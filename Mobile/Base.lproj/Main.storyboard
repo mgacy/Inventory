@@ -1,26 +1,360 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Dd5-Cp-qL8">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Inventory DateTVC-->
+        <scene sceneID="lrs-35-hw4">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                <tableViewController id="YU6-fn-vVE" customClass="InventoryDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xZo-sB-tyJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="YU6-fn-vVE" id="vRD-KN-xDs"/>
+                            <outlet property="delegate" destination="YU6-fn-vVE" id="yOe-T2-PwX"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="B3t-Y5-I1M">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="7uD-1T-PFp">
+                            <connections>
+                                <segue destination="H3s-md-9Gz" kind="show" identifier="FetchNewInventory" id="TaH-8a-dET"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="H3s-md-9Gz" kind="show" identifier="FetchExistingInventory" id="MoE-UE-r5u"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vZd-Y0-W5a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="2088.8000000000002" y="138.98050974512745"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="j6u-Gp-cWa">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Dd5-Cp-qL8" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="vZw-en-3u3">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="YU6-fn-vVE" kind="relationship" relationship="rootViewController" id="gFo-cG-Pea"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gGL-zY-1zr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1149.5999999999999" y="138.98050974512745"/>
+        </scene>
+        <!--Inventory LocationTVC-->
+        <scene sceneID="FUc-Sc-EDt">
+            <objects>
+                <tableViewController id="H3s-md-9Gz" customClass="InventoryLocationTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DzA-AY-wbP">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="H3s-md-9Gz" id="7E1-Wh-v7X"/>
+                            <outlet property="delegate" destination="H3s-md-9Gz" id="VfJ-7H-Qeg"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <segue destination="EVU-Sa-EdD" kind="show" identifier="ShowLocationCategory" id="iyW-Ae-r5B"/>
+                        <segue destination="2re-X1-JiU" kind="show" identifier="ShowLocationItem" id="4yW-DD-bsH"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1Ju-OH-epj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2985" y="139"/>
+        </scene>
+        <!--Inventory Location CategoryTVC-->
+        <scene sceneID="TtP-wW-j50">
+            <objects>
+                <tableViewController id="EVU-Sa-EdD" customClass="InventoryLocationCategoryTVC" customModule="Playground" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="TgE-k8-v4G">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="EVU-Sa-EdD" id="JHU-pV-1A8"/>
+                            <outlet property="delegate" destination="EVU-Sa-EdD" id="0mw-jQ-UsK"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <segue destination="2re-X1-JiU" kind="show" identifier="ShowLocationItems2" id="6Vu-cU-Z1a">
+                            <nil key="action"/>
+                        </segue>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="g7T-hd-scX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3902" y="-234"/>
+        </scene>
+        <!--Inventory Location ItemTVC-->
+        <scene sceneID="kiM-cd-BbP">
+            <objects>
+                <tableViewController id="2re-X1-JiU" customClass="InventoryLocationItemTVC" customModule="Playground" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="mFn-T5-2tF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="2re-X1-JiU" id="def-3A-tPe"/>
+                            <outlet property="delegate" destination="2re-X1-JiU" id="aWM-YD-fCe"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <segue destination="WFi-DU-OgF" kind="show" identifier="ShowInventoryKeypad" id="HFz-6J-tfh">
+                            <nil key="action"/>
+                        </segue>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="m0u-Gl-dub" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3902" y="565"/>
+        </scene>
+        <!--Inventory KeypadVC-->
+        <scene sceneID="JJj-C5-QEv">
+            <objects>
+                <viewController id="WFi-DU-OgF" customClass="InventoryKeypadVC" customModule="Playground" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3h9-9E-bbe"/>
+                        <viewControllerLayoutGuide type="bottom" id="cdn-aK-mKE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QJE-UP-KUf">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hdH-r2-9wY">
+                                <subviews>
+                                    <view contentMode="top" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-Db-yD3" userLabel="Display">
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="RE1-mV-8eR">
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pgW-Sf-pZA">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h3h-mq-bAf">
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="fCa-D0-TpL" userLabel="Info Stack">
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="eGu-sy-Ghh" userLabel="Pack Stack">
+                                                                        <frame key="frameInset" width="75" height="43"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Pack" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wtv-GB-JTZ" userLabel="Label - Pack">
+                                                                                <frame key="frameInset" width="75" height="22"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Item Pack" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zJ5-xE-a0L">
+                                                                                <frame key="frameInset" minY="22" width="75" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <nil key="textColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
+                                                                        <constraints>
+                                                                            <constraint firstItem="zJ5-xE-a0L" firstAttribute="top" secondItem="Wtv-GB-JTZ" secondAttribute="bottom" id="AeO-Kr-3NL"/>
+                                                                        </constraints>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="jwu-KS-P6d" userLabel="Unit Stack">
+                                                                        <frame key="frameInset" minY="43" width="75" height="36"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Unit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j3T-6p-vRr" userLabel="Label - Unit">
+                                                                                <frame key="frameInset" width="75" height="15"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Item Unit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ARd-lw-q92">
+                                                                                <frame key="frameInset" minY="15" width="75" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <nil key="textColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                            </stackView>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="qmk-Xk-t0K" userLabel="Value Stack">
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2l9-Xd-wol">
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="48"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item History" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tJU-Hv-GXO">
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                            </stackView>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="RE1-mV-8eR" firstAttribute="leading" secondItem="wz5-Db-yD3" secondAttribute="leading" constant="8" id="M3i-Kf-s9U"/>
+                                            <constraint firstItem="RE1-mV-8eR" firstAttribute="top" secondItem="wz5-Db-yD3" secondAttribute="top" constant="8" id="Ta2-4G-Sz9"/>
+                                            <constraint firstAttribute="trailing" secondItem="RE1-mV-8eR" secondAttribute="trailing" constant="8" id="nD8-JA-t2F"/>
+                                        </constraints>
+                                    </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="uuP-os-zjA" userLabel="Keypad">
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="03q-x2-WWk" userLabel="Number Col 1">
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PDt-cP-YxR" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="7"/>
+                                                        <connections>
+                                                            <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="GsY-jo-GRM"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0jg-8f-sXM" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="4"/>
+                                                        <connections>
+                                                            <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="hzZ-8c-8yL"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kjz-yR-49j" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="1"/>
+                                                        <connections>
+                                                            <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="lNa-tW-WKJ"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cbq-38-fLr" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="0"/>
+                                                        <connections>
+                                                            <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="mvR-WV-o6n"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="6wy-Rz-1nF" userLabel="Number Col 2">
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ICl-bp-QD7" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="8"/>
+                                                        <connections>
+                                                            <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="TWu-4d-F9k"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pjv-So-6hQ" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="5"/>
+                                                        <connections>
+                                                            <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="Iab-I1-lnH"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6t3-NA-mFK" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="2"/>
+                                                        <connections>
+                                                            <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="oED-vR-BOe"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ekR-nX-2Z2" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="."/>
+                                                        <connections>
+                                                            <action selector="decimalTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="68B-Wk-JLg"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="k4y-cO-ZME" userLabel="Number Col 3">
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQ6-iQ-nGa" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="9"/>
+                                                        <connections>
+                                                            <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="OOG-99-lrb"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5XF-DP-JJB" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="6"/>
+                                                        <connections>
+                                                            <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="aAv-hg-8sx"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGY-7y-nwd" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="3"/>
+                                                        <connections>
+                                                            <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="DO7-P2-uqG"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFJ-ea-4yB" customClass="OperationKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="Previous"/>
+                                                        <connections>
+                                                            <action selector="previousItemTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="hl1-an-W8d"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="QqA-un-ZW9" userLabel="Number Col 4">
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6I9-Yn-6J7" customClass="OperationKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="Clear"/>
+                                                        <connections>
+                                                            <action selector="clearTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="GhW-qn-DYU"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WNO-eL-0Ce" customClass="OperationKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="+1"/>
+                                                        <connections>
+                                                            <action selector="incrementTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="Dua-lT-zzt"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ag-cF-XKu" customClass="OperationKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="+"/>
+                                                        <connections>
+                                                            <action selector="addTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="Ex0-CJ-7ft"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zlz-LA-qO9" customClass="OperationKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                        <state key="normal" title="Next"/>
+                                                        <connections>
+                                                            <action selector="nextItemTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="sbW-NA-fyQ"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="uuP-os-zjA" firstAttribute="height" secondItem="wz5-Db-yD3" secondAttribute="height" multiplier="1.5" id="qGV-je-eol"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hdH-r2-9wY" firstAttribute="bottom" secondItem="cdn-aK-mKE" secondAttribute="top" id="9pX-sy-bMz"/>
+                            <constraint firstAttribute="trailing" secondItem="hdH-r2-9wY" secondAttribute="trailing" id="DZh-hs-Ldw"/>
+                            <constraint firstItem="hdH-r2-9wY" firstAttribute="leading" secondItem="QJE-UP-KUf" secondAttribute="leading" id="mRz-KV-G7b"/>
+                            <constraint firstItem="hdH-r2-9wY" firstAttribute="top" secondItem="3h9-9E-bbe" secondAttribute="bottom" id="qnR-DV-FBb"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="itemHistory" destination="tJU-Hv-GXO" id="orQ-8w-3R0"/>
+                        <outlet property="itemName" destination="pgW-Sf-pZA" id="Qx7-yJ-0dc"/>
+                        <outlet property="itemValue" destination="2l9-Xd-wol" id="tW0-FH-V5i"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x4O-eb-Dzt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4834" y="125"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="MoE-UE-r5u"/>
+        <segue reference="4yW-DD-bsH"/>
+    </inferredMetricsTieBreakers>
 </document>
