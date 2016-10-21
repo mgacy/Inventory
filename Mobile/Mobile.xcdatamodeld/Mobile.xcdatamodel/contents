@@ -1,4 +1,71 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1004" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Inventory" representedClassName="Inventory" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="storeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="typeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryItem" inverseName="inventory" inverseEntity="InventoryItem" syncable="YES"/>
+        <relationship name="locations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocation" inverseName="inventory" inverseEntity="InventoryLocation" syncable="YES"/>
+        <relationship name="store" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="inventories" inverseEntity="Store" syncable="YES"/>
+    </entity>
+    <entity name="InventoryItem" representedClassName="InventoryItem" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="itemID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="packSize" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="subSize" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="inventory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Inventory" inverseName="items" inverseEntity="Inventory" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationItem" inverseName="item" inverseEntity="InventoryLocationItem" syncable="YES"/>
+    </entity>
+    <entity name="InventoryLocation" representedClassName="InventoryLocation" syncable="YES" codeGenerationType="class">
+        <attribute name="locationType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationCategory" inverseName="location" inverseEntity="InventoryLocationCategory" syncable="YES"/>
+        <relationship name="inventory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Inventory" inverseName="locations" inverseEntity="Inventory" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationItem" inverseName="location" inverseEntity="InventoryLocationItem" syncable="YES"/>
+    </entity>
+    <entity name="InventoryLocationCategory" representedClassName="InventoryLocationCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryLocationItem" inverseName="category" inverseEntity="InventoryLocationItem" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocation" inverseName="categories" inverseEntity="InventoryLocation" syncable="YES"/>
+    </entity>
+    <entity name="InventoryLocationItem" representedClassName="InventoryLocationItem" syncable="YES" codeGenerationType="class">
+        <attribute name="history" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="itemID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocationCategory" inverseName="items" inverseEntity="InventoryLocationCategory" syncable="YES"/>
+        <relationship name="item" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryItem" inverseName="items" inverseEntity="InventoryItem" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocation" inverseName="items" inverseEntity="InventoryLocation" syncable="YES"/>
+        <relationship name="unit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="locationItems" inverseEntity="Unit" syncable="YES"/>
+    </entity>
+    <entity name="ItemCategory" representedClassName="ItemCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Store" representedClassName="Store" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="inventories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Inventory" inverseName="store" inverseEntity="Inventory" syncable="YES"/>
+    </entity>
+    <entity name="Unit" representedClassName="Unit" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="locationItems" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocationItem" inverseName="unit" inverseEntity="InventoryLocationItem" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Inventory" positionX="-371" positionY="-135" width="128" height="165"/>
+        <element name="InventoryLocationCategory" positionX="43" positionY="45" width="128" height="103"/>
+        <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="75"/>
+        <element name="InventoryLocation" positionX="-146" positionY="54" width="128" height="135"/>
+        <element name="InventoryItem" positionX="-144" positionY="-180" width="128" height="165"/>
+        <element name="InventoryLocationItem" positionX="306" positionY="261" width="128" height="165"/>
+        <element name="Store" positionX="-740" positionY="0" width="128" height="90"/>
+        <element name="Unit" positionX="-740" positionY="126" width="128" height="90"/>
+    </elements>
 </model>
