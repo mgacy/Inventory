@@ -11,7 +11,6 @@ import CoreData
 import Alamofire
 import SwiftyJSON
 
-//class InventoryDateTVC: CDTableViewController<Inventory> {
 class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
     // MARK: Properties

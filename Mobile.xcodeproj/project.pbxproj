@@ -11,8 +11,6 @@
 		3AE727DDF2E5199A990E16B8 /* Pods_MobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBA41CA2CE7F1141301A5503 /* Pods_MobileTests.framework */; };
 		C902FF2C1DB801970063CD02 /* InventoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF2B1DB801970063CD02 /* InventoryHelper.swift */; };
 		C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF2D1DB816EB0063CD02 /* Keypad.swift */; };
-		C902FF351DBA9B870063CD02 /* CDTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF341DBA9B870063CD02 /* CDTableViewController.swift */; };
-		C902FF371DBAAC1E0063CD02 /* CDTableViewControllerALT.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF361DBAAC1E0063CD02 /* CDTableViewControllerALT.swift */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
 		C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E21DB7EF98004C10E6 /* ViewController.swift */; };
 		C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* Main.storyboard */; };
@@ -47,8 +45,6 @@
 		6B720FCBE35A278707E0AB7A /* Pods-Mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mobile/Pods-Mobile.debug.xcconfig"; sourceTree = "<group>"; };
 		C902FF2B1DB801970063CD02 /* InventoryHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryHelper.swift; sourceTree = "<group>"; };
 		C902FF2D1DB816EB0063CD02 /* Keypad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keypad.swift; sourceTree = "<group>"; };
-		C902FF341DBA9B870063CD02 /* CDTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDTableViewController.swift; sourceTree = "<group>"; };
-		C902FF361DBAAC1E0063CD02 /* CDTableViewControllerALT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDTableViewControllerALT.swift; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9F515E21DB7EF98004C10E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -135,8 +131,6 @@
 		C902FF331DBA9B420063CD02 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				C902FF341DBA9B870063CD02 /* CDTableViewController.swift */,
-				C902FF361DBAAC1E0063CD02 /* CDTableViewControllerALT.swift */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -453,13 +447,11 @@
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
 				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
-				C902FF371DBAAC1E0063CD02 /* CDTableViewControllerALT.swift in Sources */,
 				C9F516181DB7F158004C10E6 /* AuthorizationHandler.swift in Sources */,
 				C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */,
 				C902FF2C1DB801970063CD02 /* InventoryHelper.swift in Sources */,
 				C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */,
 				C9F5160D1DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift in Sources */,
-				C902FF351DBA9B870063CD02 /* CDTableViewController.swift in Sources */,
 				C9F5160F1DB7F133004C10E6 /* InventoryKeypadVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
