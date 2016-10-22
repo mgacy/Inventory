@@ -11,25 +11,23 @@ import CoreData
 import Alamofire
 import SwiftyJSON
 
+//class InventoryDateTVC: CDTableViewController<Inventory> {
 class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
-    
+
     // MARK: Properties
-    // let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var managedObjectContext: NSManagedObjectContext? = nil
     
-    var storeID = 1
     var destinationController: UIViewController?
-    
-    // NOTE: do I really need this?
-    var mySelectedInventory: Inventory?
+    var selectedInventory: Inventory?
+
+    var storeID = 1
     
     // TableViewCell
-    let CellIdentifier = "InventoryDateTableViewCell"
+    let cellIdentifier = "InventoryDateTableViewCell"
     
     // Segues
     // TODO: make enum?
     let ExistingItemSegue = "FetchExistingInventory"
-    let NewItemSegue = "FetchNewInventory"
     let SettingsSegue = "ShowSettings"
     
     override func viewDidLoad() {
@@ -42,10 +40,15 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         // Register tableView cells
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
         // Get CoreData stuff
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        self.performFetch()
+        
+        //let xxx = self.fetchedResultsController.fetchedObjects
+        //print("Objects: \(xxx)")
         
         // 1. Check for existence of email, login
         if AuthorizationHandler.sharedInstance.userExists {
@@ -65,36 +68,15 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     
     // override func viewWillAppear(_ animated: Bool) { }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.performFetch()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    /*
-    func insertNewObject(_ sender: Any) {
-        print("insertNewObject ...")
-        let context = self.fetchedResultsController.managedObjectContext
-        
-        // GET
-        //APIManager.sharedInstance.getNewInventory(isActive: true, typeID: 1, storeID: storeID)
-        
-        let newInventory = Inventory(context: context)
-        
-        // If appropriate, configure the new managed object.
-        newInventory.date = "New"
-        newInventory.uploaded = false
-        
-        // Save the context.
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-    }
-    */
     
     // MARK: - Segues
 
@@ -102,26 +84,22 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
         case ExistingItemSegue:
-            // Get existing Inventory
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                
-                // Get the new view controller.
-                destinationController = segue.destination as! InventoryLocationTVC
-                
-                let inventory = self.fetchedResultsController.object(at: indexPath)
-                //if let remoteID = inventory.remoteID {
-                let remoteID = Int(inventory.remoteID)
-                APIManager.sharedInstance.getInventory(
-                    remoteID: remoteID, completionHandler: self.completedGetExistingInventory)
-                //}
-            }
-        case NewItemSegue:
+
             // Get the new view controller.
-            destinationController = segue.destination as! InventoryLocationTVC
+            guard let controller = segue.destination as? InventoryLocationTVC else {
+                print("PROBLEM getting destination controller")
+                return
+            }
+
+            // Pass selection to new view controller
+            if let selection = selectedInventory {
+                controller.inventory = selection
+                // print("destination.inventory: \(controller.inventory.date)")
+                controller.performFetch()
+            } else {
+                print("PROBLEM getting selection")
+            }
             
-            // Get new Inventory
-            APIManager.sharedInstance.getNewInventory(
-                isActive: true, typeID: 1, storeID: storeID, completionHandler: completedGetNewInventory)
         case SettingsSegue:
             print("Showing Settings ...")
         default:
@@ -130,7 +108,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     }
 
     // MARK: - Table view data source
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
     }
@@ -142,15 +120,17 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Dequeue Reusable Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath) as UITableViewCell
-        
-        // Fetch the appropriate Inventory for the data source layout.
-        let inventory = self.fetchedResultsController.object(at: indexPath)
-        
-        // Configure Cell
-        self.configureCell(cell, withObject: inventory)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
 
+        // Configure Cell
+        self.configureCell(cell, atIndexPath: indexPath)
+        
         return cell
+    }
+
+    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
+        let inventory = self.fetchedResultsController.object(at: indexPath)
+        cell.textLabel?.text = inventory.date
     }
     
     // Override to support conditional editing of the table view.
@@ -158,41 +138,59 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     
     // Override to support editing the table view.
     // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-
-    func configureCell(_ cell: UITableViewCell, withObject object: Inventory) {
-        cell.textLabel?.text = object.date
-    }
     
     // MARK: - Navigation
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedInventory = self.fetchedResultsController.object(at: indexPath)
+        selectedInventory = self.fetchedResultsController.object(at: indexPath)
         
         print("Selected \(selectedInventory)")
-        mySelectedInventory = selectedInventory
-        
-        // Perform segue based on .uploaded of selected Inventory
-        switch selectedInventory.uploaded {
-        case true:
-            performSegue(withIdentifier: ExistingItemSegue, sender: self)
-        case false:
-            print("We need to load this item from disk ...")
+
+        if let selection = selectedInventory {
+            switch selection.uploaded {
+            case true:
+                guard let locations = selection.locations else {
+                    print("PROBLEM: selectedInventory.locations was nil")
+                    return
+                }
+                
+                // Check whether we have already fetched Inventory since launching app
+                if locations.count > 0 {
+                    
+                    // LOAD INVENTORY
+                    // print("LOAD selectedInventory from disk ...")
+                    performSegue(withIdentifier: ExistingItemSegue, sender: self)
+                } else {
+                    
+                    // GET INVENTORY FROM SERVER
+                    // print("GET selectedInventory from server ...")
+                    let remoteID = Int(selection.remoteID)
+                    APIManager.sharedInstance.getInventory(
+                        remoteID: remoteID,
+                        completionHandler: self.completedGetExistingInventory)
+                }
+                
+            case false:
+                // print("LOAD NEW selectedInventory from disk ...")
+                performSegue(withIdentifier: ExistingItemSegue, sender: self)
+            }
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    @IBAction func newTapped(_ sender: AnyObject) {
+        // Get new Inventory
+        APIManager.sharedInstance.getNewInventory(
+            isActive: true, typeID: 1, storeID: storeID, completionHandler: completedGetNewInventory)
+    }
+    
     // MARK: - Completion Handlers
     
     func completedGetExistingInventory(json: JSON) -> Void {
-        print("completedGetExistingInventory ...")
-        //print("completedGetExistingInventory: \(json)")
+        if var selection = selectedInventory {
 
-        if var sel = mySelectedInventory {
-
-            print("We need to update \(sel)")
-            InventoryHelper.sharedInstance.updateExistingInventory(&sel, withJSON: json)
-            print("Updated Inventory: \(sel)")
+            InventoryHelper.sharedInstance.updateExistingInventory(&selection, withJSON: json)
             
             // Save the context.
             let context = self.fetchedResultsController.managedObjectContext
@@ -205,13 +203,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
             
-            // Set properties of next controller
-            if let controller = destinationController as? InventoryLocationTVC {
-                controller.inventory = sel
-                //controller.managedObjectContext = managedObjectContext
-                //controller.locations = inventory.locations
-                controller.tableView.reloadData()
-            }
+            performSegue(withIdentifier: ExistingItemSegue, sender: self)
             
         } else {
             print("Still failed to get selected Inventory")
@@ -220,19 +212,11 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     }
     
     func completedGetNewInventory(json: JSON) -> Void {
-        let context = self.fetchedResultsController.managedObjectContext
         
-        print("completedGetNewInventory ...")
-        //print("completedGetNewInventory: \(json)")
-        
-    
-        let newInventory = Inventory(context: context)
-        
-        // If appropriate, configure the new managed object.
-        newInventory.date = "New"
-        newInventory.uploaded = false
+        selectedInventory = InventoryHelper.sharedInstance.createObject(json: json, isNew: true)
         
         // Save the context.
+        let context = self.fetchedResultsController.managedObjectContext
         do {
             try context.save()
         } catch {
@@ -242,43 +226,17 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
         
-        /*
-        // Set properties of next controller
-        if let controller = destinationController as? InventoryLocationTVC {
-            controller.inventory = inventory
-            controller.locations = inventory.locations
-            controller.tableView.reloadData()
-        }
-        */
-
+        performSegue(withIdentifier: ExistingItemSegue, sender: self)
     }
     
     func completedGetInventories(json: JSON) -> Void {
-        print("completedGetInventories ...")
-        //print("completedGetInventories: \(json)")
-        
-        let context = self.fetchedResultsController.managedObjectContext
     
-        print("Creating Inventories ...")
         for (_, item) in json {
-            print("item: \(item)")
-            let newInventory = Inventory(context: context)
-            
-            // Properties
-            newInventory.date = item["date"].string
-            
-            if let remoteID = item["id"].int {
-                newInventory.remoteID = Int32(remoteID)
-            }
-            // store_id
-            // inventory_type_id
-            newInventory.uploaded = true
-            
+            InventoryHelper.sharedInstance.createObject(json: item, isNew: false)
         }
         
-        print("Saving context ...")
-        
         // Save the context.
+        let context = self.fetchedResultsController.managedObjectContext
         do {
             try context.save()
         } catch {
@@ -312,9 +270,6 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         let fetchRequest: NSFetchRequest<Inventory> = Inventory.fetchRequest()
         
         // Configure Fetch Request
-        //let uploaded = true
-        //let uploaded = nil
-        //fetchRequest.predicate = NSPredicate(format: "uploaded == \(uploaded)")
         fetchRequest.predicate = NSPredicate(format: "uploaded == true")
         
         // Initialize Batch Delete Request
@@ -342,27 +297,10 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
-        
-        
-        
-        
-        /*
-        var results: [NSManagedObject] = []
-        
-        do {
-            results = try managedObjectContext!.fetch(fetchRequest)
-            print("Found matches: \(results)")
-            managedObjectContext?.deletedObjects
-        }
-        catch {
-            print("error executing fetch request: \(error)")
-        }
-        */
-        print("/ deleteExistingInventories")
     }
     
     // MARK: - Fetched results controller
-    
+
     var fetchedResultsController: NSFetchedResultsController<Inventory> {
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
@@ -381,22 +319,31 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Master")
+        let aFetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: self.managedObjectContext!,
+            sectionNameKeyPath: nil,
+            cacheName: "Master")
+        
         aFetchedResultsController.delegate = self
         _fetchedResultsController = aFetchedResultsController
-        
-        do {
-            try _fetchedResultsController!.performFetch()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-        
+
         return _fetchedResultsController!
     }
+    
     var _fetchedResultsController: NSFetchedResultsController<Inventory>? = nil
+
+    func performFetch () {
+        self.fetchedResultsController.managedObjectContext.perform ({
+            
+            do {
+                try self.fetchedResultsController.performFetch()
+            } catch {
+                print("\(#function) FAILED : \(error)")
+            }
+            self.tableView.reloadData()
+        })
+    }
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
@@ -420,7 +367,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         case .delete:
             tableView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
-            self.configureCell(tableView.cellForRow(at: indexPath!)!, withObject: anObject as! Inventory)
+            self.configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
         case .move:
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
@@ -429,5 +376,5 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
     }
-    
+
 }

@@ -23,7 +23,7 @@
                     <navigationItem key="navigationItem" id="B3t-Y5-I1M">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="7uD-1T-PFp">
                             <connections>
-                                <segue destination="H3s-md-9Gz" kind="show" identifier="FetchNewInventory" id="TaH-8a-dET"/>
+                                <action selector="newTapped:" destination="YU6-fn-vVE" id="84G-da-Tix"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -78,7 +78,7 @@
         <!--Inventory Location CategoryTVC-->
         <scene sceneID="TtP-wW-j50">
             <objects>
-                <tableViewController id="EVU-Sa-EdD" customClass="InventoryLocationCategoryTVC" customModule="Playground" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="EVU-Sa-EdD" customClass="InventoryLocationCategoryTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="TgE-k8-v4G">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -101,7 +101,7 @@
         <!--Inventory Location ItemTVC-->
         <scene sceneID="kiM-cd-BbP">
             <objects>
-                <tableViewController id="2re-X1-JiU" customClass="InventoryLocationItemTVC" customModule="Playground" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="2re-X1-JiU" customClass="InventoryLocationItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="mFn-T5-2tF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -124,7 +124,7 @@
         <!--Inventory KeypadVC-->
         <scene sceneID="JJj-C5-QEv">
             <objects>
-                <viewController id="WFi-DU-OgF" customClass="InventoryKeypadVC" customModule="Playground" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="WFi-DU-OgF" customClass="InventoryKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3h9-9E-bbe"/>
                         <viewControllerLayoutGuide type="bottom" id="cdn-aK-mKE"/>
@@ -216,25 +216,25 @@
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="03q-x2-WWk" userLabel="Number Col 1">
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PDt-cP-YxR" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PDt-cP-YxR" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="7"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="GsY-jo-GRM"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0jg-8f-sXM" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0jg-8f-sXM" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="4"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="hzZ-8c-8yL"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kjz-yR-49j" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kjz-yR-49j" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="1"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="lNa-tW-WKJ"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cbq-38-fLr" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cbq-38-fLr" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="0"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="mvR-WV-o6n"/>
@@ -244,25 +244,25 @@
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="6wy-Rz-1nF" userLabel="Number Col 2">
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ICl-bp-QD7" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ICl-bp-QD7" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="8"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="TWu-4d-F9k"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pjv-So-6hQ" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pjv-So-6hQ" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="5"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="Iab-I1-lnH"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6t3-NA-mFK" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6t3-NA-mFK" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="2"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="oED-vR-BOe"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ekR-nX-2Z2" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ekR-nX-2Z2" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="."/>
                                                         <connections>
                                                             <action selector="decimalTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="68B-Wk-JLg"/>
@@ -272,25 +272,25 @@
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="k4y-cO-ZME" userLabel="Number Col 3">
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQ6-iQ-nGa" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQ6-iQ-nGa" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="9"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="OOG-99-lrb"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5XF-DP-JJB" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5XF-DP-JJB" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="6"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="aAv-hg-8sx"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGY-7y-nwd" customClass="NumberKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGY-7y-nwd" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="3"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="DO7-P2-uqG"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFJ-ea-4yB" customClass="OperationKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFJ-ea-4yB" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="Previous"/>
                                                         <connections>
                                                             <action selector="previousItemTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="hl1-an-W8d"/>
@@ -300,25 +300,25 @@
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="QqA-un-ZW9" userLabel="Number Col 4">
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6I9-Yn-6J7" customClass="OperationKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6I9-Yn-6J7" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="Clear"/>
                                                         <connections>
                                                             <action selector="clearTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="GhW-qn-DYU"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WNO-eL-0Ce" customClass="OperationKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WNO-eL-0Ce" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="+1"/>
                                                         <connections>
                                                             <action selector="incrementTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="Dua-lT-zzt"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ag-cF-XKu" customClass="OperationKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ag-cF-XKu" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="+"/>
                                                         <connections>
                                                             <action selector="addTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="Ex0-CJ-7ft"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zlz-LA-qO9" customClass="OperationKeypadButton" customModule="Playground" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zlz-LA-qO9" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <state key="normal" title="Next"/>
                                                         <connections>
                                                             <action selector="nextItemTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="sbW-NA-fyQ"/>
@@ -354,7 +354,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="MoE-UE-r5u"/>
         <segue reference="4yW-DD-bsH"/>
     </inferredMetricsTieBreakers>
 </document>
