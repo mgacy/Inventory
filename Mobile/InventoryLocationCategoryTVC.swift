@@ -7,16 +7,21 @@
 //
 
 import UIKit
+import CoreData
 
-class InventoryLocationCategoryTVC: UITableViewController {
+class InventoryLocationCategoryTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: Properties
+    
     var location: InventoryLocation!
     var selectedCategory: InventoryLocationCategory?
-    //var categories: [InventoryLocationCategory] {
-    var categories: NSSet? {
-        return location.categories
-    }
+    
+    // FetchedResultsController
+    var managedObjectContext: NSManagedObjectContext?
+    //var filter: NSPredicate? = nil
+    var cacheName: String? = nil // "Master"
+    var sectionNameKeyPath: String? = nil
+    var fetchBatchSize = 20 // 0 = No Limit
     
     // TableViewCell
     let cellIdentifier = "InventoryLocationCategoryTableViewCell"
@@ -38,6 +43,14 @@ class InventoryLocationCategoryTVC: UITableViewController {
         
         // Register reusable cell.
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        
+        // CoreData
+        //managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        self.performFetch()
+        
+        // TESTING
+        //let objects = self.fetchedResultsController.fetchedObjects
+        //print("viewDidLoad - Fetched Objects: \(objects)")
     }
     
     override func didReceiveMemoryWarning() {
@@ -48,11 +61,12 @@ class InventoryLocationCategoryTVC: UITableViewController {
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return self.fetchedResultsController.sections?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (categories?.count)!
+        let sectionInfo = self.fetchedResultsController.sections![section]
+        return sectionInfo.numberOfObjects
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -89,7 +103,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
     // MARK: - Navigation
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // let selectedCategory = categories[indexPath.row]
+        selectedCategory = self.fetchedResultsController.object(at: indexPath)
         // print("Selected LocationCategory: \(selectedCategory)")
         
         performSegue(withIdentifier: ItemSegue, sender: self)
@@ -101,19 +115,117 @@ class InventoryLocationCategoryTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         // Get the new view controller using segue.destinationViewController.
-        if let destinationController = segue.destination as? InventoryLocationItemTVC {
-            
-            // Pass the selected object to the new view controller.
-            guard let selectedIndex = self.tableView.indexPathForSelectedRow else {
-                return
-            }
-            /*
-            let selectedCategory = categories[selectedIndex.row]
-            
-            destinationController.category = selectedCategory
-            destinationController.title = selectedCategory.name
-            */
+        guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
+            return
         }
+        
+        // Pass the selected object to the new view controller.
+        guard let selection = selectedCategory else {
+            print("\nPROBLEM - Unable to get selected Category\n")
+            return
+        }
+
+        destinationController.title = selection.name
+        destinationController.category = selection
+        destinationController.managedObjectContext = self.managedObjectContext
+        destinationController.performFetch()
+    }
+    
+    // MARK: - Fetched results controller
+    
+    var fetchedResultsController: NSFetchedResultsController<InventoryLocationCategory> {
+        if _fetchedResultsController != nil {
+            return _fetchedResultsController!
+        }
+        
+        let fetchRequest: NSFetchRequest<InventoryLocationCategory> = InventoryLocationCategory.fetchRequest()
+        
+        // Set the batch size to a suitable number.
+        fetchRequest.fetchBatchSize = self.fetchBatchSize
+        
+        // Edit the sort key as appropriate.
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        // Set the fetch predicate.
+        if let parent = self.location {
+            let fetchPredicate = NSPredicate(format: "location == %@", parent)
+            //print("\nAdding predicate \(fetchPredicate)")
+            fetchRequest.predicate = fetchPredicate
+        } else {
+            print("\nNot able to add predicate")
+        }
+        
+        //let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        // Edit the section name key path and cache name if appropriate.
+        // nil for section name key path means "no sections".
+        let aFetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: self.managedObjectContext!,
+            //managedObjectContext: moc,
+            sectionNameKeyPath: self.sectionNameKeyPath,
+            cacheName: self.cacheName)
+        
+        aFetchedResultsController.delegate = self
+        _fetchedResultsController = aFetchedResultsController
+        
+        return _fetchedResultsController!
+    }
+    
+    func performFetch () {
+        self.fetchedResultsController.managedObjectContext.perform ({
+            
+            do {
+                try self.fetchedResultsController.performFetch()
+            } catch {
+                print("\(#function) FAILED : \(error)")
+            }
+            
+            // TESTING
+            let objects = self.fetchedResultsController.fetchedObjects
+            print("Fetched Objects: \(objects?.count)")
+            
+            if let expectedLocations = self.fetchedResultsController.fetchedObjects {
+                print("TVC should display: \(expectedLocations)")
+            }
+            
+            self.tableView.reloadData()
+        })
+    }
+    
+    var _fetchedResultsController: NSFetchedResultsController<InventoryLocationCategory>? = nil
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        self.tableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            self.tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .delete:
+            self.tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        default:
+            return
+        }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+        case .update:
+            self.configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
+        case .move:
+            tableView.moveRow(at: indexPath!, to: newIndexPath!)
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        self.tableView.endUpdates()
     }
     
 }
