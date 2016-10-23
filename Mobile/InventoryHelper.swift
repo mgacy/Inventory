@@ -60,7 +60,6 @@ public class InventoryHelper {
             if isNew {
                 addItemsForNew(&inventory, json: items)
             }
-
         }
 
         // Add InventoryLocations

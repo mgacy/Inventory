@@ -156,14 +156,11 @@ class InventoryLocationCategoryTVC: UITableViewController, NSFetchedResultsContr
             print("\nNot able to add predicate")
         }
         
-        //let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
         let aFetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: self.managedObjectContext!,
-            //managedObjectContext: moc,
             sectionNameKeyPath: self.sectionNameKeyPath,
             cacheName: self.cacheName)
         

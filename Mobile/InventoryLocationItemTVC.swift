@@ -152,18 +152,18 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         // Set the fetch predicate.
-        if let parent = self.location {
-            let fetchPredicate = NSPredicate(format: "location == %@", parent)
+        if let parentLocation = self.location {
+            let fetchPredicate = NSPredicate(format: "location == %@", parentLocation)
             print("\nAdding predicate \(fetchPredicate)")
             fetchRequest.predicate = fetchPredicate
             
-        } else if let parent = self.category {
-            let fetchPredicate = NSPredicate(format: "category == %@", parent)
+        } else if let parentCategory = self.category {
+            let fetchPredicate = NSPredicate(format: "category == %@", parentCategory)
             print("\nAdding predicate \(fetchPredicate)")
             fetchRequest.predicate = fetchPredicate
 
         } else {
-            print("\nPROBLEM - Not able to add predicate\n")
+            print("\nPROBLEM - Unable to add predicate\n")
         }
         
         // Edit the section name key path and cache name if appropriate.

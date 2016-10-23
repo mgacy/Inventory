@@ -34,8 +34,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
     // Segues
     let CategorySegue = "ShowLocationCategory"
     let ItemSegue = "ShowLocationItem"
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -190,13 +189,12 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         } else {
             print("\nPROBLEM - Unable able to add predicate\n")
         }
-        
+
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
         let aFetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: self.managedObjectContext!,
-            //managedObjectContext: moc,
             sectionNameKeyPath: self.sectionNameKeyPath,
             cacheName: self.cacheName)
         
