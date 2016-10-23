@@ -96,6 +96,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             // Pass selection to new view controller.
             if let selection = selectedInventory {
                 controller.inventory = selection
+                controller.managedObjectContext = self.managedObjectContext
                 controller.performFetch()
             } else {
                 print("\nPROBLEM - Unable to get selection\n")
