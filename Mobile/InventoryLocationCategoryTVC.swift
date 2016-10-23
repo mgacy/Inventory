@@ -12,12 +12,16 @@ class InventoryLocationCategoryTVC: UITableViewController {
     
     // MARK: Properties
     var location: InventoryLocation!
+    var selectedCategory: InventoryLocationCategory?
     //var categories: [InventoryLocationCategory] {
     var categories: NSSet? {
         return location.categories
     }
     
-    let CellIdentifier = "InventoryLocationCategoryTableViewCell"
+    // TableViewCell
+    let cellIdentifier = "InventoryLocationCategoryTableViewCell"
+    
+    // Segues
     let ItemSegue = "ShowLocationItems2"
     
     override func viewDidLoad() {
@@ -31,7 +35,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
         
         // Set title.
         title = location.name
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
     }
     
     override func didReceiveMemoryWarning() {
@@ -52,53 +56,33 @@ class InventoryLocationCategoryTVC: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Dequeue Reusable Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath) as UITableViewCell
-        /*
-        // Get LocationCategory
-        let category = categories[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
+
+        // Configure Cell
+        self.configureCell(cell, atIndexPath: indexPath)
         
-        // Configure the cell...
-        if let name = category.name {
-            cell.textLabel?.text = name
-        }
-        */
         return cell
     }
     
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
+    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
+        let category = self.fetchedResultsController.object(at: indexPath)
+        cell.textLabel?.text = category.name
+    }
     
-    /*
-     // Override to support editing the table view.
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-     if editingStyle == .delete {
-     // Delete the row from the data source
-     tableView.deleteRows(at: [indexPath], with: .fade)
-     } else if editingStyle == .insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
+    // Override to support conditional editing of the table view.
+    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
     
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
-     }
-     */
+    // Override to support editing the table view.
+    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
     
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
+    // Override to support rearranging the table view.
+    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
+    
+    // Override to support conditional rearranging of the table view.
+    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
+    
+    // Override to support conditional editing of the table view.
+    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
     
     // MARK: - Navigation
     

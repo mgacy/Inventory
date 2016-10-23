@@ -11,11 +11,8 @@ import CoreData
 
 class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
-    // MARK: New
-    var managedObjectContext: NSManagedObjectContext? = nil
-    
-    
     // MARK: Properties
+    var managedObjectContext: NSManagedObjectContext?
     
     /* Force unwrap (`!`) because:
      (a) a variable must have an initial value
@@ -39,10 +36,13 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         }
     }
 
+    // TableViewCell
+    let cellIdentifier = "InventoryLocationTableViewCell"
     
-    let CellIdentifier = "InventoryLocationTableViewCell"
-    // let CategorySegue = "ShowLocationCategory"
-    // let ItemSegue = "ShowLocationItem"
+    // Segues
+    let CategorySegue = "ShowLocationCategory"
+    let ItemSegue = "ShowLocationItem"
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +55,9 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         
         // Set Title
         title = "Locations"
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        
+        // Register reusable cell
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
         // Get CoreData stuff
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -83,45 +85,33 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Dequeue Reusable Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath) as UITableViewCell
-        
-        // Fetch the appropriate Location for the data source layout.
-        //let location = locations[indexPath.row]
-        let location = self.fetchedResultsController.object(at: indexPath)
-        
-        // Configure the cell...
-        self.configureCell(cell, withObject: location)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
+
+        // Configure Cell
+        self.configureCell(cell, atIndexPath: indexPath)
         
         return cell
     }
     
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-     */
-    
-    /*
-     // Override to support editing the table view.
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-     */
-    
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
-     */
-    
+    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
+        let location = self.fetchedResultsController.object(at: indexPath)
+        cell.textLabel?.text = location.name
+    }
     
     // Override to support conditional editing of the table view.
     // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
+
+    // Override to support editing the table view.
+    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
+
+    // Override to support rearranging the table view.
+    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
+
+    // Override to support conditional rearranging of the table view.
+    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
     
-    func configureCell(_ cell: UITableViewCell, withObject object: InventoryLocation) {
-        cell.textLabel?.text = object.name
-    }
+    // Override to support conditional editing of the table view.
+    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
     
     // MARK: - Navigation
     
@@ -252,7 +242,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         case .delete:
             tableView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
-            self.configureCell(tableView.cellForRow(at: indexPath!)!, withObject: anObject as! InventoryLocation)
+            self.configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
         case .move:
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }

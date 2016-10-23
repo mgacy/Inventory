@@ -24,8 +24,12 @@ class InventoryLocationItemTVC: UITableViewController {
             return nil
         }
     }
+    var selectedItem: InventoryLocationItem?
     
-    let CellIdentifier = "InventoryLocationTableViewCell"
+    // TableViewCell
+    let cellIdentifier = "InventoryLocationTableViewCell"
+    
+    // Segues
     let KeypadSegue = "ShowInventoryKeypad"
     
     override func viewDidLoad() {
@@ -38,7 +42,11 @@ class InventoryLocationItemTVC: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         // Register reusable cell
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        
+        performFetch()
+        //let objects = self.fetchedResultsController.fetchedObjects
+        //print("Fetched Objects: \(objects)")
     }
     
     override func didReceiveMemoryWarning() {
@@ -59,56 +67,42 @@ class InventoryLocationItemTVC: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Dequeue Reusable Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
         
-        // Get LocationItem
-        //let item = items[indexPath.row]
-        
-        // Configure the cell...
-        // cell.textLabel?.text = "\(item.itemID)"
-        
-        /*
-        if let id = item.itemID {
-            cell.textLabel?.text = "\(id)"
-        }
-        */
+        // Configure the cell
+        self.configureCell(cell, atIndexPath: indexPath)
+
         return cell
     }
     
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
+    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
+        let locationItem = self.fetchedResultsController.object(at: indexPath)
+        
+        // TEMP
+        //cell.textLabel?.text = "Item \(locationItem.quantity)"
+        //cell.textLabel?.text = "Item \(locationItem.itemID)"
+        
+        if let item = locationItem.item {
+            cell.textLabel?.text = item.name
+        } else {
+            print("PROBLEM configuringCell")
+        }
+    }
     
-    /*
-     // Override to support editing the table view.
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-     if editingStyle == .delete {
-     // Delete the row from the data source
-     tableView.deleteRows(at: [indexPath], with: .fade)
-     } else if editingStyle == .insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
+    // Override to support conditional editing of the table view.
+    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
     
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
-     }
-     */
+    // Override to support editing the table view.
+    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
     
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
+    // Override to support rearranging the table view.
+    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
+    
+    // Override to support conditional rearranging of the table view.
+    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
+    
+    // Override to support conditional editing of the table view.
+    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
     
     // MARK: - Navigation
     
