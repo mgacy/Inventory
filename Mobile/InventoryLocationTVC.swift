@@ -23,6 +23,10 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
     
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
+    //var filter: NSPredicate? = nil
+    var cacheName: String? = nil // "Master"
+    var sectionNameKeyPath: String? = nil
+    var fetchBatchSize = 20 // 0 = No Limit
     
     // TableViewCell
     let cellIdentifier = "InventoryLocationTableViewCell"
@@ -189,7 +193,13 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Master")
+        let aFetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: self.managedObjectContext!,
+            //managedObjectContext: moc,
+            sectionNameKeyPath: self.sectionNameKeyPath,
+            cacheName: self.cacheName)
+        
         aFetchedResultsController.delegate = self
         _fetchedResultsController = aFetchedResultsController
         

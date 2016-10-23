@@ -20,6 +20,10 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
+    //var filter: NSPredicate? = nil
+    var cacheName: String? = "Master"
+    var sectionNameKeyPath: String? = nil
+    var fetchBatchSize = 20 // 0 = No Limit
     
     // TableViewCell
     let cellIdentifier = "InventoryDateTableViewCell"
@@ -320,8 +324,8 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         let aFetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: self.managedObjectContext!,
-            sectionNameKeyPath: nil,
-            cacheName: "Master")
+            sectionNameKeyPath: self.sectionNameKeyPath,
+            cacheName: self.cacheName)
         
         aFetchedResultsController.delegate = self
         _fetchedResultsController = aFetchedResultsController
