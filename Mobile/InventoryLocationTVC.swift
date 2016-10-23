@@ -19,24 +19,11 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
      (c) using a forced unwrapped optional is safe since this controller won't work without a value
      */
     var inventory: Inventory!
-//    var locations = [InventoryLocation]()
-//    var locations: [InventoryLocation] {
-//        
-//    }
+    var selectedLocation: InventoryLocation?
+    
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
     
-
-    // Computed property (using getter)
-    var locations: NSSet {
-        print("locations.getter - \(inventory)")
-        if let locations = inventory?.locations {
-            return locations
-        } else {
-            return NSSet()
-        }
-    }
-
     // TableViewCell
     let cellIdentifier = "InventoryLocationTableViewCell"
     
@@ -57,11 +44,11 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         // Set Title
         title = "Locations"
         
-        // Register reusable cell
+        // Register reusable cell.
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         // CoreData
+        self.performFetch()
         
     }
     
@@ -73,12 +60,10 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        //return 1
         return self.fetchedResultsController.sections?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //return locations.count
         let sectionInfo = self.fetchedResultsController.sections![section]
         return sectionInfo.numberOfObjects
     }
@@ -118,43 +103,52 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        guard let selectedIndex = self.tableView.indexPathForSelectedRow else {
+
+        // Get the selected object.
+        guard let _selectedLocation = selectedLocation else {
+            print("\nPROBLEM - Unable to get selected Location\n")
             return
         }
         
-        //let selectedLocation = locations[selectedIndex.row]
-        let selectedLocation = self.fetchedResultsController.object(at: selectedIndex)
-        
-        
-        if segue.identifier == "ShowLocationCategory" {
+        switch segue.identifier! {
+        case CategorySegue:
             
             // Get the new view controller using segue.destinationViewController.
-            if let destinationController = segue.destination as? InventoryLocationCategoryTVC {
-                
-                // Pass the selected object to the new view controller.
-                destinationController.location = selectedLocation
+            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else {
+                print("\nPROBLEM - Unable to get destinationController\n")
+                return
             }
             
-        } else if segue.identifier == "ShowLocationItem" {
+            // Pass the selected object to the new view controller.
+            destinationController.location = _selectedLocation
+            destinationController.managedObjectContext = self.managedObjectContext
+            destinationController.performFetch()
+
+        case ItemSegue:
             
             // Get the new view controller using segue.destinationViewController.
-            if let destinationController = segue.destination as? InventoryLocationItemTVC {
-                
-                // Pass the selected object to the new view controller.
-                destinationController.location = selectedLocation
-                destinationController.title = selectedLocation.name
+            guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
+                print("\nPROBLEM - Unable to get destinationController\n")
+                return
             }
+            
+            // Pass the selected object to the new view controller.
+            destinationController.title = _selectedLocation.name
+            destinationController.location = _selectedLocation
+            destinationController.managedObjectContext = self.managedObjectContext
+            destinationController.performFetch()
+
+        default:
+            print("\nPROBLEM - segue.identifier not recognized\n")
+            break
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //let selectedLocation = locations[indexPath.row]
-        let selectedLocation = self.fetchedResultsController.object(at: indexPath)
+        selectedLocation = self.fetchedResultsController.object(at: indexPath)
         
-        /*
         // Perform segue based on locationType of selected Inventory.
-        switch selectedLocation.locationType {
+        switch selectedLocation!.locationType {
         case "category"?:
             //  InventoryLocationCategory
             performSegue(withIdentifier: "ShowLocationCategory", sender: self)
@@ -164,7 +158,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         default:
             print("\nPROBLEM - Wrong locationType\n")
         }
-        */
+
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -184,7 +178,14 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        fetchRequest.predicate = NSPredicate(format: ".inventory == \(inventory)")
+        // Set the fetch predicate.
+        if let parent = self.inventory {
+            let fetchPredicate = NSPredicate(format: "inventory == %@", parent)
+            print("\nAdding predicate \(fetchPredicate)")
+            fetchRequest.predicate = fetchPredicate
+        } else {
+            print("\nPROBLEM - Unable able to add predicate\n")
+        }
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
