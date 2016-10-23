@@ -30,11 +30,12 @@ public class InventoryHelper {
     }
     */
     
+    @discardableResult
     public func createObject(json: JSON, isNew: Bool = true) -> Inventory {
         print("Creating object ...")
         
         // Create entity
-        let inventory = Inventory(context: context)
+        var inventory = Inventory(context: context)
         
         // Set properties
         inventory.date = json["date"].string
@@ -48,65 +49,97 @@ public class InventoryHelper {
              inventory.typeID = Int32(typeID)
         }
         if isNew {
-            inventory.uploaded = true
-        } else {
             inventory.uploaded = false
+        } else {
+            inventory.uploaded = true
         }
         
         // Add InventoryItems
-        /*
         if let items = json["items"].array {
-            for item in items {
-                
+            // Currently, JSON will include "items" only for new Inventories
+            if isNew {
+                addItemsForNew(&inventory, json: items)
             }
-            
-            let itemEntities = addItems(json: items)
-            for item in itemEntities {
-                item.setValue(inventory, forKey: "inventory")
-            }
+
         }
-        */
+
         // Add InventoryLocations
         if let locations = json["locations"].array {
-            for loc in locations {
-                let location = addLocation(json: loc)
-                location.inventory = inventory
-                //location.setValue(inventory, forKey: "inventory")
-                //print("Adding InventoryLocation: \(location)")
-            }
+            addLocations(&inventory, json: locations)
         }
         
         // Save
-        print("Entity: \(inventory)")
+        //print("Entity: \(inventory)")
         //context.saveContext()
         
-        //return inventory as! Inventory
         return inventory
     }
 
     // MARK: - A
     
-    func addItemForExisting(json: JSON) -> InventoryItem {
-        let item = InventoryItem(context: context)
-        return item
-    }
-    
-    func addItemForNew(json: JSON) -> InventoryItem {
-        let item = InventoryItem(context: context)
-        return item
-    }
-
-    func addLocation(json: JSON) -> InventoryLocation {
-        let location = InventoryLocation(context: context)
-        return location
-    }
-
-    // MARK: - B
-    
-    func addLocations(inventory: inout Inventory, json: [JSON]) {
+    // ME: isn't this covered by updateExistingInventory()?
+    func addItemsForExisting(_ inventory: inout Inventory, json: [JSON]) {
         for object in json {
-            let location = InventoryLocation(context: context)
+            let item = InventoryItem(context: context)
             
+            // Properties
+            if let remoteID = object["id"].int {
+                item.remoteID = Int32(remoteID)
+            }
+            if let name = object["item"]["name"].string {
+                item.name = name
+            }
+            if let itemID = object["item"]["id"].int {
+                //if let itemID = object["item_id"].int {
+                item.itemID = Int32(itemID)
+            }
+            
+            if let categoryID = object["item"]["category"]["id"].int {
+                item.categoryID = Int32(categoryID)
+            }
+            
+            //if let quantity = object["quantity"].double {
+            //    item.quantity = Int32(quantity)
+            //}
+            // if let unitID = object["unit_id"].int {
+            
+            // Relationship
+            item.inventory = inventory
+            
+        }
+    }
+    
+    func addItemsForNew(_ inventory: inout Inventory, json: [JSON]) {
+        for object in json {
+            let item = InventoryItem(context: context)
+            
+            // Properties
+            if let itemID = object["id"].int {
+                item.itemID = Int32(itemID)
+            }
+            if let name = object["name"].string {
+                item.name = name
+            }
+            if let categoryID = object["category_id"].int {
+                item.categoryID = Int32(categoryID)
+            }
+            //if let packSize = item["pack_size"].int {
+            //if let inventoryUnitID = object["inventory_unit_id"].int {
+            //if let subSize = object["sub_size"].int {
+            //if let subUnitID = object["sub_unit_id"].int {
+            
+            // Relationship
+            item.inventory = inventory
+            
+        }
+    
+    }
+
+    func addLocations(_ inventory: inout Inventory, json: [JSON]) {
+        for object in json {
+            var location = InventoryLocation(context: context)
+
+            // Properties
             if let name = object["name"].string {
                 location.name = name
             }
@@ -116,44 +149,87 @@ public class InventoryHelper {
             if let locationType = object["loc_type"].string {
                 location.locationType = locationType
             }
+
+            // Relationship
             location.inventory = inventory
-                        
+
             // X based on Location type
             switch location.locationType {
             case "item"?:
-                //if let itemIDs = object["items"].array {
+                if let itemIDs = object["items"].array {
+                    addLocationItems(location: &location, json: itemIDs)
+                }
+                
+                /*
                 print("Type: item")
+                if let itemIDs = object["items"].array {
+                    //let locItem = InventoryLocationItem(context: self.context)
+                
+                    for (position, itemID) in itemIDs.enumerated() {
+                        if let itemID = itemID.int {
+                            
+                            let locItem = addLocationItem(itemID: itemID, position: position + 1)
+                            
+
+                            
+                        }
+                    }
+                }
+                */
+            
+            
             case "category"?:
                 print("Type: category")
             default:
                 print("Type: other")
             }
             
-            //print("Adding InventoryLocation: \(location)")
+            print("Adding InventoryLocation: \(location)")
         }
     }
-    
     
     /// Describe me
     ///
     /// - parameter parent:     Either InventoryLocation or InventoryLocationCategory
     /// - parameter parentType: Either "location" or "category"
     /// - parameter json:       JSON
-    func addLocationItems(parent: inout AnyObject, parentType: String, json: JSON) {
-
-        switch parentType {
-        case "location":
-            print("location")
-            // InventoryLocationItem.location = parent
-        case "category":
-            print("category")
-            // InventoryLocationItem.category = parent
-        default:
-            print("other")
+    func addLocationItems(location: inout InventoryLocation, json: [JSON]) {
+        for (position, itemID) in json.enumerated() {
+            if let itemID = itemID.int {
+                let locItem = addLocationItem(itemID: itemID, position: position + 1)
+                locItem.location = location
+                
+            }
         }
-
     }
 
+    func addLocationItems(category: inout InventoryLocationCategory, json: [JSON]) {
+        for (position, itemID) in json.enumerated() {
+            if let itemID = itemID.int {
+                let locItem = addLocationItem(itemID: itemID, position: position + 1)
+                locItem.category = category
+            }
+        }
+    }
+    
+    func addLocationItem(itemID: Int, position: Int?) -> InventoryLocationItem {
+        let locItem = InventoryLocationItem(context: self.context)
+        
+        // Set properties
+        locItem.itemID = Int32(itemID)
+        if let position = position {
+            locItem.position = Int16(position)
+        }
+    
+        // Try to find corresponding item and add relationship
+        if let item = fetchInventoryItem(itemID: itemID) {
+            print("Found Item \(item)")
+            locItem.item = item
+        }
+    
+        return locItem
+    }
+    
     // MARK: - C
     
     func updateExistingInventory(_ inventory: inout Inventory, withJSON json: JSON) {
@@ -253,6 +329,47 @@ public class InventoryHelper {
             print("error executing fetch request: \(error)")
         }
         
+        return nil
+    }
+    
+    func fetchInventoryItem(itemID: Int) -> InventoryItem? {
+        /*
+        let fetchRequest: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
+        var results: [InventoryItem] = []
+        
+        do {
+            // return try self.context.executeFetchRequest(request)
+            results = try self.context.fetch(fetchRequest)
+            if results.count == 1 {
+                return results[0]
+            } else {
+                print("Found multiple matches: \(results)")
+                //return nil
+            }
+            
+        }
+        catch {
+            print("error executing fetch request: \(error)")
+        }
+        */
+        
+        //let request: NSFetchRequest<NSFetchRequestResult> = InventoryItem.fetchRequest()
+        let request: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "itemID == \(Int32(itemID))")
+        
+        do {
+            let searchResults = try context.fetch(request)
+             if searchResults.count == 1 {
+                return searchResults[0]
+             } else {
+                print("Found multiple matches: \(searchResults)")
+                return searchResults[0]
+            }
+            
+        } catch {
+            print("Error with request: \(error)")
+        }
         return nil
     }
     
