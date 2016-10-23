@@ -12,7 +12,6 @@ import CoreData
 class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: Properties
-    var managedObjectContext: NSManagedObjectContext?
     
     /* Force unwrap (`!`) because:
      (a) a variable must have an initial value
@@ -24,6 +23,8 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
 //    var locations: [InventoryLocation] {
 //        
 //    }
+    // FetchedResultsController
+    var managedObjectContext: NSManagedObjectContext?
     
 
     // Computed property (using getter)
@@ -47,7 +48,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Uncomment the following line to preserve selection between presentations
+        // Uncomment the following line to preserve selection between presentations.
         // self.clearsSelectionOnViewWillAppear = false
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
@@ -59,8 +60,8 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         // Register reusable cell
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
-        // Get CoreData stuff
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        // CoreData
         
     }
     
@@ -161,7 +162,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
             // InventoryLocationItem
             performSegue(withIdentifier: "ShowLocationItem", sender: self)
         default:
-            print("PROBLEM - Wrong locationType")
+            print("\nPROBLEM - Wrong locationType\n")
         }
         */
         tableView.deselectRow(at: indexPath, animated: true)
@@ -180,8 +181,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: false)
-        
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         fetchRequest.predicate = NSPredicate(format: ".inventory == \(inventory)")
@@ -192,17 +192,6 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         aFetchedResultsController.delegate = self
         _fetchedResultsController = aFetchedResultsController
         
-        /*
-        do {
-            try _fetchedResultsController!.performFetch()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-        */
- 
         return _fetchedResultsController!
     }
     

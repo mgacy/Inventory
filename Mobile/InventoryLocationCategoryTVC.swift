@@ -35,6 +35,8 @@ class InventoryLocationCategoryTVC: UITableViewController {
         
         // Set title.
         title = location.name
+        
+        // Register reusable cell.
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
     }
     
@@ -93,7 +95,6 @@ class InventoryLocationCategoryTVC: UITableViewController {
         performSegue(withIdentifier: ItemSegue, sender: self)
         
         tableView.deselectRow(at: indexPath, animated: true)
-        
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation

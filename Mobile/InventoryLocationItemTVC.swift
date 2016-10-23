@@ -44,6 +44,7 @@ class InventoryLocationItemTVC: UITableViewController {
         // Register reusable cell
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
+        // CoreData
         performFetch()
         //let objects = self.fetchedResultsController.fetchedObjects
         //print("Fetched Objects: \(objects)")
@@ -85,7 +86,7 @@ class InventoryLocationItemTVC: UITableViewController {
         if let item = locationItem.item {
             cell.textLabel?.text = item.name
         } else {
-            print("PROBLEM configuringCell")
+            print("\nPROBLEM - configuringCell\n")
         }
     }
     

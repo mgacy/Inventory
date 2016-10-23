@@ -14,12 +14,12 @@ import SwiftyJSON
 class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
     // MARK: Properties
-    var managedObjectContext: NSManagedObjectContext? = nil
     
     var destinationController: UIViewController?
     var selectedInventory: Inventory?
-
-    var storeID = 1
+    
+    // FetchedResultsController
+    var managedObjectContext: NSManagedObjectContext? = nil
     
     // TableViewCell
     let cellIdentifier = "InventoryDateTableViewCell"
@@ -28,11 +28,14 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     // TODO: make enum?
     let ExistingItemSegue = "FetchExistingInventory"
     let SettingsSegue = "ShowSettings"
+
+    // TODO - provide interface to control this
+    var storeID = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Uncomment the following line to preserve selection between presentations
+        // Uncomment the following line to preserve selection between presentations.
         // self.clearsSelectionOnViewWillAppear = false
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
@@ -41,22 +44,18 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         // Register tableView cells
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
-        // Get CoreData stuff
+        // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
         self.performFetch()
         
-        //let xxx = self.fetchedResultsController.fetchedObjects
-        //print("Objects: \(xxx)")
-        
-        // 1. Check for existence of email, login
+        // 1. Check for existence of email and login.
         if AuthorizationHandler.sharedInstance.userExists {
             print("User exists ...")
             
-            // Delete any uploaded Inventories before fetching updated list
+            // Delete any uploaded Inventories before fetching updated list.
             deleteExistingInventories()
             
-            // Login to server, then get list of Inventories from server if successful
+            // Login to server, then get list of Inventories from server if successful.
             APIManager.sharedInstance.login(completionHandler: self.completedLogin)
         } else {
             print("User does not exist")
@@ -86,17 +85,16 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
 
             // Get the new view controller.
             guard let controller = segue.destination as? InventoryLocationTVC else {
-                print("PROBLEM getting destination controller")
+                print("\nPROBLEM - Unable to get destination controller\n")
                 return
             }
 
-            // Pass selection to new view controller
+            // Pass selection to new view controller.
             if let selection = selectedInventory {
                 controller.inventory = selection
-                // print("destination.inventory: \(controller.inventory.date)")
                 controller.performFetch()
             } else {
-                print("PROBLEM getting selection")
+                print("\nPROBLEM - Unable to get selection\n")
             }
             
         case SettingsSegue:
@@ -149,11 +147,11 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             switch selection.uploaded {
             case true:
                 guard let locations = selection.locations else {
-                    print("PROBLEM: selectedInventory.locations was nil")
+                    print("\nPROBLEM - selectedInventory.locations was nil\n")
                     return
                 }
                 
-                // Check whether we have already fetched Inventory since launching app
+                // Check whether we have already fetched Inventory since launching app.
                 if locations.count > 0 {
                     
                     // LOAD INVENTORY
@@ -179,7 +177,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     }
     
     @IBAction func newTapped(_ sender: AnyObject) {
-        // Get new Inventory
+        // Get new Inventory.
         APIManager.sharedInstance.getNewInventory(
             isActive: true, typeID: 1, storeID: storeID, completionHandler: completedGetNewInventory)
     }
@@ -189,6 +187,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     func completedGetExistingInventory(json: JSON) -> Void {
         if var selection = selectedInventory {
 
+            // Update selected Inventory with full JSON from server.
             InventoryHelper.sharedInstance.updateExistingInventory(&selection, withJSON: json)
             
             // Save the context.
@@ -205,7 +204,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             performSegue(withIdentifier: ExistingItemSegue, sender: self)
             
         } else {
-            print("Still failed to get selected Inventory")
+            print("\nPROBLEM - Still failed to get selected Inventory\n")
         }
         
     }
