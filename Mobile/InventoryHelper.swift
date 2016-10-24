@@ -74,38 +74,7 @@ public class InventoryHelper {
         return inventory
     }
 
-    // MARK: - A
-    
-    // ME: isn't this covered by updateExistingInventory()?
-    func addItemsForExisting(_ inventory: inout Inventory, json: [JSON]) {
-        for object in json {
-            let item = InventoryItem(context: context)
-            
-            // Properties
-            if let remoteID = object["id"].int {
-                item.remoteID = Int32(remoteID)
-            }
-            if let name = object["item"]["name"].string {
-                item.name = name
-            }
-            if let itemID = object["item"]["id"].int {
-                //if let itemID = object["item_id"].int {
-                item.itemID = Int32(itemID)
-            }
-            
-            if let categoryID = object["item"]["category"]["id"].int {
-                item.categoryID = Int32(categoryID)
-            }
-            
-            //if let quantity = object["quantity"].double {
-            //    item.quantity = Int32(quantity)
-            //}
-            // if let unitID = object["unit_id"].int {
-            
-            // Relationship
-            item.inventory = inventory
-        }
-    }
+    // MARK: - New
     
     func addItemsForNew(_ inventory: inout Inventory, json: [JSON]) {
         for object in json {
@@ -210,7 +179,6 @@ public class InventoryHelper {
         return locItem
     }
     
-    // MARK: - C
     func addCategoriesToNew(location: inout InventoryLocation, json: [JSON]) {
         for object in json {
             var category = InventoryLocationCategory(context: self.context)
@@ -232,6 +200,8 @@ public class InventoryHelper {
             }
         }
     }
+    
+    // MARK: - Existing
     
     func updateExistingInventory(_ inventory: inout Inventory, withJSON json: JSON) {
 
@@ -289,9 +259,74 @@ public class InventoryHelper {
         }
     }
 
-    func addItemsToDefaultLocation() {
-        
+    // ME: isn't this covered by updateExistingInventory()?
+    func addItemsForExisting(_ inventory: inout Inventory, json: [JSON]) {
+        for object in json {
+            let item = InventoryItem(context: context)
+            
+            // Properties
+            if let remoteID = object["id"].int {
+                item.remoteID = Int32(remoteID)
+            }
+            if let name = object["item"]["name"].string {
+                item.name = name
+            }
+            if let itemID = object["item"]["id"].int {
+                //if let itemID = object["item_id"].int {
+                item.itemID = Int32(itemID)
+            }
+            
+            if let categoryID = object["item"]["category"]["id"].int {
+                item.categoryID = Int32(categoryID)
+            }
+            
+            //if let quantity = object["quantity"].double {
+            //    item.quantity = Int32(quantity)
+            //}
+            // if let unitID = object["unit_id"].int {
+            
+            // Relationship
+            item.inventory = inventory
+        }
     }
+    
+    /// For existing Inventory; ...
+    ///
+    /// - parameter location: InventoryLocation
+    /// - parameter item:     InventoryItem
+    /// - parameter locItem:  InventoryLocationItem
+    /// - parameter json:     Relevant JSON
+    func addCategoryToExisting(location: inout InventoryLocation, item: inout InventoryItem,
+                               locItem: inout InventoryLocationItem, json: JSON) {
+        
+        // Handle ItemCategory and InventoryLocationCategory
+        guard let categoryName = json["item"]["category"]["name"].string else { return }
+        guard let id = json["item"]["category"]["id"].int else { return }
+        let categoryID = Int32(id)
+        
+        // TODO: fetch / add corresponding ItemCategory?
+        item.categoryID = categoryID
+        
+        var theLocCat: InventoryLocationCategory
+        if let theLocCat = location.categories?.filter({ ($0 as! InventoryLocationCategory).categoryID == categoryID }).first {
+            
+            // Found InventoryLocationCategory
+            (theLocCat as! InventoryLocationCategory).location = location
+            locItem.category = (theLocCat as! InventoryLocationCategory)
+            
+        } else {
+            
+            // Create new InventoryLocationCategory
+            theLocCat = InventoryLocationCategory(context: self.context)
+            theLocCat.name = categoryName
+            theLocCat.categoryID = categoryID
+            
+            theLocCat.location = location
+            locItem.category = theLocCat
+        }
+    }
+    
+    // func addItemsToDefaultLocation() {}
     
     // MARK: - Fetch Items
     /*
@@ -353,45 +388,6 @@ public class InventoryHelper {
             print("Error with request: \(error)")
         }
         return nil
-    }
-    
-
-    // MARK: - C
-    
-    /// For existing Inventory; ...
-    ///
-    /// - parameter location: InventoryLocation
-    /// - parameter item:     InventoryItem
-    /// - parameter locItem:  InventoryLocationItem
-    /// - parameter json:     Relevant JSON
-    func addCategoryToExisting(location: inout InventoryLocation, item: inout InventoryItem,
-                               locItem: inout InventoryLocationItem, json: JSON) {
-        
-        // Handle ItemCategory and InventoryLocationCategory
-        guard let categoryName = json["item"]["category"]["name"].string else { return }
-        guard let id = json["item"]["category"]["id"].int else { return }
-        let categoryID = Int32(id)
-        
-        // TODO: fetch / add corresponding ItemCategory?
-        item.categoryID = categoryID
-    
-        var theLocCat: InventoryLocationCategory
-        if let theLocCat = location.categories?.filter({ ($0 as! InventoryLocationCategory).categoryID == categoryID }).first {
-            
-            // Found InventoryLocationCategory
-            (theLocCat as! InventoryLocationCategory).location = location
-            locItem.category = (theLocCat as! InventoryLocationCategory)
-        
-        } else {
-            
-            // Create new InventoryLocationCategory
-            theLocCat = InventoryLocationCategory(context: self.context)
-            theLocCat.name = categoryName
-            theLocCat.categoryID = categoryID
-            
-            theLocCat.location = location
-            locItem.category = theLocCat
-        }
     }
     
 }
