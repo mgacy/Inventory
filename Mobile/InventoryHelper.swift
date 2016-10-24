@@ -183,9 +183,10 @@ public class InventoryHelper {
     }
 
     func addLocationItems(category: inout InventoryLocationCategory, json: [JSON]) {
-        for (position, itemID) in json.enumerated() {
+        // We want alphabetical sorting of Items for LocationCategories, so omit position
+        for itemID in json {
             if let itemID = itemID.int {
-                let locItem = addLocationItem(itemID: itemID, position: position + 1)
+                let locItem = addLocationItem(itemID: itemID, position: nil)
                 locItem.category = category
             }
         }
