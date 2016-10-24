@@ -178,6 +178,16 @@ class InventoryKeypadVC: UIViewController {
         
         itemHistory.text = output.history
         
+        // Item.name
+        guard let item = currentItem.item else {
+            itemName.text = "Error (1)"
+            return
+        }
+        guard let name = item.name else {
+            itemName.text = "Error (2)"
+            return
+        }
+        itemName.text = name
     }
     
     func updateForNewItem() {
