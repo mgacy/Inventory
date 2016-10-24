@@ -155,11 +155,34 @@ public class InventoryHelper {
                 if let itemIDs = object["items"].array {
                     addLocationItems(location: &location, json: itemIDs)
                 }
-                        }
-                    }
-                }
             case "category"?:
                 print("Type: category")
+                if let categories = object["categories"].array {
+                    addCategoriesToNew(location: &location, json: categories)
+                    
+                    /*
+                    // TODO: put in separate method
+                    for object in categories {
+                        var category = InventoryLocationCategory(context: self.context)
+                        
+                        // Properties
+                        if let name = object["name"].string {
+                            category.name = name
+                        }
+                        if let categoryID = object["id"].int {
+                            category.categoryID = Int32(categoryID)
+                        }
+                        
+                        // Relationship
+                        category.location = location
+                        
+                        // LocationItems
+                        if let itemIDs = object["items"].array {
+                            addLocationItems(category: &category, json: itemIDs)
+                        }
+                    }
+                    */
+                }
             default:
                 print("Type: other")
             }
@@ -210,6 +233,27 @@ public class InventoryHelper {
     }
     
     // MARK: - C
+    func addCategoriesToNew(location: inout InventoryLocation, json: [JSON]) {
+        for object in json {
+            var category = InventoryLocationCategory(context: self.context)
+            
+            // Properties
+            if let name = object["name"].string {
+                category.name = name
+            }
+            if let categoryID = object["id"].int {
+                category.categoryID = Int32(categoryID)
+            }
+            
+            // Relationship
+            category.location = location
+            
+            // LocationItems
+            if let itemIDs = object["items"].array {
+                addLocationItems(category: &category, json: itemIDs)
+            }
+        }
+    }
     
     func updateExistingInventory(_ inventory: inout Inventory, withJSON json: JSON) {
 
