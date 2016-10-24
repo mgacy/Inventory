@@ -104,7 +104,6 @@ public class InventoryHelper {
             
             // Relationship
             item.inventory = inventory
-            
         }
     }
     
@@ -129,9 +128,7 @@ public class InventoryHelper {
             
             // Relationship
             item.inventory = inventory
-            
         }
-    
     }
 
     func addLocations(_ inventory: inout Inventory, json: [JSON]) {
@@ -158,25 +155,9 @@ public class InventoryHelper {
                 if let itemIDs = object["items"].array {
                     addLocationItems(location: &location, json: itemIDs)
                 }
-                
-                /*
-                print("Type: item")
-                if let itemIDs = object["items"].array {
-                    //let locItem = InventoryLocationItem(context: self.context)
-                
-                    for (position, itemID) in itemIDs.enumerated() {
-                        if let itemID = itemID.int {
-                            
-                            let locItem = addLocationItem(itemID: itemID, position: position + 1)
-                            
-
-                            
                         }
                     }
                 }
-                */
-            
-            
             case "category"?:
                 print("Type: category")
             default:
@@ -197,7 +178,6 @@ public class InventoryHelper {
             if let itemID = itemID.int {
                 let locItem = addLocationItem(itemID: itemID, position: position + 1)
                 locItem.location = location
-                
             }
         }
     }
@@ -222,7 +202,7 @@ public class InventoryHelper {
     
         // Try to find corresponding item and add relationship
         if let item = fetchInventoryItem(itemID: itemID) {
-            print("Found Item \(item)")
+            // print("Found Item: \(item)")
             locItem.item = item
         }
     
@@ -283,10 +263,8 @@ public class InventoryHelper {
                 
                 // Add InventoryLocationItem to Location
                 newLocItem.location = defaultLocation
-                
             }
         }
-        
     }
 
     func addItemsToDefaultLocation() {
@@ -345,36 +323,15 @@ public class InventoryHelper {
     }
     
     func fetchInventoryItem(itemID: Int) -> InventoryItem? {
-        /*
-        let fetchRequest: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
-        var results: [InventoryItem] = []
-        
-        do {
-            // return try self.context.executeFetchRequest(request)
-            results = try self.context.fetch(fetchRequest)
-            if results.count == 1 {
-                return results[0]
-            } else {
-                print("Found multiple matches: \(results)")
-                //return nil
-            }
-            
-        }
-        catch {
-            print("error executing fetch request: \(error)")
-        }
-        */
-        
-        //let request: NSFetchRequest<NSFetchRequestResult> = InventoryItem.fetchRequest()
         let request: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
         
         request.predicate = NSPredicate(format: "itemID == \(Int32(itemID))")
         
         do {
             let searchResults = try context.fetch(request)
-             if searchResults.count == 1 {
+            if searchResults.count == 1 {
                 return searchResults[0]
-             } else {
+            } else {
                 print("Found multiple matches: \(searchResults)")
                 return searchResults[0]
             }
