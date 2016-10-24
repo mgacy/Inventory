@@ -258,7 +258,7 @@ public class InventoryHelper {
                 var newLocItem = InventoryLocationItem(context: self.context)
                 
                 if let quantity = inventoryItem["quantity"].double {
-                    newLocItem.quantity = quantity
+                    newLocItem.quantity = quantity as NSNumber?
                 }
                 /*
                 if let unitID = inventoryItem["unit_id"].int {

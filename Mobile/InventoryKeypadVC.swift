@@ -165,7 +165,7 @@ class InventoryKeypadVC: UIViewController {
     
     func updateModel() {
         let keypadResult = keypad.evaluateHistory()
-        currentItem.quantity = keypadResult
+        currentItem.quantity = keypadResult! as NSNumber?
     }
     
     // MARK: NEW
@@ -192,7 +192,7 @@ class InventoryKeypadVC: UIViewController {
     
     func updateForNewItem() {
         // Update keypad with info from new currentItem
-        keypad.updateNumber(currentItem.quantity)
+        keypad.updateNumber(currentItem.quantity as Double?)
         
         // Update display
         updateDisplay()
