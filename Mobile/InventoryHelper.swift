@@ -159,29 +159,6 @@ public class InventoryHelper {
                 print("Type: category")
                 if let categories = object["categories"].array {
                     addCategoriesToNew(location: &location, json: categories)
-                    
-                    /*
-                    // TODO: put in separate method
-                    for object in categories {
-                        var category = InventoryLocationCategory(context: self.context)
-                        
-                        // Properties
-                        if let name = object["name"].string {
-                            category.name = name
-                        }
-                        if let categoryID = object["id"].int {
-                            category.categoryID = Int32(categoryID)
-                        }
-                        
-                        // Relationship
-                        category.location = location
-                        
-                        // LocationItems
-                        if let itemIDs = object["items"].array {
-                            addLocationItems(category: &category, json: itemIDs)
-                        }
-                    }
-                    */
                 }
             default:
                 print("Type: other")
@@ -349,16 +326,7 @@ public class InventoryHelper {
                 print("Found multiple matches for unit with id: \(id) - \(searchResults)")
                 return searchResults[0]
             }
-            
-            /*
-            if searchResults.count == 1 {
-                return searchResults[0]
-            } else {
-                print("Found multiple matches: \(searchResults)")
-                return searchResults[0]
-            }
-            */
-            
+
         } catch {
             print("Error with request: \(error)")
         }
