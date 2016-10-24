@@ -26,12 +26,12 @@
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="categories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationCategory" inverseName="location" inverseEntity="InventoryLocationCategory" syncable="YES"/>
         <relationship name="inventory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Inventory" inverseName="locations" inverseEntity="Inventory" syncable="YES"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationItem" inverseName="location" inverseEntity="InventoryLocationItem" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="InventoryLocationItem" inverseName="location" inverseEntity="InventoryLocationItem" syncable="YES"/>
     </entity>
     <entity name="InventoryLocationCategory" representedClassName="InventoryLocationCategory" syncable="YES" codeGenerationType="class">
         <attribute name="categoryID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryLocationItem" inverseName="category" inverseEntity="InventoryLocationItem" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="InventoryLocationItem" inverseName="category" inverseEntity="InventoryLocationItem" syncable="YES"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocation" inverseName="categories" inverseEntity="InventoryLocation" syncable="YES"/>
     </entity>
     <entity name="InventoryLocationItem" representedClassName="InventoryLocationItem" syncable="YES" codeGenerationType="class">
@@ -60,12 +60,12 @@
     </entity>
     <elements>
         <element name="Inventory" positionX="-371" positionY="-135" width="128" height="165"/>
-        <element name="InventoryLocationCategory" positionX="43" positionY="45" width="128" height="103"/>
+        <element name="InventoryLocationCategory" positionX="-0" positionY="27" width="128" height="103"/>
         <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="75"/>
-        <element name="InventoryLocation" positionX="-146" positionY="54" width="128" height="135"/>
+        <element name="InventoryLocation" positionX="-171" positionY="54" width="128" height="133"/>
         <element name="InventoryItem" positionX="-144" positionY="-180" width="128" height="165"/>
-        <element name="InventoryLocationItem" positionX="306" positionY="261" width="128" height="165"/>
-        <element name="Store" positionX="-740" positionY="0" width="128" height="90"/>
-        <element name="Unit" positionX="-740" positionY="126" width="128" height="90"/>
+        <element name="InventoryLocationItem" positionX="306" positionY="261" width="128" height="163"/>
+        <element name="Store" positionX="-594" positionY="-72" width="128" height="90"/>
+        <element name="Unit" positionX="-594" positionY="117" width="128" height="90"/>
     </elements>
 </model>
