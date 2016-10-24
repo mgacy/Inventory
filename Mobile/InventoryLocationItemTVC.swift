@@ -144,8 +144,9 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
         fetchRequest.fetchBatchSize = self.fetchBatchSize
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        let positionSort = NSSortDescriptor(key: "position", ascending: true)
+        let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
+        fetchRequest.sortDescriptors = [positionSort, nameSort]
         
         // Set the fetch predicate.
         if let parentLocation = self.location {
