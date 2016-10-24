@@ -253,6 +253,9 @@ public class InventoryHelper {
                 if let itemID = inventoryItem["item"]["id"].int {
                     newItem.itemID = Int32(itemID)
                 }
+                if let name = inventoryItem["item"]["name"].string {
+                    newItem.name = name
+                }
                 
                 // Create InventoryLocationItem
                 var newLocItem = InventoryLocationItem(context: self.context)
