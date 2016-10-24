@@ -8,36 +8,40 @@
 //
 
 import UIKit
+import CoreData
 
 class InventoryKeypadVC: UIViewController {
     
-    // MARK: Properties (TEMP)
+    // MARK: Properties
+
     var category: InventoryLocationCategory?
     var location: InventoryLocation?
     var currentIndex = 0
     
-    
-    /*
-    // MARK: Properties
-    var category: InventoryLocationCategory?
-    var location: InventoryLocation?
-    //var items: [InventoryLocationItem] {
-    var items: NSSet? {
-        if let category = category {
-            return category.items
-        } else if let location = location {
-            return location.items
-            //} else {
-            //return [InventoryLocationItem]()
+    var items: NSOrderedSet {   // NSMutableOrderedSet?
+        if let parentLocation = self.location {
+            if let items = parentLocation.items {
+                return items
+            }
+        } else if let parentCategory = self.category {
+            if let items = parentCategory.items {
+                return items
+            }
+        } else {
+            print("\nPROBLEM - Unable to add predicate\n")
+            return NSOrderedSet(array:[])
         }
+        return NSOrderedSet(array:[])
     }
     
-    var currentIndex = 0
     var currentItem: InventoryLocationItem {
-        return items[currentIndex]
+        return items[currentIndex] as! InventoryLocationItem
     }
     
     let keypad = KeypadWithHistory()
+    
+    // CoreData
+    var managedObjectContext: NSManagedObjectContext?
     
     // MARK: - Display Outlets
     @IBOutlet weak var itemValue: UILabel!
