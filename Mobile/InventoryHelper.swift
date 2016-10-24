@@ -260,14 +260,14 @@ public class InventoryHelper {
                 if let quantity = inventoryItem["quantity"].double {
                     newLocItem.quantity = quantity as NSNumber?
                 }
-                /*
+                
+                // Get corresponding Unit
                 if let unitID = inventoryItem["unit_id"].int {
-                    // Get corresponding Unit
                     if let inventoryUnit = fetchUnit(id: unitID) {
                         newLocItem.unit = inventoryUnit
                     }
                 }
-                */
+                
                 // Fetch / Create corresponding InventoryLocationCategory and create relationships
                 addCategoryToExisting(location: &defaultLocation, item: &newItem, locItem: &newLocItem,
                                       json: inventoryItem)
@@ -307,25 +307,35 @@ public class InventoryHelper {
     */
     
     func fetchUnit(id: Int) -> Unit? {
-        //let fetchRequest = NSFetchRequest<Unit>
-        let fetchRequest: NSFetchRequest<Unit> = Unit.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "remoteID == \(id)")
+        let request: NSFetchRequest<Unit> = Unit.fetchRequest()
         
-        var results: [Unit] = []
+        request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
         
         do {
-            // return try self.context.executeFetchRequest(request)
-            results = try self.context.fetch(fetchRequest)
-            if results.count == 1 {
-                return results[0]
-            } else {
-                print("Found multiple matches: \(results)")
-                //return nil
+            let searchResults = try context.fetch(request)
+            
+            switch searchResults.count {
+            case 0:
+                print("Unable to find Unit with id: \(id)")
+                return nil
+            case 1:
+                return searchResults[0]
+            default:
+                print("Found multiple matches for unit with id: \(id) - \(searchResults)")
+                return searchResults[0]
             }
             
-        }
-        catch {
-            print("error executing fetch request: \(error)")
+            /*
+            if searchResults.count == 1 {
+                return searchResults[0]
+            } else {
+                print("Found multiple matches: \(searchResults)")
+                return searchResults[0]
+            }
+            */
+            
+        } catch {
+            print("Error with request: \(error)")
         }
         
         return nil
