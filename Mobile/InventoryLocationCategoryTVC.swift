@@ -182,9 +182,8 @@ class InventoryLocationCategoryTVC: UITableViewController, NSFetchedResultsContr
             // TESTING
             let objects = self.fetchedResultsController.fetchedObjects
             print("Fetched Objects: \(objects?.count)")
-            
             if let expectedLocations = self.fetchedResultsController.fetchedObjects {
-                print("TVC should display: \(expectedLocations)")
+                print("InventoryLocationCategoryTVC should display: \(expectedLocations)")
             }
             
             self.tableView.reloadData()

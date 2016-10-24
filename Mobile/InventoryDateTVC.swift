@@ -145,9 +145,6 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedInventory = self.fetchedResultsController.object(at: indexPath)
-        
-        print("Selected \(selectedInventory)")
-
         if let selection = selectedInventory {
             switch selection.uploaded {
             case true:

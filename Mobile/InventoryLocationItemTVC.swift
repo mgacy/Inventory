@@ -77,11 +77,7 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
     
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let locationItem = self.fetchedResultsController.object(at: indexPath)
-        
-        // TEMP
-        //cell.textLabel?.text = "Item \(locationItem.quantity)"
-        //cell.textLabel?.text = "Item \(locationItem.itemID)"
-        
+                
         if let item = locationItem.item {
             cell.textLabel?.text = item.name
         } else {
@@ -154,12 +150,12 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
         // Set the fetch predicate.
         if let parentLocation = self.location {
             let fetchPredicate = NSPredicate(format: "location == %@", parentLocation)
-            print("\nAdding predicate \(fetchPredicate)")
+            //print("\nAdding predicate \(fetchPredicate)")
             fetchRequest.predicate = fetchPredicate
             
         } else if let parentCategory = self.category {
             let fetchPredicate = NSPredicate(format: "category == %@", parentCategory)
-            print("\nAdding predicate \(fetchPredicate)")
+            //print("\nAdding predicate \(fetchPredicate)")
             fetchRequest.predicate = fetchPredicate
 
         } else {
@@ -193,7 +189,7 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
             let objects = self.fetchedResultsController.fetchedObjects
             print("Fetched Objects: \(objects?.count)")
             if let expectedLocations = self.fetchedResultsController.fetchedObjects {
-                print("Item TVC should display: \(expectedLocations)")
+                print("InventoryLocationItemTVC should display: \(expectedLocations)")
             }
             
             self.tableView.reloadData()

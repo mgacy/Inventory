@@ -191,6 +191,8 @@ class InventoryKeypadVC: UIViewController {
     }
     
     func updateForNewItem() {
+        // print("updateForNewItem: \(currentItem.item?.name) - \(currentItem)")
+        
         // Update keypad with info from new currentItem
         keypad.updateNumber(currentItem.quantity as Double?)
         

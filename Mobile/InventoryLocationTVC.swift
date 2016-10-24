@@ -150,6 +150,8 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedLocation = self.fetchedResultsController.object(at: indexPath)
         
+        print("\nSELECTED - Location: \(selectedLocation)\n")
+        
         // Perform segue based on locationType of selected Inventory.
         switch selectedLocation!.locationType {
         case "category"?:
@@ -184,7 +186,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         // Set the fetch predicate.
         if let parent = self.inventory {
             let fetchPredicate = NSPredicate(format: "inventory == %@", parent)
-            print("\nAdding predicate \(fetchPredicate)")
+            //print("\nAdding predicate \(fetchPredicate)")
             fetchRequest.predicate = fetchPredicate
         } else {
             print("\nPROBLEM - Unable able to add predicate\n")
