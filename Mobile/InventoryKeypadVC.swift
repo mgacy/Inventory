@@ -53,14 +53,6 @@ class InventoryKeypadVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
-        /*
-         // Update keypad with info from currentItem
-         updateKeypad()
-         
-         // Update display
-         updateDisplay()
-         */
         updateForNewItem()
     }
     
@@ -122,7 +114,6 @@ class InventoryKeypadVC: UIViewController {
         
         // Update display with updated model properties
         updateDisplay()
-        
     }
     
     @IBAction func decrementTapped(_ sender: AnyObject) {
@@ -147,13 +138,7 @@ class InventoryKeypadVC: UIViewController {
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
             currentIndex += 1
-            /*
-             // Update keypad with info from new currentItem
-             updateKeypad()
-             
-             // Update display with properties of new currentItem
-             updateDisplay()
-             */
+            
             updateForNewItem()
         } else {
             // TODO: cleanup?
@@ -166,13 +151,7 @@ class InventoryKeypadVC: UIViewController {
     @IBAction func previousItemTapped(_ sender: AnyObject) {
         if currentIndex > 0 {
             currentIndex -= 1
-            /*
-             // Update keypad with info from new currentItem
-             updateKeypad()
-             
-             // Update display with properties of new currentItem
-             updateDisplay()
-             */
+
             updateForNewItem()
         } else {
             // TODO: cleanup?
@@ -189,34 +168,14 @@ class InventoryKeypadVC: UIViewController {
         currentItem.quantity = keypadResult
     }
     
-    func updateKeypad() {
-        /*
-         if let itemQuantity = currentItem.quantity {
-         keypad.currentNumber = String(format:"%.1f", itemQuantity)
-         } else {
-         keypad.currentNumber = ""
-         }
-         // TODO: update .stack with currentItem.history (?)
-         //       - do we want to erase history with transition?
-         //       - we don't want to save it (do we?)
-         keypad.stack = []
-         */
-        keypad.updateNumber(currentItem.quantity)
-    }
-    
     // MARK: NEW
     
     func updateDisplay() {
-        
-        // TODO: currentItem.item.name
-        //itemName.text = "Item: \(currentItem.itemID!)"
-        
         let output = keypad.output()
         print("Output: \(output)")
         
         itemValue.text = output.display
         
-        // TODO: currentItem.history
         itemHistory.text = output.history
         
     }
@@ -226,10 +185,7 @@ class InventoryKeypadVC: UIViewController {
         keypad.updateNumber(currentItem.quantity)
         
         // Update display
-        // TODO: currentItem.item.name
-        //itemName.text = "Item: \(currentItem.itemID!)"
         updateDisplay()
-        
     }
     
     /*
@@ -241,5 +197,4 @@ class InventoryKeypadVC: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
-    */
 }
