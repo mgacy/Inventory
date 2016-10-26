@@ -6,6 +6,7 @@ def basic_pods
   pod 'Alamofire', '~> 4.0'
   pod 'SwiftyJSON'
   pod 'KeychainAccess'
+  # pod 'ChameleonFramework/Swift3'
 end
 
 target 'Mobile' do
