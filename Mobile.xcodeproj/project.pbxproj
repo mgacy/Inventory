@@ -13,6 +13,11 @@
 		C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF2D1DB816EB0063CD02 /* Keypad.swift */; };
 		C902FF3E1DBD8B3F0063CD02 /* NumberKeypadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */; };
 		C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */; };
+		C902FF411DBE70290063CD02 /* Inventory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF401DBE70290063CD02 /* Inventory+MyStuff.swift */; };
+		C902FF431DBE769C0063CD02 /* InventoryItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF421DBE769C0063CD02 /* InventoryItem+MyStuff.swift */; };
+		C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */; };
+		C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */; };
+		C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
 		C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E21DB7EF98004C10E6 /* ViewController.swift */; };
 		C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* Main.storyboard */; };
@@ -49,6 +54,11 @@
 		C902FF2D1DB816EB0063CD02 /* Keypad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keypad.swift; sourceTree = "<group>"; };
 		C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberKeypadButton.swift; sourceTree = "<group>"; };
 		C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationKeypadButton.swift; sourceTree = "<group>"; };
+		C902FF401DBE70290063CD02 /* Inventory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Inventory+MyStuff.swift"; sourceTree = "<group>"; };
+		C902FF421DBE769C0063CD02 /* InventoryItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryItem+MyStuff.swift"; sourceTree = "<group>"; };
+		C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationItem+MyStuff.swift"; sourceTree = "<group>"; };
+		C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocation+MyStuff.swift"; sourceTree = "<group>"; };
+		C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9F515E21DB7EF98004C10E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +151,18 @@
 			name = CoreData;
 			sourceTree = "<group>";
 		};
+		C902FF4A1DBE77290063CD02 /* Model Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C902FF401DBE70290063CD02 /* Inventory+MyStuff.swift */,
+				C902FF421DBE769C0063CD02 /* InventoryItem+MyStuff.swift */,
+				C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */,
+				C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */,
+				C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */,
+			);
+			name = "Model Extensions";
+			sourceTree = "<group>";
+		};
 		C9F515D41DB7EF98004C10E6 = {
 			isa = PBXGroup;
 			children = (
@@ -204,6 +226,7 @@
 		C9F516051DB7F11D004C10E6 /* Inventory */ = {
 			isa = PBXGroup;
 			children = (
+				C902FF4A1DBE77290063CD02 /* Model Extensions */,
 				C9F516061DB7F133004C10E6 /* InventoryDateTVC.swift */,
 				C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */,
 				C9F516081DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift */,
@@ -447,10 +470,14 @@
 			files = (
 				C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */,
 				C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */,
+				C902FF411DBE70290063CD02 /* Inventory+MyStuff.swift in Sources */,
 				C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */,
+				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
+				C902FF431DBE769C0063CD02 /* InventoryItem+MyStuff.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
 				C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */,
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
+				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,
 				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
 				C9F516181DB7F158004C10E6 /* AuthorizationHandler.swift in Sources */,
@@ -459,6 +486,7 @@
 				C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */,
 				C9F5160D1DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift in Sources */,
 				C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */,
+				C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */,
 				C902FF3E1DBD8B3F0063CD02 /* NumberKeypadButton.swift in Sources */,
 				C9F5160F1DB7F133004C10E6 /* InventoryKeypadVC.swift in Sources */,
 			);
