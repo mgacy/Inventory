@@ -29,7 +29,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     let cellIdentifier = "InventoryDateTableViewCell"
     
     // Segues
-    // TODO: make enum?
+    // TODO - make enum?
     let ExistingItemSegue = "FetchExistingInventory"
     let SettingsSegue = "ShowSettings"
 
@@ -44,6 +44,8 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        title = "Inventories"
         
         // Register tableView cells
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -63,7 +65,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             APIManager.sharedInstance.login(completionHandler: self.completedLogin)
         } else {
             print("User does not exist")
-            // TODO: how to handle this?
+            // TODO - how to handle this?
         }
         
     }

@@ -275,7 +275,6 @@ public class InventoryHelper {
                 //if let itemID = object["item_id"].int {
                 item.itemID = Int32(itemID)
             }
-            
             if let categoryID = object["item"]["category"]["id"].int {
                 item.categoryID = Int32(categoryID)
             }
@@ -354,7 +353,7 @@ public class InventoryHelper {
             
             switch searchResults.count {
             case 0:
-                print("Unable to find Unit with id: \(id)")
+                print("PROBLEM - Unable to find Unit with id: \(id)")
                 return nil
             case 1:
                 return searchResults[0]

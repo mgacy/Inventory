@@ -18,6 +18,8 @@ class InventoryKeypadVC: UIViewController {
     var location: InventoryLocation?
     var currentIndex = 0
     
+    // TODO: perform fetch with necessary sorting instead?
+    
     var items: NSOrderedSet {   // NSMutableOrderedSet?
         if let parentLocation = self.location {
             if let items = parentLocation.items {
