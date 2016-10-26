@@ -52,7 +52,10 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         
         // CoreData
         self.performFetch()
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -85,6 +88,17 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let location = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = location.name
+        
+        if let status = location.status {
+            switch status {
+            case .notStarted:
+                cell.textLabel?.textColor = UIColor.lightGray
+            case .incomplete:
+                cell.textLabel?.textColor = ColorPalette.blueColor
+            case .complete:
+                cell.textLabel?.textColor = UIColor.black
+            }
+        }
     }
     
     // Override to support conditional editing of the table view.

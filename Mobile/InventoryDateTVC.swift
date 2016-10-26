@@ -133,6 +133,13 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let inventory = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = inventory.date
+        
+        switch inventory.uploaded {
+        case true:
+            cell.textLabel?.textColor = UIColor.black
+        case false:
+            cell.textLabel?.textColor = ColorPalette.blueColor
+        }
     }
     
     // Override to support conditional editing of the table view.

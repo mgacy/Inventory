@@ -40,12 +40,14 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         // Register reusable cell
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
         // CoreData
         performFetch()
-        //let objects = self.fetchedResultsController.fetchedObjects
-        //print("Fetched Objects: \(objects)")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -67,7 +69,10 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Dequeue Reusable Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
+        
+        // OLD
+        //let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
         
         // Configure the cell
         self.configureCell(cell, atIndexPath: indexPath)
@@ -82,6 +87,14 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
             cell.textLabel?.text = item.name
         } else {
             print("\nPROBLEM - configuringCell\n")
+        }
+        
+        if let quantity = locationItem.quantity {
+            cell.textLabel?.textColor = UIColor.black
+            cell.detailTextLabel?.text = "\(quantity)"
+        } else {
+            cell.textLabel?.textColor = UIColor.lightGray
+            cell.detailTextLabel?.text = " "
         }
     }
     

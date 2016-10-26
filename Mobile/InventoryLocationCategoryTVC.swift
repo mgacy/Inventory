@@ -47,10 +47,10 @@ class InventoryLocationCategoryTVC: UITableViewController, NSFetchedResultsContr
         // CoreData
         //managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
-        
-        // TESTING
-        //let objects = self.fetchedResultsController.fetchedObjects
-        //print("viewDidLoad - Fetched Objects: \(objects)")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -83,6 +83,15 @@ class InventoryLocationCategoryTVC: UITableViewController, NSFetchedResultsContr
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let category = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = category.name
+
+        switch category.status {
+        case .notStarted:
+            cell.textLabel?.textColor = UIColor.lightGray
+        case .incomplete:
+            cell.textLabel?.textColor = ColorPalette.blueColor
+        case .complete:
+            cell.textLabel?.textColor = UIColor.black
+        }
     }
     
     // Override to support conditional editing of the table view.
