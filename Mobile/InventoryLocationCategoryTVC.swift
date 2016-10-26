@@ -137,7 +137,7 @@ class InventoryLocationCategoryTVC: UITableViewController, NSFetchedResultsContr
         destinationController.title = selection.name
         destinationController.category = selection
         destinationController.managedObjectContext = self.managedObjectContext
-        destinationController.performFetch()
+        //destinationController.performFetch()
     }
     
     // MARK: - Fetched results controller

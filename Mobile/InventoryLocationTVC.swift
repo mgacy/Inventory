@@ -139,7 +139,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
             // Pass the selected object to the new view controller.
             destinationController.location = _selectedLocation
             destinationController.managedObjectContext = self.managedObjectContext
-            destinationController.performFetch()
+            //destinationController.performFetch()
 
         case ItemSegue:
             
@@ -153,7 +153,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
             destinationController.title = _selectedLocation.name
             destinationController.location = _selectedLocation
             destinationController.managedObjectContext = self.managedObjectContext
-            destinationController.performFetch()
+            //destinationController.performFetch()
 
         default:
             print("\nPROBLEM - segue.identifier not recognized\n")

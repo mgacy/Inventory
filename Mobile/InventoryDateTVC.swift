@@ -99,7 +99,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             if let selection = selectedInventory {
                 controller.inventory = selection
                 controller.managedObjectContext = self.managedObjectContext
-                controller.performFetch()
+                //controller.performFetch()
             } else {
                 print("\nPROBLEM - Unable to get selection\n")
             }
