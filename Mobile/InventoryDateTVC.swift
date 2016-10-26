@@ -196,10 +196,10 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     // MARK: - Completion Handlers
     
     func completedGetExistingInventory(json: JSON) -> Void {
-        if var selection = selectedInventory {
+        if let selection = selectedInventory {
 
             // Update selected Inventory with full JSON from server.
-            InventoryHelper.sharedInstance.updateExistingInventory(&selection, withJSON: json)
+            selection.updateExisting(context: self.managedObjectContext!, json: json)
             
             // Save the context.
             let context = self.fetchedResultsController.managedObjectContext
@@ -221,8 +221,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     }
     
     func completedGetNewInventory(json: JSON) -> Void {
-        
-        selectedInventory = InventoryHelper.sharedInstance.createObject(json: json, isNew: true)
+        selectedInventory = Inventory(context: self.managedObjectContext!, json: json, uploaded: false)
         
         // Save the context.
         let context = self.fetchedResultsController.managedObjectContext
@@ -241,7 +240,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     func completedGetInventories(json: JSON) -> Void {
     
         for (_, item) in json {
-            InventoryHelper.sharedInstance.createObject(json: item, isNew: false)
+            _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
         }
         
         // Save the context.
@@ -262,7 +261,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             print("\nCompleted login - succeeded: \(succeeded)")
             
             // Get list of Inventories from server
-            print("\nFetching existing Inventories from server ...")
+            // print("\nFetching existing Inventories from server ...")
             APIManager.sharedInstance.getInventories(storeID: storeID, completionHandler: self.completedGetInventories)
             
         } else {
