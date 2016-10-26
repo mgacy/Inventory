@@ -87,16 +87,16 @@ class Keypad {
     }
     
     func _updateNumber(_ newNumber: Double?) {
-        guard let newNumber = newNumber else {
+        guard let _newNumber = newNumber else {
             currentNumber = ""
             return
         }
         
-        if let newString = numberFormatter.string(from:  NSNumber(value: newNumber)) {
+        if let newString = numberFormatter.string(from:  NSNumber(value: _newNumber)) {
             currentNumber = newString
         } else {
             // Is it possible to reach this point?
-            print("There was a problem converting '\(newNumber)' to a string")
+            print("There was a problem converting '\(_newNumber)' to a string")
             currentNumber = "Error"
         }
     }
