@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Dd5-Cp-qL8">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Dd5-Cp-qL8">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -56,7 +56,7 @@
         <!--Inventory LocationTVC-->
         <scene sceneID="FUc-Sc-EDt">
             <objects>
-                <tableViewController id="H3s-md-9Gz" customClass="InventoryLocationTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="H3s-md-9Gz" userLabel="Inventory LocationTVC" customClass="InventoryLocationTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DzA-AY-wbP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -66,6 +66,11 @@
                             <outlet property="delegate" destination="H3s-md-9Gz" id="VfJ-7H-Qeg"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="H8h-2x-fWf">
+                        <barButtonItem key="rightBarButtonItem" image="Upload" id="Thp-L9-W6m" userLabel="Upload"/>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="EVU-Sa-EdD" kind="show" identifier="ShowLocationCategory" id="iyW-Ae-r5B"/>
                         <segue destination="2re-X1-JiU" kind="show" identifier="ShowLocationItem" id="4yW-DD-bsH"/>
@@ -353,6 +358,9 @@
             <point key="canvasLocation" x="4834" y="125"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Upload" width="22" height="22"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="4yW-DD-bsH"/>
     </inferredMetricsTieBreakers>
