@@ -271,6 +271,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     
     // MARK: - A
     
+    // TODO: pass filter: NSPredicate? as parameter
     func deleteExistingInventories() {
         print("deleteExistingInventories ...")
         
@@ -278,7 +279,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         let fetchRequest: NSFetchRequest<Inventory> = Inventory.fetchRequest()
         
         // Configure Fetch Request
-        fetchRequest.predicate = NSPredicate(format: "uploaded == true")
+        //fetchRequest.predicate = NSPredicate(format: "uploaded == true")
         
         // Initialize Batch Delete Request
         let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
