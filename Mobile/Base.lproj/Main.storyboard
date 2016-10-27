@@ -21,6 +21,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="B3t-Y5-I1M">
+                        <barButtonItem key="leftBarButtonItem" image="reset" id="rbc-tm-kyC">
+                            <connections>
+                                <action selector="resetTapped:" destination="YU6-fn-vVE" id="CjF-ov-Uxg"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="7uD-1T-PFp">
                             <connections>
                                 <action selector="newTapped:" destination="YU6-fn-vVE" id="84G-da-Tix"/>
@@ -68,7 +73,11 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="H8h-2x-fWf">
-                        <barButtonItem key="rightBarButtonItem" image="Upload" id="Thp-L9-W6m" userLabel="Upload"/>
+                        <barButtonItem key="rightBarButtonItem" image="Upload" id="Thp-L9-W6m" userLabel="Upload">
+                            <connections>
+                                <action selector="uploadTapped:" destination="H3s-md-9Gz" id="Yqv-gJ-hgb"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -361,6 +370,7 @@
     </scenes>
     <resources>
         <image name="Upload" width="22" height="22"/>
+        <image name="reset" width="22" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="4yW-DD-bsH"/>
