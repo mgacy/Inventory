@@ -15,7 +15,7 @@ public enum Router: URLRequestConvertible {
     case getNewInventory(isActive: Bool, typeID: Int, storeID: Int)
     case listInventories(storeID: Int)
     case fetchInventory(remoteID: Int)
-    case postInventory([String: AnyObject])
+    case postInventory([String: Any])
     
     //static let baseURLString = "http://127.0.0.1:5000"
     static let baseURLString = "http:mgacy.pythonanywhere.com"
@@ -47,7 +47,7 @@ public enum Router: URLRequestConvertible {
         case .fetchInventory(let remoteID):
             return "\(Router.apiPath)/inventories/\(remoteID)"
         case .postInventory:
-            return "/inventories"
+            return "\(Router.apiPath)/inventories"
         }
     }
     
@@ -59,7 +59,8 @@ public enum Router: URLRequestConvertible {
             return ["active": isActive, "inventory_type_id": typeID, "store_id": storeID]
         // case .listInventories:
         // case .fetchInventory:
-        // case .postInventory:
+         case .postInventory(let parameters):
+            return parameters
         default:
             return [:]
         }
@@ -84,7 +85,8 @@ public enum Router: URLRequestConvertible {
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         // case .listInventories:
         // case .fetchInventory(let remoteID):
-        // case .postInventory(let parameters):
+         case .postInventory:
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         default:
             break
         }
