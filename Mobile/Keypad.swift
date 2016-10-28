@@ -64,8 +64,8 @@ class Keypad {
     
     func pushDigit(value: Int) {
         if isEditingNumber {
-            // TODO: prevent '00'
-            // TODO: prevent 'x.yzn'; add setting for max significant digits
+            // TODO - prevent '00'
+            // TODO - prevent 'x.yzn'; add setting for max significant digits
             currentNumber += "\(value)"
             
         } else {
@@ -152,7 +152,7 @@ class KeypadWithHistory: Keypad {
         
         self.stack = []
         
-        // TODO: override settings for numberFormatter?
+        // TODO - override settings for numberFormatter?
     }
     
     // MARK: - Stack Manipulation
@@ -206,6 +206,9 @@ class KeypadWithHistory: Keypad {
     override func updateNumber(_ newNumber: Double?) {
         stack = []
         _updateNumber(newNumber)
+        if newNumber != nil {
+            pushOperator()
+        }
     }
     
     // MARK: - Output
@@ -244,7 +247,7 @@ class KeypadWithHistory: Keypad {
             if !stack.isEmpty{
                 for item in stack {
                     /*
-                     TODO: replace `evaluateNumber()` with .string(from:) and use
+                     TODO - replace `evaluateNumber()` with .string(from:) and use
                      that here?
                      */
                     if let number = Double(item) {
