@@ -85,4 +85,18 @@ class APIManager {
                 }
         }
     }
+    
+    func postInventory(inventory: [String: Any], completionHandler: @escaping (Bool) -> Void) {
+        sessionManager.request(Router.postInventory(inventory))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("Success: \(value)")
+                    completionHandler(true)
+                case .failure(let error):
+                    print("Failure: \(error)")
+                    completionHandler(false)
+                }
+        }
+    }
 }

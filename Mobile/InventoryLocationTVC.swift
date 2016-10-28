@@ -181,6 +181,31 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    // MARK: - Upload
+    
+    @IBAction func uploadTapped(_ sender: AnyObject) {
+        print("Uploading Inventory ...")
+        
+        guard let dict = self.inventory.serialize() else {
+            print("\nPROBLEM - Unable to serialize Inventory")
+            // TODO - completedUpload(false)
+            return
+        }
+        APIManager.sharedInstance.postInventory(inventory: dict, completionHandler: self.completedUpload)
+        
+    }
+    
+    func completedUpload(_ succeeded: Bool) {
+        if succeeded {
+            print("\nCompleted upload - succeeded: \(succeeded)")
+            // inventory.uploaded = true
+            // TODO - save context
+            
+        } else {
+            print("\nPROBLEM - Unable to upload Inventory")
+        }
+    }
+    
     // MARK: - Fetched results controller
     
     var fetchedResultsController: NSFetchedResultsController<InventoryLocation> {
