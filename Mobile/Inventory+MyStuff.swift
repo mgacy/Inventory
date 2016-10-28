@@ -48,6 +48,33 @@ extension Inventory {
         }
     }
     
+    // MARK: - Serialization
+    
+    func serialize() -> [String: Any]? {
+        guard let items = self.items else {
+            print("\nPROBLEM - Unable to serialize without any InventoryItems")
+            return nil
+        }
+        
+        var myDict = [String: Any]()
+        
+        // TODO - handle conversion from NSDate to string
+        myDict["date"] = self.date
+        
+        // TODO - remove hard-coded values
+        myDict["inventory_type_id"] = 1
+        myDict["store_id"] = 1
+        
+        // Generate array of dictionaries for InventoryItems
+        var itemsArray = [[String: Any]]()
+        for case let item as InventoryItem  in items {
+            itemsArray.append(item.serialize())
+        }
+        myDict["items"] = itemsArray
+        
+        return myDict
+    }
+    
     // MARK: - Update Existing
     
     func updateExisting(context: NSManagedObjectContext, json: JSON) {

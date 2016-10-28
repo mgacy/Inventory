@@ -66,4 +66,23 @@ extension InventoryItem {
         // if let unitID = json["unit_id"].int {
     }
     
+    public func serialize() -> [String: Any] {
+        var itemDict: [String: Any] = [
+            "item_id": Int(self.itemID),
+            "quantity": 0.0
+        ]
+        
+        guard let items = self.items else {
+            return itemDict
+        }
+
+        var subTotal = 0.0
+        for case let item as InventoryLocationItem in items where item.quantity != nil {
+            subTotal += Double(item.quantity!)
+        }
+        itemDict["quantity"] = subTotal
+        
+        return itemDict
+    }
+    
 }
