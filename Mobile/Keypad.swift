@@ -78,11 +78,11 @@ class Keypad {
     
     // MARK: - Output
     
-    func evaluateNumber() -> Double {
+    func evaluateNumber() -> Double? {
         if let value = Double(currentNumber) {
             return value
         } else {
-            return 0.0
+            return nil
         }
     }
     
@@ -242,9 +242,12 @@ class KeypadWithHistory: Keypad {
     func evaluateHistory() -> Double? {
         
         // Handle stack
-        func evaluateStack() -> Double {
-            var total = 0.0
-            if !stack.isEmpty{
+        func evaluateStack() -> Double? {
+            switch stack.isEmpty {
+            case true:
+                return nil
+            case false:
+                var total = 0.0
                 for item in stack {
                     /*
                      TODO - replace `evaluateNumber()` with .string(from:) and use
@@ -254,18 +257,24 @@ class KeypadWithHistory: Keypad {
                         total += number
                     }
                 }
+                return total
             }
-            return total
         }
         
-        /*
-         let a = evaluateNumber()
-         print("Number: \(a)")
-         let b = evaluateStack()
-         print("Stack: \(b)")
-         */
+        var total: Double? = nil
         
-        let total = evaluateNumber() + evaluateStack()
+        if let stackVal = evaluateStack() {
+            total = stackVal
+        }
+        
+        if let numberVal = evaluateNumber() {
+            if total != nil {
+                total! += numberVal
+            } else {
+                total = numberVal
+            }
+        }
+        
         return total
     }
     
@@ -288,6 +297,8 @@ class KeypadWithHistory: Keypad {
         var display = ""
         if total != nil {
             display = formatTotal(total!)
+        } else {
+            display = "0"
         }
         
         return (history: history, total: total, display: display)

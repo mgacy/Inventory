@@ -166,8 +166,11 @@ class InventoryKeypadVC: UIViewController {
     // MARK: - C
     
     func updateModel() {
-        let keypadResult = keypad.evaluateHistory()
-        currentItem.quantity = keypadResult! as NSNumber?
+        if let keypadResult = keypad.evaluateHistory() {
+            currentItem.quantity = keypadResult as NSNumber?
+        } else {
+            currentItem.quantity = nil
+        }
         
         // Save the context.
         let context = self.managedObjectContext!
@@ -187,7 +190,13 @@ class InventoryKeypadVC: UIViewController {
         let output = keypad.output()
         print("Output: \(output)")
         
+        // Item.quantity
         itemValue.text = output.display
+        if output.total != nil {
+            itemValue.textColor = UIColor.black
+        } else {
+            itemValue.textColor = UIColor.lightGray
+        }
         
         itemHistory.text = output.history
         
@@ -201,6 +210,10 @@ class InventoryKeypadVC: UIViewController {
             return
         }
         itemName.text = name
+        
+        // Item.pack
+        
+        // Item.unit
     }
     
     func updateForNewItem() {
