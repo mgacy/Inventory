@@ -12,6 +12,8 @@ import SwiftyJSON
 
 extension InventoryItem {
     
+    // MARK: - Lifecycle
+    
     convenience init(context: NSManagedObjectContext, json: JSON,
                      inventory: Inventory) {
         self.init(context: context)

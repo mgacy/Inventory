@@ -127,9 +127,5 @@ extension Inventory {
     
         print("Created InventoryLocation: \(defaultLocation)")
     }
-    
-    private func addItemsToExisting() {
-        
-    }
 
 }

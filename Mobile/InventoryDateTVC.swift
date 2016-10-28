@@ -33,8 +33,9 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     let ExistingItemSegue = "FetchExistingInventory"
     let SettingsSegue = "ShowSettings"
 
-    // TODO - provide interface to control this
+    // TODO - provide interface to control these
     var storeID = 1
+    // let inventoryTypeID = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
