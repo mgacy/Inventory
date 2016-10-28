@@ -136,6 +136,7 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
         // TODO: should I really pass both or just the one != nil?
         destinationController.category = category
         destinationController.location = location
+        destinationController.managedObjectContext = self.managedObjectContext
         
         // FIX: fix this
         if let indexPath = self.tableView.indexPathForSelectedRow?.row {

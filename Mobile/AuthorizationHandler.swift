@@ -93,7 +93,7 @@ class AuthorizationHandler: RequestAdapter {
             // TODO: use sessionManager.request?
             Alamofire.request(Router.login(email: email, password: password))
                 .responseJSON { response in
-                    if response.result.isSuccess, let token = JSON(response.result.value)["token"].string {
+                    if response.result.isSuccess, let token = JSON(response.result.value!)["token"].string {
                         self.accessToken = token
                         completionHandler(true)
                     } else {

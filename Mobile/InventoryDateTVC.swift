@@ -33,8 +33,9 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     let ExistingItemSegue = "FetchExistingInventory"
     let SettingsSegue = "ShowSettings"
 
-    // TODO - provide interface to control this
+    // TODO - provide interface to control these
     var storeID = 1
+    // let inventoryTypeID = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +60,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             print("User exists ...")
             
             // Delete any uploaded Inventories before fetching updated list.
-            deleteExistingInventories()
+            deleteExistingInventories(NSPredicate(format: "uploaded == true"))
             
             // Login to server, then get list of Inventories from server if successful.
             APIManager.sharedInstance.login(completionHandler: self.completedLogin)
@@ -193,6 +194,13 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             isActive: true, typeID: 1, storeID: storeID, completionHandler: completedGetNewInventory)
     }
     
+    @IBAction func resetTapped(_ sender: AnyObject) {
+        // By leaving filter as nil, we will delete all Inventories
+        deleteExistingInventories()
+        // Download Inventories from server again
+        completedLogin(true)
+    }
+    
     // MARK: - Completion Handlers
     
     func completedGetExistingInventory(json: JSON) -> Void {
@@ -271,15 +279,14 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     
     // MARK: - A
     
-    // TODO: pass filter: NSPredicate? as parameter
-    func deleteExistingInventories() {
+    func deleteExistingInventories(_ filter: NSPredicate? = nil) {
         print("deleteExistingInventories ...")
         
         // Create Fetch Request
         let fetchRequest: NSFetchRequest<Inventory> = Inventory.fetchRequest()
         
         // Configure Fetch Request
-        //fetchRequest.predicate = NSPredicate(format: "uploaded == true")
+        if let _filter = filter { fetchRequest.predicate = _filter }
         
         // Initialize Batch Delete Request
         let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)

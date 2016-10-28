@@ -6,6 +6,14 @@ def basic_pods
   pod 'Alamofire', '~> 4.0'
   pod 'SwiftyJSON'
   pod 'KeychainAccess'
+  # A
+  # pod 'DATAStack', '~> 6'
+  # pod 'DATASource', '~> 6'
+  # pod 'Sync', '~> 2'
+  # B
+  # pod 'ObjectMapper', '~> 2.2'
+  # pod 'AlamofireObjectMapper', '~> 4.0'
+  #
   # pod 'ChameleonFramework/Swift3'
 end
 
