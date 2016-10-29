@@ -344,9 +344,9 @@
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="DO7-P2-uqG"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFJ-ea-4yB" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFJ-ea-4yB" userLabel="Prev" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="252.5" width="93" height="83"/>
-                                                        <state key="normal" title="Previous"/>
+                                                        <state key="normal" image="prev"/>
                                                         <connections>
                                                             <action selector="previousItemTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="hl1-an-W8d"/>
                                                         </connections>
@@ -356,9 +356,9 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="QqA-un-ZW9" userLabel="Number Col 4">
                                                 <rect key="frame" x="282" y="0.0" width="93" height="335.5"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6I9-Yn-6J7" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6I9-Yn-6J7" userLabel="Clear" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="93" height="83"/>
-                                                        <state key="normal" title="Clear"/>
+                                                        <state key="normal" image="delete"/>
                                                         <connections>
                                                             <action selector="clearTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="GhW-qn-DYU"/>
                                                         </connections>
@@ -377,9 +377,9 @@
                                                             <action selector="addTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="Ex0-CJ-7ft"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zlz-LA-qO9" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zlz-LA-qO9" userLabel="Next" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="252.5" width="93" height="83"/>
-                                                        <state key="normal" title="Next"/>
+                                                        <state key="normal" image="next"/>
                                                         <connections>
                                                             <action selector="nextItemTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="sbW-NA-fyQ"/>
                                                         </connections>
@@ -415,6 +415,9 @@
     </scenes>
     <resources>
         <image name="Upload" width="22" height="22"/>
+        <image name="delete" width="29" height="19"/>
+        <image name="next" width="36" height="19"/>
+        <image name="prev" width="36" height="19"/>
         <image name="reset" width="22" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
