@@ -17,27 +17,37 @@ class InventoryKeypadVC: UIViewController {
     var category: InventoryLocationCategory?
     var location: InventoryLocation?
     var currentIndex = 0
-    
-    // TODO: perform fetch with necessary sorting instead?
-    
-    var items: NSOrderedSet {   // NSMutableOrderedSet?
+
+    var items: [InventoryLocationItem] {
+        let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
+        
         if let parentLocation = self.location {
-            if let items = parentLocation.items {
-                return items
-            }
+            request.predicate = NSPredicate(format: "location == %@", parentLocation)
+            let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
+            request.sortDescriptors = [sortDescriptor]
+
         } else if let parentCategory = self.category {
-            if let items = parentCategory.items {
-                return items
-            }
+            request.predicate = NSPredicate(format: "category == %@", parentCategory)
+            let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
+            request.sortDescriptors = [sortDescriptor]
+
         } else {
             print("\nPROBLEM - Unable to add predicate\n")
-            return NSOrderedSet(array:[])
+            return [InventoryLocationItem]()
         }
-        return NSOrderedSet(array:[])
+        
+        do {
+            let searchResults = try managedObjectContext?.fetch(request)
+            return searchResults!
+
+        } catch {
+            print("Error with request: \(error)")
+        }
+        return [InventoryLocationItem]()
     }
     
     var currentItem: InventoryLocationItem {
-        return items[currentIndex] as! InventoryLocationItem
+        return items[currentIndex]
     }
     
     let keypad = KeypadWithHistory()
