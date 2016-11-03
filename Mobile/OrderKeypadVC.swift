@@ -70,11 +70,6 @@ class OrderKeypadVC: UIViewController {
     
     // MARK: - Keypad
     
-    /*
-     TODO: should any call to keypad return (quantity: Double, history: String) so
-     that those can then be passed both to currentItem and the display?
-     */
-    
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
         print("Tapped '\(digit)'")
@@ -138,107 +133,6 @@ class OrderKeypadVC: UIViewController {
     
     // MARK: - C
     
-    func updateModel() {
-        
-//        if let keypadResult = keypad.evaluateHistory() {
-//            currentItem.quantity = keypadResult as NSNumber?
-//        } else {
-//            currentItem.quantity = nil
-//        }
-        
-        // Save the context.
-        let context = self.managedObjectContext!
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-    }
-    
-    // MARK: NEW
-    
-    func updateDisplay() {
-        
-        // TODO - guard currentItem
-        
-        // Item.name
-        // Item.name
-        /*
-        guard let item = currentItem.item else {
-            itemName.text = "Error (1)"
-            return
-        }
-        guard let name = item.name else {
-            itemName.text = "Error (2)"
-            return
-        }
-        */
-        guard let name = currentItem.name else {
-            itemName.text = "Error (1)"
-            return
-        }
-        itemName.text = name
-        
-        
-        // Item.minOrder
-        minOrder.text = "\(currentItem.minOrder) \(currentItem.minOrderUnit?.abbreviation)"
-        
-        // Item.caseSize
-        // Item.par
-        par.text = "\(currentItem.par) \(currentItem.item?.parUnit?.abbreviation)"
-        
-        // Item.order
-        order.text = "\(currentItem.quantity)"
-        
-        // Item.orderUnit
-        orderUnit.text = currentItem.orderUnit?.abbreviation
-        
-        
-        /*
-        
-         @IBOutlet weak var itemName: UILabel!
-         @IBOutlet weak var par: UILabel!
-         @IBOutlet weak var onHand: UILabel!
-         @IBOutlet weak var minOrder: UILabel!
-         @IBOutlet weak var caseSize: UILabel!
-         @IBOutlet weak var order: UILabel!
-         @IBOutlet weak var orderUnit: UILabel!
-         
-         let output = keypad.output()
-        print("Output: \(output)")
-        
-        // Item.quantity
-        itemValue.text = output.display
-        if output.total != nil {
-            itemValue.textColor = UIColor.black
-        } else {
-            itemValue.textColor = UIColor.lightGray
-        }
-        
-        itemHistory.text = output.history
-        
-        // Item.pack
-        
-        // Item.unit
-        */
-    }
-    
-    func updateForNewItem() {
-        // print("updateForNewItem: \(currentItem.item?.name) - \(currentItem)")
-        
-        // Update keypad with info from new currentItem
-        //keypad.updateNumber(currentItem.quantity as Int?)
-        
-        // Update display
-        updateDisplay()
-    }
-
-    
-    // MARK: - NEW
-    
     func update(newItem: Bool = false) {
         
         let output: keypadOutput
@@ -274,75 +168,48 @@ class OrderKeypadVC: UIViewController {
     }
     
     func updateDisplay(item: OrderItem, keypadOutput: keypadOutput) {
-        
-        
-        
-        
-        
-        
-        // TODO - guard currentItem
-        
-        // Item.name
-        // Item.name
-        /*
-         guard let item = currentItem.item else {
-         itemName.text = "Error (1)"
-         return
-         }
-         guard let name = item.name else {
-         itemName.text = "Error (2)"
-         return
-         }
-         */
-        guard let name = currentItem.name else {
+        guard let item = currentItem.item else {
             itemName.text = "Error (1)"
             return
         }
+        guard let name = item.name else {
+            itemName.text = "Error (2)"
+            return
+        }
         itemName.text = name
+
+        par.text = "\(currentItem.par) \(currentItem.item?.parUnit?.abbreviation ?? " ")"
+        onHand.text = "\(currentItem.onHand) \(currentItem.item?.inventoryUnit?.abbreviation ?? " ")"
+        minOrder.text = "\(currentItem.minOrder) \(currentItem.minOrderUnit?.abbreviation ?? " ")"
+        /*
+        var caseSizeString = ""
+        if let packSize = currentItem.item?.packSize {
+            caseSizeString += " \(packSize)"
+        }
+        if let subSize = currentItem.item?.subSize {
+            caseSizeString += " \(subSize)"
+        }
+        if let subUnit = currentItem.item?.subUnit?.abbreviation {
+            caseSizeString += " \(subUnit)"
+        }
+        caseSize.text = caseSizeString
+        */
+        caseSize.text = "\(item.packSize) x \(item.subSize) \(item.subUnit?.abbreviation ?? " ")"
         
-        
-        // Item.minOrder
-        minOrder.text = "\(currentItem.minOrder) \(currentItem.minOrderUnit?.abbreviation)"
-        
-        // Item.caseSize
-        // Item.par
-        par.text = "\(currentItem.par) \(currentItem.item?.parUnit?.abbreviation)"
-        
-        // Item.order
-        order.text = "\(currentItem.quantity)"
-        
-        // Item.orderUnit
+        order.text = "\(currentItem.quantity ?? 0)"
         orderUnit.text = currentItem.orderUnit?.abbreviation
         
-        /*
-         
-         @IBOutlet weak var itemName: UILabel!
-         @IBOutlet weak var par: UILabel!
-         @IBOutlet weak var onHand: UILabel!
-         @IBOutlet weak var minOrder: UILabel!
-         @IBOutlet weak var caseSize: UILabel!
-         @IBOutlet weak var order: UILabel!
-         @IBOutlet weak var orderUnit: UILabel!
-         
-         let output = keypad.output()
-         print("Output: \(output)")
-         
-         // Item.quantity
-         itemValue.text = output.display
-         if output.total != nil {
-         itemValue.textColor = UIColor.black
-         } else {
-         itemValue.textColor = UIColor.lightGray
-         }
-         
-         itemHistory.text = output.history
-         
-         // Item.pack
-         
-         // Item.unit
-         */
-        
-        
+        switch keypadOutput.total {
+        case nil:
+            order.textColor = UIColor.lightGray
+            orderUnit.textColor = UIColor.lightGray
+        case 0.0?:
+            order.textColor = UIColor.lightGray
+            orderUnit.textColor = UIColor.lightGray
+        default:
+            order.textColor = UIColor.black
+            orderUnit.textColor = UIColor.black
+        }
         
     }
     
