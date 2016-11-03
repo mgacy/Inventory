@@ -199,15 +199,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         }
 
         // Save the context.
-        let context = self.fetchedResultsController.managedObjectContext
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
+        saveContext()
     }
     
     func completedGetExistingOrderCollection(json: JSON) -> Void {
@@ -217,15 +209,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
             selection.updateExisting(context: self.managedObjectContext!, json: json)
             
             // Save the context.
-            let context = self.fetchedResultsController.managedObjectContext
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
+            saveContext()
             
             performSegue(withIdentifier: segueIdentifier, sender: self)
             
@@ -239,15 +223,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         selectedCollection = OrderCollection(context: self.managedObjectContext!, json: json, completed: false)
         
         // Save the context.
-        let context = self.fetchedResultsController.managedObjectContext
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
+        saveContext()
         
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
@@ -266,7 +242,19 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     }
     
     // MARK: - A
-        
+    
+    func saveContext() {
+        let context = self.fetchedResultsController.managedObjectContext
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+    }
+    
     func deleteExistingOrders(_ filter: NSPredicate? = nil) {
         print("deleteExistingOrders...")
         
