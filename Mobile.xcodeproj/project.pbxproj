@@ -17,10 +17,16 @@
 		C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */; };
 		C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */; };
 		C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */; };
+		C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */; };
+		C92D75BF1DC7A7E500AA1A02 /* InvoiceItemTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BE1DC7A7E500AA1A02 /* InvoiceItemTVC.swift */; };
+		C92D75C11DC7A81400AA1A02 /* InvoiceKeypadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C01DC7A81400AA1A02 /* InvoiceKeypadVC.swift */; };
+		C92D75C31DC7A93100AA1A02 /* AccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C21DC7A93100AA1A02 /* AccountVC.swift */; };
+		C92D75C51DC7A94100AA1A02 /* SettingsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C41DC7A94100AA1A02 /* SettingsTVC.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
 		C9A14ABC1DC6742700ACDE69 /* OrderVendorTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */; };
 		C9A14ABE1DC6746300ACDE69 /* OrderItemTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */; };
 		C9A14AC01DC6748000ACDE69 /* OrderKeypadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */; };
+		C9A14AC21DC67A0F00ACDE69 /* InvoiceDateTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */; };
 		C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */; };
 		C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */; };
 		C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */; };
@@ -65,10 +71,16 @@
 		C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationItem+MyStuff.swift"; sourceTree = "<group>"; };
 		C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocation+MyStuff.swift"; sourceTree = "<group>"; };
 		C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationCategory+MyStuff.swift"; sourceTree = "<group>"; };
+		C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceVendorTVC.swift; sourceTree = "<group>"; };
+		C92D75BE1DC7A7E500AA1A02 /* InvoiceItemTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemTVC.swift; sourceTree = "<group>"; };
+		C92D75C01DC7A81400AA1A02 /* InvoiceKeypadVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadVC.swift; sourceTree = "<group>"; };
+		C92D75C21DC7A93100AA1A02 /* AccountVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountVC.swift; sourceTree = "<group>"; };
+		C92D75C41DC7A94100AA1A02 /* SettingsTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTVC.swift; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderVendorTVC.swift; sourceTree = "<group>"; };
 		C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemTVC.swift; sourceTree = "<group>"; };
 		C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadVC.swift; sourceTree = "<group>"; };
+		C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceDateTVC.swift; sourceTree = "<group>"; };
 		C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OrderCollection+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Order+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OrderItem+MyStuff.swift"; sourceTree = "<group>"; };
@@ -131,6 +143,8 @@
 		C902FF2F1DB81BD00063CD02 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				C92D75C41DC7A94100AA1A02 /* SettingsTVC.swift */,
+				C92D75C21DC7A93100AA1A02 /* AccountVC.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -148,6 +162,10 @@
 		C902FF311DB81BF70063CD02 /* Invoice */ = {
 			isa = PBXGroup;
 			children = (
+				C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */,
+				C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */,
+				C92D75BE1DC7A7E500AA1A02 /* InvoiceItemTVC.swift */,
+				C92D75C01DC7A81400AA1A02 /* InvoiceKeypadVC.swift */,
 			);
 			name = Invoice;
 			sourceTree = "<group>";
@@ -498,22 +516,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */,
+				C92D75BF1DC7A7E500AA1A02 /* InvoiceItemTVC.swift in Sources */,
 				C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */,
 				C9A14AC01DC6748000ACDE69 /* OrderKeypadVC.swift in Sources */,
 				C902FF411DBE70290063CD02 /* Inventory+MyStuff.swift in Sources */,
 				C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */,
 				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
 				C9A14ABE1DC6746300ACDE69 /* OrderItemTVC.swift in Sources */,
+				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift in Sources */,
 				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,
 				C902FF431DBE769C0063CD02 /* InventoryItem+MyStuff.swift in Sources */,
+				C92D75C31DC7A93100AA1A02 /* AccountVC.swift in Sources */,
 				C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
 				C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */,
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
 				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,
 				C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */,
+				C9A14AC21DC67A0F00ACDE69 /* InvoiceDateTVC.swift in Sources */,
 				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
+				C92D75C11DC7A81400AA1A02 /* InvoiceKeypadVC.swift in Sources */,
+				C92D75C51DC7A94100AA1A02 /* SettingsTVC.swift in Sources */,
 				C9F516181DB7F158004C10E6 /* AuthorizationHandler.swift in Sources */,
 				C9A14ABC1DC6742700ACDE69 /* OrderVendorTVC.swift in Sources */,
 				C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */,
