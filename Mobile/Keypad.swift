@@ -111,6 +111,14 @@ class Keypad {
         _updateNumber(newNumber)
     }
     
+    func formatTotal(_ result: Double) -> String {
+        if let resultString = self.numberFormatter.string(from: NSNumber(value: result)) {
+            return resultString
+        } else {
+            return ""
+        }
+    }
+    
     // MARK: - Testing
     
     func updateDisplay(button: String) {
@@ -258,14 +266,6 @@ class KeypadWithHistory: Keypad {
         }
         
         return total
-    }
-    
-    func formatTotal(_ result: Double) -> String {
-        if let resultString = self.numberFormatter.string(from: NSNumber(value: result)) {
-            return resultString
-        } else {
-            return ""
-        }
     }
     
     func output() -> (history: String, total: Double?, display: String) {
