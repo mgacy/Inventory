@@ -23,6 +23,7 @@
 		C92D75C31DC7A93100AA1A02 /* AccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C21DC7A93100AA1A02 /* AccountVC.swift */; };
 		C92D75C51DC7A94100AA1A02 /* SettingsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C41DC7A94100AA1A02 /* SettingsTVC.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
+		C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */; };
 		C9A14ABC1DC6742700ACDE69 /* OrderVendorTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */; };
 		C9A14ABE1DC6746300ACDE69 /* OrderItemTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */; };
 		C9A14AC01DC6748000ACDE69 /* OrderKeypadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */; };
@@ -77,6 +78,7 @@
 		C92D75C21DC7A93100AA1A02 /* AccountVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountVC.swift; sourceTree = "<group>"; };
 		C92D75C41DC7A94100AA1A02 /* SettingsTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTVC.swift; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
+		C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderVendorTVC.swift; sourceTree = "<group>"; };
 		C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemTVC.swift; sourceTree = "<group>"; };
 		C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadVC.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				C902FF311DB81BF70063CD02 /* Invoice */,
 				C902FF321DB81C000063CD02 /* Order */,
 				C9F515E41DB7EF98004C10E6 /* Main.storyboard */,
+				C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */,
 				C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */,
 				C902FF2D1DB816EB0063CD02 /* Keypad.swift */,
 				C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */,
@@ -549,6 +552,7 @@
 				C902FF3E1DBD8B3F0063CD02 /* NumberKeypadButton.swift in Sources */,
 				C9F5160F1DB7F133004C10E6 /* InventoryKeypadVC.swift in Sources */,
 				C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */,
+				C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
