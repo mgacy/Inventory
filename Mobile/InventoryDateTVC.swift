@@ -1,5 +1,5 @@
 //
-//  InventoryListTVC.swift
+//  InventoryDateTVC.swift
 //  Playground
 //
 //  Created by Mathew Gacy on 10/6/16.
@@ -325,10 +325,9 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         let fetchRequest: NSFetchRequest<Inventory> = Inventory.fetchRequest()
         
         // Set the batch size to a suitable number.
-        fetchRequest.fetchBatchSize = 20
+        fetchRequest.fetchBatchSize = fetchBatchSize
         
         // Edit the sort key as appropriate.
-        //let sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
