@@ -119,6 +119,22 @@ class Keypad {
         }
     }
     
+    func outputB() -> (total: Double?, display: String) {
+        
+        // Result
+        let total = evaluateNumber()
+        
+        // Display
+        var display = ""
+        if total != nil {
+            display = formatTotal(total!)
+        } else {
+            display = "0"
+        }
+        
+        return (total: total, display: display)
+    }
+    
     // MARK: - Testing
     
     func updateDisplay(button: String) {
