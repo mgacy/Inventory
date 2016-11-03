@@ -43,6 +43,7 @@ class Keypad {
                 isEditingNumber = true
             }
             
+            // TESTING
             updateDisplay(button: "clear")
         }
     }
@@ -59,6 +60,7 @@ class Keypad {
             currentNumber += "."
         }
         
+        // TESTING
         updateDisplay(button: ".")
     }
     
@@ -73,6 +75,7 @@ class Keypad {
             isEditingNumber = true
         }
         
+        // TESTING
         updateDisplay(button: String(value))
     }
     
@@ -122,29 +125,7 @@ class KeypadWithHistory: Keypad {
     // currentNumber
     
     var stack: [String] = []
-    /*
-     var history: String {
-     // Formatting
-     let historySeparator = " + "
-     
-     var historyString = ""
-     if !stack.isEmpty {
-     historyString = stack.joined(separator: historySeparator)
-     if currentNumber.isEmpty {
-     historyString += historySeparator
-     }
-     }
-     
-     if !currentNumber.isEmpty {
-     if !stack.isEmpty {
-     historyString += historySeparator
-     }
-     historyString += currentNumber
-     }
-     
-     return historyString
-     }
-     */
+
     // MARK: - Lifecycle
     
     override init() {
@@ -173,12 +154,12 @@ class KeypadWithHistory: Keypad {
             
             // Try to clear from stack
             if  !stack.isEmpty {
-                // currentNumber = String(numberStack.popLast()!)
                 currentNumber = stack.popLast()!
                 isEditingNumber = true
             }
         }
         
+        // TESTING
         updateDisplay(button: "clear")
     }
     
@@ -198,6 +179,7 @@ class KeypadWithHistory: Keypad {
             isEditingNumber = false
         }
         
+        // TESTING
         updateDisplay(button: "+")
     }
     
