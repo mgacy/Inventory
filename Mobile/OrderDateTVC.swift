@@ -191,31 +191,32 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     }
     
     func completedGetListOfOrderCollections(json: JSON) -> Void {
-        
-        if let dates = json["dates"].array {
-            for date in dates {
-                _ = OrderCollection(context: self.managedObjectContext!, date: date, completed: true)
-            }
+        guard let dates = json["dates"].array else {
+            print("\nPROBLEM - Failed to get dates")
+            return
         }
-
+        
+        for date in dates {
+            _ = OrderCollection(context: self.managedObjectContext!, date: date, completed: true)
+        }
+    
         // Save the context.
         saveContext()
     }
     
     func completedGetExistingOrderCollection(json: JSON) -> Void {
-        if let selection = selectedCollection {
-            
-            // Update selected Inventory with full JSON from server.
-            selection.updateExisting(context: self.managedObjectContext!, json: json)
-            
-            // Save the context.
-            saveContext()
-            
-            performSegue(withIdentifier: segueIdentifier, sender: self)
-            
-        } else {
+        guard let selection = selectedCollection else {
             print("\nPROBLEM - Still failed to get selected OrderCollection\n")
+            return
         }
+
+        // Update selected Inventory with full JSON from server.
+        selection.updateExisting(context: self.managedObjectContext!, json: json)
+        
+        // Save the context.
+        saveContext()
+        
+        performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
     func completedGetNewOrderCollection(json: JSON) -> Void {
