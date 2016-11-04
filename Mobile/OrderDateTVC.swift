@@ -123,36 +123,34 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCollection = self.fetchedResultsController.object(at: indexPath)
-        if let selection = selectedCollection {
-            switch selection.completed {
-            case true:
-                guard let orders = selection.orders else {
-                    print("\nPROBLEM - selectedCollection.orders was nil\n")
+        guard let selection = selectedCollection else { return }
+        
+        switch selection.completed {
+        case true:
+            guard let orders = selection.orders else {
+                print("\nPROBLEM - selectedCollection.orders was nil\n")
+                return
+            }
+            
+            // Check whether we have already fetched Collection since launch.
+            if orders.count > 0 {
+                // LOAD
+                performSegue(withIdentifier: segueIdentifier, sender: self)
+            } else {
+                // GET
+                print("GET OrderCollection from server ...")
+                guard let collectionDate = selection.date else {
+                    print("\nPROBLEM - Unable to get orderCollection.date")
                     return
                 }
-                
-                // Check whether we have already fetched Collection since launch.
-                if orders.count > 0 {
-                    // LOAD
-                    performSegue(withIdentifier: segueIdentifier, sender: self)
-                } else {
-                    // GET
-                    print("GET OrderCollection from server ...")
-                    guard let collectionDate = selection.date else {
-                        print("\nPROBLEM - Unable to get orderCollection.date")
-                        return
-                    }
-                    APIManager.sharedInstance.getOrder(
-                        storeID: storeID, orderDate: collectionDate,
-                        completionHandler: completedGetExistingOrderCollection)
-                }
-                
-            case false:
-                print("LOAD NEW selectedCollection from disk ...")
-                performSegue(withIdentifier: segueIdentifier, sender: self)
+                APIManager.sharedInstance.getOrder(
+                    storeID: storeID, orderDate: collectionDate,
+                    completionHandler: completedGetExistingOrderCollection)
             }
-        } else {
-            print("\nPROBLEM - ")
+            
+        case false:
+            print("LOAD NEW selectedCollection from disk ...")
+            performSegue(withIdentifier: segueIdentifier, sender: self)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
