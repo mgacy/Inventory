@@ -47,6 +47,7 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.tableView.reloadData()
     }
     

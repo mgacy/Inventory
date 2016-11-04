@@ -54,7 +54,8 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.performFetch()
+        //self.performFetch()
+        self.tableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
