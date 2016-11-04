@@ -143,7 +143,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
                     print("\nPROBLEM - Unable to get orderCollection.date")
                     return
                 }
-                APIManager.sharedInstance.getOrder(
+                APIManager.sharedInstance.getOrderCollection(
                     storeID: storeID, orderDate: collectionDate,
                     completionHandler: completedGetExistingOrderCollection)
             }
@@ -178,7 +178,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
     @IBAction func newTapped(_ sender: AnyObject) {
         // Get new OrderCollection.
-        APIManager.sharedInstance.getNewOrder(
+        APIManager.sharedInstance.getNewOrderCollection(
             storeID: storeID, typeID: orderTypeID, returnUsage: true,
             periodLength: 28, completionHandler: completedGetNewOrderCollection)
     }
@@ -234,7 +234,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
             
             // Get list of OrderCollections from server
             // print("\nFetching existing OrderCollections from server ...")
-            APIManager.sharedInstance.getListOfOrders(storeID: storeID, completionHandler: self.completedGetListOfOrderCollections)
+            APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completionHandler: self.completedGetListOfOrderCollections)
             
         } else {
             print("Unable to login ...")

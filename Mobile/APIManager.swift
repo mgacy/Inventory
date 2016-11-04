@@ -118,7 +118,7 @@ class APIManager {
     
     // MARK: - API Calls - Order
     
-    func getListOfOrders(storeID: Int, completionHandler: @escaping (JSON) -> Void)
+    func getListOfOrderCollections(storeID: Int, completionHandler: @escaping (JSON) -> Void)
     {
         sessionManager.request(Router.listOrders(storeID: storeID))
             .responseJSON { response in
@@ -134,14 +134,14 @@ class APIManager {
         }
     }
     
-    func getOrder(storeID: Int, orderDate: String, completionHandler:
+    func getOrderCollection(storeID: Int, orderDate: String, completionHandler:
         @escaping (JSON) -> Void)
     {
         sessionManager.request(Router.fetchOrder(storeID: storeID, orderDate: orderDate))
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                     print("\ngetOrder - response: \(response)\n")
+                    // print("\ngetOrder - response: \(response)\n")
                     let json = JSON(value)
                     completionHandler(json)
                 case .failure(let error):
@@ -151,7 +151,7 @@ class APIManager {
         }
     }
     
-    func getNewOrder(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?, completionHandler:
+    func getNewOrderCollection(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?, completionHandler:
         @escaping (JSON) -> Void)
     {
         sessionManager.request(Router.getNewOrder(storeID: storeID, typeID: typeID,
