@@ -37,11 +37,13 @@ extension OrderItem {
         //if let categoryName = json["item"]["category"]["name"].int {}
         //if let categoryID = json["item"]["category"]["name"].string {}
         
-        
-        //if let inventory = json["inventory"].string {}
+        if let onHand = json["inventory"].double {
+            self.onHand = onHand //as NSNumber?
+        }
 
         if let minOrder = json["min_order"].double {
             self.minOrder = minOrder
+            self.quantity = minOrder as NSNumber?
         }
         if let minOrderUnitID = json["min_order_unit_id"].int {
             fetchUnit(context: context, id: minOrderUnitID, relationship: UnitRelationship.minOrder)
