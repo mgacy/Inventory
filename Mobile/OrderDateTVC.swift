@@ -156,7 +156,6 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     
@@ -170,7 +169,6 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         if let selection = selectedCollection {
             controller.parentObject = selection
             controller.managedObjectContext = self.managedObjectContext
-            //controller.performFetch()
         } else {
             print("\nPROBLEM - Unable to get selection\n")
         }
@@ -184,10 +182,6 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     }
     
     // MARK: - Completion Handlers
-    
-    func completedInit(json: JSON) -> Void {
-        
-    }
     
     func completedGetListOfOrderCollections(json: JSON) -> Void {
         guard let dates = json["dates"].array else {
