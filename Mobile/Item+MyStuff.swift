@@ -12,11 +12,6 @@ import SwiftyJSON
 
 extension Item {
 
-    enum UnitRelationship {
-        case inventoryUnit
-        case parUnit
-        case purchaseUnit
-        case subUnit
     }
 
     // MARK: - Lifecycle
@@ -128,18 +123,17 @@ extension Item {
         return nil
     }
     
-    private func fetchUnit(context: NSManagedObjectContext, id: Int) {
+    private func fetchUnit(context: NSManagedObjectContext, id: Int) -> Unit? {
         let request: NSFetchRequest<Unit> = Unit.fetchRequest()
         request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
         
         do {
-            let unit: Unit
             let searchResults = try context.fetch(request)
             
             switch searchResults.count {
             case 0:
                 print("PROBLEM - Unable to find Unit with id: \(id)")
-                return
+                return nil
             case 1:
                 return searchResults[0]
             default:
@@ -150,48 +144,10 @@ extension Item {
         } catch {
             print("Error with request: \(error)")
         }
+        
+        return nil
     }
     
-    //private func fetchStore(context: NSManagedObjectContext, id: Int) {}
 
-    //private func fetchVendor(context: NSManagedObjectContext, id: Int) { }
-
-    // MARK: - Fetch Object + Establish Relationship
-    
-    private func fetchUnit(context: NSManagedObjectContext, id: Int, relationship: UnitRelationship) {
-        let request: NSFetchRequest<Unit> = Unit.fetchRequest()
-        request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
-
-        do {
-            let unit: Unit
-            let searchResults = try context.fetch(request)
-
-            switch searchResults.count {
-            case 0:
-                print("PROBLEM - Unable to find Unit with id: \(id)")
-                return
-            case 1:
-                unit = searchResults[0]
-            default:
-                print("Found multiple matches for Unit with id: \(id) - \(searchResults)")
-                unit = searchResults[0]
-            }
-
-            // Establish relationship
-            switch relationship {
-            case .inventoryUnit:
-                self.inventoryUnit = unit
-            case .parUnit:
-                self.parUnit = unit
-            case .purchaseUnit:
-                self.purchaseUnit = unit
-            case .subUnit:
-                self.subUnit = unit
-            }
-
-        } catch {
-            print("Error with request: \(error)")
-        }
-    }
 
 }
