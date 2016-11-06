@@ -36,6 +36,7 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login:
             return .post
+        // Inventory
         case .getNewInventory:
             return .get
         case .listInventories:
@@ -69,6 +70,7 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login:
             return "/auth/login"
+        // Inventory
         case .getNewInventory:
             return "\(Router.apiPath)/new_inventory"
         case .listInventories:
@@ -145,6 +147,7 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+            
         // Inventory
         case .getNewInventory:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
