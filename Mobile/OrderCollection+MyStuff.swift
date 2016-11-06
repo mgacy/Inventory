@@ -66,11 +66,35 @@ extension OrderCollection {
             print("\nPROBLEM - Unable to get orders from JSON")
             return
         }
-        
+
         // Iterate over Orders
         for orderJSON in orders {
             _ = Order(context: context, json: orderJSON, collection: self)
         }
+    }
+
+    // MARK: -
+    
+    static func fetchByDate(context: NSManagedObjectContext, date: String) -> OrderCollection? {
+        let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
+        request.predicate = NSPredicate(format: "date == %@", date)
         
+        do {
+            let searchResults = try context.fetch(request)
+            
+            switch searchResults.count {
+            case 0:
+                return nil
+            case 1:
+                return searchResults[0]
+            default:
+                print("Found multiple matches: \(searchResults)")
+                return searchResults[0]
+            }
+            
+        } catch {
+            print("Error with request: \(error)")
+        }
+        return nil
     }
 }
