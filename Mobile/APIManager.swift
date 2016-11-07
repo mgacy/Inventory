@@ -20,8 +20,8 @@ class APIManager {
     
     // MARK: Lifecycle
     
-    init() {    
-        authHandler = AuthorizationHandler()
+    init() {
+        authHandler = AuthorizationHandler.sharedInstance
 
         sessionManager = Alamofire.SessionManager.default
         sessionManager.adapter = authHandler
