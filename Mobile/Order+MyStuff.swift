@@ -69,11 +69,58 @@ extension Order {
                 _ = OrderItem(context: context, json: itemJSON, order: self)
             }
         }
-
     }
 
     // MARK: - Serialization
 
+    func serialize() -> [String: Any]? {
+        var myDict = [String: Any]()
+        
+        // TODO - handle conversion from NSDate to string
+        myDict["order_date"] = self.collection?.date
+        myDict["vendor_id"] = self.vendor?.remoteID
+        
+        // TODO - remove hard-coded values
+        myDict["store_id"] = 1
+        
+        // Generate array of dictionaries for InventoryItems
+        guard let items = self.items else {
+            print("\nPROBLEM - Unable to serialize without any OrderItems")
+            return myDict
+        }
+        
+        var itemsArray = [[String: Any]]()
+        for case let item as OrderItem in items {
+            if let itemDict = item.serialize() {
+                itemsArray.append(itemDict)
+            }
+        }
+        myDict["items"] = itemsArray
+        
+        return myDict
+    }
+    
+    // MARK: - Order Generation
+    
+    func getOrderMessage() -> String? {
+        guard let items = self.items else { return nil }
+
+        var messageItems: [String] = []
+        for case let item as OrderItem in items {
+            guard let quantity = item.quantity else { return nil }
+            
+            if Int(quantity) > 0 {
+                guard let name = item.item?.name else { break }
+                messageItems.append("\n\(name) \(quantity) \(item.orderUnit?.abbreviation ?? "")")
+            }
+        }
+
+        messageItems.sort()
+        let message = "Order for \(self.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
+
+        return message
+    }
+    
     // MARK: - Fetch Object + Establish Relationship
     
     func fetchVendor(context: NSManagedObjectContext, id: Int) {

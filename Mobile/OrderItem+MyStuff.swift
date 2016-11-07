@@ -93,6 +93,16 @@ extension OrderItem {
 
     // MARK: - Serialization
 
+    func serialize() -> [String: Any]? {
+        var myDict = [String: Any]()
+        
+        myDict["item_id"] = self.item?.remoteID
+        myDict["order_quant"] = self.quantity
+        myDict["order_unit_id"] = self.orderUnit?.remoteID
+        
+        return myDict
+    }
+    
     // MARK: - Fetch Entity
     
     func fetchEntityByID<T: NSManagedObject>(entityType: T.Type, context moc: NSManagedObjectContext, id: Int) -> T? {

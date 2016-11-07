@@ -49,7 +49,6 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -61,6 +60,17 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - User Interaction
+    
+    @IBAction func tappedMessageOrder(_ sender: AnyObject) {
+        guard let message = parentObject.getOrderMessage() else { return }
+        print("\n\(message)")
+        
+        if let json = parentObject.serialize() {
+            print("\npost: \(json)")
+        }
     }
     
     // MARK: - Table view data source
@@ -88,7 +98,6 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let orderItem = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = orderItem.itemName
-        
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -133,7 +142,6 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         if let indexPath = self.tableView.indexPathForSelectedRow?.row {
             destinationController.currentIndex = indexPath
         }
-
     }
     
     // MARK: - Fetched results controller
