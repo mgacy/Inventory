@@ -67,7 +67,7 @@ extension Inventory {
         
         // Generate array of dictionaries for InventoryItems
         var itemsArray = [[String: Any]]()
-        for case let item as InventoryItem  in items {
+        for case let item as InventoryItem in items {
             itemsArray.append(item.serialize())
         }
         myDict["items"] = itemsArray
