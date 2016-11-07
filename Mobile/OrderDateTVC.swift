@@ -167,6 +167,13 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
             periodLength: 28, completionHandler: completedGetNewOrderCollection)
     }
     
+    @IBAction func resetTapped(_ sender: AnyObject) {
+        deleteObjects(entityType: Item.self)
+        deleteExistingOrderCollections()
+        
+        _ = StartupManager(completionHandler: completedLogin)
+    }
+    
     // MARK: - Completion Handlers
     
     func completedGetListOfOrderCollections(json: JSON) -> Void {

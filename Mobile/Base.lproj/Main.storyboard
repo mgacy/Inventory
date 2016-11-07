@@ -25,7 +25,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="B3t-Y5-I1M">
-                        <barButtonItem key="leftBarButtonItem" image="reset" id="rbc-tm-kyC">
+                        <barButtonItem key="leftBarButtonItem" image="reset" id="rbc-tm-kyC" userLabel="Reset">
                             <connections>
                                 <action selector="resetTapped:" destination="YU6-fn-vVE" id="CjF-ov-Uxg"/>
                             </connections>
@@ -58,6 +58,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="UdO-o2-hmD">
+                        <barButtonItem key="leftBarButtonItem" image="reset" id="3Ar-bP-uBa" userLabel="Reset">
+                            <connections>
+                                <action selector="resetTapped:" destination="SjL-9C-Vrt" id="hYu-8h-sSW"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="mKD-iL-I2s">
                             <connections>
                                 <action selector="newTapped:" destination="SjL-9C-Vrt" id="oG1-s1-NNa"/>
@@ -878,11 +883,11 @@
                                         <rect key="frame" x="0.0" y="56" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EG4-hE-eoB" id="epB-fh-Lie">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FDP-LD-P7j">
-                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="345" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
