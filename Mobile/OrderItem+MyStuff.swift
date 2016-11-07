@@ -41,6 +41,11 @@ extension OrderItem {
             self.onHand = onHand //as NSNumber?
         }
 
+        if let packSize = json["pack_size"].int {
+            self.packSize = Int32(packSize)
+        }
+        
+        // minOrder
         if let minOrder = json["min_order"].double {
             self.minOrder = minOrder
             self.quantity = minOrder as NSNumber?
@@ -49,7 +54,7 @@ extension OrderItem {
             fetchUnit(context: context, id: minOrderUnitID, relationship: UnitRelationship.minOrder)
         }
         
-        
+        // order
         if let order = json["order"].double {
             self.quantity = order as NSNumber?
         }
@@ -57,14 +62,18 @@ extension OrderItem {
             fetchUnit(context: context, id: orderUnitID, relationship: UnitRelationship.order)
         }
         
-        if let packSize = json["pack_size"].int {
-            self.packSize = Int32(packSize)
-        }
+        // par
         if let par = json["par"].double {
             self.par = par
         }
-        
-        //if let parUnitID = json["par_unit_id"].int {}
+        if let parUnitID = json["par_unit_id"].int {
+            //let parUnit = self.fetchEntityByID(entityType: Unit.self, context: context, id: parUnitID)
+            //print("parUnit: \(parUnit)")
+            //self.parUnit = parUnit
+            self.parUnit = self.fetchEntityByID(entityType: Unit.self, context: context, id: parUnitID)
+        } else {
+            print("PROBLEM - Unable to get par_unit_id")
+        }
         
         //if let purchaseUnitID = json["purchase_unit_id"].int {}
         //if let purchaseSubUnitID = json["purchase_sub_unit_id"].int {}
@@ -72,9 +81,9 @@ extension OrderItem {
         // Relationships
         
         if let itemID = json["item"]["id"].int {
-            print("Searching for Item with \(itemID)")
+            //print("Searching for Item with \(itemID)")
             if let item = Item.withID(itemID, fromContext: context) {
-                print("Found Item: \(item)")
+                //print("Found Item: \(item)")
                 self.item = item
             }
         }

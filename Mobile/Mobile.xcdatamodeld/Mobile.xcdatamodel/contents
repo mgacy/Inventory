@@ -48,7 +48,7 @@
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="packSize" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <attribute name="subSize" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="inventoryItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryItem" inverseName="item" inverseEntity="InventoryItem" syncable="YES"/>
         <relationship name="inventoryUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemInventoryUnits" inverseEntity="Unit" syncable="YES"/>
@@ -75,7 +75,7 @@
     </entity>
     <entity name="OrderCollection" representedClassName="OrderCollection" syncable="YES" codeGenerationType="class">
         <attribute name="completed" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="inventoryID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="storeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="orders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Order" inverseName="collection" inverseEntity="Order" syncable="YES"/>
@@ -94,6 +94,7 @@
         <relationship name="minOrderUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="orderItemMinOrderUnits" inverseEntity="Unit" syncable="YES"/>
         <relationship name="order" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Order" inverseName="items" inverseEntity="Order" syncable="YES"/>
         <relationship name="orderUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="orderItemOrderUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="parUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="orderItemParUnits" inverseEntity="Unit" syncable="YES"/>
     </entity>
     <entity name="Store" representedClassName="Store" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -105,7 +106,7 @@
     <entity name="Unit" representedClassName="Unit" syncable="YES" codeGenerationType="class">
         <attribute name="abbreviation" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <relationship name="itemInventoryUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="inventoryUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="itemParUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="parUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="itemPurchaseUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="purchaseUnit" inverseEntity="Item" syncable="YES"/>
@@ -113,6 +114,7 @@
         <relationship name="locationItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryLocationItem" inverseName="unit" inverseEntity="InventoryLocationItem" syncable="YES"/>
         <relationship name="orderItemMinOrderUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="minOrderUnit" inverseEntity="OrderItem" syncable="YES"/>
         <relationship name="orderItemOrderUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="orderUnit" inverseEntity="OrderItem" syncable="YES"/>
+        <relationship name="orderItemParUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="parUnit" inverseEntity="OrderItem" syncable="YES"/>
     </entity>
     <entity name="Vendor" representedClassName="Vendor" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -126,13 +128,13 @@
         <element name="InventoryLocation" positionX="-171" positionY="54" width="128" height="133"/>
         <element name="InventoryLocationCategory" positionX="106" positionY="-36" width="128" height="103"/>
         <element name="InventoryLocationItem" positionX="306" positionY="261" width="128" height="163"/>
+        <element name="Item" positionX="-468" positionY="-234" width="128" height="225"/>
         <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="75"/>
         <element name="Order" positionX="-504" positionY="330" width="128" height="165"/>
         <element name="OrderCollection" positionX="-783" positionY="348" width="128" height="120"/>
-        <element name="OrderItem" positionX="-234" positionY="-27" width="128" height="30"/>
+        <element name="OrderItem" positionX="-234" positionY="-27" width="128" height="255"/>
         <element name="Store" positionX="-684" positionY="-126" width="128" height="120"/>
-        <element name="Unit" positionX="-675" positionY="204" width="128" height="30"/>
+        <element name="Unit" positionX="-675" positionY="204" width="128" height="210"/>
         <element name="Vendor" positionX="-576" positionY="12" width="128" height="105"/>
-        <element name="Item" positionX="-468" positionY="-234" width="128" height="30"/>
     </elements>
 </model>
