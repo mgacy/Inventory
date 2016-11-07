@@ -89,7 +89,7 @@ class InventoryLocationCategoryTVC: UITableViewController, NSFetchedResultsContr
         case .notStarted:
             cell.textLabel?.textColor = UIColor.lightGray
         case .incomplete:
-            cell.textLabel?.textColor = ColorPalette.blueColor
+            cell.textLabel?.textColor = ColorPalette.yellowColor
         case .complete:
             cell.textLabel?.textColor = UIColor.black
         }

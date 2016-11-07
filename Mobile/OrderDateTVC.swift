@@ -96,7 +96,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         case true:
             cell.textLabel?.textColor = UIColor.black
         case false:
-            cell.textLabel?.textColor = ColorPalette.blueColor
+            cell.textLabel?.textColor = ColorPalette.yellowColor
         }
     }
     
