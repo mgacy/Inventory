@@ -39,7 +39,11 @@ extension Item {
 
     convenience init(context: NSManagedObjectContext, json: JSON) {
         self.init(context: context)
+        self.update(context: context, withJSON: json)
+    }
 
+    func update(context: NSManagedObjectContext, withJSON json: JSON) {
+        
         // Properties
         if let remoteID = json["id"].int {
             self.remoteID = Int32(remoteID)
@@ -54,10 +58,10 @@ extension Item {
             self.subSize = Int16(subSize)
         }
 
-        if let categoryID = json["category_id"].int {
-            self.categoryID = Int32(categoryID)
-        }
-        
+        //if let categoryID = json["category_id"].int {
+        //    self.categoryID = Int32(categoryID)
+        //}
+
         // TODO - implement:
         // active
         // shelfLife
@@ -67,15 +71,19 @@ extension Item {
         // Relationships
         // if let categoryID = json["category"]["id"].int { }
         if let vendorID = json["vendor"]["id"].int {
-            /*
-            self.vendor = genericFetch(
-                Vendor, context: context,
-                predicate: NSPredicate(format: "remoteID == \(Int32(vendorID))"))
-            */
             
-            self.vendor = genericFetch(
-                Vendor, context: context,
-                predicateString: "remoteID == \(Int32(vendorID))")
+            if let vendor = fetchEntityByID(entityType: Vendor.self, context: context, id: vendorID) {
+                //print("Found Vendor: \(vendor)")
+                self.vendor = vendor
+            } else {
+                let newVendor = Vendor(context: context)
+                newVendor.remoteID = Int32(vendorID)
+                
+                if let vendorName = json["vendor"]["name"].string {
+                    newVendor.name = vendorName
+                }
+            }
+
         }
 
         if let inventoryUnitID = json["inventory_unit"]["id"].int {
