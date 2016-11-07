@@ -57,8 +57,8 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
             print("User exists ...")
             
             // Delete any uploaded Inventories before fetching updated list.
-            //deleteExistingOrders(NSPredicate(format: "completed == true"))
-            deleteExistingOrders()
+            //deleteExistingOrderCollections(NSPredicate(format: "completed == true"))
+            deleteExistingOrderCollections()
             
             // Login to server, then get list of Inventories from server if successful.
             APIManager.sharedInstance.login(completionHandler: self.completedLogin)
@@ -249,7 +249,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         }
     }
     
-    func deleteExistingOrders(_ filter: NSPredicate? = nil) {
+    func deleteExistingOrderCollections(_ filter: NSPredicate? = nil) {
         print("deleteExistingOrders...")
         
         // Create Fetch Request
