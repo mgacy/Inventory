@@ -114,26 +114,25 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         
         switch selection.completed {
         case true:
-            guard let orders = selection.orders else {
-                print("\nPROBLEM - selectedCollection.orders was nil\n")
+            
+            // Get date to use when getting OrderCollection from server
+            guard let collectionDate = selection.date else {
+                print("\nPROBLEM - Unable to get orderCollection.date")
                 return
             }
+
+            // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
+            // Delete existing orders of selected collection
+            print("Deleting Orders of selected OrderCollection ...")
+            deleteChildOrders(parent: selection)
             
-            // Check whether we have already fetched Collection since launch.
-            if orders.count > 0 {
-                // LOAD
-                performSegue(withIdentifier: segueIdentifier, sender: self)
-            } else {
-                // GET
-                print("GET OrderCollection from server ...")
-                guard let collectionDate = selection.date else {
-                    print("\nPROBLEM - Unable to get orderCollection.date")
-                    return
-                }
-                APIManager.sharedInstance.getOrderCollection(
-                    storeID: storeID, orderDate: collectionDate,
-                    completionHandler: completedGetExistingOrderCollection)
-            }
+            // Reset selection since we reset the managedObjectContext in deleteChildOrders
+            selectedCollection = self.fetchedResultsController.object(at: indexPath)
+
+            print("GET OrderCollection from server ...")
+            APIManager.sharedInstance.getOrderCollection(
+                storeID: storeID, orderDate: collectionDate,
+                completionHandler: completedGetExistingOrderCollection)
             
         case false:
             print("LOAD NEW selectedCollection from disk ...")
@@ -176,10 +175,19 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
             return
         }
         
+        // FIX - this does not account for Collections that have been deleted from the server but
+        // are still present in the local store
         for date in dates {
-            _ = OrderCollection(context: self.managedObjectContext!, date: date, completed: true)
+            if let dateString = date.string {
+                
+                // Create OrderCollection if we can't find one with date `date`
+                if OrderCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
+                    // print("Creating OrderCollection: \(dateString)")
+                    _ = OrderCollection(context: self.managedObjectContext!, date: date, completed: true)
+                }
+            }
         }
-    
+
         // Save the context.
         saveContext()
     }
