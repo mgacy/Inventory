@@ -34,6 +34,7 @@ class OrderKeypadVC: UIViewController {
     }
     
     var currentItem: OrderItem {
+        //print("currentItem: \(items[currentIndex])")
         return items[currentIndex]
     }
     
@@ -42,6 +43,8 @@ class OrderKeypadVC: UIViewController {
     
     // CoreData
     var managedObjectContext: NSManagedObjectContext?
+    
+    var numberFormatter: NumberFormatter?
     
     // MARK: - Display Outlets
     
@@ -58,9 +61,14 @@ class OrderKeypadVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Setup numberFormatter
+        numberFormatter = NumberFormatter()
+        guard let numberFormatter = numberFormatter else { return }
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.roundingMode = .halfUp
+        numberFormatter.maximumFractionDigits = 2
+
         update(newItem: true)
-        
-        print("currentItem: \(currentItem)")
     }
 
     override func didReceiveMemoryWarning() {
@@ -169,33 +177,21 @@ class OrderKeypadVC: UIViewController {
     
     func updateDisplay(item: OrderItem, keypadOutput: keypadOutput) {
         guard let item = currentItem.item else {
-            itemName.text = "Error (1)"
-            return
+            itemName.text = "Error (1)"; return
         }
         guard let name = item.name else {
-            itemName.text = "Error (2)"
-            return
+            itemName.text = "Error (2)" ; return
         }
         itemName.text = name
 
-        par.text = "\(currentItem.par) \(currentItem.item?.parUnit?.abbreviation ?? " ")"
-        onHand.text = "\(currentItem.onHand) \(currentItem.item?.inventoryUnit?.abbreviation ?? " ")"
-        minOrder.text = "\(currentItem.minOrder) \(currentItem.minOrderUnit?.abbreviation ?? " ")"
-        /*
-        var caseSizeString = ""
-        if let packSize = currentItem.item?.packSize {
-            caseSizeString += " \(packSize)"
-        }
-        if let subSize = currentItem.item?.subSize {
-            caseSizeString += " \(subSize)"
-        }
-        if let subUnit = currentItem.item?.subUnit?.abbreviation {
-            caseSizeString += " \(subUnit)"
-        }
-        caseSize.text = caseSizeString
-        */
         caseSize.text = "\(item.packSize) x \(item.subSize) \(item.subUnit?.abbreviation ?? " ")"
-        
+        par.text = formDisplayLine(
+            quantity: currentItem.par, abbreviation: currentItem.parUnit?.abbreviation ?? " ")
+        onHand.text = formDisplayLine(
+            quantity: currentItem.onHand, abbreviation: currentItem.item?.inventoryUnit?.abbreviation ?? " ")
+        minOrder.text = formDisplayLine(
+            quantity: currentItem.minOrder, abbreviation: currentItem.minOrderUnit?.abbreviation ?? " ")
+
         order.text = "\(currentItem.quantity ?? 0)"
         orderUnit.text = currentItem.orderUnit?.abbreviation
         
@@ -213,4 +209,15 @@ class OrderKeypadVC: UIViewController {
         
     }
     
+    private func formDisplayLine(quantity: Double?, abbreviation: String) -> String {
+        guard let numberFormatter = numberFormatter else { return "ERROR 3" }
+        guard let quantity = quantity else { return "ERROR 4" }
+        
+        // Quantity
+        if let quantityString = numberFormatter.string(from: NSNumber(value: quantity)) {
+            return "\(quantityString) \(abbreviation)"
+        }
+        return ""
+    }
+
 }
