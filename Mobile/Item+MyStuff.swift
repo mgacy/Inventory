@@ -98,58 +98,52 @@ extension Item {
 
     // MARK: - Fetch Object
 
-    private func genericFetch<T: NSManagedObject>(_ t: T, context: NSManagedObjectContext, predicate: NSPredicate) -> T? {
-        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-        request.predicate = predicate
-
-        do {
-            let searchResults = try context.fetch(request)
-
-            switch searchResults.count {
-            case 0:
-                return nil
-            case 1:
-                return searchResults[0]
-            default:
-                print("Found multiple matches: \(searchResults)")
-                return searchResults[0]
-            }
-
-        } catch {
-            print("Error with request: \(error)")
-        }
-        return nil
-    }
-
-    private func genericFetchWithString<T: NSManagedObject>(_ t: T, context: NSManagedObjectContext, predicateString: String) -> T? {
-        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-        request.predicate = NSPredicate(format: predicateString)
+    func fetchEntities<T: NSManagedObject>(entityType: T.Type, fromManagedObjectContext moc: NSManagedObjectContext, predicate: NSPredicate) -> [T] {
+        let classNameComponents: [String] = entityType.description().components(separatedBy: ".")
+        let className = classNameComponents[classNameComponents.count-1]
         
+        let fetchRequest = NSFetchRequest<T>(entityName: className)
+        
+        var searchResults = [T]()
         do {
-            let searchResults = try context.fetch(request)
-            
-            switch searchResults.count {
-            case 0:
-                return nil
-            case 1:
-                return searchResults[0]
-            default:
-                print("Found multiple matches: \(searchResults)")
-                return searchResults[0]
-            }
-            
+            searchResults = try moc.fetch(fetchRequest)
         } catch {
             print("Error with request: \(error)")
         }
-        return nil
+        
+        return searchResults
     }
     
-    private func fetchUnit(context: NSManagedObjectContext, id: Int) -> Unit? {
+    func fetchEntityByID<T: NSManagedObject>(entityType: T.Type, context moc: NSManagedObjectContext, id: Int) -> T? {
+        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
+        request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
+    
+        do {
+            let searchResults = try moc.fetch(request)
+            
+            switch searchResults.count {
+            case 0:
+                print("PROBLEM - Unable to find entity with id: \(id)")
+                return nil
+            case 1:
+                return searchResults[0]
+            default:
+                print("Found multiple matches: \(searchResults)")
+                return searchResults[0]
+            }
+            
+        } catch {
+            print("Error with request: \(error)")
+        }
+        return nil
+    }
+
+    private func fetchUnit(context moc: NSManagedObjectContext, id: Int) -> Unit? {
         let request: NSFetchRequest<Unit> = Unit.fetchRequest()
         request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
         
         do {
-            let searchResults = try context.fetch(request)
+            let searchResults = try moc.fetch(request)
             
             switch searchResults.count {
             case 0:
@@ -168,7 +162,5 @@ extension Item {
         
         return nil
     }
-    
-
 
 }
