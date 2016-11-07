@@ -84,6 +84,32 @@ extension OrderItem {
 
     // MARK: - Serialization
 
+    // MARK: - Fetch Entity
+    
+    func fetchEntityByID<T: NSManagedObject>(entityType: T.Type, context moc: NSManagedObjectContext, id: Int) -> T? {
+        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
+        request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
+        
+        do {
+            let searchResults = try moc.fetch(request)
+            
+            switch searchResults.count {
+            case 0:
+                print("PROBLEM - Unable to find entity with id: \(id)")
+                return nil
+            case 1:
+                return searchResults[0]
+            default:
+                print("Found multiple matches: \(searchResults)")
+                return searchResults[0]
+            }
+            
+        } catch {
+            print("Error with request: \(error)")
+        }
+        return nil
+    }
+    
     // MARK: - Fetch Object + Establish Relationship
     
     func fetchItem(context: NSManagedObjectContext, id: Int) {
