@@ -70,6 +70,15 @@ extension OrderItem {
         //if let purchaseSubUnitID = json["purchase_sub_unit_id"].int {}
         
         // Relationships
+        
+        if let itemID = json["item"]["id"].int {
+            print("Searching for Item with \(itemID)")
+            if let item = Item.withID(itemID, fromContext: context) {
+                print("Found Item: \(item)")
+                self.item = item
+            }
+        }
+        
         self.order = order
     }
 
