@@ -95,7 +95,7 @@ class Keypad {
             return
         }
         
-        if let newString = numberFormatter.string(from:  NSNumber(value: _newNumber)) {
+        if let newString = numberFormatter.string(from: NSNumber(value: _newNumber)) {
             currentNumber = newString
         } else {
             // Is it possible to reach this point?
