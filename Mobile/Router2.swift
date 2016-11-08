@@ -16,9 +16,8 @@ public enum Router2: URLRequestConvertible {
     case getUnits
     case getVendors
 
-    static let baseURLString = "http://127.0.0.1:5000"
-    //static let baseURLString = "http:mgacy.pythonanywhere.com"
-    // static let apiPath = "/api/v1.0"
+    static let baseURLString = Router.baseURLString
+    // static let apiPath = Router.apiPath
 
     var method: HTTPMethod {
         switch self {
