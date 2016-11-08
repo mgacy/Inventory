@@ -16,6 +16,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     // MARK: Properties
     
     var selectedCollection: OrderCollection?
+    //var selectedCollectionIndex: IndexPath?
     
     // MARK: FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
@@ -110,6 +111,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCollection = self.fetchedResultsController.object(at: indexPath)
+        //selectedCollectionIndex = indexPath
         guard let selection = selectedCollection else { return }
         
         switch selection.uploaded {
@@ -200,6 +202,22 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     }
     
     func completedGetExistingOrderCollection(json: JSON) -> Void {
+        /*
+        guard let selectedCollectionIndex = selectedCollectionIndex else {
+            print("\nPROBLEM - 1a")
+            return
+        }
+        var selection: OrderCollection
+        selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
+        
+        // Delete existing orders of selected collection
+        print("Deleting Orders of selected OrderCollection ...")
+        deleteChildOrders(parent: selection)
+        
+        // Reset selection since we reset the managedObjectContext in deleteChildOrders
+        selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
+        */
+
         guard let selection = selectedCollection else {
             print("\nPROBLEM - Still failed to get selected OrderCollection\n")
             return
