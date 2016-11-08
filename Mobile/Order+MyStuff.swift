@@ -14,7 +14,7 @@ extension Order {
 
     // MARK: - Lifecycle
 
-    convenience init(context: NSManagedObjectContext, json: JSON, collection: OrderCollection) {
+    convenience init(context: NSManagedObjectContext, json: JSON, collection: OrderCollection, placed: Bool = false) {
         self.init(context: context)
 
         // Properties
@@ -49,6 +49,7 @@ extension Order {
         if let vendorName = json["vendor"]["name"].string {
             self.vendorName = vendorName
         }
+        self.placed = placed
         /*
         // Rep
         if json["vendor"]["rep"].array != nil {

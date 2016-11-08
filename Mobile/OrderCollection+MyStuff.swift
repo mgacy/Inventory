@@ -14,17 +14,17 @@ extension OrderCollection {
     
     // MARK: - Lifecycle
     
-    convenience init(context: NSManagedObjectContext, date: JSON, completed: Bool = true) {
+    convenience init(context: NSManagedObjectContext, date: JSON, uploaded: Bool = false) {
         self.init(context: context)
 
         // Set properties
         if let _date = date.string {
             self.date = _date
         }
-        self.completed = completed
+        self.uploaded = uploaded
     }
     
-    convenience init(context: NSManagedObjectContext, json: JSON, completed: Bool = true) {
+    convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
         self.init(context: context)
         
         // Set properties
@@ -37,6 +37,7 @@ extension OrderCollection {
         if let storeID = json["store_id"].int {
             self.storeID = Int32(storeID)
         }
+        self.uploaded = uploaded
         
         // Add Orders
         if let orders = json["orders"].array {
@@ -44,7 +45,6 @@ extension OrderCollection {
                 _ = Order(context: context, json: orderJSON, collection: self)
             }
         }
-        
     }
     
     // MARK: - Serialization
@@ -69,7 +69,7 @@ extension OrderCollection {
 
         // Iterate over Orders
         for orderJSON in orders {
-            _ = Order(context: context, json: orderJSON, collection: self)
+            _ = Order(context: context, json: orderJSON, collection: self, placed: true)
         }
     }
 

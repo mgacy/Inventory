@@ -92,7 +92,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         let collection = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = collection.date
         
-        switch collection.completed {
+        switch collection.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black
         case false:
@@ -112,7 +112,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         selectedCollection = self.fetchedResultsController.object(at: indexPath)
         guard let selection = selectedCollection else { return }
         
-        switch selection.completed {
+        switch selection.uploaded {
         case true:
             
             // Get date to use when getting OrderCollection from server
@@ -190,7 +190,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
                 // Create OrderCollection if we can't find one with date `date`
                 if OrderCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
                     // print("Creating OrderCollection: \(dateString)")
-                    _ = OrderCollection(context: self.managedObjectContext!, date: date, completed: true)
+                    _ = OrderCollection(context: self.managedObjectContext!, date: date, uploaded: true)
                 }
             }
         }
@@ -216,7 +216,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
     func completedGetNewOrderCollection(json: JSON) -> Void {
         print("\nCreating new OrderCollection ...")
-        selectedCollection = OrderCollection(context: self.managedObjectContext!, json: json, completed: false)
+        selectedCollection = OrderCollection(context: self.managedObjectContext!, json: json, uploaded: false)
         
         // Save the context.
         saveContext()
