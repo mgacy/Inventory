@@ -28,8 +28,8 @@ public enum Router: URLRequestConvertible {
     case fetchOrder(storeID: Int, orderDate: String)
     case postOrder([String: Any])
     
-    //static let baseURLString = "http://127.0.0.1:5000"
-    static let baseURLString = "http:mgacy.pythonanywhere.com"
+    static let baseURLString = "http://127.0.0.1:5000"
+    //static let baseURLString = "http:mgacy.pythonanywhere.com"
     static let apiPath = "/api/v1.0"
     
     var method: HTTPMethod {
