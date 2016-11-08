@@ -24,7 +24,7 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     var fetchBatchSize = 20 // 0 = No Limit
     
     // TableView
-    var cellIdentifier = "Cell"
+    var cellIdentifier = "OrderItemTableViewCell"
     
     // Segues
     let segueIdentifier = "showOrderKeypad"
@@ -44,7 +44,7 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         title = parentObject.vendorName
         
         // Register reusable cell
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -87,7 +87,10 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Dequeue Reusable Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
+        
+        // OLD
+        //let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
         
         // Configure Cell
         self.configureCell(cell, atIndexPath: indexPath)
@@ -98,6 +101,17 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let orderItem = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = orderItem.itemName
+        
+        guard let quantity = orderItem.quantity else { return }
+        if Double(quantity) > 0.0 {
+            cell.textLabel?.textColor = UIColor.black
+            cell.detailTextLabel?.text = "\(quantity) \(orderItem.orderUnit?.abbreviation ?? "")"
+        } else {
+            cell.textLabel?.textColor = UIColor.lightGray
+            // TODO - should I even both displaying quantity?
+            cell.detailTextLabel?.text = "\(quantity)"
+        }
+        // TODO - add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
