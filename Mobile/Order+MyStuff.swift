@@ -18,31 +18,8 @@ extension Order {
         self.init(context: context)
 
         // Properties
-        // if let orderCost = json["order_cost"].float {
-        // if let orderDate = json["order_date"].string {
-
-        // For New Order
-        // - Relationship
-        if let vendorID = json["vendor_id"].int {
-            self.fetchVendor(context: context, id: vendorID)
-        }
-        // - Properties
-        if let vendorID = json["vendor_id"].int {
-            self.vendorID = Int32(vendorID)
-        }
-        if let vendorName = json["vendor_name"].string {
-            self.vendorName = vendorName
-        }
-        // if let rep = json["rep"].string { self.
-        // if let repEmail = json["rep_email"].string { self.
-        // if let repPhone = json["rep_phone"].int { self.
-        
-        // For Existing Order
-        // - Relationship
-        if let vendorID = json["vendor"]["id"].int {
-            self.fetchVendor(context: context, id: vendorID)
-        }
-        // - Properties
+        // if let orderCost = json["order_cost"].float {}
+        // if let orderDate = json["order_date"].string {}
         if let vendorID = json["vendor"]["id"].int {
             self.vendorID = Int32(vendorID)
         }
@@ -50,19 +27,22 @@ extension Order {
             self.vendorName = vendorName
         }
         self.placed = placed
+
+        // Relationships
+        self.collection = collection
+        if let vendorID = json["vendor"]["id"].int {
+            self.vendor = self.fetchVendor(context: context, id: vendorID)
+        }
+
         /*
         // Rep
         if json["vendor"]["rep"].array != nil {
-            // rep = json["vendor"]["rep"]["name"].string {
-            // repEmail = json["vendor"]["rep"]["email"].string {
-            // repPhone = json["vendor"]["rep"]["phone"].int {
+            // rep = json["vendor"]["rep"]["name"].string {}
+            // repEmail = json["vendor"]["rep"]["email"].string {}
+            // repPhone = json["vendor"]["rep"]["phone"].int {}
         }
         */
-        //}
         
-        // Relationships
-        self.collection = collection
-
         // OrderItems
         if let items = json["items"].array {
             print("\nCreating OrderItems ...")
@@ -124,9 +104,8 @@ extension Order {
     
     // MARK: - Fetch Object + Establish Relationship
     
-    func fetchVendor(context: NSManagedObjectContext, id: Int) {
+    func fetchVendor(context: NSManagedObjectContext, id: Int) -> Vendor? {
         let request: NSFetchRequest<Vendor> = Vendor.fetchRequest()
-        
         request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
         
         do {
@@ -134,18 +113,19 @@ extension Order {
             
             switch searchResults.count {
             case 0:
-                print("PROBLEM - Unable to find Unit with id: \(id)")
-                return
+                print("PROBLEM - Unable to find Vendor with id: \(id)")
+                return nil
             case 1:
-                self.vendor = searchResults[0]
+                return searchResults[0]
             default:
-                print("Found multiple matches for unit with id: \(id) - \(searchResults)")
-                self.vendor = searchResults[0]
+                print("Found multiple matches for Vendor with id: \(id) - \(searchResults)")
+                return searchResults[0]
             }
             
         } catch {
             print("Error with request: \(error)")
         }
+        return nil
     }
     
 }
