@@ -16,8 +16,7 @@ class OperationKeypadButton: UIButton {
         super.init(coder: aDecoder)
         
         // set other operations after super.init, if required
-        // let blueColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 255/255.0, alpha: 1.0)
-        backgroundColor = UIColor.blue
+        backgroundColor = ColorPalette.secondaryColor
         setTitleColor(UIColor.white, for: .normal)
         //setTitleColor(UIColor.green, for: .highlighted)
         titleLabel?.font = UIFont.systemFont(ofSize: 22.0)
