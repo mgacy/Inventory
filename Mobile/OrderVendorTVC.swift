@@ -87,8 +87,14 @@ class OrderVendorTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let order = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = order.vendorName
-        
-        // TODO - Order.placed
+
+        switch order.placed {
+        case false:
+            //cell.textLabel?.textColor = UIColor.lightGray
+            cell.textLabel?.textColor = ColorPalette.yellowColor
+        case true:
+            cell.textLabel?.textColor = UIColor.black
+        }
     }
 
     // Override to support conditional editing of the table view.
