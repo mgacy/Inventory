@@ -36,6 +36,7 @@
 		C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */; };
 		C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */; };
 		C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */; };
+		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
 		C9E198D51DC5669E0065FB98 /* OrderDateTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
 		C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E21DB7EF98004C10E6 /* ViewController.swift */; };
@@ -96,6 +97,7 @@
 		C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OrderCollection+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Order+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OrderItem+MyStuff.swift"; sourceTree = "<group>"; };
+		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
 		C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderDateTVC.swift; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */,
 				C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */,
 				C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */,
+				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
 			);
 			name = Order;
 			sourceTree = "<group>";
@@ -576,6 +579,7 @@
 				C9F5160D1DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift in Sources */,
 				C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */,
 				C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */,
+				C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */,
 				C902FF3E1DBD8B3F0063CD02 /* NumberKeypadButton.swift in Sources */,
 				C9F5160F1DB7F133004C10E6 /* InventoryKeypadVC.swift in Sources */,
 				C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */,

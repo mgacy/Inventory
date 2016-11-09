@@ -84,11 +84,8 @@
     </entity>
     <entity name="OrderItem" representedClassName="OrderItem" syncable="YES" codeGenerationType="class">
         <attribute name="itemID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="itemName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="minOrder" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="onHand" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="packSize" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="par" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="quantity" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -134,7 +131,7 @@
         <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="75"/>
         <element name="Order" positionX="-504" positionY="330" width="128" height="195"/>
         <element name="OrderCollection" positionX="-783" positionY="348" width="128" height="120"/>
-        <element name="OrderItem" positionX="-234" positionY="-27" width="128" height="255"/>
+        <element name="OrderItem" positionX="-234" positionY="-27" width="128" height="30"/>
         <element name="Store" positionX="-684" positionY="-126" width="128" height="120"/>
         <element name="Unit" positionX="-675" positionY="204" width="128" height="210"/>
         <element name="Vendor" positionX="-576" positionY="12" width="128" height="105"/>
