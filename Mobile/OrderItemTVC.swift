@@ -23,6 +23,9 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     var sectionNameKeyPath: String? = nil
     var fetchBatchSize = 20 // 0 = No Limit
     
+    // Create a MessageComposer
+    let messageComposer = MessageComposer()
+    
     // TableView
     var cellIdentifier = "OrderItemTableViewCell"
     
@@ -64,13 +67,39 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: - User Interaction
     
-    @IBAction func tappedMessageOrder(_ sender: AnyObject) {
+    @IBAction func tappedMessageOrder(_ sender: UIBarButtonItem) {
+        //guard let phoneNumber = parentObject.vendor.rep.phoneNumber else { return}
         guard let message = parentObject.getOrderMessage() else { return }
         print("\n\(message)")
         
+        // Make sure the device can send text messages
+        if (messageComposer.canSendText()) {
+
+            // Obtain a configured MFMessageComposeViewController
+            let messageComposeVC = messageComposer.configuredMessageComposeViewController(
+                phoneNumber: "1-800-867-5309", message: message)
+            
+            // Present the configured MFMessageComposeViewController instance
+            // Note that the dismissal of the VC will be handled by the messageComposer instance,
+            // since it implements the appropriate delegate call-back
+            present(messageComposeVC, animated: true, completion: nil)
+
+        } else {
+            
+            // TODO - try to send email message?
+            
+            // Let the user know if his/her device isn't able to send text messages
+            let errorAlert = UIAlertController(title: "Cannot Send Text Message",
+                                               message: "Your device is not able to send text messages.",
+                                               preferredStyle: UIAlertControllerStyle.alert)
+            present(errorAlert, animated: true, completion: nil)
+            
+        }
+
         if let json = parentObject.serialize() {
             print("\npost: \(json)")
         }
+
     }
     
     // MARK: - Table view data source
