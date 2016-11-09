@@ -22,23 +22,14 @@ extension OrderItem {
         if let itemID = json["item"]["id"].int {
             self.itemID = Int32(itemID)
         }
-        if let itemName = json["item"]["name"].string {
-            self.itemName = itemName
-            self.name = itemName
-        }
-        // TODO - handle category?
-        //if let categoryName = json["category"].string {}
-        //if let categoryID = json["category_id"].string {}
-        
-        //if let categoryName = json["item"]["category"]["name"].int {}
-        //if let categoryID = json["item"]["category"]["name"].string {}
+        //if let itemName = json["item"]["name"].string {
+        //    self.itemName = itemName
+        //    self.name = itemName
+        //}
         
         if let onHand = json["inventory"].double {
             self.onHand = onHand //as NSNumber?
         }
-
-        if let packSize = json["pack_size"].int {
-            self.packSize = Int32(packSize)
         
         // par
         if let par = json["par"].double {
@@ -64,9 +55,6 @@ extension OrderItem {
         if let orderUnitID = json["order_unit_id"].int {
             self.orderUnit = self.fetchEntityByID(entityType: Unit.self, context: context, id: orderUnitID)
         }
-        
-        //if let purchaseUnitID = json["purchase_unit_id"].int {}
-        //if let purchaseSubUnitID = json["purchase_sub_unit_id"].int {}
         
         // Relationships
         

@@ -100,7 +100,7 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let orderItem = self.fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = orderItem.itemName
+        cell.textLabel?.text = orderItem.item?.name
         
         guard let quantity = orderItem.quantity else { return }
         if Double(quantity) > 0.0 {
@@ -171,7 +171,9 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         fetchRequest.fetchBatchSize = fetchBatchSize
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "itemName", ascending: true)
+        // TODO - sort by item.category.name as well?
+        // let categorySortDescriptor = NSSortDescriptor(key: "item.category.name", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         // Set the fetch predicate
