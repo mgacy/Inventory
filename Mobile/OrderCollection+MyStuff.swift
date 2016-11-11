@@ -42,7 +42,7 @@ extension OrderCollection {
         // Add Orders
         if let orders = json["orders"].array {
             for orderJSON in orders {
-                _ = Order(context: context, json: orderJSON, collection: self)
+                _ = Order(context: context, json: orderJSON, collection: self, uploaded: uploaded)
             }
         }
     }
@@ -69,7 +69,7 @@ extension OrderCollection {
 
         // Iterate over Orders
         for orderJSON in orders {
-            _ = Order(context: context, json: orderJSON, collection: self, placed: true)
+            _ = Order(context: context, json: orderJSON, collection: self, uploaded: true)
         }
     }
 

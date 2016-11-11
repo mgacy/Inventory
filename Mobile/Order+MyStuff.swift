@@ -14,7 +14,7 @@ extension Order {
 
     // MARK: - Lifecycle
 
-    convenience init(context: NSManagedObjectContext, json: JSON, collection: OrderCollection, placed: Bool = false) {
+    convenience init(context: NSManagedObjectContext, json: JSON, collection: OrderCollection, uploaded: Bool = false) {
         self.init(context: context)
 
         // Properties
@@ -26,7 +26,8 @@ extension Order {
         if let vendorName = json["vendor"]["name"].string {
             self.vendorName = vendorName
         }
-        self.placed = placed
+        self.placed = uploaded
+        self.uploaded = uploaded
 
         // Relationships
         self.collection = collection
