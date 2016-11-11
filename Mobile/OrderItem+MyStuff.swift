@@ -22,10 +22,6 @@ extension OrderItem {
         if let itemID = json["item"]["id"].int {
             self.itemID = Int32(itemID)
         }
-        //if let itemName = json["item"]["name"].string {
-        //    self.itemName = itemName
-        //    self.name = itemName
-        //}
         
         if let onHand = json["inventory"].double {
             self.onHand = onHand //as NSNumber?
@@ -72,6 +68,10 @@ extension OrderItem {
     // MARK: - Serialization
 
     func serialize() -> [String: Any]? {
+        if self.quantity == 0 {
+            return nil
+        }
+        
         var myDict = [String: Any]()
         
         myDict["item_id"] = self.item?.remoteID
