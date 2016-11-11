@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwiftyJSON
 
 class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
@@ -68,9 +69,24 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     // MARK: - User Interaction
     
     @IBAction func tappedMessageOrder(_ sender: UIBarButtonItem) {
-        //guard let phoneNumber = parentObject.vendor.rep.phoneNumber else { return}
+        
+        // Prevent placing the order twice
+        if parentObject.uploaded {
+            return
+        }
+        
+        // Simply POST the order if we already sent the message but were unable to POST if previously
+        if parentObject.placed {
+            completedPlaceOrder(true)
+        }
+        
+        // TODO - handle different orderMethod
+        // TODO - prevent attempt to send empty order
+        
+        //guard let phoneNumber = parentObject.vendor.rep.phoneNumber else { return }
+        let phoneNumber = "1-800-867-5309"
         guard let message = parentObject.getOrderMessage() else { return }
-        print("\n\(message)")
+        print("\nOrder message: \(message)")
         
         // Make sure the device can send text messages
         if (messageComposer.canSendText()) {
@@ -177,8 +193,14 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
             showAlert(title: "Problem", message: "Unable to send Order message")
         }
     }
+    
+    func completedPostOrder(succeeded: Bool, json: JSON) {
+        if succeeded {
+            parentObject.uploaded = true
+        } else {
+            print("\nPROBLEM - Unable to POST order \(json)")
+            showAlert(title: "Problem", message: "Unable to upload Order")
         }
-
     }
     
     // MARK: - Table view data source
