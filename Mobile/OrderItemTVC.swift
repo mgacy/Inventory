@@ -87,17 +87,96 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         } else {
             
             // TODO - try to send email message?
-            
-            // Let the user know if his/her device isn't able to send text messages
-            let errorAlert = UIAlertController(title: "Cannot Send Text Message",
-                                               message: "Your device is not able to send text messages.",
-                                               preferredStyle: UIAlertControllerStyle.alert)
-            present(errorAlert, animated: true, completion: nil)
-            
-        }
 
-        if let json = parentObject.serialize() {
-            print("\npost: \(json)")
+            // Let the user know if his/her device isn't able to send text messages
+            let errorAlert = createAlert(
+                title: "Cannot Send Text Message",
+                message: "Your device is not able to send text messages.",
+                handler: nil)
+            
+            present(errorAlert, animated: true, completion: nil)
+        }
+    }
+
+    // If we pass a handler, display a "Cancel" and an "OK" button with the latter calling that handler
+    // Otherwise, display a single "OK" button
+    // TODO - shouldn't we allow the specification of the okAction's title?
+    // TODO - should we just present the alert within the function instead of returning it?
+    func createAlert(title: String, message: String, handler: (() -> Void)? = nil) -> UIAlertController {
+    
+        // Create alert controller
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let cancelTitle: String
+        
+        switch handler != nil {
+        case true:
+            cancelTitle = "Cancel"
+        
+            // Create and add the OK action
+            let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { action -> Void in
+                // Do some stuff
+                handler!()
+            }
+            alert.addAction(okAction)
+        
+        case false:
+            cancelTitle = "OK"
+        }
+        
+        // Create and add the Cancel action
+        let cancelAction: UIAlertAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        return alert
+    }
+    
+    func showAlert(title: String, message: String, handler: (() -> Void)? = nil) {
+        
+        // Create alert controller
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        
+        let cancelTitle: String
+        switch handler != nil {
+        case true:
+            cancelTitle = "Cancel"
+            
+            // Create and add the OK action
+            let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { action -> Void in
+                // Do some stuff
+                handler!()
+            }
+            alert.addAction(okAction)
+            
+        case false:
+            cancelTitle = "OK"
+        }
+        
+        // Create and add the Cancel action
+        let cancelAction: UIAlertAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: - Completion handlers
+    
+    func completedPlaceOrder(_ succeeded: Bool) {
+        if succeeded {
+            parentObject.placed = true
+            
+            // Serialize and POST Order
+            if let json = parentObject.serialize() {
+                print("\nPOSTing Order: \(json)")
+                APIManager.sharedInstance.postOrder(order: json, completionHandler: completedPostOrder)
+            }
+        
+            // TODO - handle failure to serialize Order
+        
+        } else {
+            print("\nPROBLEM - Unable to send Order message")
+            showAlert(title: "Problem", message: "Unable to send Order message")
+        }
+    }
         }
 
     }
