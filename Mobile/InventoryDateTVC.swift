@@ -202,7 +202,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         completedLogin(true)
     }
     
-    // MARK: - Completion Handlers
+    // MARK: - Completion handlers
     
     func completedGetExistingInventory(json: JSON) -> Void {
         if let selection = selectedInventory {

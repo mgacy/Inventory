@@ -88,6 +88,9 @@ class OrderVendorTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         let order = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = order.vendorName
 
+        // TODO - handle situation where user placed an order but uploading to the server failed;
+        // we still need to make sure that it ends up getting uploaded
+        
         switch order.placed {
         case false:
             //cell.textLabel?.textColor = UIColor.lightGray
