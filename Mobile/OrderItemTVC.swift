@@ -93,7 +93,8 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
             // Obtain a configured MFMessageComposeViewController
             let messageComposeVC = messageComposer.configuredMessageComposeViewController(
-                phoneNumber: "1-800-867-5309", message: message)
+                phoneNumber: phoneNumber, message: message,
+                completionHandler: completedPlaceOrder)
             
             // Present the configured MFMessageComposeViewController instance
             // Note that the dismissal of the VC will be handled by the messageComposer instance,
