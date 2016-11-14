@@ -92,6 +92,9 @@ extension Item {
         if let purchaseUnitID = json["purchase_unit"]["id"].int {
             self.purchaseUnit = fetchUnit(context: context, id: purchaseUnitID)
         }
+        if let purchaseSubUnitID = json["purchase_sub_unit"]["id"].int {
+            self.purchaseSubUnit = fetchUnit(context: context, id: purchaseSubUnitID)
+        }
         if let subUnitID = json["sub_unit"]["id"].int {
             self.subUnit = fetchUnit(context: context, id: subUnitID)
         }

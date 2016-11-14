@@ -54,6 +54,7 @@
         <relationship name="inventoryUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemInventoryUnits" inverseEntity="Unit" syncable="YES"/>
         <relationship name="orderItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="item" inverseEntity="OrderItem" syncable="YES"/>
         <relationship name="parUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemParUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="purchaseSubUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemPurchaseSubUnits" inverseEntity="Unit" syncable="YES"/>
         <relationship name="purchaseUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemPurchaseUnits" inverseEntity="Unit" syncable="YES"/>
         <relationship name="store" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="items" inverseEntity="Store" syncable="YES"/>
         <relationship name="subUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemSubUnit" inverseEntity="Unit" syncable="YES"/>
@@ -108,6 +109,7 @@
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <relationship name="itemInventoryUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="inventoryUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="itemParUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="parUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemPurchaseSubUnits" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="purchaseSubUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="itemPurchaseUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="purchaseUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="itemSubUnit" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="subUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="locationItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryLocationItem" inverseName="unit" inverseEntity="InventoryLocationItem" syncable="YES"/>
@@ -127,13 +129,13 @@
         <element name="InventoryLocation" positionX="-171" positionY="54" width="128" height="133"/>
         <element name="InventoryLocationCategory" positionX="106" positionY="-36" width="128" height="103"/>
         <element name="InventoryLocationItem" positionX="306" positionY="261" width="128" height="163"/>
-        <element name="Item" positionX="-468" positionY="-234" width="128" height="225"/>
+        <element name="Item" positionX="-468" positionY="-234" width="128" height="240"/>
         <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="75"/>
         <element name="Order" positionX="-504" positionY="330" width="128" height="195"/>
         <element name="OrderCollection" positionX="-783" positionY="348" width="128" height="120"/>
         <element name="OrderItem" positionX="-234" positionY="-27" width="128" height="30"/>
         <element name="Store" positionX="-684" positionY="-126" width="128" height="120"/>
-        <element name="Unit" positionX="-675" positionY="204" width="128" height="210"/>
+        <element name="Unit" positionX="-675" positionY="204" width="128" height="225"/>
         <element name="Vendor" positionX="-576" positionY="12" width="128" height="105"/>
     </elements>
 </model>
