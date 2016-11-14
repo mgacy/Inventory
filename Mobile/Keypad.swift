@@ -43,6 +43,7 @@ class Keypad {
                 isEditingNumber = true
             }
             
+            // TESTING
             updateDisplay(button: "clear")
         }
     }
@@ -59,6 +60,7 @@ class Keypad {
             currentNumber += "."
         }
         
+        // TESTING
         updateDisplay(button: ".")
     }
     
@@ -73,6 +75,7 @@ class Keypad {
             isEditingNumber = true
         }
         
+        // TESTING
         updateDisplay(button: String(value))
     }
     
@@ -92,7 +95,7 @@ class Keypad {
             return
         }
         
-        if let newString = numberFormatter.string(from:  NSNumber(value: _newNumber)) {
+        if let newString = numberFormatter.string(from: NSNumber(value: _newNumber)) {
             currentNumber = newString
         } else {
             // Is it possible to reach this point?
@@ -106,6 +109,30 @@ class Keypad {
         // functionality while still making use of _updateNumber
         // TODO: should this be done using an extension?
         _updateNumber(newNumber)
+    }
+    
+    func formatTotal(_ result: Double) -> String {
+        if let resultString = self.numberFormatter.string(from: NSNumber(value: result)) {
+            return resultString
+        } else {
+            return ""
+        }
+    }
+    
+    func outputB() -> (total: Double?, display: String) {
+        
+        // Result
+        let total = evaluateNumber()
+        
+        // Display
+        var display = ""
+        if total != nil {
+            display = formatTotal(total!)
+        } else {
+            display = "0"
+        }
+        
+        return (total: total, display: display)
     }
     
     // MARK: - Testing
@@ -122,29 +149,7 @@ class KeypadWithHistory: Keypad {
     // currentNumber
     
     var stack: [String] = []
-    /*
-     var history: String {
-     // Formatting
-     let historySeparator = " + "
-     
-     var historyString = ""
-     if !stack.isEmpty {
-     historyString = stack.joined(separator: historySeparator)
-     if currentNumber.isEmpty {
-     historyString += historySeparator
-     }
-     }
-     
-     if !currentNumber.isEmpty {
-     if !stack.isEmpty {
-     historyString += historySeparator
-     }
-     historyString += currentNumber
-     }
-     
-     return historyString
-     }
-     */
+
     // MARK: - Lifecycle
     
     override init() {
@@ -173,12 +178,12 @@ class KeypadWithHistory: Keypad {
             
             // Try to clear from stack
             if  !stack.isEmpty {
-                // currentNumber = String(numberStack.popLast()!)
                 currentNumber = stack.popLast()!
                 isEditingNumber = true
             }
         }
         
+        // TESTING
         updateDisplay(button: "clear")
     }
     
@@ -198,6 +203,7 @@ class KeypadWithHistory: Keypad {
             isEditingNumber = false
         }
         
+        // TESTING
         updateDisplay(button: "+")
     }
     
@@ -276,14 +282,6 @@ class KeypadWithHistory: Keypad {
         }
         
         return total
-    }
-    
-    func formatTotal(_ result: Double) -> String {
-        if let resultString = self.numberFormatter.string(from: NSNumber(value: result)) {
-            return resultString
-        } else {
-            return ""
-        }
     }
     
     func output() -> (history: String, total: Double?, display: String) {

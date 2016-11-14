@@ -18,6 +18,7 @@
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="subSize" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="inventory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Inventory" inverseName="items" inverseEntity="Inventory" syncable="YES"/>
+        <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="inventoryItems" inverseEntity="Item" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationItem" inverseName="item" inverseEntity="InventoryLocationItem" syncable="YES"/>
     </entity>
     <entity name="InventoryLocation" representedClassName="InventoryLocation" syncable="YES" codeGenerationType="class">
@@ -44,58 +45,97 @@
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocation" inverseName="items" inverseEntity="InventoryLocation" syncable="YES"/>
         <relationship name="unit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="locationItems" inverseEntity="Unit" syncable="YES"/>
     </entity>
+    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="packSize" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
+        <attribute name="subSize" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="inventoryItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryItem" inverseName="item" inverseEntity="InventoryItem" syncable="YES"/>
+        <relationship name="inventoryUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemInventoryUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="orderItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="item" inverseEntity="OrderItem" syncable="YES"/>
+        <relationship name="parUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemParUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="purchaseSubUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemPurchaseSubUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="purchaseUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemPurchaseUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="store" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="items" inverseEntity="Store" syncable="YES"/>
+        <relationship name="subUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemSubUnit" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="vendor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="items" inverseEntity="Vendor" syncable="YES"/>
+    </entity>
     <entity name="ItemCategory" representedClassName="ItemCategory" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="Order" representedClassName="Order" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="placed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="vendorID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="vendorName" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="collection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OrderCollection" inverseName="orders" inverseEntity="OrderCollection" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="OrderItem" inverseName="order" inverseEntity="OrderItem" syncable="YES"/>
         <relationship name="store" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="orders" inverseEntity="Store" syncable="YES"/>
         <relationship name="vendor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="orders" inverseEntity="Vendor" syncable="YES"/>
     </entity>
     <entity name="OrderCollection" representedClassName="OrderCollection" syncable="YES" codeGenerationType="class">
-        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="inventoryID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="storeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="orders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Order" inverseName="collection" inverseEntity="Order" syncable="YES"/>
     </entity>
     <entity name="OrderItem" representedClassName="OrderItem" syncable="YES" codeGenerationType="class">
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="quantity" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="itemID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="minOrder" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="onHand" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="par" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="orderItems" inverseEntity="Item" syncable="YES"/>
+        <relationship name="minOrderUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="orderItemMinOrderUnits" inverseEntity="Unit" syncable="YES"/>
         <relationship name="order" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Order" inverseName="items" inverseEntity="Order" syncable="YES"/>
-        <relationship name="unit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="orderItems" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="orderUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="orderItemOrderUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="parUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="orderItemParUnits" inverseEntity="Unit" syncable="YES"/>
     </entity>
     <entity name="Store" representedClassName="Store" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="inventories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Inventory" inverseName="store" inverseEntity="Inventory" syncable="YES"/>
-        <relationship name="orders" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Order" inverseName="store" inverseEntity="Order" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="store" inverseEntity="Item" syncable="YES"/>
+        <relationship name="orders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Order" inverseName="store" inverseEntity="Order" syncable="YES"/>
     </entity>
     <entity name="Unit" representedClassName="Unit" syncable="YES" codeGenerationType="class">
+        <attribute name="abbreviation" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="locationItems" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocationItem" inverseName="unit" inverseEntity="InventoryLocationItem" syncable="YES"/>
-        <relationship name="orderItems" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="unit" inverseEntity="OrderItem" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
+        <relationship name="itemInventoryUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="inventoryUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemParUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="parUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemPurchaseSubUnits" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="purchaseSubUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemPurchaseUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="purchaseUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemSubUnit" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="subUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="locationItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryLocationItem" inverseName="unit" inverseEntity="InventoryLocationItem" syncable="YES"/>
+        <relationship name="orderItemMinOrderUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="minOrderUnit" inverseEntity="OrderItem" syncable="YES"/>
+        <relationship name="orderItemOrderUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="orderUnit" inverseEntity="OrderItem" syncable="YES"/>
+        <relationship name="orderItemParUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="parUnit" inverseEntity="OrderItem" syncable="YES"/>
     </entity>
     <entity name="Vendor" representedClassName="Vendor" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="orders" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Order" inverseName="vendor" inverseEntity="Order" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="vendor" inverseEntity="Item" syncable="YES"/>
+        <relationship name="orders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Order" inverseName="vendor" inverseEntity="Order" syncable="YES"/>
     </entity>
     <elements>
         <element name="Inventory" positionX="-371" positionY="-135" width="128" height="165"/>
-        <element name="InventoryItem" positionX="-144" positionY="-180" width="128" height="165"/>
+        <element name="InventoryItem" positionX="-128" positionY="-135" width="128" height="30"/>
         <element name="InventoryLocation" positionX="-171" positionY="54" width="128" height="133"/>
-        <element name="InventoryLocationCategory" positionX="-0" positionY="27" width="128" height="103"/>
+        <element name="InventoryLocationCategory" positionX="106" positionY="-36" width="128" height="103"/>
         <element name="InventoryLocationItem" positionX="306" positionY="261" width="128" height="163"/>
+        <element name="Item" positionX="-468" positionY="-234" width="128" height="240"/>
         <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="75"/>
-        <element name="Store" positionX="-594" positionY="-72" width="128" height="105"/>
-        <element name="Unit" positionX="-594" positionY="117" width="128" height="105"/>
-        <element name="Vendor" positionX="-387" positionY="-27" width="128" height="90"/>
-        <element name="Order" positionX="-378" positionY="-18" width="128" height="135"/>
-        <element name="OrderItem" positionX="-369" positionY="-9" width="128" height="120"/>
-        <element name="OrderCollection" positionX="-360" positionY="0" width="128" height="75"/>
+        <element name="Order" positionX="-504" positionY="330" width="128" height="195"/>
+        <element name="OrderCollection" positionX="-783" positionY="348" width="128" height="120"/>
+        <element name="OrderItem" positionX="-234" positionY="-27" width="128" height="30"/>
+        <element name="Store" positionX="-684" positionY="-126" width="128" height="120"/>
+        <element name="Unit" positionX="-675" positionY="204" width="128" height="225"/>
+        <element name="Vendor" positionX="-576" positionY="12" width="128" height="105"/>
     </elements>
 </model>

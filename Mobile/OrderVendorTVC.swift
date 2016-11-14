@@ -1,34 +1,34 @@
 //
-//  InventoryLocationItemTVC.swift
-//  Playground
+//  OrderVendorTVC.swift
+//  Mobile
 //
-//  Created by Mathew Gacy on 10/6/16.
+//  Created by Mathew Gacy on 10/30/16.
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
-class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
+class OrderVendorTVC: UITableViewController, NSFetchedResultsControllerDelegate {
+    // MARK: - Properties
     
-    // MARK: Properties
-    
-    var category: InventoryLocationCategory?
-    var location: InventoryLocation?
-    var selectedItem: InventoryLocationItem?
+    var parentObject: OrderCollection!
+    var selectedObject: Order?
     
     // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext? = nil
-    //var filter: NSPredicate? = nil
+    var managedObjectContext: NSManagedObjectContext?
+    var filter: NSPredicate? = nil
     var cacheName: String? = nil
     var sectionNameKeyPath: String? = nil
     var fetchBatchSize = 20 // 0 = No Limit
     
-    // TableViewCell
-    let cellIdentifier = "InventoryLocationTableViewCell"
+    // TableView
+     var cellIdentifier = "Cell"
     
     // Segues
-    let KeypadSegue = "ShowInventoryKeypad"
+    let segueIdentifier = "showOrderItems"
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,15 +39,21 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
+        // Set Title
+        title = "Vendors"
+        
         // Register reusable cell
-        //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
         // CoreData
-        performFetch()
+        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        self.performFetch()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        //self.performFetch()
         self.tableView.reloadData()
     }
     
@@ -70,35 +76,30 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Dequeue Reusable Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
         
-        // OLD
-        //let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
-        
-        // Configure the cell
+        // Configure Cell
         self.configureCell(cell, atIndexPath: indexPath)
-
+        
         return cell
     }
     
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
-        let locationItem = self.fetchedResultsController.object(at: indexPath)
-                
-        if let item = locationItem.item {
-            cell.textLabel?.text = item.name
-        } else {
-            print("\nPROBLEM - configuringCell\n")
-        }
+        let order = self.fetchedResultsController.object(at: indexPath)
+        cell.textLabel?.text = order.vendorName
+
+        // TODO - handle situation where user placed an order but uploading to the server failed;
+        // we still need to make sure that it ends up getting uploaded
         
-        if let quantity = locationItem.quantity {
+        switch order.placed {
+        case false:
+            //cell.textLabel?.textColor = UIColor.lightGray
+            cell.textLabel?.textColor = ColorPalette.yellowColor
+        case true:
             cell.textLabel?.textColor = UIColor.black
-            cell.detailTextLabel?.text = "\(quantity)"
-        } else {
-            cell.textLabel?.textColor = UIColor.lightGray
-            cell.detailTextLabel?.text = " "
         }
     }
-    
+
     // Override to support conditional editing of the table view.
     // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
     
@@ -117,10 +118,10 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
     // MARK: - Navigation
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedItem = self.fetchedResultsController.object(at: indexPath)
-        // print("Selected LocationItem: \(selectedItem)")
+        selectedObject = self.fetchedResultsController.object(at: indexPath)
+        print("Selected Order: \(selectedObject)")
         
-        performSegue(withIdentifier: KeypadSegue, sender: self)
+        performSegue(withIdentifier: segueIdentifier, sender: self)
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -128,54 +129,44 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InventoryKeypadVC else {
+        // Get the selected object.
+        guard let selectedObject = selectedObject else {
+            print("\nPROBLEM - Unable to get selection")
             return
         }
         
-        // Pass the parent of the selected object to the new view controller.
-        // TODO: should I really pass both or just the one != nil?
-        destinationController.category = category
-        destinationController.location = location
-        destinationController.managedObjectContext = self.managedObjectContext
-        
-        // FIX: fix this
-        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
-            destinationController.currentIndex = indexPath
+        // Get the new view controller using segue.destinationViewController.
+        guard let destinationController = segue.destination as? OrderItemTVC else {
+            return
         }
-    
+        
+        // Pass the selected object to the new view controller.
+        destinationController.parentObject = selectedObject
+        destinationController.managedObjectContext = self.managedObjectContext
     }
     
     // MARK: - Fetched results controller
     
-    var fetchedResultsController: NSFetchedResultsController<InventoryLocationItem> {
+    var fetchedResultsController: NSFetchedResultsController<Order> {
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
         }
         
-        let fetchRequest: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
+        let fetchRequest: NSFetchRequest<Order> = Order.fetchRequest()
         
         // Set the batch size to a suitable number.
-        fetchRequest.fetchBatchSize = self.fetchBatchSize
+        fetchRequest.fetchBatchSize = fetchBatchSize
         
         // Edit the sort key as appropriate.
-        let positionSort = NSSortDescriptor(key: "position", ascending: true)
-        let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
-        fetchRequest.sortDescriptors = [positionSort, nameSort]
+        let sortDescriptor = NSSortDescriptor(key: "vendorName", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         
-        // Set the fetch predicate.
-        if let parentLocation = self.location {
-            let fetchPredicate = NSPredicate(format: "location == %@", parentLocation)
-            //print("\nAdding predicate \(fetchPredicate)")
+        // Set the fetch predicate
+        if let parent = self.parentObject {
+            let fetchPredicate = NSPredicate(format: "collection == %@", parent)
             fetchRequest.predicate = fetchPredicate
-            
-        } else if let parentCategory = self.category {
-            let fetchPredicate = NSPredicate(format: "category == %@", parentCategory)
-            //print("\nAdding predicate \(fetchPredicate)")
-            fetchRequest.predicate = fetchPredicate
-
         } else {
-            print("\nPROBLEM - Unable to add predicate\n")
+            print("\nPROBLEM - Unable able to add predicate")
         }
         
         // Edit the section name key path and cache name if appropriate.
@@ -192,6 +183,8 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
         return _fetchedResultsController!
     }
     
+    var _fetchedResultsController: NSFetchedResultsController<Order>? = nil
+    
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({
             
@@ -200,19 +193,17 @@ class InventoryLocationItemTVC: UITableViewController, NSFetchedResultsControlle
             } catch {
                 print("\(#function) FAILED : \(error)")
             }
-            /*
+            
             // TESTING:
             let objects = self.fetchedResultsController.fetchedObjects
             print("Fetched Objects: \(objects?.count)")
             if let expectedLocations = self.fetchedResultsController.fetchedObjects {
-                print("InventoryLocationItemTVC should display: \(expectedLocations)")
+                print("OrderVendorTVC should display: \(expectedLocations)")
             }
-            */
+            
             self.tableView.reloadData()
         })
     }
-    
-    var _fetchedResultsController: NSFetchedResultsController<InventoryLocationItem>? = nil
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
