@@ -97,6 +97,8 @@ extension Order {
             }
         }
 
+        if messageItems.count == 0 { return nil }
+        
         messageItems.sort()
         let message = "Order for \(self.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
 
