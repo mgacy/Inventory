@@ -104,11 +104,21 @@ class OrderKeypadVC: UIViewController {
     // MARK: - Units
     
     @IBAction func packTapped(_ sender: AnyObject) {
-    
+        guard let item = currentItem.item else { print("A1"); return  }
+        guard let purchaseUnit = item.purchaseUnit else { print("B1"); return }
+        
+        currentItem.orderUnit = purchaseUnit
+        update()
     }
     
     @IBAction func unitTapped(_ sender: AnyObject) {
-    
+        guard let item = currentItem.item else { print("A2"); return  }
+        print("Item: \(item)")
+        guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
+        
+        
+        currentItem.orderUnit = purchaseSubUnit
+        update()
     }
     
     // MARK: - Item Navigation
