@@ -92,9 +92,13 @@ class APIManager {
                 switch response.result {
                 case .success(let value):
                     print("Success: \(value)")
+                    //let json = JSON(value)
+                    //completionHandler(true, json)
                     completionHandler(true)
                 case .failure(let error):
                     print("Failure: \(error)")
+                    //let json = JSON(error)
+                    //completionHandler(false, json)
                     completionHandler(false)
                 }
         }
@@ -169,16 +173,18 @@ class APIManager {
         }
     }
     
-    func postOrder(order: [String: Any], completionHandler: @escaping (Bool) -> Void) {
+    func postOrder(order: [String: Any], completionHandler: @escaping (Bool, JSON) -> Void) {
         sessionManager.request(Router.postOrder(order))
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
                     print("Success: \(value)")
-                    completionHandler(true)
+                    let json = JSON(value)
+                    completionHandler(true, json)
                 case .failure(let error):
                     print("Failure: \(error)")
-                    completionHandler(false)
+                    let json = JSON(error)
+                    completionHandler(false, json)
                 }
         }
     }
