@@ -11,10 +11,56 @@ import CoreData
 
 class InvoiceKeypadVC: UIViewController {
 
+    // MARK: Properties
+    
+    var parentObject: Invoice!
+    var currentIndex = 0
+    
+    var items: [InvoiceItem] {
+        let request: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
+        request.predicate = NSPredicate(format: "invoice == %@", parentObject)
+        
+        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+        
+        do {
+            let searchResults = try managedObjectContext?.fetch(request)
+            return searchResults!
+            
+        } catch {
+            print("Error with request: \(error)")
+        }
+        return [InvoiceItem]()
+    }
+    
+    var currentItem: InvoiceItem {
+        //print("currentItem: \(items[currentIndex])")
+        return items[currentIndex]
+    }
+    
+    typealias keypadOutput = (total: Double?, display: String)
+    let keypad = Keypad()
+    
+    // CoreData
+    var managedObjectContext: NSManagedObjectContext?
+    
+    var numberFormatter: NumberFormatter?
+    
+    // MARK: - Display Outlets
+    
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        // Setup numberFormatter
+        numberFormatter = NumberFormatter()
+        guard let numberFormatter = numberFormatter else { return }
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.roundingMode = .halfUp
+        numberFormatter.maximumFractionDigits = 2
+        
+        update(newItem: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,14 +69,10 @@ class InvoiceKeypadVC: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    // MARK: - C
+    
+    func update(newItem: Bool = false) {}
+    
+    func updateDisplay(item: InvoiceItem, keypadOutput: keypadOutput) {}
 
 }
