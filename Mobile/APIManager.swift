@@ -106,15 +106,41 @@ class APIManager {
     
     // MARK: - API Calls - Invoice
     
-    func getListOfInvoices(storeID: Int, typeID: Int, orderDate: String, completionHandler:
+    func getListOfInvoiceCollections(storeID: Int, completionHandler:
         @escaping (JSON) -> Void)
-    {}
+    {
+        sessionManager.request(Router.listInvoices(storeID: storeID))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("\ngetListOfInvoiceCollections - response: \(response)\n")
+                    let json = JSON(value)
+                    completionHandler(json)
+                case .failure(let error):
+                    // TODO - handle error somewhere
+                    debugPrint("\nERROR - getListOfInvoiceCollections: \(error)")
+                }
+        }
+    }
     
-    func getInvoice(remoteID: Int, completionHandler:
+    func getInvoiceCollection(storeID: Int, invoiceDate: String, completionHandler:
         @escaping (JSON) -> Void)
-    {}
+    {
+        sessionManager.request(Router.fetchInvoice(storeID: storeID, invoiceDate: invoiceDate))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\ngetInvoiceCollection - response: \(response)\n")
+                    let json = JSON(value)
+                    completionHandler(json)
+                case .failure(let error):
+                    // TODO - handle error somewhere
+                    debugPrint("\nERROR - getInvoiceCollection: \(error)")
+                }
+        }
+    }
     
-    func getNewInvoice(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?, completionHandler:
+    func getNewInvoiceCollection(storeID: Int, completionHandler:
         @escaping (JSON) -> Void)
     {}
     
@@ -128,12 +154,12 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\ngetListOfOrders - response: \(response)\n")
+                    // print("\ngetListOfOrderCollections - response: \(response)\n")
                     let json = JSON(value)
                     completionHandler(json)
                 case .failure(let error):
                     // TODO - handle error somewhere
-                    debugPrint("\nERROR - getListOfOrders: \(error)")
+                    debugPrint("\nERROR - getListOfOrderCollections: \(error)")
                 }
         }
     }
@@ -145,12 +171,12 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\ngetOrder - response: \(response)\n")
+                    // print("\ngetOrderCollection - response: \(response)\n")
                     let json = JSON(value)
                     completionHandler(json)
                 case .failure(let error):
                     // TODO - handle error somewhere
-                    debugPrint("\nERROR - getOrder: \(error)")
+                    debugPrint("\nERROR - getOrderCollection: \(error)")
                 }
         }
     }
@@ -163,12 +189,12 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\ngetNewOrder - response: \(response)\n")
+                    // print("\ngetNewOrderCollection - response: \(response)\n")
                     let json = JSON(value)
                     completionHandler(json)
                 case .failure(let error):
                     // TODO - handle error somewhere
-                    debugPrint("\nERROR - getNewOrder: \(error)")
+                    debugPrint("\nERROR - getNewOrderCollection: \(error)")
                 }
         }
     }

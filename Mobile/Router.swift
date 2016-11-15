@@ -18,9 +18,9 @@ public enum Router: URLRequestConvertible {
     case fetchInventory(remoteID: Int)
     case postInventory([String: Any])
     // Invoice
-    case getNewInvoice()
+    case getNewInvoice(storeID: Int)
     case listInvoices(storeID: Int)
-    case fetchInvoice(storeID: Int)
+    case fetchInvoice(storeID: Int, invoiceDate: String)
     case postInvoice([String: Any])
     // Order
     case getNewOrder(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?)
@@ -112,9 +112,12 @@ public enum Router: URLRequestConvertible {
         case .postInventory(let parameters):
             return parameters
         // Invoice
-        // case .getNewInvoice:
-        // case .listInvoices:
-        // case .fetchInvoice:
+         case .getNewInvoice(let storeID):
+            return ["store_id": storeID]
+         case .listInvoices(let storeID):
+            return ["store_id": storeID]
+         case .fetchInvoice(let storeID, let invoiceDate):
+            return ["store_id": storeID, "date": invoiceDate]
         case .postInvoice(let parameters):
             return parameters
         // Order
@@ -157,12 +160,13 @@ public enum Router: URLRequestConvertible {
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
             
         // Invoice
-        // case .getNewInvoice:
-        //     urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
+        case .getNewInvoice:
+            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         // case .listInvoices:
-        // case .fetchInvoice:
-        // case .postInvoice:
-        //     urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+        case .fetchInvoice:
+            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
+        case .postInvoice:
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         
         // Order
         case .getNewOrder:
