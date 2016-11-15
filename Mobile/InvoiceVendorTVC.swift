@@ -83,17 +83,15 @@ class InvoiceVendorTVC: UITableViewController, NSFetchedResultsControllerDelegat
     
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let invoice = self.fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = "\(invoice.remoteID)"
+        cell.textLabel?.text = invoice.vendor?.name
         
-        /*
-        switch invoice.placed {
+        switch invoice.uploaded {
         case false:
             //cell.textLabel?.textColor = UIColor.lightGray
             cell.textLabel?.textColor = ColorPalette.yellowColor
         case true:
             cell.textLabel?.textColor = UIColor.black
         }
-        */
     }
     
     // Override to support conditional editing of the table view.
@@ -117,9 +115,9 @@ class InvoiceVendorTVC: UITableViewController, NSFetchedResultsControllerDelegat
         selectedObject = self.fetchedResultsController.object(at: indexPath)
         print("Selected Invoice: \(selectedObject)")
         
-        //performSegue(withIdentifier: segueIdentifier, sender: self)
+        performSegue(withIdentifier: segueIdentifier, sender: self)
         
-        //tableView.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -155,7 +153,8 @@ class InvoiceVendorTVC: UITableViewController, NSFetchedResultsControllerDelegat
         
         // Edit the sort key as appropriate.
         // TODO - change sort to vendor.name
-        let sortDescriptor = NSSortDescriptor(key: "vendorName", ascending: true)
+        //let sortDescriptor = NSSortDescriptor(key: "remoteID", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         // Set the fetch predicate
