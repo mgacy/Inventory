@@ -45,6 +45,37 @@
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocation" inverseName="items" inverseEntity="InventoryLocation" syncable="YES"/>
         <relationship name="unit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="locationItems" inverseEntity="Unit" syncable="YES"/>
     </entity>
+    <entity name="Invoice" representedClassName="Invoice" syncable="YES" codeGenerationType="class">
+        <attribute name="checkNo" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="credit" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="invoiceNo" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="receiveDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="shipDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="shipping" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="taxes" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="totalCost" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="collection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InvoiceCollection" inverseName="invoices" inverseEntity="InvoiceCollection" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InvoiceItem" inverseName="invoice" inverseEntity="InvoiceItem" syncable="YES"/>
+        <relationship name="vendor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="invoices" inverseEntity="Vendor" syncable="YES"/>
+    </entity>
+    <entity name="InvoiceCollection" representedClassName="InvoiceCollection" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="storeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="invoices" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Invoice" inverseName="collection" inverseEntity="Invoice" syncable="YES"/>
+    </entity>
+    <entity name="InvoiceItem" representedClassName="InvoiceItem" syncable="YES" codeGenerationType="class">
+        <attribute name="cost" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="discount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="invoice" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Invoice" inverseName="items" inverseEntity="Invoice" syncable="YES"/>
+        <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="invoiceItems" inverseEntity="Item" syncable="YES"/>
+        <relationship name="unit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="invoiceItems" inverseEntity="Unit" syncable="YES"/>
+    </entity>
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="packSize" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -52,6 +83,7 @@
         <attribute name="subSize" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="inventoryItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryItem" inverseName="item" inverseEntity="InventoryItem" syncable="YES"/>
         <relationship name="inventoryUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemInventoryUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="invoiceItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InvoiceItem" inverseName="item" inverseEntity="InvoiceItem" syncable="YES"/>
         <relationship name="orderItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="item" inverseEntity="OrderItem" syncable="YES"/>
         <relationship name="parUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemParUnits" inverseEntity="Unit" syncable="YES"/>
         <relationship name="purchaseSubUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemPurchaseSubUnits" inverseEntity="Unit" syncable="YES"/>
@@ -107,6 +139,7 @@
         <attribute name="abbreviation" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
+        <relationship name="invoiceItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InvoiceItem" inverseName="unit" inverseEntity="InvoiceItem" syncable="YES"/>
         <relationship name="itemInventoryUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="inventoryUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="itemParUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="parUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="itemPurchaseSubUnits" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="purchaseSubUnit" inverseEntity="Item" syncable="YES"/>
@@ -120,6 +153,7 @@
     <entity name="Vendor" representedClassName="Vendor" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="invoices" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Invoice" inverseName="vendor" inverseEntity="Invoice" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="vendor" inverseEntity="Item" syncable="YES"/>
         <relationship name="orders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Order" inverseName="vendor" inverseEntity="Order" syncable="YES"/>
     </entity>
@@ -129,13 +163,16 @@
         <element name="InventoryLocation" positionX="-171" positionY="54" width="128" height="133"/>
         <element name="InventoryLocationCategory" positionX="106" positionY="-36" width="128" height="103"/>
         <element name="InventoryLocationItem" positionX="306" positionY="261" width="128" height="163"/>
-        <element name="Item" positionX="-468" positionY="-234" width="128" height="240"/>
+        <element name="Item" positionX="-468" positionY="-234" width="128" height="255"/>
         <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="75"/>
         <element name="Order" positionX="-504" positionY="330" width="128" height="195"/>
         <element name="OrderCollection" positionX="-783" positionY="348" width="128" height="120"/>
         <element name="OrderItem" positionX="-234" positionY="-27" width="128" height="30"/>
         <element name="Store" positionX="-684" positionY="-126" width="128" height="120"/>
-        <element name="Unit" positionX="-675" positionY="204" width="128" height="225"/>
-        <element name="Vendor" positionX="-576" positionY="12" width="128" height="105"/>
+        <element name="Unit" positionX="-675" positionY="204" width="128" height="240"/>
+        <element name="Vendor" positionX="-576" positionY="12" width="128" height="120"/>
+        <element name="Invoice" positionX="-576" positionY="-81" width="128" height="30"/>
+        <element name="InvoiceItem" positionX="-567" positionY="-72" width="128" height="150"/>
+        <element name="InvoiceCollection" positionX="-558" positionY="-63" width="128" height="105"/>
     </elements>
 </model>
