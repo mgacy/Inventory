@@ -12,6 +12,29 @@ import SwiftyJSON
 
 extension Unit {
     
+    static func withID(_ id: Int, fromContext context: NSManagedObjectContext) -> Unit? {
+        let request: NSFetchRequest<Unit> = Unit.fetchRequest()
+        request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
+        
+        do {
+            let searchResults = try context.fetch(request)
+            
+            switch searchResults.count {
+            case 0:
+                return nil
+            case 1:
+                return searchResults[0]
+            default:
+                print("Found multiple matches: \(searchResults)")
+                return searchResults[0]
+            }
+            
+        } catch {
+            print("Error with request: \(error)")
+        }
+        return nil
+    }
+    
     // MARK: - Lifecycle
     
     convenience init(context: NSManagedObjectContext, json: JSON) {
