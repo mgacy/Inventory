@@ -91,12 +91,80 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="b9F-TQ-nk6">
+                        <barButtonItem key="leftBarButtonItem" image="reset" id="m6G-Jr-szo" userLabel="Reset">
+                            <connections>
+                                <action selector="resetTapped:" destination="JEB-WY-LZ0" id="pSz-DQ-Z1W"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="XVa-ul-dwF"/>
                     </navigationItem>
+                    <connections>
+                        <segue destination="VhV-VD-YI0" kind="show" identifier="showInvoiceVendors" id="wCl-Z0-XJs"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TvV-Mf-QZ0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2089" y="2016"/>
+        </scene>
+        <!--Invoice VendorTVC-->
+        <scene sceneID="YZi-Qr-cTX">
+            <objects>
+                <tableViewController id="VhV-VD-YI0" customClass="InvoiceVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ahH-Or-Iyl">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="VhV-VD-YI0" id="2tb-YW-wIU"/>
+                            <outlet property="delegate" destination="VhV-VD-YI0" id="dh5-8u-IFU"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <segue destination="l7g-UY-PfL" kind="show" identifier="showInvoiceItems" id="KBh-Of-pbq"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bRg-gA-w5F" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2985" y="2015"/>
+        </scene>
+        <!--Invoice ItemTVC-->
+        <scene sceneID="sAK-Ak-TeE">
+            <objects>
+                <tableViewController id="l7g-UY-PfL" customClass="InvoiceItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="8U1-sa-wNz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="l7g-UY-PfL" id="sCd-uL-Ybg"/>
+                            <outlet property="delegate" destination="l7g-UY-PfL" id="xMy-yH-tNB"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <segue destination="YYD-4x-u8L" kind="show" identifier="showInvoiceKeypad" id="dUN-FR-aP7"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WNf-PQ-5Fe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3902" y="2015"/>
+        </scene>
+        <!--Invoice KeypadVC-->
+        <scene sceneID="k8Y-JV-hwY">
+            <objects>
+                <viewController id="YYD-4x-u8L" customClass="InvoiceKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Hg0-RF-7Da"/>
+                        <viewControllerLayoutGuide type="bottom" id="2A8-Sv-YFH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gTG-5a-aNW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PmF-Zh-WEi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4774" y="2015"/>
         </scene>
         <!--Order VendorTVC-->
         <scene sceneID="Sdp-Sd-Wvi">
