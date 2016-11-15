@@ -11,10 +11,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Inventory DateTVC-->
+        <!--InventoryDate-->
         <scene sceneID="lrs-35-hw4">
             <objects>
-                <tableViewController id="YU6-fn-vVE" customClass="InventoryDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="YU6-fn-vVE" userLabel="InventoryDate" customClass="InventoryDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xZo-sB-tyJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -44,10 +44,10 @@
             </objects>
             <point key="canvasLocation" x="2088.8000000000002" y="138.98050974512745"/>
         </scene>
-        <!--Order DateTVC-->
+        <!--OrderDate-->
         <scene sceneID="56f-6e-YPo">
             <objects>
-                <tableViewController id="SjL-9C-Vrt" customClass="OrderDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="SjL-9C-Vrt" userLabel="OrderDate" customClass="OrderDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="dA3-eM-KQG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -77,10 +77,10 @@
             </objects>
             <point key="canvasLocation" x="2089" y="1200"/>
         </scene>
-        <!--Invoice DateTVC-->
+        <!--InvoiceDate-->
         <scene sceneID="qvx-H1-EZt">
             <objects>
-                <tableViewController id="JEB-WY-LZ0" customClass="InvoiceDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="JEB-WY-LZ0" userLabel="InvoiceDate" customClass="InvoiceDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="YmK-sc-PDB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -106,10 +106,10 @@
             </objects>
             <point key="canvasLocation" x="2089" y="2016"/>
         </scene>
-        <!--Invoice VendorTVC-->
+        <!--InvoiceVendor-->
         <scene sceneID="YZi-Qr-cTX">
             <objects>
-                <tableViewController id="VhV-VD-YI0" customClass="InvoiceVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="VhV-VD-YI0" userLabel="InvoiceVendor" customClass="InvoiceVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ahH-Or-Iyl">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -127,10 +127,10 @@
             </objects>
             <point key="canvasLocation" x="2985" y="2015"/>
         </scene>
-        <!--Invoice ItemTVC-->
+        <!--InvoiceItem-->
         <scene sceneID="sAK-Ak-TeE">
             <objects>
-                <tableViewController id="l7g-UY-PfL" customClass="InvoiceItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="l7g-UY-PfL" userLabel="InvoiceItem" customClass="InvoiceItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="8U1-sa-wNz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -148,10 +148,10 @@
             </objects>
             <point key="canvasLocation" x="3902" y="2015"/>
         </scene>
-        <!--Invoice KeypadVC-->
+        <!--InvoiceKeypad-->
         <scene sceneID="k8Y-JV-hwY">
             <objects>
-                <viewController id="YYD-4x-u8L" customClass="InvoiceKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="YYD-4x-u8L" userLabel="InvoiceKeypad" customClass="InvoiceKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Hg0-RF-7Da"/>
                         <viewControllerLayoutGuide type="bottom" id="2A8-Sv-YFH"/>
@@ -166,10 +166,10 @@
             </objects>
             <point key="canvasLocation" x="4774" y="2015"/>
         </scene>
-        <!--Order VendorTVC-->
+        <!--OrderVendor-->
         <scene sceneID="Sdp-Sd-Wvi">
             <objects>
-                <tableViewController id="Zlj-V1-U9C" customClass="OrderVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Zlj-V1-U9C" userLabel="OrderVendor" customClass="OrderVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ol5-oj-Brx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -187,10 +187,10 @@
             </objects>
             <point key="canvasLocation" x="2985" y="1200"/>
         </scene>
-        <!--Order ItemTVC-->
+        <!--OrderItem-->
         <scene sceneID="RYd-Fb-0K8">
             <objects>
-                <tableViewController id="yHa-97-WdW" customClass="OrderItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="yHa-97-WdW" userLabel="OrderItem" customClass="OrderItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="hX6-m9-oGy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -215,10 +215,10 @@
             </objects>
             <point key="canvasLocation" x="3902" y="1200"/>
         </scene>
-        <!--Order KeypadVC-->
+        <!--OrderKeypad-->
         <scene sceneID="3gh-C2-Cya">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="e6G-Uh-Dbm" customClass="OrderKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="e6G-Uh-Dbm" userLabel="OrderKeypad" customClass="OrderKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="1du-vi-zGv"/>
                         <viewControllerLayoutGuide type="bottom" id="0ck-it-Yoe"/>
@@ -532,11 +532,11 @@
             </objects>
             <point key="canvasLocation" x="-402" y="1200"/>
         </scene>
-        <!--Inventory-->
+        <!--Inventories-->
         <scene sceneID="j6u-Gp-cWa">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Dd5-Cp-qL8" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Inventory" image="inventoryTab" id="gAl-q1-bWL"/>
+                    <tabBarItem key="tabBarItem" title="Inventories" image="inventoryTab" id="gAl-q1-bWL"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="vZw-en-3u3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -551,10 +551,10 @@
             </objects>
             <point key="canvasLocation" x="1149.5999999999999" y="138.98050974512745"/>
         </scene>
-        <!--Inventory LocationTVC-->
+        <!--InventoryLocation-->
         <scene sceneID="FUc-Sc-EDt">
             <objects>
-                <tableViewController id="H3s-md-9Gz" userLabel="Inventory LocationTVC" customClass="InventoryLocationTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="H3s-md-9Gz" userLabel="InventoryLocation" customClass="InventoryLocationTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DzA-AY-wbP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -582,10 +582,10 @@
             </objects>
             <point key="canvasLocation" x="2985" y="139"/>
         </scene>
-        <!--Inventory Location CategoryTVC-->
+        <!--InventoryLocationCategory-->
         <scene sceneID="TtP-wW-j50">
             <objects>
-                <tableViewController hidesBottomBarWhenPushed="YES" id="EVU-Sa-EdD" customClass="InventoryLocationCategoryTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController hidesBottomBarWhenPushed="YES" id="EVU-Sa-EdD" userLabel="InventoryLocationCategory" customClass="InventoryLocationCategoryTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="TgE-k8-v4G">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -605,10 +605,10 @@
             </objects>
             <point key="canvasLocation" x="3902" y="-234"/>
         </scene>
-        <!--Inventory Location ItemTVC-->
+        <!--InventoryLocationItem-->
         <scene sceneID="kiM-cd-BbP">
             <objects>
-                <tableViewController hidesBottomBarWhenPushed="YES" id="2re-X1-JiU" customClass="InventoryLocationItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController hidesBottomBarWhenPushed="YES" id="2re-X1-JiU" userLabel="InventoryLocationItem" customClass="InventoryLocationItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="mFn-T5-2tF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -628,10 +628,10 @@
             </objects>
             <point key="canvasLocation" x="4830" y="502"/>
         </scene>
-        <!--Inventory KeypadVC-->
+        <!--InventoryKeypad-->
         <scene sceneID="JJj-C5-QEv">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="WFi-DU-OgF" customClass="InventoryKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="WFi-DU-OgF" userLabel="InventoryKeypad" customClass="InventoryKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3h9-9E-bbe"/>
                         <viewControllerLayoutGuide type="bottom" id="cdn-aK-mKE"/>
@@ -1136,6 +1136,6 @@
         <image name="settingsTab" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4yW-DD-bsH"/>
+        <segue reference="6Vu-cU-Z1a"/>
     </inferredMetricsTieBreakers>
 </document>
