@@ -45,6 +45,7 @@ extension InvoiceCollection {
     }
     
     // MARK: - Serialization
+    
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
         
@@ -58,14 +59,10 @@ extension InvoiceCollection {
     // MARK: - Update Existing
     
     func updateExisting(context: NSManagedObjectContext, json: JSON) {
-        guard let invoices = json["invoices"].array else {
-            print("\nPROBLEM - Unable to get invoices from JSON")
-            return
-        }
         
         // Iterate over Invoices
-        for invoiceJSON in invoices {
-            _ = Invoice(context: context, json: invoiceJSON, collection: self, uploaded: true)
+        for (_, item) in json {
+            _ = Invoice(context: context, json: item, collection: self, uploaded: true)
         }
     }
     
