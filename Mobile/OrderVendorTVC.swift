@@ -158,6 +158,7 @@ class OrderVendorTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         fetchRequest.fetchBatchSize = fetchBatchSize
         
         // Edit the sort key as appropriate.
+        // TODO - change sort to vendor.name
         let sortDescriptor = NSSortDescriptor(key: "vendorName", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         

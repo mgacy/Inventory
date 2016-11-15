@@ -307,6 +307,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     }
     
     // Source: https://code.tutsplus.com/tutorials/core-data-and-swift-batch-deletes--cms-25380
+    // NOTE - I believe I scrapped a plan to make this a method because of the involvement of the moc
     func deleteChildOrders(parent: OrderCollection) {
         guard let managedObjectContext = managedObjectContext else {
             return
