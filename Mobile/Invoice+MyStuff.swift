@@ -56,14 +56,16 @@ extension Invoice {
         //    self.status = status
         //}
 
-        // self.vendorID = vendor_id
-        // self.vendorName = vendor_name
-
         // Relationships
+        self.collection = collection
+        // TODO - error / log if these fail
         if let items = json["items"].array {
             for itemJSON in items {
                 _ = InvoiceItem(context: context, json: itemJSON, invoice: self)
             }
+        }
+        if let vendorID = json["vendor"]["id"].int {
+            self.vendor = Vendor.withID(vendorID, fromContext: context)
         }
     }
 

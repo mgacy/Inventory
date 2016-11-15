@@ -34,6 +34,7 @@ extension InvoiceItem {
         // TODO - status
 
         // Relationships
+        self.invoice = invoice
         if let itemID = json["item"]["id"].int {
             self.item = context.fetchWithID(Item.self, withID: itemID)
         }
