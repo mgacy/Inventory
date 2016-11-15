@@ -20,12 +20,6 @@ extension Order {
         // Properties
         // if let orderCost = json["order_cost"].float {}
         // if let orderDate = json["order_date"].string {}
-        if let vendorID = json["vendor"]["id"].int {
-            self.vendorID = Int32(vendorID)
-        }
-        if let vendorName = json["vendor"]["name"].string {
-            self.vendorName = vendorName
-        }
         self.placed = uploaded
         self.uploaded = uploaded
 

@@ -45,7 +45,7 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         // Set Title
-        title = parentObject.vendorName
+        title = parentObject.vendor?.name
         
         // Register reusable cell
         //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
