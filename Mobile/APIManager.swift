@@ -142,7 +142,20 @@ class APIManager {
     
     func getNewInvoiceCollection(storeID: Int, completionHandler:
         @escaping (JSON) -> Void)
-    {}
+    {
+        sessionManager.request(Router.getNewInvoice(storeID: storeID))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\ngetNewInvoiceCollection - response: \(response)\n")
+                    let json = JSON(value)
+                    completionHandler(json)
+                case .failure(let error):
+                    // TODO - handle error somewhere
+                    debugPrint("\nERROR - getNewInvoiceCollection: \(error)")
+                }
+        }
+    }
     
     func postInvoice(invoice: [String: Any], completionHandler: @escaping (Bool) -> Void) {}
     
