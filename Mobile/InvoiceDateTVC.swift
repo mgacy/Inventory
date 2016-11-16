@@ -105,12 +105,12 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         let collection = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = collection.date
 
-        // switch collection.uploaded {
-        // case true:
-        //     cell.textLabel?.textColor = UIColor.black
-        // case false:
-        //     cell.textLabel?.textColor = ColorPalette.yellowColor
-        // }
+        switch collection.uploaded {
+        case true:
+            cell.textLabel?.textColor = UIColor.black
+        case false:
+            cell.textLabel?.textColor = ColorPalette.yellowColor
+        }
     }
 
     // Override to support conditional editing of the table view.
