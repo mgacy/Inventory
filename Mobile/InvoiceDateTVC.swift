@@ -134,27 +134,24 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         selectedCollection = self.fetchedResultsController.object(at: indexPath)
         guard let selection = selectedCollection else { return }
         
-        // TEMP
-        selection.uploaded = true
-        
         switch selection.uploaded {
         case true:
             
             // Get date to use when getting OrderCollection from server
             guard let collectionDate = selection.date else {
-                print("\nPROBLEM - Unable to get invoiceCollection.date")
+                print("\nPROBLEM - Unable to get InvoiceCollection.date")
                 return
             }
             
             // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
-            // Delete existing orders of selected collection
+            // Delete existing invoices of selected collection
             print("Deleting Invoices of selected InvoiceCollection ...")
             deleteChildInvoices(parent: selection)
             
             // Reset selection since we reset the managedObjectContext in deleteChildOrders
             selectedCollection = self.fetchedResultsController.object(at: indexPath)
             
-            print("GET OrderCollection from server ...")
+            print("GET InvoiceCollection from server ...")
             APIManager.sharedInstance.getInvoiceCollection(
                 storeID: storeID, invoiceDate: collectionDate,
                 completionHandler: completedGetExistingInvoiceCollection)
@@ -186,7 +183,7 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     }
     
     @IBAction func newTapped(_ sender: AnyObject) {
-        // Get new OrderCollection.
+        // Get new InvoiceCollection.
         APIManager.sharedInstance.getNewInvoiceCollection(
             storeID: storeID, completionHandler: completedGetNewInvoiceCollection)
     }
