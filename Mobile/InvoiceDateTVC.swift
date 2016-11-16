@@ -239,7 +239,13 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     }
     
     func completedGetNewInvoiceCollection(json: JSON) -> Void {
+        print("\nCreating new InvoiceCollection ...")
+        selectedCollection = InvoiceCollection(context: self.managedObjectContext!, json: json, uploaded: false)
         
+        // Save the context.
+        saveContext()
+        
+        performSegue(withIdentifier: segueIdentifier, sender: self)
     }
     
     func completedLogin(_ succeeded: Bool) {
