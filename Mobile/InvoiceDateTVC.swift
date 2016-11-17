@@ -13,7 +13,7 @@ import SwiftyJSON
 
 class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
-    // MARK: Properties
+    // MARK: - Properties
 
     var selectedCollection: InvoiceCollection?
 
@@ -34,6 +34,8 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     var storeID = 1
     // let invoiceTypeID = 1
 
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -80,6 +82,93 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - User interaction
+    
+    @IBAction func newTapped(_ sender: AnyObject) {
+        // Get new InvoiceCollection.
+        APIManager.sharedInstance.getNewInvoiceCollection(
+            storeID: storeID, completionHandler: completedGetNewInvoiceCollection)
+    }
+    
+    @IBAction func resetTapped(_ sender: AnyObject) {
+        //deleteObjects(entityType: Item.self)
+        deleteExistingInvoiceCollections()
+        
+        _ = StartupManager(completionHandler: completedLogin)
+    }
+    
+    // MARK: - Completion handlers
+    
+    func completedGetListOfInvoiceCollections(json: JSON) -> Void {
+        guard let dates = json["dates"].array else {
+            print("\nPROBLEM - Failed to get dates")
+            return
+        }
+        
+        // FIX - this does not account for Collections that have been deleted from the server but
+        // are still present in the local store
+        for date in dates {
+            if let dateString = date.string {
+                
+                // Create InvoiceCollection if we can't find one with date `date` (2)
+                let predicate = NSPredicate(format: "date == %@", dateString)
+                if managedObjectContext?.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate) == nil {
+                    print("Creating InvoiceCollection: \(dateString)")
+                    _ = InvoiceCollection(context: self.managedObjectContext!, date: date, uploaded: true)
+                }
+                
+                /*
+                 // Create InvoiceCollection if we can't find one with date `date`
+                 if InvoiceCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
+                 // print("Creating InvoiceCollection: \(dateString)")
+                 _ = InvoiceCollection(context: self.managedObjectContext!, date: date, uploaded: true)
+                 }
+                 */
+            }
+        }
+        
+        // Save the context.
+        saveContext()
+    }
+    
+    func completedGetExistingInvoiceCollection(json: JSON) -> Void {
+        guard let selection = selectedCollection else {
+            print("\nPROBLEM - Still failed to get selected InvoiceCollection\n")
+            return
+        }
+        
+        // Update selected Inventory with full JSON from server.
+        selection.updateExisting(context: self.managedObjectContext!, json: json)
+        
+        // Save the context.
+        saveContext()
+        
+        performSegue(withIdentifier: segueIdentifier, sender: self)
+    }
+    
+    func completedGetNewInvoiceCollection(json: JSON) -> Void {
+        print("\nCreating new InvoiceCollection ...")
+        selectedCollection = InvoiceCollection(context: self.managedObjectContext!, json: json, uploaded: false)
+        
+        // Save the context.
+        saveContext()
+        
+        performSegue(withIdentifier: segueIdentifier, sender: self)
+    }
+    
+    func completedLogin(_ succeeded: Bool) {
+        if succeeded {
+            print("\nCompleted login - succeeded: \(succeeded)")
+            
+            // Get list of Invoices from server
+            // print("\nFetching existing InvoiceCollections from server ...")
+            APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completionHandler: self.completedGetListOfInvoiceCollections)
+            
+        } else {
+            print("Unable to login ...")
+        }
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -136,7 +225,7 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         
         switch selection.uploaded {
         case true:
-            
+        
             // Get date to use when getting OrderCollection from server
             guard let collectionDate = selection.date else {
                 print("\nPROBLEM - Unable to get InvoiceCollection.date")
@@ -179,82 +268,6 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             controller.managedObjectContext = self.managedObjectContext
         } else {
             print("\nPROBLEM - Unable to get selection\n")
-        }
-    }
-    
-    @IBAction func newTapped(_ sender: AnyObject) {
-        // Get new InvoiceCollection.
-        APIManager.sharedInstance.getNewInvoiceCollection(
-            storeID: storeID, completionHandler: completedGetNewInvoiceCollection)
-    }
-    
-    @IBAction func resetTapped(_ sender: AnyObject) {
-        //deleteObjects(entityType: Item.self)
-        deleteExistingInvoiceCollections()
-        
-        _ = StartupManager(completionHandler: completedLogin)
-    }
- 
-    // MARK: - Completion Handlers
-    
-    func completedGetListOfInvoiceCollections(json: JSON) -> Void {
-        guard let dates = json["dates"].array else {
-            print("\nPROBLEM - Failed to get dates")
-            return
-        }
-        
-        // FIX - this does not account for Collections that have been deleted from the server but
-        // are still present in the local store
-        for date in dates {
-            if let dateString = date.string {
-                
-                // Create InvoiceCollection if we can't find one with date `date`
-                if InvoiceCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
-                    // print("Creating InvoiceCollection: \(dateString)")
-                    _ = InvoiceCollection(context: self.managedObjectContext!, date: date, uploaded: true)
-                }
-            }
-        }
-        
-        // Save the context.
-        saveContext()
-    }
-    
-    func completedGetExistingInvoiceCollection(json: JSON) -> Void {
-        guard let selection = selectedCollection else {
-            print("\nPROBLEM - Still failed to get selected InvoiceCollection\n")
-            return
-        }
-        
-        // Update selected Inventory with full JSON from server.
-        selection.updateExisting(context: self.managedObjectContext!, json: json)
-        
-        // Save the context.
-        saveContext()
-        
-        performSegue(withIdentifier: segueIdentifier, sender: self)
-    }
-    
-    func completedGetNewInvoiceCollection(json: JSON) -> Void {
-        print("\nCreating new InvoiceCollection ...")
-        selectedCollection = InvoiceCollection(context: self.managedObjectContext!, json: json, uploaded: false)
-        
-        // Save the context.
-        saveContext()
-        
-        performSegue(withIdentifier: segueIdentifier, sender: self)
-    }
-    
-    func completedLogin(_ succeeded: Bool) {
-        if succeeded {
-            print("\nCompleted login - succeeded: \(succeeded)")
-            
-            // Get list of Invoices from server
-            // print("\nFetching existing InvoiceCollections from server ...")
-            APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completionHandler: self.completedGetListOfInvoiceCollections)
-            
-        } else {
-            print("Unable to login ...")
         }
     }
     

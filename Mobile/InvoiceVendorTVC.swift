@@ -11,7 +11,7 @@ import CoreData
 
 class InvoiceVendorTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
-    // MARK: Properties
+    // MARK: - Properties
     
     var parentObject: InvoiceCollection!
     var selectedObject: Invoice?

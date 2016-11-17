@@ -66,7 +66,7 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: - User Interaction
+    // MARK: - User interaction
     
     @IBAction func tappedMessageOrder(_ sender: UIBarButtonItem) {
         
