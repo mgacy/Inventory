@@ -26,7 +26,7 @@ extension Order {
         // Relationships
         self.collection = collection
         if let vendorID = json["vendor"]["id"].int {
-            self.vendor = self.fetchVendor(context: context, id: vendorID)
+            self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
         }
 
         /*
@@ -97,32 +97,6 @@ extension Order {
         let message = "Order for \(self.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
 
         return message
-    }
-    
-    // MARK: - Fetch Object + Establish Relationship
-    
-    func fetchVendor(context: NSManagedObjectContext, id: Int) -> Vendor? {
-        let request: NSFetchRequest<Vendor> = Vendor.fetchRequest()
-        request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
-        
-        do {
-            let searchResults = try context.fetch(request)
-            
-            switch searchResults.count {
-            case 0:
-                print("PROBLEM - Unable to find Vendor with id: \(id)")
-                return nil
-            case 1:
-                return searchResults[0]
-            default:
-                print("Found multiple matches for Vendor with id: \(id) - \(searchResults)")
-                return searchResults[0]
-            }
-            
-        } catch {
-            print("Error with request: \(error)")
-        }
-        return nil
     }
     
 }

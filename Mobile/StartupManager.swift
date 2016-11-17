@@ -101,7 +101,7 @@ class StartupManager {
             }
             
             // Find + update / create Items
-            if let item = Item.withID(itemID, fromContext: managedObjectContext) {
+            if let item = managedObjectContext.fetchWithRemoteID(Item.self, withID: itemID) {
                 item.update(context: managedObjectContext, withJSON: itemJSON)
             } else {
                 _ = Item(context: managedObjectContext, json: itemJSON)

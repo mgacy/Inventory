@@ -36,12 +36,11 @@ extension InvoiceItem {
         // Relationships
         self.invoice = invoice
         if let itemID = json["item"]["id"].int {
-            self.item = context.fetchWithID(Item.self, withID: itemID)
+            self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
         }
         if let unitID = json["unit_id"].int {
-            self.unit = context.fetchWithID(Unit.self, withID: unitID)
+            self.unit = context.fetchWithRemoteID(Unit.self, withID: unitID)
         }
-
     }
 
     // MARK: - Serialization

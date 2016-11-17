@@ -32,7 +32,7 @@ extension OrderItem {
             self.par = par
         }
         if let parUnitID = json["par_unit_id"].int {
-            self.parUnit = self.fetchEntityByID(entityType: Unit.self, context: context, id: parUnitID)
+            self.parUnit = context.fetchWithRemoteID(Unit.self, withID: parUnitID)
         }
         
         // minOrder
@@ -41,23 +41,21 @@ extension OrderItem {
             self.quantity = minOrder as NSNumber?
         }
         if let minOrderUnitID = json["min_order_unit_id"].int {
-            self.minOrderUnit = self.fetchEntityByID(entityType: Unit.self, context: context, id: minOrderUnitID)
+            self.minOrderUnit = context.fetchWithRemoteID(Unit.self, withID: minOrderUnitID)
         }
-        
+
         // order
         if let order = json["order"].double {
             self.quantity = order as NSNumber?
         }
         if let orderUnitID = json["order_unit_id"].int {
-            self.orderUnit = self.fetchEntityByID(entityType: Unit.self, context: context, id: orderUnitID)
+            self.orderUnit = context.fetchWithRemoteID(Unit.self, withID: orderUnitID)
         }
         
         // Relationships
         
         if let itemID = json["item"]["id"].int {
-            //print("Searching for Item with \(itemID)")
-            if let item = Item.withID(itemID, fromContext: context) {
-                //print("Found Item: \(item)")
+            if let item = context.fetchWithRemoteID(Item.self, withID: itemID) {
                 self.item = item
             }
         }
@@ -79,32 +77,6 @@ extension OrderItem {
         myDict["order_unit_id"] = self.orderUnit?.remoteID
         
         return myDict
-    }
-    
-    // MARK: - Fetch Entity
-    
-    func fetchEntityByID<T: NSManagedObject>(entityType: T.Type, context moc: NSManagedObjectContext, id: Int) -> T? {
-        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-        request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
-        
-        do {
-            let searchResults = try moc.fetch(request)
-            
-            switch searchResults.count {
-            case 0:
-                print("PROBLEM - Unable to find entity with id: \(id)")
-                return nil
-            case 1:
-                return searchResults[0]
-            default:
-                print("Found multiple matches: \(searchResults)")
-                return searchResults[0]
-            }
-            
-        } catch {
-            print("Error with request: \(error)")
-        }
-        return nil
     }
     
 }
