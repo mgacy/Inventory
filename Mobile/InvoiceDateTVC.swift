@@ -425,7 +425,7 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             let objects = self.fetchedResultsController.fetchedObjects
             print("Fetched Objects: \(objects?.count)")
             if let expectedObjects = self.fetchedResultsController.fetchedObjects {
-                print("OrderDateTVC should display: \(expectedObjects)")
+                print("InvoiceDateTVC should display: \(expectedObjects)")
             }
             
             self.tableView.reloadData()
