@@ -11,7 +11,7 @@ import CoreData
 
 class InvoiceKeypadVC: UIViewController {
 
-    // MARK: Properties
+    // MARK: - Properties
     
     var parentObject: Invoice!
     var currentIndex = 0
