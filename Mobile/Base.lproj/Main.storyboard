@@ -96,7 +96,11 @@
                                 <action selector="resetTapped:" destination="JEB-WY-LZ0" id="pSz-DQ-Z1W"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="XVa-ul-dwF"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="XVa-ul-dwF">
+                            <connections>
+                                <action selector="newTapped:" destination="JEB-WY-LZ0" id="rum-MC-h6T"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="VhV-VD-YI0" kind="show" identifier="showInvoiceVendors" id="wCl-Z0-XJs"/>
@@ -141,7 +145,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="Gpo-9C-2bo">
-                        <barButtonItem key="rightBarButtonItem" image="Upload" id="3tn-IB-IGT" userLabel="Upload"/>
+                        <barButtonItem key="rightBarButtonItem" image="Upload" id="3tn-IB-IGT" userLabel="Upload">
+                            <connections>
+                                <action selector="uploadTapped:" destination="l7g-UY-PfL" id="EZv-H3-DjC"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="YYD-4x-u8L" kind="show" identifier="showInvoiceKeypad" id="dUN-FR-aP7"/>

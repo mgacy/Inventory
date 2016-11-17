@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwiftyJSON
 
 class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
@@ -60,7 +61,27 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
 
     // MARK: - User interaction
     
+    @IBAction func uploadTapped(_ sender: AnyObject) {
+        print("Uploading Invoice ...")
+        
+        guard let dict = self.parentObject.serialize() else {
+            print("\nPROBLEM - Unable to serialize Invoice")
+            // TODO - completedUpload(false)
+            return
+        }
+        APIManager.sharedInstance.postInvoice(invoice: dict, completionHandler: completedUpload)
+    }
+    
     // MARK: - Completion handlers
+    
+    func completedUpload(succeeded: Bool, json: JSON) {
+        print("completedUpload: \(succeeded)")
+        if succeeded {
+            parentObject.uploaded = true
+        } else {
+            print("\nPROBLEM - Unable to upload Invoice")
+        }
+    }
     
     // MARK: - Table view data source
 

@@ -157,7 +157,21 @@ class APIManager {
         }
     }
     
-    func postInvoice(invoice: [String: Any], completionHandler: @escaping (Bool) -> Void) {}
+    func postInvoice(invoice: [String: Any], completionHandler: @escaping (Bool, JSON) -> Void) {
+        sessionManager.request(Router.postInvoice(invoice))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("Success: \(value)")
+                    let json = JSON(value)
+                    completionHandler(true, json)
+                case .failure(let error):
+                    print("Failure: \(error)")
+                    let json = JSON(error)
+                    completionHandler(false, json)
+                }
+        }
+    }
     
     // MARK: - API Calls - Order
     
