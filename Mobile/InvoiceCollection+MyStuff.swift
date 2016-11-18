@@ -37,10 +37,8 @@ extension InvoiceCollection {
         self.uploaded = uploaded
 
         // Add Invoices
-        if let invoices = json["invoices"].array {
-            for invoiceJSON in invoices {
-                _ = Invoice(context: context, json: invoiceJSON, collection: self, uploaded: uploaded)
-            }
+        for (_, item) in json {
+            _ = Invoice(context: context, json: item, collection: self, uploaded: false)
         }
     }
     
