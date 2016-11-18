@@ -202,7 +202,7 @@ class OrderKeypadVC: UIViewController {
         minOrder.text = formDisplayLine(
             quantity: currentItem.minOrder, abbreviation: currentItem.minOrderUnit?.abbreviation ?? " ")
 
-        order.text = "\(currentItem.quantity ?? 0)"
+        order.text = keypadOutput.display
         orderUnit.text = currentItem.orderUnit?.abbreviation
         
         switch keypadOutput.total {
