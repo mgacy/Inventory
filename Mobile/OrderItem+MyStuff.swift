@@ -45,10 +45,13 @@ extension OrderItem {
         }
 
         // order
-        if let order = json["order"].double {
+        if let order = json["quantity"].double {
             self.quantity = order as NSNumber?
         }
-        if let orderUnitID = json["order_unit_id"].int {
+        // Accomodate differences between response for new and existing Orders
+        if let orderUnitID = json["unit_id"].int {
+            self.orderUnit = context.fetchWithRemoteID(Unit.self, withID: orderUnitID)
+        } else if let orderUnitID = json["unit"]["id"].int {
             self.orderUnit = context.fetchWithRemoteID(Unit.self, withID: orderUnitID)
         }
         
