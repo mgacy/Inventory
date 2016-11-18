@@ -204,6 +204,25 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     
     // MARK: - Completion handlers
     
+    func completedGetListOfInventories(json: JSON) -> Void {
+        
+        for (_, item) in json {
+            _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
+        }
+        
+        // Save the context.
+        let context = self.fetchedResultsController.managedObjectContext
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        
+    }
+    
     func completedGetExistingInventory(json: JSON) -> Void {
         if let selection = selectedInventory {
 
@@ -244,25 +263,6 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         }
         
         performSegue(withIdentifier: ExistingItemSegue, sender: self)
-    }
-    
-    func completedGetListOfInventories(json: JSON) -> Void {
-    
-        for (_, item) in json {
-            _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
-        }
-        
-        // Save the context.
-        let context = self.fetchedResultsController.managedObjectContext
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-
     }
     
     func completedLogin(_ succeeded: Bool) {
