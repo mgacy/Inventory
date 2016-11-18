@@ -49,10 +49,12 @@ extension InvoiceItem {
         var myDict = [String: Any]()
         // TODO - remove the init of the different types?
         myDict["id"] = Int(self.remoteID)
+        myDict["item_id"] = self.item?.remoteID
         myDict["quantity"] = Double(self.quantity)
         myDict["discount"] = Double(self.discount)
         myDict["cost"] = Double(self.cost)
         myDict["unit_id"] = self.unit?.remoteID
+        //myDict["status"] = self.status
         return myDict
     }
 
