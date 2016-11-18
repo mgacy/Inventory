@@ -84,7 +84,7 @@ class APIManager {
     
     // MARK: - API Calls - Inventory
     
-    func getInventories(storeID: Int, completionHandler completion:
+    func getListOfInventories(storeID: Int, completionHandler completion:
         @escaping (JSON) -> Void)
     {
         sessionManager.request(Router.listInventories(storeID: storeID))

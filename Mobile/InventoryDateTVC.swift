@@ -246,7 +246,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         performSegue(withIdentifier: ExistingItemSegue, sender: self)
     }
     
-    func completedGetInventories(json: JSON) -> Void {
+    func completedGetListOfInventories(json: JSON) -> Void {
     
         for (_, item) in json {
             _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
@@ -271,7 +271,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             
             // Get list of Inventories from server
             // print("\nFetching existing Inventories from server ...")
-            APIManager.sharedInstance.getInventories(storeID: storeID, completionHandler: self.completedGetInventories)
+            APIManager.sharedInstance.getListOfInventories(storeID: storeID, completionHandler: self.completedGetListOfInventories)
             
         } else {
             print("Unable to login ...")
