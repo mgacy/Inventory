@@ -27,8 +27,6 @@
 		C96870E61DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */; };
 		C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
-		C98234151DCC0A8D00E3E353 /* Router2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98234141DCC0A8D00E3E353 /* Router2.swift */; };
-		C98234171DCC0A9800E3E353 /* APIManager2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98234161DCC0A9800E3E353 /* APIManager2.swift */; };
 		C982341B1DCD3B3A00E3E353 /* StartupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* StartupManager.swift */; };
 		C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */; };
 		C98A4FB31DCB0233002BB076 /* Unit+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */; };
@@ -93,8 +91,6 @@
 		C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InvoiceItem+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+MyStuff.swift"; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
-		C98234141DCC0A8D00E3E353 /* Router2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router2.swift; sourceTree = "<group>"; };
-		C98234161DCC0A9800E3E353 /* APIManager2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIManager2.swift; sourceTree = "<group>"; };
 		C982341A1DCD3B3A00E3E353 /* StartupManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupManager.swift; sourceTree = "<group>"; };
 		C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Unit+MyStuff.swift"; sourceTree = "<group>"; };
@@ -339,8 +335,6 @@
 				C982341A1DCD3B3A00E3E353 /* StartupManager.swift */,
 				C9F516111DB7F158004C10E6 /* Router.swift */,
 				C9F516121DB7F158004C10E6 /* APIManager.swift */,
-				C98234141DCC0A8D00E3E353 /* Router2.swift */,
-				C98234161DCC0A9800E3E353 /* APIManager2.swift */,
 				C9F516131DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift */,
 				C9F516141DB7F158004C10E6 /* AuthorizationHandler.swift */,
 			);
@@ -575,9 +569,7 @@
 				C982341B1DCD3B3A00E3E353 /* StartupManager.swift in Sources */,
 				C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */,
 				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
-				C98234171DCC0A9800E3E353 /* APIManager2.swift in Sources */,
 				C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */,
-				C98234151DCC0A8D00E3E353 /* Router2.swift in Sources */,
 				C9A14ABE1DC6746300ACDE69 /* OrderItemTVC.swift in Sources */,
 				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift in Sources */,
 				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,

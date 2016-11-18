@@ -12,6 +12,10 @@ import SwiftyJSON
 
 public enum Router: URLRequestConvertible {
     case login(email: String, password: String)
+    // General
+    case getItems(storeID: Int)
+    case getUnits
+    case getVendors(storeID: Int)
     // Inventory
     case getNewInventory(isActive: Bool, typeID: Int, storeID: Int)
     case listInventories(storeID: Int)
@@ -36,6 +40,13 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login:
             return .post
+        // General
+        case .getItems:
+            return .get
+        case .getUnits:
+            return .get
+        case .getVendors:
+            return .get
         // Inventory
         case .getNewInventory:
             return .get
@@ -70,6 +81,13 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login:
             return "/auth/login"
+        // General
+        case .getItems:
+            return "items"
+        case .getUnits:
+            return "units"
+        case .getVendors:
+            return "vendors"
         // Inventory
         case .getNewInventory:
             return "\(Router.apiPath)/new_inventory"
@@ -104,6 +122,11 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login(let email, let password):
             return ["email": email, "password": password]
+        // General
+        case .getItems(let storeID):
+            return ["storeID": storeID]
+        // case .getUnits:
+        // case .getVendors(let storeID:
         // Inventory
         case .getNewInventory(let isActive, let typeID, let storeID):
             return ["active": isActive, "inventory_type_id": typeID, "store_id": storeID]
@@ -150,7 +173,13 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
-            
+        
+        // General
+        case .getItems:
+            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
+        // case .getUnits:
+        // case .getVendors:
+        
         // Inventory
         case .getNewInventory:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)

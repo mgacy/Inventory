@@ -44,7 +44,7 @@ class StartupManager {
 
             // Get list of Items from server
             // print("\nFetching Items from server ...")
-            APIManager2.sharedInstance.getItems(storeID: self.storeID, completionHandler: completedGetItems)
+            APIManager.sharedInstance.getItems(storeID: self.storeID, completionHandler: completedGetItems)
             
         } else {
             print("Unable to login ...")
