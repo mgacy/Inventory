@@ -30,6 +30,8 @@ extension InvoiceCollection {
         // Set properties
         if let date = json["date"].string {
             self.date = date
+        } else {
+            self.date = Date().shortDate
         }
         if let storeID = json["store_id"].int {
             self.storeID = Int32(storeID)
