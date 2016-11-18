@@ -11,7 +11,7 @@ import CoreData
 
 class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
-    // MARK: Properties
+    // MARK: - Properties
     
     /* Force unwrap (`!`) because:
      (a) a variable must have an initial value
@@ -35,6 +35,8 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
     let CategorySegue = "ShowLocationCategory"
     let ItemSegue = "ShowLocationItem"
 
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,6 +64,33 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - User interaction
+    
+    @IBAction func uploadTapped(_ sender: AnyObject) {
+        print("Uploading Inventory ...")
+        
+        guard let dict = self.inventory.serialize() else {
+            print("\nPROBLEM - Unable to serialize Inventory")
+            // TODO - completedUpload(false)
+            return
+        }
+        APIManager.sharedInstance.postInventory(inventory: dict, completionHandler: self.completedUpload)
+        
+    }
+    
+    // MARK: - Completion handlers
+    
+    func completedUpload(_ succeeded: Bool) {
+        if succeeded {
+            print("\nCompleted upload - succeeded: \(succeeded)")
+            // inventory.uploaded = true
+            // TODO - save context
+            
+        } else {
+            print("\nPROBLEM - Unable to upload Inventory")
+        }
     }
     
     // MARK: - Table view data source
@@ -130,7 +159,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         
         switch segue.identifier! {
         case CategorySegue:
-            
+    
             // Get the new view controller using segue.destinationViewController.
             guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else {
                 print("\nPROBLEM - Unable to get destinationController\n")
@@ -180,31 +209,6 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
         }
 
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    // MARK: - Upload
-    
-    @IBAction func uploadTapped(_ sender: AnyObject) {
-        print("Uploading Inventory ...")
-        
-        guard let dict = self.inventory.serialize() else {
-            print("\nPROBLEM - Unable to serialize Inventory")
-            // TODO - completedUpload(false)
-            return
-        }
-        APIManager.sharedInstance.postInventory(inventory: dict, completionHandler: self.completedUpload)
-        
-    }
-    
-    func completedUpload(_ succeeded: Bool) {
-        if succeeded {
-            print("\nCompleted upload - succeeded: \(succeeded)")
-            // inventory.uploaded = true
-            // TODO - save context
-            
-        } else {
-            print("\nPROBLEM - Unable to upload Inventory")
-        }
     }
     
     // MARK: - Fetched results controller

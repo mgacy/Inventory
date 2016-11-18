@@ -12,15 +12,19 @@ import SwiftyJSON
 
 public enum Router: URLRequestConvertible {
     case login(email: String, password: String)
+    // General
+    case getItems(storeID: Int)
+    case getUnits
+    case getVendors(storeID: Int)
     // Inventory
     case getNewInventory(isActive: Bool, typeID: Int, storeID: Int)
     case listInventories(storeID: Int)
     case fetchInventory(remoteID: Int)
     case postInventory([String: Any])
     // Invoice
-    case getNewInvoice()
+    case getNewInvoice(storeID: Int)
     case listInvoices(storeID: Int)
-    case fetchInvoice(storeID: Int)
+    case fetchInvoice(storeID: Int, invoiceDate: String)
     case postInvoice([String: Any])
     // Order
     case getNewOrder(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?)
@@ -36,6 +40,13 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login:
             return .post
+        // General
+        case .getItems:
+            return .get
+        case .getUnits:
+            return .get
+        case .getVendors:
+            return .get
         // Inventory
         case .getNewInventory:
             return .get
@@ -70,6 +81,13 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login:
             return "/auth/login"
+        // General
+        case .getItems:
+            return "items"
+        case .getUnits:
+            return "units"
+        case .getVendors:
+            return "vendors"
         // Inventory
         case .getNewInventory:
             return "\(Router.apiPath)/new_inventory"
@@ -104,6 +122,11 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login(let email, let password):
             return ["email": email, "password": password]
+        // General
+        case .getItems(let storeID):
+            return ["storeID": storeID]
+        // case .getUnits:
+        // case .getVendors(let storeID:
         // Inventory
         case .getNewInventory(let isActive, let typeID, let storeID):
             return ["active": isActive, "inventory_type_id": typeID, "store_id": storeID]
@@ -112,9 +135,12 @@ public enum Router: URLRequestConvertible {
         case .postInventory(let parameters):
             return parameters
         // Invoice
-        // case .getNewInvoice:
-        // case .listInvoices:
-        // case .fetchInvoice:
+         case .getNewInvoice(let storeID):
+            return ["store_id": storeID]
+         case .listInvoices(let storeID):
+            return ["store_id": storeID]
+         case .fetchInvoice(let storeID, let invoiceDate):
+            return ["store_id": storeID, "date": invoiceDate]
         case .postInvoice(let parameters):
             return parameters
         // Order
@@ -147,7 +173,13 @@ public enum Router: URLRequestConvertible {
         switch self {
         case .login:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
-            
+        
+        // General
+        case .getItems:
+            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
+        // case .getUnits:
+        // case .getVendors:
+        
         // Inventory
         case .getNewInventory:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
@@ -157,12 +189,13 @@ public enum Router: URLRequestConvertible {
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
             
         // Invoice
-        // case .getNewInvoice:
-        //     urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
+        case .getNewInvoice:
+            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         // case .listInvoices:
-        // case .fetchInvoice:
-        // case .postInvoice:
-        //     urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+        case .fetchInvoice:
+            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
+        case .postInvoice:
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         
         // Order
         case .getNewOrder:

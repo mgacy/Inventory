@@ -25,7 +25,6 @@ extension Vendor {
         }
 
         // TODO - create separate VendorRep object
-        
     }
     
 }

@@ -86,7 +86,7 @@ class OrderVendorTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let order = self.fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = order.vendorName
+        cell.textLabel?.text = order.vendor?.name
 
         // TODO - handle situation where user placed an order but uploading to the server failed;
         // we still need to make sure that it ends up getting uploaded
@@ -158,7 +158,7 @@ class OrderVendorTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         fetchRequest.fetchBatchSize = fetchBatchSize
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "vendorName", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         // Set the fetch predicate

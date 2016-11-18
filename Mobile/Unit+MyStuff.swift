@@ -11,7 +11,7 @@ import CoreData
 import SwiftyJSON
 
 extension Unit {
-    
+        
     // MARK: - Lifecycle
     
     convenience init(context: NSManagedObjectContext, json: JSON) {

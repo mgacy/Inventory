@@ -44,7 +44,7 @@ class StartupManager {
 
             // Get list of Items from server
             // print("\nFetching Items from server ...")
-            APIManager2.sharedInstance.getItems(storeID: self.storeID, completionHandler: completedGetItems)
+            APIManager.sharedInstance.getItems(storeID: self.storeID, completionHandler: completedGetItems)
             
         } else {
             print("Unable to login ...")
@@ -101,7 +101,7 @@ class StartupManager {
             }
             
             // Find + update / create Items
-            if let item = Item.withID(itemID, fromContext: managedObjectContext) {
+            if let item = managedObjectContext.fetchWithRemoteID(Item.self, withID: itemID) {
                 item.update(context: managedObjectContext, withJSON: itemJSON)
             } else {
                 _ = Item(context: managedObjectContext, json: itemJSON)

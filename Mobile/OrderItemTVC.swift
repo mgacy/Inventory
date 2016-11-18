@@ -45,7 +45,7 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         // Set Title
-        title = parentObject.vendorName
+        title = parentObject.vendor?.name
         
         // Register reusable cell
         //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -66,7 +66,7 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: - User Interaction
+    // MARK: - User interaction
     
     @IBAction func tappedMessageOrder(_ sender: UIBarButtonItem) {
         

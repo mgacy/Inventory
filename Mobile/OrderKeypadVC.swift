@@ -11,7 +11,7 @@ import CoreData
 
 class OrderKeypadVC: UIViewController {
 
-    // MARK: Properties
+    // MARK: - Properties
     
     var parentObject: Order!
     var currentIndex = 0
@@ -111,11 +111,11 @@ class OrderKeypadVC: UIViewController {
         update()
     }
     
+    // TODO - rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
         guard let item = currentItem.item else { print("A2"); return  }
         print("Item: \(item)")
         guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
-        
         
         currentItem.orderUnit = purchaseSubUnit
         update()
@@ -202,7 +202,7 @@ class OrderKeypadVC: UIViewController {
         minOrder.text = formDisplayLine(
             quantity: currentItem.minOrder, abbreviation: currentItem.minOrderUnit?.abbreviation ?? " ")
 
-        order.text = "\(currentItem.quantity ?? 0)"
+        order.text = keypadOutput.display
         orderUnit.text = currentItem.orderUnit?.abbreviation
         
         switch keypadOutput.total {

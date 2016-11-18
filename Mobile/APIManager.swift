@@ -22,20 +22,69 @@ class APIManager {
     
     init() {
         authHandler = AuthorizationHandler.sharedInstance
-
+        //authHandler = AuthorizationHandler()
+        
         sessionManager = Alamofire.SessionManager.default
         sessionManager.adapter = authHandler
         // sessionManager.retrier = authHandler
     }
     
     // MARK: - Authorization
-    func login(completionHandler: @escaping (Bool) -> Void ) {
-        authHandler.requestToken(completionHandler: completionHandler)
+    func login(completionHandler completion: @escaping (Bool) -> Void ) {
+        authHandler.requestToken(completionHandler: completion)
+    }
+    
+    // MARK: - API Calls - General
+    
+    func getItems(storeID: Int, completionHandler completion: @escaping (Bool, JSON?) -> Void) {
+        sessionManager.request(Router.getItems(storeID: storeID))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    //print("\ngetItems - response: \(response)\n")
+                    let json = JSON(value)
+                    completion(true, json)
+                case .failure(let error):
+                    // TODO - handle error somewhere
+                    debugPrint("\nERROR - getItems: \(error)")
+                    completion(false, nil)
+                }
+        }
+    }
+    
+    func getUnits(completionHandler completion: @escaping (JSON) -> Void) {
+        sessionManager.request(Router.getUnits)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\ngetUnits - response: \(response)\n")
+                    let json = JSON(value)
+                    completion(json)
+                case .failure(let error):
+                    // TODO - handle error somewhere
+                    debugPrint("\nERROR - getUnits: \(error)")
+                }
+        }
+    }
+    
+    func getVendors(storeID: Int, completionHandler completion: @escaping (JSON) -> Void) {
+        sessionManager.request(Router.getVendors(storeID: storeID))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\ngetVendors - response: \(response)\n")
+                    let json = JSON(value)
+                    completion(json)
+                case .failure(let error):
+                    // TODO - handle error somewhere
+                    debugPrint("\nERROR - getVendors: \(error)")
+                }
+        }
     }
     
     // MARK: - API Calls - Inventory
     
-    func getInventories(storeID: Int, completionHandler:
+    func getInventories(storeID: Int, completionHandler completion:
         @escaping (JSON) -> Void)
     {
         sessionManager.request(Router.listInventories(storeID: storeID))
@@ -44,7 +93,7 @@ class APIManager {
                 case .success(let value):
                     // print("\ngetInventories - response: \(response)\n")
                     let json = JSON(value)
-                    completionHandler(json)
+                    completion(json)
                 case .failure(let error):
                     // TODO - handle error somewhere
                     debugPrint("\nERROR - getInventories: \(error)")
@@ -52,7 +101,7 @@ class APIManager {
         }
     }
 
-    func getInventory(remoteID: Int, completionHandler:
+    func getInventory(remoteID: Int, completionHandler completion:
         @escaping (JSON) -> Void)
     {
         sessionManager.request(Router.fetchInventory(remoteID: remoteID))
@@ -61,7 +110,7 @@ class APIManager {
                 case .success(let value):
                     // print("/ngetInventory - response: \(response)\n")
                     let json = JSON(value)
-                    completionHandler(json)
+                    completion(json)
                 case .failure(let error):
                     // TODO - handle error somewhere
                     debugPrint("\nERROR - getInventory: \(error)")
@@ -69,7 +118,7 @@ class APIManager {
         }
     }
     
-    func getNewInventory(isActive: Bool, typeID: Int, storeID: Int, completionHandler:
+    func getNewInventory(isActive: Bool, typeID: Int, storeID: Int, completionHandler completion:
         @escaping (JSON) -> Void)
     {
         sessionManager.request(Router.getNewInventory(isActive: isActive, typeID: typeID, storeID: storeID))
@@ -78,7 +127,7 @@ class APIManager {
                 case .success(let value):
                     // print("\ngetNewInventory - response: \(response)\n")
                     let json = JSON(value)
-                    completionHandler(json)
+                    completion(json)
                 case .failure(let error):
                     // TODO - handle error somewhere
                     debugPrint("\nERROR - getNewInventory: \(error)")
@@ -86,76 +135,129 @@ class APIManager {
         }
     }
     
-    func postInventory(inventory: [String: Any], completionHandler: @escaping (Bool) -> Void) {
+    func postInventory(inventory: [String: Any], completionHandler completion: @escaping (Bool) -> Void) {
         sessionManager.request(Router.postInventory(inventory))
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
                     print("Success: \(value)")
                     //let json = JSON(value)
-                    //completionHandler(true, json)
-                    completionHandler(true)
+                    //completion(true, json)
+                    completion(true)
                 case .failure(let error):
                     print("Failure: \(error)")
                     //let json = JSON(error)
-                    //completionHandler(false, json)
-                    completionHandler(false)
+                    //completion(false, json)
+                    completion(false)
                 }
         }
     }
     
     // MARK: - API Calls - Invoice
     
-    func getListOfInvoices(storeID: Int, typeID: Int, orderDate: String, completionHandler:
+    func getListOfInvoiceCollections(storeID: Int, completionHandler completion:
         @escaping (JSON) -> Void)
-    {}
+    {
+        sessionManager.request(Router.listInvoices(storeID: storeID))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("\ngetListOfInvoiceCollections - response: \(response)\n")
+                    let json = JSON(value)
+                    completion(json)
+                case .failure(let error):
+                    // TODO - handle error somewhere
+                    debugPrint("\nERROR - getListOfInvoiceCollections: \(error)")
+                }
+        }
+    }
     
-    func getInvoice(remoteID: Int, completionHandler:
+    func getInvoiceCollection(storeID: Int, invoiceDate: String, completionHandler completion:
         @escaping (JSON) -> Void)
-    {}
+    {
+        sessionManager.request(Router.fetchInvoice(storeID: storeID, invoiceDate: invoiceDate))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\ngetInvoiceCollection - response: \(response)\n")
+                    let json = JSON(value)
+                    completion(json)
+                case .failure(let error):
+                    // TODO - handle error somewhere
+                    debugPrint("\nERROR - getInvoiceCollection: \(error)")
+                }
+        }
+    }
     
-    func getNewInvoice(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?, completionHandler:
+    func getNewInvoiceCollection(storeID: Int, completionHandler completion:
         @escaping (JSON) -> Void)
-    {}
+    {
+        sessionManager.request(Router.getNewInvoice(storeID: storeID))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\ngetNewInvoiceCollection - response: \(response)\n")
+                    let json = JSON(value)
+                    completion(json)
+                case .failure(let error):
+                    // TODO - handle error somewhere
+                    debugPrint("\nERROR - getNewInvoiceCollection: \(error)")
+                }
+        }
+    }
     
-    func postInvoice(invoice: [String: Any], completionHandler: @escaping (Bool) -> Void) {}
+    func postInvoice(invoice: [String: Any], completionHandler completion: @escaping (Bool, JSON) -> Void) {
+        sessionManager.request(Router.postInvoice(invoice))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("Success: \(value)")
+                    let json = JSON(value)
+                    completion(true, json)
+                case .failure(let error):
+                    print("Failure: \(error)")
+                    let json = JSON(error)
+                    completion(false, json)
+                }
+        }
+    }
     
     // MARK: - API Calls - Order
     
-    func getListOfOrderCollections(storeID: Int, completionHandler: @escaping (JSON) -> Void)
+    func getListOfOrderCollections(storeID: Int, completionHandler completion: @escaping (JSON) -> Void)
     {
         sessionManager.request(Router.listOrders(storeID: storeID))
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\ngetListOfOrders - response: \(response)\n")
+                    // print("\ngetListOfOrderCollections - response: \(response)\n")
                     let json = JSON(value)
-                    completionHandler(json)
+                    completion(json)
                 case .failure(let error):
                     // TODO - handle error somewhere
-                    debugPrint("\nERROR - getListOfOrders: \(error)")
+                    debugPrint("\nERROR - getListOfOrderCollections: \(error)")
                 }
         }
     }
     
-    func getOrderCollection(storeID: Int, orderDate: String, completionHandler:
+    func getOrderCollection(storeID: Int, orderDate: String, completionHandler completion:
         @escaping (JSON) -> Void)
     {
         sessionManager.request(Router.fetchOrder(storeID: storeID, orderDate: orderDate))
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\ngetOrder - response: \(response)\n")
+                    // print("\ngetOrderCollection - response: \(response)\n")
                     let json = JSON(value)
-                    completionHandler(json)
+                    completion(json)
                 case .failure(let error):
                     // TODO - handle error somewhere
-                    debugPrint("\nERROR - getOrder: \(error)")
+                    debugPrint("\nERROR - getOrderCollection: \(error)")
                 }
         }
     }
     
-    func getNewOrderCollection(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?, completionHandler:
+    func getNewOrderCollection(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?, completionHandler completion:
         @escaping (JSON) -> Void)
     {
         sessionManager.request(Router.getNewOrder(storeID: storeID, typeID: typeID,
@@ -163,28 +265,28 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\ngetNewOrder - response: \(response)\n")
+                    // print("\ngetNewOrderCollection - response: \(response)\n")
                     let json = JSON(value)
-                    completionHandler(json)
+                    completion(json)
                 case .failure(let error):
                     // TODO - handle error somewhere
-                    debugPrint("\nERROR - getNewOrder: \(error)")
+                    debugPrint("\nERROR - getNewOrderCollection: \(error)")
                 }
         }
     }
     
-    func postOrder(order: [String: Any], completionHandler: @escaping (Bool, JSON) -> Void) {
+    func postOrder(order: [String: Any], completionHandler completion: @escaping (Bool, JSON) -> Void) {
         sessionManager.request(Router.postOrder(order))
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
                     print("Success: \(value)")
                     let json = JSON(value)
-                    completionHandler(true, json)
+                    completion(true, json)
                 case .failure(let error):
                     print("Failure: \(error)")
                     let json = JSON(error)
-                    completionHandler(false, json)
+                    completion(false, json)
                 }
         }
     }
