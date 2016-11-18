@@ -69,6 +69,9 @@ extension InvoiceCollection {
     // MARK: -
     
     static func fetchByDate(context: NSManagedObjectContext, date: String) -> InvoiceCollection? {
+        //let predicate = NSPredicate(format: "date == %@", date)
+        //return context.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate)
+        
         let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
         request.predicate = NSPredicate(format: "date == %@", date)
         
