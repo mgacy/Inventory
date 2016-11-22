@@ -108,7 +108,7 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("/ngetInventory - response: \(response)\n")
+                    // print("\ngetInventory - response: \(response)\n")
                     let json = JSON(value)
                     completion(json)
                 case .failure(let error):
