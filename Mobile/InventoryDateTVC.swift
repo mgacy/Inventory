@@ -156,34 +156,34 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedInventory = self.fetchedResultsController.object(at: indexPath)
-        if let selection = selectedInventory {
-            switch selection.uploaded {
-            case true:
-                guard let locations = selection.locations else {
-                    print("\nPROBLEM - selectedInventory.locations was nil\n")
-                    return
-                }
-                
-                // Check whether we have already fetched Inventory since launching app.
-                if locations.count > 0 {
-                    
-                    // LOAD INVENTORY
-                    // print("LOAD selectedInventory from disk ...")
-                    performSegue(withIdentifier: ExistingItemSegue, sender: self)
-                } else {
-                    
-                    // GET INVENTORY FROM SERVER
-                    // print("GET selectedInventory from server ...")
-                    let remoteID = Int(selection.remoteID)
-                    APIManager.sharedInstance.getInventory(
-                        remoteID: remoteID,
-                        completionHandler: self.completedGetExistingInventory)
-                }
-                
-            case false:
-                // print("LOAD NEW selectedInventory from disk ...")
-                performSegue(withIdentifier: ExistingItemSegue, sender: self)
+        guard let selection = selectedInventory else { print("Unable to get selection"); return }
+        
+        switch selection.uploaded {
+        case true:
+            guard let locations = selection.locations else {
+                print("\nPROBLEM - selectedInventory.locations was nil\n")
+                return
             }
+            
+            // Check whether we have already fetched Inventory since launching app.
+            if locations.count > 0 {
+                
+                // LOAD INVENTORY
+                // print("LOAD selectedInventory from disk ...")
+                performSegue(withIdentifier: ExistingItemSegue, sender: self)
+            } else {
+                
+                // GET INVENTORY FROM SERVER
+                // print("GET selectedInventory from server ...")
+                let remoteID = Int(selection.remoteID)
+                APIManager.sharedInstance.getInventory(
+                    remoteID: remoteID,
+                    completionHandler: self.completedGetExistingInventory)
+            }
+
+        case false:
+            print("LOAD NEW selectedInventory from disk ...")
+            performSegue(withIdentifier: ExistingItemSegue, sender: self)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -228,7 +228,6 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         } else {
             print("\nPROBLEM - Still failed to get selected Inventory\n")
         }
-        
     }
     
     func completedGetNewInventory(json: JSON) -> Void {
