@@ -27,9 +27,10 @@ extension InventoryLocationItem {
         // Relationships
         self.location = location
         
-        // Try to find corresponding item and add relationship
-        if let item = fetchInventoryItem(context: context, itemID: itemID) {
-            // print("Found Item: \(item)")
+        // Try to find corresponding InventoryItem and add relationship
+        guard let parent = location.inventory else { return }
+        
+        if let item = fetchInventoryItem(context: context, inventory: parent, itemID: itemID) {
             self.item = item
         } else {
             print("Unable to fetch InventoryItem")
@@ -45,9 +46,11 @@ extension InventoryLocationItem {
         // Relationships
         self.category = category
         
-        // Try to find corresponding item and add relationship
-        if let item = fetchInventoryItem(context: context, itemID: itemID) {
-            // print("Found Item: \(item)")
+        // Try to find corresponding InventoryItem and add relationship
+        guard let location = category.location else { return }
+        guard let parent = location.inventory else { return }
+        
+        if let item = fetchInventoryItem(context: context, inventory: parent, itemID: itemID) {
             self.item = item
         } else {
             print("Unable to fetch InventoryItem")
@@ -56,30 +59,11 @@ extension InventoryLocationItem {
     
     // MARK: - Establish Relationships
     
-    func fetchInventoryItem(context: NSManagedObjectContext,
-                            itemID: Int) -> InventoryItem? {
-        let request: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
-        
-        request.predicate = NSPredicate(format: "itemID == \(Int32(itemID))")
-        
-        do {
-            let searchResults = try context.fetch(request)
-            
-            switch searchResults.count {
-            case 0:
-                print("Unable to find Item with id: \(itemID)")
-                return nil
-            case 1:
-                return searchResults[0]
-            default:
-                print("Found multiple matches for InventoryItem with id: \(itemID) - \(searchResults)")
-                return searchResults[0]
-            }
-            
-        } catch {
-            print("Error with request: \(error)")
-        }
-        return nil
+    func fetchInventoryItem(context: NSManagedObjectContext, inventory: Inventory, itemID: Int) -> InventoryItem? {
+        let predicate1 = NSPredicate(format: "itemID == \(Int32(itemID))")
+        let predicate2 = NSPredicate(format: "inventory == %@", inventory)
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate1, predicate2])
+        return context.fetchSingleEntity(InventoryItem.self, matchingPredicate: predicate)
     }
     
 }
