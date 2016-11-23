@@ -38,7 +38,7 @@ extension InvoiceItem {
         if let itemID = json["item"]["id"].int {
             self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
         }
-        if let unitID = json["unit"]["]id"].int {
+        if let unitID = json["unit"]["id"].int {
             self.unit = context.fetchWithRemoteID(Unit.self, withID: unitID)
         }
     }
