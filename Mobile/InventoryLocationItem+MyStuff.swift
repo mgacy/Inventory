@@ -18,7 +18,7 @@ extension InventoryLocationItem {
     convenience init(context: NSManagedObjectContext, itemID: Int,
                      position: Int?, location: InventoryLocation) {
         self.init(context: context)
-    
+        
         self.itemID = Int32(itemID)
         if let _position = position {
             self.position = Int16(_position)
@@ -31,8 +31,9 @@ extension InventoryLocationItem {
         if let item = fetchInventoryItem(context: context, itemID: itemID) {
             // print("Found Item: \(item)")
             self.item = item
+        } else {
+            print("Unable to fetch InventoryItem")
         }
-    
     }
     
     // For InventoryLocationItems belonging to an InventoryLocationCategory
@@ -48,6 +49,8 @@ extension InventoryLocationItem {
         if let item = fetchInventoryItem(context: context, itemID: itemID) {
             // print("Found Item: \(item)")
             self.item = item
+        } else {
+            print("Unable to fetch InventoryItem")
         }
     }
     
