@@ -148,27 +148,22 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         
         switch selection.uploaded {
         case true:
-            guard let locations = selection.locations else {
-                print("\nPROBLEM - selectedInventory.locations was nil\n")
-                return
-            }
+            let remoteID = Int(selection.remoteID)
             
-            // Check whether we have already fetched Inventory since launching app.
-            if locations.count > 0 {
-                
-                // LOAD INVENTORY
-                // print("LOAD selectedInventory from disk ...")
-                performSegue(withIdentifier: ExistingItemSegue, sender: self)
-            } else {
-                
-                // GET INVENTORY FROM SERVER
-                // print("GET selectedInventory from server ...")
-                let remoteID = Int(selection.remoteID)
-                APIManager.sharedInstance.getInventory(
-                    remoteID: remoteID,
-                    completionHandler: self.completedGetExistingInventory)
-            }
-
+            // TODO - ideally, we would want to deleteInventoryItems *after* fetching data from server
+            // Delete existing InventoryItems of selected Inventory
+            print("Deleting InventoryItems of selected Inventory ...")
+            deleteChildren(parent: selection)
+            
+            // Reset selection since we reset the managedObjectContext in deleteInventoryItems
+            selectedInventory = self.fetchedResultsController.object(at: indexPath)
+            
+            // GET INVENTORY FROM SERVER
+            print("GET selectedInventory from server - \(remoteID) ...")
+            APIManager.sharedInstance.getInventory(
+                remoteID: remoteID,
+                completionHandler: self.completedGetExistingInventory)
+            
         case false:
             print("LOAD NEW selectedInventory from disk ...")
             performSegue(withIdentifier: ExistingItemSegue, sender: self)
@@ -195,7 +190,11 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     func completedGetListOfInventories(json: JSON) -> Void {
         
         for (_, item) in json {
-            _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
+            guard let inventoryID = item["id"].int else { print("a"); break }
+            
+            if managedObjectContext?.fetchWithRemoteID(Inventory.self, withID: inventoryID) == nil {
+                _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
+            }
         }
         
         // Save the context.
@@ -277,6 +276,82 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             
             // Reset Managed Object Context
             managedObjectContext?.reset()
+            
+            // Perform Fetch
+            try self.fetchedResultsController.performFetch()
+            
+            // Reload Table View
+            tableView.reloadData()
+            
+        } catch {
+            let updateError = error as NSError
+            print("\(updateError), \(updateError.userInfo)")
+        }
+    }
+    
+    func deleteChildren(parent: Inventory) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+        
+        /*
+         Since the batch delete request directly interacts with the persistent store we need
+         to make sure that any changes are first pushed to that store.
+         */
+        if managedObjectContext.hasChanges {
+            do {
+                try managedObjectContext.save()
+            } catch {
+                let saveError = error as NSError
+                print("\(saveError), \(saveError.userInfo)")
+            }
+        }
+        
+        // Create Fetch Request (1)
+        let fetchRequest1: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
+        
+        // Configure Fetch Request
+        fetchRequest1.predicate = NSPredicate(format: "inventory == %@", parent)
+        
+        // Initialize Batch Delete Request
+        let batchDeleteRequest1 = NSBatchDeleteRequest(fetchRequest: fetchRequest1 as! NSFetchRequest<NSFetchRequestResult>)
+        
+        do {
+            // Execute Batch Request
+            let batchDeleteResult1 = try managedObjectContext.execute(batchDeleteRequest1) as! NSBatchDeleteResult
+            
+            print("The batch delete request has deleted \(batchDeleteResult1.result!) InventoryLocations.")
+        
+        } catch {
+            let updateError = error as NSError
+            print("\(updateError), \(updateError.userInfo)")
+        }
+        
+        // Create Fetch Request (2)
+        let fetchRequest: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
+        
+        // Configure Fetch Request
+        fetchRequest.predicate = NSPredicate(format: "inventory == %@", parent)
+        
+        // Initialize Batch Delete Request
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
+        
+        // Configure Batch Update Request
+        batchDeleteRequest.resultType = .resultTypeCount
+        //batchDeleteRequest.resultType = .resultTypeStatusOnly
+        
+        do {
+            // Execute Batch Request
+            let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
+            
+            print("The batch delete request has deleted \(batchDeleteResult.result!) InventoryItems.")
+            
+            // The managed object context is not notified of the consequences of the batch delete request.
+            
+            // Reset Managed Object Context
+            // As the request directly interacts with the persistent store, we need need to reset the context
+            // for it to be aware of the changes
+            managedObjectContext.reset()
             
             // Perform Fetch
             try self.fetchedResultsController.performFetch()
