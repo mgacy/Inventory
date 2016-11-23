@@ -53,7 +53,6 @@ extension InventoryLocationItem {
     
     // MARK: - Establish Relationships
     
-    // TODO: go ahead and just set relationship here?
     func fetchInventoryItem(context: NSManagedObjectContext,
                             itemID: Int) -> InventoryItem? {
         let request: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
@@ -78,30 +77,6 @@ extension InventoryLocationItem {
             print("Error with request: \(error)")
         }
         return nil
-    }
-    
-    func fetchUnit(context: NSManagedObjectContext, id: Int) {
-        let request: NSFetchRequest<Unit> = Unit.fetchRequest()
-        
-        request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
-        
-        do {
-            let searchResults = try context.fetch(request)
-            
-            switch searchResults.count {
-            case 0:
-                print("PROBLEM - Unable to find Unit with id: \(id)")
-                return
-            case 1:
-                self.unit = searchResults[0]
-            default:
-                print("Found multiple matches for unit with id: \(id) - \(searchResults)")
-                self.unit = searchResults[0]
-            }
-            
-        } catch {
-            print("Error with request: \(error)")
-        }
     }
     
 }
