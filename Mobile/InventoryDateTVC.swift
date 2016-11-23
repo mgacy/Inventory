@@ -55,20 +55,8 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
         
-        // 1. Check for existence of email and login.
-        if AuthorizationHandler.sharedInstance.userExists {
-            print("User exists ...")
-            
-            // Delete any uploaded Inventories before fetching updated list.
-            deleteExistingInventories(NSPredicate(format: "uploaded == true"))
-            
-            // Login to server, then get list of Inventories from server if successful.
-            APIManager.sharedInstance.login(completionHandler: self.completedLogin)
-        } else {
-            print("User does not exist")
-            // TODO - how to handle this?
-        }
-        
+        // Login to server, get list of Items, and update store
+        _ = StartupManager(completionHandler: completedLogin)
     }
     
     // override func viewWillAppear(_ animated: Bool) { }
