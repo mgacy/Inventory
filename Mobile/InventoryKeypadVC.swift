@@ -59,6 +59,8 @@ class InventoryKeypadVC: UIViewController {
     @IBOutlet weak var itemValue: UILabel!
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var itemHistory: UILabel!
+    @IBOutlet weak var itemPack: UILabel!
+    @IBOutlet weak var itemUnit: UILabel!
     
     // MARK: - Default
     
@@ -218,8 +220,10 @@ class InventoryKeypadVC: UIViewController {
         itemName.text = name
         
         // Item.pack
+        itemPack.text = "\(item.item?.packSize ?? 0)"
         
         // Item.unit
+        itemUnit.text = "\(item.item?.subSize ?? 0) \(item.item?.subUnit?.abbreviation ?? "")"
     }
     
     /*

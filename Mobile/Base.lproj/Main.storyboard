@@ -1199,6 +1199,8 @@
                     <connections>
                         <outlet property="itemHistory" destination="tJU-Hv-GXO" id="orQ-8w-3R0"/>
                         <outlet property="itemName" destination="pgW-Sf-pZA" id="Qx7-yJ-0dc"/>
+                        <outlet property="itemPack" destination="zJ5-xE-a0L" id="jHW-yj-xHg"/>
+                        <outlet property="itemUnit" destination="ARd-lw-q92" id="ORo-CG-D00"/>
                         <outlet property="itemValue" destination="2l9-Xd-wol" id="tW0-FH-V5i"/>
                     </connections>
                 </viewController>

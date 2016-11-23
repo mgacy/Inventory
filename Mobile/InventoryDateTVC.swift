@@ -55,20 +55,8 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
         
-        // 1. Check for existence of email and login.
-        if AuthorizationHandler.sharedInstance.userExists {
-            print("User exists ...")
-            
-            // Delete any uploaded Inventories before fetching updated list.
-            deleteExistingInventories(NSPredicate(format: "uploaded == true"))
-            
-            // Login to server, then get list of Inventories from server if successful.
-            APIManager.sharedInstance.login(completionHandler: self.completedLogin)
-        } else {
-            print("User does not exist")
-            // TODO - how to handle this?
-        }
-        
+        // Login to server, get list of Items, and update store
+        _ = StartupManager(completionHandler: completedLogin)
     }
     
     // override func viewWillAppear(_ animated: Bool) { }
@@ -156,34 +144,29 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedInventory = self.fetchedResultsController.object(at: indexPath)
-        if let selection = selectedInventory {
-            switch selection.uploaded {
-            case true:
-                guard let locations = selection.locations else {
-                    print("\nPROBLEM - selectedInventory.locations was nil\n")
-                    return
-                }
-                
-                // Check whether we have already fetched Inventory since launching app.
-                if locations.count > 0 {
-                    
-                    // LOAD INVENTORY
-                    // print("LOAD selectedInventory from disk ...")
-                    performSegue(withIdentifier: ExistingItemSegue, sender: self)
-                } else {
-                    
-                    // GET INVENTORY FROM SERVER
-                    // print("GET selectedInventory from server ...")
-                    let remoteID = Int(selection.remoteID)
-                    APIManager.sharedInstance.getInventory(
-                        remoteID: remoteID,
-                        completionHandler: self.completedGetExistingInventory)
-                }
-                
-            case false:
-                // print("LOAD NEW selectedInventory from disk ...")
-                performSegue(withIdentifier: ExistingItemSegue, sender: self)
-            }
+        guard let selection = selectedInventory else { print("Unable to get selection"); return }
+        
+        switch selection.uploaded {
+        case true:
+            let remoteID = Int(selection.remoteID)
+            
+            // TODO - ideally, we would want to deleteInventoryItems *after* fetching data from server
+            // Delete existing InventoryItems of selected Inventory
+            print("Deleting InventoryItems of selected Inventory ...")
+            deleteChildren(parent: selection)
+            
+            // Reset selection since we reset the managedObjectContext in deleteInventoryItems
+            selectedInventory = self.fetchedResultsController.object(at: indexPath)
+            
+            // GET INVENTORY FROM SERVER
+            print("GET selectedInventory from server - \(remoteID) ...")
+            APIManager.sharedInstance.getInventory(
+                remoteID: remoteID,
+                completionHandler: self.completedGetExistingInventory)
+            
+        case false:
+            print("LOAD NEW selectedInventory from disk ...")
+            performSegue(withIdentifier: ExistingItemSegue, sender: self)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -204,6 +187,20 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     
     // MARK: - Completion handlers
     
+    func completedGetListOfInventories(json: JSON) -> Void {
+        
+        for (_, item) in json {
+            guard let inventoryID = item["id"].int else { print("a"); break }
+            
+            if managedObjectContext?.fetchWithRemoteID(Inventory.self, withID: inventoryID) == nil {
+                _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
+            }
+        }
+        
+        // Save the context.
+        saveContext()
+    }
+    
     func completedGetExistingInventory(json: JSON) -> Void {
         if let selection = selectedInventory {
 
@@ -211,58 +208,22 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             selection.updateExisting(context: self.managedObjectContext!, json: json)
             
             // Save the context.
-            let context = self.fetchedResultsController.managedObjectContext
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
+            saveContext()
             
             performSegue(withIdentifier: ExistingItemSegue, sender: self)
             
         } else {
             print("\nPROBLEM - Still failed to get selected Inventory\n")
         }
-        
     }
     
     func completedGetNewInventory(json: JSON) -> Void {
         selectedInventory = Inventory(context: self.managedObjectContext!, json: json, uploaded: false)
         
         // Save the context.
-        let context = self.fetchedResultsController.managedObjectContext
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
+        saveContext()
         
         performSegue(withIdentifier: ExistingItemSegue, sender: self)
-    }
-    
-    func completedGetInventories(json: JSON) -> Void {
-    
-        for (_, item) in json {
-            _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
-        }
-        
-        // Save the context.
-        let context = self.fetchedResultsController.managedObjectContext
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-
     }
     
     func completedLogin(_ succeeded: Bool) {
@@ -271,7 +232,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             
             // Get list of Inventories from server
             // print("\nFetching existing Inventories from server ...")
-            APIManager.sharedInstance.getInventories(storeID: storeID, completionHandler: self.completedGetInventories)
+            APIManager.sharedInstance.getListOfInventories(storeID: storeID, completionHandler: self.completedGetListOfInventories)
             
         } else {
             print("Unable to login ...")
@@ -279,6 +240,18 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     }
     
     // MARK: - A
+    
+    func saveContext() {
+        let context = self.fetchedResultsController.managedObjectContext
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+    }
     
     func deleteExistingInventories(_ filter: NSPredicate? = nil) {
         print("deleteExistingInventories ...")
@@ -303,6 +276,82 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             
             // Reset Managed Object Context
             managedObjectContext?.reset()
+            
+            // Perform Fetch
+            try self.fetchedResultsController.performFetch()
+            
+            // Reload Table View
+            tableView.reloadData()
+            
+        } catch {
+            let updateError = error as NSError
+            print("\(updateError), \(updateError.userInfo)")
+        }
+    }
+    
+    func deleteChildren(parent: Inventory) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+        
+        /*
+         Since the batch delete request directly interacts with the persistent store we need
+         to make sure that any changes are first pushed to that store.
+         */
+        if managedObjectContext.hasChanges {
+            do {
+                try managedObjectContext.save()
+            } catch {
+                let saveError = error as NSError
+                print("\(saveError), \(saveError.userInfo)")
+            }
+        }
+        
+        // Create Fetch Request (1)
+        let fetchRequest1: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
+        
+        // Configure Fetch Request
+        fetchRequest1.predicate = NSPredicate(format: "inventory == %@", parent)
+        
+        // Initialize Batch Delete Request
+        let batchDeleteRequest1 = NSBatchDeleteRequest(fetchRequest: fetchRequest1 as! NSFetchRequest<NSFetchRequestResult>)
+        
+        do {
+            // Execute Batch Request
+            let batchDeleteResult1 = try managedObjectContext.execute(batchDeleteRequest1) as! NSBatchDeleteResult
+            
+            print("The batch delete request has deleted \(batchDeleteResult1.result!) InventoryLocations.")
+        
+        } catch {
+            let updateError = error as NSError
+            print("\(updateError), \(updateError.userInfo)")
+        }
+        
+        // Create Fetch Request (2)
+        let fetchRequest: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
+        
+        // Configure Fetch Request
+        fetchRequest.predicate = NSPredicate(format: "inventory == %@", parent)
+        
+        // Initialize Batch Delete Request
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
+        
+        // Configure Batch Update Request
+        batchDeleteRequest.resultType = .resultTypeCount
+        //batchDeleteRequest.resultType = .resultTypeStatusOnly
+        
+        do {
+            // Execute Batch Request
+            let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
+            
+            print("The batch delete request has deleted \(batchDeleteResult.result!) InventoryItems.")
+            
+            // The managed object context is not notified of the consequences of the batch delete request.
+            
+            // Reset Managed Object Context
+            // As the request directly interacts with the persistent store, we need need to reset the context
+            // for it to be aware of the changes
+            managedObjectContext.reset()
             
             // Perform Fetch
             try self.fetchedResultsController.performFetch()
