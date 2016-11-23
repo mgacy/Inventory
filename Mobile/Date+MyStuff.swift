@@ -16,6 +16,7 @@ extension DateFormatter {
     convenience init(dateStyle: DateFormatter.Style) {
         self.init()
         self.dateStyle = dateStyle
+        self.dateFormat = "yyyy-MM-dd"
     }
 }
 
