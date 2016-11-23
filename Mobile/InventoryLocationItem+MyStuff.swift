@@ -14,6 +14,7 @@ extension InventoryLocationItem {
     
     // MARK: - Lifecycle
     
+    // For InventoryLocationItems belonging to an InventoryLocation
     convenience init(context: NSManagedObjectContext, itemID: Int,
                      position: Int?, location: InventoryLocation) {
         self.init(context: context)
@@ -34,6 +35,7 @@ extension InventoryLocationItem {
     
     }
     
+    // For InventoryLocationItems belonging to an InventoryLocationCategory
     convenience init(context: NSManagedObjectContext, itemID: Int,
                      category: InventoryLocationCategory) {
         self.init(context: context)
