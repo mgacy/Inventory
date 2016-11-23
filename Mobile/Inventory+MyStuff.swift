@@ -34,7 +34,6 @@ extension Inventory {
 
         // Add InventoryItems
         if let items = json["items"].array {
-            // Currently, JSON will include "items" only for new Inventories
             for itemJSON in items {
                 _ = InventoryItem(context: context, json: itemJSON, inventory: self)
             }
@@ -80,7 +79,6 @@ extension Inventory {
     func updateExisting(context: NSManagedObjectContext, json: JSON) {
     
         // Add Default Location
-        //let defaultLocation = InventoryLocation(context: context)
         let defaultLocation = InventoryLocation(context: context, name: "Default", remoteID: 1,
                                                 type: InventoryLocationType.category, inventory: self)
         
