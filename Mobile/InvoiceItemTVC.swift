@@ -69,7 +69,7 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             // TODO - completedUpload(false)
             return
         }
-        APIManager.sharedInstance.postInvoice(invoice: dict, completionHandler: completedUpload)
+        APIManager.sharedInstance.postInvoice(invoice: dict, completion: completedUpload)
     }
     
     // MARK: - Completion handlers
@@ -119,7 +119,6 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             // TODO - should I even both displaying quantity?
             cell.detailTextLabel?.text = "\(quantity)"
         }
-
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

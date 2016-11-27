@@ -87,7 +87,7 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     @IBAction func newTapped(_ sender: AnyObject) {
         // Get new InvoiceCollection.
         APIManager.sharedInstance.getNewInvoiceCollection(
-            storeID: storeID, completionHandler: completedGetNewInvoiceCollection)
+            storeID: storeID, completion: completedGetNewInvoiceCollection)
     }
     
     @IBAction func resetTapped(_ sender: AnyObject) {
@@ -99,7 +99,10 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     
     // MARK: - Completion handlers
     
-    func completedGetListOfInvoiceCollections(json: JSON) -> Void {
+    func completedGetListOfInvoiceCollections(json: JSON?, error: Error?) -> Void {
+        guard let json = json else {
+            print("\(#function) FAILED : \(error)"); return
+        }
         guard let dates = json["dates"].array else {
             print("\nPROBLEM - Failed to get dates")
             return
@@ -131,7 +134,10 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         saveContext()
     }
     
-    func completedGetExistingInvoiceCollection(json: JSON) -> Void {
+    func completedGetExistingInvoiceCollection(json: JSON?, error: Error?) -> Void {
+        guard let json = json else {
+            print("\(#function) FAILED : \(error)"); return
+        }
         guard let selection = selectedCollection else {
             print("\nPROBLEM - Still failed to get selected InvoiceCollection\n")
             return
@@ -146,8 +152,11 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
     
-    func completedGetNewInvoiceCollection(json: JSON) -> Void {
-        print("\nCreating new InvoiceCollection ...")
+    func completedGetNewInvoiceCollection(json: JSON?, error: Error?) -> Void {
+        guard let json = json else {
+            print("\(#function) FAILED : \(error)"); return
+        }
+        //print("\nCreating new InvoiceCollection ...")
         selectedCollection = InvoiceCollection(context: self.managedObjectContext!, json: json, uploaded: false)
         
         // Save the context.
@@ -162,7 +171,7 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             
             // Get list of Invoices from server
             // print("\nFetching existing InvoiceCollections from server ...")
-            APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completionHandler: self.completedGetListOfInvoiceCollections)
+            APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
             
         } else {
             print("Unable to login ...")
@@ -243,7 +252,7 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             print("GET InvoiceCollection from server ...")
             APIManager.sharedInstance.getInvoiceCollection(
                 storeID: storeID, invoiceDate: collectionDate,
-                completionHandler: completedGetExistingInvoiceCollection)
+                completion: completedGetExistingInvoiceCollection)
             
         case false:
             print("LOAD NEW selectedCollection from disk ...")

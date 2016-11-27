@@ -184,7 +184,7 @@ class OrderItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
             // Serialize and POST Order
             if let json = parentObject.serialize() {
                 print("\nPOSTing Order: \(json)")
-                APIManager.sharedInstance.postOrder(order: json, completionHandler: completedPostOrder)
+                APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
             }
         
             // TODO - handle failure to serialize Order

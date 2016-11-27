@@ -162,7 +162,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             print("GET selectedInventory from server - \(remoteID) ...")
             APIManager.sharedInstance.getInventory(
                 remoteID: remoteID,
-                completionHandler: self.completedGetExistingInventory)
+                completion: self.completedGetExistingInventory)
             
         case false:
             print("LOAD NEW selectedInventory from disk ...")
@@ -175,7 +175,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     @IBAction func newTapped(_ sender: AnyObject) {
         // Get new Inventory.
         APIManager.sharedInstance.getNewInventory(
-            isActive: true, typeID: 1, storeID: storeID, completionHandler: completedGetNewInventory)
+            isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
     }
     
     @IBAction func resetTapped(_ sender: AnyObject) {
@@ -187,7 +187,10 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
     
     // MARK: - Completion handlers
     
-    func completedGetListOfInventories(json: JSON) -> Void {
+    func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
+        guard let json = json else {
+            print("\(#function) FAILED : \(error)"); return
+        }
         
         for (_, item) in json {
             guard let inventoryID = item["id"].int else { print("a"); break }
@@ -201,23 +204,28 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
         saveContext()
     }
     
-    func completedGetExistingInventory(json: JSON) -> Void {
-        if let selection = selectedInventory {
-
-            // Update selected Inventory with full JSON from server.
-            selection.updateExisting(context: self.managedObjectContext!, json: json)
-            
-            // Save the context.
-            saveContext()
-            
-            performSegue(withIdentifier: ExistingItemSegue, sender: self)
-            
-        } else {
-            print("\nPROBLEM - Still failed to get selected Inventory\n")
+    func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
+        guard let json = json else {
+            print("\(#function) FAILED : \(error)"); return
         }
+        guard let selection = selectedInventory else {
+            print("\nPROBLEM - Still failed to get selected Inventory\n"); return
+        }
+
+        // Update selected Inventory with full JSON from server.
+        selection.updateExisting(context: self.managedObjectContext!, json: json)
+        
+        // Save the context.
+        saveContext()
+        
+        performSegue(withIdentifier: ExistingItemSegue, sender: self)
     }
     
-    func completedGetNewInventory(json: JSON) -> Void {
+    func completedGetNewInventory(json: JSON?, error: Error?) -> Void {
+        guard let json = json else {
+            print("\(#function) FAILED : \(error)"); return
+        }
+        
         selectedInventory = Inventory(context: self.managedObjectContext!, json: json, uploaded: false)
         
         // Save the context.
@@ -232,7 +240,7 @@ class InventoryDateTVC: UITableViewController, NSFetchedResultsControllerDelegat
             
             // Get list of Inventories from server
             // print("\nFetching existing Inventories from server ...")
-            APIManager.sharedInstance.getListOfInventories(storeID: storeID, completionHandler: self.completedGetListOfInventories)
+            APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
             
         } else {
             print("Unable to login ...")

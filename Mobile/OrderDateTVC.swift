@@ -134,7 +134,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
             print("GET OrderCollection from server ...")
             APIManager.sharedInstance.getOrderCollection(
                 storeID: storeID, orderDate: collectionDate,
-                completionHandler: completedGetExistingOrderCollection)
+                completion: completedGetExistingOrderCollection)
             
         case false:
             print("LOAD NEW selectedCollection from disk ...")
@@ -166,7 +166,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         // Get new OrderCollection.
         APIManager.sharedInstance.getNewOrderCollection(
             storeID: storeID, typeID: orderTypeID, returnUsage: true,
-            periodLength: 28, completionHandler: completedGetNewOrderCollection)
+            periodLength: 28, completion: completedGetNewOrderCollection)
     }
     
     @IBAction func resetTapped(_ sender: AnyObject) {
@@ -178,7 +178,10 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: - Completion Handlers
     
-    func completedGetListOfOrderCollections(json: JSON) -> Void {
+    func completedGetListOfOrderCollections(json: JSON?, error: Error?) -> Void {
+        guard let json = json else {
+            print("PROBLEM"); return
+        }
         guard let dates = json["dates"].array else {
             print("\nPROBLEM - Failed to get dates")
             return
@@ -201,7 +204,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         saveContext()
     }
     
-    func completedGetExistingOrderCollection(json: JSON) -> Void {
+    func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
         /*
         guard let selectedCollectionIndex = selectedCollectionIndex else {
             print("\nPROBLEM - 1a")
@@ -217,7 +220,9 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         // Reset selection since we reset the managedObjectContext in deleteChildOrders
         selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
         */
-
+        guard let json = json else {
+            print("\(#function) FAILED : \(error)"); return
+        }
         guard let selection = selectedCollection else {
             print("\nPROBLEM - Still failed to get selected OrderCollection\n")
             return
@@ -232,8 +237,11 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
-    func completedGetNewOrderCollection(json: JSON) -> Void {
-        print("\nCreating new OrderCollection ...")
+    func completedGetNewOrderCollection(json: JSON?, error: Error?) -> Void {
+        guard let json = json else {
+            print("\(#function) FAILED : \(error)"); return
+        }
+        //print("\nCreating new OrderCollection ...")
         selectedCollection = OrderCollection(context: self.managedObjectContext!, json: json, uploaded: false)
         
         // Save the context.
@@ -248,7 +256,7 @@ class OrderDateTVC: UITableViewController, NSFetchedResultsControllerDelegate {
             
             // Get list of OrderCollections from server
             // print("\nFetching existing OrderCollections from server ...")
-            APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completionHandler: self.completedGetListOfOrderCollections)
+            APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
             
         } else {
             print("Unable to login ...")

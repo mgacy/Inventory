@@ -76,7 +76,7 @@ class InventoryLocationTVC: UITableViewController, NSFetchedResultsControllerDel
             // TODO - completedUpload(false)
             return
         }
-        APIManager.sharedInstance.postInventory(inventory: dict, completionHandler: self.completedUpload)
+        APIManager.sharedInstance.postInventory(inventory: dict, completion: self.completedUpload)
         
     }
     
