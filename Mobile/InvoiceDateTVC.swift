@@ -85,12 +85,16 @@ class InvoiceDateTVC: UITableViewController {
     // MARK: - User interaction
 
     @IBAction func newTapped(_ sender: AnyObject) {
+        tableView.activityIndicatorView.startAnimating()
+
         // Get new InvoiceCollection.
         APIManager.sharedInstance.getNewInvoiceCollection(
             storeID: storeID, completion: completedGetNewInvoiceCollection)
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
+        tableView.activityIndicatorView.startAnimating()
+
         //deleteObjects(entityType: Item.self)
         deleteExistingInvoiceCollections()
 
@@ -100,6 +104,8 @@ class InvoiceDateTVC: UITableViewController {
     // MARK: - Completion handlers
 
     func completedGetListOfInvoiceCollections(json: JSON?, error: Error?) -> Void {
+        tableView.activityIndicatorView.stopAnimating()
+
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
         }
@@ -135,6 +141,8 @@ class InvoiceDateTVC: UITableViewController {
     }
 
     func completedGetExistingInvoiceCollection(json: JSON?, error: Error?) -> Void {
+        tableView.activityIndicatorView.stopAnimating()
+
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
         }
@@ -153,6 +161,8 @@ class InvoiceDateTVC: UITableViewController {
     }
 
     func completedGetNewInvoiceCollection(json: JSON?, error: Error?) -> Void {
+        tableView.activityIndicatorView.stopAnimating()
+
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
         }

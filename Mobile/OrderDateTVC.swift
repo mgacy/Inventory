@@ -123,6 +123,8 @@ class OrderDateTVC: UITableViewController {
                 return
             }
 
+            tableView.activityIndicatorView.startAnimating()
+
             // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
             // Delete existing orders of selected collection
             print("Deleting Orders of selected OrderCollection ...")
@@ -163,6 +165,8 @@ class OrderDateTVC: UITableViewController {
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
+        tableView.activityIndicatorView.startAnimating()
+
         // Get new OrderCollection.
         APIManager.sharedInstance.getNewOrderCollection(
             storeID: storeID, typeID: orderTypeID, returnUsage: true,
@@ -170,6 +174,8 @@ class OrderDateTVC: UITableViewController {
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
+        tableView.activityIndicatorView.startAnimating()
+
         deleteObjects(entityType: Item.self)
         deleteExistingOrderCollections()
 
@@ -179,6 +185,8 @@ class OrderDateTVC: UITableViewController {
     // MARK: - Completion Handlers
 
     func completedGetListOfOrderCollections(json: JSON?, error: Error?) -> Void {
+        tableView.activityIndicatorView.stopAnimating()
+
         guard let json = json else {
             print("PROBLEM"); return
         }
@@ -205,6 +213,8 @@ class OrderDateTVC: UITableViewController {
     }
 
     func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
+        tableView.activityIndicatorView.stopAnimating()
+
         /*
         guard let selectedCollectionIndex = selectedCollectionIndex else {
             print("\nPROBLEM - 1a")
@@ -238,6 +248,8 @@ class OrderDateTVC: UITableViewController {
     }
 
     func completedGetNewOrderCollection(json: JSON?, error: Error?) -> Void {
+        tableView.activityIndicatorView.stopAnimating()
+
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
         }

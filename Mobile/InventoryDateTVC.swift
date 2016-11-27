@@ -148,6 +148,8 @@ class InventoryDateTVC: UITableViewController {
 
         switch selection.uploaded {
         case true:
+            tableView.activityIndicatorView.startAnimating()
+
             let remoteID = Int(selection.remoteID)
 
             // TODO - ideally, we would want to deleteInventoryItems *after* fetching data from server
@@ -159,7 +161,7 @@ class InventoryDateTVC: UITableViewController {
             selectedInventory = self.fetchedResultsController.object(at: indexPath)
 
             // GET INVENTORY FROM SERVER
-            print("GET selectedInventory from server - \(remoteID) ...")
+            // print("GET selectedInventory from server - \(remoteID) ...")
             APIManager.sharedInstance.getInventory(
                 remoteID: remoteID,
                 completion: self.completedGetExistingInventory)
@@ -173,12 +175,16 @@ class InventoryDateTVC: UITableViewController {
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
+        tableView.activityIndicatorView.startAnimating()
+
         // Get new Inventory.
         APIManager.sharedInstance.getNewInventory(
             isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
+        tableView.activityIndicatorView.startAnimating()
+
         // By leaving filter as nil, we will delete all Inventories
         deleteExistingInventories()
         // Download Inventories from server again
@@ -188,6 +194,8 @@ class InventoryDateTVC: UITableViewController {
     // MARK: - Completion handlers
 
     func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
+        tableView.activityIndicatorView.stopAnimating()
+
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
         }
@@ -205,6 +213,8 @@ class InventoryDateTVC: UITableViewController {
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
+        tableView.activityIndicatorView.stopAnimating()
+
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
         }
@@ -222,6 +232,8 @@ class InventoryDateTVC: UITableViewController {
     }
 
     func completedGetNewInventory(json: JSON?, error: Error?) -> Void {
+        tableView.activityIndicatorView.stopAnimating()
+
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
         }
