@@ -420,7 +420,7 @@ class InventoryDateTVC: UITableViewController {
 
 }
 
-
+// MARK: - NSFetchedResultsControllerDelegate Extension
 extension InventoryDateTVC: NSFetchedResultsControllerDelegate {
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

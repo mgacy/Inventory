@@ -216,7 +216,7 @@ class InventoryLocationItemTVC: UITableViewController {
 
 }
 
-
+// MARK: - NSFetchedResultsControllerDelegate Extension
 extension InventoryLocationItemTVC: NSFetchedResultsControllerDelegate {
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
