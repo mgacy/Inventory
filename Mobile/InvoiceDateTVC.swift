@@ -35,7 +35,7 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     // let invoiceTypeID = 1
 
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -57,17 +57,17 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         // 1. Check for existence of email and login. (?)
         if AuthorizationHandler.sharedInstance.userExists {
             print("User exists ...")
-            
+
             // Delete any uploaded Inventories before fetching updated list.
             //deleteExistingInvoices(NSPredicate(format: "uploaded == true"))
-            
+
             // Login to server, then get list of Inventories from server if successful.
             APIManager.sharedInstance.login(completionHandler: self.completedLogin)
         } else {
             print("User does not exist")
             // TODO - how to handle this?
         }
-        
+
         // Login to server, get list of Items, and update store
 
     }
@@ -83,22 +83,22 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     }
 
     // MARK: - User interaction
-    
+
     @IBAction func newTapped(_ sender: AnyObject) {
         // Get new InvoiceCollection.
         APIManager.sharedInstance.getNewInvoiceCollection(
             storeID: storeID, completion: completedGetNewInvoiceCollection)
     }
-    
+
     @IBAction func resetTapped(_ sender: AnyObject) {
         //deleteObjects(entityType: Item.self)
         deleteExistingInvoiceCollections()
-        
+
         _ = StartupManager(completionHandler: completedLogin)
     }
-    
+
     // MARK: - Completion handlers
-    
+
     func completedGetListOfInvoiceCollections(json: JSON?, error: Error?) -> Void {
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
@@ -107,19 +107,19 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             print("\nPROBLEM - Failed to get dates")
             return
         }
-        
+
         // FIX - this does not account for Collections that have been deleted from the server but
         // are still present in the local store
         for date in dates {
             if let dateString = date.string {
-                
+
                 // Create InvoiceCollection if we can't find one with date `date` (2)
                 let predicate = NSPredicate(format: "date == %@", dateString)
                 if managedObjectContext?.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate) == nil {
                     print("Creating InvoiceCollection: \(dateString)")
                     _ = InvoiceCollection(context: self.managedObjectContext!, date: date, uploaded: true)
                 }
-                
+
                 /*
                  // Create InvoiceCollection if we can't find one with date `date`
                  if InvoiceCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
@@ -129,11 +129,11 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
                  */
             }
         }
-        
+
         // Save the context.
         saveContext()
     }
-    
+
     func completedGetExistingInvoiceCollection(json: JSON?, error: Error?) -> Void {
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
@@ -142,42 +142,42 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             print("\nPROBLEM - Still failed to get selected InvoiceCollection\n")
             return
         }
-        
+
         // Update selected Inventory with full JSON from server.
         selection.updateExisting(context: self.managedObjectContext!, json: json)
-        
+
         // Save the context.
         saveContext()
-        
+
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
-    
+
     func completedGetNewInvoiceCollection(json: JSON?, error: Error?) -> Void {
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
         }
         //print("\nCreating new InvoiceCollection ...")
         selectedCollection = InvoiceCollection(context: self.managedObjectContext!, json: json, uploaded: false)
-        
+
         // Save the context.
         saveContext()
-        
+
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
-    
+
     func completedLogin(_ succeeded: Bool) {
         if succeeded {
             print("\nCompleted login - succeeded: \(succeeded)")
-            
+
             // Get list of Invoices from server
             // print("\nFetching existing InvoiceCollections from server ...")
             APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
-            
+
         } else {
             print("Unable to login ...")
         }
     }
-    
+
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -227,50 +227,50 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
 
     // MARK: - Navigation
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCollection = self.fetchedResultsController.object(at: indexPath)
         guard let selection = selectedCollection else { return }
-        
+
         switch selection.uploaded {
         case true:
-        
+
             // Get date to use when getting OrderCollection from server
             guard let collectionDate = selection.date else {
                 print("\nPROBLEM - Unable to get InvoiceCollection.date")
                 return
             }
-            
+
             // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
             // Delete existing invoices of selected collection
             print("Deleting Invoices of selected InvoiceCollection ...")
             deleteChildInvoices(parent: selection)
-            
+
             // Reset selection since we reset the managedObjectContext in deleteChildOrders
             selectedCollection = self.fetchedResultsController.object(at: indexPath)
-            
+
             print("GET InvoiceCollection from server ...")
             APIManager.sharedInstance.getInvoiceCollection(
                 storeID: storeID, invoiceDate: collectionDate,
                 completion: completedGetExistingInvoiceCollection)
-            
+
         case false:
             print("LOAD NEW selectedCollection from disk ...")
             performSegue(withIdentifier: segueIdentifier, sender: self)
         }
-        
+
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
+
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+
         // Get the new view controller.
         guard let controller = segue.destination as? InvoiceVendorTVC else {
             print("\nPROBLEM - Unable to get destination controller\n")
             return
         }
-        
+
         // Pass selection to new view controller.
         if let selection = selectedCollection {
             controller.parentObject = selection
@@ -279,7 +279,7 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             print("\nPROBLEM - Unable to get selection\n")
         }
     }
-    
+
     // MARK: - A
 
     func saveContext() {
@@ -293,49 +293,49 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
     }
-    
+
     func deleteExistingInvoiceCollections(_ filter: NSPredicate? = nil) {
         print("deleteExistingInvoices...")
-        
+
         // Create Fetch Request
         let fetchRequest: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-        
+
         // Configure Fetch Request
         if let _filter = filter { fetchRequest.predicate = _filter }
-        
+
         // Initialize Batch Delete Request
         let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-        
+
         // Configure Batch Update Request
         batchDeleteRequest.resultType = .resultTypeCount
-        
+
         do {
             // Execute Batch Request
             let batchDeleteResult = try managedObjectContext?.execute(batchDeleteRequest) as! NSBatchDeleteResult
-            
+
             print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-            
+
             // Reset Managed Object Context
             managedObjectContext?.reset()
-            
+
             // Perform Fetch
             try self.fetchedResultsController.performFetch()
-            
+
             // Reload Table View
             tableView.reloadData()
-            
+
         } catch {
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
-    
+
     }
 
     func deleteChildInvoices(parent: InvoiceCollection) {
         guard let managedObjectContext = managedObjectContext else {
             return
         }
-        
+
         /*
          Since the batch delete request directly interacts with the persistent store we need
          to make sure that any changes are first pushed to that store.
@@ -348,63 +348,63 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
                 print("\(saveError), \(saveError.userInfo)")
             }
         }
-        
+
         // Create Fetch Request
         let fetchRequest: NSFetchRequest<Invoice> = Invoice.fetchRequest()
-        
+
         // Configure Fetch Request
         fetchRequest.predicate = NSPredicate(format: "collection == %@", parent)
-        
+
         // Initialize Batch Delete Request
         let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-        
+
         // Configure Batch Update Request
         batchDeleteRequest.resultType = .resultTypeCount
         //batchDeleteRequest.resultType = .resultTypeStatusOnly
-        
+
         do {
             // Execute Batch Request
             let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
-            
+
             print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-            
+
             // The managed object context is not notified of the consequences of the batch delete request.
-            
+
             // Reset Managed Object Context
             // As the request directly interacts with the persistent store, we need need to reset the context
             // for it to be aware of the changes
             managedObjectContext.reset()
-            
+
             // Perform Fetch
             try self.fetchedResultsController.performFetch()
-            
+
             // Reload Table View
             tableView.reloadData()
-            
+
         } catch {
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
-        
+
     }
-    
+
     // MARK: - Fetched results controller
 
     var fetchedResultsController: NSFetchedResultsController<InvoiceCollection> {
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
         }
-        
+
         let fetchRequest: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-        
+
         // Set the batch size to a suitable number.
         fetchRequest.fetchBatchSize = fetchBatchSize
-        
+
         // Edit the sort key as appropriate.
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-        
+
         fetchRequest.sortDescriptors = [sortDescriptor]
-        
+
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
         let aFetchedResultsController = NSFetchedResultsController(
@@ -412,39 +412,39 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             managedObjectContext: self.managedObjectContext!,
             sectionNameKeyPath: self.sectionNameKeyPath,
             cacheName: self.cacheName)
-        
+
         aFetchedResultsController.delegate = self
         _fetchedResultsController = aFetchedResultsController
-        
+
         return _fetchedResultsController!
     }
-    
+
     var _fetchedResultsController: NSFetchedResultsController<InvoiceCollection>? = nil
-    
+
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({
-            
+
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
                 print("\(#function) FAILED : \(error)")
             }
-            
+
             // TESTING:
             let objects = self.fetchedResultsController.fetchedObjects
             print("Fetched Objects: \(objects?.count)")
             if let expectedObjects = self.fetchedResultsController.fetchedObjects {
                 print("InvoiceDateTVC should display: \(expectedObjects)")
             }
-            
+
             self.tableView.reloadData()
         })
     }
-    
+
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
     }
-    
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
         case .insert:
@@ -455,7 +455,7 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             return
         }
     }
-    
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
@@ -468,7 +468,7 @@ class InvoiceDateTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
     }
-    
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
     }

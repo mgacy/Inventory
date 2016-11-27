@@ -13,25 +13,25 @@ import SwiftyJSON
 class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
     // MARK: - Properties
-    
+
     var parentObject: Invoice!
     var selectedObject: InvoiceItem?
-    
+
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
     var filter: NSPredicate? = nil
     var cacheName: String? = nil
     var sectionNameKeyPath: String? = nil
     var fetchBatchSize = 20 // 0 = No Limit
-    
+
     // TableView
     var cellIdentifier = "InvoiceItemTableViewCell"
-    
+
     // Segues
     let segueIdentifier = "showInvoiceKeypad"
-    
+
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -40,10 +40,10 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
+
         // Set Title
         title = parentObject.vendor?.name
-        
+
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
@@ -53,17 +53,17 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         super.viewDidAppear(animated)
         self.tableView.reloadData()
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
     // MARK: - User interaction
-    
+
     @IBAction func uploadTapped(_ sender: AnyObject) {
         print("Uploading Invoice ...")
-        
+
         guard let dict = self.parentObject.serialize() else {
             print("\nPROBLEM - Unable to serialize Invoice")
             // TODO - completedUpload(false)
@@ -71,9 +71,9 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         }
         APIManager.sharedInstance.postInvoice(invoice: dict, completion: completedUpload)
     }
-    
+
     // MARK: - Completion handlers
-    
+
     func completedUpload(succeeded: Bool, json: JSON) {
         print("completedUpload: \(succeeded)")
         if succeeded {
@@ -82,29 +82,29 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             print("\nPROBLEM - Unable to upload Invoice")
         }
     }
-    
+
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = self.fetchedResultsController.sections![section]
         return sectionInfo.numberOfObjects
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         // Dequeue Reusable Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
-        
+
         // Configure Cell
         self.configureCell(cell, atIndexPath: indexPath)
-        
+
         return cell
     }
-    
+
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let invoiceItem = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = invoiceItem.item?.name
@@ -120,13 +120,13 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             cell.detailTextLabel?.text = "\(quantity)"
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
         print("Selected InvoiceItem: \(selectedObject)")
-        
+
         performSegue(withIdentifier: segueIdentifier, sender: self)
-        
+
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -138,27 +138,27 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     
     // Override to support rearranging the table view.
     // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
-    
+
     // Override to support conditional rearranging of the table view.
     // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
-    
+
     // Override to support conditional editing of the table view.
     // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
 
     // MARK: - Navigation
-    
+
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+
         // Get the new view controller using segue.destinationViewController.
         guard let destinationController = segue.destination as? InvoiceKeypadVC else {
             return
         }
-        
+
         // Pass the parent of the selected object to the new view controller.
         destinationController.parentObject = parentObject
         destinationController.managedObjectContext = self.managedObjectContext
-        
+
         // FIX: fix this
         if let indexPath = self.tableView.indexPathForSelectedRow?.row {
             destinationController.currentIndex = indexPath
@@ -166,21 +166,21 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
     }
 
     // MARK: - Fetched results controller
-    
+
     var fetchedResultsController: NSFetchedResultsController<InvoiceItem> {
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
         }
-        
+
         let fetchRequest: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
-        
+
         // Set the batch size to a suitable number.
         fetchRequest.fetchBatchSize = fetchBatchSize
-        
+
         // Edit the sort key as appropriate.
         let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        
+
         // Set the fetch predicate
         if let parent = self.parentObject {
             let fetchPredicate = NSPredicate(format: "invoice == %@", parent)
@@ -188,7 +188,7 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
         } else {
             print("\nPROBLEM - Unable able to add predicate")
         }
-        
+
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
         let aFetchedResultsController = NSFetchedResultsController(
@@ -196,39 +196,39 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             managedObjectContext: self.managedObjectContext!,
             sectionNameKeyPath: self.sectionNameKeyPath,
             cacheName: self.cacheName)
-        
+
         aFetchedResultsController.delegate = self
         _fetchedResultsController = aFetchedResultsController
-        
+
         return _fetchedResultsController!
     }
-    
+
     var _fetchedResultsController: NSFetchedResultsController<InvoiceItem>? = nil
-    
+
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({
-            
+
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
                 print("\(#function) FAILED : \(error)")
             }
-            
+
             // TESTING:
             let objects = self.fetchedResultsController.fetchedObjects
             print("Fetched Objects: \(objects?.count)")
             if let expectedLocations = self.fetchedResultsController.fetchedObjects {
                 print("OrderItemTVC should display: \(expectedLocations)")
             }
-            
+
             self.tableView.reloadData()
         })
     }
-    
+
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
     }
-    
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
         case .insert:
@@ -239,7 +239,7 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             return
         }
     }
-    
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
@@ -252,9 +252,9 @@ class InvoiceItemTVC: UITableViewController, NSFetchedResultsControllerDelegate 
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
     }
-    
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
     }
-    
+
 }
