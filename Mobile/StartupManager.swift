@@ -20,7 +20,8 @@ class StartupManager {
     private let storeID: Int = 1
     
     // MARK: - Lifecycle
-    
+
+    // We will (1) try to log in to server, (2) call some endpoints, (3) call completionHandler
     init(completionHandler: @escaping (Bool) -> Void) {
         
         self.managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwiftyJSON
 
 class InventoryLocationTVC: UITableViewController {
 
