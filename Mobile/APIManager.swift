@@ -134,20 +134,18 @@ class APIManager {
         }
     }
 
-    func postInventory(inventory: [String: Any], completion: @escaping (Bool) -> Void) {
+    func postInventory(inventory: [String: Any], completion: @escaping (JSON?, Error?) -> Void) {
         sessionManager.request(Router.postInventory(inventory))
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    //let json = JSON(value)
-                    //completion(true, json)
-                    completion(true)
                     // print("Success: \(value)")
+                    let json = JSON(value)
+                    completion(json, nil)
                 case .failure(let error):
-                    //let json = JSON(error)
-                    //completion(false, json)
-                    completion(false)
                     debugPrint("\(#function) FAILED : \(error)")
+                    let json = JSON(error)
+                    completion(json, error)
                 }
         }
     }

@@ -82,15 +82,24 @@ class InventoryLocationTVC: UITableViewController {
 
     // MARK: - Completion handlers
 
-    func completedUpload(_ succeeded: Bool) {
-        if succeeded {
-            print("\nCompleted upload - succeeded: \(succeeded)")
-            // inventory.uploaded = true
-            // TODO - save context
-
-        } else {
-            print("\nPROBLEM - Unable to upload Inventory")
+    func completedUpload(json: JSON?, error: Error?) {
+        guard error == nil else {
+            return
         }
+        guard let json = json else {
+            print("Unable to get JSON")
+            return
+        }
+        guard let remoteID = json["id"].int else {
+            print("Unable to get remoteID of posted Inventory")
+            return
+        }
+
+        inventory.uploaded = true
+        inventory.remoteID = Int32(remoteID)
+
+        // Pop view
+        navigationController!.popViewController(animated: true)
     }
 
     // MARK: - Table view data source
