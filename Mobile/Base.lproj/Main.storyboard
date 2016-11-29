@@ -38,6 +38,7 @@
                     </navigationItem>
                     <connections>
                         <segue destination="H3s-md-9Gz" kind="show" identifier="FetchExistingInventory" id="MoE-UE-r5u"/>
+                        <segue destination="EVU-Sa-EdD" kind="show" identifier="ShowLocationCategory" id="bQV-xM-Zpe"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vZd-Y0-W5a" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1261,11 +1262,11 @@
                                         <rect key="frame" x="0.0" y="56" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EG4-hE-eoB" id="epB-fh-Lie">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FDP-LD-P7j">
-                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="345" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -1442,6 +1443,7 @@
         <image name="settingsTab" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="bQV-xM-Zpe"/>
         <segue reference="4yW-DD-bsH"/>
     </inferredMetricsTieBreakers>
 </document>

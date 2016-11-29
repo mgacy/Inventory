@@ -29,9 +29,17 @@ class InventoryDateTVC: UITableViewController {
     let cellIdentifier = "InventoryDateTableViewCell"
 
     // Segues
-    // TODO - make enum?
-    let ExistingItemSegue = "FetchExistingInventory"
+    let NewItemSegue = "FetchExistingInventory"
+    let ExistingItemSegue = "ShowLocationCategory"
     let SettingsSegue = "ShowSettings"
+    /*
+    // TODO - make enum?
+    enum SegueIdentifiers : String {
+        case newItemSegue = "FetchExistingInventory"
+        case existingItemSegue = "ShowLocationCategory"
+        case settingsSegue = "ShowSettings"
+    }
+    */
 
     // TODO - provide interface to control these
     var storeID = 1
@@ -77,22 +85,41 @@ class InventoryDateTVC: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
-        case ExistingItemSegue:
+        case NewItemSegue:
 
             // Get the new view controller.
             guard let controller = segue.destination as? InventoryLocationTVC else {
-                print("\nPROBLEM - Unable to get destination controller\n")
-                return
+                print("\nPROBLEM - Unable to get destination controller\n"); return
             }
 
             // Pass selection to new view controller.
-            if let selection = selectedInventory {
-                controller.inventory = selection
-                controller.managedObjectContext = self.managedObjectContext
-                //controller.performFetch()
-            } else {
-                print("\nPROBLEM - Unable to get selection\n")
+            guard let selection = selectedInventory else {
+                print("\nPROBLEM - Unable to get selection\n"); return
             }
+            controller.inventory = selection
+            controller.managedObjectContext = self.managedObjectContext
+
+        case ExistingItemSegue:
+
+            // Get the new view controller.
+            guard let controller = segue.destination as? InventoryLocationCategoryTVC else {
+                print("\nPROBLEM - Unable to get destination controller\n"); return
+            }
+
+            // Pass selection to new view controller.
+            guard let selection = selectedInventory, let locations = selection.locations?.allObjects else {
+                print("\nPROBLEM - Unable to get selection\n"); return
+            }
+
+            // Exisitng Inventories should have 1 Location - "Default"
+            guard let defaultLocation = locations[0] as? InventoryLocation else {
+                print("\(#function) FAILED : unable to get Default Location"); return
+            }
+            if defaultLocation.name != "Default" {
+                print("\(#function) FAILED : unable to get Default Location"); return
+            }
+            controller.location = defaultLocation
+            controller.managedObjectContext = self.managedObjectContext
 
         case SettingsSegue:
             print("Showing Settings ...")
@@ -168,7 +195,7 @@ class InventoryDateTVC: UITableViewController {
 
         case false:
             print("LOAD NEW selectedInventory from disk ...")
-            performSegue(withIdentifier: ExistingItemSegue, sender: self)
+            performSegue(withIdentifier: NewItemSegue, sender: self)
         }
 
         tableView.deselectRow(at: indexPath, animated: true)
@@ -195,6 +222,9 @@ class InventoryDateTVC: UITableViewController {
 
     func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
         tableView.activityIndicatorView.stopAnimating()
+        guard error == nil else {
+            self.noticeError(error!.localizedDescription); return
+        }
 
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
@@ -214,12 +244,15 @@ class InventoryDateTVC: UITableViewController {
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
         tableView.activityIndicatorView.stopAnimating()
+        guard error == nil else {
+            self.noticeError(error!.localizedDescription); return
+        }
 
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
         }
         guard let selection = selectedInventory else {
-            print("\nPROBLEM - Still failed to get selected Inventory\n"); return
+            print("\(#function) FAILED : Still failed to get selected Inventory\n"); return
         }
 
         // Update selected Inventory with full JSON from server.
@@ -232,6 +265,10 @@ class InventoryDateTVC: UITableViewController {
     }
 
     func completedGetNewInventory(json: JSON?, error: Error?) -> Void {
+        guard error == nil else {
+            self.noticeError(error!.localizedDescription); return
+        }
+
         tableView.activityIndicatorView.stopAnimating()
 
         guard let json = json else {
@@ -243,7 +280,7 @@ class InventoryDateTVC: UITableViewController {
         // Save the context.
         saveContext()
 
-        performSegue(withIdentifier: ExistingItemSegue, sender: self)
+        performSegue(withIdentifier: NewItemSegue, sender: self)
     }
 
     func completedLogin(_ succeeded: Bool) {
