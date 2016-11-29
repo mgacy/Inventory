@@ -3,7 +3,7 @@ platform :ios, '10.0'
 
 # Basic
 def basic_pods
-  pod 'Alamofire', '~> 4.0'
+  pod 'Alamofire', '~> 4.2'
   pod 'SwiftyJSON'
   pod 'KeychainAccess'
   # A
