@@ -221,9 +221,8 @@ class InventoryDateTVC: UITableViewController {
     // MARK: - Completion handlers
 
     func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
-        tableView.activityIndicatorView.stopAnimating()
         guard error == nil else {
-            self.noticeError(error!.localizedDescription); return
+            self.noticeError(error!.localizedDescription, autoClear: true); return
         }
 
         guard let json = json else {
@@ -243,9 +242,8 @@ class InventoryDateTVC: UITableViewController {
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
-        tableView.activityIndicatorView.stopAnimating()
         guard error == nil else {
-            self.noticeError(error!.localizedDescription); return
+            self.noticeError(error!.localizedDescription, autoClear: true); return
         }
 
         guard let json = json else {
@@ -266,7 +264,7 @@ class InventoryDateTVC: UITableViewController {
 
     func completedGetNewInventory(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            self.noticeError(error!.localizedDescription); return
+            self.noticeError(error!.localizedDescription, autoClear: true); return
         }
 
         tableView.activityIndicatorView.stopAnimating()
@@ -293,6 +291,7 @@ class InventoryDateTVC: UITableViewController {
 
         } else {
             print("Unable to login ...")
+            self.noticeError("Error", autoClear: true)
         }
     }
 
