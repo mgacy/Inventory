@@ -200,14 +200,6 @@ class InventoryLocationItemTVC: UITableViewController {
             } catch {
                 print("\(#function) FAILED : \(error)")
             }
-            /*
-            // TESTING:
-            let objects = self.fetchedResultsController.fetchedObjects
-            print("Fetched Objects: \(objects?.count)")
-            if let expectedLocations = self.fetchedResultsController.fetchedObjects {
-                print("InventoryLocationItemTVC should display: \(expectedLocations)")
-            }
-            */
             self.tableView.reloadData()
         })
     }

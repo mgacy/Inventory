@@ -53,7 +53,6 @@ class OrderVendorTVC: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //self.performFetch()
         self.tableView.reloadData()
     }
 
@@ -193,14 +192,6 @@ class OrderVendorTVC: UITableViewController {
             } catch {
                 print("\(#function) FAILED : \(error)")
             }
-
-            // TESTING:
-            let objects = self.fetchedResultsController.fetchedObjects
-            print("Fetched Objects: \(objects?.count)")
-            if let expectedLocations = self.fetchedResultsController.fetchedObjects {
-                print("OrderVendorTVC should display: \(expectedLocations)")
-            }
-
             self.tableView.reloadData()
         })
     }

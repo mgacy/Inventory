@@ -439,14 +439,6 @@ class InvoiceDateTVC: UITableViewController {
             } catch {
                 print("\(#function) FAILED : \(error)")
             }
-
-            // TESTING:
-            let objects = self.fetchedResultsController.fetchedObjects
-            print("Fetched Objects: \(objects?.count)")
-            if let expectedObjects = self.fetchedResultsController.fetchedObjects {
-                print("InvoiceDateTVC should display: \(expectedObjects)")
-            }
-
             self.tableView.reloadData()
         })
     }

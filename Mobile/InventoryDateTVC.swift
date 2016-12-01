@@ -71,7 +71,6 @@ class InventoryDateTVC: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //self.performFetch()
         self.tableView.reloadData()
     }
 

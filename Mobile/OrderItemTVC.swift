@@ -57,7 +57,6 @@ class OrderItemTVC: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //self.performFetch()
         self.tableView.reloadData()
     }
 
@@ -239,7 +238,7 @@ class OrderItemTVC: UITableViewController {
             cell.detailTextLabel?.text = "\(quantity) \(orderItem.orderUnit?.abbreviation ?? "")"
         } else {
             cell.textLabel?.textColor = UIColor.lightGray
-            // TODO - should I even both displaying quantity?
+            // TODO - should I even bother displaying quantity?
             cell.detailTextLabel?.text = "\(quantity)"
         }
         // TODO - add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
@@ -339,14 +338,6 @@ class OrderItemTVC: UITableViewController {
             } catch {
                 print("\(#function) FAILED : \(error)")
             }
-
-            // TESTING:
-            let objects = self.fetchedResultsController.fetchedObjects
-            print("Fetched Objects: \(objects?.count)")
-            if let expectedLocations = self.fetchedResultsController.fetchedObjects {
-                print("OrderItemTVC should display: \(expectedLocations)")
-            }
-
             self.tableView.reloadData()
         })
     }
