@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import SwiftyJSON
+import PKHUD
 
 class OrderItemTVC: UITableViewController {
 
@@ -180,6 +181,8 @@ class OrderItemTVC: UITableViewController {
         if succeeded {
             parentObject.placed = true
 
+            HUD.show(.progress)
+
             // Serialize and POST Order
             if let json = parentObject.serialize() {
                 print("\nPOSTing Order: \(json)")
@@ -197,6 +200,12 @@ class OrderItemTVC: UITableViewController {
     func completedPostOrder(succeeded: Bool, json: JSON) {
         if succeeded {
             parentObject.uploaded = true
+
+            HUD.flash(.success, delay: 1.0) { finished in
+                // Pop view
+                self.navigationController!.popViewController(animated: true)
+            }
+
         } else {
             print("\nPROBLEM - Unable to POST order \(json)")
             showAlert(title: "Problem", message: "Unable to upload Order")

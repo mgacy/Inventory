@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import Alamofire
 import SwiftyJSON
+import PKHUD
 
 class InvoiceDateTVC: UITableViewController {
 
@@ -85,7 +86,8 @@ class InvoiceDateTVC: UITableViewController {
     // MARK: - User interaction
 
     @IBAction func newTapped(_ sender: AnyObject) {
-        tableView.activityIndicatorView.startAnimating()
+        //tableView.activityIndicatorView.startAnimating()
+        HUD.show(.progress)
 
         // Get new InvoiceCollection.
         APIManager.sharedInstance.getNewInvoiceCollection(
@@ -93,7 +95,8 @@ class InvoiceDateTVC: UITableViewController {
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
-        tableView.activityIndicatorView.startAnimating()
+        //tableView.activityIndicatorView.startAnimating()
+        HUD.show(.progress)
 
         //deleteObjects(entityType: Item.self)
         deleteExistingInvoiceCollections()
@@ -104,7 +107,7 @@ class InvoiceDateTVC: UITableViewController {
     // MARK: - Completion handlers
 
     func completedGetListOfInvoiceCollections(json: JSON?, error: Error?) -> Void {
-        tableView.activityIndicatorView.stopAnimating()
+        //tableView.activityIndicatorView.stopAnimating()
 
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
@@ -138,10 +141,11 @@ class InvoiceDateTVC: UITableViewController {
 
         // Save the context.
         saveContext()
+        HUD.hide()
     }
 
     func completedGetExistingInvoiceCollection(json: JSON?, error: Error?) -> Void {
-        tableView.activityIndicatorView.stopAnimating()
+        //tableView.activityIndicatorView.stopAnimating()
 
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
@@ -157,11 +161,13 @@ class InvoiceDateTVC: UITableViewController {
         // Save the context.
         saveContext()
 
+        HUD.hide()
+
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
     func completedGetNewInvoiceCollection(json: JSON?, error: Error?) -> Void {
-        tableView.activityIndicatorView.stopAnimating()
+        //tableView.activityIndicatorView.stopAnimating()
 
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
@@ -171,6 +177,8 @@ class InvoiceDateTVC: UITableViewController {
 
         // Save the context.
         saveContext()
+
+        HUD.hide()
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
@@ -185,6 +193,7 @@ class InvoiceDateTVC: UITableViewController {
 
         } else {
             print("Unable to login ...")
+            HUD.flash(.error, delay: 1.0)
         }
     }
 

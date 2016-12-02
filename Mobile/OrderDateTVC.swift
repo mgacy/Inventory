@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import Alamofire
 import SwiftyJSON
+import PKHUD
 
 class OrderDateTVC: UITableViewController {
 
@@ -123,7 +124,8 @@ class OrderDateTVC: UITableViewController {
                 return
             }
 
-            tableView.activityIndicatorView.startAnimating()
+            //tableView.activityIndicatorView.startAnimating()
+            HUD.show(.progress)
 
             // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
             // Delete existing orders of selected collection
@@ -165,7 +167,8 @@ class OrderDateTVC: UITableViewController {
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
-        tableView.activityIndicatorView.startAnimating()
+        //tableView.activityIndicatorView.startAnimating()
+        HUD.show(.progress)
 
         // Get new OrderCollection.
         APIManager.sharedInstance.getNewOrderCollection(
@@ -174,7 +177,8 @@ class OrderDateTVC: UITableViewController {
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
-        tableView.activityIndicatorView.startAnimating()
+        //tableView.activityIndicatorView.startAnimating()
+        HUD.show(.progress)
 
         deleteObjects(entityType: Item.self)
         deleteExistingOrderCollections()
@@ -185,8 +189,6 @@ class OrderDateTVC: UITableViewController {
     // MARK: - Completion Handlers
 
     func completedGetListOfOrderCollections(json: JSON?, error: Error?) -> Void {
-        tableView.activityIndicatorView.stopAnimating()
-
         guard let json = json else {
             print("PROBLEM"); return
         }
@@ -210,10 +212,12 @@ class OrderDateTVC: UITableViewController {
 
         // Save the context.
         saveContext()
+
+        //tableView.activityIndicatorView.stopAnimating()
+        HUD.hide()
     }
 
     func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
-        tableView.activityIndicatorView.stopAnimating()
 
         /*
         guard let selectedCollectionIndex = selectedCollectionIndex else {
@@ -244,12 +248,13 @@ class OrderDateTVC: UITableViewController {
         // Save the context.
         saveContext()
 
+        //tableView.activityIndicatorView.stopAnimating()
+        HUD.hide()
+
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
     func completedGetNewOrderCollection(json: JSON?, error: Error?) -> Void {
-        tableView.activityIndicatorView.stopAnimating()
-
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return
         }
@@ -258,6 +263,9 @@ class OrderDateTVC: UITableViewController {
 
         // Save the context.
         saveContext()
+
+        //tableView.activityIndicatorView.stopAnimating()
+        HUD.hide()
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
@@ -272,6 +280,7 @@ class OrderDateTVC: UITableViewController {
 
         } else {
             print("Unable to login ...")
+            HUD.flash(.error, delay: 1.0)
         }
     }
 

@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import Alamofire
 import SwiftyJSON
+import PKHUD
 
 class InventoryDateTVC: UITableViewController {
 
@@ -174,7 +175,9 @@ class InventoryDateTVC: UITableViewController {
 
         switch selection.uploaded {
         case true:
-            tableView.activityIndicatorView.startAnimating()
+            //self.pleaseWait()
+            //tableView.activityIndicatorView.startAnimating()
+            HUD.show(.progress)
 
             let remoteID = Int(selection.remoteID)
 
@@ -201,7 +204,9 @@ class InventoryDateTVC: UITableViewController {
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
-        tableView.activityIndicatorView.startAnimating()
+        //self.pleaseWait()
+        //tableView.activityIndicatorView.startAnimating()
+        HUD.show(.progress)
 
         // Get new Inventory.
         APIManager.sharedInstance.getNewInventory(
@@ -209,7 +214,9 @@ class InventoryDateTVC: UITableViewController {
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
-        tableView.activityIndicatorView.startAnimating()
+        //self.pleaseWait()
+        //tableView.activityIndicatorView.startAnimating()
+        HUD.show(.progress)
 
         // By leaving filter as nil, we will delete all Inventories
         deleteExistingInventories()
@@ -238,6 +245,9 @@ class InventoryDateTVC: UITableViewController {
 
         // Save the context.
         saveContext()
+
+        //tableView.activityIndicatorView.stopAnimating()
+        HUD.hide()
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
@@ -258,15 +268,20 @@ class InventoryDateTVC: UITableViewController {
         // Save the context.
         saveContext()
 
+        //tableView.activityIndicatorView.stopAnimating()
+        HUD.hide()
+
         performSegue(withIdentifier: ExistingItemSegue, sender: self)
     }
 
     func completedGetNewInventory(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            self.noticeError(error!.localizedDescription, autoClear: true); return
+            //self.noticeError(error!.localizedDescription, autoClear: true); return
+            HUD.flash(.error, delay: 1.0); return
         }
 
-        tableView.activityIndicatorView.stopAnimating()
+        //tableView.activityIndicatorView.stopAnimating()
+        HUD.hide()
 
         guard let json = json else {
             print("\(#function) FAILED : \(error)"); return

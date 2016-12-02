@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import SwiftyJSON
+import PKHUD
 
 class InventoryLocationTVC: UITableViewController {
 
@@ -71,6 +72,8 @@ class InventoryLocationTVC: UITableViewController {
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
         print("Uploading Inventory ...")
+        //self.pleaseWait()
+        HUD.show(.progress)
 
         guard let dict = self.inventory.serialize() else {
             print("\nPROBLEM - Unable to serialize Inventory")
@@ -78,29 +81,40 @@ class InventoryLocationTVC: UITableViewController {
             return
         }
         APIManager.sharedInstance.postInventory(inventory: dict, completion: self.completedUpload)
-
     }
 
     // MARK: - Completion handlers
 
     func completedUpload(json: JSON?, error: Error?) {
+        //self.clearAllNotice()
         guard error == nil else {
+            //self.noticeError("Error", autoClear: true)
+            //self.noticeError((error?.localizedDescription)!, autoClear: true)
+            HUD.flash(.error, delay: 1.0)
             return
         }
         guard let json = json else {
             print("Unable to get JSON")
+            //self.noticeError("Error", autoClear: true)
+            HUD.flash(.error, delay: 1.0)
             return
         }
         guard let remoteID = json["id"].int else {
             print("Unable to get remoteID of posted Inventory")
+            //self.noticeError("Error", autoClear: true)
+            HUD.flash(.error, delay: 1.0)
             return
         }
 
         inventory.uploaded = true
         inventory.remoteID = Int32(remoteID)
 
+        //self.noticeSuccess("Success!", autoClear: true)
+        HUD.flash(.success, delay: 1.0)
+
         // Pop view
         navigationController!.popViewController(animated: true)
+        //self.clearAllNotice()
     }
 
     // MARK: - Table view data source

@@ -6,6 +6,7 @@ def basic_pods
   pod 'Alamofire', '~> 4.2'
   pod 'SwiftyJSON'
   pod 'KeychainAccess'
+  pod 'PKHUD', '~> 4.0'
   # A
   # pod 'DATAStack', '~> 6'
   # pod 'DATASource', '~> 6'
