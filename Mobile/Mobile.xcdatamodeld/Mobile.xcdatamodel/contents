@@ -72,6 +72,7 @@
         <attribute name="discount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="quantity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="invoice" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Invoice" inverseName="items" inverseEntity="Invoice" syncable="YES"/>
         <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="invoiceItems" inverseEntity="Item" syncable="YES"/>
         <relationship name="unit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="invoiceItems" inverseEntity="Unit" syncable="YES"/>
@@ -164,7 +165,7 @@
         <element name="InventoryLocationItem" positionX="306" positionY="261" width="128" height="163"/>
         <element name="Invoice" positionX="-576" positionY="-81" width="128" height="30"/>
         <element name="InvoiceCollection" positionX="-558" positionY="-63" width="128" height="105"/>
-        <element name="InvoiceItem" positionX="-567" positionY="-72" width="128" height="150"/>
+        <element name="InvoiceItem" positionX="-567" positionY="-72" width="128" height="165"/>
         <element name="Item" positionX="-468" positionY="-234" width="128" height="255"/>
         <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="75"/>
         <element name="Order" positionX="-504" positionY="330" width="128" height="180"/>

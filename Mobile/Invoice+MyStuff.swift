@@ -10,7 +10,18 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+
+@objc public enum InvoiceStatus: Int16 {
+    case notReceived    = 0
+    case outOfStock     = 1
+    case received       = 2
+    case substitute     = 3
+}
+
+
 extension Invoice {
+
+    @NSManaged var ageType: InvoiceStatus
 
     // MARK: - Lifecycle
 
@@ -18,6 +29,7 @@ extension Invoice {
         self.init(context: context)
 
         // Properties
+
         if let remoteID = json["remote_id"].int {
             self.remoteID = Int32(remoteID)
         }
