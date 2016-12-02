@@ -27,32 +27,29 @@ class CoreDataImporter {
     func preloadData() {
 
         // Retrieve data from the source file
-        // let asset = NSDataAsset(name: "units", bundle: Bundle.main)
-        // if let path = Bundle.main.path(forResource: "assets/units", ofType: "json") {
-        if let path = Bundle.main.path(forResource: "units", ofType: "json") {
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .alwaysMapped)
-                let jsonArray = JSON(data: data)
-                if jsonArray != JSON.null {
-                    //print("jsonData:\(jsonArray)")
+        if let asset = NSDataAsset(name: "units", bundle: Bundle.main) {
 
-                    //let managedObjectContext = CoreDataStack.shared.viewContext
-                    let managedObjectContext = CoreDataStack.shared.backgroundContext
+            let data = asset.data
+            let jsonArray = JSON(data: data)
+            if jsonArray != JSON.null {
+                //print("jsonData:\(jsonArray)")
 
-                    for (_, unitJSON):(String, JSON) in jsonArray {
-                        //print("\(unitJSON)")
-                        let unit = Unit(context: managedObjectContext, json: unitJSON)
-                        print("\(unit)")
-                    }
+                let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                //let managedObjectContext = CoreDataStack.shared.viewContext
+                //let managedObjectContext = CoreDataStack.shared.backgroundContext
 
-                } else {
-                    print("Could not get json from file, make sure that file contains valid json.")
+                for (_, unitJSON):(String, JSON) in jsonArray {
+                    //print("\(unitJSON)")
+                    let unit = Unit(context: managedObjectContext, json: unitJSON)
+                    print("\(unit)")
                 }
-            } catch let error {
-                print(error.localizedDescription)
+
+            } else {
+                print("Could not get json from file, make sure that file contains valid json.")
             }
+
         } else {
-            print("Invalid filename/path.")
+            print("Invalid filename.")
         }
     }
 
