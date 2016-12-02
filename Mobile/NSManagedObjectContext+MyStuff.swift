@@ -23,11 +23,12 @@ extension NSManagedObjectContext {
             
             switch fetchResults.count {
             case 0:
+                //print("Found 0 matches for remoteID \(id)")
                 return nil
             case 1:
                 return fetchResults[0]
             default:
-                //print("Found multiple matches: \(searchResults)")
+                //print("Found multiple matches for remoteID \(id): \(searchResults)")
                 fatalError("Returned multiple objects, expected max 1")
             }
             
