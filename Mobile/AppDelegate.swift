@@ -17,7 +17,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+
+        // TODO - set up CoreDataStack
+        /*
+        // Check if we have already preloaded data
+        let defaults = UserDefaults.standard
+        let isPreloaded = defaults.bool(forKey: "isPreloaded")
+        if !isPreloaded {
+            print("Preloading data ...")
+            CoreDataImporter.shared.preloadData()
+            defaults.set(true, forKey: "isPreloaded")
+        }
+        */
         // TODO - get Items from server at this point
         
         return true
