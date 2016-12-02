@@ -185,13 +185,19 @@ class OrderDateTVC: UITableViewController {
     // MARK: - Completion Handlers
 
     func completedGetListOfOrderCollections(json: JSON?, error: Error?) -> Void {
+        guard error == nil else {
+            HUD.flash(.error, delay: 1.0); return
+        }
         guard let json = json else {
-            print("PROBLEM"); return
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
         }
         guard let dates = json["dates"].array else {
-            print("\nPROBLEM - Failed to get dates")
-            return
+            print("\(#function) FAILED : unable to get dates")
+            HUD.flash(.error, delay: 1.0); return
         }
+
+        HUD.hide()
 
         // FIX - this does not account for Collections that have been deleted from the server but
         // are still present in the local store
@@ -210,10 +216,13 @@ class OrderDateTVC: UITableViewController {
         saveContext()
 
         //tableView.activityIndicatorView.stopAnimating()
-        HUD.hide()
+        //HUD.hide()
     }
 
     func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
+        guard error == nil else {
+            HUD.flash(.error, delay: 1.0); return
+        }
 
         /*
         guard let selectedCollectionIndex = selectedCollectionIndex else {
@@ -231,11 +240,12 @@ class OrderDateTVC: UITableViewController {
         selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
         */
         guard let json = json else {
-            print("\(#function) FAILED : \(error)"); return
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
         }
         guard let selection = selectedCollection else {
-            print("\nPROBLEM - Still failed to get selected OrderCollection\n")
-            return
+            print("\(#function) FAILED : still unable to get selected OrderCollection\n")
+            HUD.flash(.error, delay: 1.0); return
         }
 
         // Update selected Inventory with full JSON from server.
