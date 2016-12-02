@@ -119,6 +119,25 @@ class InvoiceItemTVC: UITableViewController {
             // TODO - should I even both displaying quantity?
             cell.detailTextLabel?.text = "\(quantity)"
         }
+        /*
+        switch invoiceItem.status {
+        case InvoiceStatus.notReceived.rawValue:
+            print("a")
+            // cell.textLabel?.textColor = UIColor.lightGray
+        case InvoiceStatus.outOfStock.rawValue:
+            print("a")
+            // cell.textLabel?.textColor = UIColor.lightGray
+        case InvoiceStatus.received.rawValue:
+            print("a")
+            // cell.textLabel?.textColor = UIColor.lightGray
+        case InvoiceStatus.substitute.rawValue:
+            print("a")
+            // cell.textLabel?.textColor = UIColor.lightGray
+        default:
+            print("z")
+            // cell.textLabel?.textColor = UIColor.lightGray
+        }
+        */
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -130,12 +149,37 @@ class InvoiceItemTVC: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
+            self.isEditing = false
+            print("more button tapped")
+        }
+        more.backgroundColor = UIColor.lightGray
+
+        let notReceived = UITableViewRowAction(style: .normal, title: "Not Received ...") { action, index in
+            print("favorite button tapped")
+        }
+        notReceived.backgroundColor = ColorPalette.redColor
+
+        let received = UITableViewRowAction(style: .normal, title: "Received") { action, index in
+            self.isEditing = false
+            print("received button tapped")
+        }
+        received.backgroundColor = ColorPalette.navyColor
+
+        return [received, notReceived, more]
+    }
+
     // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-    
+     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
     // Override to support editing the table view.
-    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-    
+     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        // stuff
+    }
+
     // Override to support rearranging the table view.
     // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
 
