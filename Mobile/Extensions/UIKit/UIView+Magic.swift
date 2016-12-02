@@ -9,10 +9,8 @@
 
 import Foundation
 import UIKit
-/*
+
 fileprivate var ActivityIndicatorViewAssociativeKey = "ActivityIndicatorViewAssociativeKey"
-
-
 public extension UIView {
 
     var activityIndicatorView: UIActivityIndicatorView {
@@ -37,9 +35,17 @@ public extension UIView {
             setAssociatedObject(newValue, associativeKey:&ActivityIndicatorViewAssociativeKey, policy: .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    
+
+    func setupActivityIndicator(style: UIActivityIndicatorViewStyle, color: UIColor) {
+        activityIndicatorView.activityIndicatorViewStyle = style
+        activityIndicatorView.color = color
+    }
+
 }
-*/
+
+/*
+ 
+// NOTE - this version was causing problems with the indicator failing to be dismissed when .stopAnimating() was called
 
 fileprivate var ActivityIndicatorViewAssociativeKey = "ActivityIndicatorViewAssociativeKey"
 public extension UIView {
@@ -74,3 +80,4 @@ public extension UIView {
     }
 
 }
+*/
