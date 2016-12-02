@@ -55,12 +55,11 @@ class OrderDateTVC: UITableViewController {
         self.performFetch()
 
         // Login to server, get list of Items, and update store
-        _ = StartupManager(completionHandler: completedLogin)
+        //_ = StartupManager(completionHandler: completedLogin)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //self.performFetch()
         self.tableView.reloadData()
     }
 
@@ -152,10 +151,7 @@ class OrderDateTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         // Get the new view controller.
-        guard let controller = segue.destination as? OrderVendorTVC else {
-            print("\nPROBLEM - Unable to get destination controller\n")
-            return
-        }
+        guard let controller = segue.destination as? OrderVendorTVC else { return }
 
         // Pass selection to new view controller.
         if let selection = selectedCollection {
