@@ -804,6 +804,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bottleButton" destination="gJv-O0-NQF" id="5K0-dR-Rh8"/>
+                        <outlet property="caseButton" destination="xRx-du-mNh" id="TJi-5B-IuX"/>
                         <outlet property="caseSize" destination="ICH-iB-fZk" id="kC7-ze-Hkl"/>
                         <outlet property="itemName" destination="IhG-CO-DzN" id="kdw-6h-pro"/>
                         <outlet property="minOrder" destination="He8-0w-cSb" id="weM-4D-zos"/>

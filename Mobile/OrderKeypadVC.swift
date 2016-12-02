@@ -55,9 +55,14 @@ class OrderKeypadVC: UIViewController {
     @IBOutlet weak var caseSize: UILabel!
     @IBOutlet weak var order: UILabel!
     @IBOutlet weak var orderUnit: UILabel!
-    
+
+    // MARK: - Keypad Outlets
+
+    @IBOutlet weak var caseButton: OperationKeypadButton!
+    @IBOutlet weak var bottleButton: OperationKeypadButton!
+
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -75,9 +80,9 @@ class OrderKeypadVC: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     // MARK: - Keypad
-    
+
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
         print("Tapped '\(digit)'")
@@ -86,43 +91,43 @@ class OrderKeypadVC: UIViewController {
         
         update()
     }
-    
+
     @IBAction func clearTapped(_ sender: AnyObject) {
         print("Tapped 'clear'")
         keypad.popItem()
         
         update()
     }
-    
+
     @IBAction func decimalTapped(_ sender: AnyObject) {
         print("Tapped '.'")
         keypad.pushDecimal()
         
         update()
     }
-    
+
     // MARK: - Units
-    
+
     @IBAction func packTapped(_ sender: AnyObject) {
         guard let item = currentItem.item else { print("A1"); return  }
         guard let purchaseUnit = item.purchaseUnit else { print("B1"); return }
-        
+
         currentItem.orderUnit = purchaseUnit
         update()
     }
-    
+
     // TODO - rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
         guard let item = currentItem.item else { print("A2"); return  }
         print("Item: \(item)")
         guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
-        
+
         currentItem.orderUnit = purchaseSubUnit
         update()
     }
-    
+
     // MARK: - Item Navigation
-    
+
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
             currentIndex += 1
@@ -135,7 +140,7 @@ class OrderKeypadVC: UIViewController {
             navigationController!.popViewController(animated: true)
         }
     }
-    
+
     @IBAction func previousItemTapped(_ sender: AnyObject) {
         if currentIndex > 0 {
             currentIndex -= 1
@@ -148,13 +153,13 @@ class OrderKeypadVC: UIViewController {
             navigationController!.popViewController(animated: true)
         }
     }
-    
+
     // MARK: - C
-    
+
     func update(newItem: Bool = false) {
-        
+
         let output: keypadOutput
-        
+
         switch newItem {
         case true:
             // Update keypad with quantity of new currentItem
@@ -163,13 +168,13 @@ class OrderKeypadVC: UIViewController {
         case false:
             // Update model with output of keyapd
             output = keypad.outputB()
-            
+
             if let keypadResult = output.total {
                 currentItem.quantity = keypadResult as NSNumber?
             } else {
                 currentItem.quantity = nil
             }
-            
+
             // Save the context.
             let context = self.managedObjectContext!
             do {
@@ -181,10 +186,10 @@ class OrderKeypadVC: UIViewController {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-        
+
         updateDisplay(item: currentItem, keypadOutput: output)
     }
-    
+
     func updateDisplay(item: OrderItem, keypadOutput: keypadOutput) {
         guard let item = currentItem.item else {
             itemName.text = "Error (1)"; return
@@ -204,7 +209,7 @@ class OrderKeypadVC: UIViewController {
 
         order.text = keypadOutput.display
         orderUnit.text = currentItem.orderUnit?.abbreviation
-        
+
         switch keypadOutput.total {
         case nil:
             order.textColor = UIColor.lightGray
@@ -218,7 +223,7 @@ class OrderKeypadVC: UIViewController {
         }
         
     }
-    
+
     private func formDisplayLine(quantity: Double?, abbreviation: String) -> String {
         guard let numberFormatter = numberFormatter else { return "ERROR 3" }
         guard let quantity = quantity else { return "ERROR 4" }
