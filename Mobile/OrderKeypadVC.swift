@@ -109,20 +109,33 @@ class OrderKeypadVC: UIViewController {
     // MARK: - Units
 
     @IBAction func packTapped(_ sender: AnyObject) {
+        //print("currentItem: \(currentItem)")
         guard let item = currentItem.item else { print("A1"); return  }
+        //print(".item: \(item)")
         guard let purchaseUnit = item.purchaseUnit else { print("B1"); return }
 
         currentItem.orderUnit = purchaseUnit
+
+        // Update keypad buttons
+        caseButton.backgroundColor = ColorPalette.navyColor
+        bottleButton.backgroundColor = ColorPalette.secondaryColor
+
         update()
     }
 
     // TODO - rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
+        //print("currentItem: \(currentItem)")
         guard let item = currentItem.item else { print("A2"); return  }
-        print("Item: \(item)")
+        //print(".item: \(item)")
         guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
 
         currentItem.orderUnit = purchaseSubUnit
+
+        // Update keypad buttons
+        caseButton.backgroundColor = ColorPalette.secondaryColor
+        bottleButton.backgroundColor = ColorPalette.navyColor
+
         update()
     }
 
@@ -165,6 +178,10 @@ class OrderKeypadVC: UIViewController {
             // Update keypad with quantity of new currentItem
             keypad.updateNumber(currentItem.quantity as Double?)
             output = keypad.outputB()
+
+            // Update keypad buttons
+            updateKeypadButtons(item: currentItem)
+
         case false:
             // Update model with output of keyapd
             output = keypad.outputB()
@@ -188,6 +205,8 @@ class OrderKeypadVC: UIViewController {
         }
 
         updateDisplay(item: currentItem, keypadOutput: output)
+
+        //print("currentItem: \(currentItem)")
     }
 
     func updateDisplay(item: OrderItem, keypadOutput: keypadOutput) {
@@ -222,6 +241,34 @@ class OrderKeypadVC: UIViewController {
             orderUnit.textColor = UIColor.black
         }
         
+    }
+
+    func updateKeypadButtons(item: OrderItem) {
+        guard let orderUnit = currentItem.orderUnit else { print("a"); return }
+        guard let item = currentItem.item else { print("b"); return }
+        guard let purchaseUnit = item.purchaseUnit else { print("c"); return }
+
+        guard let purchaseSubUnit = item.purchaseSubUnit else {
+            print("d")
+
+            caseButton.backgroundColor = ColorPalette.navyColor
+            bottleButton.backgroundColor = ColorPalette.secondaryColor
+            bottleButton.isEnabled = false
+            return
+        }
+
+        bottleButton.isEnabled = true
+
+        if orderUnit == purchaseUnit {
+            caseButton.backgroundColor = ColorPalette.navyColor
+            bottleButton.backgroundColor = ColorPalette.secondaryColor
+        } else if orderUnit == purchaseSubUnit {
+            caseButton.backgroundColor = ColorPalette.secondaryColor
+            bottleButton.backgroundColor = ColorPalette.navyColor
+        } else {
+            caseButton.backgroundColor = UIColor.red
+            bottleButton.backgroundColor = UIColor.red
+        }
     }
 
     private func formDisplayLine(quantity: Double?, abbreviation: String) -> String {
