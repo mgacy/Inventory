@@ -65,6 +65,7 @@ class InventoryDateTVC: UITableViewController {
         self.performFetch()
 
         // Login to server, get list of Items, and update store
+        HUD.show(.progress)
         _ = StartupManager(completionHandler: completedLogin)
     }
 
