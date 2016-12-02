@@ -16,7 +16,12 @@ extension Vendor {
     
     convenience init(context: NSManagedObjectContext, json: JSON) {
         self.init(context: context)
-        
+        self.update(context: context, withJSON: json)
+    }
+    
+    func update(context: NSManagedObjectContext, withJSON json: JSON) {
+
+        // Properties
         if let remoteID = json["id"].int {
             self.remoteID = Int32(remoteID)
         }
@@ -26,5 +31,5 @@ extension Vendor {
 
         // TODO - create separate VendorRep object
     }
-    
+
 }

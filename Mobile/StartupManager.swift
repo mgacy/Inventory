@@ -43,9 +43,9 @@ class StartupManager {
         //print("\nCompleted login - succeeded: \(succeeded)")
         if succeeded {
 
-            // Get list of Items from server
-            print("\nFetching Items from server ...")
-            APIManager.sharedInstance.getItems(storeID: self.storeID, completion: completedGetItems)
+            // Get list of Vendors from server
+            print("\nFetching Vendors from server ...")
+            APIManager.sharedInstance.getVendors(storeID: self.storeID, completion: completedGetVendors)
             
         } else {
             print("Unable to login ...")
@@ -113,10 +113,37 @@ class StartupManager {
         
         self.completionHandler(true)
     }
-    
+
     // func completedGetUnits(success: Bool, json: [JSON]) -> Void { }
 
-    // func completedGetVendors(success: Bool, json: [JSON]) -> Void { }
+    func completedGetVendors(json: JSON?, error: Error?) -> Void {
+        guard error == nil else {
+            print("\(#function) FAILED : \(error)"); return
+        }
+        guard let json = json else {
+            print("\(#function) FAILED : unable to get Items"); return
+        }
+
+        // Create new / update existing Vendors
+        for (_, vendorJSON):(String, JSON) in json {
+            guard let vendorID = vendorJSON["id"].int else {
+                break
+            }
+
+            // Find + update / create Vendors
+            if let vendor = managedObjectContext.fetchWithRemoteID(Vendor.self, withID: vendorID) {
+                vendor.update(context: managedObjectContext, withJSON: vendorJSON)
+            } else {
+                _ = Vendor(context: managedObjectContext, json: vendorJSON)
+            }
+        }
+
+        print("Finished with Vendors")
+
+        // Get list of Items from server
+        print("\nFetching Items from server ...")
+        APIManager.sharedInstance.getItems(storeID: self.storeID, completion: completedGetItems)
+    }
 
     // MARK: - Sync
     
