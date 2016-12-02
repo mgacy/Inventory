@@ -17,6 +17,8 @@
 		C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */; };
 		C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */; };
 		C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */; };
+		C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F741DF0D61E00166A08 /* CoreDataStack.swift */; };
+		C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */; };
 		C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */; };
 		C92D75BF1DC7A7E500AA1A02 /* InvoiceItemTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BE1DC7A7E500AA1A02 /* InvoiceItemTVC.swift */; };
 		C92D75C11DC7A81400AA1A02 /* InvoiceKeypadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C01DC7A81400AA1A02 /* InvoiceKeypadVC.swift */; };
@@ -83,6 +85,8 @@
 		C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationItem+MyStuff.swift"; sourceTree = "<group>"; };
 		C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocation+MyStuff.swift"; sourceTree = "<group>"; };
 		C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationCategory+MyStuff.swift"; sourceTree = "<group>"; };
+		C9124F741DF0D61E00166A08 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataImporter.swift; sourceTree = "<group>"; };
 		C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceVendorTVC.swift; sourceTree = "<group>"; };
 		C92D75BE1DC7A7E500AA1A02 /* InvoiceItemTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemTVC.swift; sourceTree = "<group>"; };
 		C92D75C01DC7A81400AA1A02 /* InvoiceKeypadVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadVC.swift; sourceTree = "<group>"; };
@@ -310,6 +314,8 @@
 			children = (
 				C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */,
 				C9F515E21DB7EF98004C10E6 /* ViewController.swift */,
+				C9124F741DF0D61E00166A08 /* CoreDataStack.swift */,
+				C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */,
 				C9BA91271DEB957400DA2C6C /* Extensions */,
 				C98A4FB61DCB034D002BB076 /* Model Extensions */,
 				C9F516101DB7F144004C10E6 /* Networking */,
@@ -628,7 +634,9 @@
 				C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */,
 				C9F5160D1DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift in Sources */,
 				C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */,
+				C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */,
 				C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */,
+				C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */,
 				C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */,
 				C96870E61DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift in Sources */,
 				C902FF3E1DBD8B3F0063CD02 /* NumberKeypadButton.swift in Sources */,
