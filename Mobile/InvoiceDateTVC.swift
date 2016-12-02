@@ -55,14 +55,15 @@ class InvoiceDateTVC: UITableViewController {
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
 
+        /*
         // 1. Check for existence of email and login. (?)
         if AuthorizationHandler.sharedInstance.userExists {
             print("User exists ...")
 
-            // Delete any uploaded Inventories before fetching updated list.
+            // Delete any uploaded Invoices before fetching updated list.
             //deleteExistingInvoices(NSPredicate(format: "uploaded == true"))
 
-            // Login to server, then get list of Inventories from server if successful.
+            // Login to server, then get list of Invoices from server if successful.
             APIManager.sharedInstance.login(completionHandler: self.completedLogin)
         } else {
             print("User does not exist")
@@ -70,7 +71,10 @@ class InvoiceDateTVC: UITableViewController {
         }
 
         // Login to server, get list of Items, and update store
+        */
 
+        HUD.show(.progress)
+        completedLogin(true)
     }
 
     override func viewDidAppear(_ animated: Bool) {

@@ -56,6 +56,9 @@ class OrderDateTVC: UITableViewController {
 
         // Login to server, get list of Items, and update store
         //_ = StartupManager(completionHandler: completedLogin)
+
+        HUD.show(.progress)
+        completedLogin(true)
     }
 
     override func viewDidAppear(_ animated: Bool) {
