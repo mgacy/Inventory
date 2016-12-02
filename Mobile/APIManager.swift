@@ -18,6 +18,27 @@ class APIManager {
     private let authHandler: AuthorizationHandler
     private let sessionManager: SessionManager
 
+    // typealias CompletionHandlerType = (JSON?, Error?) -> Void
+    // typealias CompletionHandlerType = (Result) -> Void
+    /*
+    enum Result {
+        case success(JSON?)
+        case failure(MyError)
+    }
+
+    enum MyError: Error {
+        case AuthenticationFailure
+    }
+
+    enum BackendError: Error {
+        case network(error: Error) // Capture any underlying Error from the URLSession API
+        case dataSerialization(error: Error)
+        case jsonSerialization(error: Error)
+        case xmlSerialization(error: Error)
+        case objectSerialization(reason: String)
+    }
+     */
+
     // MARK: Lifecycle
 
     init() {
