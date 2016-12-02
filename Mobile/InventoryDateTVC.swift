@@ -228,12 +228,15 @@ class InventoryDateTVC: UITableViewController {
 
     func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            self.noticeError(error!.localizedDescription, autoClear: true); return
+            //self.noticeError(error!.localizedDescription, autoClear: true); return
+            HUD.flash(.error, delay: 1.0); return
+        }
+        guard let json = json else {
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
         }
 
-        guard let json = json else {
-            print("\(#function) FAILED : \(error)"); return
-        }
+        HUD.hide()
 
         for (_, item) in json {
             guard let inventoryID = item["id"].int else { print("a"); break }
@@ -247,19 +250,21 @@ class InventoryDateTVC: UITableViewController {
         saveContext()
 
         //tableView.activityIndicatorView.stopAnimating()
-        HUD.hide()
+        //HUD.hide()
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            self.noticeError(error!.localizedDescription, autoClear: true); return
+            //self.noticeError(error!.localizedDescription, autoClear: true); return
+            HUD.flash(.error, delay: 1.0); return
         }
-
         guard let json = json else {
-            print("\(#function) FAILED : \(error)"); return
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
         }
         guard let selection = selectedInventory else {
-            print("\(#function) FAILED : Still failed to get selected Inventory\n"); return
+            print("\(#function) FAILED : Still failed to get selected Inventory\n")
+            HUD.flash(.error, delay: 1.0); return
         }
 
         // Update selected Inventory with full JSON from server.
@@ -279,13 +284,13 @@ class InventoryDateTVC: UITableViewController {
             //self.noticeError(error!.localizedDescription, autoClear: true); return
             HUD.flash(.error, delay: 1.0); return
         }
+        guard let json = json else {
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
+        }
 
         //tableView.activityIndicatorView.stopAnimating()
         HUD.hide()
-
-        guard let json = json else {
-            print("\(#function) FAILED : \(error)"); return
-        }
 
         selectedInventory = Inventory(context: self.managedObjectContext!, json: json, uploaded: false)
 
@@ -305,7 +310,8 @@ class InventoryDateTVC: UITableViewController {
 
         } else {
             print("Unable to login ...")
-            self.noticeError("Error", autoClear: true)
+            //self.noticeError("Error", autoClear: true)
+            HUD.flash(.error, delay: 1.0); return
         }
     }
 
