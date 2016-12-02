@@ -83,10 +83,12 @@ class OrderItemTVC: UITableViewController {
         // TODO - handle different orderMethod
         // TODO - prevent attempt to send empty order
 
+        // TODO - Enable usage of vendor.rep.phoneNumber
         //guard let phoneNumber = parentObject.vendor.rep.phoneNumber else { return }
-        let phoneNumber = "1-800-867-5309"
+        //let phoneNumber = "1-800-867-5309"
+        let phoneNumber = "602-980-4718"
         guard let message = parentObject.getOrderMessage() else { return }
-        print("\nOrder message: \(message)")
+        //print("\nOrder message: \(message)")
 
         // Make sure the device can send text messages
         if (messageComposer.canSendText()) {
