@@ -44,8 +44,8 @@ class StartupManager {
         if succeeded {
 
             // Get list of Items from server
-            // print("\nFetching Items from server ...")
-            APIManager.sharedInstance.getItems(storeID: self.storeID, completionHandler: completedGetItems)
+            print("\nFetching Items from server ...")
+            APIManager.sharedInstance.getItems(storeID: self.storeID, completion: completedGetItems)
             
         } else {
             print("Unable to login ...")
@@ -54,14 +54,14 @@ class StartupManager {
 
     // MARK: - Primary Items
     
-    func completedGetItems(success: Bool, json: JSON?) -> Void {
+    func completedGetItems(json: JSON?, error: Error?) -> Void {
+        guard error == nil else {
+            print("\(#function) FAILED : \(error)"); return
+        }
         guard let json = json else {
-            print("\nPROBLEM - Unable to get Items"); return
+            print("\(#function) FAILED : unable to get Items"); return
         }
-        if success == false {
-            print("\nPROBLEM - Unable to get Items"); return
-        }
-        
+
         /*
         
         // Get set of ids of response

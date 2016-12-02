@@ -36,17 +36,17 @@ class APIManager {
 
     // MARK: - API Calls - General
 
-    func getItems(storeID: Int, completionHandler completion: @escaping (Bool, JSON?) -> Void) {
+    func getItems(storeID: Int, completion: @escaping (JSON?, Error?) -> Void) {
         sessionManager.request(Router.getItems(storeID: storeID))
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
                     // print("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
-                    completion(true, json)
+                    completion(json, nil)
                 case .failure(let error):
                     debugPrint("\(#function) FAILED : \(error)")
-                    completion(false, nil)
+                    completion(nil, error)
                 }
         }
     }
