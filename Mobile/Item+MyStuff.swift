@@ -11,7 +11,7 @@ import CoreData
 import SwiftyJSON
 
 extension Item {
-    
+
     // MARK: - Lifecycle
 
     convenience init(context: NSManagedObjectContext, json: JSON) {
@@ -20,7 +20,7 @@ extension Item {
     }
 
     func update(context: NSManagedObjectContext, withJSON json: JSON) {
-        
+
         // Properties
         if let remoteID = json["id"].int {
             self.remoteID = Int32(remoteID)
@@ -44,7 +44,7 @@ extension Item {
         // shelfLife
         // sku
         // vendorItemID
-        
+
         // Relationships
         // if let categoryID = json["category"]["id"].int { }
         if let vendorID = json["vendor"]["id"].int {
