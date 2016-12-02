@@ -78,9 +78,33 @@ class AuthorizationHandler: RequestAdapter {
     }
     
     // MARK: - RequestRetrier
-    
-    // public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) { }
-    
+    /*
+    func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
+        lock.lock() ; defer { lock.unlock() }
+
+        if let response = request.task.response as? HTTPURLResponse, response.statusCode == 401 {
+            requestsToRetry.append(completion)
+
+            if !isRefreshing {
+                refreshTokens { [weak self] succeeded, accessToken, refreshToken in
+                    guard let strongSelf = self else { return }
+
+                    strongSelf.lock.lock() ; defer { strongSelf.lock.unlock() }
+
+                    if let accessToken = accessToken, let refreshToken = refreshToken {
+                        strongSelf.accessToken = accessToken
+                        strongSelf.refreshToken = refreshToken
+                    }
+
+                    strongSelf.requestsToRetry.forEach { $0(succeeded, 0.0) }
+                    strongSelf.requestsToRetry.removeAll()
+                }
+            }
+        } else {
+            completion(false, 0.0)
+        }
+    }
+    */
     // MARK: - Private - Refresh Tokens
     
     // private func refreshTokens(completion: @escaping RefreshCompletion) { }
