@@ -196,8 +196,7 @@ class InventoryKeypadVC: UIViewController {
 
     // func updateDisplay(item: InventoryLocationItem, history: String, total: Double?, display: String) {}
     func updateDisplay(item: InventoryLocationItem, keypadOutput: keypadOutput) {
-        // NOTE - we pass item in anticipation of item.pack and item.unit
-        
+
         // Item.quantity
         itemValue.text = keypadOutput.display
         if keypadOutput.total != nil {
@@ -209,19 +208,18 @@ class InventoryKeypadVC: UIViewController {
         itemHistory.text = keypadOutput.history
         
         // Item.name
-        guard let item = currentItem.item else {
-            itemName.text = "Error (1)"
-            return
+        guard let inventoryItem = currentItem.item else {
+            itemName.text = "Error (1)"; return
         }
-        guard let name = item.name else {
-            itemName.text = "Error (2)"
-            return
+        guard let name = inventoryItem.name else {
+            itemName.text = "Error (2)"; return
         }
         itemName.text = name
         
         // Item.pack
-        itemPack.text = "\(item.item?.packSize ?? 0)"
-        
+        guard let item = inventoryItem.item else { return }
+        itemPack.text = item.packDisplay
+
         // Item.unit
         itemUnit.text = "\(item.item?.subSize ?? 0) \(item.item?.subUnit?.abbreviation ?? "")"
     }

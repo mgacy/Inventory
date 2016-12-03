@@ -218,7 +218,7 @@ class OrderKeypadVC: UIViewController {
         }
         itemName.text = name
 
-        caseSize.text = "\(item.packSize) x \(item.subSize) \(item.subUnit?.abbreviation ?? " ")"
+        caseSize.text = item.packDisplay
         par.text = formDisplayLine(
             quantity: currentItem.par, abbreviation: currentItem.parUnit?.abbreviation ?? " ")
         onHand.text = formDisplayLine(

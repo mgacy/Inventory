@@ -60,7 +60,6 @@ extension Item {
                     newVendor.name = vendorName
                 }
             }
-
         }
 
         if let inventoryUnitID = json["inventory_unit"]["id"].int {
@@ -83,5 +82,13 @@ extension Item {
     }
 
     // MARK: - Serialization
+
+}
+
+extension Item {
+
+    var packDisplay: String {
+        return "\(self.packSize) x \(self.subSize) \(self.subUnit?.abbreviation ?? " ")"
+    }
 
 }
