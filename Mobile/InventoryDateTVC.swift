@@ -67,6 +67,8 @@ class InventoryDateTVC: UITableViewController {
         self.performFetch()
 
         // Login to server, get list of Items, and update store
+        HUD.dimsBackground = false
+        HUD.allowsInteraction = false
         HUD.show(.progress)
         _ = StartupManager(completionHandler: completedLogin)
     }
