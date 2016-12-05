@@ -99,12 +99,20 @@ class InventoryLocationTVC: UITableViewController {
             HUD.flash(.error, delay: 1.0)
             return
         }
+
+        // TODO - remove hard-coded remoteID
+        let remoteID = 19
+
+        // TODO - Enable
+        // The following is disabled for the purpose of demos
+        /*
         guard let remoteID = json["id"].int else {
             print("Unable to get remoteID of posted Inventory")
             //self.noticeError("Error", autoClear: true)
             HUD.flash(.error, delay: 1.0)
             return
         }
+         */
 
         inventory.uploaded = true
         inventory.remoteID = Int32(remoteID)
