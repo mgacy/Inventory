@@ -221,7 +221,7 @@ class InventoryKeypadVC: UIViewController {
         itemPack.text = item.packDisplay
 
         // Item.unit
-        itemUnit.text = "\(item.item?.subSize ?? 0) \(item.item?.subUnit?.abbreviation ?? "")"
+        itemUnit.text = "\(item.inventoryUnit?.abbreviation ?? "")"
     }
     
     /*
