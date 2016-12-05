@@ -49,7 +49,7 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         
         switch result.rawValue {
-        case 0:  // cancelled
+        case MessageComposeResult.cancelled.rawValue:  // cancelled
             print("Message was cancelled")
             controller.dismiss(animated: true, completion: nil)
             
@@ -57,7 +57,7 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
                 // TODO - change to false
                 completionHandler(true)
             }
-        case 1: // sent
+        case MessageComposeResult.sent.rawValue: // sent
             print("Message was sent")
             controller.dismiss(animated: true, completion: nil)
             
@@ -65,7 +65,7 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
                 completionHandler(true)
             }
             
-        case 2: // failed
+        case MessageComposeResult.failed.rawValue: // failed
             print("Message failed")
             controller.dismiss(animated: true, completion: nil)
             
