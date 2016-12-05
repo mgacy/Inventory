@@ -72,6 +72,7 @@ class OrderItemTVC: UITableViewController {
 
         // Prevent placing the order twice
         if parentObject.uploaded {
+            HUD.flash(.label("Order already placed"), delay: 2.0)
             return
         }
 
@@ -85,7 +86,6 @@ class OrderItemTVC: UITableViewController {
 
         // TODO - Enable usage of vendor.rep.phoneNumber
         //guard let phoneNumber = parentObject.vendor.rep.phoneNumber else { return }
-        //let phoneNumber = "1-800-867-5309"
         let phoneNumber = "602-980-4718"
         guard let message = parentObject.getOrderMessage() else { return }
         //print("\nOrder message: \(message)")
