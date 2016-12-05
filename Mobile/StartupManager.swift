@@ -53,7 +53,7 @@ class StartupManager {
     }
 
     // MARK: - Primary Items
-    
+
     func completedGetItems(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
             print("\(#function) FAILED : \(error)"); return
@@ -62,56 +62,29 @@ class StartupManager {
             print("\(#function) FAILED : unable to get Items"); return
         }
 
-        /*
-        
-        // Get set of ids of response
-        let responseIDs = Set(json.arrayValue.map({ $0["id"].intValue }))
-        
-        // Get set of ids of Items (if they exist)
-        let storeIDs: Set<Int>
-        let request: NSFetchRequest<NSFetchRequestResult> = Item.fetchRequest()
-        request.propertiesToFetch = ["remoteID"]
-        do {
-            let searchResults = try managedObjectContext.fetch(request)
+        // Set up fetch request
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Item.fetchRequest()
 
-            // Create set of remoteIDs
-            storeIDs = Set(searchResults.map { Int(($0 as! Item).remoteID) })
+        // Relationships we'll touch:
+        fetchRequest.relationshipKeyPathsForPrefetching = [
+            "inventoryUnit", "purchaseSubUnit", "purchaseUnit",
+            "subUnit", "vendor"
+        ]
+
+        // Relationships we won't:
+        // inventoryItems, invoiceItems, orderItems
+
+        do {
+            let searchResults = try managedObjectContext.fetch(fetchRequest)
+            syncItems(searchResults: searchResults as! [Item], json: json)
 
         } catch {
             print("Error with request: \(error)")
             return
         }
-        
 
-        // Determine new / deleted items
-        let deletedItems = storeIDs.subtracting(responseIDs)
-        let newItems = responseIDs.subtracting(storeIDs)
-        
-        print("Deleted items: \(deletedItems)")
-        print("New items: \(newItems)")
- 
-        // TODO - delete deletedItems
-        // 1. perform fetchRequest where remoteID in deletedItems
-        // 2. perform batchDelete?
-         */
- 
-        // Create new / update existing Items
-        for (_, itemJSON):(String, JSON) in json {
-            guard let itemID = itemJSON["id"].int else {
-                break
-            }
-            
-            // Find + update / create Items
-            if let item = managedObjectContext.fetchWithRemoteID(Item.self, withID: itemID) {
-                item.update(context: managedObjectContext, withJSON: itemJSON)
-            } else {
-                _ = Item(context: managedObjectContext, json: itemJSON)
-            }
-        }
-        
-        print("Finished with Items")
-        
-        self.completionHandler(true)
+        //print("Finished syncing Items")
+        //self.completionHandler(true)
     }
 
     // func completedGetUnits(success: Bool, json: [JSON]) -> Void { }
@@ -146,21 +119,84 @@ class StartupManager {
     }
 
     // MARK: - Sync
-    
-    func syncItems(json: JSON) {
-        
+
+    func syncItems(searchResults: [Item], json: JSON) {
+
+        // Create dict from array of Items returned from fetch request
+        let dictionary = searchResults.toDictionary { $0.remoteID }
+
+        for (_, itemJSON):(String, JSON) in json {
+            guard let itemID = itemJSON["id"].int else {
+                break
+            }
+            let id = Int32(itemID)
+
+            // Find + update / create Items
+            if let existingItem = dictionary[id] {
+                //print("UPDATE existing item \(existingItem)")
+                existingItem.update(context: managedObjectContext, withJSON: itemJSON)
+
+            } else {
+                //print("CREATE new item \(itemJSON)")
+                _ = Item(context: managedObjectContext, json: itemJSON)
+            }
+        }
+
+        // TODO - delete Items that were deleted from server
+        /*
         // Get set of ids of response
-    
-        // Get set of ids of Items (if they exist)
-        let request: NSFetchRequest<Item> = Item.fetchRequest()
-        request.propertiesToFetch = ["remoteID"]
-        // returnsDistinctResults
-        
-        // Specify we want dictionaries to be returned
-        // request.resultType = .dictionaryResultType
-    
+        let responseIDs = Set(json.arrayValue.map({ Int32($0["id"].intValue) }))
+        let storeIDs = Set(dictionary.keys)
+
+        // Determine new / deleted items
+        let deletedItems = storeIDs.subtracting(responseIDs)
+        let newItems = responseIDs.subtracting(storeIDs)
+
+        print("Deleted items: \(deletedItems)")
+        print("New items: \(newItems)")
+
+        // TODO - delete deletedItems
+        // 1. perform fetchRequest where remoteID in deletedItems
+        // 2. perform batchDelete?
+        */
+
+        print("Finished syncing Items")
+        self.completionHandler(true)
     }
-    
+
+    /*
+    func syncVendors(searchResults: [Vendor], json: JSON) {
+
+        // Create dict from array of Vendors returned from fetch request
+        let dictionary = searchResults.toDictionary { $0.remoteID }
+
+        for (_, vendorJSON):(String, JSON) in json {
+            guard let vendorID = vendorJSON["id"].int else {
+                break
+            }
+            let id = Int32(vendorID)
+
+            // Find + update / create Vendors
+            if let existingVendor = dictionary[id] {
+                //print("UPDATE existing Vendor \(existingVendor)")
+                existingVendor.update(context: managedObjectContext, withJSON: vendorJSON)
+
+            } else {
+                //print("CREATE new Vendor \(vendorJSON)")
+                _ = Vendor(context: managedObjectContext, json: vendorJSON)
+            }
+        }
+
+        // TODO - delete Vendors that were deleted from server
+
+        print("Finished with Vendors")
+
+        // Get list of Items from server
+        print("\nFetching Items from server ...")
+        APIManager.sharedInstance.getItems(storeID: self.storeID, completion: completedGetItems)
+    }
+    */
+
     // MARK: - Completion
     
     func completedStartup(_ succeeded: Bool) {
