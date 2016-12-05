@@ -63,16 +63,24 @@ extension Item {
         }
 
         if let inventoryUnitID = json["inventory_unit"]["id"].int {
-            self.inventoryUnit = context.fetchWithRemoteID(Unit.self, withID: inventoryUnitID)
+            if self.inventoryUnit?.remoteID != Int32(inventoryUnitID) {
+                self.inventoryUnit = context.fetchWithRemoteID(Unit.self, withID: inventoryUnitID)
+            }
         }
         if let purchaseUnitID = json["purchase_unit"]["id"].int {
-            self.purchaseUnit = context.fetchWithRemoteID(Unit.self, withID: purchaseUnitID)
+            if self.purchaseUnit?.remoteID != Int32(purchaseUnitID) {
+                self.purchaseUnit = context.fetchWithRemoteID(Unit.self, withID: purchaseUnitID)
+            }
         }
         if let purchaseSubUnitID = json["purchase_sub_unit"]["id"].int {
-            self.purchaseSubUnit = context.fetchWithRemoteID(Unit.self, withID: purchaseSubUnitID)
+            if self.purchaseSubUnit?.remoteID != Int32(purchaseSubUnitID) {
+                self.purchaseSubUnit = context.fetchWithRemoteID(Unit.self, withID: purchaseSubUnitID)
+            }
         }
         if let subUnitID = json["sub_unit"]["id"].int {
-            self.subUnit = context.fetchWithRemoteID(Unit.self, withID: subUnitID)
+            if self.subUnit?.remoteID != Int32(subUnitID) {
+                self.subUnit = context.fetchWithRemoteID(Unit.self, withID: subUnitID)
+            }
         }
 
         // TODO - implement:
