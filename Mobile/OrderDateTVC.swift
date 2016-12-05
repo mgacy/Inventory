@@ -166,6 +166,9 @@ class OrderDateTVC: UITableViewController {
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
+
+        // TODO - check if there is already an Order for the current date and of the current type
+
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
 

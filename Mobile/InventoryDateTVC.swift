@@ -46,6 +46,8 @@ class InventoryDateTVC: UITableViewController {
     var storeID = 1
     // let inventoryTypeID = 1
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -205,6 +207,9 @@ class InventoryDateTVC: UITableViewController {
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
+
+        // TODO - check if there is already an Inventory for the current date and of the current type
+
         //self.pleaseWait()
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
