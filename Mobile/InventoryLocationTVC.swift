@@ -101,7 +101,7 @@ class InventoryLocationTVC: UITableViewController {
         }
 
         // TODO - remove hard-coded remoteID
-        let remoteID = 19
+        let remoteID = 0
 
         // TODO - Enable
         // The following is disabled for the purpose of demos

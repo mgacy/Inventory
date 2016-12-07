@@ -184,7 +184,13 @@ class InventoryDateTVC: UITableViewController {
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
 
-            let remoteID = Int(selection.remoteID)
+            // TODO - enable
+            // let remoteID = Int(selection.remoteID)
+            // TODO - remove; this is a hack for current demo, where we fake uploading an inventory
+            var remoteID = Int(selection.remoteID)
+            if remoteID == 0 {
+                remoteID = 19
+            }
 
             // TODO - ideally, we would want to deleteInventoryItems *after* fetching data from server
             // Delete existing InventoryItems of selected Inventory
