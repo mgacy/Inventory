@@ -16,6 +16,7 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
     
     // TODO - this really how I want to do this, or should I just move this into the controller?
     var completionHandler: ((_ succeeded: Bool) -> Void?)? = nil
+    //var completionHandler: ((_ result: MessageComposeResult) -> Void?)? = nil
     
     /*
     init(completionHandler: @escaping (Bool) -> Void?) {
