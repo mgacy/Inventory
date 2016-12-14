@@ -90,7 +90,7 @@
         <relationship name="purchaseSubUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemPurchaseSubUnits" inverseEntity="Unit" syncable="YES"/>
         <relationship name="purchaseUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemPurchaseUnits" inverseEntity="Unit" syncable="YES"/>
         <relationship name="store" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="items" inverseEntity="Store" syncable="YES"/>
-        <relationship name="subUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemSubUnit" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="subUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemSubUnits" inverseEntity="Unit" syncable="YES"/>
         <relationship name="vendor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="items" inverseEntity="Vendor" syncable="YES"/>
     </entity>
     <entity name="ItemCategory" representedClassName="ItemCategory" syncable="YES" codeGenerationType="class">
@@ -144,7 +144,7 @@
         <relationship name="itemParUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="parUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="itemPurchaseSubUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="purchaseSubUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="itemPurchaseUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="purchaseUnit" inverseEntity="Item" syncable="YES"/>
-        <relationship name="itemSubUnit" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="subUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemSubUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="subUnit" inverseEntity="Item" syncable="YES"/>
         <relationship name="locationItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryLocationItem" inverseName="unit" inverseEntity="InventoryLocationItem" syncable="YES"/>
         <relationship name="orderItemMinOrderUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="minOrderUnit" inverseEntity="OrderItem" syncable="YES"/>
         <relationship name="orderItemOrderUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="orderUnit" inverseEntity="OrderItem" syncable="YES"/>
