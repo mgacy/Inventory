@@ -28,7 +28,7 @@ extension NSManagedObjectContext {
             case 1:
                 return fetchResults[0]
             default:
-                //print("Found multiple matches for remoteID \(id): \(searchResults)")
+                print("\(#function) FAILED: found multiple matches for remoteID \(id): \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
             }
             

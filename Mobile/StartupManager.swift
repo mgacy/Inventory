@@ -12,13 +12,13 @@ import Alamofire
 import SwiftyJSON
 
 class StartupManager {
-    
-    //static let sharedInstance = StartupManager()
-    
+
+    // MARK: - Properties
+
     private var managedObjectContext: NSManagedObjectContext
     private let completionHandler: ((Bool) -> Void)
     private let storeID: Int = 1
-    
+
     // MARK: - Lifecycle
 
     // We will (1) try to log in to server, (2) call some endpoints, (3) call completionHandler

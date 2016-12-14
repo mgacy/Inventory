@@ -184,9 +184,10 @@ class InventoryDateTVC: UITableViewController {
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
 
-            // TODO - enable
+            // TODO: enable
             // let remoteID = Int(selection.remoteID)
-            // TODO - remove; this is a hack for current demo, where we fake uploading an inventory
+
+            // TODO: remove; this is a hack for current demo, where we fake uploading an inventory
             var remoteID = Int(selection.remoteID)
             if remoteID == 0 {
                 remoteID = 19

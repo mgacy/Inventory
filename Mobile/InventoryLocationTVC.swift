@@ -100,11 +100,10 @@ class InventoryLocationTVC: UITableViewController {
             return
         }
 
-        // TODO - remove hard-coded remoteID
+        // TODO: remove hard-coded remoteID
         let remoteID = 0
 
-        // TODO - Enable
-        // The following is disabled for the purpose of demos
+        // TODO: enable the following, which is disabled for the purpose of demos
         /*
         guard let remoteID = json["id"].int else {
             print("Unable to get remoteID of posted Inventory")
