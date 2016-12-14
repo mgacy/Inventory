@@ -190,7 +190,11 @@ class InventoryDateTVC: UITableViewController {
             // TODO: remove; this is a hack for current demo, where we fake uploading an inventory
             var remoteID = Int(selection.remoteID)
             if remoteID == 0 {
-                remoteID = 19
+                if let changedID = changeSelectionForDemo(selection: selection) {
+                    remoteID = changedID
+                } else {
+                    print("There was a problem with changeSelectionForDemo")
+                }
             }
 
             // TODO - ideally, we would want to deleteInventoryItems *after* fetching data from server
@@ -536,6 +540,37 @@ extension InventoryDateTVC: NSFetchedResultsControllerDelegate {
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
+    }
+
+}
+
+// MARK: - For Demo
+extension InventoryDateTVC {
+
+    func changeSelectionForDemo(selection: Inventory, defaultRemoteID: Int = 19) -> Int? {
+        guard Int(selection.remoteID) == 0 else { return nil }
+        guard let managedObjectContext = managedObjectContext else { return nil }
+
+        print("Intercepting selection for the purpose of demo ...")
+
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Inventory.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "remoteID == \(Int32(defaultRemoteID))")
+        do {
+            let fetchResults = try managedObjectContext.fetch(fetchRequest)
+            switch fetchResults.count {
+            case 0:
+                print("\(#function) FAILED: unable to get Inventory (\(defaultRemoteID))")
+                return nil
+            default:
+                selectedInventory = fetchResults[0] as? Inventory
+                print("Changed selection for demo")
+                return defaultRemoteID
+            }
+
+        } catch {
+            print("\(#function) FAILED: error with request: \(error)")
+            return nil
+        }
     }
 
 }
