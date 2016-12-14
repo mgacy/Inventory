@@ -72,7 +72,13 @@ class OrderItemTVC: UITableViewController {
 
         // Prevent placing the order twice
         if parentObject.uploaded {
-            HUD.flash(.label("Order already placed"), delay: 2.0)
+            //HUD.flash(.label("Order already placed"), delay: 2.0)
+
+            // Alt, more configurable call
+            PKHUD.sharedHUD.show()
+            PKHUD.sharedHUD.contentView = PKHUDErrorView(title: "Error", subtitle: "Order already placed")
+            PKHUD.sharedHUD.hide(afterDelay: 2.0)
+
             return
         }
 
