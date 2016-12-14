@@ -447,7 +447,7 @@
 				TargetAttributes = {
 					C9F515DC1DB7EF98004C10E6 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = NYT8K4678F;
+						DevelopmentTeam = 2PMX4WLK83;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -792,7 +792,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Mobile/Mobile.entitlements;
-				DEVELOPMENT_TEAM = NYT8K4678F;
+				DEVELOPMENT_TEAM = 2PMX4WLK83;
 				INFOPLIST_FILE = Mobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mgacy.Mobile;
@@ -808,7 +808,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Mobile/Mobile.entitlements;
-				DEVELOPMENT_TEAM = NYT8K4678F;
+				DEVELOPMENT_TEAM = 2PMX4WLK83;
 				INFOPLIST_FILE = Mobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mgacy.Mobile;
