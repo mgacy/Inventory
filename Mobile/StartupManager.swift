@@ -21,35 +21,15 @@ class StartupManager {
 
     // MARK: - Lifecycle
 
-    // We will (1) try to log in to server, (2) call some endpoints, (3) call completionHandler
+    // We will (1) call some endpoints, (2) sync objects, (3) call completionHandler
     init(completionHandler: @escaping (Bool) -> Void) {
         
         self.managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.completionHandler = completionHandler
-        
-        // 1. Check for existence of email and login.
-        if AuthorizationHandler.sharedInstance.userExists {
-            print("User exists ...")
-            
-            // Login to server, then get list of Inventories from server if successful.
-            APIManager.sharedInstance.login(completionHandler: self.completedLogin)
-        } else {
-            print("User does not exist")
-            // TODO - how to handle this?
-        }
-    }
 
-    func completedLogin(_ succeeded: Bool) {
-        //print("\nCompleted login - succeeded: \(succeeded)")
-        if succeeded {
-
-            // Get list of Vendors from server
-            print("\nFetching Vendors from server ...")
-            APIManager.sharedInstance.getVendors(storeID: self.storeID, completion: completedGetVendors)
-            
-        } else {
-            print("Unable to login ...")
-        }
+        // Get list of Vendors from server
+        print("\nFetching Vendors from server ...")
+        APIManager.sharedInstance.getVendors(storeID: self.storeID, completion: completedGetVendors)
     }
 
     // MARK: - Primary Items
@@ -82,9 +62,6 @@ class StartupManager {
             print("Error with request: \(error)")
             return
         }
-
-        //print("Finished syncing Items")
-        //self.completionHandler(true)
     }
 
     // func completedGetUnits(success: Bool, json: [JSON]) -> Void { }

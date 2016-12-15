@@ -40,16 +40,16 @@ class APIManager {
     // MARK: Lifecycle
 
     init() {
-        authHandler = AuthorizationHandler.sharedInstance
-        //authHandler = AuthorizationHandler()
+        authHandler = AuthorizationHandler()
 
         sessionManager = Alamofire.SessionManager.default
         sessionManager.adapter = authHandler
-        // sessionManager.retrier = authHandler
+        sessionManager.retrier = authHandler
     }
 
-    // MARK: - Authorization
-        authHandler.requestToken(completionHandler: completion)
+    // MARK: - Authentication
+    func login(completion: @escaping (Bool) -> Void) {
+        authHandler.login(completion: completion)
     }
 
     // MARK: - API Calls - General
