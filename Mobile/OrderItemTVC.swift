@@ -20,6 +20,7 @@ class OrderItemTVC: UITableViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
+    var _fetchedResultsController: NSFetchedResultsController<OrderItem>? = nil
     var filter: NSPredicate? = nil
     var cacheName: String? = nil
     var sectionNameKeyPath: String? = nil
@@ -66,7 +67,26 @@ class OrderItemTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - User interaction
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        // Get the new view controller using segue.destinationViewController.
+        guard let destinationController = segue.destination as? OrderKeypadVC else {
+            return
+        }
+
+        // Pass the parent of the selected object to the new view controller.
+        destinationController.parentObject = parentObject
+        destinationController.managedObjectContext = self.managedObjectContext
+
+        // FIX: fix this
+        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
+            destinationController.currentIndex = indexPath
+        }
+    }
+
+    // MARK: - User Actions
 
     @IBAction func tappedMessageOrder(_ sender: UIBarButtonItem) {
 
@@ -183,44 +203,7 @@ class OrderItemTVC: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
 
-    // MARK: - Completion handlers
-
-    func completedPlaceOrder(_ succeeded: Bool) {
-        if succeeded {
-            parentObject.placed = true
-
-            HUD.show(.progress)
-
-            // Serialize and POST Order
-            if let json = parentObject.serialize() {
-                print("\nPOSTing Order: \(json)")
-                APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
-            }
-
-            // TODO - handle failure to serialize Order
-
-        } else {
-            print("\nPROBLEM - Unable to send Order message")
-            showAlert(title: "Problem", message: "Unable to send Order message")
-        }
-    }
-
-    func completedPostOrder(succeeded: Bool, json: JSON) {
-        if succeeded {
-            parentObject.uploaded = true
-
-            HUD.flash(.success, delay: 1.0) { finished in
-                // Pop view
-                self.navigationController!.popViewController(animated: true)
-            }
-
-        } else {
-            print("\nPROBLEM - Unable to POST order \(json)")
-            showAlert(title: "Problem", message: "Unable to upload Order")
-        }
-    }
-
-    // MARK: - Table view data source
+    // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
@@ -261,6 +244,8 @@ class OrderItemTVC: UITableViewController {
         // TODO - add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
     }
 
+    // MARK: - UITableViewDelegate
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
         // print("Selected OrderItem: \(selectedObject)")
@@ -270,42 +255,50 @@ class OrderItemTVC: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
+}
 
-    // Override to support editing the table view.
-    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
+// MARK: - Completion Handlers
+extension OrderItemTVC {
 
-    // Override to support rearranging the table view.
-    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
+    func completedPlaceOrder(_ succeeded: Bool) {
+        if succeeded {
+            parentObject.placed = true
 
-    // Override to support conditional rearranging of the table view.
-    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
+            HUD.show(.progress)
 
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
+            // Serialize and POST Order
+            if let json = parentObject.serialize() {
+                print("\nPOSTing Order: \(json)")
+                APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
+            }
 
-    // MARK: - Navigation
+            // TODO - handle failure to serialize Order
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? OrderKeypadVC else {
-            return
-        }
-
-        // Pass the parent of the selected object to the new view controller.
-        destinationController.parentObject = parentObject
-        destinationController.managedObjectContext = self.managedObjectContext
-
-        // FIX: fix this
-        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
-            destinationController.currentIndex = indexPath
+        } else {
+            print("\nPROBLEM - Unable to send Order message")
+            showAlert(title: "Problem", message: "Unable to send Order message")
         }
     }
 
-    // MARK: - Fetched results controller
+    func completedPostOrder(succeeded: Bool, json: JSON) {
+        if succeeded {
+            parentObject.uploaded = true
+
+            HUD.flash(.success, delay: 1.0) { finished in
+                // Pop view
+                self.navigationController!.popViewController(animated: true)
+            }
+
+        } else {
+            print("\nPROBLEM - Unable to POST order \(json)")
+            showAlert(title: "Problem", message: "Unable to upload Order")
+        }
+    }
+
+}
+
+// MARK: - Type-Specific NSFetchedResultsController Extension
+extension  OrderItemTVC {
 
     var fetchedResultsController: NSFetchedResultsController<OrderItem> {
         if _fetchedResultsController != nil {
@@ -345,8 +338,6 @@ class OrderItemTVC: UITableViewController {
         return _fetchedResultsController!
     }
 
-    var _fetchedResultsController: NSFetchedResultsController<OrderItem>? = nil
-
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({
 
@@ -360,6 +351,7 @@ class OrderItemTVC: UITableViewController {
     }
 
 }
+
 
 // MARK: - NSFetchedResultsControllerDelegate Extension
 extension OrderItemTVC: NSFetchedResultsControllerDelegate {

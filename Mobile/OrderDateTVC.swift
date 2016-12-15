@@ -21,6 +21,7 @@ class OrderDateTVC: UITableViewController {
 
     // MARK: FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
+    var _fetchedResultsController: NSFetchedResultsController<OrderCollection>? = nil
     var filter: NSPredicate? = nil
     var cacheName: String? = "Master"
     var sectionNameKeyPath: String? = nil
@@ -35,6 +36,8 @@ class OrderDateTVC: UITableViewController {
     // TODO - provide interface to control these
     var storeID = 1
     let orderTypeID = 1
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +74,23 @@ class OrderDateTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        // Get the new view controller.
+        guard let controller = segue.destination as? OrderVendorTVC else { return }
+
+        // Pass selection to new view controller.
+        if let selection = selectedCollection {
+            controller.parentObject = selection
+            controller.managedObjectContext = self.managedObjectContext
+        } else {
+            print("\nPROBLEM - Unable to get selection\n")
+        }
+    }
+
+    // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
@@ -104,13 +123,7 @@ class OrderDateTVC: UITableViewController {
         }
     }
 
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support editing the table view.
-    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-
-    // MARK: - Navigation
+    // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCollection = self.fetchedResultsController.object(at: indexPath)
@@ -150,20 +163,7 @@ class OrderDateTVC: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller.
-        guard let controller = segue.destination as? OrderVendorTVC else { return }
-
-        // Pass selection to new view controller.
-        if let selection = selectedCollection {
-            controller.parentObject = selection
-            controller.managedObjectContext = self.managedObjectContext
-        } else {
-            print("\nPROBLEM - Unable to get selection\n")
-        }
-    }
+    // MARK: - User Actions
 
     @IBAction func newTapped(_ sender: AnyObject) {
 
@@ -188,7 +188,12 @@ class OrderDateTVC: UITableViewController {
         _ = StartupManager(completionHandler: completedLogin)
     }
 
-    // MARK: - Completion Handlers
+}
+
+// MARK: - Completion Handlers + Sync
+extension OrderDateTVC {
+
+    // MARK: Completion Handlers
 
     func completedGetListOfOrderCollections(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
@@ -296,19 +301,7 @@ class OrderDateTVC: UITableViewController {
         }
     }
 
-    // MARK: - A
-
-    func saveContext() {
-        let context = self.fetchedResultsController.managedObjectContext
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-    }
+    // MARK: Sync
 
     func deleteExistingOrderCollections(_ filter: NSPredicate? = nil) {
         print("deleteExistingOrders...")
@@ -452,7 +445,10 @@ class OrderDateTVC: UITableViewController {
         }
     }
 
-    // MARK: - Fetched results controller
+}
+
+// MARK: - Type-Specific NSFetchedResultsController Extension
+extension OrderDateTVC {
 
     var fetchedResultsController: NSFetchedResultsController<OrderCollection> {
         if _fetchedResultsController != nil {
@@ -483,8 +479,6 @@ class OrderDateTVC: UITableViewController {
         return _fetchedResultsController!
     }
 
-    var _fetchedResultsController: NSFetchedResultsController<OrderCollection>? = nil
-
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({
 
@@ -495,6 +489,18 @@ class OrderDateTVC: UITableViewController {
             }
             self.tableView.reloadData()
         })
+    }
+
+    func saveContext() {
+        let context = self.fetchedResultsController.managedObjectContext
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
     }
 
 }

@@ -17,6 +17,7 @@ class OrderVendorTVC: UITableViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
+    var _fetchedResultsController: NSFetchedResultsController<Order>? = nil
     var filter: NSPredicate? = nil
     var cacheName: String? = nil
     var sectionNameKeyPath: String? = nil
@@ -48,7 +49,6 @@ class OrderVendorTVC: UITableViewController {
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
-
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -61,7 +61,27 @@ class OrderVendorTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        // Get the selected object.
+        guard let selectedObject = selectedObject else {
+            print("\nPROBLEM - Unable to get selection")
+            return
+        }
+
+        // Get the new view controller using segue.destinationViewController.
+        guard let destinationController = segue.destination as? OrderItemTVC else {
+            return
+        }
+
+        // Pass the selected object to the new view controller.
+        destinationController.parentObject = selectedObject
+        destinationController.managedObjectContext = self.managedObjectContext
+    }
+
+    // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
@@ -99,22 +119,7 @@ class OrderVendorTVC: UITableViewController {
         }
     }
 
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support editing the table view.
-    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-
-    // Override to support rearranging the table view.
-    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
-
-    // Override to support conditional rearranging of the table view.
-    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // MARK: - Navigation
+    // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
@@ -125,26 +130,10 @@ class OrderVendorTVC: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+}
 
-        // Get the selected object.
-        guard let selectedObject = selectedObject else {
-            print("\nPROBLEM - Unable to get selection")
-            return
-        }
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? OrderItemTVC else {
-            return
-        }
-
-        // Pass the selected object to the new view controller.
-        destinationController.parentObject = selectedObject
-        destinationController.managedObjectContext = self.managedObjectContext
-    }
-
-    // MARK: - Fetched results controller
+// MARK: - Type-Specific NSFetchedResultsController Extension
+extension OrderVendorTVC {
 
     var fetchedResultsController: NSFetchedResultsController<Order> {
         if _fetchedResultsController != nil {
@@ -182,7 +171,6 @@ class OrderVendorTVC: UITableViewController {
         return _fetchedResultsController!
     }
 
-    var _fetchedResultsController: NSFetchedResultsController<Order>? = nil
 
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({
