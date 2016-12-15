@@ -22,17 +22,17 @@ extension Item {
     func update(context: NSManagedObjectContext, withJSON json: JSON) {
 
         // Properties
-        if let remoteID = json["id"].int {
-            self.remoteID = Int32(remoteID)
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
         }
         if let name = json["name"].string {
             self.name = name
         }
-        if let packSize = json["pack_size"].int {
-            self.packSize = Int16(packSize)
+        if let packSize = json["pack_size"].int16 {
+            self.packSize = packSize
         }
-        if let subSize = json["sub_size"].int {
-            self.subSize = Int16(subSize)
+        if let subSize = json["sub_size"].int16 {
+            self.subSize = subSize
         }
 
         //if let categoryID = json["category_id"].int {

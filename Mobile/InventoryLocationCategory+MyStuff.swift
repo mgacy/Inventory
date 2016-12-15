@@ -63,8 +63,8 @@ extension InventoryLocationCategory {
         if let name = json["name"].string {
             self.name = name
         }
-        if let categoryID = json["id"].int {
-            self.categoryID = Int32(categoryID)
+        if let categoryID = json["id"].int32 {
+            self.categoryID = categoryID
         }
         // Relationship
         self.location = location

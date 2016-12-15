@@ -25,7 +25,7 @@ extension Order {
 
         // Relationships
         self.collection = collection
-        if let vendorID = json["vendor"]["id"].int {
+        if let vendorID = json["vendor"]["id"].int32 {
             self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
         }
 

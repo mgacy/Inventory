@@ -37,7 +37,32 @@ extension NSManagedObjectContext {
         }
         return nil
     }
-    
+
+    public func fetchWithRemoteID<T : NSManagedObject>(_ entity: T.Type, withID id: Int32) -> T? {
+        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
+        request.predicate = NSPredicate(format: "remoteID == \(id)")
+        request.fetchLimit = 2
+
+        do {
+            let fetchResults = try self.fetch(request)
+
+            switch fetchResults.count {
+            case 0:
+                //print("Found 0 matches for remoteID \(id)")
+                return nil
+            case 1:
+                return fetchResults[0]
+            default:
+                print("\(#function) FAILED: found multiple matches for remoteID \(id): \(fetchResults)")
+                fatalError("Returned multiple objects, expected max 1")
+            }
+
+        } catch {
+            print("Error with request: \(error)")
+        }
+        return nil
+    }
+
     public func fetchSingleEntity<T : NSManagedObject>(_ entity: T.Type, matchingPredicate predicate: NSPredicate) -> T? {
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
         request.predicate = predicate
@@ -52,7 +77,7 @@ extension NSManagedObjectContext {
             case 1:
                 return fetchResults[0]
             default:
-                //print("Found multiple matches: \(searchResults)")
+                print("\(#function) FAILED: found multiple matches: \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
             }
         

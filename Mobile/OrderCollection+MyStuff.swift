@@ -31,11 +31,11 @@ extension OrderCollection {
         if let date = json["date"].string {
             self.date = date
         }
-        if let inventoryID = json["inventory_id"].int {
-            self.inventoryID = Int32(inventoryID)
+        if let inventoryID = json["inventory_id"].int32 {
+            self.inventoryID = inventoryID
         }
-        if let storeID = json["store_id"].int {
-            self.storeID = Int32(storeID)
+        if let storeID = json["store_id"].int32 {
+            self.storeID = storeID
         }
         self.uploaded = uploaded
         

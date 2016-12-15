@@ -21,14 +21,14 @@ extension Inventory {
         if let date = json["date"].string {
             self.date = date
         }
-        if let remoteID = json["id"].int {
-            self.remoteID = Int32(remoteID)
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
         }
-        if let storeID = json["store_id"].int {
-            self.storeID = Int32(storeID)
+        if let storeID = json["store_id"].int32 {
+            self.storeID = storeID
         }
-        if let typeID = json["inventory_type_id"].int {
-            self.typeID = Int32(typeID)
+        if let typeID = json["inventory_type_id"].int32 {
+            self.typeID = typeID
         }
         self.uploaded = uploaded
 

@@ -17,8 +17,8 @@ extension Unit {
     convenience init(context: NSManagedObjectContext, json: JSON) {
         self.init(context: context)
         
-        if let remoteID = json["id"].int {
-            self.remoteID = Int32(remoteID)
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
         }
         if let name = json["name"].string {
             self.name = name

@@ -134,8 +134,8 @@ extension InventoryLocation {
         if let name = json["name"].string {
             self.name = name
         }
-        if let remoteID = json["id"].int {
-            self.remoteID = Int32(remoteID)
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
         }
         if let locationType = json["loc_type"].string {
             self.locationType = locationType

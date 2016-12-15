@@ -32,15 +32,15 @@ extension InventoryItem {
 
     private func initNew(context: NSManagedObjectContext, json: JSON) {
 
-        if let itemID = json["id"].int {
-            self.itemID = Int32(itemID)
+        if let itemID = json["id"].int32 {
+            self.itemID = itemID
             self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
         }
         if let name = json["name"].string {
             self.name = name
         }
-        if let categoryID = json["category_id"].int {
-            self.categoryID = Int32(categoryID)
+        if let categoryID = json["category_id"].int32 {
+            self.categoryID = categoryID
         }
         //if let packSize = json["pack_size"].int {
         //if let inventoryUnitID = json["inventory_unit_id"].int {
@@ -50,18 +50,18 @@ extension InventoryItem {
     
     private func initExisting(context: NSManagedObjectContext, json: JSON) {
 
-        if let remoteID = json["id"].int {
-            self.remoteID = Int32(remoteID)
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
         }
         if let name = json["item"]["name"].string {
             self.name = name
         }
-        if let itemID = json["item"]["id"].int {
-            self.itemID = Int32(itemID)
+        if let itemID = json["item"]["id"].int32 {
+            self.itemID = itemID
             self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
         }
-        if let categoryID = json["item"]["category"]["id"].int {
-            self.categoryID = Int32(categoryID)
+        if let categoryID = json["item"]["category"]["id"].int32 {
+            self.categoryID = categoryID
         }
         
         //if let quantity = json["quantity"].double {
