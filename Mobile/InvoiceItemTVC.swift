@@ -19,6 +19,7 @@ class InvoiceItemTVC: UITableViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
+    var _fetchedResultsController: NSFetchedResultsController<InvoiceItem>? = nil
     var filter: NSPredicate? = nil
     var cacheName: String? = nil
     var sectionNameKeyPath: String? = nil
@@ -59,6 +60,25 @@ class InvoiceItemTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        // Get the new view controller using segue.destinationViewController.
+        guard let destinationController = segue.destination as? InvoiceKeypadVC else {
+            return
+        }
+
+        // Pass the parent of the selected object to the new view controller.
+        destinationController.parentObject = parentObject
+        destinationController.managedObjectContext = self.managedObjectContext
+
+        // FIX: fix this
+        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
+            destinationController.currentIndex = indexPath
+        }
+    }
+
     // MARK: - User interaction
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
@@ -72,18 +92,7 @@ class InvoiceItemTVC: UITableViewController {
         APIManager.sharedInstance.postInvoice(invoice: dict, completion: completedUpload)
     }
 
-    // MARK: - Completion handlers
-
-    func completedUpload(succeeded: Bool, json: JSON) {
-        print("completedUpload: \(succeeded)")
-        if succeeded {
-            parentObject.uploaded = true
-        } else {
-            print("\nPROBLEM - Unable to upload Invoice")
-        }
-    }
-
-    // MARK: - Table view data source
+    // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
@@ -140,6 +149,8 @@ class InvoiceItemTVC: UITableViewController {
         */
     }
 
+    // MARK: - UITableViewDelegate
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
         print("Selected InvoiceItem: \(selectedObject)")
@@ -170,46 +181,34 @@ class InvoiceItemTVC: UITableViewController {
         return [received, notReceived, more]
     }
 
-    // Override to support conditional editing of the table view.
+    // Support conditional editing of the table view.
      override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
-    // Override to support editing the table view.
+    // Support editing the table view.
      override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         // stuff
     }
 
-    // Override to support rearranging the table view.
-    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
+}
 
-    // Override to support conditional rearranging of the table view.
-    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
+// MARK: - Completion Handlers
+extension InvoiceItemTVC {
 
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InvoiceKeypadVC else {
-            return
-        }
-
-        // Pass the parent of the selected object to the new view controller.
-        destinationController.parentObject = parentObject
-        destinationController.managedObjectContext = self.managedObjectContext
-
-        // FIX: fix this
-        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
-            destinationController.currentIndex = indexPath
+    func completedUpload(succeeded: Bool, json: JSON) {
+        print("completedUpload: \(succeeded)")
+        if succeeded {
+            parentObject.uploaded = true
+        } else {
+            print("\nPROBLEM - Unable to upload Invoice")
         }
     }
 
-    // MARK: - Fetched results controller
+}
+
+// MARK: - Type-Specific NSFetchedResultsController Extension
+extension InvoiceItemTVC {
 
     var fetchedResultsController: NSFetchedResultsController<InvoiceItem> {
         if _fetchedResultsController != nil {
@@ -246,8 +245,6 @@ class InvoiceItemTVC: UITableViewController {
 
         return _fetchedResultsController!
     }
-
-    var _fetchedResultsController: NSFetchedResultsController<InvoiceItem>? = nil
 
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({

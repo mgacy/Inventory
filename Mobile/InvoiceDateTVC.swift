@@ -20,6 +20,7 @@ class InvoiceDateTVC: UITableViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
+    var _fetchedResultsController: NSFetchedResultsController<InvoiceCollection>? = nil
     var filter: NSPredicate? = nil
     var cacheName: String? = "Master"
     var sectionNameKeyPath: String? = nil
@@ -87,6 +88,25 @@ class InvoiceDateTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        // Get the new view controller.
+        guard let controller = segue.destination as? InvoiceVendorTVC else {
+            print("\nPROBLEM - Unable to get destination controller\n")
+            return
+        }
+
+        // Pass selection to new view controller.
+        if let selection = selectedCollection {
+            controller.parentObject = selection
+            controller.managedObjectContext = self.managedObjectContext
+        } else {
+            print("\nPROBLEM - Unable to get selection\n")
+        }
+    }
+
     // MARK: - User interaction
 
     @IBAction func newTapped(_ sender: AnyObject) {
@@ -108,7 +128,81 @@ class InvoiceDateTVC: UITableViewController {
         _ = StartupManager(completionHandler: completedLogin)
     }
 
-    // MARK: - Completion handlers
+    // MARK: - UITableViewDataSource
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return self.fetchedResultsController.sections?.count ?? 0
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let sectionInfo = self.fetchedResultsController.sections![section]
+        return sectionInfo.numberOfObjects
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // Dequeue Reusable Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
+
+        // Configure Cell
+        self.configureCell(cell, atIndexPath: indexPath)
+
+        return cell
+    }
+
+    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
+        let collection = self.fetchedResultsController.object(at: indexPath)
+        cell.textLabel?.text = collection.date
+
+        switch collection.uploaded {
+        case true:
+            cell.textLabel?.textColor = UIColor.black
+        case false:
+            cell.textLabel?.textColor = ColorPalette.yellowColor
+        }
+    }
+
+    // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedCollection = self.fetchedResultsController.object(at: indexPath)
+        guard let selection = selectedCollection else { return }
+
+        switch selection.uploaded {
+        case true:
+
+            // Get date to use when getting OrderCollection from server
+            guard let collectionDate = selection.date else {
+                print("\nPROBLEM - Unable to get InvoiceCollection.date")
+                return
+            }
+
+            // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
+            // Delete existing invoices of selected collection
+            print("Deleting Invoices of selected InvoiceCollection ...")
+            deleteChildInvoices(parent: selection)
+
+            // Reset selection since we reset the managedObjectContext in deleteChildOrders
+            selectedCollection = self.fetchedResultsController.object(at: indexPath)
+
+            print("GET InvoiceCollection from server ...")
+            APIManager.sharedInstance.getInvoiceCollection(
+                storeID: storeID, invoiceDate: collectionDate,
+                completion: completedGetExistingInvoiceCollection)
+
+        case false:
+            print("LOAD NEW selectedCollection from disk ...")
+            performSegue(withIdentifier: segueIdentifier, sender: self)
+        }
+
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+}
+
+// MARK: - Completion Handlers + Sync
+extension InvoiceDateTVC {
+
+    // MARK: Completion Handlers
 
     func completedGetListOfInvoiceCollections(json: JSON?, error: Error?) -> Void {
         //tableView.activityIndicatorView.stopAnimating()
@@ -201,121 +295,7 @@ class InvoiceDateTVC: UITableViewController {
         }
     }
 
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return self.fetchedResultsController.sections?.count ?? 0
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = self.fetchedResultsController.sections![section]
-        return sectionInfo.numberOfObjects
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Dequeue Reusable Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
-
-        // Configure Cell
-        self.configureCell(cell, atIndexPath: indexPath)
-
-        return cell
-    }
-
-    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
-        let collection = self.fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = collection.date
-
-        switch collection.uploaded {
-        case true:
-            cell.textLabel?.textColor = UIColor.black
-        case false:
-            cell.textLabel?.textColor = ColorPalette.yellowColor
-        }
-    }
-
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support editing the table view.
-    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-
-    // Override to support rearranging the table view.
-    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
-
-    // Override to support conditional rearranging of the table view.
-    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // MARK: - Navigation
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCollection = self.fetchedResultsController.object(at: indexPath)
-        guard let selection = selectedCollection else { return }
-
-        switch selection.uploaded {
-        case true:
-
-            // Get date to use when getting OrderCollection from server
-            guard let collectionDate = selection.date else {
-                print("\nPROBLEM - Unable to get InvoiceCollection.date")
-                return
-            }
-
-            // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
-            // Delete existing invoices of selected collection
-            print("Deleting Invoices of selected InvoiceCollection ...")
-            deleteChildInvoices(parent: selection)
-
-            // Reset selection since we reset the managedObjectContext in deleteChildOrders
-            selectedCollection = self.fetchedResultsController.object(at: indexPath)
-
-            print("GET InvoiceCollection from server ...")
-            APIManager.sharedInstance.getInvoiceCollection(
-                storeID: storeID, invoiceDate: collectionDate,
-                completion: completedGetExistingInvoiceCollection)
-
-        case false:
-            print("LOAD NEW selectedCollection from disk ...")
-            performSegue(withIdentifier: segueIdentifier, sender: self)
-        }
-
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller.
-        guard let controller = segue.destination as? InvoiceVendorTVC else {
-            print("\nPROBLEM - Unable to get destination controller\n")
-            return
-        }
-
-        // Pass selection to new view controller.
-        if let selection = selectedCollection {
-            controller.parentObject = selection
-            controller.managedObjectContext = self.managedObjectContext
-        } else {
-            print("\nPROBLEM - Unable to get selection\n")
-        }
-    }
-
-    // MARK: - A
-
-    func saveContext() {
-        let context = self.fetchedResultsController.managedObjectContext
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-    }
+    // MARK: Sync
 
     func deleteExistingInvoiceCollections(_ filter: NSPredicate? = nil) {
         print("deleteExistingInvoices...")
@@ -351,7 +331,6 @@ class InvoiceDateTVC: UITableViewController {
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
-
     }
 
     func deleteChildInvoices(parent: InvoiceCollection) {
@@ -408,10 +387,12 @@ class InvoiceDateTVC: UITableViewController {
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
-
     }
 
-    // MARK: - Fetched results controller
+}
+
+// MARK: - Type-Specific NSFetchedResultsController Extension
+extension InvoiceDateTVC {
 
     var fetchedResultsController: NSFetchedResultsController<InvoiceCollection> {
         if _fetchedResultsController != nil {
@@ -442,8 +423,6 @@ class InvoiceDateTVC: UITableViewController {
         return _fetchedResultsController!
     }
 
-    var _fetchedResultsController: NSFetchedResultsController<InvoiceCollection>? = nil
-
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({
 
@@ -454,6 +433,18 @@ class InvoiceDateTVC: UITableViewController {
             }
             self.tableView.reloadData()
         })
+    }
+
+    func saveContext() {
+        let context = self.fetchedResultsController.managedObjectContext
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
     }
 
 }
