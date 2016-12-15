@@ -10,6 +10,22 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
+/*
+enum BackendError: Error {
+    case authentication(error: Error)
+    case network(error: Error) // Capture any underlying Error from the URLSession API
+    case dataSerialization(error: Error)
+    case jsonSerialization(error: Error)
+    case xmlSerialization(error: Error)
+    case objectSerialization(reason: String)
+}
+
+enum MyResult {
+    case success(JSON?)
+    case failure(BackendError)
+}
+*/
+
 class APIManager {
 
     // MARK: Properties
@@ -18,26 +34,8 @@ class APIManager {
     private let authHandler: AuthorizationHandler
     private let sessionManager: SessionManager
 
-    // typealias CompletionHandlerType = (JSON?, Error?) -> Void
-    // typealias CompletionHandlerType = (Result) -> Void
-    /*
-    enum Result {
-        case success(JSON?)
-        case failure(MyError)
-    }
-
-    enum MyError: Error {
-        case AuthenticationFailure
-    }
-
-    enum BackendError: Error {
-        case network(error: Error) // Capture any underlying Error from the URLSession API
-        case dataSerialization(error: Error)
-        case jsonSerialization(error: Error)
-        case xmlSerialization(error: Error)
-        case objectSerialization(reason: String)
-    }
-     */
+    typealias AuthCompletion = (_ succeeded: Bool, _ accessToken: String?) -> Void
+    typealias CompletionHandlerType = (JSON?, Error?) -> Void
 
     // MARK: Lifecycle
 
@@ -51,14 +49,14 @@ class APIManager {
     }
 
     // MARK: - Authorization
-    func login(completionHandler completion: @escaping (Bool) -> Void ) {
         authHandler.requestToken(completionHandler: completion)
     }
 
     // MARK: - API Calls - General
 
-    func getItems(storeID: Int, completion: @escaping (JSON?, Error?) -> Void) {
+    func getItems(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.getItems(storeID: storeID))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -72,8 +70,9 @@ class APIManager {
         }
     }
 
-    func getUnits(completion: @escaping (JSON?, Error?) -> Void) {
+    func getUnits(completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.getUnits)
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -87,8 +86,9 @@ class APIManager {
         }
     }
 
-    func getVendors(storeID: Int, completion: @escaping (JSON?, Error?) -> Void) {
+    func getVendors(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.getVendors(storeID: storeID))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -104,10 +104,10 @@ class APIManager {
 
     // MARK: - API Calls - Inventory
 
-    func getListOfInventories(storeID: Int, completion:
-        @escaping (JSON?, Error?) -> Void)
+    func getListOfInventories(storeID: Int, completion: @escaping CompletionHandlerType)
     {
         sessionManager.request(Router.listInventories(storeID: storeID))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -121,10 +121,10 @@ class APIManager {
         }
     }
 
-    func getInventory(remoteID: Int, completion:
-        @escaping (JSON?, Error?) -> Void)
+    func getInventory(remoteID: Int, completion: @escaping CompletionHandlerType)
     {
         sessionManager.request(Router.fetchInventory(remoteID: remoteID))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -139,9 +139,10 @@ class APIManager {
     }
 
     func getNewInventory(isActive: Bool, typeID: Int, storeID: Int, completion:
-        @escaping (JSON?, Error?) -> Void)
+        @escaping CompletionHandlerType)
     {
         sessionManager.request(Router.getNewInventory(isActive: isActive, typeID: typeID, storeID: storeID))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -155,8 +156,9 @@ class APIManager {
         }
     }
 
-    func postInventory(inventory: [String: Any], completion: @escaping (JSON?, Error?) -> Void) {
+    func postInventory(inventory: [String: Any], completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.postInventory(inventory))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -173,10 +175,10 @@ class APIManager {
 
     // MARK: - API Calls - Invoice
 
-    func getListOfInvoiceCollections(storeID: Int, completion:
-        @escaping (JSON?, Error?) -> Void)
+    func getListOfInvoiceCollections(storeID: Int, completion: @escaping CompletionHandlerType)
     {
         sessionManager.request(Router.listInvoices(storeID: storeID))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -191,9 +193,10 @@ class APIManager {
     }
 
     func getInvoiceCollection(storeID: Int, invoiceDate: String, completion:
-        @escaping (JSON?, Error?) -> Void)
+        @escaping CompletionHandlerType)
     {
         sessionManager.request(Router.fetchInvoice(storeID: storeID, invoiceDate: invoiceDate))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -208,9 +211,10 @@ class APIManager {
     }
 
     func getNewInvoiceCollection(storeID: Int, completion:
-        @escaping (JSON?, Error?) -> Void)
+        @escaping CompletionHandlerType)
     {
         sessionManager.request(Router.getNewInvoice(storeID: storeID))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -226,6 +230,7 @@ class APIManager {
 
     func postInvoice(invoice: [String: Any], completion: @escaping (Bool, JSON) -> Void) {
         sessionManager.request(Router.postInvoice(invoice))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -242,9 +247,10 @@ class APIManager {
 
     // MARK: - API Calls - Order
 
-    func getListOfOrderCollections(storeID: Int, completion: @escaping (JSON?, Error?) -> Void)
+    func getListOfOrderCollections(storeID: Int, completion: @escaping CompletionHandlerType)
     {
         sessionManager.request(Router.listOrders(storeID: storeID))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -259,9 +265,10 @@ class APIManager {
     }
 
     func getOrderCollection(storeID: Int, orderDate: String, completion:
-        @escaping (JSON?, Error?) -> Void)
+        @escaping CompletionHandlerType)
     {
         sessionManager.request(Router.fetchOrder(storeID: storeID, orderDate: orderDate))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -276,10 +283,11 @@ class APIManager {
     }
 
     func getNewOrderCollection(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?, completion:
-        @escaping (JSON?, Error?) -> Void)
+        @escaping CompletionHandlerType)
     {
         sessionManager.request(Router.getNewOrder(storeID: storeID, typeID: typeID,
                                                   returnUsage: returnUsage, periodLength: periodLength))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -295,6 +303,7 @@ class APIManager {
 
     func postOrder(order: [String: Any], completion: @escaping (Bool, JSON) -> Void) {
         sessionManager.request(Router.postOrder(order))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
