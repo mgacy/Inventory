@@ -203,7 +203,7 @@ class AuthorizationHandler: RequestAdapter, RequestRetrier {
         }
     }
 
-    // MARK: - My Stuff
+    // MARK: - Request Token
 
     public func login(completion: @escaping (Bool) -> Void) {
 

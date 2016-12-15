@@ -34,7 +34,6 @@ class APIManager {
     private let authHandler: AuthorizationHandler
     private let sessionManager: SessionManager
 
-    typealias AuthCompletion = (_ succeeded: Bool, _ accessToken: String?) -> Void
     typealias CompletionHandlerType = (JSON?, Error?) -> Void
 
     // MARK: Lifecycle
