@@ -18,6 +18,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
+    var _fetchedResultsController: NSFetchedResultsController<InventoryLocationCategory>? = nil
     //var filter: NSPredicate? = nil
     var cacheName: String? = nil // "Master"
     var sectionNameKeyPath: String? = nil
@@ -28,6 +29,8 @@ class InventoryLocationCategoryTVC: UITableViewController {
 
     // Segues
     let ItemSegue = "ShowLocationItems2"
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +62,28 @@ class InventoryLocationCategoryTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        // Get the new view controller using segue.destinationViewController.
+        guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
+            return
+        }
+
+        // Pass the selected object to the new view controller.
+        guard let selection = selectedCategory else {
+            print("\nPROBLEM - Unable to get selected Category\n")
+            return
+        }
+
+        destinationController.title = selection.name
+        destinationController.category = selection
+        destinationController.managedObjectContext = self.managedObjectContext
+        //destinationController.performFetch()
+    }
+
+    // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
@@ -95,22 +119,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
         }
     }
 
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support editing the table view.
-    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-
-    // Override to support rearranging the table view.
-    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
-
-    // Override to support conditional rearranging of the table view.
-    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // MARK: - Navigation
+    // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCategory = self.fetchedResultsController.object(at: indexPath)
@@ -121,27 +130,10 @@ class InventoryLocationCategoryTVC: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+}
 
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
-            return
-        }
-
-        // Pass the selected object to the new view controller.
-        guard let selection = selectedCategory else {
-            print("\nPROBLEM - Unable to get selected Category\n")
-            return
-        }
-
-        destinationController.title = selection.name
-        destinationController.category = selection
-        destinationController.managedObjectContext = self.managedObjectContext
-        //destinationController.performFetch()
-    }
-
-    // MARK: - Fetched results controller
+// MARK: - Type-Specific NSFetchedResultsController Extension
+extension InventoryLocationCategoryTVC {
 
     var fetchedResultsController: NSFetchedResultsController<InventoryLocationCategory> {
         if _fetchedResultsController != nil {
@@ -191,8 +183,6 @@ class InventoryLocationCategoryTVC: UITableViewController {
             self.tableView.reloadData()
         })
     }
-
-    var _fetchedResultsController: NSFetchedResultsController<InventoryLocationCategory>? = nil
 
 }
 
