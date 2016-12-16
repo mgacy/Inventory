@@ -57,11 +57,10 @@ class OrderDateTVC: UITableViewController {
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
 
-        // Login to server, get list of Items, and update store
-        //_ = StartupManager(completionHandler: completedLogin)
-
+        // Get list of OrderCollections from server
+        // print("\nFetching existing OrderCollections from server ...")
         HUD.show(.progress)
-        completedLogin(true)
+        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
     }
 
     override func viewDidAppear(_ animated: Bool) {
