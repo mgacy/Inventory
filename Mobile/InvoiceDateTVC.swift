@@ -334,9 +334,7 @@ extension InvoiceDateTVC {
     }
 
     func deleteChildInvoices(parent: InvoiceCollection) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
+        guard let managedObjectContext = managedObjectContext else { return }
 
         /*
          Since the batch delete request directly interacts with the persistent store we need

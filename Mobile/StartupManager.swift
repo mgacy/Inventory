@@ -64,8 +64,6 @@ class StartupManager {
         }
     }
 
-    // func completedGetUnits(success: Bool, json: [JSON]) -> Void { }
-
     func completedGetVendors(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
             print("\(#function) FAILED : \(error)"); return
@@ -132,9 +130,8 @@ class StartupManager {
         // TODO - delete Items that were deleted from server
         /*
         // Get set of ids of response
-        let responseIDs = Set(json.arrayValue.map({ Int32($0["id"].intValue) }))
         let responseIDs = Set(json.arrayValue.map({ $0["id"].int32Value }))
-        let storeIDs = Set(dictionary.keys)
+        let storeIDs = Set(itemDict.keys)
 
         // Determine new / deleted items
         let deletedItems = storeIDs.subtracting(responseIDs)
