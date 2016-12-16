@@ -29,31 +29,6 @@ extension NSManagedObjectContext {
 
     // NOTE - this requires (1) entity has remoteID and (2) type is Int32
     // TODO - make T require objects conforming to protocol specifying the above requirements?
-    public func fetchWithRemoteID<T : NSManagedObject>(_ entity: T.Type, withID id: Int) -> T? {
-        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-        request.predicate = NSPredicate(format: "remoteID == \(Int32(id))")
-        request.fetchLimit = 2
-        
-        do {
-            let fetchResults = try self.fetch(request)
-            
-            switch fetchResults.count {
-            case 0:
-                //print("Found 0 matches for remoteID \(id)")
-                return nil
-            case 1:
-                return fetchResults[0]
-            default:
-                print("\(#function) FAILED: found multiple matches for remoteID \(id): \(fetchResults)")
-                fatalError("Returned multiple objects, expected max 1")
-            }
-            
-        } catch {
-            print("Error with request: \(error)")
-        }
-        return nil
-    }
-
     public func fetchWithRemoteID<T : NSManagedObject>(_ entity: T.Type, withID id: Int32) -> T? {
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
         request.predicate = NSPredicate(format: "remoteID == \(id)")
