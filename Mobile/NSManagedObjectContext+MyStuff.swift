@@ -8,9 +8,25 @@
 
 import Foundation
 import CoreData
+import SwiftyJSON
 
 extension NSManagedObjectContext {
-    
+
+    // MARK: - Insert
+
+    public func insertObject<T : NSManagedObject>(_ entity: T.Type) -> T {
+        let newItem = T(context: self)
+        return newItem
+    }
+
+    public func insertObjectWithJSON<T : Syncable>(_ entity: T.Type, withJSON json: JSON) -> T where T: NSManagedObject {
+        let newItem = T(context: self)
+        newItem.update(context: self, withJSON: json)
+        return newItem
+    }
+
+    // MARK: - Fetch
+
     // NOTE - this requires (1) entity has remoteID and (2) type is Int32
     // TODO - make T require objects conforming to protocol specifying the above requirements?
     public func fetchWithRemoteID<T : NSManagedObject>(_ entity: T.Type, withID id: Int) -> T? {
