@@ -10,13 +10,16 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-extension Unit {
+extension Unit: Syncable {
         
     // MARK: - Lifecycle
     
     convenience init(context: NSManagedObjectContext, json: JSON) {
         self.init(context: context)
-        
+        self.update(context: context, withJSON: json)
+    }
+
+    func update(context: NSManagedObjectContext, withJSON json: JSON) {
         if let remoteID = json["id"].int32 {
             self.remoteID = remoteID
         }
@@ -27,5 +30,5 @@ extension Unit {
             self.abbreviation = abbreviation
         }
     }
-    
+
 }
