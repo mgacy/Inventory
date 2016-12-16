@@ -201,7 +201,7 @@ extension InventoryLocationTVC {
             HUD.flash(.error, delay: 1.0)
             return
         }
-        guard let json = json else {
+        guard json != nil else {
             print("Unable to get JSON")
             //self.noticeError("Error", autoClear: true)
             HUD.flash(.error, delay: 1.0)
@@ -213,6 +213,12 @@ extension InventoryLocationTVC {
 
         // TODO: enable the following, which is disabled for the purpose of demos
         /*
+         guard let json = json else {
+         print("Unable to get JSON")
+         //self.noticeError("Error", autoClear: true)
+         HUD.flash(.error, delay: 1.0)
+         return
+         }
          guard let remoteID = json["id"].int else {
          print("Unable to get remoteID of posted Inventory")
          //self.noticeError("Error", autoClear: true)

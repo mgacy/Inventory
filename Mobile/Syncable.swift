@@ -18,6 +18,8 @@ import SwiftyJSON
     var remoteID: Int32 { get set }
     var name: String? { get set }
 
+    //func update(withJSON json: JSON)
+
     //func update(context: NSManagedObjectContext, withJSON json: JSON)
 
 }

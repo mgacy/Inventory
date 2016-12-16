@@ -126,7 +126,7 @@ public enum Router: URLRequestConvertible {
         case .getItems(let storeID):
             return ["storeID": storeID]
         // case .getUnits:
-        // case .getVendors(let storeID:
+        // case .getVendors(let storeID):
         // Inventory
         case .getNewInventory(let isActive, let typeID, let storeID):
             return ["active": isActive, "inventory_type_id": typeID, "store_id": storeID]
@@ -184,7 +184,7 @@ public enum Router: URLRequestConvertible {
         case .getNewInventory:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         // case .listInventories:
-        // case .fetchInventory(let remoteID):
+        // case .fetchInventory:
         case .postInventory:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
             
