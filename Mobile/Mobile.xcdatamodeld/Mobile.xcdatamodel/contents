@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11542" systemVersion="15G1108" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="15G1212" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Inventory" representedClassName="Inventory" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -82,6 +82,7 @@
         <attribute name="packSize" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <attribute name="subSize" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ItemCategory" inverseName="items" inverseEntity="ItemCategory" syncable="YES"/>
         <relationship name="inventoryItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryItem" inverseName="item" inverseEntity="InventoryItem" syncable="YES"/>
         <relationship name="inventoryUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemInventoryUnits" inverseEntity="Unit" syncable="YES"/>
         <relationship name="invoiceItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InvoiceItem" inverseName="item" inverseEntity="InvoiceItem" syncable="YES"/>
@@ -96,6 +97,7 @@
     <entity name="ItemCategory" representedClassName="ItemCategory" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="category" inverseEntity="Item" syncable="YES"/>
     </entity>
     <entity name="Order" representedClassName="Order" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
@@ -166,8 +168,8 @@
         <element name="Invoice" positionX="-576" positionY="-81" width="128" height="30"/>
         <element name="InvoiceCollection" positionX="-558" positionY="-63" width="128" height="105"/>
         <element name="InvoiceItem" positionX="-567" positionY="-72" width="128" height="165"/>
-        <element name="Item" positionX="-468" positionY="-234" width="128" height="255"/>
-        <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="75"/>
+        <element name="Item" positionX="-468" positionY="-234" width="128" height="270"/>
+        <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="90"/>
         <element name="Order" positionX="-504" positionY="330" width="128" height="180"/>
         <element name="OrderCollection" positionX="-783" positionY="348" width="128" height="120"/>
         <element name="OrderItem" positionX="-234" positionY="-27" width="128" height="30"/>
