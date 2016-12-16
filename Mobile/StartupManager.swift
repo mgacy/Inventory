@@ -74,9 +74,7 @@ class StartupManager {
 
         // Create new / update existing Vendors
         for (_, vendorJSON):(String, JSON) in json {
-            guard let vendorID = vendorJSON["id"].int else {
-                break
-            }
+            guard let vendorID = vendorJSON["id"].int32 else { break }
 
             // Find + update / create Vendors
             if let vendor = managedObjectContext.fetchWithRemoteID(Vendor.self, withID: vendorID) {

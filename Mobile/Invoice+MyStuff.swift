@@ -76,7 +76,7 @@ extension Invoice {
                 _ = InvoiceItem(context: context, json: itemJSON, invoice: self)
             }
         }
-        if let vendorID = json["vendor"]["id"].int {
+        if let vendorID = json["vendor"]["id"].int32 {
             self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
         }
     }
