@@ -105,41 +105,28 @@ extension NSManagedObjectContext {
     
     // http://codereview.stackexchange.com/questions/147005/swift-3-generic-fetch-request-extension
     func fetchEntities<T: NSManagedObject>(_ entityClass: T.Type, sortBy: [NSSortDescriptor]? = nil, matchingPredicate predicate: NSPredicate? = nil) throws -> [T] {
-        var request: NSFetchRequest<NSFetchRequestResult>
-        
+
+        let request: NSFetchRequest<T>
         if #available(iOS 10.0, *) {
-            request = entityClass.fetchRequest()
+            request = entityClass.fetchRequest() as! NSFetchRequest<T>
         } else {
-            let entityClassName = NSStringFromClass(entityClass)
-            let entityName = entityClassName.components(separatedBy: ".").last ?? entityClassName
+            let entityName = String(describing: entityClass)
             request = NSFetchRequest(entityName: entityName)
         }
-        
-        var fetchRequestError: Error?
+
         request.returnsObjectsAsFaults = false
-        
-        if let predicate = predicate {
-            request.predicate = predicate
-        }
-        if let sortBy = sortBy {
-            request.sortDescriptors = sortBy
-        }
-        
-        var fetchedResult: [T]?
-        
+        request.predicate = predicate
+        request.sortDescriptors = sortBy
+
+        //let fetchedResult = try self.fetch(request)
+        //return fetchedResult
         do {
-            fetchedResult = try self.fetch(request) as? [T]
+            let fetchedResult = try self.fetch(request)
+            return fetchedResult
+        } catch let error {
+            print(error.localizedDescription)
+            throw error
         }
-        catch let error {
-            fetchRequestError = error
-            //print(fetchRequestError)
-        }
-        
-        guard let entityArray = fetchedResult else {
-            throw fetchRequestError!
-        }
-        
-        return entityArray
     }
     
 }
