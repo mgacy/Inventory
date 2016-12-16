@@ -188,14 +188,12 @@ extension InventoryLocationTVC {
         guard error == nil else {
             //self.noticeError("Error", autoClear: true)
             //self.noticeError((error?.localizedDescription)!, autoClear: true)
-            HUD.flash(.error, delay: 1.0)
-            return
+            HUD.flash(.error, delay: 1.0); return
         }
         guard json != nil else {
             print("Unable to get JSON")
             //self.noticeError("Error", autoClear: true)
-            HUD.flash(.error, delay: 1.0)
-            return
+            HUD.flash(.error, delay: 1.0); return
         }
 
         // TODO: remove hard-coded remoteID
