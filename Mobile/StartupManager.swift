@@ -100,22 +100,32 @@ class StartupManager {
     func syncItems(searchResults: [Item], json: JSON) {
 
         // Create dict from array of Items returned from fetch request
-        let dictionary = searchResults.toDictionary { $0.remoteID }
+        let itemDict = searchResults.toDictionary { $0.remoteID }
+
+        // Create dict from fetch request on Units
+        var unitDict = [Int32: Unit]()
+        let unitFetchRequest: NSFetchRequest<NSFetchRequestResult> = Unit.fetchRequest()
+        do {
+            let unitSearchResults = try managedObjectContext.fetch(unitFetchRequest)
+            unitDict = (unitSearchResults as! [Unit]).toDictionary { $0.remoteID }
+        } catch {
+            print("Error with request: \(error)")
+            return
+        }
 
         for (_, itemJSON):(String, JSON) in json {
-            guard let itemID = itemJSON["id"].int else {
-                break
-            }
-            let id = Int32(itemID)
+            guard let itemID = itemJSON["id"].int32 else { break }
 
             // Find + update / create Items
-            if let existingItem = dictionary[id] {
-                //print("UPDATE existing item \(existingItem)")
+            if let existingItem = itemDict[itemID] {
+                //print("UPDATE existing Item: \(existingItem)")
                 existingItem.update(context: managedObjectContext, withJSON: itemJSON)
+                existingItem.updateUnits(withJSON: itemJSON, unitDict: unitDict)
 
             } else {
-                //print("CREATE new item \(itemJSON)")
-                _ = Item(context: managedObjectContext, json: itemJSON)
+                //print("CREATE new Item: \(itemJSON)")
+                let newItem = Item(context: managedObjectContext, json: itemJSON)
+                newItem.updateUnits(withJSON: itemJSON, unitDict: unitDict)
             }
         }
 
@@ -123,6 +133,7 @@ class StartupManager {
         /*
         // Get set of ids of response
         let responseIDs = Set(json.arrayValue.map({ Int32($0["id"].intValue) }))
+        let responseIDs = Set(json.arrayValue.map({ $0["id"].int32Value }))
         let storeIDs = Set(dictionary.keys)
 
         // Determine new / deleted items
