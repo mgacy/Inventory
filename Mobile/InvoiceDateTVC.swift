@@ -93,18 +93,14 @@ class InvoiceDateTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         // Get the new view controller.
-        guard let controller = segue.destination as? InvoiceVendorTVC else {
-            print("\nPROBLEM - Unable to get destination controller\n")
-            return
-        }
+        guard let controller = segue.destination as? InvoiceVendorTVC else { return }
+
+        // Get the selection
+        guard let selection = selectedCollection else { return }
 
         // Pass selection to new view controller.
-        if let selection = selectedCollection {
-            controller.parentObject = selection
-            controller.managedObjectContext = self.managedObjectContext
-        } else {
-            print("\nPROBLEM - Unable to get selection\n")
-        }
+        controller.parentObject = selection
+        controller.managedObjectContext = self.managedObjectContext
     }
 
     // MARK: - User interaction
@@ -172,8 +168,7 @@ class InvoiceDateTVC: UITableViewController {
 
             // Get date to use when getting OrderCollection from server
             guard let collectionDate = selection.date else {
-                print("\nPROBLEM - Unable to get InvoiceCollection.date")
-                return
+                print("\(#function) FAILED : unable to get InvoiceCollection.date"); return
             }
 
             // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
@@ -211,8 +206,7 @@ extension InvoiceDateTVC {
             print("\(#function) FAILED : \(error)"); return
         }
         guard let dates = json["dates"].array else {
-            print("\nPROBLEM - Failed to get dates")
-            return
+            print("\(#function) FAILED : unable to get dates"); return
         }
 
         // FIX - this does not account for Collections that have been deleted from the server but
@@ -220,7 +214,7 @@ extension InvoiceDateTVC {
         for date in dates {
             if let dateString = date.string {
 
-                // Create InvoiceCollection if we can't find one with date `date` (2)
+                // Create InvoiceCollection if we can't find one with date `date`
                 let predicate = NSPredicate(format: "date == %@", dateString)
                 if managedObjectContext?.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate) == nil {
                     print("Creating InvoiceCollection: \(dateString)")
@@ -249,8 +243,7 @@ extension InvoiceDateTVC {
             print("\(#function) FAILED : \(error)"); return
         }
         guard let selection = selectedCollection else {
-            print("\nPROBLEM - Still failed to get selected InvoiceCollection\n")
-            return
+            print("\(#function) FAILED : still unable to get selected InvoiceCollection\n"); return
         }
 
         // Update selected Inventory with full JSON from server.

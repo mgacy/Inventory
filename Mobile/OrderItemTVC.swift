@@ -72,9 +72,7 @@ class OrderItemTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? OrderKeypadVC else {
-            return
-        }
+        guard let destinationController = segue.destination as? OrderKeypadVC else { return }
 
         // Pass the parent of the selected object to the new view controller.
         destinationController.parentObject = parentObject
@@ -351,7 +349,6 @@ extension  OrderItemTVC {
     }
 
 }
-
 
 // MARK: - NSFetchedResultsControllerDelegate Extension
 extension OrderItemTVC: NSFetchedResultsControllerDelegate {

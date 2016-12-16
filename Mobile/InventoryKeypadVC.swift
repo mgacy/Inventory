@@ -62,7 +62,7 @@ class InventoryKeypadVC: UIViewController {
     @IBOutlet weak var itemPack: UILabel!
     @IBOutlet weak var itemUnit: UILabel!
     
-    // MARK: - Default
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -159,7 +159,7 @@ class InventoryKeypadVC: UIViewController {
         }
     }
     
-    // MARK: - C
+    // MARK: - View
         
     func update(newItem: Bool = false) {
         let output: keypadOutput
@@ -223,14 +223,5 @@ class InventoryKeypadVC: UIViewController {
         // Item.unit
         itemUnit.text = "\(item.inventoryUnit?.abbreviation ?? "")"
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+
 }

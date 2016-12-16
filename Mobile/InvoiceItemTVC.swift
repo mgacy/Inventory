@@ -65,9 +65,7 @@ class InvoiceItemTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InvoiceKeypadVC else {
-            return
-        }
+        guard let destinationController = segue.destination as? InvoiceKeypadVC else { return }
 
         // Pass the parent of the selected object to the new view controller.
         destinationController.parentObject = parentObject
@@ -168,7 +166,7 @@ class InvoiceItemTVC: UITableViewController {
         more.backgroundColor = UIColor.lightGray
 
         let notReceived = UITableViewRowAction(style: .normal, title: "Not Received ...") { action, index in
-            print("favorite button tapped")
+            print("notReceived button tapped")
         }
         notReceived.backgroundColor = ColorPalette.redColor
 
@@ -201,7 +199,7 @@ extension InvoiceItemTVC {
         if succeeded {
             parentObject.uploaded = true
         } else {
-            print("\nPROBLEM - Unable to upload Invoice")
+            print("\(#function) FAILED : unable to upload Invoice")
         }
     }
 

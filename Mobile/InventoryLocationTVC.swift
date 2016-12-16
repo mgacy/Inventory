@@ -74,19 +74,13 @@ class InventoryLocationTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         // Get the selected object.
-        guard let _selectedLocation = selectedLocation else {
-            print("\nPROBLEM - Unable to get selected Location\n")
-            return
-        }
+        guard let _selectedLocation = selectedLocation else { return }
 
         switch segue.identifier! {
         case CategorySegue:
 
             // Get the new view controller using segue.destinationViewController.
-            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else {
-                print("\nPROBLEM - Unable to get destinationController\n")
-                return
-            }
+            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else { return }
 
             // Pass the selected object to the new view controller.
             destinationController.location = _selectedLocation
@@ -96,10 +90,7 @@ class InventoryLocationTVC: UITableViewController {
         case ItemSegue:
 
             // Get the new view controller using segue.destinationViewController.
-            guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
-                print("\nPROBLEM - Unable to get destinationController\n")
-                return
-            }
+            guard let destinationController = segue.destination as? InventoryLocationItemTVC else { return }
 
             // Pass the selected object to the new view controller.
             destinationController.title = _selectedLocation.name
@@ -108,8 +99,7 @@ class InventoryLocationTVC: UITableViewController {
             //destinationController.performFetch()
 
         default:
-            print("\nPROBLEM - segue.identifier not recognized\n")
-            break
+            print("\(#function) FAILED : segue.identifier not recognized\n"); break
         }
     }
 
@@ -167,7 +157,7 @@ class InventoryLocationTVC: UITableViewController {
             // InventoryLocationItem
             performSegue(withIdentifier: "ShowLocationItem", sender: self)
         default:
-            print("\nPROBLEM - Wrong locationType\n")
+            print("\(#function) FAILED : wrong locationType\n")
         }
 
         tableView.deselectRow(at: indexPath, animated: true)
@@ -181,7 +171,7 @@ class InventoryLocationTVC: UITableViewController {
         HUD.show(.progress)
 
         guard let dict = self.inventory.serialize() else {
-            print("\nPROBLEM - Unable to serialize Inventory")
+            print("\(#function) FAILED : unable to serialize Inventory")
             // TODO - completedUpload(false)
             return
         }
@@ -260,10 +250,9 @@ extension InventoryLocationTVC {
         // Set the fetch predicate.
         if let parent = self.inventory {
             let fetchPredicate = NSPredicate(format: "inventory == %@", parent)
-            //print("\nAdding predicate \(fetchPredicate)")
             fetchRequest.predicate = fetchPredicate
         } else {
-            print("\nPROBLEM - Unable able to add predicate\n")
+            print("\(#function) FAILED : unable able to add predicate\n")
         }
 
         // Edit the section name key path and cache name if appropriate.

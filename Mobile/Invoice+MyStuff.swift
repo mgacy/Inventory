@@ -77,8 +77,6 @@ extension Invoice {
             }
         }
         if let vendorID = json["vendor"]["id"].int {
-            //let predicate = NSPredicate(format: "remoteID == \(Int32(vendorID))")
-            //self.vendor = context.fetchSingleEntity(Vendor.self, matchingPredicate: predicate)
             self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
         }
     }

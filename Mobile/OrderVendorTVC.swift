@@ -66,15 +66,10 @@ class OrderVendorTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         // Get the selected object.
-        guard let selectedObject = selectedObject else {
-            print("\nPROBLEM - Unable to get selection")
-            return
-        }
+        guard let selectedObject = selectedObject else { return }
 
         // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? OrderItemTVC else {
-            return
-        }
+        guard let destinationController = segue.destination as? OrderItemTVC else { return }
 
         // Pass the selected object to the new view controller.
         destinationController.parentObject = selectedObject
@@ -154,7 +149,7 @@ extension OrderVendorTVC {
             let fetchPredicate = NSPredicate(format: "collection == %@", parent)
             fetchRequest.predicate = fetchPredicate
         } else {
-            print("\nPROBLEM - Unable able to add predicate")
+            print("\(#function) FAILED : unable able to add predicate")
         }
 
         // Edit the section name key path and cache name if appropriate.

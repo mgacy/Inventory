@@ -64,9 +64,7 @@ class InventoryLocationItemTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InventoryKeypadVC else {
-            return
-        }
+        guard let destinationController = segue.destination as? InventoryKeypadVC else { return }
 
         // Pass the parent of the selected object to the new view controller.
         // TODO: should I really pass both or just the one != nil?
@@ -166,7 +164,7 @@ extension InventoryLocationItemTVC {
             fetchRequest.predicate = fetchPredicate
 
         } else {
-            print("\nPROBLEM - Unable to add predicate\n")
+            print("\(#function) FAILED : unable to add predicate\n")
         }
 
         // Edit the section name key path and cache name if appropriate.

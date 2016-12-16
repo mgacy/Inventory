@@ -67,20 +67,15 @@ class InventoryLocationCategoryTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
-            return
-        }
+        guard let destinationController = segue.destination as? InventoryLocationItemTVC else { return }
+
+        // Get the selection
+        guard let selection = selectedCategory else { return }
 
         // Pass the selected object to the new view controller.
-        guard let selection = selectedCategory else {
-            print("\nPROBLEM - Unable to get selected Category\n")
-            return
-        }
-
         destinationController.title = selection.name
         destinationController.category = selection
         destinationController.managedObjectContext = self.managedObjectContext
-        //destinationController.performFetch()
     }
 
     // MARK: - UITableViewDataSource
@@ -152,10 +147,9 @@ extension InventoryLocationCategoryTVC {
         // Set the fetch predicate.
         if let parent = self.location {
             let fetchPredicate = NSPredicate(format: "location == %@", parent)
-            //print("\nAdding predicate \(fetchPredicate)")
             fetchRequest.predicate = fetchPredicate
         } else {
-            print("\nNot able to add predicate")
+            print("\(#function) FAILED : unable to add predicate")
         }
 
         // Edit the section name key path and cache name if appropriate.

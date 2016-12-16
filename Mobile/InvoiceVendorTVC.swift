@@ -68,14 +68,11 @@ class InvoiceVendorTVC: UITableViewController {
 
         // Get the selected object.
         guard let selectedObject = selectedObject else {
-            print("\nPROBLEM - Unable to get selection")
-            return
+            print("\(#function) FAILED : unable to get selection"); return
         }
 
         // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InvoiceItemTVC else {
-            return
-        }
+        guard let destinationController = segue.destination as? InvoiceItemTVC else { return }
 
         // Pass the selected object to the new view controller.
         destinationController.parentObject = selectedObject
@@ -144,8 +141,6 @@ extension InvoiceVendorTVC {
         fetchRequest.fetchBatchSize = fetchBatchSize
 
         // Edit the sort key as appropriate.
-        // TODO - change sort to vendor.name
-        //let sortDescriptor = NSSortDescriptor(key: "remoteID", ascending: true)
         let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
 
@@ -154,7 +149,7 @@ extension InvoiceVendorTVC {
             let fetchPredicate = NSPredicate(format: "collection == %@", parent)
             fetchRequest.predicate = fetchPredicate
         } else {
-            print("\nPROBLEM - Unable able to add predicate")
+            print("\(#function) FAILED : unable able to add predicate")
         }
 
         // Edit the section name key path and cache name if appropriate.

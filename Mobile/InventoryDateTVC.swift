@@ -93,27 +93,23 @@ class InventoryDateTVC: UITableViewController {
         case NewItemSegue:
 
             // Get the new view controller.
-            guard let controller = segue.destination as? InventoryLocationTVC else {
-                print("\nPROBLEM - Unable to get destination controller\n"); return
-            }
+            guard let controller = segue.destination as? InventoryLocationTVC else { return }
+
+            //  Get the selection
+            guard let selection = selectedInventory else { return }
 
             // Pass selection to new view controller.
-            guard let selection = selectedInventory else {
-                print("\nPROBLEM - Unable to get selection\n"); return
-            }
             controller.inventory = selection
             controller.managedObjectContext = self.managedObjectContext
 
         case ExistingItemSegue:
 
             // Get the new view controller.
-            guard let controller = segue.destination as? InventoryLocationCategoryTVC else {
-                print("\nPROBLEM - Unable to get destination controller\n"); return
-            }
+            guard let controller = segue.destination as? InventoryLocationCategoryTVC else { return }
 
             // Pass selection to new view controller.
             guard let selection = selectedInventory, let locations = selection.locations?.allObjects else {
-                print("\nPROBLEM - Unable to get selection\n"); return
+                print("\(#function) FAILED : unable to get selection\n"); return
             }
 
             // Exisitng Inventories should have 1 Location - "Default"
@@ -187,7 +183,7 @@ class InventoryDateTVC: UITableViewController {
                 if let changedID = changeSelectionForDemo(selection: selection) {
                     remoteID = changedID
                 } else {
-                    print("There was a problem with changeSelectionForDemo")
+                    print("\(#function) FAILED : there was a problem with changeSelectionForDemo")
                 }
             }
 
@@ -259,7 +255,7 @@ extension InventoryDateTVC {
         HUD.hide()
 
         for (_, item) in json {
-            guard let inventoryID = item["id"].int else { print("a"); break }
+            guard let inventoryID = item["id"].int32 else { print("a"); break }
 
             if managedObjectContext?.fetchWithRemoteID(Inventory.self, withID: inventoryID) == nil {
                 _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)

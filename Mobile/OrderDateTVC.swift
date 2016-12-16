@@ -81,13 +81,12 @@ class OrderDateTVC: UITableViewController {
         // Get the new view controller.
         guard let controller = segue.destination as? OrderVendorTVC else { return }
 
+        // Get the selection
+        guard let selection = selectedCollection else { return }
+
         // Pass selection to new view controller.
-        if let selection = selectedCollection {
-            controller.parentObject = selection
-            controller.managedObjectContext = self.managedObjectContext
-        } else {
-            print("\nPROBLEM - Unable to get selection\n")
-        }
+        controller.parentObject = selection
+        controller.managedObjectContext = self.managedObjectContext
     }
 
     // MARK: - UITableViewDataSource
@@ -135,8 +134,7 @@ class OrderDateTVC: UITableViewController {
 
             // Get date to use when getting OrderCollection from server
             guard let collectionDate = selection.date else {
-                print("\nPROBLEM - Unable to get orderCollection.date")
-                return
+                print("\(#function) FAILED : unable to get orderCollection.date"); return
             }
 
             //tableView.activityIndicatorView.startAnimating()
@@ -237,8 +235,7 @@ extension OrderDateTVC {
 
         /*
         guard let selectedCollectionIndex = selectedCollectionIndex else {
-            print("\nPROBLEM - 1a")
-            return
+            print("\nPROBLEM - 1a"); return
         }
         var selection: OrderCollection
         selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
@@ -407,12 +404,7 @@ extension OrderDateTVC {
 
     func deleteObjects<T: NSManagedObject>(entityType: T.Type, filter: NSPredicate? = nil) {
 
-        // Create Fetch Request (A)
-        //let classNameComponents: [String] = entityType.description().components(separatedBy: ".")
-        //let className = classNameComponents[classNameComponents.count-1]
-        //let fetchRequest = NSFetchRequest<T>(entityName: className)
-
-        // Create Fetch Request (B)
+        // Create Fetch Request
         let fetchRequest: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
 
         // Configure Fetch Request
