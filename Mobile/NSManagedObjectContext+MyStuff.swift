@@ -48,7 +48,7 @@ extension NSManagedObjectContext {
                 fatalError("Returned multiple objects, expected max 1")
             }
 
-        } catch {
+        } catch let error {
             print("Error with request: \(error)")
         }
         return nil
@@ -72,7 +72,7 @@ extension NSManagedObjectContext {
                 fatalError("Returned multiple objects, expected max 1")
             }
         
-        } catch {
+        } catch let error {
             print("Error with request: \(error)")
         }
         return nil
@@ -114,6 +114,10 @@ extension NSManagedObjectContext {
             request = NSFetchRequest(entityName: entityName)
         }
 
+        /* 
+         Set returnsObjectsAsFaults to false to gain a performance benefit if you know
+         you will need to access the property values from the returned objects.
+         */
         request.returnsObjectsAsFaults = false
         request.predicate = predicate
 
