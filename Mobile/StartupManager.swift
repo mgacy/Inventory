@@ -59,8 +59,7 @@ class StartupManager {
             syncItems(searchResults: searchResults as! [Item], json: json)
 
         } catch {
-            print("Error with request: \(error)")
-            return
+            print("Error with request: \(error)"); return
         }
     }
 
