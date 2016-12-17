@@ -97,16 +97,17 @@ class StartupManager {
 
         // Create dict from array of Items returned from fetch request
         let itemDict = searchResults.toDictionary { $0.remoteID }
+        /*
+        // Create dict from fetch request on Units (1)
+        let unitSearchResults = try? managedObjectContext.fetchEntities(Unit.self)
+        guard let unitDict = (unitSearchResults?.toDictionary { $0.remoteID }) else {
+            print("\(#function) FAILED : unable to create Unit dictionary"); return
+        }
+        */
 
-        // Create dict from fetch request on Units
-        var unitDict = [Int32: Unit]()
-        let unitFetchRequest: NSFetchRequest<NSFetchRequestResult> = Unit.fetchRequest()
-        do {
-            let unitSearchResults = try managedObjectContext.fetch(unitFetchRequest)
-            unitDict = (unitSearchResults as! [Unit]).toDictionary { $0.remoteID }
-        } catch {
-            print("Error with request: \(error)")
-            return
+        // Create dict from fetch request on Units (2)
+        guard let unitDict = try? managedObjectContext.fetchEntityDict(Unit.self) else {
+            print("\(#function) FAILED : unable to create Unit dictionary"); return
         }
 
         for (_, itemJSON):(String, JSON) in json {
@@ -133,16 +134,15 @@ class StartupManager {
 
         // Determine new / deleted items
         let deletedItems = storeIDs.subtracting(responseIDs)
-        let newItems = responseIDs.subtracting(storeIDs)
+        //let newItems = responseIDs.subtracting(storeIDs)
 
         print("Deleted items: \(deletedItems)")
-        print("New items: \(newItems)")
+        //print("New items: \(newItems)")
 
         // TODO - delete deletedItems
         // 1. perform fetchRequest where remoteID in deletedItems
         // 2. perform batchDelete?
         */
-
         print("Finished syncing Items")
         self.completionHandler(true)
     }
