@@ -204,14 +204,6 @@ extension InvoiceDateTVC {
                     print("Creating InvoiceCollection: \(dateString)")
                     _ = InvoiceCollection(context: self.managedObjectContext!, date: date, uploaded: true)
                 }
-
-                /*
-                 // Create InvoiceCollection if we can't find one with date `date`
-                 if InvoiceCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
-                 // print("Creating InvoiceCollection: \(dateString)")
-                 _ = InvoiceCollection(context: self.managedObjectContext!, date: date, uploaded: true)
-                 }
-                 */
             }
         }
 
