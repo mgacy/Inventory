@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-@objc public protocol Syncable: class {
+@objc public protocol Syncable {
 
     // https://gist.github.com/capttaco/adb38e0d37fbaf9c004e
-    // typealias SyncableType: NSManagedObject = Self
+    //associatedtype SyncableType: NSManagedObject = Self
 
     var remoteID: Int32 { get set }
     var name: String? { get set }
@@ -24,7 +24,7 @@ import SwiftyJSON
 
 }
 
-extension Syncable {
+extension Syncable where Self : NSManagedObject {
 
     // TODO - rename updateWithJSON / updateFromJSON?
     func update(context: NSManagedObjectContext, withJSON json: JSON) {

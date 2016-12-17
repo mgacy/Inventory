@@ -104,4 +104,29 @@ extension NSManagedObjectContext {
         }
     }
 
+    func fetchEntityDict<T: Syncable>(_ entityClass: T.Type, matchingPredicate predicate: NSPredicate? = nil) throws -> [Int32: T] where T: NSManagedObject {
+
+        let request: NSFetchRequest<T>
+        if #available(iOS 10.0, *) {
+            request = entityClass.fetchRequest() as! NSFetchRequest<T>
+        } else {
+            let entityName = String(describing: entityClass)
+            request = NSFetchRequest(entityName: entityName)
+        }
+
+        request.returnsObjectsAsFaults = false
+        request.predicate = predicate
+
+        //let fetchedResult = try self.fetch(request)
+        //return fetchedResult
+        do {
+            let fetchedResult = try self.fetch(request)
+            let objectDict = fetchedResult.toDictionary { $0.remoteID }
+            return objectDict
+        } catch let error {
+            print(error.localizedDescription)
+            throw error
+        }
+    }
+
 }
