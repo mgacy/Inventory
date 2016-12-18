@@ -10,7 +10,39 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+@objc public enum InvoiceItemStatus : Int16 {
+    case pending        = 0
+    case received       = 1
+    case damaged        = 2
+    case outOfStock     = 3
+    case promo          = 4
+    case substitute     = 5
+    case wrongItem      = 6
+
+    var description: String {
+        switch self {
+        case .pending:
+            return "Pending"
+        case .received:
+            return "Received"
+        case .damaged:
+            return "Damaged"
+        case .outOfStock:
+            return "Out of Stock"
+        case .promo:
+            return "Promotion"
+        case .substitute:
+            return "Substitute"
+        case .wrongItem:
+            return "Wrong Item"
+        }
+    }
+
+}
+
 extension InvoiceItem {
+
+    //@NSManaged var status: InvoiceItemStatus
 
     // MARK: - Lifecycle
 
