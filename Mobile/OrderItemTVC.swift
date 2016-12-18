@@ -20,6 +20,7 @@ class OrderItemTVC: UITableViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
+    var _fetchedResultsController: NSFetchedResultsController<OrderItem>? = nil
     var filter: NSPredicate? = nil
     var cacheName: String? = nil
     var sectionNameKeyPath: String? = nil
@@ -66,7 +67,24 @@ class OrderItemTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - User interaction
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        // Get the new view controller using segue.destinationViewController.
+        guard let destinationController = segue.destination as? OrderKeypadVC else { return }
+
+        // Pass the parent of the selected object to the new view controller.
+        destinationController.parentObject = parentObject
+        destinationController.managedObjectContext = self.managedObjectContext
+
+        // FIX: fix this
+        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
+            destinationController.currentIndex = indexPath
+        }
+    }
+
+    // MARK: - User Actions
 
     @IBAction func tappedMessageOrder(_ sender: UIBarButtonItem) {
 
@@ -122,6 +140,195 @@ class OrderItemTVC: UITableViewController {
             present(errorAlert, animated: true, completion: nil)
         }
     }
+
+    // MARK: - UITableViewDataSource
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return self.fetchedResultsController.sections?.count ?? 0
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let sectionInfo = self.fetchedResultsController.sections![section]
+        return sectionInfo.numberOfObjects
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        // Dequeue Reusable Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
+
+        // OLD
+        //let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
+
+        // Configure Cell
+        self.configureCell(cell, atIndexPath: indexPath)
+
+        return cell
+    }
+
+    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
+        let orderItem = self.fetchedResultsController.object(at: indexPath)
+        cell.textLabel?.text = orderItem.item?.name
+
+        guard let quantity = orderItem.quantity else { return }
+        if Double(quantity) > 0.0 {
+            cell.textLabel?.textColor = UIColor.black
+            cell.detailTextLabel?.text = "\(quantity) \(orderItem.orderUnit?.abbreviation ?? "")"
+        } else {
+            cell.textLabel?.textColor = UIColor.lightGray
+            // TODO - should I even bother displaying quantity?
+            cell.detailTextLabel?.text = "\(quantity)"
+        }
+        // TODO - add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
+    }
+
+    // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedObject = self.fetchedResultsController.object(at: indexPath)
+        // print("Selected OrderItem: \(selectedObject)")
+
+        performSegue(withIdentifier: segueIdentifier, sender: self)
+
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+}
+
+// MARK: - Completion Handlers
+extension OrderItemTVC {
+
+    func completedPlaceOrder(_ succeeded: Bool) {
+        if succeeded {
+            parentObject.placed = true
+
+            HUD.show(.progress)
+
+            // Serialize and POST Order
+            if let json = parentObject.serialize() {
+                print("\nPOSTing Order: \(json)")
+                APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
+            }
+
+            // TODO - handle failure to serialize Order
+
+        } else {
+            print("\nPROBLEM - Unable to send Order message")
+            showAlert(title: "Problem", message: "Unable to send Order message")
+        }
+    }
+
+    func completedPostOrder(succeeded: Bool, json: JSON) {
+        if succeeded {
+            parentObject.uploaded = true
+
+            HUD.flash(.success, delay: 1.0) { finished in
+                // Pop view
+                self.navigationController!.popViewController(animated: true)
+            }
+
+        } else {
+            print("\nPROBLEM - Unable to POST order \(json)")
+            showAlert(title: "Problem", message: "Unable to upload Order")
+        }
+    }
+
+}
+
+// MARK: - Type-Specific NSFetchedResultsController Extension
+extension  OrderItemTVC {
+
+    var fetchedResultsController: NSFetchedResultsController<OrderItem> {
+        if _fetchedResultsController != nil {
+            return _fetchedResultsController!
+        }
+
+        let fetchRequest: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
+
+        // Set the batch size to a suitable number.
+        fetchRequest.fetchBatchSize = fetchBatchSize
+
+        // Edit the sort key as appropriate.
+        // TODO - sort by item.category.name as well?
+        // let categorySortDescriptor = NSSortDescriptor(key: "item.category.name", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+
+        // Set the fetch predicate
+        if let parent = self.parentObject {
+            let fetchPredicate = NSPredicate(format: "order == %@", parent)
+            fetchRequest.predicate = fetchPredicate
+        } else {
+            print("\nPROBLEM - Unable able to add predicate")
+        }
+
+        // Edit the section name key path and cache name if appropriate.
+        // nil for section name key path means "no sections".
+        let aFetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: self.managedObjectContext!,
+            sectionNameKeyPath: self.sectionNameKeyPath,
+            cacheName: self.cacheName)
+
+        aFetchedResultsController.delegate = self
+        _fetchedResultsController = aFetchedResultsController
+
+        return _fetchedResultsController!
+    }
+
+    func performFetch () {
+        self.fetchedResultsController.managedObjectContext.perform ({
+
+            do {
+                try self.fetchedResultsController.performFetch()
+            } catch {
+                print("\(#function) FAILED : \(error)")
+            }
+            self.tableView.reloadData()
+        })
+    }
+
+}
+
+// MARK: - NSFetchedResultsControllerDelegate Extension
+extension OrderItemTVC: NSFetchedResultsControllerDelegate {
+
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .delete:
+            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        default:
+            return
+        }
+    }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+        case .update:
+            configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
+        case .move:
+            tableView.moveRow(at: indexPath!, to: newIndexPath!)
+        }
+    }
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+    }
+
+}
+
+// MARK: - Notifications
+extension OrderItemTVC {
 
     // If we pass a handler, display a "Cancel" and an "OK" button with the latter calling that handler
     // Otherwise, display a single "OK" button
@@ -179,221 +386,8 @@ class OrderItemTVC: UITableViewController {
         // Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
         alert.addAction(cancelAction)
-
+        
         present(alert, animated: true, completion: nil)
-    }
-
-    // MARK: - Completion handlers
-
-    func completedPlaceOrder(_ succeeded: Bool) {
-        if succeeded {
-            parentObject.placed = true
-
-            HUD.show(.progress)
-
-            // Serialize and POST Order
-            if let json = parentObject.serialize() {
-                print("\nPOSTing Order: \(json)")
-                APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
-            }
-
-            // TODO - handle failure to serialize Order
-
-        } else {
-            print("\nPROBLEM - Unable to send Order message")
-            showAlert(title: "Problem", message: "Unable to send Order message")
-        }
-    }
-
-    func completedPostOrder(succeeded: Bool, json: JSON) {
-        if succeeded {
-            parentObject.uploaded = true
-
-            HUD.flash(.success, delay: 1.0) { finished in
-                // Pop view
-                self.navigationController!.popViewController(animated: true)
-            }
-
-        } else {
-            print("\nPROBLEM - Unable to POST order \(json)")
-            showAlert(title: "Problem", message: "Unable to upload Order")
-        }
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return self.fetchedResultsController.sections?.count ?? 0
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = self.fetchedResultsController.sections![section]
-        return sectionInfo.numberOfObjects
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        // Dequeue Reusable Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
-
-        // OLD
-        //let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
-
-        // Configure Cell
-        self.configureCell(cell, atIndexPath: indexPath)
-
-        return cell
-    }
-
-    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
-        let orderItem = self.fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = orderItem.item?.name
-
-        guard let quantity = orderItem.quantity else { return }
-        if Double(quantity) > 0.0 {
-            cell.textLabel?.textColor = UIColor.black
-            cell.detailTextLabel?.text = "\(quantity) \(orderItem.orderUnit?.abbreviation ?? "")"
-        } else {
-            cell.textLabel?.textColor = UIColor.lightGray
-            // TODO - should I even bother displaying quantity?
-            cell.detailTextLabel?.text = "\(quantity)"
-        }
-        // TODO - add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = self.fetchedResultsController.object(at: indexPath)
-        // print("Selected OrderItem: \(selectedObject)")
-
-        performSegue(withIdentifier: segueIdentifier, sender: self)
-
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support editing the table view.
-    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-
-    // Override to support rearranging the table view.
-    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
-
-    // Override to support conditional rearranging of the table view.
-    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? OrderKeypadVC else {
-            return
-        }
-
-        // Pass the parent of the selected object to the new view controller.
-        destinationController.parentObject = parentObject
-        destinationController.managedObjectContext = self.managedObjectContext
-
-        // FIX: fix this
-        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
-            destinationController.currentIndex = indexPath
-        }
-    }
-
-    // MARK: - Fetched results controller
-
-    var fetchedResultsController: NSFetchedResultsController<OrderItem> {
-        if _fetchedResultsController != nil {
-            return _fetchedResultsController!
-        }
-
-        let fetchRequest: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
-
-        // Set the batch size to a suitable number.
-        fetchRequest.fetchBatchSize = fetchBatchSize
-
-        // Edit the sort key as appropriate.
-        // TODO - sort by item.category.name as well?
-        // let categorySortDescriptor = NSSortDescriptor(key: "item.category.name", ascending: true)
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-
-        // Set the fetch predicate
-        if let parent = self.parentObject {
-            let fetchPredicate = NSPredicate(format: "order == %@", parent)
-            fetchRequest.predicate = fetchPredicate
-        } else {
-            print("\nPROBLEM - Unable able to add predicate")
-        }
-
-        // Edit the section name key path and cache name if appropriate.
-        // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(
-            fetchRequest: fetchRequest,
-            managedObjectContext: self.managedObjectContext!,
-            sectionNameKeyPath: self.sectionNameKeyPath,
-            cacheName: self.cacheName)
-
-        aFetchedResultsController.delegate = self
-        _fetchedResultsController = aFetchedResultsController
-
-        return _fetchedResultsController!
-    }
-
-    var _fetchedResultsController: NSFetchedResultsController<OrderItem>? = nil
-
-    func performFetch () {
-        self.fetchedResultsController.managedObjectContext.perform ({
-
-            do {
-                try self.fetchedResultsController.performFetch()
-            } catch {
-                print("\(#function) FAILED : \(error)")
-            }
-            self.tableView.reloadData()
-        })
-    }
-
-}
-
-// MARK: - NSFetchedResultsControllerDelegate Extension
-extension OrderItemTVC: NSFetchedResultsControllerDelegate {
-
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        switch type {
-        case .insert:
-            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
-        case .delete:
-            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
-        default:
-            return
-        }
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
-        case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .fade)
-        case .update:
-            configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
-        case .move:
-            tableView.moveRow(at: indexPath!, to: newIndexPath!)
-        }
-    }
-
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
     }
 
 }

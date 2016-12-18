@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-extension Vendor {
+extension Vendor: Syncable {
     
     // MARK: - Lifecycle
     
@@ -22,8 +22,8 @@ extension Vendor {
     func update(context: NSManagedObjectContext, withJSON json: JSON) {
 
         // Properties
-        if let remoteID = json["id"].int {
-            self.remoteID = Int32(remoteID)
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
         }
         if let name = json["name"].string {
             self.name = name

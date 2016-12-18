@@ -18,8 +18,8 @@ extension InvoiceItem {
         self.init(context: context)
 
         // Properties
-        if let remoteID = json["id"].int {
-            self.remoteID = Int32(remoteID)
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
         }
         if let quantity = json["quantity"].double {
             self.quantity = quantity
@@ -35,10 +35,10 @@ extension InvoiceItem {
 
         // Relationships
         self.invoice = invoice
-        if let itemID = json["item"]["id"].int {
+        if let itemID = json["item"]["id"].int32 {
             self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
         }
-        if let unitID = json["unit"]["id"].int {
+        if let unitID = json["unit"]["id"].int32 {
             self.unit = context.fetchWithRemoteID(Unit.self, withID: unitID)
         }
     }

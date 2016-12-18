@@ -10,13 +10,12 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-// TODO - use an enum for InventoryLocation.locationType?
-
 enum InventoryLocationType {
     case category
     case item
 }
 
+// TODO: rename to InventoryLocationStatus?
 enum InventoryStatus {
     case incomplete
     case complete
@@ -134,8 +133,8 @@ extension InventoryLocation {
         if let name = json["name"].string {
             self.name = name
         }
-        if let remoteID = json["id"].int {
-            self.remoteID = Int32(remoteID)
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
         }
         if let locationType = json["loc_type"].string {
             self.locationType = locationType

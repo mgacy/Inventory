@@ -21,6 +21,7 @@ class InventoryDateTVC: UITableViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
+    var _fetchedResultsController: NSFetchedResultsController<Inventory>? = nil
     //var filter: NSPredicate? = nil
     var cacheName: String? = "Master"
     var sectionNameKeyPath: String? = nil
@@ -85,35 +86,30 @@ class InventoryDateTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Segues
+    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
         case NewItemSegue:
 
             // Get the new view controller.
-            guard let controller = segue.destination as? InventoryLocationTVC else {
-                print("\nPROBLEM - Unable to get destination controller\n"); return
-            }
+            guard let controller = segue.destination as? InventoryLocationTVC else { return }
+
+            //  Get the selection
+            guard let selection = selectedInventory else { return }
 
             // Pass selection to new view controller.
-            guard let selection = selectedInventory else {
-                print("\nPROBLEM - Unable to get selection\n"); return
-            }
             controller.inventory = selection
             controller.managedObjectContext = self.managedObjectContext
 
         case ExistingItemSegue:
 
             // Get the new view controller.
-            guard let controller = segue.destination as? InventoryLocationCategoryTVC else {
-                print("\nPROBLEM - Unable to get destination controller\n"); return
-            }
+            guard let controller = segue.destination as? InventoryLocationCategoryTVC else { return }
 
             // Pass selection to new view controller.
             guard let selection = selectedInventory, let locations = selection.locations?.allObjects else {
-                print("\nPROBLEM - Unable to get selection\n"); return
+                print("\(#function) FAILED : unable to get selection\n"); return
             }
 
             // Exisitng Inventories should have 1 Location - "Default"
@@ -133,7 +129,7 @@ class InventoryDateTVC: UITableViewController {
         }
     }
 
-    // MARK: - Table view data source
+    // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
@@ -166,13 +162,7 @@ class InventoryDateTVC: UITableViewController {
         }
     }
 
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support editing the table view.
-    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-
-    // MARK: - Navigation
+    // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedInventory = self.fetchedResultsController.object(at: indexPath)
@@ -193,7 +183,7 @@ class InventoryDateTVC: UITableViewController {
                 if let changedID = changeSelectionForDemo(selection: selection) {
                     remoteID = changedID
                 } else {
-                    print("There was a problem with changeSelectionForDemo")
+                    print("\(#function) FAILED : there was a problem with changeSelectionForDemo")
                 }
             }
 
@@ -219,6 +209,8 @@ class InventoryDateTVC: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
+    // MARK: - User Actions
+
     @IBAction func newTapped(_ sender: AnyObject) {
 
         // TODO - check if there is already an Inventory for the current date and of the current type
@@ -243,7 +235,12 @@ class InventoryDateTVC: UITableViewController {
         completedLogin(true)
     }
 
-    // MARK: - Completion handlers
+}
+
+// MARK: - Completion Handlers + Sync
+extension InventoryDateTVC {
+
+    // MARK: - Completion Handlers
 
     func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
@@ -258,7 +255,7 @@ class InventoryDateTVC: UITableViewController {
         HUD.hide()
 
         for (_, item) in json {
-            guard let inventoryID = item["id"].int else { print("a"); break }
+            guard let inventoryID = item["id"].int32 else { print("a"); break }
 
             if managedObjectContext?.fetchWithRemoteID(Inventory.self, withID: inventoryID) == nil {
                 _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
@@ -334,19 +331,7 @@ class InventoryDateTVC: UITableViewController {
         }
     }
 
-    // MARK: - A
-
-    func saveContext() {
-        let context = self.fetchedResultsController.managedObjectContext
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-    }
+    // MARK: - Sync
 
     func deleteExistingInventories(_ filter: NSPredicate? = nil) {
         print("deleteExistingInventories ...")
@@ -450,17 +435,20 @@ class InventoryDateTVC: UITableViewController {
 
             // Perform Fetch
             try self.fetchedResultsController.performFetch()
-
+            
             // Reload Table View
             tableView.reloadData()
-
+            
         } catch {
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
     }
 
-    // MARK: - Fetched results controller
+}
+
+// MARK: - Type-Specific NSFetchedResultsController Extension
+extension InventoryDateTVC {
 
     var fetchedResultsController: NSFetchedResultsController<Inventory> {
         if _fetchedResultsController != nil {
@@ -491,8 +479,6 @@ class InventoryDateTVC: UITableViewController {
         return _fetchedResultsController!
     }
 
-    var _fetchedResultsController: NSFetchedResultsController<Inventory>? = nil
-
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({
 
@@ -503,6 +489,18 @@ class InventoryDateTVC: UITableViewController {
             }
             self.tableView.reloadData()
         })
+    }
+
+    func saveContext() {
+        let context = self.fetchedResultsController.managedObjectContext
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
     }
 
 }
@@ -543,6 +541,10 @@ extension InventoryDateTVC: NSFetchedResultsControllerDelegate {
     }
 
 }
+
+// MARK: - UITableViewDataSource Extension
+
+// MARK: - UITableViewDelegate Extension
 
 // MARK: - For Demo
 extension InventoryDateTVC {

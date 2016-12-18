@@ -30,13 +30,13 @@ extension Invoice {
 
         // Properties
 
-        if let remoteID = json["remote_id"].int {
-            self.remoteID = Int32(remoteID)
+        if let remoteID = json["remote_id"].int32 {
+            self.remoteID = remoteID
         }
-        if let invoiceNo = json["invoice_no"].int {
-            self.invoiceNo = Int32(invoiceNo)
+        if let invoiceNo = json["invoice_no"].int32 {
+            self.invoiceNo = invoiceNo
         }
-        //if let storeID = json["store_id"].int {
+        //if let storeID = json["store_id"].int32 {
         //    self.storeID = storeID
         //}
         if let shipDate = json["ship_date"].string {
@@ -58,8 +58,8 @@ extension Invoice {
         if let totalCost = json["total_cost"].double {
             self.totalCost = totalCost
         }
-        if let checkNo = json["check_no"].int {
-            self.checkNo = Int32(checkNo)
+        if let checkNo = json["check_no"].int32 {
+            self.checkNo = checkNo
         }
         self.uploaded = uploaded
         
@@ -76,9 +76,7 @@ extension Invoice {
                 _ = InvoiceItem(context: context, json: itemJSON, invoice: self)
             }
         }
-        if let vendorID = json["vendor"]["id"].int {
-            //let predicate = NSPredicate(format: "remoteID == \(Int32(vendorID))")
-            //self.vendor = context.fetchSingleEntity(Vendor.self, matchingPredicate: predicate)
+        if let vendorID = json["vendor"]["id"].int32 {
             self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
         }
     }

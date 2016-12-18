@@ -19,8 +19,8 @@ extension OrderItem {
 
         // Properties
         
-        if let itemID = json["item"]["id"].int {
-            self.itemID = Int32(itemID)
+        if let itemID = json["item"]["id"].int32 {
+            self.itemID = itemID
         }
         
         if let onHand = json["inventory"].double {
@@ -31,7 +31,7 @@ extension OrderItem {
         if let par = json["par"].double {
             self.par = par
         }
-        if let parUnitID = json["par_unit_id"].int {
+        if let parUnitID = json["par_unit_id"].int32 {
             self.parUnit = context.fetchWithRemoteID(Unit.self, withID: parUnitID)
         }
         
@@ -40,7 +40,7 @@ extension OrderItem {
             self.minOrder = minOrder
             self.quantity = minOrder as NSNumber?
         }
-        if let minOrderUnitID = json["min_order_unit_id"].int {
+        if let minOrderUnitID = json["min_order_unit_id"].int32 {
             self.minOrderUnit = context.fetchWithRemoteID(Unit.self, withID: minOrderUnitID)
         }
 
@@ -49,15 +49,15 @@ extension OrderItem {
             self.quantity = order as NSNumber?
         }
         // Accomodate differences between response for new and existing Orders
-        if let orderUnitID = json["unit_id"].int {
+        if let orderUnitID = json["unit_id"].int32 {
             self.orderUnit = context.fetchWithRemoteID(Unit.self, withID: orderUnitID)
-        } else if let orderUnitID = json["unit"]["id"].int {
+        } else if let orderUnitID = json["unit"]["id"].int32 {
             self.orderUnit = context.fetchWithRemoteID(Unit.self, withID: orderUnitID)
         }
         
         // Relationships
         
-        if let itemID = json["item"]["id"].int {
+        if let itemID = json["item"]["id"].int32 {
             if let item = context.fetchWithRemoteID(Item.self, withID: itemID) {
                 self.item = item
             }

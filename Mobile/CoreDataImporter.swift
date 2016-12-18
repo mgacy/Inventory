@@ -32,16 +32,13 @@ class CoreDataImporter {
             let data = asset.data
             let jsonArray = JSON(data: data)
             if jsonArray != JSON.null {
-                //print("jsonData:\(jsonArray)")
 
                 let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
                 //let managedObjectContext = CoreDataStack.shared.viewContext
                 //let managedObjectContext = CoreDataStack.shared.backgroundContext
 
                 for (_, unitJSON):(String, JSON) in jsonArray {
-                    //print("\(unitJSON)")
-                    let unit = Unit(context: managedObjectContext, json: unitJSON)
-                    print("\(unit)")
+                    _ = Unit(context: managedObjectContext, json: unitJSON)
                 }
 
             } else {

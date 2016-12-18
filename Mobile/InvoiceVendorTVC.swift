@@ -18,6 +18,7 @@ class InvoiceVendorTVC: UITableViewController {
 
     // MARK: FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
+    var _fetchedResultsController: NSFetchedResultsController<Invoice>? = nil
     var filter: NSPredicate? = nil
     var cacheName: String? = "Master"
     var sectionNameKeyPath: String? = nil
@@ -28,6 +29,8 @@ class InvoiceVendorTVC: UITableViewController {
 
     // Segues
     let segueIdentifier = "showInvoiceItems"
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +62,24 @@ class InvoiceVendorTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        // Get the selected object.
+        guard let selectedObject = selectedObject else {
+            print("\(#function) FAILED : unable to get selection"); return
+        }
+
+        // Get the new view controller using segue.destinationViewController.
+        guard let destinationController = segue.destination as? InvoiceItemTVC else { return }
+
+        // Pass the selected object to the new view controller.
+        destinationController.parentObject = selectedObject
+        destinationController.managedObjectContext = self.managedObjectContext
+    }
+
+    // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
@@ -94,22 +114,7 @@ class InvoiceVendorTVC: UITableViewController {
         }
     }
 
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support editing the table view.
-    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-
-    // Override to support rearranging the table view.
-    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
-
-    // Override to support conditional rearranging of the table view.
-    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // MARK: - Navigation
+    // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
@@ -120,26 +125,10 @@ class InvoiceVendorTVC: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+}
 
-        // Get the selected object.
-        guard let selectedObject = selectedObject else {
-            print("\nPROBLEM - Unable to get selection")
-            return
-        }
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InvoiceItemTVC else {
-            return
-        }
-
-        // Pass the selected object to the new view controller.
-        destinationController.parentObject = selectedObject
-        destinationController.managedObjectContext = self.managedObjectContext
-    }
-
-    // MARK: - Fetched results controller
+// MARK: - Type-Specific NSFetchedResultsController Extension
+extension InvoiceVendorTVC {
 
     var fetchedResultsController: NSFetchedResultsController<Invoice> {
         if _fetchedResultsController != nil {
@@ -152,8 +141,6 @@ class InvoiceVendorTVC: UITableViewController {
         fetchRequest.fetchBatchSize = fetchBatchSize
 
         // Edit the sort key as appropriate.
-        // TODO - change sort to vendor.name
-        //let sortDescriptor = NSSortDescriptor(key: "remoteID", ascending: true)
         let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
 
@@ -162,7 +149,7 @@ class InvoiceVendorTVC: UITableViewController {
             let fetchPredicate = NSPredicate(format: "collection == %@", parent)
             fetchRequest.predicate = fetchPredicate
         } else {
-            print("\nPROBLEM - Unable able to add predicate")
+            print("\(#function) FAILED : unable able to add predicate")
         }
 
         // Edit the section name key path and cache name if appropriate.
@@ -179,7 +166,6 @@ class InvoiceVendorTVC: UITableViewController {
         return _fetchedResultsController!
     }
 
-    var _fetchedResultsController: NSFetchedResultsController<Invoice>? = nil
 
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({

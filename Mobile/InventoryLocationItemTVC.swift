@@ -19,6 +19,7 @@ class InventoryLocationItemTVC: UITableViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
+    var _fetchedResultsController: NSFetchedResultsController<InventoryLocationItem>? = nil
     //var filter: NSPredicate? = nil
     var cacheName: String? = nil
     var sectionNameKeyPath: String? = nil
@@ -29,6 +30,8 @@ class InventoryLocationItemTVC: UITableViewController {
 
     // Segues
     let KeypadSegue = "ShowInventoryKeypad"
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,7 +59,26 @@ class InventoryLocationItemTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        // Get the new view controller using segue.destinationViewController.
+        guard let destinationController = segue.destination as? InventoryKeypadVC else { return }
+
+        // Pass the parent of the selected object to the new view controller.
+        // TODO: should I really pass both or just the one != nil?
+        destinationController.category = category
+        destinationController.location = location
+        destinationController.managedObjectContext = self.managedObjectContext
+
+        // FIX: fix this
+        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
+            destinationController.currentIndex = indexPath
+        }
+    }
+
+    // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
@@ -99,22 +121,7 @@ class InventoryLocationItemTVC: UITableViewController {
         }
     }
 
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support editing the table view.
-    // override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
-
-    // Override to support rearranging the table view.
-    // override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {}
-
-    // Override to support conditional rearranging of the table view.
-    // override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {}
-
-    // Override to support conditional editing of the table view.
-    // override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {}
-
-    // MARK: - Navigation
+    // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedItem = self.fetchedResultsController.object(at: indexPath)
@@ -125,28 +132,10 @@ class InventoryLocationItemTVC: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+}
 
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InventoryKeypadVC else {
-            return
-        }
-
-        // Pass the parent of the selected object to the new view controller.
-        // TODO: should I really pass both or just the one != nil?
-        destinationController.category = category
-        destinationController.location = location
-        destinationController.managedObjectContext = self.managedObjectContext
-
-        // FIX: fix this
-        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
-            destinationController.currentIndex = indexPath
-        }
-
-    }
-
-    // MARK: - Fetched results controller
+// MARK: - Type-Specific NSFetchedResultsController Extension
+extension InventoryLocationItemTVC {
 
     var fetchedResultsController: NSFetchedResultsController<InventoryLocationItem> {
         if _fetchedResultsController != nil {
@@ -175,7 +164,7 @@ class InventoryLocationItemTVC: UITableViewController {
             fetchRequest.predicate = fetchPredicate
 
         } else {
-            print("\nPROBLEM - Unable to add predicate\n")
+            print("\(#function) FAILED : unable to add predicate\n")
         }
 
         // Edit the section name key path and cache name if appropriate.
@@ -203,8 +192,6 @@ class InventoryLocationItemTVC: UITableViewController {
             self.tableView.reloadData()
         })
     }
-
-    var _fetchedResultsController: NSFetchedResultsController<InventoryLocationItem>? = nil
 
 }
 
