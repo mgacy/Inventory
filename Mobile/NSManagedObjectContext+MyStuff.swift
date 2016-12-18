@@ -104,7 +104,11 @@ extension NSManagedObjectContext {
         }
     }
 
-    func fetchEntityDict<T: Syncable>(_ entityClass: T.Type, matchingPredicate predicate: NSPredicate? = nil) throws -> [Int32: T] where T: NSManagedObject {
+    func fetchEntityDict<T: Syncable>(_ entityClass: T.Type,
+                         matchingPredicate predicate: NSPredicate? = nil,
+                         prefetchingRelationships relationships: [String]? = nil,
+                         returningAsFaults asFaults: Bool = false
+        ) throws -> [Int32: T] where T: NSManagedObject {
 
         let request: NSFetchRequest<T>
         if #available(iOS 10.0, *) {
@@ -118,8 +122,9 @@ extension NSManagedObjectContext {
          Set returnsObjectsAsFaults to false to gain a performance benefit if you know
          you will need to access the property values from the returned objects.
          */
-        request.returnsObjectsAsFaults = false
+        request.returnsObjectsAsFaults = asFaults
         request.predicate = predicate
+        request.relationshipKeyPathsForPrefetching = relationships
 
         //let fetchedResult = try self.fetch(request)
         //return fetchedResult
