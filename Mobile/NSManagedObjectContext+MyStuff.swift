@@ -133,4 +133,45 @@ extension NSManagedObjectContext {
         }
     }
 
+    // MARK: - Delete
+
+    func deleteEntities<T: NSManagedObject>(_ entityClass: T.Type, filter: NSPredicate? = nil) throws {
+
+        // We need to make sure that any changes are first pushed to the persistent store
+        if self.hasChanges {
+            do {
+                try self.save()
+            } catch {
+                let saveError = error as NSError
+                print("\(saveError), \(saveError.userInfo)")
+            }
+        }
+
+        // Create Fetch Request
+        let fetchRequest: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
+
+        // Configure Fetch Request
+        if let filter = filter { fetchRequest.predicate = filter }
+
+        // Initialize Batch Delete Request
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
+
+        // Configure Batch Update Request
+        batchDeleteRequest.resultType = .resultTypeCount
+
+        do {
+            // Execute Batch Request
+            let batchDeleteResult = try self.execute(batchDeleteRequest) as! NSBatchDeleteResult
+
+            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+
+            // Reset Managed Object Context
+            self.reset()
+
+        } catch {
+            let updateError = error as NSError
+            print("\(updateError), \(updateError.userInfo)")
+        }
+    }
+
 }
