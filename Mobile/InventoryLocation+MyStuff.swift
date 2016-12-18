@@ -10,13 +10,12 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-// TODO - use an enum for InventoryLocation.locationType?
-
 enum InventoryLocationType {
     case category
     case item
 }
 
+// TODO: rename to InventoryLocationStatus?
 enum InventoryStatus {
     case incomplete
     case complete
