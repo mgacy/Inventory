@@ -114,7 +114,13 @@ class InvoiceItemTVC: UITableViewController {
 
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let invoiceItem = self.fetchedResultsController.object(at: indexPath)
+
+        // Name
         cell.textLabel?.text = invoiceItem.item?.name
+
+        // TODO - pack
+
+        // TODO - cost
 
         //guard let quantity = invoiceItem.quantity else { return }
         let quantity = invoiceItem.quantity
@@ -159,6 +165,9 @@ class InvoiceItemTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+
+        // Buttons
+
         let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
             self.isEditing = false
             print("more button tapped")
