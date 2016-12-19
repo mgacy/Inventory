@@ -136,17 +136,17 @@ class InvoiceItemTVC: UITableViewController {
         switch invoiceItem.status {
         case InvoiceItemStatus.pending.rawValue:
             cell.textLabel?.textColor = UIColor.lightGray
-
+        // Received
         case InvoiceItemStatus.received.rawValue:
             cell.textLabel?.textColor = UIColor.black
-        // X
+        // Not Received
         case InvoiceItemStatus.damaged.rawValue:
             cell.textLabel?.textColor = ColorPalette.redColor
         case InvoiceItemStatus.outOfStock.rawValue:
             cell.textLabel?.textColor = ColorPalette.redColor
         case InvoiceItemStatus.wrongItem.rawValue:
             cell.textLabel?.textColor = ColorPalette.redColor
-        // Z
+        // Other
         case InvoiceItemStatus.promo.rawValue:
             cell.textLabel?.textColor = ColorPalette.navyColor
         case InvoiceItemStatus.substitute.rawValue:
@@ -173,25 +173,23 @@ class InvoiceItemTVC: UITableViewController {
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let invoiceItem = self.fetchedResultsController.object(at: indexPath)
 
-        // Buttons
-
+        // More Button
         let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
             self.isEditing = false
             print("more button tapped")
         }
         more.backgroundColor = UIColor.lightGray
 
+        // Not Received Button
         let notReceived = UITableViewRowAction(style: .normal, title: "Not Received ...") { action, index in
-            print("notReceived button tapped")
             self.showNotReceivedAlert(forItem: invoiceItem)
         }
         notReceived.backgroundColor = ColorPalette.redColor
 
+        // Received Button
         let received = UITableViewRowAction(style: .normal, title: "Received") { action, index in
             invoiceItem.status = InvoiceItemStatus.received.rawValue
-            print("Item: \(invoiceItem)")
             self.isEditing = false
-            print("received button tapped")
         }
         received.backgroundColor = ColorPalette.navyColor
 
@@ -215,49 +213,41 @@ class InvoiceItemTVC: UITableViewController {
         // Generic Action Handler
 
         func updateItemStatus(forItem invoiceItem: InvoiceItem, withStatus status: InvoiceItemStatus) {
+            self.isEditing = false
             invoiceItem.status = status.rawValue
             print("Updated InvoiceItem: \(invoiceItem)")
-            self.isEditing = false
         }
 
         // Alert Controller
-
-        let alertController = UIAlertController(
-            title: "Hey AppCoda",
-            message: "Why wasn't this item received?",
-            preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: nil,message: "Why wasn't this item received?",
+                                                preferredStyle: .actionSheet)
 
         // Actions
 
         // TODO - use InvoiceItemStatus.description for alert action title?
 
         // damaged
-        let damagedActionHandler = { (action:UIAlertAction!) -> Void in
+        let damagedAction = UIAlertAction(title: "Damaged", style: .default, handler: { (action:UIAlertAction!) -> Void in
             updateItemStatus(forItem: invoiceItem, withStatus: .damaged)
-        }
-        let damagedAction = UIAlertAction(title: "Damaged", style: .default, handler: damagedActionHandler)
+        })
         alertController.addAction(damagedAction)
 
         // outOfStock
-        let outOfStockActionHandler = { (action:UIAlertAction!) -> Void in
+        let outOfStockAction = UIAlertAction(title: "Out of Stock", style: .default, handler: { (action:UIAlertAction!) -> Void in
             updateItemStatus(forItem: invoiceItem, withStatus: .outOfStock)
-        }
-        let outOfStockAction = UIAlertAction(title: "Out of Stock", style: .default, handler: outOfStockActionHandler)
+        })
         alertController.addAction(outOfStockAction)
 
         // wrongItem
-        let wrongItemActionHandler = { (action: UIAlertAction) -> Void in
+        let wrontItemAction = UIAlertAction(title: "Wrong Item", style: .default, handler: { (action: UIAlertAction) -> Void in
             updateItemStatus(forItem: invoiceItem, withStatus: .wrongItem)
-        }
-        let wrontItemAction = UIAlertAction(title: "Wrong Item", style: .default, handler: wrongItemActionHandler)
+        })
         alertController.addAction(wrontItemAction)
 
         // cancel
-        let cancelActionHandler = { (action: UIAlertAction) -> Void in
-            print("Cancelled")
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) -> Void in
             self.isEditing = false
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelActionHandler)
+        })
         alertController.addAction(cancelAction)
 
         // Present Alert
