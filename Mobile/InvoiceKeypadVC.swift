@@ -37,7 +37,21 @@ class InvoiceKeypadVC: UIViewController {
         //print("currentItem: \(items[currentIndex])")
         return items[currentIndex]
     }
-    
+
+    var inactiveUnit: Unit? {
+        guard let item = currentItem.item else { print("A1"); return nil  }
+        guard let pack = item.purchaseUnit else { print("A2"); return nil }
+        guard let unit = item.purchaseSubUnit else { print("A3"); return nil }
+
+        if currentItem.unit == unit {
+            return pack
+        } else if currentItem.unit == pack {
+            return unit
+        } else {
+            print("Unable to get inactiveUnit"); return nil
+        }
+    }
+
     typealias keypadOutput = (total: Double?, display: String)
     let keypad = Keypad()
     
@@ -47,7 +61,8 @@ class InvoiceKeypadVC: UIViewController {
         case cost
         case status
     }
-    
+
+    // TODO - should default mode be cost, since that is most likely to vary?
     var currentMode: KeypadState = .quantity
     
     // CoreData
@@ -62,6 +77,9 @@ class InvoiceKeypadVC: UIViewController {
     @IBOutlet weak var itemCost: UILabel!
     @IBOutlet weak var itemStatus: UILabel!
     @IBOutlet weak var displayQuantity: UILabel!
+
+    // MARK: - Keypad Outlets
+    @IBOutlet weak var softButton: OperationKeypadButton!
 
     // MARK: - Lifecycle
     
@@ -116,6 +134,27 @@ class InvoiceKeypadVC: UIViewController {
     }
     
     // MARK: - Units
+
+    @IBAction func softButtonTapped( _sender: AnyObject) {
+        switch currentMode {
+        // Toggle currentItem.unit
+        case .quantity:
+            let currentUnit = currentItem.unit
+            guard let newUnit = inactiveUnit else {
+                print("\(#function) FAILED : unable to get inactiveUnit"); return
+            }
+
+            currentItem.unit = newUnit
+            softButton.setTitle(currentUnit?.abbreviation, for: .normal)
+            update()
+        // ?
+        case .cost:
+            print("z2")
+        // ?
+        case .status:
+            print("z3")
+        }
+    }
 
     @IBAction func packTapped(_ sender: AnyObject) {
         guard let item = currentItem.item else { print("A1"); return  }
@@ -191,16 +230,22 @@ class InvoiceKeypadVC: UIViewController {
             itemCost.textColor = UIColor.black
             itemQuantity.textColor = UIColor.lightGray
             itemStatus.textColor = UIColor.lightGray
+            softButton.setTitle("", for: .normal)
         case 1:
             currentMode = .quantity
             itemCost.textColor = UIColor.lightGray
             itemQuantity.textColor = UIColor.black
             itemStatus.textColor = UIColor.lightGray
+
+            guard let altUnit = inactiveUnit else { return }
+            softButton.setTitle(altUnit.abbreviation, for: .normal)
+
         case 2:
             currentMode = .status
             itemCost.textColor = UIColor.lightGray
             itemQuantity.textColor = UIColor.lightGray
             itemStatus.textColor = UIColor.black
+            softButton.setTitle("", for: .normal)
         default:
             fatalError("Invalid mode")
         }
@@ -275,72 +320,9 @@ class InvoiceKeypadVC: UIViewController {
         
         updateDisplay(item: currentItem, keypadOutput: output)
     }
-    
-    
-    // MARK: - B
-    /*
-    func switchMode(mode: Int) {
-        switch currentMode {
-        case .cost:
-            print("update - cost")
-            keypad.updateNumber(currentItem.cost as Double?)
-            update()
-        case .quantity:
-            print("update - quantity")
-            keypad.updateNumber(currentItem.quantity as Double?)
-            update()
-        case .status:
-            print("update - status")
-            // TESTING
-        }
-    }
-    
-    // MARK: - C
-    
-    func update(newItem: Bool = false) {
-    
-        let output: keypadOutput
-        
-        switch newItem {
-        case true:
-            // Update keypad with quantity of new currentItem
-            switch currentMode {
-            case .cost:
-                print("update - cost")
-                keypad.updateNumber(currentItem.cost as Double?)
-                output = keypad.outputB()
-            case .quantity:
-                print("update - quantity")
-                keypad.updateNumber(currentItem.quantity as Double?)
-                output = keypad.outputB()
 
-            case .status:
-                print("update - status")
-                // TESTING
-                output = (total: 1.0, display: "Test")
-            }
-            
-            
-        case false:
-            // Update model with output of keyapd
-            output = keypad.outputB()
-            
-            print("Update model ...")
-            
-            switch currentMode {
-            case .cost:
-                print("update - cost")
-            case .quantity:
-                print("update - quantity")
-            case .status:
-                print("update - status")
-            }
-            
-        }
-        
-        updateDisplay(item: currentItem, keypadOutput: output)
-    }
-    */
+    // MARK: - B
+
     func updateDisplay(item: InvoiceItem, keypadOutput: keypadOutput) {
         guard let item = currentItem.item else {
             itemName.text = "Error (1)"; return
@@ -349,21 +331,28 @@ class InvoiceKeypadVC: UIViewController {
             itemName.text = "Error (2)" ; return
         }
         itemName.text = name
-        
-        /*
-        itemQuantity.text = formDisplayLine(
-            quantity: currentItem.quantity,
-            abbreviation: currentItem.unit?.abbreviation ?? " ")
-        itemCost.text = currencyFormatter?.string(from: NSNumber(value: currentItem.cost))
-        //itemStatus.text = currentItem.status
-        */
-        
+
+        // Get strings for display
         let quantityString = formDisplayLine(
             quantity: currentItem.quantity,
             abbreviation: currentItem.unit?.abbreviation ?? " ")
         let costString = currencyFormatter?.string(from: NSNumber(value: currentItem.cost))
-        let statusString = "Status"
-        
+
+        let statusString: String
+        if let _statusString = InvoiceItemStatus(rawValue: currentItem.status)?.description {
+            statusString = _statusString
+        } else {
+            statusString = ""
+        }
+
+        /*
+         itemQuantity.text = formDisplayLine(
+         quantity: currentItem.quantity,
+         abbreviation: currentItem.unit?.abbreviation ?? " ")
+         itemCost.text = currencyFormatter?.string(from: NSNumber(value: currentItem.cost))
+         //itemStatus.text = currentItem.status
+         */
+
         switch currentMode {
         case .cost:
             itemQuantity.text = quantityString
