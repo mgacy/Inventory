@@ -172,14 +172,14 @@ class InvoiceItemTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let invoiceItem = self.fetchedResultsController.object(at: indexPath)
-
+        /*
         // More Button
         let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
             self.isEditing = false
             print("more button tapped")
         }
         more.backgroundColor = UIColor.lightGray
-
+        */
         // Not Received Button
         let notReceived = UITableViewRowAction(style: .normal, title: "Not Received ...") { action, index in
             self.showNotReceivedAlert(forItem: invoiceItem)
@@ -193,7 +193,7 @@ class InvoiceItemTVC: UITableViewController {
         }
         received.backgroundColor = ColorPalette.navyColor
 
-        return [received, notReceived, more]
+        return [received, notReceived]
     }
 
     // Support conditional editing of the table view.
@@ -206,7 +206,24 @@ class InvoiceItemTVC: UITableViewController {
         // stuff
     }
 
-    // MARK: - Action Stuff
+}
+
+// MARK: - Completion Handlers
+extension InvoiceItemTVC {
+
+    func completedUpload(succeeded: Bool, json: JSON) {
+        print("completedUpload: \(succeeded)")
+        if succeeded {
+            parentObject.uploaded = true
+        } else {
+            print("\(#function) FAILED : unable to upload Invoice")
+        }
+    }
+
+}
+
+// MARK: - Alert Controller Extension
+extension InvoiceItemTVC {
 
     func showNotReceivedAlert(forItem invoiceItem: InvoiceItem) {
 
@@ -253,7 +270,7 @@ class InvoiceItemTVC: UITableViewController {
         // Present Alert
         present(alertController, animated: true, completion: nil)
     }
-    
+
     func showMoreAlert(forItem invoiceItem: InvoiceItem) {
 
         // Generic Action Handler
@@ -264,20 +281,6 @@ class InvoiceItemTVC: UITableViewController {
 
         // Present Alert
 
-    }
-
-}
-
-// MARK: - Completion Handlers
-extension InvoiceItemTVC {
-
-    func completedUpload(succeeded: Bool, json: JSON) {
-        print("completedUpload: \(succeeded)")
-        if succeeded {
-            parentObject.uploaded = true
-        } else {
-            print("\(#function) FAILED : unable to upload Invoice")
-        }
     }
 
 }
