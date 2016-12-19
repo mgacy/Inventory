@@ -250,7 +250,7 @@ extension InvoiceDateTVC {
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
-    func completedLogin(_ succeeded: Bool) {
+    func completedLogin(_ succeeded: Bool, error: Error?) {
         if succeeded {
             print("\nCompleted login - succeeded: \(succeeded)")
 
@@ -260,6 +260,7 @@ extension InvoiceDateTVC {
 
         } else {
             print("Unable to login ...")
+            // if let error = error { // present more detailed error ...
             HUD.flash(.error, delay: 1.0)
         }
     }

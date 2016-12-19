@@ -16,13 +16,13 @@ class StartupManager {
     // MARK: - Properties
 
     private var managedObjectContext: NSManagedObjectContext
-    private let completionHandler: ((Bool) -> Void)
+    private let completionHandler: ((Bool, Error?) -> Void)
     private let storeID: Int = 1
 
     // MARK: - Lifecycle
 
     // We will (1) call some endpoints, (2) sync objects, (3) call completionHandler
-    init(completionHandler: @escaping (Bool) -> Void) {
+    init(completionHandler: @escaping (Bool, Error?) -> Void) {
         
         self.managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.completionHandler = completionHandler
@@ -37,10 +37,15 @@ class StartupManager {
 
     func completedGetItems(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            print("\(#function) FAILED : \(error)"); return
+            print("\(#function) FAILED : \(error)")
+            completionHandler(false, error)
+            return
         }
         guard let json = json else {
-            print("\(#function) FAILED : unable to get Items"); return
+            print("\(#function) FAILED : unable to get Items")
+            // TODO - construct error?
+            completionHandler(false, nil)
+            return
         }
 
         // Set up fetch request
@@ -66,10 +71,15 @@ class StartupManager {
 
     func completedGetVendors(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            print("\(#function) FAILED : \(error)"); return
+            print("\(#function) FAILED : \(error)")
+            completionHandler(false, error)
+            return
         }
         guard let json = json else {
-            print("\(#function) FAILED : unable to get Items"); return
+            print("\(#function) FAILED : unable to get Items")
+            // TODO - construct error?
+            completionHandler(false, nil)
+            return
         }
 
         // Create new / update existing Vendors
@@ -91,7 +101,7 @@ class StartupManager {
         APIManager.sharedInstance.getItems(storeID: self.storeID, completion: completedGetItems)
     }
 
-    // MARK: - Sync
+    // MARK: - Sync (OLD)
 
     func syncItems(searchResults: [Item], json: JSON) {
 
@@ -144,84 +154,7 @@ class StartupManager {
         // 2. perform batchDelete?
         */
         print("Finished syncing Items")
-        self.completionHandler(true)
-    }
-
-    // MARK: - Sync (NEW)
-
-    func syncItems(json: JSON?, error: Error?) {
-        guard error == nil else {
-            print("\(#function) FAILED : \(error)"); return
-        }
-        guard let json = json else {
-            print("\(#function) FAILED : unable to get Items"); return
-        }
-
-        // Create dict from fetch request on Items
-        let prefetch = ["inventoryUnit", "purchaseSubUnit", "purchaseUnit",
-                        "subUnit", "vendor"]
-        guard let itemDict = try? managedObjectContext.fetchEntityDict(Item.self, prefetchingRelationships: prefetch) else {
-            print("\(#function) FAILED : unable to create Item dictionary"); return
-        }
-
-        // Create dict from fetch request on Units
-        guard let unitDict = try? managedObjectContext.fetchEntityDict(Unit.self) else {
-            print("\(#function) FAILED : unable to create Unit dictionary"); return
-        }
-
-        for (_, itemJSON):(String, JSON) in json {
-            guard let itemID = itemJSON["id"].int32 else { break }
-
-            // Find + update / create Items
-            if let existingItem = itemDict[itemID] {
-                //print("UPDATE existing Item: \(existingItem)")
-                existingItem.update(context: managedObjectContext, withJSON: itemJSON)
-                existingItem.updateUnits(withJSON: itemJSON, unitDict: unitDict)
-
-            } else {
-                //print("CREATE new Item: \(itemJSON)")
-                let newItem = Item(context: managedObjectContext, json: itemJSON)
-                newItem.updateUnits(withJSON: itemJSON, unitDict: unitDict)
-            }
-        }
-
-        // TODO - delete Items that were deleted from server
-
-        print("Finished syncing Items")
-        self.completionHandler(true)
-    }
-
-    func syncVendors(json: JSON?, error: Error?) {
-        guard error == nil else {
-            print("\(#function) FAILED : \(error)"); return
-        }
-        guard let json = json else {
-            print("\(#function) FAILED : unable to get Items"); return
-        }
-
-        guard let vendorDict = try? managedObjectContext.fetchEntityDict(Vendor.self) else {
-            print("\(#function) FAILED : unable to create Vendor dictionary"); return
-        }
-
-        for (_, vendorJSON):(String, JSON) in json {
-            guard let itemID = vendorJSON["id"].int32 else { break }
-
-            // Find + update / create Items
-            if let existingEntity = vendorDict[itemID] {
-                //print("UPDATE existing Vendor: \(existingEntity)")
-                existingEntity.update(context: managedObjectContext, withJSON: vendorJSON)
-
-            } else {
-                //print("CREATE new Vendor: \(itemJSON)")
-                _ = Vendor(context: managedObjectContext, json: vendorJSON)
-            }
-        }
-
-        print("Finished with Vendors")
-
-        // Get list of Items from server
-        print("\nFetching Items from server ...")
-        APIManager.sharedInstance.getItems(storeID: self.storeID, completion: syncItems)
+        self.completionHandler(true, nil)
     }
 
     func syncVendors(searchResults: [Vendor], json: JSON) {
@@ -255,10 +188,97 @@ class StartupManager {
         APIManager.sharedInstance.getItems(storeID: self.storeID, completion: completedGetItems)
     }
 
+    // MARK: - Sync (NEW)
+
+    func syncItems(json: JSON?, error: Error?) {
+        guard error == nil else {
+            print("\(#function) FAILED : \(error)")
+            completionHandler(false, error)
+            return
+        }
+        guard let json = json else {
+            print("\(#function) FAILED : unable to get Items")
+            // TODO - construct error?
+            completionHandler(false, nil)
+            return
+        }
+
+        // Create dict from fetch request on Items
+        let prefetch = ["inventoryUnit", "purchaseSubUnit", "purchaseUnit",
+                        "subUnit", "vendor"]
+        guard let itemDict = try? managedObjectContext.fetchEntityDict(Item.self, prefetchingRelationships: prefetch) else {
+            print("\(#function) FAILED : unable to create Item dictionary"); return
+        }
+
+        // Create dict from fetch request on Units
+        guard let unitDict = try? managedObjectContext.fetchEntityDict(Unit.self) else {
+            print("\(#function) FAILED : unable to create Unit dictionary"); return
+        }
+
+        for (_, itemJSON):(String, JSON) in json {
+            guard let itemID = itemJSON["id"].int32 else { break }
+
+            // Find + update / create Items
+            if let existingItem = itemDict[itemID] {
+                //print("UPDATE existing Item: \(existingItem)")
+                existingItem.update(context: managedObjectContext, withJSON: itemJSON)
+                existingItem.updateUnits(withJSON: itemJSON, unitDict: unitDict)
+
+            } else {
+                //print("CREATE new Item: \(itemJSON)")
+                let newItem = Item(context: managedObjectContext, json: itemJSON)
+                newItem.updateUnits(withJSON: itemJSON, unitDict: unitDict)
+            }
+        }
+
+        // TODO - delete Items that were deleted from server
+
+        print("Finished syncing Items")
+        self.completionHandler(true, nil)
+    }
+
+    func syncVendors(json: JSON?, error: Error?) {
+        guard error == nil else {
+            print("\(#function) FAILED : \(error)")
+            completionHandler(false, error)
+            return
+        }
+        guard let json = json else {
+            print("\(#function) FAILED : unable to get Items")
+            // TODO - construct error?
+            completionHandler(false, nil)
+            return
+        }
+
+        guard let vendorDict = try? managedObjectContext.fetchEntityDict(Vendor.self) else {
+            print("\(#function) FAILED : unable to create Vendor dictionary"); return
+        }
+
+        for (_, vendorJSON):(String, JSON) in json {
+            guard let itemID = vendorJSON["id"].int32 else { break }
+
+            // Find + update / create Items
+            if let existingEntity = vendorDict[itemID] {
+                //print("UPDATE existing Vendor: \(existingEntity)")
+                existingEntity.update(context: managedObjectContext, withJSON: vendorJSON)
+
+            } else {
+                //print("CREATE new Vendor: \(itemJSON)")
+                _ = Vendor(context: managedObjectContext, json: vendorJSON)
+            }
+        }
+
+        print("Finished with Vendors")
+
+        // Get list of Items from server
+        print("\nFetching Items from server ...")
+        APIManager.sharedInstance.getItems(storeID: self.storeID, completion: syncItems)
+    }
+
     // MARK: - Completion
     
     func completedStartup(_ succeeded: Bool) {
-        self.completionHandler(true)
+        self.completionHandler(true, nil)
     }
     
 }

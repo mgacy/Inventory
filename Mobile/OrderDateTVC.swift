@@ -283,7 +283,7 @@ extension OrderDateTVC {
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
-    func completedLogin(_ succeeded: Bool) {
+    func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             print("\nCompleted login - succeeded: \(succeeded)")
 
@@ -293,6 +293,7 @@ extension OrderDateTVC {
 
         } else {
             print("Unable to login ...")
+            // if let error = error { // present more detailed error ...
             HUD.flash(.error, delay: 1.0)
         }
     }
