@@ -64,6 +64,7 @@ extension NSManagedObjectContext {
             
             switch fetchResults.count {
             case 0:
+                //print("Found 0 matches for predicate \(predicate)")
                 return nil
             case 1:
                 return fetchResults[0]
