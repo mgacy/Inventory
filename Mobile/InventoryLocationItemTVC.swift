@@ -220,7 +220,12 @@ extension InventoryLocationItemTVC: NSFetchedResultsControllerDelegate {
         case .delete:
             tableView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
-            configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
+            if let updatedCell = tableView.cellForRow(at: indexPath!) {
+                configureCell(updatedCell, atIndexPath: indexPath!)
+            } else {
+                print("PROBLEM Getting cellForRow at: \(indexPath!))")
+            }
+
         case .move:
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
