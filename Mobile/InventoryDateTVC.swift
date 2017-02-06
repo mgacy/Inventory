@@ -175,17 +175,17 @@ class InventoryDateTVC: UITableViewController {
             HUD.show(.progress)
 
             // TODO: enable
-            // let remoteID = Int(selection.remoteID)
+            let remoteID = Int(selection.remoteID)
 
             // TODO: remove; this is a hack for current demo, where we fake uploading an inventory
-            var remoteID = Int(selection.remoteID)
-            if remoteID == 0 {
-                if let changedID = changeSelectionForDemo(selection: selection) {
-                    remoteID = changedID
-                } else {
-                    print("\(#function) FAILED : there was a problem with changeSelectionForDemo")
-                }
-            }
+            //var remoteID = Int(selection.remoteID)
+            //if remoteID == 0 {
+            //    if let changedID = changeSelectionForDemo(selection: selection) {
+            //        remoteID = changedID
+            //    } else {
+            //        print("\(#function) FAILED : there was a problem with changeSelectionForDemo")
+            //    }
+            //}
 
             // TODO - ideally, we would want to deleteInventoryItems *after* fetching data from server
             // Delete existing InventoryItems of selected Inventory
