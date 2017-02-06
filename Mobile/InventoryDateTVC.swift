@@ -247,6 +247,7 @@ extension InventoryDateTVC {
             //self.noticeError(error!.localizedDescription, autoClear: true); return
             HUD.flash(.error, delay: 1.0); return
         }
+        // TODO - distinguish empty response (new account) from error
         guard let json = json else {
             print("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
