@@ -232,7 +232,7 @@ class InventoryDateTVC: UITableViewController {
         // By leaving filter as nil, we will delete all Inventories
         deleteExistingInventories()
         // Download Inventories from server again
-        completedLogin(true)
+        completedLogin(true, nil)
     }
 
 }
@@ -247,6 +247,7 @@ extension InventoryDateTVC {
             //self.noticeError(error!.localizedDescription, autoClear: true); return
             HUD.flash(.error, delay: 1.0); return
         }
+        // TODO - distinguish empty response (new account) from error
         guard let json = json else {
             print("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
@@ -316,7 +317,7 @@ extension InventoryDateTVC {
         performSegue(withIdentifier: NewItemSegue, sender: self)
     }
 
-    func completedLogin(_ succeeded: Bool) {
+    func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             print("\nCompleted login - succeeded: \(succeeded)")
 
@@ -326,6 +327,7 @@ extension InventoryDateTVC {
 
         } else {
             print("Unable to login ...")
+            // if let error = error { // present more detailed error ...
             //self.noticeError("Error", autoClear: true)
             HUD.flash(.error, delay: 1.0); return
         }

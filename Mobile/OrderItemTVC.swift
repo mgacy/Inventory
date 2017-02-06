@@ -170,6 +170,12 @@ class OrderItemTVC: UITableViewController {
         let orderItem = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = orderItem.item?.name
 
+        // TODO - pack?
+
+        // TODO - on hand?
+
+        // TODO - par
+
         guard let quantity = orderItem.quantity else { return }
         if Double(quantity) > 0.0 {
             cell.textLabel?.textColor = UIColor.black

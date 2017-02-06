@@ -33,7 +33,8 @@ extension InventoryLocationItem {
         if let item = fetchInventoryItem(context: context, inventory: parent, itemID: itemID) {
             self.item = item
         } else {
-            print("Unable to fetch InventoryItem")
+            // TODO - init should fail since self.item is required
+            print("Unable to fetch InventoryItem \(itemID) for InventoryLocation \(location)")
         }
     }
     
@@ -53,7 +54,8 @@ extension InventoryLocationItem {
         if let item = fetchInventoryItem(context: context, inventory: parent, itemID: itemID) {
             self.item = item
         } else {
-            print("Unable to fetch InventoryItem")
+            // TODO - init should fail since self.item is required
+            print("Unable to fetch InventoryItem \(itemID) for InventoryLocationCategory \(category)")
         }
     }
     

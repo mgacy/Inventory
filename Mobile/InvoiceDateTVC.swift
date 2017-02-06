@@ -185,12 +185,17 @@ extension InvoiceDateTVC {
 
     func completedGetListOfInvoiceCollections(json: JSON?, error: Error?) -> Void {
         //tableView.activityIndicatorView.stopAnimating()
-
+        guard error == nil else {
+            HUD.flash(.error, delay: 1.0); return
+        }
+        // TODO - distinguish empty response (new account) from error
         guard let json = json else {
-            print("\(#function) FAILED : \(error)"); return
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
         }
         guard let dates = json["dates"].array else {
-            print("\(#function) FAILED : unable to get dates"); return
+            print("\(#function) FAILED : unable to get dates")
+            HUD.flash(.error, delay: 1.0); return
         }
 
         // FIX - this does not account for Collections that have been deleted from the server but
@@ -250,7 +255,7 @@ extension InvoiceDateTVC {
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
-    func completedLogin(_ succeeded: Bool) {
+    func completedLogin(_ succeeded: Bool, error: Error?) {
         if succeeded {
             print("\nCompleted login - succeeded: \(succeeded)")
 
@@ -260,6 +265,7 @@ extension InvoiceDateTVC {
 
         } else {
             print("Unable to login ...")
+            // if let error = error { // present more detailed error ...
             HUD.flash(.error, delay: 1.0)
         }
     }

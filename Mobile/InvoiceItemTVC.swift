@@ -114,7 +114,13 @@ class InvoiceItemTVC: UITableViewController {
 
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let invoiceItem = self.fetchedResultsController.object(at: indexPath)
+
+        // Name
         cell.textLabel?.text = invoiceItem.item?.name
+
+        // TODO - pack
+
+        // TODO - cost
 
         //guard let quantity = invoiceItem.quantity else { return }
         let quantity = invoiceItem.quantity
@@ -126,25 +132,31 @@ class InvoiceItemTVC: UITableViewController {
             // TODO - should I even both displaying quantity?
             cell.detailTextLabel?.text = "\(quantity)"
         }
-        /*
+
         switch invoiceItem.status {
-        case InvoiceStatus.notReceived.rawValue:
-            print("a")
-            // cell.textLabel?.textColor = UIColor.lightGray
-        case InvoiceStatus.outOfStock.rawValue:
-            print("a")
-            // cell.textLabel?.textColor = UIColor.lightGray
-        case InvoiceStatus.received.rawValue:
-            print("a")
-            // cell.textLabel?.textColor = UIColor.lightGray
-        case InvoiceStatus.substitute.rawValue:
-            print("a")
-            // cell.textLabel?.textColor = UIColor.lightGray
+        case InvoiceItemStatus.pending.rawValue:
+            cell.textLabel?.textColor = UIColor.lightGray
+        // Received
+        case InvoiceItemStatus.received.rawValue:
+            cell.textLabel?.textColor = UIColor.black
+        // Not Received
+        case InvoiceItemStatus.damaged.rawValue:
+            cell.textLabel?.textColor = ColorPalette.redColor
+        case InvoiceItemStatus.outOfStock.rawValue:
+            cell.textLabel?.textColor = ColorPalette.redColor
+        case InvoiceItemStatus.wrongItem.rawValue:
+            cell.textLabel?.textColor = ColorPalette.redColor
+        // Other
+        case InvoiceItemStatus.promo.rawValue:
+            cell.textLabel?.textColor = ColorPalette.navyColor
+        case InvoiceItemStatus.substitute.rawValue:
+            cell.textLabel?.textColor = ColorPalette.navyColor
+
         default:
             print("z")
             // cell.textLabel?.textColor = UIColor.lightGray
         }
-        */
+
     }
 
     // MARK: - UITableViewDelegate
@@ -159,24 +171,29 @@ class InvoiceItemTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let invoiceItem = self.fetchedResultsController.object(at: indexPath)
+        /*
+        // More Button
         let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
             self.isEditing = false
             print("more button tapped")
         }
         more.backgroundColor = UIColor.lightGray
-
+        */
+        // Not Received Button
         let notReceived = UITableViewRowAction(style: .normal, title: "Not Received ...") { action, index in
-            print("notReceived button tapped")
+            self.showNotReceivedAlert(forItem: invoiceItem)
         }
         notReceived.backgroundColor = ColorPalette.redColor
 
+        // Received Button
         let received = UITableViewRowAction(style: .normal, title: "Received") { action, index in
+            invoiceItem.status = InvoiceItemStatus.received.rawValue
             self.isEditing = false
-            print("received button tapped")
         }
         received.backgroundColor = ColorPalette.navyColor
 
-        return [received, notReceived, more]
+        return [received, notReceived]
     }
 
     // Support conditional editing of the table view.
@@ -201,6 +218,69 @@ extension InvoiceItemTVC {
         } else {
             print("\(#function) FAILED : unable to upload Invoice")
         }
+    }
+
+}
+
+// MARK: - Alert Controller Extension
+extension InvoiceItemTVC {
+
+    func showNotReceivedAlert(forItem invoiceItem: InvoiceItem) {
+
+        // Generic Action Handler
+
+        func updateItemStatus(forItem invoiceItem: InvoiceItem, withStatus status: InvoiceItemStatus) {
+            self.isEditing = false
+            invoiceItem.status = status.rawValue
+            print("Updated InvoiceItem: \(invoiceItem)")
+        }
+
+        // Alert Controller
+        let alertController = UIAlertController(title: nil,message: "Why wasn't this item received?",
+                                                preferredStyle: .actionSheet)
+
+        // Actions
+
+        // TODO - use InvoiceItemStatus.description for alert action title?
+
+        // damaged
+        let damagedAction = UIAlertAction(title: "Damaged", style: .default, handler: { (action:UIAlertAction!) -> Void in
+            updateItemStatus(forItem: invoiceItem, withStatus: .damaged)
+        })
+        alertController.addAction(damagedAction)
+
+        // outOfStock
+        let outOfStockAction = UIAlertAction(title: "Out of Stock", style: .default, handler: { (action:UIAlertAction!) -> Void in
+            updateItemStatus(forItem: invoiceItem, withStatus: .outOfStock)
+        })
+        alertController.addAction(outOfStockAction)
+
+        // wrongItem
+        let wrontItemAction = UIAlertAction(title: "Wrong Item", style: .default, handler: { (action: UIAlertAction) -> Void in
+            updateItemStatus(forItem: invoiceItem, withStatus: .wrongItem)
+        })
+        alertController.addAction(wrontItemAction)
+
+        // cancel
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) -> Void in
+            self.isEditing = false
+        })
+        alertController.addAction(cancelAction)
+
+        // Present Alert
+        present(alertController, animated: true, completion: nil)
+    }
+
+    func showMoreAlert(forItem invoiceItem: InvoiceItem) {
+
+        // Generic Action Handler
+
+        // Alert Controller
+
+        // Actions
+
+        // Present Alert
+
     }
 
 }
