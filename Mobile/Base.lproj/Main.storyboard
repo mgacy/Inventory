@@ -982,13 +982,13 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="80" height="21"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pack" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wtv-GB-JTZ" userLabel="Label - Pack">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="80" height="1"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="80" height="0.0"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Pack" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zJ5-xE-a0L">
-                                                                                <rect key="frame" x="0.0" y="1" width="80" height="20"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="80" height="21"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
@@ -1294,7 +1294,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="e1Z-CZ-oos" kind="presentation" identifier="showAccount" trigger="accessoryAction" id="bfb-b5-hhF"/>
+                                            <segue destination="cCC-W6-7FV" kind="presentation" identifier="showAccount" id="rMb-OV-10f"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1432,22 +1432,22 @@
             <point key="canvasLocation" x="3902" y="2809"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="BQo-0t-tOW">
+        <scene sceneID="d2J-dV-gdn">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="e1Z-CZ-oos" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cCC-W6-7FV" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mA6-da-3E5">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="DYZ-q7-jiv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="zZf-3R-7Kl" kind="relationship" relationship="rootViewController" id="W2A-XA-usY"/>
+                        <segue destination="zZf-3R-7Kl" kind="relationship" relationship="rootViewController" id="tVe-Fl-7rZ"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qv1-b8-GaM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ARh-nG-seg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2985" y="2810"/>
+            <point key="canvasLocation" x="2985" y="2809"/>
         </scene>
     </scenes>
     <resources>
