@@ -47,8 +47,56 @@ class APIManager {
     }
 
     // MARK: - Authentication
+    func forgotPassword(email: String, completion: @escaping CompletionHandlerType) {
+        sessionManager.request(Router.forgotPassword(email: email))
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\n\(#function) - response: \(response)\n")
+                    let json = JSON(value)
+                    completion(json, nil)
+                case .failure(let error):
+                    debugPrint("\(#function) FAILED : \(error)")
+                    completion(nil, error)
+                }
+        }
+    }
+
     func login(completion: @escaping (Bool) -> Void) {
         authHandler.login(completion: completion)
+    }
+
+    func logout(completion: @escaping CompletionHandlerType) {
+        sessionManager.request(Router.logout)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\n\(#function) - response: \(response)\n")
+                    let json = JSON(value)
+                    completion(json, nil)
+                case .failure(let error):
+                    debugPrint("\(#function) FAILED : \(error)")
+                    completion(nil, error)
+                }
+        }
+    }
+
+    func signUp(email: String, password: String, completion: @escaping CompletionHandlerType) {
+        sessionManager.request(Router.signUp(email: email, password: password))
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\n\(#function) - response: \(response)\n")
+                    let json = JSON(value)
+                    completion(json, nil)
+                case .failure(let error):
+                    debugPrint("\(#function) FAILED : \(error)")
+                    completion(nil, error)
+                }
+        }
     }
 
     // MARK: - API Calls - General
