@@ -1,5 +1,5 @@
 //
-//  AuthorizationHandler.swift
+//  AuthenticationHandler.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/13/16.
@@ -11,7 +11,7 @@ import Alamofire
 import KeychainAccess
 import SwiftyJSON
 
-class AuthorizationHandler: RequestAdapter, RequestRetrier {
+class AuthenticationHandler: RequestAdapter, RequestRetrier {
     private typealias RefreshCompletion = (_ succeeded: Bool, _ accessToken: String?, _ refreshToken: String?) -> Void
 
     private let sessionManager: Alamofire.SessionManager = {

@@ -31,7 +31,7 @@ class APIManager {
     // MARK: Properties
 
     static let sharedInstance = APIManager()
-    private let authHandler: AuthorizationHandler
+    private let authHandler: AuthenticationHandler
     private let sessionManager: SessionManager
 
     typealias CompletionHandlerType = (JSON?, Error?) -> Void
@@ -39,7 +39,7 @@ class APIManager {
     // MARK: Lifecycle
 
     init() {
-        authHandler = AuthorizationHandler()
+        authHandler = AuthenticationHandler()
 
         sessionManager = Alamofire.SessionManager.default
         sessionManager.adapter = authHandler
