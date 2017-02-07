@@ -63,7 +63,7 @@
 		C9F516151DB7F158004C10E6 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516111DB7F158004C10E6 /* Router.swift */; };
 		C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516121DB7F158004C10E6 /* APIManager.swift */; };
 		C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516131DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift */; };
-		C9F516181DB7F158004C10E6 /* AuthorizationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516141DB7F158004C10E6 /* AuthorizationHandler.swift */; };
+		C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516141DB7F158004C10E6 /* AuthenticationHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,7 +139,7 @@
 		C9F516111DB7F158004C10E6 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		C9F516121DB7F158004C10E6 /* APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		C9F516131DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlamofireRequest+JSONSerializable.swift"; sourceTree = "<group>"; };
-		C9F516141DB7F158004C10E6 /* AuthorizationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationHandler.swift; sourceTree = "<group>"; };
+		C9F516141DB7F158004C10E6 /* AuthenticationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationHandler.swift; sourceTree = "<group>"; };
 		D430FB7BCEC8764AA38D8E28 /* Pods-MobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileTests/Pods-MobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E7E121BAFBB6D4F072EDD6C3 /* Pods-Mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mobile/Pods-Mobile.release.xcconfig"; sourceTree = "<group>"; };
 		FBA41CA2CE7F1141301A5503 /* Pods_MobileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -381,7 +381,7 @@
 				C9F516111DB7F158004C10E6 /* Router.swift */,
 				C9F516121DB7F158004C10E6 /* APIManager.swift */,
 				C9F516131DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift */,
-				C9F516141DB7F158004C10E6 /* AuthorizationHandler.swift */,
+				C9F516141DB7F158004C10E6 /* AuthenticationHandler.swift */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -636,7 +636,7 @@
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
 				C92D75C11DC7A81400AA1A02 /* InvoiceKeypadVC.swift in Sources */,
 				C92D75C51DC7A94100AA1A02 /* SettingsTVC.swift in Sources */,
-				C9F516181DB7F158004C10E6 /* AuthorizationHandler.swift in Sources */,
+				C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */,
 				C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */,
 				C9A14ABC1DC6742700ACDE69 /* OrderVendorTVC.swift in Sources */,
 				C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */,
