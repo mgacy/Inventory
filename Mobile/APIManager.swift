@@ -31,7 +31,8 @@ class APIManager {
     // MARK: Properties
 
     static let sharedInstance = APIManager()
-    private let authHandler: AuthenticationHandler
+    // private let authHandler: AuthenticationHandler
+    let authHandler: AuthenticationHandler
     private let sessionManager: SessionManager
 
     typealias CompletionHandlerType = (JSON?, Error?) -> Void
