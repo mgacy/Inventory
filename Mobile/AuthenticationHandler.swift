@@ -36,12 +36,23 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
     // Mine
 
     // TODO: remove hard-coded email
-    private let email = "***REMOVED***"
     //private let email: String? = "***REMOVED***"
+    var email: String? {
+        set {
+            let defaults = UserDefaults.standard
+            if let valueToSave = newValue {
+                defaults.set(valueToSave, forKey: "email")
+            }
+        }
+        get {
+            let defaults = UserDefaults.standard
+            return defaults.string(forKey: "email")
+        }
+    }
 
     private var password: String? {
         set {
-            //guard let email = email else { return }
+            guard let email = email else { return }
 
             if let valueToSave = newValue {
                 keychain[email] = valueToSave
@@ -50,7 +61,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
             }
         }
         get {
-            //guard let email = email else { return nil }
+            guard let email = email else { return nil }
 
             // try to load from keychain
             guard let pass1 = try? keychain.get(email) else {
@@ -110,6 +121,8 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
         // TODO: do I need to handle absence of service?
         keychain = Keychain(service: "***REMOVED***")
+
+        // Try to get email from NSUserDefaults
 
         // TODO: handle absence of email
 
@@ -179,6 +192,9 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
         isRefreshing = true
 
+        guard let email = email else {
+            debugPrint("\(#function) FAILED : unable to get email"); return
+        }
         guard let password = password else {
             debugPrint("\(#function) FAILED : unable to get password"); return
         }
@@ -207,6 +223,9 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
     public func login(completion: @escaping (Bool) -> Void) {
 
+        guard let email = email else {
+            debugPrint("\(#function) FAILED : unable to get email"); return
+        }
         guard let password = password else {
             debugPrint("\(#function) FAILED : unable to get password"); return
         }
