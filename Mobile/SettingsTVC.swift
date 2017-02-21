@@ -53,4 +53,27 @@ class SettingsTVC: UITableViewController {
 
     // MARK: - UITableViewDelegate
 
+
+}
+
+// MARK: - Completion Handlers
+extension SettingsTVC {
+
+    func completedLogout(suceeded: Bool) {
+
+        // TEMP
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: "email")
+        userExists = false
+
+        if suceeded {
+            print("OK")
+            AccountCell.textLabel?.text = "Login"
+        } else {
+            print("Nope")
+            // TEMP
+            AccountCell.textLabel?.text = "Login"
+        }
+    }
+
 }
