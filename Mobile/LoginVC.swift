@@ -1,5 +1,5 @@
 //
-//  AccountVC.swift
+//  LoginVC.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/31/16.
@@ -11,7 +11,7 @@ import KeychainAccess
 import PKHUD
 //import SwiftyJSON
 
-class AccountVC: UIViewController, UITextFieldDelegate {
+class LoginVC: UIViewController, UITextFieldDelegate {
 
     // MARK: Properties
     let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
@@ -85,7 +85,7 @@ class AccountVC: UIViewController, UITextFieldDelegate {
 }
 
 // MARK: - Completion Handlers
-extension AccountVC {
+extension LoginVC {
 
     func completedLogin(success: Bool) {
         if success {

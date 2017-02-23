@@ -832,7 +832,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="hQS-dZ-Fpm">
             <objects>
-                <tabBarController id="Lwb-b5-sIi" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" id="Lwb-b5-sIi" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="D63-oU-dUH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1365,10 +1365,10 @@
             </objects>
             <point key="canvasLocation" x="1150" y="2809"/>
         </scene>
-        <!--AccountVC-->
+        <!--LoginVC-->
         <scene sceneID="kaD-K1-Urv">
             <objects>
-                <viewController id="zZf-3R-7Kl" customClass="AccountVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" id="zZf-3R-7Kl" customClass="LoginVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Lzy-hW-dcW"/>
                         <viewControllerLayoutGuide type="bottom" id="rBi-jN-EQU"/>
@@ -1461,7 +1461,7 @@
         <image name="settingsTab" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="bQV-xM-Zpe"/>
-        <segue reference="4yW-DD-bsH"/>
+        <segue reference="iyW-Ae-r5B"/>
+        <segue reference="6Vu-cU-Z1a"/>
     </inferredMetricsTieBreakers>
 </document>
