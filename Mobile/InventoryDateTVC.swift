@@ -71,7 +71,7 @@ class InventoryDateTVC: UITableViewController {
         HUD.dimsBackground = false
         HUD.allowsInteraction = false
         HUD.show(.progress)
-        _ = StartupManager(completionHandler: completedLogin)
+        _ = SyncManager(completionHandler: completedLogin)
     }
 
     // override func viewWillAppear(_ animated: Bool) { }

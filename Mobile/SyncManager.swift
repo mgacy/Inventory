@@ -1,5 +1,5 @@
 //
-//  StartupManager.swift
+//  SyncManager.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 11/4/16.
@@ -11,7 +11,7 @@ import CoreData
 import Alamofire
 import SwiftyJSON
 
-class StartupManager {
+class SyncManager {
 
     // MARK: - Properties
 

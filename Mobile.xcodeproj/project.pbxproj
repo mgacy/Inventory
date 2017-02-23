@@ -33,7 +33,7 @@
 		C96870E61DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */; };
 		C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
-		C982341B1DCD3B3A00E3E353 /* StartupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* StartupManager.swift */; };
+		C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* SyncManager.swift */; };
 		C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988CE701DF5050D00A8028B /* Array+MyStuff.swift */; };
 		C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */; };
 		C98A4FB31DCB0233002BB076 /* Unit+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */; };
@@ -106,7 +106,7 @@
 		C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InvoiceItem+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+MyStuff.swift"; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
-		C982341A1DCD3B3A00E3E353 /* StartupManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupManager.swift; sourceTree = "<group>"; };
+		C982341A1DCD3B3A00E3E353 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		C988CE701DF5050D00A8028B /* Array+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+MyStuff.swift"; path = "Extensions/Foundation/Array+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Unit+MyStuff.swift"; sourceTree = "<group>"; };
@@ -383,7 +383,7 @@
 		C9F516101DB7F144004C10E6 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				C982341A1DCD3B3A00E3E353 /* StartupManager.swift */,
+				C982341A1DCD3B3A00E3E353 /* SyncManager.swift */,
 				C9F516111DB7F158004C10E6 /* Router.swift */,
 				C9F516121DB7F158004C10E6 /* APIManager.swift */,
 				C9F516131DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift */,
@@ -619,7 +619,7 @@
 				C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */,
 				C9A14AC01DC6748000ACDE69 /* OrderKeypadVC.swift in Sources */,
 				C902FF411DBE70290063CD02 /* Inventory+MyStuff.swift in Sources */,
-				C982341B1DCD3B3A00E3E353 /* StartupManager.swift in Sources */,
+				C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */,
 				C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */,
 				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
 				C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */,
