@@ -35,13 +35,13 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
     // Mine
 
-    // TODO: remove hard-coded email
     private var email: String? {
         get {
             let defaults = UserDefaults.standard
             return defaults.string(forKey: "email")
         }
     }
+
     private var password: String? {
         get {
             // try to load from keychain

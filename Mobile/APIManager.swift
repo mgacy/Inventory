@@ -31,8 +31,7 @@ class APIManager {
     // MARK: Properties
 
     static let sharedInstance = APIManager()
-    // private let authHandler: AuthenticationHandler
-    let authHandler: AuthenticationHandler
+    private let authHandler: AuthenticationHandler
     private let sessionManager: SessionManager
 
     typealias CompletionHandlerType = (JSON?, Error?) -> Void
@@ -40,6 +39,7 @@ class APIManager {
     // MARK: Lifecycle
 
     init() {
+        // TODO - get CurrentUserManager from AppDelegate?
         authHandler = AuthenticationHandler()
 
         sessionManager = Alamofire.SessionManager.default
@@ -65,6 +65,7 @@ class APIManager {
     }
 
     func login(completion: @escaping (Bool) -> Void) {
+        // TODO - handle CurrentUserManager
         authHandler.login(completion: completion)
     }
 
@@ -76,7 +77,7 @@ class APIManager {
                 //case .success(let value):
                 case .success:
                     print("\n\(#function) - response: \(response)\n")
-                    // TODO - handle authHandler
+                    // TODO - handle CurrentUserManager
                     //let json = JSON(value)
                     //completion(json, nil)
                     completion(true)
@@ -96,6 +97,7 @@ class APIManager {
                 case .success(let value):
                     // print("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
+                    // TODO - handle CurrentUserManager
                     completion(json, nil)
                 case .failure(let error):
                     debugPrint("\(#function) FAILED : \(error)")
