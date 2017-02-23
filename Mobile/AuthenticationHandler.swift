@@ -36,35 +36,16 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
     // Mine
 
     // TODO: remove hard-coded email
-    //private let email: String? = "***REMOVED***"
-    var email: String? {
-        set {
-            let defaults = UserDefaults.standard
-            if let valueToSave = newValue {
-                defaults.set(valueToSave, forKey: "email")
-            }
-        }
+    private var email: String? {
         get {
             let defaults = UserDefaults.standard
             return defaults.string(forKey: "email")
         }
     }
-
     private var password: String? {
-        set {
-            guard let email = email else { return }
-
-            if let valueToSave = newValue {
-                keychain[email] = valueToSave
-            } else { // they set it to nil, so delete it
-                keychain[email] = nil
-            }
-        }
         get {
-            guard let email = email else { return nil }
-
             // try to load from keychain
-            guard let pass1 = try? keychain.get(email) else {
+            guard let pass1 = try? keychain.get("password") else {
                 print("FAILED: unable to access keychain"); return nil
             }
             if let pass2 = pass1 {
@@ -75,7 +56,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                 print("Using hard-coded password")
                 let defaultPass = "***REMOVED***"
 
-                keychain[email] = defaultPass
+                keychain["password"] = defaultPass
                 return defaultPass
             }
         }
@@ -99,14 +80,6 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
         }
     }
 
-    public var userExists: Bool {
-        if self.password != nil {
-            return true
-        } else {
-            return false
-        }
-    }
-    
     // MARK: Lifecycle
 
     public init() {
@@ -222,12 +195,13 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
     // MARK: - Request Token
 
     public func login(completion: @escaping (Bool) -> Void) {
-
         guard let email = email else {
-            debugPrint("\(#function) FAILED : unable to get email"); return
+            debugPrint("\(#function) FAILED : unable to get email")
+            return completion(false)
         }
         guard let password = password else {
-            debugPrint("\(#function) FAILED : unable to get password"); return
+            debugPrint("\(#function) FAILED : unable to get password")
+            return completion(false)
         }
 
         sessionManager.request(Router.login(email: email, password: password))
@@ -237,7 +211,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                     completion(true)
                 } else {
                     // TODO: add logging or pass more error info on to handler
-                    print("Problem getting token")
+                    debugPrint("\(#function) FAILED : unable to get token")
                     completion(false)
                 }
         }
