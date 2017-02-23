@@ -14,7 +14,7 @@
         <!--InventoryDate-->
         <scene sceneID="lrs-35-hw4">
             <objects>
-                <tableViewController id="YU6-fn-vVE" userLabel="InventoryDate" customClass="InventoryDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="InventoryDateTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YU6-fn-vVE" userLabel="InventoryDate" customClass="InventoryDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xZo-sB-tyJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -48,7 +48,7 @@
         <!--OrderDate-->
         <scene sceneID="56f-6e-YPo">
             <objects>
-                <tableViewController id="SjL-9C-Vrt" userLabel="OrderDate" customClass="OrderDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="OrderDateTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SjL-9C-Vrt" userLabel="OrderDate" customClass="OrderDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="dA3-eM-KQG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -81,7 +81,7 @@
         <!--InvoiceDate-->
         <scene sceneID="qvx-H1-EZt">
             <objects>
-                <tableViewController id="JEB-WY-LZ0" userLabel="InvoiceDate" customClass="InvoiceDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="InvoiceDateTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="JEB-WY-LZ0" userLabel="InvoiceDate" customClass="InvoiceDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="YmK-sc-PDB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -114,7 +114,7 @@
         <!--InvoiceVendor-->
         <scene sceneID="YZi-Qr-cTX">
             <objects>
-                <tableViewController id="VhV-VD-YI0" userLabel="InvoiceVendor" customClass="InvoiceVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="InvoiceVendorTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="VhV-VD-YI0" userLabel="InvoiceVendor" customClass="InvoiceVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ahH-Or-Iyl">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -135,7 +135,7 @@
         <!--InvoiceItem-->
         <scene sceneID="sAK-Ak-TeE">
             <objects>
-                <tableViewController id="l7g-UY-PfL" userLabel="InvoiceItem" customClass="InvoiceItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="InvoiceItemTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="l7g-UY-PfL" userLabel="InvoiceItem" customClass="InvoiceItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="8U1-sa-wNz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -163,7 +163,7 @@
         <!--InvoiceKeypad-->
         <scene sceneID="k8Y-JV-hwY">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="YYD-4x-u8L" userLabel="InvoiceKeypad" customClass="InvoiceKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InvoiceKeypadVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YYD-4x-u8L" userLabel="InvoiceKeypad" customClass="InvoiceKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Hg0-RF-7Da"/>
                         <viewControllerLayoutGuide type="bottom" id="2A8-Sv-YFH"/>
@@ -484,7 +484,7 @@
         <!--OrderVendor-->
         <scene sceneID="Sdp-Sd-Wvi">
             <objects>
-                <tableViewController id="Zlj-V1-U9C" userLabel="OrderVendor" customClass="OrderVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="OrderVendorTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zlj-V1-U9C" userLabel="OrderVendor" customClass="OrderVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ol5-oj-Brx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -505,7 +505,7 @@
         <!--OrderItem-->
         <scene sceneID="RYd-Fb-0K8">
             <objects>
-                <tableViewController id="yHa-97-WdW" userLabel="OrderItem" customClass="OrderItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="OrderItemTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="yHa-97-WdW" userLabel="OrderItem" customClass="OrderItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="hX6-m9-oGy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -533,7 +533,7 @@
         <!--OrderKeypad-->
         <scene sceneID="3gh-C2-Cya">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="e6G-Uh-Dbm" userLabel="OrderKeypad" customClass="OrderKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OrderKeypadVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="e6G-Uh-Dbm" userLabel="OrderKeypad" customClass="OrderKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="1du-vi-zGv"/>
                         <viewControllerLayoutGuide type="bottom" id="0ck-it-Yoe"/>
@@ -871,7 +871,7 @@
         <!--InventoryLocation-->
         <scene sceneID="FUc-Sc-EDt">
             <objects>
-                <tableViewController id="H3s-md-9Gz" userLabel="InventoryLocation" customClass="InventoryLocationTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="InventoryLocationTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="H3s-md-9Gz" userLabel="InventoryLocation" customClass="InventoryLocationTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DzA-AY-wbP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -902,7 +902,7 @@
         <!--InventoryLocationCategory-->
         <scene sceneID="TtP-wW-j50">
             <objects>
-                <tableViewController hidesBottomBarWhenPushed="YES" id="EVU-Sa-EdD" userLabel="InventoryLocationCategory" customClass="InventoryLocationCategoryTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="InventoryLocationCategoryTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="EVU-Sa-EdD" userLabel="InventoryLocationCategory" customClass="InventoryLocationCategoryTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="TgE-k8-v4G">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -925,7 +925,7 @@
         <!--InventoryLocationItem-->
         <scene sceneID="kiM-cd-BbP">
             <objects>
-                <tableViewController hidesBottomBarWhenPushed="YES" id="2re-X1-JiU" userLabel="InventoryLocationItem" customClass="InventoryLocationItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="InventoryLocationItemTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2re-X1-JiU" userLabel="InventoryLocationItem" customClass="InventoryLocationItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="mFn-T5-2tF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -948,7 +948,7 @@
         <!--InventoryKeypad-->
         <scene sceneID="JJj-C5-QEv">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="WFi-DU-OgF" userLabel="InventoryKeypad" customClass="InventoryKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InventoryKeypadVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="WFi-DU-OgF" userLabel="InventoryKeypad" customClass="InventoryKeypadVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3h9-9E-bbe"/>
                         <viewControllerLayoutGuide type="bottom" id="cdn-aK-mKE"/>
@@ -1269,7 +1269,7 @@
         <!--Settings-->
         <scene sceneID="KFd-N6-8u3">
             <objects>
-                <tableViewController id="lN6-oK-Pdf" userLabel="Settings" customClass="SettingsTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SettingsTVC" id="lN6-oK-Pdf" userLabel="Settings" customClass="SettingsTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="nnN-Er-7NR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1281,11 +1281,11 @@
                                         <rect key="frame" x="0.0" y="56" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EG4-hE-eoB" id="epB-fh-Lie">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FDP-LD-P7j">
-                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="345" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
