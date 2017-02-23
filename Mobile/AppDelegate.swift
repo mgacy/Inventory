@@ -29,11 +29,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             defaults.set(true, forKey: "isPreloaded")
         }
 
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
         // Check if we already have user + credentials
         if userManager.user != nil {
             print("AppDelegate: has User")
+            let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController")
+            self.window?.rootViewController = tabBarController
         } else {
             print("AppDelegate: missing User")
+
+            let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController")
+            self.window?.rootViewController = tabBarController
+
+            let loginController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+            //self.window?.rootViewController = loginController
+
+//            let navController = UINavigationController(rootViewController: loginController)
+//            self.window?.rootViewController = navController
+
+
+            self.window?.rootViewController?.present(loginController, animated: true, completion: nil)
+
         }
 
         // TODO - get Items from server at this point
@@ -67,6 +85,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
+    }
+
+    // MARK: - State Restoration
+
+    func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
+        return true
+    }
+
+    func application(_ application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
+        return true
     }
 
     // MARK: - Core Data stack
