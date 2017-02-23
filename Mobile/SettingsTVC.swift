@@ -11,9 +11,7 @@ import UIKit
 class SettingsTVC: UITableViewController {
 
     // MARK: Properties
-
-    var userExists: Bool = false
-    var userEmail: String? = nil
+    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
 
     // Segues
     let accountSegue = "showAccount"
@@ -31,14 +29,10 @@ class SettingsTVC: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
-        updateUserStatus()
-
-        // Configure Account cell text
         configureAccountCell()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        updateUserStatus()
         configureAccountCell()
     }
 
@@ -72,12 +66,8 @@ class SettingsTVC: UITableViewController {
 
         // Account
         if indexPath.section == 0 {
-            // TODO - Logout or show AccountVC
-            print("Now we would decide what to do ...")
-
-            //let authManager = APIManager.sharedInstance.authHandler
-            if userExists {
-                print("Logging out \(userEmail)?")
+            if let user = userManager.user {
+                print("Logging out \(user.email)")
 
                 // TEMP
                 let defaults = UserDefaults.standard
@@ -100,26 +90,10 @@ class SettingsTVC: UITableViewController {
         dismiss(animated: true, completion: nil)
     }
 
-    func updateUserStatus() {
-        print("\(#function)")
-        let authManager = APIManager.sharedInstance.authHandler
-        if let email = authManager.email {
-            userExists = true
-            userEmail = email
-        } else {
-            userExists = false
-        }
-        print("userExists: \(userExists)")
-    }
-
     // TODO - pass User?
     func configureAccountCell() {
-        //let authManager = APIManager.sharedInstance.authHandler
-        //if let email = authManager.email {
-        if userExists {
-            //let email = userEmail
-            print("email: \(userEmail)")
-            AccountCell.textLabel?.text = "Logout \(userEmail!)"
+        if let user = userManager.user {
+            AccountCell.textLabel?.text = "Logout \(user.email)"
         } else {
             AccountCell.textLabel?.text = "Login"
         }
@@ -131,18 +105,13 @@ class SettingsTVC: UITableViewController {
 extension SettingsTVC {
 
     func completedLogout(suceeded: Bool) {
-
-        // TEMP
-        let defaults = UserDefaults.standard
-        defaults.removeObject(forKey: "email")
-        userExists = false
-
         if suceeded {
-            print("OK")
+            userManager.removeUser()
             AccountCell.textLabel?.text = "Login"
         } else {
             print("Nope")
             // TEMP
+            userManager.removeUser()
             AccountCell.textLabel?.text = "Login"
         }
     }

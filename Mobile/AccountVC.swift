@@ -8,12 +8,15 @@
 
 import UIKit
 import KeychainAccess
+import PKHUD
 //import SwiftyJSON
 
 class AccountVC: UIViewController, UITextFieldDelegate {
 
+    // MARK: Properties
+    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
+
     // MARK: Interface
-    
     @IBOutlet weak var loginTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
@@ -25,11 +28,9 @@ class AccountVC: UIViewController, UITextFieldDelegate {
         
         // Do any additional setup after loading the view.
 
-        let defaults = UserDefaults.standard
-        if let email = defaults.string(forKey: "email") {
-            loginTextField.text = email
+        if let user = userManager.user {
+            loginTextField.text = user.email
         }
-
     }
     
     override func didReceiveMemoryWarning() {
@@ -58,21 +59,11 @@ class AccountVC: UIViewController, UITextFieldDelegate {
     // MARK: - Keychain Stuff
     
     @IBAction func loginButtonPressed(_ sender: AnyObject) {
-        if let email = loginTextField.text, let pass = passwordTextField.text {
-
-            // TODO - use User object
-
-            let defaults = UserDefaults.standard
-            print("Saving email: \(email) ...")
-            defaults.set(email, forKey: "email")
-            print("Saving pass: \(pass) ...")
-            let keychain = Keychain(service: "***REMOVED***")
-            keychain[email] = pass
+        guard let email = loginTextField.text, let pass = passwordTextField.text else {
+            return
         }
-
+        userManager.createUser(email: email, password: pass)
         APIManager.sharedInstance.login(completion: completedLogin)
-        //dismiss(animated: true, completion: nil)
-        //navigationController!.popViewController(animated: true)
     }
     
     // MARK: - Navigation
@@ -99,10 +90,10 @@ extension AccountVC {
     func completedLogin(success: Bool) {
         if success {
             print("Logged in")
-            // TODO - handle User?
             dismiss(animated: true, completion: nil)
         } else {
             // TODO - how best to handle this?
+            HUD.flash(.error, delay: 1.0); return
             print("Failed to login")
         }
     }

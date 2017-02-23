@@ -19,6 +19,8 @@
 		C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */; };
 		C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F741DF0D61E00166A08 /* CoreDataStack.swift */; };
 		C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */; };
+		C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B4EDB1E5C2863002DA2A5 /* User.swift */; };
+		C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */; };
 		C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */; };
 		C92D75BF1DC7A7E500AA1A02 /* InvoiceItemTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BE1DC7A7E500AA1A02 /* InvoiceItemTVC.swift */; };
 		C92D75C11DC7A81400AA1A02 /* InvoiceKeypadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C01DC7A81400AA1A02 /* InvoiceKeypadVC.swift */; };
@@ -90,6 +92,8 @@
 		C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C9124F741DF0D61E00166A08 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataImporter.swift; sourceTree = "<group>"; };
+		C91B4EDB1E5C2863002DA2A5 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUserManager.swift; sourceTree = "<group>"; };
 		C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceVendorTVC.swift; sourceTree = "<group>"; };
 		C92D75BE1DC7A7E500AA1A02 /* InvoiceItemTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemTVC.swift; sourceTree = "<group>"; };
 		C92D75C01DC7A81400AA1A02 /* InvoiceKeypadVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadVC.swift; sourceTree = "<group>"; };
@@ -325,6 +329,8 @@
 				C9F515E21DB7EF98004C10E6 /* ViewController.swift */,
 				C9124F741DF0D61E00166A08 /* CoreDataStack.swift */,
 				C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */,
+				C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */,
+				C91B4EDB1E5C2863002DA2A5 /* User.swift */,
 				C9BA91271DEB957400DA2C6C /* Extensions */,
 				C98A4FB61DCB034D002BB076 /* Model Extensions */,
 				C9F516101DB7F144004C10E6 /* Networking */,
@@ -606,6 +612,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */,
 				C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */,
 				C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */,
 				C92D75BF1DC7A7E500AA1A02 /* InvoiceItemTVC.swift in Sources */,
@@ -624,6 +631,7 @@
 				C902FF431DBE769C0063CD02 /* InventoryItem+MyStuff.swift in Sources */,
 				C92D75C31DC7A93100AA1A02 /* AccountVC.swift in Sources */,
 				C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */,
+				C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
 				C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */,
 				C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */,

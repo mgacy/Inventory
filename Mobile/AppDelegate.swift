@@ -13,7 +13,7 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var userManager: CurrentUserManager = CurrentUserManager.sharedInstance
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -27,6 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Preloading data ...")
             CoreDataImporter.shared.preloadData()
             defaults.set(true, forKey: "isPreloaded")
+        }
+
+        // Check if we already have user + credentials
+        if userManager.user != nil {
+            print("AppDelegate: has User")
+        } else {
+            print("AppDelegate: missing User")
         }
 
         // TODO - get Items from server at this point
