@@ -832,7 +832,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="hQS-dZ-Fpm">
             <objects>
-                <tabBarController storyboardIdentifier="TabBarViewController" id="Lwb-b5-sIi" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Lwb-b5-sIi" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="D63-oU-dUH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -852,7 +852,7 @@
         <!--Inventories-->
         <scene sceneID="j6u-Gp-cWa">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Dd5-Cp-qL8" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="InventoriesNavController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Dd5-Cp-qL8" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Inventories" image="inventoryTab" id="gAl-q1-bWL"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="vZw-en-3u3">
@@ -1462,6 +1462,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="iyW-Ae-r5B"/>
-        <segue reference="6Vu-cU-Z1a"/>
+        <segue reference="4yW-DD-bsH"/>
     </inferredMetricsTieBreakers>
 </document>
