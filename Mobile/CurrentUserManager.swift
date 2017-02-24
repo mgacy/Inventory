@@ -26,6 +26,10 @@ class CurrentUserManager {
 
         if let email = defaults.string(forKey: "email") {
             user = User(id: 1, email: email)
+        } else {
+            // TEMP
+            print("CurrentUserManager: no email")
+            //createUser(email: "stevey@mgacy.com", password: "password")
         }
 
     }
