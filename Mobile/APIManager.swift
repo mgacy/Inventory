@@ -39,7 +39,8 @@ class APIManager {
     // MARK: Lifecycle
 
     init() {
-        // TODO - get CurrentUserManager from AppDelegate?
+        // TODO - get CurrentUserManager from AppDelegate and pass to AuthenticationHandler
+        // instead of having it access password and accessToken directly?
         authHandler = AuthenticationHandler()
 
         sessionManager = Alamofire.SessionManager.default
