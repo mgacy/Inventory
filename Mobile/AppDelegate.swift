@@ -46,8 +46,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let loginController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
             //self.window?.rootViewController = loginController
 
-//            let navController = UINavigationController(rootViewController: loginController)
-//            self.window?.rootViewController = navController
+            //let navController = UINavigationController(rootViewController: loginController)
+            //self.window?.rootViewController = navController
 
 
             self.window?.rootViewController?.present(loginController, animated: true, completion: nil)
