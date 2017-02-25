@@ -26,6 +26,7 @@
 		C92D75C11DC7A81400AA1A02 /* InvoiceKeypadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C01DC7A81400AA1A02 /* InvoiceKeypadVC.swift */; };
 		C92D75C31DC7A93100AA1A02 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C21DC7A93100AA1A02 /* LoginVC.swift */; };
 		C92D75C51DC7A94100AA1A02 /* SettingsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C41DC7A94100AA1A02 /* SettingsTVC.swift */; };
+		C935E9A41E60D713003BF386 /* InitialLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E9A31E60D713003BF386 /* InitialLoginVC.swift */; };
 		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
 		C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */; };
@@ -99,6 +100,7 @@
 		C92D75C01DC7A81400AA1A02 /* InvoiceKeypadVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadVC.swift; sourceTree = "<group>"; };
 		C92D75C21DC7A93100AA1A02 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		C92D75C41DC7A94100AA1A02 /* SettingsTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTVC.swift; sourceTree = "<group>"; };
+		C935E9A31E60D713003BF386 /* InitialLoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialLoginVC.swift; sourceTree = "<group>"; };
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Syncable.swift; sourceTree = "<group>"; };
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InvoiceCollection+MyStuff.swift"; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 		C9F515DF1DB7EF98004C10E6 /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				C935E9A31E60D713003BF386 /* InitialLoginVC.swift */,
 				C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */,
 				C9F515E21DB7EF98004C10E6 /* ViewController.swift */,
 				C9124F741DF0D61E00166A08 /* CoreDataStack.swift */,
@@ -635,6 +638,7 @@
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
 				C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */,
 				C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */,
+				C935E9A41E60D713003BF386 /* InitialLoginVC.swift in Sources */,
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
 				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,
 				C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */,

@@ -1448,6 +1448,72 @@
             </objects>
             <point key="canvasLocation" x="2985" y="2809"/>
         </scene>
+        <!--Initial LoginVC-->
+        <scene sceneID="koq-0d-6Dk">
+            <objects>
+                <viewController storyboardIdentifier="InitialLoginViewController" id="37G-Gi-gMX" customClass="InitialLoginVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cZQ-mb-mEt"/>
+                        <viewControllerLayoutGuide type="bottom" id="Cn3-5c-tsR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Xkz-o5-nv8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="lQ2-pa-8s7">
+                                <rect key="frame" x="16" y="80" width="343" height="144"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Zt6-K4-KGw">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="M7C-ku-sZj">
+                                        <rect key="frame" x="0.0" y="38" width="343" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofl-0V-Bsb">
+                                        <rect key="frame" x="0.0" y="76" width="343" height="30"/>
+                                        <state key="normal" title="Login"/>
+                                        <connections>
+                                            <action selector="loginButtonPressed:" destination="37G-Gi-gMX" eventType="touchUpInside" id="tXi-xC-Qdg"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BcY-I3-lEg">
+                                        <rect key="frame" x="0.0" y="114" width="343" height="30"/>
+                                        <state key="normal" title="Sign Up"/>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="lQ2-pa-8s7" secondAttribute="trailing" id="5hf-lA-yEe"/>
+                            <constraint firstItem="lQ2-pa-8s7" firstAttribute="top" secondItem="cZQ-mb-mEt" secondAttribute="bottom" constant="60" id="iLQ-FR-u98"/>
+                            <constraint firstItem="lQ2-pa-8s7" firstAttribute="leading" secondItem="Xkz-o5-nv8" secondAttribute="leadingMargin" id="leR-8X-rLf"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="TaB-cC-MgH">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="0JG-qN-Ar8">
+                            <connections>
+                                <action selector="cancel:" destination="37G-Gi-gMX" id="jou-6q-FHz"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="loginButton" destination="ofl-0V-Bsb" id="Z9V-eD-E1z"/>
+                        <outlet property="loginTextField" destination="Zt6-K4-KGw" id="mWr-y3-rG0"/>
+                        <outlet property="passwordTextField" destination="M7C-ku-sZj" id="Kwf-kj-9Zu"/>
+                        <segue destination="Lwb-b5-sIi" kind="show" identifier="showTabController" id="fev-ZI-ohI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9EX-X0-wAO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2188" y="139"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Upload" width="22" height="22"/>
