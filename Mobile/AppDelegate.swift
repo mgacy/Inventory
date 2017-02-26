@@ -67,13 +67,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if userManager.user != nil {
             //print("AppDelegate: has User")
             let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as! UITabBarController
-            self.window?.rootViewController = tabBarController
-
             let inventoryNavController = tabBarController.viewControllers?[0] as! UINavigationController
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
-            print("SyncManager ...")
+
+            // Sync
+            HUD.show(.progress)
             _ = SyncManager(completionHandler: controller.completedLogin)
 
+            self.window?.rootViewController = tabBarController
         } else {
             //print("AppDelegate: missing User")
             let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as! InitialLoginVC
