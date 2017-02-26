@@ -66,12 +66,6 @@ class InventoryDateTVC: UITableViewController {
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
-
-        // Login to server, get list of Items, and update store
-        HUD.dimsBackground = false
-        HUD.allowsInteraction = false
-        HUD.show(.progress)
-        _ = StartupManager(completionHandler: completedLogin)
     }
 
     // override func viewWillAppear(_ animated: Bool) { }
@@ -170,7 +164,6 @@ class InventoryDateTVC: UITableViewController {
 
         switch selection.uploaded {
         case true:
-            //self.pleaseWait()
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
 
@@ -215,7 +208,6 @@ class InventoryDateTVC: UITableViewController {
 
         // TODO - check if there is already an Inventory for the current date and of the current type
 
-        //self.pleaseWait()
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
 
@@ -225,7 +217,6 @@ class InventoryDateTVC: UITableViewController {
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
-        //self.pleaseWait()
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
 

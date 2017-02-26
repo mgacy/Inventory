@@ -1,5 +1,5 @@
 //
-//  AccountVC.swift
+//  LoginVC.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/31/16.
@@ -8,13 +8,18 @@
 
 import UIKit
 import KeychainAccess
+import PKHUD
+//import SwiftyJSON
 
-class AccountVC: UIViewController, UITextFieldDelegate {
+class LoginVC: UIViewController, UITextFieldDelegate {
+
+    // MARK: Properties
+    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
 
     // MARK: Interface
-    
     @IBOutlet weak var loginTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var loginButton: UIButton!
     
     // MARK: Lifecycle
     
@@ -22,7 +27,10 @@ class AccountVC: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        //readFromKeychain()
+
+        if let user = userManager.user {
+            loginTextField.text = user.email
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -51,10 +59,11 @@ class AccountVC: UIViewController, UITextFieldDelegate {
     // MARK: - Keychain Stuff
     
     @IBAction func loginButtonPressed(_ sender: AnyObject) {
-        //writeToKeychain()
-        dismiss(animated: true, completion: nil)
-        //navigationController!.popViewController(animated: true)
-        
+        guard let email = loginTextField.text, let pass = passwordTextField.text else {
+            return
+        }
+        userManager.createUser(email: email, password: pass)
+        APIManager.sharedInstance.login(completion: completedLogin)
     }
     
     // MARK: - Navigation
@@ -62,14 +71,33 @@ class AccountVC: UIViewController, UITextFieldDelegate {
     @IBAction func cancel(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
     }
-    
+
     /*
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        print("Preparing for segue ...")
     }
     */
+
+}
+
+// MARK: - Completion Handlers
+extension LoginVC {
+
+    func completedLogin(success: Bool) {
+        if success {
+            print("Logged in")
+            dismiss(animated: true, completion: nil)
+        } else {
+            // TODO - how best to handle this?
+            HUD.flash(.error, delay: 1.0); return
+            print("Failed to login")
+        }
+    }
+
+    // func completedSignup(json: JSON?, error: Error?) -> Void {}
 
 }

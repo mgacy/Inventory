@@ -11,7 +11,11 @@ import Alamofire
 import SwiftyJSON
 
 public enum Router: URLRequestConvertible {
+    // Authentication
+    case forgotPassword(email: String)
     case login(email: String, password: String)
+    case logout
+    case signUp(email: String, password: String)
     // General
     case getItems(storeID: Int)
     case getUnits
@@ -32,13 +36,20 @@ public enum Router: URLRequestConvertible {
     case fetchOrder(storeID: Int, orderDate: String)
     case postOrder([String: Any])
     
-    //static let baseURLString = "http://127.0.0.1:5000"
+    //static let baseURLString = "http://localhost:5000"
     static let baseURLString = "***REMOVED***"
     static let apiPath = "/api/v1.0"
     
     var method: HTTPMethod {
         switch self {
+        // Authorization
+        case .forgotPassword:
+            return .post
         case .login:
+            return .post
+        case .logout:
+            return .post
+        case .signUp:
             return .post
         // General
         case .getItems:
@@ -79,8 +90,15 @@ public enum Router: URLRequestConvertible {
     
     var path: String {
         switch self {
+        // Authentication
+        case .forgotPassword:
+            return "/auth/lost_password"
         case .login:
             return "/auth/login"
+        case .logout:
+            return "/auth/logout"
+        case .signUp:
+            return "/signup"
         // General
         case .getItems:
             return "items"
@@ -120,7 +138,13 @@ public enum Router: URLRequestConvertible {
     
     var parameters: Parameters {
         switch self {
+        // Authentication
+        case .forgotPassword(let email):
+            return ["email": email]
         case .login(let email, let password):
+            return ["email": email, "password": password]
+        //case .logout:
+        case .signUp(let email, let password):
             return ["email": email, "password": password]
         // General
         case .getItems(let storeID):
@@ -171,9 +195,14 @@ public enum Router: URLRequestConvertible {
         urlRequest.httpMethod = method.rawValue
         
         switch self {
+        // Authentication
+        case .forgotPassword:
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         case .login:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
-        
+        // case .logout:
+        case .signUp:
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         // General
         case .getItems:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)

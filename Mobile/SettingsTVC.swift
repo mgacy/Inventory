@@ -11,13 +11,15 @@ import UIKit
 class SettingsTVC: UITableViewController {
 
     // MARK: Properties
-    
+    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
+
+    // Segues
     let accountSegue = "showAccount"
-    
+
     @IBOutlet weak var AccountCell: UITableViewCell!
-    
+
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,6 +28,13 @@ class SettingsTVC: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+
+        title = "Settings"
+        configureAccountCell()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        configureAccountCell()
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,75 +42,13 @@ class SettingsTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    @IBAction func done(_ sender: UIBarButtonItem) {
-        print("Saving Settings ...")
-        dismiss(animated: true, completion: nil)
-    }
-    
     // MARK: - Navigation
-    
+
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
         case accountSegue:
-            
+
             // Get the new view controller.
             // let destinationController = segue.destination as! AccountVC
             // destinationController.readFromKeychain()
@@ -109,8 +56,62 @@ class SettingsTVC: UITableViewController {
         default:
             break
         }
-        
+
         // Pass the selected object to the new view controller.
+    }
+
+    // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Selected section \(indexPath.section)")
+
+        // Account
+        if indexPath.section == 0 {
+            if let user = userManager.user {
+                print("Logging out \(user.email)")
+
+                // TEMP
+                let defaults = UserDefaults.standard
+                defaults.removeObject(forKey: "email")
+
+                APIManager.sharedInstance.logout(completion: completedLogout)
+            } else {
+                print("Showing AccountVC ...")
+                performSegue(withIdentifier: accountSegue, sender: self)
+            }
+        }
+
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    // MARK: - User Actions
+
+    // MARK: - Configuration
+
+    // TODO - pass User?
+    func configureAccountCell() {
+        if let user = userManager.user {
+            AccountCell.textLabel?.text = "Logout \(user.email)"
+        } else {
+            AccountCell.textLabel?.text = "Login"
+        }
+    }
+
+}
+
+// MARK: - Completion Handlers
+extension SettingsTVC {
+
+    func completedLogout(suceeded: Bool) {
+        if suceeded {
+            userManager.removeUser()
+            AccountCell.textLabel?.text = "Login"
+        } else {
+            print("Nope")
+            // TEMP
+            userManager.removeUser()
+            AccountCell.textLabel?.text = "Login"
+        }
     }
 
 }

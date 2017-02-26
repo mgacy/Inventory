@@ -8,12 +8,13 @@
 
 import UIKit
 import CoreData
+import PKHUD
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var userManager: CurrentUserManager = CurrentUserManager.sharedInstance
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -29,8 +30,62 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             defaults.set(true, forKey: "isPreloaded")
         }
 
-        // TODO - get Items from server at this point
-        
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        HUD.dimsBackground = false
+        HUD.allowsInteraction = false
+
+        /*
+        //enum RootControllers: String {
+        //    case InventoryRoot: "InventoryDateTVC"
+        //    case OrderRoot: "OrderDateTVC"
+        //    case InvoiceRoot: "InvoiceDateTVC"
+        //    case SettingsRoot: "SettingsTVC"
+        //}
+
+        let rootInventoryController = storyboard.instantiateViewController(withIdentifier: "InventoryDateTVC")
+         let rootInventoryNavController = UINavigationController(rootViewController: rootInventoryController)
+
+        let rootOrderController = storyboard.instantiateViewController(withIdentifier: "OrderDateTVC")
+        let rootOrderNavController = UINavigationController(rootViewController: rootOrderController)
+
+        let rootInvoiceController = storyboard.instantiateViewController(withIdentifier: "InvoiceDateTVC")
+        let rootInvoiceNavController = UINavigationController(rootViewController: rootInvoiceController)
+
+        let rootSettingsController = storyboard.instantiateViewController(withIdentifier: "SettingsTVC")
+        let rootSettingsNavController = UINavigationController(rootViewController: rootSettingsController)
+
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = [
+            rootInventoryNavController, rootOrderNavController,
+            rootInvoiceNavController, rootSettingsNavController
+        ]
+        */
+
+        // Check if we already have user + credentials
+        if userManager.user != nil {
+            //print("AppDelegate: has User")
+            let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as! UITabBarController
+            self.window?.rootViewController = tabBarController
+
+            let inventoryNavController = tabBarController.viewControllers?[0] as! UINavigationController
+            let controller = inventoryNavController.topViewController as! InventoryDateTVC
+            print("SyncManager ...")
+            _ = SyncManager(completionHandler: controller.completedLogin)
+
+        } else {
+            //print("AppDelegate: missing User")
+            let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as! InitialLoginVC
+
+            // TODO - Inject dependencies
+            // loginController.userManager = self.userManager
+
+            self.window?.rootViewController = loginController
+        }
+
+        //self.window?.makeKeyAndVisible()
+
         return true
     }
 
@@ -62,6 +117,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.saveContext()
     }
 
+    // MARK: - State Restoration
+    /*
+
+    func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
+        return true
+    }
+
+    func application(_ application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
+        return true
+    }
+
+    */
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {

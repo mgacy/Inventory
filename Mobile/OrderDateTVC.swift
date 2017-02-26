@@ -182,7 +182,7 @@ class OrderDateTVC: UITableViewController {
         deleteObjects(entityType: Item.self)
         deleteExistingOrderCollections()
 
-        _ = StartupManager(completionHandler: completedLogin)
+        _ = SyncManager(completionHandler: completedLogin)
     }
 
 }

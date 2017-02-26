@@ -31,7 +31,7 @@ class APIManager {
     // MARK: Properties
 
     static let sharedInstance = APIManager()
-    private let authHandler: AuthorizationHandler
+    private let authHandler: AuthenticationHandler
     private let sessionManager: SessionManager
 
     typealias CompletionHandlerType = (JSON?, Error?) -> Void
@@ -39,7 +39,9 @@ class APIManager {
     // MARK: Lifecycle
 
     init() {
-        authHandler = AuthorizationHandler()
+        // TODO - get CurrentUserManager from AppDelegate and pass to AuthenticationHandler
+        // instead of having it access password and accessToken directly?
+        authHandler = AuthenticationHandler()
 
         sessionManager = Alamofire.SessionManager.default
         sessionManager.adapter = authHandler
@@ -47,8 +49,62 @@ class APIManager {
     }
 
     // MARK: - Authentication
+    func forgotPassword(email: String, completion: @escaping CompletionHandlerType) {
+        sessionManager.request(Router.forgotPassword(email: email))
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\n\(#function) - response: \(response)\n")
+                    let json = JSON(value)
+                    completion(json, nil)
+                case .failure(let error):
+                    debugPrint("\(#function) FAILED : \(error)")
+                    completion(nil, error)
+                }
+        }
+    }
+
     func login(completion: @escaping (Bool) -> Void) {
+        // TODO - handle CurrentUserManager
         authHandler.login(completion: completion)
+    }
+
+    func logout(completion: @escaping (Bool) -> Void) {
+        sessionManager.request(Router.logout)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                //case .success(let value):
+                case .success:
+                    print("\n\(#function) - response: \(response)\n")
+                    // TODO - handle CurrentUserManager
+                    //let json = JSON(value)
+                    //completion(json, nil)
+                    completion(true)
+                case .failure(let error):
+                    debugPrint("\(#function) FAILED : \(error)")
+                    //completion(nil, error)
+                    completion(false)
+                }
+        }
+    }
+
+    func signUp(email: String, password: String, completion: @escaping CompletionHandlerType) {
+        sessionManager.request(Router.signUp(email: email, password: password))
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\n\(#function) - response: \(response)\n")
+                    let json = JSON(value)
+                    // TODO - handle CurrentUserManager
+                    completion(json, nil)
+                case .failure(let error):
+                    debugPrint("\(#function) FAILED : \(error)")
+                    completion(nil, error)
+                }
+        }
     }
 
     // MARK: - API Calls - General
