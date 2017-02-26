@@ -82,20 +82,9 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
         case MainSegue:
 
             // Get the new view controller.
-            guard let tabBarController = segue.destination as? UITabBarController else {
-                print("\(#function) FAILED : problem A")
-                HUD.flash(.error, delay: 1.0); return
-            }
-            guard let inventoryNavController = tabBarController.viewControllers?[0] as? UINavigationController else {
-                print("\(#function) FAILED : problem B")
-
-                HUD.flash(.error, delay: 1.0); return
-            }
-            guard let controller = inventoryNavController.topViewController as? InventoryDateTVC else {
-                print("\(#function) FAILED : problem C")
-                HUD.flash(.error, delay: 1.0); return
-            }
-
+            let tabBarController = segue.destination as! UITabBarController
+            let inventoryNavController = tabBarController.viewControllers![0] as! UINavigationController
+            let controller = inventoryNavController.topViewController as! InventoryDateTVC
             print("SyncManager ...")
             _ = SyncManager(completionHandler: controller.completedLogin)
         case SignUpSegue:
