@@ -85,10 +85,7 @@ class SettingsTVC: UITableViewController {
 
     // MARK: - User Actions
 
-    @IBAction func done(_ sender: UIBarButtonItem) {
-        print("Saving Settings ...")
-        dismiss(animated: true, completion: nil)
-    }
+    // MARK: - Configuration
 
     // TODO - pass User?
     func configureAccountCell() {

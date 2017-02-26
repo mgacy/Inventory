@@ -1281,11 +1281,11 @@
                                         <rect key="frame" x="0.0" y="56" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EG4-hE-eoB" id="epB-fh-Lie">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FDP-LD-P7j">
-                                                    <rect key="frame" x="15" y="0.0" width="345" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -1330,13 +1330,7 @@
                             <outlet property="delegate" destination="lN6-oK-Pdf" id="PVB-sg-NHr"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="CGJ-W2-4gF">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="dsu-Te-FeL">
-                            <connections>
-                                <action selector="done:" destination="lN6-oK-Pdf" id="xXe-gT-U6B"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="CGJ-W2-4gF"/>
                     <connections>
                         <outlet property="AccountCell" destination="EG4-hE-eoB" id="HOe-BO-FPp"/>
                         <segue destination="cCC-W6-7FV" kind="presentation" identifier="showAccount" id="PaH-ar-rGK"/>
