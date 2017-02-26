@@ -36,6 +36,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         HUD.dimsBackground = false
         HUD.allowsInteraction = false
 
+        /*
+        //enum RootControllers: String {
+        //    case InventoryRoot: "InventoryDateTVC"
+        //    case OrderRoot: "OrderDateTVC"
+        //    case InvoiceRoot: "InvoiceDateTVC"
+        //    case SettingsRoot: "SettingsTVC"
+        //}
+
+        let rootInventoryController = storyboard.instantiateViewController(withIdentifier: "InventoryDateTVC")
+         let rootInventoryNavController = UINavigationController(rootViewController: rootInventoryController)
+
+        let rootOrderController = storyboard.instantiateViewController(withIdentifier: "OrderDateTVC")
+        let rootOrderNavController = UINavigationController(rootViewController: rootOrderController)
+
+        let rootInvoiceController = storyboard.instantiateViewController(withIdentifier: "InvoiceDateTVC")
+        let rootInvoiceNavController = UINavigationController(rootViewController: rootInvoiceController)
+
+        let rootSettingsController = storyboard.instantiateViewController(withIdentifier: "SettingsTVC")
+        let rootSettingsNavController = UINavigationController(rootViewController: rootSettingsController)
+
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = [
+            rootInventoryNavController, rootOrderNavController,
+            rootInvoiceNavController, rootSettingsNavController
+        ]
+        */
+
         // Check if we already have user + credentials
         if userManager.user != nil {
             print("AppDelegate: has User")

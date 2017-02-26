@@ -18,6 +18,10 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
     //let userManager: CurrentUserManager
 
     // Segue
+    //let InventorySegue = "showInventories"
+    //let OrderSegue = "showOrders"
+    //let InvoiceSegue = "showInvoices"
+    //let SettingSegue = "showSettings"
     let MainSegue = "showTabController"
     let SignUpSegue = "showSignUpController"
 
@@ -132,6 +136,7 @@ extension InitialLoginVC {
 
     func completedSync(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
+            //performSegue(withIdentifier: InventorySegue, sender: self)
             performSegue(withIdentifier: MainSegue, sender: self)
         } else {
             HUD.flash(.error, delay: 1.0); return
