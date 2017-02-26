@@ -81,21 +81,18 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
         switch segue.identifier! {
         case MainSegue:
 
-            print("Destination: \(segue.destination)")
-
             // Get the new view controller.
-            guard let tabController = segue.destination as? UITabBarController else {
-                print("PROBLEM B")
+            guard let tabBarController = segue.destination as? UITabBarController else {
+                print("\(#function) FAILED : problem A")
                 HUD.flash(.error, delay: 1.0); return
             }
+            guard let inventoryNavController = tabBarController.viewControllers?[0] as? UINavigationController else {
+                print("\(#function) FAILED : problem B")
 
-            print("\(tabController)")
-            print("\(tabController.selectedViewController)")
-            print("\(tabController.selectedIndex)")
-            print("\(tabController.viewControllers)")
-
-            guard let controller = tabController.viewControllers?[0] as? InventoryDateTVC else {
-                print("PROBLEM C")
+                HUD.flash(.error, delay: 1.0); return
+            }
+            guard let controller = inventoryNavController.topViewController as? InventoryDateTVC else {
+                print("\(#function) FAILED : problem C")
                 HUD.flash(.error, delay: 1.0); return
             }
 
