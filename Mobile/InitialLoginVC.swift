@@ -57,14 +57,14 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         // Disable the LogIn button while editing.
-        //loginButton.enabled = false
+        loginButton.isEnabled = false
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         // checkValidMealName()
     }
 
-    // MARK: - Keychain Stuff
+    // MARK: - User interaction
 
     @IBAction func loginButtonPressed(_ sender: AnyObject) {
         guard let email = loginTextField.text, let pass = passwordTextField.text else {
@@ -74,6 +74,8 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
         userManager.createUser(email: email, password: pass)
         APIManager.sharedInstance.login(completion: completedLogin)
     }
+
+    //@IBAction func signupButtonPressed(_ sender: AnyObject) {}
 
     // MARK: - Navigation
 
@@ -110,7 +112,5 @@ extension InitialLoginVC {
             HUD.flash(.error, delay: 1.0); return
         }
     }
-
-    // func completedSignup(json: JSON?, error: Error?) -> Void {}
 
 }
