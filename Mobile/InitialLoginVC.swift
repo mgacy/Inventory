@@ -85,7 +85,8 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
             let tabBarController = segue.destination as! UITabBarController
             let inventoryNavController = tabBarController.viewControllers![0] as! UINavigationController
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
-            print("SyncManager ...")
+
+            // Sync with completion handler from the new view controller.
             _ = SyncManager(completionHandler: controller.completedLogin)
         case SignUpSegue:
             print("b")
@@ -102,31 +103,14 @@ extension InitialLoginVC {
     func completedLogin(success: Bool) {
         if success {
             print("Logged in")
-
-            // A
-            // Use prepare(for, sender) to init SyncManager with InventoryDateTVC.completedLogin
-            // as completion handler
-            //performSegue(withIdentifier: MainSegue, sender: self)
-
-            // B
-            _ = SyncManager(completionHandler: completedSync)
-
+            performSegue(withIdentifier: MainSegue, sender: self)
         } else {
+            print("Failed to login")
             // TODO - how best to handle this?
             HUD.flash(.error, delay: 1.0); return
-                print("Failed to login")
         }
     }
 
     // func completedSignup(json: JSON?, error: Error?) -> Void {}
-
-    func completedSync(_ succeeded: Bool, _ error: Error?) {
-        if succeeded {
-            //performSegue(withIdentifier: InventorySegue, sender: self)
-            performSegue(withIdentifier: MainSegue, sender: self)
-        } else {
-            HUD.flash(.error, delay: 1.0); return
-        }
-    }
 
 }
