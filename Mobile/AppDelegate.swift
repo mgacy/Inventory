@@ -65,28 +65,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Check if we already have user + credentials
         if userManager.user != nil {
-            print("AppDelegate: has User")
-            let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController")
+            //print("AppDelegate: has User")
+            let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as! UITabBarController
             self.window?.rootViewController = tabBarController
+
+            let inventoryNavController = tabBarController.viewControllers?[0] as! UINavigationController
+            let controller = inventoryNavController.topViewController as! InventoryDateTVC
+            print("SyncManager ...")
+            _ = SyncManager(completionHandler: controller.completedLogin)
+
         } else {
-            print("AppDelegate: missing User")
+            //print("AppDelegate: missing User")
+            let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as! InitialLoginVC
 
-            let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController")
-            self.window?.rootViewController = tabBarController
+            // TODO - Inject dependencies
+            // loginController.userManager = self.userManager
 
-            let loginController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
-            //self.window?.rootViewController = loginController
-
-            //let navController = UINavigationController(rootViewController: loginController)
-            //self.window?.rootViewController = navController
-
-
-            self.window?.rootViewController?.present(loginController, animated: true, completion: nil)
-
+            self.window?.rootViewController = loginController
         }
 
-        // TODO - get Items from server at this point
-        
+        //self.window?.makeKeyAndVisible()
+
         return true
     }
 

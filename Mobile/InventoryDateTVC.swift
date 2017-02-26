@@ -66,12 +66,6 @@ class InventoryDateTVC: UITableViewController {
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
-
-        // Login to server, get list of Items, and update store
-        HUD.dimsBackground = false
-        HUD.allowsInteraction = false
-        HUD.show(.progress)
-        _ = SyncManager(completionHandler: completedLogin)
     }
 
     // override func viewWillAppear(_ animated: Bool) { }
