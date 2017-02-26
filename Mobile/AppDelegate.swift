@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import PKHUD
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -31,6 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        HUD.dimsBackground = false
+        HUD.allowsInteraction = false
 
         // Check if we already have user + credentials
         if userManager.user != nil {
@@ -88,6 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     // MARK: - State Restoration
+    /*
 
     func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
         return true
@@ -97,6 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    */
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {

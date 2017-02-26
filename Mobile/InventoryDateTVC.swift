@@ -170,7 +170,6 @@ class InventoryDateTVC: UITableViewController {
 
         switch selection.uploaded {
         case true:
-            //self.pleaseWait()
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
 
@@ -215,7 +214,6 @@ class InventoryDateTVC: UITableViewController {
 
         // TODO - check if there is already an Inventory for the current date and of the current type
 
-        //self.pleaseWait()
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
 
@@ -225,7 +223,6 @@ class InventoryDateTVC: UITableViewController {
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
-        //self.pleaseWait()
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
 

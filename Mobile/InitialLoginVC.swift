@@ -89,10 +89,6 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
                 print("PROBLEM B")
                 HUD.flash(.error, delay: 1.0); return
             }
-//            guard let controller = tabController.selectedViewController as? InventoryDateTVC else {
-//                print("PROBLEM C")
-//                HUD.flash(.error, delay: 1.0); return
-//            }
 
             print("\(tabController)")
             print("\(tabController.selectedViewController)")
