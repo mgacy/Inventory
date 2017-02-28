@@ -71,6 +71,7 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
             return
         }
         HUD.show(.progress)
+        // TODO: move createUser() to completion handler
         userManager.createUser(email: email, password: pass)
         APIManager.sharedInstance.login(completion: completedLogin)
     }
@@ -105,9 +106,11 @@ extension InitialLoginVC {
     func completedLogin(success: Bool) {
         if success {
             print("Logged in")
+            // TODO: change so we only createUser() on success
             performSegue(withIdentifier: MainSegue, sender: self)
         } else {
             print("Failed to login")
+            userManager.removeUser()
             // TODO - how best to handle this?
             HUD.flash(.error, delay: 1.0); return
         }
