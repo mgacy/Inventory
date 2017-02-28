@@ -15,7 +15,7 @@ public enum Router: URLRequestConvertible {
     case forgotPassword(email: String)
     case login(email: String, password: String)
     case logout
-    case signUp(email: String, password: String)
+    case signUp(username: String, email: String, password: String)
     // General
     case getItems(storeID: Int)
     case getUnits
@@ -144,8 +144,8 @@ public enum Router: URLRequestConvertible {
         case .login(let email, let password):
             return ["email": email, "password": password]
         //case .logout:
-        case .signUp(let email, let password):
-            return ["email": email, "password": password]
+        case .signUp(let username, let email, let password):
+            return ["username": username, "email": email, "password": password]
         // General
         case .getItems(let storeID):
             return ["storeID": storeID]

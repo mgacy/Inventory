@@ -90,8 +90,8 @@ class APIManager {
         }
     }
 
-    func signUp(email: String, password: String, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.signUp(email: email, password: password))
+    func signUp(username: String, email: String, password: String, completion: @escaping CompletionHandlerType) {
+        sessionManager.request(Router.signUp(username: username, email: email, password: password))
             .validate()
             .responseJSON { response in
                 switch response.result {
