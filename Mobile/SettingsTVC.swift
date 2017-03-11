@@ -44,7 +44,6 @@ class SettingsTVC: UITableViewController {
 
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
         case accountSegue:
@@ -56,8 +55,6 @@ class SettingsTVC: UITableViewController {
         default:
             break
         }
-
-        // Pass the selected object to the new view controller.
     }
 
     // MARK: - UITableViewDelegate
@@ -69,10 +66,6 @@ class SettingsTVC: UITableViewController {
         if indexPath.section == 0 {
             if let user = userManager.user {
                 print("Logging out \(user.email)")
-
-                // TEMP
-                let defaults = UserDefaults.standard
-                defaults.removeObject(forKey: "email")
 
                 APIManager.sharedInstance.logout(completion: completedLogout)
             } else {

@@ -53,10 +53,9 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         // checkValidMealName()
-        // navigationItem.title = textField.text
     }
     
-    // MARK: - Keychain Stuff
+    // MARK: - User interaction
     
     @IBAction func loginButtonPressed(_ sender: AnyObject) {
         guard let email = loginTextField.text, let pass = passwordTextField.text else {
