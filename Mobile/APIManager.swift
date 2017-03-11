@@ -24,7 +24,6 @@ class APIManager {
     // MARK: Properties
 
     static let sharedInstance = APIManager()
-    private let authHandler: AuthenticationHandler
     private let sessionManager: SessionManager
 
     typealias CompletionHandlerType = (JSON?, Error?) -> Void
@@ -32,11 +31,10 @@ class APIManager {
     // MARK: Lifecycle
 
     init() {
-        // TODO - get CurrentUserManager from AppDelegate and pass to AuthenticationHandler
-        // instead of having it access password and accessToken directly?
-        authHandler = AuthenticationHandler()
-
         sessionManager = Alamofire.SessionManager.default
+    }
+
+    func configSession(_ authHandler: AuthenticationHandler?) {
         sessionManager.adapter = authHandler
         sessionManager.retrier = authHandler
     }
