@@ -11,14 +11,7 @@ import Alamofire
 import SwiftyJSON
 
 /*
-enum BackendError: Error {
-    case authentication(error: Error)
-    case network(error: Error) // Capture any underlying Error from the URLSession API
-    case dataSerialization(error: Error)
-    case jsonSerialization(error: Error)
-    case xmlSerialization(error: Error)
-    case objectSerialization(reason: String)
-}
+NOTE - BackendError already declared in AlamofireRequest+JSONSerializable.swift
 
 enum MyResult {
     case success(JSON?)
