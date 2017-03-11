@@ -16,6 +16,7 @@ class OrderDateTVC: UITableViewController {
 
     // MARK: Properties
 
+    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
     var selectedCollection: OrderCollection?
     //var selectedCollectionIndex: IndexPath?
 
@@ -34,7 +35,6 @@ class OrderDateTVC: UITableViewController {
     let segueIdentifier = "showOrderVendors"
 
     // TODO - provide interface to control these
-    var storeID = 1
     let orderTypeID = 1
 
     // MARK: - Lifecycle
@@ -60,7 +60,7 @@ class OrderDateTVC: UITableViewController {
         // Get list of OrderCollections from server
         // print("\nFetching existing OrderCollections from server ...")
         HUD.show(.progress)
-        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
+        APIManager.sharedInstance.getListOfOrderCollections(storeID: userManager.storeID!, completion: self.completedGetListOfOrderCollections)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -135,6 +135,9 @@ class OrderDateTVC: UITableViewController {
             guard let collectionDate = selection.date else {
                 print("\(#function) FAILED : unable to get orderCollection.date"); return
             }
+            guard let storeID = userManager.storeID else {
+                print("\(#function) FAILED : unable to get storeID"); return
+            }
 
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
@@ -166,6 +169,10 @@ class OrderDateTVC: UITableViewController {
 
         // TODO - check if there is already an Order for the current date and of the current type
 
+        guard let storeID = userManager.storeID else {
+            print("\(#function) FAILED : unable to get storeID"); return
+        }
+
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
 
@@ -182,7 +189,7 @@ class OrderDateTVC: UITableViewController {
         deleteObjects(entityType: Item.self)
         deleteExistingOrderCollections()
 
-        _ = SyncManager(completionHandler: completedLogin)
+        _ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
     }
 
 }
@@ -287,6 +294,12 @@ extension OrderDateTVC {
     func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             print("\nCompleted login - succeeded: \(succeeded)")
+
+            guard let storeID = userManager.storeID else {
+                print("\(#function) FAILED : unable to get storeID")
+                HUD.flash(.error, delay: 1.0)
+                return
+            }
 
             // Get list of OrderCollections from server
             // print("\nFetching existing OrderCollections from server ...")

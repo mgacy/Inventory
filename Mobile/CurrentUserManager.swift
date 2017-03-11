@@ -16,6 +16,7 @@ class CurrentUserManager {
     let defaults: UserDefaults
     let keychain: Keychain
 
+    var storeID: Int? = 1
     var user: User?
 
     // MARK: - Lifecycle

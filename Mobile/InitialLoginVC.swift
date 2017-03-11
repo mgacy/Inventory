@@ -90,7 +90,7 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
 
             // Sync with completion handler from the new view controller.
-            _ = SyncManager(completionHandler: controller.completedLogin)
+            _ = SyncManager(storeID: userManager.storeID!, completionHandler: controller.completedLogin)
         case SignUpSegue:
             print("b")
         default:

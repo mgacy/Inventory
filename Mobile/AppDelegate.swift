@@ -72,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             // Sync
             HUD.show(.progress)
-            _ = SyncManager(completionHandler: controller.completedLogin)
+            _ = SyncManager(storeID: userManager.storeID!, completionHandler: controller.completedLogin)
 
             self.window?.rootViewController = tabBarController
         } else {
