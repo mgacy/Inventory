@@ -14,8 +14,7 @@ import PKHUD
 class InitialLoginVC: UIViewController, UITextFieldDelegate {
 
     // MARK: Properties
-    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
-    //let userManager: CurrentUserManager
+    var userManager: CurrentUserManager!
 
     // Segue
     //let InventorySegue = "showInventories"
@@ -85,14 +84,29 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
         case MainSegue:
 
             // Get the new view controller.
+            // TODO - use guards here?
             let tabBarController = segue.destination as! UITabBarController
             let inventoryNavController = tabBarController.viewControllers![0] as! UINavigationController
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
 
+            // Inject dependencies
+            controller.userManager = userManager
+
             // Sync with completion handler from the new view controller.
             _ = SyncManager(storeID: userManager.storeID!, completionHandler: controller.completedLogin)
         case SignUpSegue:
-            print("b")
+
+            // Get the new view controller.
+            guard
+                let destinationNavController = segue.destination as? UINavigationController,
+                let destinationController = destinationNavController.topViewController as? InitialSignUpVC
+                else {
+                    debugPrint("\(#function) FAILED : unable to get destination"); return
+            }
+
+            // Pass dependencies to the new view controller.
+            destinationController.userManager = userManager
+
         default:
             break
         }

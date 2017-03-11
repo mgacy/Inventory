@@ -70,6 +70,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let inventoryNavController = tabBarController.viewControllers?[0] as! UINavigationController
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
 
+            // Inject dependencies
+            // controller.managedObjectContext = persistentContainer.viewContext
+            controller.userManager = userManager
+
             // Sync
             HUD.show(.progress)
             _ = SyncManager(storeID: userManager.storeID!, completionHandler: controller.completedLogin)
@@ -79,8 +83,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //print("AppDelegate: missing User")
             let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as! InitialLoginVC
 
-            // TODO - Inject dependencies
-            // loginController.userManager = self.userManager
+            // Inject dependencies
+            loginController.userManager = userManager
 
             self.window?.rootViewController = loginController
         }

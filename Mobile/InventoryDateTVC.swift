@@ -18,6 +18,7 @@ class InventoryDateTVC: UITableViewController {
 
     var destinationController: UIViewController?
     var selectedInventory: Inventory?
+    var userManager: CurrentUserManager!
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil

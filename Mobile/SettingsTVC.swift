@@ -49,9 +49,16 @@ class SettingsTVC: UITableViewController {
         case accountSegue:
 
             // Get the new view controller.
-            // let destinationController = segue.destination as! AccountVC
-            // destinationController.readFromKeychain()
-            break
+            guard
+                let destinationNavController = segue.destination as? UINavigationController,
+                let destinationController = destinationNavController.topViewController as? LoginVC
+            else {
+                debugPrint("\(#function) FAILED : unable to get destination"); return
+            }
+
+            // Pass dependencies to the new view controller.
+            destinationController.userManager = userManager
+
         default:
             break
         }

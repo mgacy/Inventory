@@ -17,6 +17,7 @@ class InvoiceDateTVC: UITableViewController {
     // MARK: - Properties
 
     let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
+    //var userManager: CurrentUserManager!
     var selectedCollection: InvoiceCollection?
 
     // FetchedResultsController

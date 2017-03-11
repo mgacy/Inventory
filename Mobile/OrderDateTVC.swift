@@ -17,6 +17,7 @@ class OrderDateTVC: UITableViewController {
     // MARK: Properties
 
     let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
+    //var userManager: CurrentUserManager!
     var selectedCollection: OrderCollection?
     //var selectedCollectionIndex: IndexPath?
 

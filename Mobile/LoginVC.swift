@@ -14,7 +14,7 @@ import PKHUD
 class LoginVC: UIViewController, UITextFieldDelegate {
 
     // MARK: Properties
-    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
+    var userManager: CurrentUserManager!
 
     // MARK: Interface
     @IBOutlet weak var loginTextField: UITextField!
