@@ -39,60 +39,6 @@ class APIManager {
         sessionManager.retrier = authHandler
     }
 
-    // MARK: - Authentication
-    func forgotPassword(email: String, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.forgotPassword(email: email))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
-    func login(completion: @escaping (Bool) -> Void) {
-        // TODO - handle CurrentUserManager
-        authHandler.login(completion: completion)
-    }
-
-    func logout(completion: @escaping (Bool) -> Void) {
-        sessionManager.request(Router.logout)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success:
-                    print("\n\(#function) - response: \(response)\n")
-                    completion(true)
-                case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
-                    completion(false)
-                }
-        }
-    }
-
-    func signUp(username: String, email: String, password: String, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.signUp(username: username, email: email, password: password))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
-                    let json = JSON(value)
-                    // TODO - handle CurrentUserManager
-                    completion(json, nil)
-                case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
     // MARK: - API Calls - General
 
     func getItems(storeID: Int, completion: @escaping CompletionHandlerType) {

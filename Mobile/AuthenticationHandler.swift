@@ -157,9 +157,30 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
     // MARK: - Request Token
 
-    public func login(completion: @escaping (Bool) -> Void) {
-        }
+    public func login(completion: @escaping (JSON?, Error?) -> Void) {
+        sessionManager.request(Router.login(email: email, password: password))
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    // print("\n\(#function) - response: \(response)\n")
+                    guard let token = JSON(value)["token"].string else {
+                        let error = BackendError.authentication(error: "Unable to get token" as! Error)
+                        completion(nil, error)
+                        return
+                    }
+                    self.accessToken = token
 
+                    let json = JSON(value)
+                    completion(json, nil)
+
+                case .failure(let error):
+                    debugPrint("\(#function) FAILED : unable to get token : \(error)")
+                    completion(nil, error)
+                }
+        }
+    }
+
+    public func login(completion: @escaping (Bool) -> Void) {
         sessionManager.request(Router.login(email: email, password: password))
             .responseJSON { response in
                 if response.result.isSuccess, let token = JSON(response.result.value!)["token"].string {

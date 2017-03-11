@@ -73,8 +73,7 @@ class SettingsTVC: UITableViewController {
         if indexPath.section == 0 {
             if let user = userManager.user {
                 print("Logging out \(user.email)")
-
-                APIManager.sharedInstance.logout(completion: completedLogout)
+                userManager.logout(completion: completedLogout)
             } else {
                 print("Showing AccountVC ...")
                 performSegue(withIdentifier: accountSegue, sender: self)
@@ -104,12 +103,9 @@ extension SettingsTVC {
 
     func completedLogout(suceeded: Bool) {
         if suceeded {
-            userManager.removeUser()
             AccountCell.textLabel?.text = "Login"
         } else {
-            print("Nope")
-            // TEMP
-            userManager.removeUser()
+            print("Unable to actually logout")
             AccountCell.textLabel?.text = "Login"
         }
     }

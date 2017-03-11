@@ -61,8 +61,8 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         guard let email = loginTextField.text, let pass = passwordTextField.text else {
             return
         }
-        userManager.createUser(email: email, password: pass)
-        APIManager.sharedInstance.login(completion: completedLogin)
+        HUD.show(.progress)
+        userManager.login(email: email, password: pass, completion: completedLogin)
     }
     
     // MARK: - Navigation

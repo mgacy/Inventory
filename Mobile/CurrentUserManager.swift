@@ -7,7 +7,9 @@
 //
 
 import Foundation
+import Alamofire
 import KeychainAccess
+import SwiftyJSON
 
 class CurrentUserManager {
 
@@ -99,6 +101,110 @@ class CurrentUserManager {
         keychain["authToken"] = nil
         user = nil
         authHandler = nil
+    }
+
+
+    // MARK: -
+
+    public func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
+
+        // TODO - handle pre-existing user?
+        // TODO - handle pre-existing authHandler?
+
+        // We login with AuthenticationHandler since it is responsible for maintaining the token
+        authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
+
+        authHandler!.login(completion: {(json: JSON?, error: Error?) -> Void in
+            // TODO - combine the two guards?
+            // TODO - does AuthenticationHandler.login already ensure json != nil?
+            // TODO - set authHandler back to nil / self.removeUser() if guard fails?
+            guard error == nil else {
+                print("\(#function) FAILED : \(error)")
+                return completion(false)
+            }
+            guard let json = json else {
+                print("\(#function) FAILED : \(error)")
+                return completion(false)
+            }
+
+            let user: Dictionary<String, JSON> = json["user"].dictionaryValue
+            let userID: Int = user["id"]!.intValue
+            let stores: Array<JSON> = user["stores"]!.arrayValue
+
+            // TODO - can we safely assume all users will have at least one store?
+            let defaultStore = stores[0]
+            let defaultStoreID: Int = defaultStore["id"].intValue
+
+            // TESTING
+            //print("login response: \(json)")
+            //print("user: \(user)")
+            //print("userID: \(userID)")
+            //print("stores: \(stores)")
+            //print("defaultStore: \(defaultStore)")
+            //print("defaultStoreID: \(defaultStoreID)")
+            //print("storeID: \(self.storeID)")
+
+            //self.defaults.set(defaultStoreID, forKey: "store")
+            //self.defaults.set(email, forKey: "email")
+            //self.keychain["password"] = password
+
+            self.email = email
+            self.password = password
+            self.storeID = defaultStoreID
+
+            self.user = User(id: userID, email: email)
+
+            APIManager.sharedInstance.configSession(self.authHandler!)
+
+            completion(true)
+        })
+    }
+
+    public func signUp(username: String, email: String, password: String, completion: @escaping (JSON?, Error?) -> Void) {
+
+        Alamofire.request(Router.signUp(username: username, email: email, password: password))
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("\n\(#function) - response: \(response)\n")
+                    let json = JSON(value)
+
+                    let user: Dictionary<String, JSON> = json["user"].dictionaryValue
+                    let userID: Int = user["id"]!.intValue
+
+                    self.defaults.set(email, forKey: "email")
+                    self.keychain["password"] = password
+                    self.user = User(id: userID, email: email)
+
+                    completion(json, nil)
+                case .failure(let error):
+                    debugPrint("\(#function) FAILED : \(error)")
+                    completion(nil, error)
+                }
+        }
+    }
+
+    func logout(completion: @escaping (Bool) -> Void) {
+        // TODO - removeUser first, regardless of response.result?
+        Alamofire.request(Router.logout)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success:
+                    print("\n\(#function) - response: \(response)\n")
+
+                    APIManager.sharedInstance.configSession(nil)
+                    self.removeUser()
+                    completion(true)
+                case .failure(let error):
+                    debugPrint("\(#function) FAILED : \(error)")
+
+                    APIManager.sharedInstance.configSession(nil)
+                    self.removeUser()
+                    completion(false)
+                }
+        }
     }
 
 }

@@ -70,9 +70,8 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
             return
         }
         HUD.show(.progress)
-        // TODO: move createUser() to completion handler
-        userManager.createUser(email: email, password: pass)
-        APIManager.sharedInstance.login(completion: completedLogin)
+
+        userManager.login(email: email, password: pass, completion: completedLogin)
     }
 
     //@IBAction func signupButtonPressed(_ sender: AnyObject) {}
