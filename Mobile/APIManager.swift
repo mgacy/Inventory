@@ -68,16 +68,11 @@ class APIManager {
             .validate()
             .responseJSON { response in
                 switch response.result {
-                //case .success(let value):
                 case .success:
                     print("\n\(#function) - response: \(response)\n")
-                    // TODO - handle CurrentUserManager
-                    //let json = JSON(value)
-                    //completion(json, nil)
                     completion(true)
                 case .failure(let error):
                     debugPrint("\(#function) FAILED : \(error)")
-                    //completion(nil, error)
                     completion(false)
                 }
         }
