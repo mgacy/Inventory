@@ -1480,7 +1480,7 @@
                                         <rect key="frame" x="0.0" y="114" width="343" height="30"/>
                                         <state key="normal" title="Sign Up"/>
                                         <connections>
-                                            <segue destination="4Mb-7Z-e1m" kind="presentation" identifier="showSignUp" id="qcm-We-wid"/>
+                                            <segue destination="4Mb-7Z-e1m" kind="presentation" identifier="showSignUpController" id="qcm-We-wid"/>
                                         </connections>
                                     </button>
                                 </subviews>
