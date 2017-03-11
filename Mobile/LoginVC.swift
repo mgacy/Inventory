@@ -47,8 +47,8 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        // Disable the Save button while editing.
-        //saveButton.enabled = false
+        // Disable the LogIn button while editing.
+        loginButton.isEnabled = false
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -89,6 +89,7 @@ extension LoginVC {
     func completedLogin(success: Bool) {
         if success {
             print("Logged in")
+            HUD.hide()
             dismiss(animated: true, completion: nil)
         } else {
             // TODO - how best to handle this?
