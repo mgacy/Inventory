@@ -31,36 +31,11 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
     // OAuth2
     // private var clientID: String
     private var baseURLString: String
-    //private var refreshToken: String?
+    //private var refreshToken: String
 
     // Mine
-
-    private var email: String? {
-        get {
-            let defaults = UserDefaults.standard
-            return defaults.string(forKey: "email")
-        }
-    }
-
-    private var password: String? {
-        get {
-            // try to load from keychain
-            guard let pass1 = try? keychain.get("password") else {
-                print("FAILED: unable to access keychain"); return nil
-            }
-            if let pass2 = pass1 {
-                print("Got password from keychain")
-                return pass2
-            } else {
-                // TODO: remove hard-coded password
-                print("Using hard-coded password")
-                let defaultPass = "***REMOVED***"
-
-                keychain["password"] = defaultPass
-                return defaultPass
-            }
-        }
-    }
+    private var email: String
+    private var password: String
 
     private var accessToken: String? {
         set {
@@ -82,22 +57,17 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
     // MARK: Lifecycle
 
-    public init() {
+    public init(keychain: Keychain, email: String, password: String) {
         // OAuth2
-
         //self.clientID = clientID
         self.baseURLString = Router.baseURLString
         //self.accessToken = accessToken
         //self.refreshToken = refreshToken
 
         // Mine
-
-        // TODO: do I need to handle absence of service?
-        keychain = Keychain(service: "***REMOVED***")
-
-        // Try to get email from NSUserDefaults
-
-        // TODO: handle absence of email
+        self.keychain = keychain
+        self.email = email
+        self.password = password
 
         // If we don't have an accessToken, we go ahead and get one from the start
         if accessToken == nil {
@@ -165,13 +135,6 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
         isRefreshing = true
 
-        guard let email = email else {
-            debugPrint("\(#function) FAILED : unable to get email"); return
-        }
-        guard let password = password else {
-            debugPrint("\(#function) FAILED : unable to get password"); return
-        }
-
         // Log in again
         print("Logging in again to refreshTokens ...")
         sessionManager.request(Router.login(email: email, password: password))
@@ -195,13 +158,6 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
     // MARK: - Request Token
 
     public func login(completion: @escaping (Bool) -> Void) {
-        guard let email = email else {
-            debugPrint("\(#function) FAILED : unable to get email")
-            return completion(false)
-        }
-        guard let password = password else {
-            debugPrint("\(#function) FAILED : unable to get password")
-            return completion(false)
         }
 
         sessionManager.request(Router.login(email: email, password: password))
