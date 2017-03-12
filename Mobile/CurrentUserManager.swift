@@ -27,23 +27,28 @@ class CurrentUserManager {
             return defaults.string(forKey: "email")
         }
         set {
-            defaults.set(email, forKey: "email")
+            if let valueToSave = newValue {
+                defaults.set(valueToSave, forKey: "email")
+            } else { // they set it to nil, so delete it
+                defaults.removeObject(forKey: "email")
+            }
         }
     }
     private var password: String? {
         get {
             // try to load from keychain
-            guard let passEntry = try? keychain.get("password") else {
-                print("FAILED: unable to access keychain"); return nil
+            if let pass = try? keychain.get("password") {
+                return pass
+            } else {
+                return nil
             }
-            guard let pass = passEntry else {
-                print("FAILED: unable to get password from keychain"); return nil
-            }
-            print("Got password from keychain")
-            return pass
         }
          set {
-            keychain["password"] = password
+            if let valueToSave = newValue {
+                keychain["password"] = valueToSave
+            } else { // they set it to nil, so delete it
+                keychain["password"] = nil
+            }
         }
     }
 
@@ -55,8 +60,13 @@ class CurrentUserManager {
             //return x
         }
         set {
-            print("set storeID: \(storeID)")
-            defaults.set(storeID, forKey: "store")
+            //print("set storeID: \(storeID)")
+            //defaults.set(storeID, forKey: "store")
+            if let valueToSave = newValue {
+                defaults.set(valueToSave, forKey: "store")
+            } else { // they set it to nil, so delete it
+                defaults.removeObject(forKey: "store")
+            }
         }
     }
 
@@ -87,8 +97,8 @@ class CurrentUserManager {
     // MARK: -
 
     func createUser(email: String, password: String) {
-        defaults.set(email, forKey: "email")
-        keychain["password"] = password
+        self.email = email
+        self.password = password
         user = User(id: 1, email: email)
 
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
@@ -96,8 +106,8 @@ class CurrentUserManager {
     }
 
     func removeUser() {
-        defaults.removeObject(forKey: "email")
-        keychain["password"] = nil
+        self.email = nil
+        self.password = nil
         keychain["authToken"] = nil
         user = nil
         authHandler = nil
@@ -138,20 +148,10 @@ class CurrentUserManager {
             // TESTING
             //print("login response: \(json)")
             //print("user: \(user)")
-            //print("userID: \(userID)")
-            //print("stores: \(stores)")
-            //print("defaultStore: \(defaultStore)")
-            //print("defaultStoreID: \(defaultStoreID)")
-            //print("storeID: \(self.storeID)")
-
-            //self.defaults.set(defaultStoreID, forKey: "store")
-            //self.defaults.set(email, forKey: "email")
-            //self.keychain["password"] = password
 
             self.email = email
             self.password = password
             self.storeID = defaultStoreID
-
             self.user = User(id: userID, email: email)
 
             APIManager.sharedInstance.configSession(self.authHandler!)
@@ -173,8 +173,8 @@ class CurrentUserManager {
                     let user: Dictionary<String, JSON> = json["user"].dictionaryValue
                     let userID: Int = user["id"]!.intValue
 
-                    self.defaults.set(email, forKey: "email")
-                    self.keychain["password"] = password
+                    self.email = email
+                    self.password = password
                     self.user = User(id: userID, email: email)
 
                     completion(json, nil)
