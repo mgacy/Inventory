@@ -170,14 +170,13 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                 switch response.result {
                 case .success(let value):
                     // print("\n\(#function) - response: \(response)\n")
-                    guard let token = JSON(value)["token"].string else {
-                        let error = BackendError.authentication(error: "Unable to get token" as! Error)
-                        completion(nil, error)
-                        return
-                    }
-                    self.accessToken = token
 
                     let json = JSON(value)
+                    guard let token = json["token"].string else {
+                        let error = BackendError.authentication(error: "Unable to get token" as! Error)
+                        return completion(nil, error)
+                    }
+                    self.accessToken = token
                     completion(json, nil)
 
                 case .failure(let error):
