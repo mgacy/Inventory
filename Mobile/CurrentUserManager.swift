@@ -104,7 +104,7 @@ class CurrentUserManager {
     }
 
 
-    // MARK: -
+    // MARK: - Authentication
 
     public func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
 
@@ -187,24 +187,18 @@ class CurrentUserManager {
 
     func logout(completion: @escaping (Bool) -> Void) {
         // TODO - removeUser first, regardless of response.result?
-        Alamofire.request(Router.logout)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success:
-                    print("\n\(#function) - response: \(response)\n")
-
-                    APIManager.sharedInstance.configSession(nil)
-                    self.removeUser()
-                    completion(true)
-                case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
-
-                    APIManager.sharedInstance.configSession(nil)
-                    self.removeUser()
-                    completion(false)
-                }
-        }
+        APIManager.sharedInstance.logout(completion: {(success: Bool) -> Void in
+            switch success {
+            case true:
+                APIManager.sharedInstance.configSession(nil)
+                self.removeUser()
+                completion(true)
+            case false:
+                APIManager.sharedInstance.configSession(nil)
+                self.removeUser()
+                completion(false)
+            }
+        })
     }
 
 }

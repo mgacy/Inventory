@@ -39,6 +39,23 @@ class APIManager {
         sessionManager.retrier = authHandler
     }
 
+    // MARK: - Authentication
+
+    func logout(completion: @escaping (Bool) -> Void) {
+        sessionManager.request(Router.logout)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success:
+                    print("\n\(#function) - response: \(response)\n")
+                    completion(true)
+                case .failure(let error):
+                    debugPrint("\(#function) FAILED : \(error)")
+                    completion(false)
+                }
+        }
+    }
+
     // MARK: - API Calls - General
 
     func getItems(storeID: Int, completion: @escaping CompletionHandlerType) {
