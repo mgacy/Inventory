@@ -72,7 +72,14 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
         // If we don't have an accessToken, we go ahead and get one from the start
         if accessToken == nil {
             print("No accessToken; logging in ...")
-            login(completion: loginCompletion)
+            login(completion: {(succeeded: Bool) -> Void in
+                switch succeeded {
+                case true:
+                    print("We logged in")
+                case false:
+                    print("We were unable to log in")
+                }
+            })
         } else {
             print("Have accessToken")
         }
@@ -191,15 +198,6 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                     debugPrint("\(#function) FAILED : unable to get token")
                     completion(false)
                 }
-        }
-    }
-
-    func loginCompletion(_ succeeded: Bool) -> Void {
-        switch succeeded {
-        case true:
-            print("We logged in")
-        case false:
-            print("We were unable to log in")
         }
     }
 
