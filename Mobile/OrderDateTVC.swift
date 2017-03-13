@@ -202,11 +202,12 @@ extension OrderDateTVC {
 
     func completedGetListOfOrderCollections(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
+            print("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
         // TODO - distinguish empty response (new account) from error
         guard let json = json else {
-            print("\(#function) FAILED : \(error)")
+            print("\(#function) FAILED : no JSON")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let dates = json["dates"].array else {
@@ -238,6 +239,11 @@ extension OrderDateTVC {
 
     func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
+        }
+        guard let json = json else {
+            print("\(#function) FAILED : no JSON")
             HUD.flash(.error, delay: 1.0); return
         }
 
@@ -255,10 +261,7 @@ extension OrderDateTVC {
         // Reset selection since we reset the managedObjectContext in deleteChildOrders
         selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
         */
-        guard let json = json else {
-            print("\(#function) FAILED : \(error)")
-            HUD.flash(.error, delay: 1.0); return
-        }
+
         guard let selection = selectedCollection else {
             print("\(#function) FAILED : still unable to get selected OrderCollection\n")
             HUD.flash(.error, delay: 1.0); return
@@ -277,8 +280,13 @@ extension OrderDateTVC {
     }
 
     func completedGetNewOrderCollection(json: JSON?, error: Error?) -> Void {
+        guard error == nil else {
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
+        }
         guard let json = json else {
-            print("\(#function) FAILED : \(error)"); return
+            print("\(#function) FAILED : no JSON")
+            HUD.flash(.error, delay: 1.0); return
         }
         //print("\nCreating new OrderCollection ...")
         selectedCollection = OrderCollection(context: self.managedObjectContext!, json: json, uploaded: false)
