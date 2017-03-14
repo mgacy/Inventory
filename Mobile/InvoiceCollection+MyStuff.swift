@@ -26,7 +26,7 @@ extension InvoiceCollection {
     
     convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
         self.init(context: context)
-        
+
         // Set properties
         if let date = json["date"].string {
             self.date = date

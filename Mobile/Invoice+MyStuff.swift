@@ -36,9 +36,6 @@ extension Invoice {
         if let invoiceNo = json["invoice_no"].int32 {
             self.invoiceNo = invoiceNo
         }
-        //if let storeID = json["store_id"].int32 {
-        //    self.storeID = storeID
-        //}
         if let shipDate = json["ship_date"].string {
             self.shipDate = shipDate
         }

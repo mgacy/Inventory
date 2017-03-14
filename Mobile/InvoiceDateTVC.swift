@@ -192,7 +192,6 @@ extension InvoiceDateTVC {
     // MARK: Completion Handlers
 
     func completedGetListOfInvoiceCollections(json: JSON?, error: Error?) -> Void {
-        //tableView.activityIndicatorView.stopAnimating()
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }

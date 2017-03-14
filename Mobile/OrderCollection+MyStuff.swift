@@ -63,8 +63,7 @@ extension OrderCollection {
     
     func updateExisting(context: NSManagedObjectContext, json: JSON) {
         guard let orders = json["orders"].array else {
-            print("\nPROBLEM - Unable to get orders from JSON")
-            return
+            print("\nPROBLEM - Unable to get orders from JSON"); return
         }
 
         // Iterate over Orders

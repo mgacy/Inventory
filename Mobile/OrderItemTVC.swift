@@ -228,6 +228,8 @@ extension OrderItemTVC {
         if succeeded {
             parentObject.uploaded = true
 
+            // TODO: set .uploaded of parentObject.collection is all are uploaded
+
             HUD.flash(.success, delay: 1.0) { finished in
                 // Pop view
                 self.navigationController!.popViewController(animated: true)

@@ -166,7 +166,6 @@ extension OrderVendorTVC {
         return _fetchedResultsController!
     }
 
-
     func performFetch () {
         self.fetchedResultsController.managedObjectContext.perform ({
 
