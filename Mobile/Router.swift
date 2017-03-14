@@ -148,7 +148,7 @@ public enum Router: URLRequestConvertible {
             return ["username": username, "email": email, "password": password]
         // General
         case .getItems(let storeID):
-            return ["storeID": storeID]
+            return ["store_id": storeID]
         // case .getUnits:
         // case .getVendors(let storeID):
         // Inventory
