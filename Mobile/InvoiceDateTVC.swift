@@ -225,10 +225,13 @@ extension InvoiceDateTVC {
     }
 
     func completedGetExistingInvoiceCollection(json: JSON?, error: Error?) -> Void {
-        //tableView.activityIndicatorView.stopAnimating()
-
+        guard error == nil else {
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
+        }
         guard let json = json else {
-            print("\(#function) FAILED : \(error)"); return
+            print("\(#function) FAILED : no JSON")
+            HUD.hide(); return
         }
         guard let selection = selectedCollection else {
             print("\(#function) FAILED : still unable to get selected InvoiceCollection\n"); return
@@ -246,11 +249,15 @@ extension InvoiceDateTVC {
     }
 
     func completedGetNewInvoiceCollection(json: JSON?, error: Error?) -> Void {
-        //tableView.activityIndicatorView.stopAnimating()
-
-        guard let json = json else {
-            print("\(#function) FAILED : \(error)"); return
+        guard error == nil else {
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
         }
+        guard let json = json else {
+            print("\(#function) FAILED : no JSON")
+            HUD.hide(); return
+        }
+
         //print("\nCreating new InvoiceCollection ...")
         selectedCollection = InvoiceCollection(context: self.managedObjectContext!, json: json, uploaded: false)
 
@@ -268,8 +275,7 @@ extension InvoiceDateTVC {
 
             guard let storeID = userManager.storeID else {
                 print("\(#function) FAILED : unable to get storeID")
-                HUD.flash(.error, delay: 1.0)
-                return
+                HUD.flash(.error, delay: 1.0); return
             }
 
             // Get list of Invoices from server
