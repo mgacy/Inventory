@@ -11,14 +11,7 @@ import Alamofire
 import SwiftyJSON
 
 /*
-enum BackendError: Error {
-    case authentication(error: Error)
-    case network(error: Error) // Capture any underlying Error from the URLSession API
-    case dataSerialization(error: Error)
-    case jsonSerialization(error: Error)
-    case xmlSerialization(error: Error)
-    case objectSerialization(reason: String)
-}
+NOTE - BackendError already declared in AlamofireRequest+JSONSerializable.swift
 
 enum MyResult {
     case success(JSON?)
@@ -31,7 +24,6 @@ class APIManager {
     // MARK: Properties
 
     static let sharedInstance = APIManager()
-    private let authHandler: AuthenticationHandler
     private let sessionManager: SessionManager
 
     typealias CompletionHandlerType = (JSON?, Error?) -> Void
@@ -39,70 +31,27 @@ class APIManager {
     // MARK: Lifecycle
 
     init() {
-        // TODO - get CurrentUserManager from AppDelegate and pass to AuthenticationHandler
-        // instead of having it access password and accessToken directly?
-        authHandler = AuthenticationHandler()
-
         sessionManager = Alamofire.SessionManager.default
+    }
+
+    func configSession(_ authHandler: AuthenticationHandler?) {
         sessionManager.adapter = authHandler
         sessionManager.retrier = authHandler
     }
 
     // MARK: - Authentication
-    func forgotPassword(email: String, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.forgotPassword(email: email))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
-    func login(completion: @escaping (Bool) -> Void) {
-        // TODO - handle CurrentUserManager
-        authHandler.login(completion: completion)
-    }
 
     func logout(completion: @escaping (Bool) -> Void) {
         sessionManager.request(Router.logout)
             .validate()
             .responseJSON { response in
                 switch response.result {
-                //case .success(let value):
                 case .success:
                     print("\n\(#function) - response: \(response)\n")
-                    // TODO - handle CurrentUserManager
-                    //let json = JSON(value)
-                    //completion(json, nil)
                     completion(true)
                 case .failure(let error):
                     debugPrint("\(#function) FAILED : \(error)")
-                    //completion(nil, error)
                     completion(false)
-                }
-        }
-    }
-
-    func signUp(username: String, email: String, password: String, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.signUp(username: username, email: email, password: password))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
-                    let json = JSON(value)
-                    // TODO - handle CurrentUserManager
-                    completion(json, nil)
-                case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
-                    completion(nil, error)
                 }
         }
     }

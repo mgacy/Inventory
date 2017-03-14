@@ -17,13 +17,16 @@ class SyncManager {
 
     private var managedObjectContext: NSManagedObjectContext
     private let completionHandler: ((Bool, Error?) -> Void)
-    private let storeID: Int = 1
+    private let storeID: Int
 
     // MARK: - Lifecycle
 
     // We will (1) call some endpoints, (2) sync objects, (3) call completionHandler
-    init(completionHandler: @escaping (Bool, Error?) -> Void) {
-        
+    init(storeID: Int, completionHandler: @escaping (Bool, Error?) -> Void) {
+        self.storeID = storeID
+
+        // TODO - pass managedObjectContext as init parameter
+        //self.managedObjectContext = context
         self.managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.completionHandler = completionHandler
 

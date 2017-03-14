@@ -14,7 +14,7 @@ import PKHUD
 class LoginVC: UIViewController, UITextFieldDelegate {
 
     // MARK: Properties
-    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
+    var userManager: CurrentUserManager!
 
     // MARK: Interface
     @IBOutlet weak var loginTextField: UITextField!
@@ -47,23 +47,22 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        // Disable the Save button while editing.
-        //saveButton.enabled = false
+        // Disable the LogIn button while editing.
+        loginButton.isEnabled = false
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         // checkValidMealName()
-        // navigationItem.title = textField.text
     }
     
-    // MARK: - Keychain Stuff
+    // MARK: - User interaction
     
     @IBAction func loginButtonPressed(_ sender: AnyObject) {
         guard let email = loginTextField.text, let pass = passwordTextField.text else {
             return
         }
-        userManager.createUser(email: email, password: pass)
-        APIManager.sharedInstance.login(completion: completedLogin)
+        HUD.show(.progress)
+        userManager.login(email: email, password: pass, completion: completedLogin)
     }
     
     // MARK: - Navigation
@@ -90,6 +89,7 @@ extension LoginVC {
     func completedLogin(success: Bool) {
         if success {
             print("Logged in")
+            HUD.hide()
             dismiss(animated: true, completion: nil)
         } else {
             // TODO - how best to handle this?

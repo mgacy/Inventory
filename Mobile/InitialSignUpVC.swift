@@ -14,8 +14,7 @@ import SwiftyJSON
 class InitialSignUpVC: UIViewController, UITextFieldDelegate {
 
     // MARK: Properties
-    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
-    //let userManager: CurrentUserManager
+    var userManager: CurrentUserManager!
 
     // Segue
     //let InventorySegue = "showInventories"
@@ -78,7 +77,8 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate {
         }
 
         HUD.show(.progress)
-        APIManager.sharedInstance.signUp(username: username, email: email, password: pass, completion: completedSignup)
+        userManager.signUp(username: username, email: email, password: pass, completion: completedSignup)
+        //APIManager.sharedInstance.signUp(username: username, email: email, password: pass, completion: completedSignup)
     }
 
     // MARK: - Navigation
@@ -93,7 +93,7 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate {
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
 
             // Sync with completion handler from the new view controller.
-            _ = SyncManager(completionHandler: controller.completedLogin)
+            _ = SyncManager(storeID: userManager.storeID!, completionHandler: controller.completedLogin)
         case SignUpSegue:
             print("b")
         default:

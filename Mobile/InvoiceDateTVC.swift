@@ -16,6 +16,8 @@ class InvoiceDateTVC: UITableViewController {
 
     // MARK: - Properties
 
+    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
+    //var userManager: CurrentUserManager!
     var selectedCollection: InvoiceCollection?
 
     // FetchedResultsController
@@ -33,7 +35,6 @@ class InvoiceDateTVC: UITableViewController {
     let segueIdentifier = "showInvoiceVendors"
 
     // TODO - provide interface to control these
-    var storeID = 1
     // let invoiceTypeID = 1
 
     // MARK: - Lifecycle
@@ -59,7 +60,7 @@ class InvoiceDateTVC: UITableViewController {
         // Get list of Invoices from server
         // print("\nFetching existing InvoiceCollections from server ...")
         HUD.show(.progress)
-        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
+        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: userManager.storeID!, completion: self.completedGetListOfInvoiceCollections)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -90,6 +91,10 @@ class InvoiceDateTVC: UITableViewController {
     // MARK: - User interaction
 
     @IBAction func newTapped(_ sender: AnyObject) {
+        guard let storeID = userManager.storeID else {
+            print("\(#function) FAILED : unable to get storeID"); return
+        }
+
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
 
@@ -105,7 +110,7 @@ class InvoiceDateTVC: UITableViewController {
         //deleteObjects(entityType: Item.self)
         deleteExistingInvoiceCollections()
 
-        _ = SyncManager(completionHandler: completedLogin)
+        _ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
     }
 
     // MARK: - UITableViewDataSource
@@ -153,6 +158,9 @@ class InvoiceDateTVC: UITableViewController {
             // Get date to use when getting OrderCollection from server
             guard let collectionDate = selection.date else {
                 print("\(#function) FAILED : unable to get InvoiceCollection.date"); return
+            }
+            guard let storeID = userManager.storeID else {
+                print("\(#function) FAILED : unable to get storeID"); return
             }
 
             // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
@@ -257,14 +265,20 @@ extension InvoiceDateTVC {
 
     func completedLogin(_ succeeded: Bool, error: Error?) {
         if succeeded {
-            print("\nCompleted login - succeeded: \(succeeded)")
+            print("\nCompleted login / sync - succeeded: \(succeeded)")
+
+            guard let storeID = userManager.storeID else {
+                print("\(#function) FAILED : unable to get storeID")
+                HUD.flash(.error, delay: 1.0)
+                return
+            }
 
             // Get list of Invoices from server
             // print("\nFetching existing InvoiceCollections from server ...")
             APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
 
         } else {
-            print("Unable to login ...")
+            print("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
             HUD.flash(.error, delay: 1.0)
         }

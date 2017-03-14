@@ -152,8 +152,10 @@ public enum Router: URLRequestConvertible {
         // case .getUnits:
         // case .getVendors(let storeID):
         // Inventory
-        case .getNewInventory(let isActive, let typeID, let storeID):
-            return ["active": isActive, "inventory_type_id": typeID, "store_id": storeID]
+        // case .getNewInventory(let isActive, let typeID, let storeID):
+        //     return ["active": isActive, "inventory_type_id": typeID, "store_id": storeID]
+        case .getNewInventory(let isActive, _, let storeID):
+            return ["active": isActive, "store_id": storeID]
         // case .listInventories(let typeID):
         // case .fetchInventory:
         case .postInventory(let parameters):
@@ -168,9 +170,12 @@ public enum Router: URLRequestConvertible {
         case .postInvoice(let parameters):
             return parameters
         // Order
-        case .getNewOrder(let storeID, let typeID, let returnUsage, let periodLength):
-            return ["store_id": storeID, "inventory_type": typeID,
-                    "return_usage": returnUsage, "period_length": periodLength ?? 28]
+        // case .getNewOrder(let storeID, let typeID, let returnUsage, let periodLength):
+        //     return ["store_id": storeID, "inventory_type": typeID,
+        //             "return_usage": returnUsage, "period_length": periodLength ?? 28]
+        case .getNewOrder(let storeID, _, let returnUsage, let periodLength):
+            return ["store_id": storeID, "return_usage": returnUsage,
+                    "period_length": periodLength ?? 28]
         case .listOrders(let storeID):
             return ["store_id": storeID]
         case .fetchOrder(let storeID, let orderDate):

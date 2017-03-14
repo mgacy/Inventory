@@ -44,20 +44,24 @@ class SettingsTVC: UITableViewController {
 
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
         case accountSegue:
 
             // Get the new view controller.
-            // let destinationController = segue.destination as! AccountVC
-            // destinationController.readFromKeychain()
-            break
+            guard
+                let destinationNavController = segue.destination as? UINavigationController,
+                let destinationController = destinationNavController.topViewController as? LoginVC
+            else {
+                debugPrint("\(#function) FAILED : unable to get destination"); return
+            }
+
+            // Pass dependencies to the new view controller.
+            destinationController.userManager = userManager
+
         default:
             break
         }
-
-        // Pass the selected object to the new view controller.
     }
 
     // MARK: - UITableViewDelegate
@@ -69,12 +73,7 @@ class SettingsTVC: UITableViewController {
         if indexPath.section == 0 {
             if let user = userManager.user {
                 print("Logging out \(user.email)")
-
-                // TEMP
-                let defaults = UserDefaults.standard
-                defaults.removeObject(forKey: "email")
-
-                APIManager.sharedInstance.logout(completion: completedLogout)
+                userManager.logout(completion: completedLogout)
             } else {
                 print("Showing AccountVC ...")
                 performSegue(withIdentifier: accountSegue, sender: self)
@@ -104,12 +103,9 @@ extension SettingsTVC {
 
     func completedLogout(suceeded: Bool) {
         if suceeded {
-            userManager.removeUser()
             AccountCell.textLabel?.text = "Login"
         } else {
-            print("Nope")
-            // TEMP
-            userManager.removeUser()
+            print("Unable to actually logout")
             AccountCell.textLabel?.text = "Login"
         }
     }

@@ -16,6 +16,8 @@ class OrderDateTVC: UITableViewController {
 
     // MARK: Properties
 
+    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
+    //var userManager: CurrentUserManager!
     var selectedCollection: OrderCollection?
     //var selectedCollectionIndex: IndexPath?
 
@@ -34,7 +36,6 @@ class OrderDateTVC: UITableViewController {
     let segueIdentifier = "showOrderVendors"
 
     // TODO - provide interface to control these
-    var storeID = 1
     let orderTypeID = 1
 
     // MARK: - Lifecycle
@@ -60,7 +61,7 @@ class OrderDateTVC: UITableViewController {
         // Get list of OrderCollections from server
         // print("\nFetching existing OrderCollections from server ...")
         HUD.show(.progress)
-        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
+        APIManager.sharedInstance.getListOfOrderCollections(storeID: userManager.storeID!, completion: self.completedGetListOfOrderCollections)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -135,6 +136,9 @@ class OrderDateTVC: UITableViewController {
             guard let collectionDate = selection.date else {
                 print("\(#function) FAILED : unable to get orderCollection.date"); return
             }
+            guard let storeID = userManager.storeID else {
+                print("\(#function) FAILED : unable to get storeID"); return
+            }
 
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
@@ -166,6 +170,10 @@ class OrderDateTVC: UITableViewController {
 
         // TODO - check if there is already an Order for the current date and of the current type
 
+        guard let storeID = userManager.storeID else {
+            print("\(#function) FAILED : unable to get storeID"); return
+        }
+
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
 
@@ -182,7 +190,7 @@ class OrderDateTVC: UITableViewController {
         deleteObjects(entityType: Item.self)
         deleteExistingOrderCollections()
 
-        _ = SyncManager(completionHandler: completedLogin)
+        _ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
     }
 
 }
@@ -194,11 +202,12 @@ extension OrderDateTVC {
 
     func completedGetListOfOrderCollections(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
+            print("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
         // TODO - distinguish empty response (new account) from error
         guard let json = json else {
-            print("\(#function) FAILED : \(error)")
+            print("\(#function) FAILED : no JSON")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let dates = json["dates"].array else {
@@ -230,6 +239,11 @@ extension OrderDateTVC {
 
     func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
+        }
+        guard let json = json else {
+            print("\(#function) FAILED : no JSON")
             HUD.flash(.error, delay: 1.0); return
         }
 
@@ -247,10 +261,7 @@ extension OrderDateTVC {
         // Reset selection since we reset the managedObjectContext in deleteChildOrders
         selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
         */
-        guard let json = json else {
-            print("\(#function) FAILED : \(error)")
-            HUD.flash(.error, delay: 1.0); return
-        }
+
         guard let selection = selectedCollection else {
             print("\(#function) FAILED : still unable to get selected OrderCollection\n")
             HUD.flash(.error, delay: 1.0); return
@@ -269,8 +280,13 @@ extension OrderDateTVC {
     }
 
     func completedGetNewOrderCollection(json: JSON?, error: Error?) -> Void {
+        guard error == nil else {
+            print("\(#function) FAILED : \(error)")
+            HUD.flash(.error, delay: 1.0); return
+        }
         guard let json = json else {
-            print("\(#function) FAILED : \(error)"); return
+            print("\(#function) FAILED : no JSON")
+            HUD.flash(.error, delay: 1.0); return
         }
         //print("\nCreating new OrderCollection ...")
         selectedCollection = OrderCollection(context: self.managedObjectContext!, json: json, uploaded: false)
@@ -286,14 +302,20 @@ extension OrderDateTVC {
 
     func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
-            print("\nCompleted login - succeeded: \(succeeded)")
+            print("\nCompleted login / sync - succeeded: \(succeeded)")
+
+            guard let storeID = userManager.storeID else {
+                print("\(#function) FAILED : unable to get storeID")
+                HUD.flash(.error, delay: 1.0)
+                return
+            }
 
             // Get list of OrderCollections from server
             // print("\nFetching existing OrderCollections from server ...")
             APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
 
         } else {
-            print("Unable to login ...")
+            print("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
             HUD.flash(.error, delay: 1.0)
         }

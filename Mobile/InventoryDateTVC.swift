@@ -18,6 +18,7 @@ class InventoryDateTVC: UITableViewController {
 
     var destinationController: UIViewController?
     var selectedInventory: Inventory?
+    var userManager: CurrentUserManager!
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
@@ -44,7 +45,6 @@ class InventoryDateTVC: UITableViewController {
     */
 
     // TODO - provide interface to control these
-    var storeID = 1
     // let inventoryTypeID = 1
 
     // MARK: - Lifecycle
@@ -208,10 +208,12 @@ class InventoryDateTVC: UITableViewController {
 
         // TODO - check if there is already an Inventory for the current date and of the current type
 
-        //tableView.activityIndicatorView.startAnimating()
-        HUD.show(.progress)
+        guard let storeID = userManager.storeID else {
+            print("\(#function) FAILED : unable to get storeID"); return
+        }
 
         // Get new Inventory.
+        HUD.show(.progress)
         APIManager.sharedInstance.getNewInventory(
             isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
     }
@@ -308,16 +310,21 @@ extension InventoryDateTVC {
         performSegue(withIdentifier: NewItemSegue, sender: self)
     }
 
+    // TODO - rename `completedSync`(?)
     func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
-            print("\nCompleted login - succeeded: \(succeeded)")
+            print("\nCompleted login / sync - succeeded: \(succeeded)")
+
+            guard let storeID = userManager.storeID else {
+                print("\(#function) FAILED : unable to get storeID"); return
+            }
 
             // Get list of Inventories from server
             // print("\nFetching existing Inventories from server ...")
             APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
 
         } else {
-            print("Unable to login ...")
+            print("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
             //self.noticeError("Error", autoClear: true)
             HUD.flash(.error, delay: 1.0); return
