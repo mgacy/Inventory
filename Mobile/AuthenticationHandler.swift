@@ -68,7 +68,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
         self.keychain = keychain
         self.email = email
         self.password = password
-
+        /*
         // If we don't have an accessToken, we go ahead and get one from the start
         if accessToken == nil {
             print("No accessToken; logging in ...")
@@ -83,6 +83,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
         } else {
             print("Have accessToken")
         }
+        */
     }
 
     // MARK: - RequestAdapter
@@ -185,7 +186,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                 }
         }
     }
-
+    /*
     public func login(completion: @escaping (Bool) -> Void) {
         sessionManager.request(Router.login(email: email, password: password))
             .responseJSON { response in
@@ -199,6 +200,6 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                 }
         }
     }
-
+    */
 }
 
