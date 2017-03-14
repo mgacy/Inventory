@@ -302,7 +302,7 @@ extension OrderDateTVC {
 
     func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
-            print("\nCompleted login - succeeded: \(succeeded)")
+            print("\nCompleted login / sync - succeeded: \(succeeded)")
 
             guard let storeID = userManager.storeID else {
                 print("\(#function) FAILED : unable to get storeID")
@@ -315,7 +315,7 @@ extension OrderDateTVC {
             APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
 
         } else {
-            print("Unable to login ...")
+            print("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
             HUD.flash(.error, delay: 1.0)
         }

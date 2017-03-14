@@ -310,9 +310,10 @@ extension InventoryDateTVC {
         performSegue(withIdentifier: NewItemSegue, sender: self)
     }
 
+    // TODO - rename `completedSync`(?)
     func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
-            print("\nCompleted login - succeeded: \(succeeded)")
+            print("\nCompleted login / sync - succeeded: \(succeeded)")
 
             guard let storeID = userManager.storeID else {
                 print("\(#function) FAILED : unable to get storeID"); return
@@ -323,7 +324,7 @@ extension InventoryDateTVC {
             APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
 
         } else {
-            print("Unable to login ...")
+            print("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
             //self.noticeError("Error", autoClear: true)
             HUD.flash(.error, delay: 1.0); return

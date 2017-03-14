@@ -265,7 +265,7 @@ extension InvoiceDateTVC {
 
     func completedLogin(_ succeeded: Bool, error: Error?) {
         if succeeded {
-            print("\nCompleted login - succeeded: \(succeeded)")
+            print("\nCompleted login / sync - succeeded: \(succeeded)")
 
             guard let storeID = userManager.storeID else {
                 print("\(#function) FAILED : unable to get storeID")
@@ -278,7 +278,7 @@ extension InvoiceDateTVC {
             APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
 
         } else {
-            print("Unable to login ...")
+            print("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
             HUD.flash(.error, delay: 1.0)
         }
