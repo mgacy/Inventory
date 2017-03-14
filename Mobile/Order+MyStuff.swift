@@ -54,11 +54,9 @@ extension Order {
         
         // TODO - handle conversion from NSDate to string
         myDict["order_date"] = self.collection?.date
+        myDict["store_id"] = self.collection?.storeID
         myDict["vendor_id"] = self.vendor?.remoteID
-        
-        // TODO - remove hard-coded values
-        myDict["store_id"] = 1
-        
+
         // Generate array of dictionaries for InventoryItems
         guard let items = self.items else {
             print("\nPROBLEM - Unable to serialize without any OrderItems")
