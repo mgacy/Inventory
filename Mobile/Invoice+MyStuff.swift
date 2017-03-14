@@ -86,7 +86,7 @@ extension Invoice {
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
         myDict["id"] = Int(self.remoteID)
-        myDict["invoiceNo"] = Int(self.invoiceNo)
+        myDict["invoice_no"] = Int(self.invoiceNo)
         myDict["ship_date"] = self.shipDate
         myDict["receive_date"] = self.receiveDate
         myDict["credit"] = Double(self.credit)
