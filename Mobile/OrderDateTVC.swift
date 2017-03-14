@@ -205,10 +205,9 @@ extension OrderDateTVC {
             print("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
-        // TODO - distinguish empty response (new account) from error
         guard let json = json else {
             print("\(#function) FAILED : no JSON")
-            HUD.flash(.error, delay: 1.0); return
+            HUD.hide(); return
         }
         guard let dates = json["dates"].array else {
             print("\(#function) FAILED : unable to get dates")
@@ -232,9 +231,6 @@ extension OrderDateTVC {
 
         // Save the context.
         saveContext()
-
-        //tableView.activityIndicatorView.stopAnimating()
-        //HUD.hide()
     }
 
     func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
