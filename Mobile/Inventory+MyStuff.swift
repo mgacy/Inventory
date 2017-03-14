@@ -59,11 +59,13 @@ extension Inventory {
         
         // TODO - handle conversion from NSDate to string
         myDict["date"] = self.date
-        
-        // TODO - remove hard-coded values
-        myDict["inventory_type_id"] = 1
-        myDict["store_id"] = 1
-        
+        myDict["store_id"] = storeID
+
+        // Apple suggests using a default value of 0 over using optional attributes
+        if typeID != 0 {
+            myDict["inventory_type_id"] = typeID
+        }
+
         // Generate array of dictionaries for InventoryItems
         var itemsArray = [[String: Any]]()
         for case let item as InventoryItem in items {
