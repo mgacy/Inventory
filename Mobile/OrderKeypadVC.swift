@@ -235,28 +235,37 @@ class OrderKeypadVC: UIViewController {
     func updateKeypadButtons(item: OrderItem) {
         guard let orderUnit = currentItem.orderUnit else { print("a"); return }
         guard let item = currentItem.item else { print("b"); return }
-        guard let purchaseUnit = item.purchaseUnit else { print("c"); return }
 
-        guard let purchaseSubUnit = item.purchaseSubUnit else {
-            print("d")
+        //print("currentItem: \(currentItem)\n")
+        //print("currentItem.item: \(item)\n")
 
+        // TODO - some of this should only be done when we change currentItem
+        if orderUnit == item.purchaseUnit {
             caseButton.backgroundColor = ColorPalette.navyColor
-            bottleButton.backgroundColor = ColorPalette.secondaryColor
-            bottleButton.isEnabled = false
-            return
-        }
+            caseButton.isEnabled = true
 
-        bottleButton.isEnabled = true
-
-        if orderUnit == purchaseUnit {
-            caseButton.backgroundColor = ColorPalette.navyColor
             bottleButton.backgroundColor = ColorPalette.secondaryColor
-        } else if orderUnit == purchaseSubUnit {
-            caseButton.backgroundColor = ColorPalette.secondaryColor
+            if item.purchaseSubUnit != nil {
+                bottleButton.isEnabled = true
+            } else {
+                bottleButton.isEnabled = false
+            }
+
+        } else if orderUnit == item.purchaseSubUnit {
             bottleButton.backgroundColor = ColorPalette.navyColor
+            bottleButton.isEnabled = true
+
+            caseButton.backgroundColor = ColorPalette.secondaryColor
+            if item.purchaseUnit != nil {
+                caseButton.isEnabled = true
+            } else {
+                caseButton.isEnabled = false
+            }
+
         } else {
-            caseButton.backgroundColor = UIColor.red
-            bottleButton.backgroundColor = UIColor.red
+            print("\(#function) FAILED : A")
+            caseButton.isEnabled = false
+            bottleButton.isEnabled = false
         }
     }
 
