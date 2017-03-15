@@ -100,7 +100,7 @@ class InvoiceKeypadVC: UIViewController {
         currencyFormatter.numberStyle = .currency
         
         // Reset mode to quantity; this also calls update(newItem: true)
-        switchMode(1)
+        switchMode(.quantity)
         //update(newItem: true)
     }
 
@@ -190,7 +190,7 @@ class InvoiceKeypadVC: UIViewController {
             currentIndex += 1
             
             // Reset mode to quantity; this also calls update(newItem: true)
-            switchMode(1)
+            switchMode(.quantity)
             //update(newItem: true)
         } else {
             // TODO - cleanup?
@@ -205,7 +205,7 @@ class InvoiceKeypadVC: UIViewController {
             currentIndex -= 1
             
             // Reset mode to quantity; this also calls update(newItem: true)
-            switchMode(1)
+            switchMode(.quantity)
             //update(newItem: true)
         } else {
             // TODO - cleanup?
@@ -221,29 +221,28 @@ class InvoiceKeypadVC: UIViewController {
         switch currentMode {
         case .cost:
             // -> status
-            switchMode(2)
+            switchMode(.status)
         case .quantity:
             // -> cost
-            switchMode(0)
+            switchMode(.cost)
         case .status:
             // -> quantity
-            switchMode(1)
+            switchMode(.quantity)
         }
     }
 
     // MARK: -
 
-    func switchMode(_ newMode: Int) {
-        
+    func switchMode(_ newMode: KeypadState) {
+        currentMode = newMode
+
         switch newMode {
-        case 0:
-            currentMode = .cost
+        case .cost:
             itemCost.textColor = UIColor.black
             itemQuantity.textColor = UIColor.lightGray
             itemStatus.textColor = UIColor.lightGray
             softButton.setTitle("", for: .normal)
-        case 1:
-            currentMode = .quantity
+        case .quantity:
             itemCost.textColor = UIColor.lightGray
             itemQuantity.textColor = UIColor.black
             itemStatus.textColor = UIColor.lightGray
@@ -255,22 +254,19 @@ class InvoiceKeypadVC: UIViewController {
                 softButton.setTitle(currentItem.unit?.abbreviation, for: .normal)
             }
 
-        case 2:
-            currentMode = .status
+        case .status:
             itemCost.textColor = UIColor.lightGray
             itemQuantity.textColor = UIColor.lightGray
             itemStatus.textColor = UIColor.black
             softButton.setTitle("", for: .normal)
-        default:
-            fatalError("Invalid mode")
         }
-        
+
         // TODO - what is the best way to handle this?
         update(newItem: true)
         // TODO - is this something that should be always be done in Keypad?
         keypad.isEditingNumber = false
     }
-    
+
     // MARK: - C
     
     func update(newItem: Bool = false) {
