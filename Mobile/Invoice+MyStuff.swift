@@ -91,6 +91,11 @@ extension Invoice {
         myDict["taxes"] = Double(self.taxes)
         myDict["total_cost"] = Int(self.totalCost)
         myDict["check_no"] = Int(self.checkNo)
+        myDict["store_id"] = Int((self.collection?.storeID)!)
+
+        if let vendor = self.vendor {
+            myDict["vendor_id"] = Int(vendor.remoteID)
+        }
 
         // Generate array of dictionaries for InventoryItems
         guard let items = self.items else {
