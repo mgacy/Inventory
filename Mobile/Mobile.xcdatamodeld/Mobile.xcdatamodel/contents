@@ -61,7 +61,7 @@
         <attribute name="taxes" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="totalCost" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="collection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InvoiceCollection" inverseName="invoices" inverseEntity="InvoiceCollection" syncable="YES"/>
+        <relationship name="collection" maxCount="1" deletionRule="Nullify" destinationEntity="InvoiceCollection" inverseName="invoices" inverseEntity="InvoiceCollection" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InvoiceItem" inverseName="invoice" inverseEntity="InvoiceItem" syncable="YES"/>
         <relationship name="vendor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="invoices" inverseEntity="Vendor" syncable="YES"/>
     </entity>
