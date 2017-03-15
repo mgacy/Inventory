@@ -7,6 +7,7 @@ def basic_pods
   pod 'SwiftyJSON'
   pod 'KeychainAccess'
   pod 'PKHUD', '~> 4.0'
+  # pod 'SwiftyBeaver', '~> 1.1'
   # A
   # pod 'DATAStack', '~> 6'
   # pod 'DATASource', '~> 6'
