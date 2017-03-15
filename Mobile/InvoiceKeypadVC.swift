@@ -40,6 +40,7 @@ class InvoiceKeypadVC: UIViewController {
 
     var inactiveUnit: Unit? {
         guard let item = currentItem.item else { print("A1"); return nil  }
+        // Simply return currentItem.unit instead of nil?
         guard let pack = item.purchaseUnit else { print("A2"); return nil }
         guard let unit = item.purchaseSubUnit else { print("A3"); return nil }
 
@@ -239,8 +240,12 @@ class InvoiceKeypadVC: UIViewController {
             itemQuantity.textColor = UIColor.black
             itemStatus.textColor = UIColor.lightGray
 
-            guard let altUnit = inactiveUnit else { return }
-            softButton.setTitle(altUnit.abbreviation, for: .normal)
+            // Should inactiveUnit simply return currentItem.unit instead of nil?
+            if let altUnit = inactiveUnit {
+                softButton.setTitle(altUnit.abbreviation, for: .normal)
+            } else {
+                softButton.setTitle(currentItem.unit?.abbreviation, for: .normal)
+            }
 
         case 2:
             currentMode = .status
