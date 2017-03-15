@@ -131,6 +131,9 @@ class OrderItemTVC: UITableViewController {
 
             // TODO - try to send email message?
 
+            // TESTING:
+            completedPlaceOrder(true)
+
             // Let the user know if his/her device isn't able to send text messages
             let errorAlert = createAlert(
                 title: "Cannot Send Text Message",
