@@ -158,9 +158,11 @@ class InvoiceKeypadVC: UIViewController {
             if var status = InvoiceItemStatus(rawValue: currentItem.status) {
                 status.next()
                 currentItem.status = status.rawValue
-            }
-            softButton.setTitle("S", for: .normal)
+                //status.next()
+                //softButton.setTitle(status.shortDescription, for: .normal)
 
+            }
+            softButton.setTitle("s", for: .normal)
             update()
         }
     }
