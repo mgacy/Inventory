@@ -106,7 +106,7 @@ class OrderKeypadVC: UIViewController {
         update()
     }
 
-    // MARK: - Units
+    // MARK: Units
 
     @IBAction func packTapped(_ sender: AnyObject) {
         //print("currentItem: \(currentItem)")
@@ -139,7 +139,7 @@ class OrderKeypadVC: UIViewController {
         update()
     }
 
-    // MARK: - Item Navigation
+    // MARK: Item Navigation
 
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
@@ -243,6 +243,7 @@ class OrderKeypadVC: UIViewController {
         
     }
 
+    // TODO - rename `updateUnitButtons`?
     func updateKeypadButtons(item: OrderItem) {
         guard let orderUnit = currentItem.orderUnit else { print("a"); return }
         guard let item = currentItem.item else { print("b"); return }
