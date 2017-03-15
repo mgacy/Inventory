@@ -115,6 +115,8 @@ class InvoiceKeypadVC: UIViewController {
         guard let digit = sender.currentTitle else { return }
         print("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
+        if currentMode == .status { return }
+
         keypad.pushDigit(value: number)
         
         update()
