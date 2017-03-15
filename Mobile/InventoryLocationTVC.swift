@@ -184,15 +184,11 @@ class InventoryLocationTVC: UITableViewController {
 extension InventoryLocationTVC {
 
     func completedUpload(json: JSON?, error: Error?) {
-        //self.clearAllNotice()
         guard error == nil else {
-            //self.noticeError("Error", autoClear: true)
-            //self.noticeError((error?.localizedDescription)!, autoClear: true)
             HUD.flash(.error, delay: 1.0); return
         }
         guard json != nil else {
             print("Unable to get JSON")
-            //self.noticeError("Error", autoClear: true)
             HUD.flash(.error, delay: 1.0); return
         }
 
@@ -218,12 +214,10 @@ extension InventoryLocationTVC {
         inventory.uploaded = true
         inventory.remoteID = Int32(remoteID)
 
-        //self.noticeSuccess("Success!", autoClear: true)
         HUD.flash(.success, delay: 1.0)
 
         // Pop view
         navigationController!.popViewController(animated: true)
-        //self.clearAllNotice()
     }
 
 }
