@@ -60,8 +60,12 @@ class OrderDateTVC: UITableViewController {
 
         // Get list of OrderCollections from server
         // print("\nFetching existing OrderCollections from server ...")
+
+        guard let storeID = userManager.storeID else {
+            print("\(#function) FAILED: unable to get storeID"); return
+        }
         HUD.show(.progress)
-        APIManager.sharedInstance.getListOfOrderCollections(storeID: userManager.storeID!, completion: self.completedGetListOfOrderCollections)
+        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -287,7 +291,6 @@ extension OrderDateTVC {
         // Save the context.
         saveContext()
 
-        //tableView.activityIndicatorView.stopAnimating()
         HUD.hide()
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
