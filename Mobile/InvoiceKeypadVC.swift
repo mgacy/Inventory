@@ -133,7 +133,7 @@ class InvoiceKeypadVC: UIViewController {
         update()
     }
     
-    // MARK: - Units
+    // MARK: Units
 
     @IBAction func softButtonTapped( _sender: AnyObject) {
         switch currentMode {
@@ -174,7 +174,7 @@ class InvoiceKeypadVC: UIViewController {
         update()
     }
     
-    // MARK: - Item Navigation
+    // MARK: Item Navigation
     
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
@@ -206,7 +206,7 @@ class InvoiceKeypadVC: UIViewController {
         }
     }
     
-    // MARK: - B
+    // MARK: Mode
     
     @IBAction func modeTapped(_ sender: AnyObject) {
         switch currentMode {
@@ -221,7 +221,9 @@ class InvoiceKeypadVC: UIViewController {
             switchMode(1)
         }
     }
-    
+
+    // MARK: -
+
     func switchMode(_ newMode: Int) {
         
         switch newMode {
