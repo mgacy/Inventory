@@ -155,7 +155,30 @@ class InvoiceKeypadVC: UIViewController {
             print("z2")
         // ?
         case .status:
-            print("z3")
+            // TODO - is there a more elegant way to do this?
+            // Perhaps add .next / .previous methods to InvoiceItemStatus?
+            switch currentItem.status {
+            case 0:
+                currentItem.status = 1
+            case 1:
+                currentItem.status = 2
+            case 2:
+                currentItem.status = 3
+            case 3:
+                currentItem.status = 4
+            case 4:
+                currentItem.status = 5
+            case 5:
+                currentItem.status = 6
+            case 6:
+                currentItem.status = 0
+            default:
+                print("Switch status fell through")
+                currentItem.status = 0
+            }
+            softButton.setTitle("S", for: .normal)
+
+            update()
         }
     }
 
