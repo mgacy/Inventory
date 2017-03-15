@@ -242,6 +242,7 @@ class InvoiceKeypadVC: UIViewController {
             itemQuantity.textColor = UIColor.lightGray
             itemStatus.textColor = UIColor.lightGray
             softButton.setTitle("", for: .normal)
+            softButton.isEnabled = false
         case .quantity:
             itemCost.textColor = UIColor.lightGray
             itemQuantity.textColor = UIColor.black
@@ -250,8 +251,10 @@ class InvoiceKeypadVC: UIViewController {
             // Should inactiveUnit simply return currentItem.unit instead of nil?
             if let altUnit = inactiveUnit {
                 softButton.setTitle(altUnit.abbreviation, for: .normal)
+                softButton.isEnabled = true
             } else {
                 softButton.setTitle(currentItem.unit?.abbreviation, for: .normal)
+                softButton.isEnabled = false
             }
 
         case .status:
@@ -259,6 +262,7 @@ class InvoiceKeypadVC: UIViewController {
             itemQuantity.textColor = UIColor.lightGray
             itemStatus.textColor = UIColor.black
             softButton.setTitle("", for: .normal)
+            softButton.isEnabled = true
         }
 
         // TODO - what is the best way to handle this?
