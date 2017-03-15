@@ -109,33 +109,23 @@ class OrderKeypadVC: UIViewController {
     // MARK: Units
 
     @IBAction func packTapped(_ sender: AnyObject) {
-        //print("currentItem: \(currentItem)")
         guard let item = currentItem.item else { print("A1"); return  }
-        //print(".item: \(item)")
         guard let purchaseUnit = item.purchaseUnit else { print("B1"); return }
 
         currentItem.orderUnit = purchaseUnit
 
-        // Update keypad buttons
-        caseButton.backgroundColor = ColorPalette.navyColor
-        bottleButton.backgroundColor = ColorPalette.secondaryColor
-
+        // Update display, keypad buttons
         update()
     }
 
     // TODO - rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
-        //print("currentItem: \(currentItem)")
         guard let item = currentItem.item else { print("A2"); return  }
-        //print(".item: \(item)")
         guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
 
         currentItem.orderUnit = purchaseSubUnit
 
-        // Update keypad buttons
-        caseButton.backgroundColor = ColorPalette.secondaryColor
-        bottleButton.backgroundColor = ColorPalette.navyColor
-
+        // Update display, keypad buttons
         update()
     }
 
@@ -179,11 +169,8 @@ class OrderKeypadVC: UIViewController {
             keypad.updateNumber(currentItem.quantity as Double?)
             output = keypad.outputB()
 
-            // Update keypad buttons
-            updateKeypadButtons(item: currentItem)
-
         case false:
-            // Update model with output of keyapd
+            // Update model with output of keypad
             output = keypad.outputB()
 
             if let keypadResult = output.total {
@@ -204,6 +191,7 @@ class OrderKeypadVC: UIViewController {
             }
         }
 
+        updateKeypadButtons(item: currentItem)
         updateDisplay(item: currentItem, keypadOutput: output)
 
         //print("currentItem: \(currentItem)")
