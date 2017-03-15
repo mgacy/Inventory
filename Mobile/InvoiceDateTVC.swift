@@ -199,26 +199,23 @@ extension InvoiceDateTVC {
             print("\(#function) FAILED : no JSON")
             HUD.hide(); return
         }
-        guard let dates = json["dates"].array else {
-            print("\(#function) FAILED : unable to get dates")
-            HUD.flash(.error, delay: 1.0); return
-        }
 
         // FIX - this does not account for Collections that have been deleted from the server but
         // are still present in the local store
-        for date in dates {
-            if let dateString = date.string {
+        for (_, collection) in json {
+            guard let dateString = collection["date"].string else {
+                print("unable to get date"); continue
+            }
 
-                // Create InvoiceCollection if we can't find one with date `date`
-                let predicate = NSPredicate(format: "date == %@", dateString)
-                if managedObjectContext?.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate) == nil {
-                    print("Creating InvoiceCollection: \(dateString)")
-                    _ = InvoiceCollection(context: self.managedObjectContext!, date: date, uploaded: true)
-                }
+            // Create InvoiceCollection if we can't find one with date `date`
+            // if InvoiceCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
+            let predicate = NSPredicate(format: "date == %@", dateString)
+            if managedObjectContext?.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate) == nil {
+                print("Creating InvoiceCollection: \(dateString)")
+                _ = InvoiceCollection(context: self.managedObjectContext!, json: collection, uploaded: true)
             }
         }
 
-        // Save the context.
         saveContext()
         HUD.hide()
     }
@@ -238,8 +235,6 @@ extension InvoiceDateTVC {
 
         // Update selected Inventory with full JSON from server.
         selection.updateExisting(context: self.managedObjectContext!, json: json)
-
-        // Save the context.
         saveContext()
 
         HUD.hide()
@@ -257,15 +252,17 @@ extension InvoiceDateTVC {
             HUD.hide(); return
         }
 
-        //print("\nCreating new InvoiceCollection ...")
-        selectedCollection = InvoiceCollection(context: self.managedObjectContext!, json: json, uploaded: false)
+        //print("\nCreating new InvoiceCollection(s) ...")
+        for (_, collection) in json {
+            _ = InvoiceCollection(context: self.managedObjectContext!, json: collection, uploaded: false)
+        }
 
-        // Save the context.
         saveContext()
-
         HUD.hide()
 
-        performSegue(withIdentifier: segueIdentifier, sender: self)
+        // TODO - if we only added one collection, select it and performSegue
+        //selectedCollection = ...
+        //performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
     func completedLogin(_ succeeded: Bool, error: Error?) {

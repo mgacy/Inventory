@@ -13,17 +13,7 @@ import SwiftyJSON
 extension OrderCollection {
     
     // MARK: - Lifecycle
-    
-    convenience init(context: NSManagedObjectContext, date: JSON, uploaded: Bool = false) {
-        self.init(context: context)
 
-        // Set properties
-        if let _date = date.string {
-            self.date = _date
-        }
-        self.uploaded = uploaded
-    }
-    
     convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
         self.init(context: context)
         
