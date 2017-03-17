@@ -20,6 +20,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var loginTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var signupButton: UIButton!
     
     // MARK: Lifecycle
     
@@ -27,6 +28,8 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        // TODO - enable signup
+        signupButton.isEnabled = false
 
         if let user = userManager.user {
             loginTextField.text = user.email
