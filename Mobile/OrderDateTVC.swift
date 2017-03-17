@@ -60,8 +60,12 @@ class OrderDateTVC: UITableViewController {
 
         // Get list of OrderCollections from server
         // print("\nFetching existing OrderCollections from server ...")
+
+        guard let storeID = userManager.storeID else {
+            print("\(#function) FAILED: unable to get storeID"); return
+        }
         HUD.show(.progress)
-        APIManager.sharedInstance.getListOfOrderCollections(storeID: userManager.storeID!, completion: self.completedGetListOfOrderCollections)
+        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -205,36 +209,29 @@ extension OrderDateTVC {
             print("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
-        // TODO - distinguish empty response (new account) from error
         guard let json = json else {
             print("\(#function) FAILED : no JSON")
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let dates = json["dates"].array else {
-            print("\(#function) FAILED : unable to get dates")
-            HUD.flash(.error, delay: 1.0); return
+            HUD.hide(); return
         }
 
         HUD.hide()
 
         // FIX - this does not account for Collections that have been deleted from the server but
         // are still present in the local store
-        for date in dates {
-            if let dateString = date.string {
+        for (_, collection) in json {
+            guard let dateString = collection["date"].string else {
+                print("unable to get date"); continue
+            }
 
-                // Create OrderCollection if we can't find one with date `date`
-                if OrderCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
-                    // print("Creating OrderCollection: \(dateString)")
-                    _ = OrderCollection(context: self.managedObjectContext!, date: date, uploaded: true)
-                }
+            // Create OrderCollection if we can't find one with date `date`
+            if OrderCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
+                // print("Creating OrderCollection: \(dateString)")
+                _ = OrderCollection(context: self.managedObjectContext!, json: collection, uploaded: true)
             }
         }
 
         // Save the context.
         saveContext()
-
-        //tableView.activityIndicatorView.stopAnimating()
-        //HUD.hide()
     }
 
     func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
@@ -294,7 +291,6 @@ extension OrderDateTVC {
         // Save the context.
         saveContext()
 
-        //tableView.activityIndicatorView.stopAnimating()
         HUD.hide()
 
         performSegue(withIdentifier: segueIdentifier, sender: self)

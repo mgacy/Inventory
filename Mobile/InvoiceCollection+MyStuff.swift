@@ -13,20 +13,10 @@ import SwiftyJSON
 extension InvoiceCollection {
     
     // MARK: - Lifecycle
-    
-    convenience init(context: NSManagedObjectContext, date: JSON, uploaded: Bool = false) {
-        self.init(context: context)
-        
-        // Set properties
-        if let _date = date.string {
-            self.date = _date
-        }
-        self.uploaded = uploaded
-    }
-    
+
     convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
         self.init(context: context)
-        
+
         // Set properties
         if let date = json["date"].string {
             self.date = date
@@ -39,8 +29,10 @@ extension InvoiceCollection {
         self.uploaded = uploaded
 
         // Add Invoices
-        for (_, item) in json {
-            _ = Invoice(context: context, json: item, collection: self, uploaded: false)
+        if let invoices = json["invoices"].array {
+            for invoiceJSON in invoices {
+                _ = Invoice(context: context, json: invoiceJSON, collection: self, uploaded: uploaded)
+            }
         }
     }
     

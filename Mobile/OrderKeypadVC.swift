@@ -106,40 +106,30 @@ class OrderKeypadVC: UIViewController {
         update()
     }
 
-    // MARK: - Units
+    // MARK: Units
 
     @IBAction func packTapped(_ sender: AnyObject) {
-        //print("currentItem: \(currentItem)")
         guard let item = currentItem.item else { print("A1"); return  }
-        //print(".item: \(item)")
         guard let purchaseUnit = item.purchaseUnit else { print("B1"); return }
 
         currentItem.orderUnit = purchaseUnit
 
-        // Update keypad buttons
-        caseButton.backgroundColor = ColorPalette.navyColor
-        bottleButton.backgroundColor = ColorPalette.secondaryColor
-
+        // Update display, keypad buttons
         update()
     }
 
     // TODO - rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
-        //print("currentItem: \(currentItem)")
         guard let item = currentItem.item else { print("A2"); return  }
-        //print(".item: \(item)")
         guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
 
         currentItem.orderUnit = purchaseSubUnit
 
-        // Update keypad buttons
-        caseButton.backgroundColor = ColorPalette.secondaryColor
-        bottleButton.backgroundColor = ColorPalette.navyColor
-
+        // Update display, keypad buttons
         update()
     }
 
-    // MARK: - Item Navigation
+    // MARK: Item Navigation
 
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
@@ -179,11 +169,8 @@ class OrderKeypadVC: UIViewController {
             keypad.updateNumber(currentItem.quantity as Double?)
             output = keypad.outputB()
 
-            // Update keypad buttons
-            updateKeypadButtons(item: currentItem)
-
         case false:
-            // Update model with output of keyapd
+            // Update model with output of keypad
             output = keypad.outputB()
 
             if let keypadResult = output.total {
@@ -204,6 +191,7 @@ class OrderKeypadVC: UIViewController {
             }
         }
 
+        updateKeypadButtons(item: currentItem)
         updateDisplay(item: currentItem, keypadOutput: output)
 
         //print("currentItem: \(currentItem)")
@@ -243,31 +231,41 @@ class OrderKeypadVC: UIViewController {
         
     }
 
+    // TODO - rename `updateUnitButtons`?
     func updateKeypadButtons(item: OrderItem) {
         guard let orderUnit = currentItem.orderUnit else { print("a"); return }
         guard let item = currentItem.item else { print("b"); return }
-        guard let purchaseUnit = item.purchaseUnit else { print("c"); return }
 
-        guard let purchaseSubUnit = item.purchaseSubUnit else {
-            print("d")
+        //print("currentItem: \(currentItem)\n")
+        //print("currentItem.item: \(item)\n")
 
+        // TODO - some of this should only be done when we change currentItem
+        if orderUnit == item.purchaseUnit {
             caseButton.backgroundColor = ColorPalette.navyColor
-            bottleButton.backgroundColor = ColorPalette.secondaryColor
-            bottleButton.isEnabled = false
-            return
-        }
+            caseButton.isEnabled = true
 
-        bottleButton.isEnabled = true
-
-        if orderUnit == purchaseUnit {
-            caseButton.backgroundColor = ColorPalette.navyColor
             bottleButton.backgroundColor = ColorPalette.secondaryColor
-        } else if orderUnit == purchaseSubUnit {
-            caseButton.backgroundColor = ColorPalette.secondaryColor
+            if item.purchaseSubUnit != nil {
+                bottleButton.isEnabled = true
+            } else {
+                bottleButton.isEnabled = false
+            }
+
+        } else if orderUnit == item.purchaseSubUnit {
             bottleButton.backgroundColor = ColorPalette.navyColor
+            bottleButton.isEnabled = true
+
+            caseButton.backgroundColor = ColorPalette.secondaryColor
+            if item.purchaseUnit != nil {
+                caseButton.isEnabled = true
+            } else {
+                caseButton.isEnabled = false
+            }
+
         } else {
-            caseButton.backgroundColor = UIColor.red
-            bottleButton.backgroundColor = UIColor.red
+            print("\(#function) FAILED : A")
+            caseButton.isEnabled = false
+            bottleButton.isEnabled = false
         }
     }
 

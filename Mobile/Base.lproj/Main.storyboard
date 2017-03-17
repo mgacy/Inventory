@@ -1281,11 +1281,11 @@
                                         <rect key="frame" x="0.0" y="56" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EG4-hE-eoB" id="epB-fh-Lie">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FDP-LD-P7j">
-                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="345" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -1418,6 +1418,7 @@
                         <outlet property="loginButton" destination="xbj-Sw-6v7" id="xTL-F0-JaN"/>
                         <outlet property="loginTextField" destination="wzg-MY-l3m" id="aDd-PJ-bPa"/>
                         <outlet property="passwordTextField" destination="OAD-tX-aAu" id="hfZ-b1-L2I"/>
+                        <outlet property="signupButton" destination="dRj-kU-Njl" id="Zhj-km-j0y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qil-wZ-TEO" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1504,6 +1505,7 @@
                         <outlet property="loginButton" destination="ofl-0V-Bsb" id="Z9V-eD-E1z"/>
                         <outlet property="loginTextField" destination="Zt6-K4-KGw" id="mWr-y3-rG0"/>
                         <outlet property="passwordTextField" destination="M7C-ku-sZj" id="Kwf-kj-9Zu"/>
+                        <outlet property="signupButton" destination="BcY-I3-lEg" id="O2t-Ak-dTJ"/>
                         <segue destination="Lwb-b5-sIi" kind="show" identifier="showTabController" id="fev-ZI-ohI"/>
                     </connections>
                 </viewController>
@@ -1610,8 +1612,8 @@
         <image name="settingsTab" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4yW-DD-bsH"/>
-        <segue reference="RYI-Jx-XiF"/>
+        <segue reference="fev-ZI-ohI"/>
         <segue reference="bQV-xM-Zpe"/>
+        <segue reference="4yW-DD-bsH"/>
     </inferredMetricsTieBreakers>
 </document>

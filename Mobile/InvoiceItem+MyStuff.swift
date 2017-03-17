@@ -38,6 +38,44 @@ import SwiftyJSON
         }
     }
 
+    var shortDescription: String {
+        switch self {
+        case .pending:
+            return "P"
+        case .received:
+            return "R"
+        case .damaged:
+            return "D"
+        case .outOfStock:
+            return "O"
+        case .promo:
+            return "Pr"
+        case .substitute:
+            return "Sub"
+        case .wrongItem:
+            return "WI"
+        }
+    }
+
+    mutating func next() {
+        switch self {
+        case .pending:
+            self = .received
+        case .received:
+            self = .damaged
+        case .damaged:
+            self = .outOfStock
+        case .outOfStock:
+            self = .promo
+        case .promo:
+            self = .substitute
+        case .substitute:
+            self = .wrongItem
+        case .wrongItem:
+            self = .pending
+        }
+    }
+
 }
 
 extension InvoiceItem {

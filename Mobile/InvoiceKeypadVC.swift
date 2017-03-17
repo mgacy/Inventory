@@ -40,6 +40,7 @@ class InvoiceKeypadVC: UIViewController {
 
     var inactiveUnit: Unit? {
         guard let item = currentItem.item else { print("A1"); return nil  }
+        // Simply return currentItem.unit instead of nil?
         guard let pack = item.purchaseUnit else { print("A2"); return nil }
         guard let unit = item.purchaseSubUnit else { print("A3"); return nil }
 
@@ -99,7 +100,7 @@ class InvoiceKeypadVC: UIViewController {
         currencyFormatter.numberStyle = .currency
         
         // Reset mode to quantity; this also calls update(newItem: true)
-        switchMode(1)
+        switchMode(.quantity)
         //update(newItem: true)
     }
 
@@ -114,6 +115,8 @@ class InvoiceKeypadVC: UIViewController {
         guard let digit = sender.currentTitle else { return }
         print("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
+        if currentMode == .status { return }
+
         keypad.pushDigit(value: number)
         
         update()
@@ -133,7 +136,7 @@ class InvoiceKeypadVC: UIViewController {
         update()
     }
     
-    // MARK: - Units
+    // MARK: Units
 
     @IBAction func softButtonTapped( _sender: AnyObject) {
         switch currentMode {
@@ -152,7 +155,15 @@ class InvoiceKeypadVC: UIViewController {
             print("z2")
         // ?
         case .status:
-            print("z3")
+            if var status = InvoiceItemStatus(rawValue: currentItem.status) {
+                status.next()
+                currentItem.status = status.rawValue
+                //status.next()
+                //softButton.setTitle(status.shortDescription, for: .normal)
+
+            }
+            softButton.setTitle("s", for: .normal)
+            update()
         }
     }
 
@@ -174,14 +185,14 @@ class InvoiceKeypadVC: UIViewController {
         update()
     }
     
-    // MARK: - Item Navigation
+    // MARK: Item Navigation
     
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
             currentIndex += 1
             
             // Reset mode to quantity; this also calls update(newItem: true)
-            switchMode(1)
+            switchMode(.quantity)
             //update(newItem: true)
         } else {
             // TODO - cleanup?
@@ -196,7 +207,7 @@ class InvoiceKeypadVC: UIViewController {
             currentIndex -= 1
             
             // Reset mode to quantity; this also calls update(newItem: true)
-            switchMode(1)
+            switchMode(.quantity)
             //update(newItem: true)
         } else {
             // TODO - cleanup?
@@ -206,56 +217,62 @@ class InvoiceKeypadVC: UIViewController {
         }
     }
     
-    // MARK: - B
+    // MARK: Mode
     
     @IBAction func modeTapped(_ sender: AnyObject) {
         switch currentMode {
         case .cost:
             // -> status
-            switchMode(2)
+            switchMode(.status)
         case .quantity:
             // -> cost
-            switchMode(0)
+            switchMode(.cost)
         case .status:
             // -> quantity
-            switchMode(1)
+            switchMode(.quantity)
         }
     }
-    
-    func switchMode(_ newMode: Int) {
-        
+
+    // MARK: -
+
+    func switchMode(_ newMode: KeypadState) {
+        currentMode = newMode
+
         switch newMode {
-        case 0:
-            currentMode = .cost
+        case .cost:
             itemCost.textColor = UIColor.black
             itemQuantity.textColor = UIColor.lightGray
             itemStatus.textColor = UIColor.lightGray
             softButton.setTitle("", for: .normal)
-        case 1:
-            currentMode = .quantity
+            softButton.isEnabled = false
+        case .quantity:
             itemCost.textColor = UIColor.lightGray
             itemQuantity.textColor = UIColor.black
             itemStatus.textColor = UIColor.lightGray
 
-            guard let altUnit = inactiveUnit else { return }
-            softButton.setTitle(altUnit.abbreviation, for: .normal)
+            // Should inactiveUnit simply return currentItem.unit instead of nil?
+            if let altUnit = inactiveUnit {
+                softButton.setTitle(altUnit.abbreviation, for: .normal)
+                softButton.isEnabled = true
+            } else {
+                softButton.setTitle(currentItem.unit?.abbreviation, for: .normal)
+                softButton.isEnabled = false
+            }
 
-        case 2:
-            currentMode = .status
+        case .status:
             itemCost.textColor = UIColor.lightGray
             itemQuantity.textColor = UIColor.lightGray
             itemStatus.textColor = UIColor.black
             softButton.setTitle("", for: .normal)
-        default:
-            fatalError("Invalid mode")
+            softButton.isEnabled = true
         }
-        
+
         // TODO - what is the best way to handle this?
         update(newItem: true)
         // TODO - is this something that should be always be done in Keypad?
         keypad.isEditingNumber = false
     }
-    
+
     // MARK: - C
     
     func update(newItem: Bool = false) {

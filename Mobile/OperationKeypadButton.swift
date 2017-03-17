@@ -14,11 +14,16 @@ class OperationKeypadButton: UIButton {
 
     required init?(coder aDecoder: NSCoder) {        
         super.init(coder: aDecoder)
-        
+
         // set other operations after super.init, if required
         backgroundColor = ColorPalette.secondaryColor
-        setTitleColor(UIColor.white, for: .normal)
-        //setTitleColor(UIColor.green, for: .highlighted)
+        setTitleColor(.white, for: .normal)
+        setTitleColor(ColorPalette.yellowColor, for: .highlighted)
+        setTitleColor(ColorPalette.textColor, for: .disabled)
+        //setTitleColor(ColorPalette.darkGrayColor, for: .disabled)
+        // NOTE - not sure about the following states for UIButton
+        setTitleColor(.red, for: .selected)
+        setTitleColor(.blue, for: .focused)
         titleLabel?.font = UIFont.systemFont(ofSize: 22.0)
     }
 

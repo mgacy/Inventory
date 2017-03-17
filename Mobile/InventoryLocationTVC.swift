@@ -184,46 +184,25 @@ class InventoryLocationTVC: UITableViewController {
 extension InventoryLocationTVC {
 
     func completedUpload(json: JSON?, error: Error?) {
-        //self.clearAllNotice()
         guard error == nil else {
-            //self.noticeError("Error", autoClear: true)
-            //self.noticeError((error?.localizedDescription)!, autoClear: true)
             HUD.flash(.error, delay: 1.0); return
         }
-        guard json != nil else {
-            print("Unable to get JSON")
-            //self.noticeError("Error", autoClear: true)
+        guard let json = json else {
+            print("\(#function) FAILED: unable to get JSON")
             HUD.flash(.error, delay: 1.0); return
         }
-
-        // TODO: remove hard-coded remoteID
-        let remoteID = 0
-
-        // TODO: enable the following, which is disabled for the purpose of demos
-        /*
-         guard let json = json else {
-         print("Unable to get JSON")
-         //self.noticeError("Error", autoClear: true)
-         HUD.flash(.error, delay: 1.0)
-         return
-         }
-         guard let remoteID = json["id"].int else {
-         print("Unable to get remoteID of posted Inventory")
-         //self.noticeError("Error", autoClear: true)
-         HUD.flash(.error, delay: 1.0)
-         return
-         }
-         */
+        guard let remoteID = json["id"].int else {
+            print("\(#function) FAILED: unable to get remoteID of posted Inventory")
+            HUD.flash(.error, delay: 1.0); return
+        }
 
         inventory.uploaded = true
         inventory.remoteID = Int32(remoteID)
 
-        //self.noticeSuccess("Success!", autoClear: true)
         HUD.flash(.success, delay: 1.0)
 
         // Pop view
         navigationController!.popViewController(animated: true)
-        //self.clearAllNotice()
     }
 
 }

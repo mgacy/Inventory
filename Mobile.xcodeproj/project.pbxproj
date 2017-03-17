@@ -422,6 +422,7 @@
 				C9F515DB1DB7EF98004C10E6 /* Resources */,
 				52092E81B2BA2C8F6EDD3BBF /* [CP] Embed Pods Frameworks */,
 				ADA2809B8EAE7BBE3EA5C642 /* [CP] Copy Pods Resources */,
+				C95A8DC21E7896BA001F425B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -613,6 +614,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Mobile/Pods-Mobile-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		C95A8DC21E7896BA001F425B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ $USER == 'matt' ]]; then\n    /Users/matt/scripts/incrementXcodeBuild\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 

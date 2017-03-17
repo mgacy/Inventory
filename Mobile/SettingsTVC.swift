@@ -6,12 +6,15 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
+import CoreData
 import UIKit
 
 class SettingsTVC: UITableViewController {
 
     // MARK: Properties
     let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
+
+    var managedObjectContext: NSManagedObjectContext? = nil
 
     // Segues
     let accountSegue = "showAccount"
@@ -26,11 +29,11 @@ class SettingsTVC: UITableViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-
         title = "Settings"
         configureAccountCell()
+
+        // CoreData
+        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -73,6 +76,10 @@ class SettingsTVC: UITableViewController {
         if indexPath.section == 0 {
             if let user = userManager.user {
                 print("Logging out \(user.email)")
+
+                // TODO - check for pending Inventory / Invoice / Order
+                // TODO - if so, present warning
+
                 userManager.logout(completion: completedLogout)
             } else {
                 print("Showing AccountVC ...")
@@ -104,9 +111,58 @@ extension SettingsTVC {
     func completedLogout(suceeded: Bool) {
         if suceeded {
             AccountCell.textLabel?.text = "Login"
+            deleteData()
         } else {
             print("Unable to actually logout")
             AccountCell.textLabel?.text = "Login"
+            deleteData()
+        }
+    }
+
+}
+
+// MARK: - Delete Data
+extension SettingsTVC {
+
+    func deleteData() {
+        guard let managedObjectContext = managedObjectContext else { return }
+
+        /*
+         Since the batch delete request directly interacts with the persistent store we need
+         to make sure that any changes are first pushed to that store.
+         */
+        if managedObjectContext.hasChanges {
+            do {
+                try managedObjectContext.save()
+            } catch {
+                let saveError = error as NSError
+                print("\(saveError), \(saveError.userInfo)")
+            }
+        }
+
+        // Inventory
+        do {
+            try managedObjectContext.deleteEntities(Inventory.self)
+        } catch {
+            print("Unable to delete Inventories")
+        }
+        // Order
+        do {
+            try managedObjectContext.deleteEntities(OrderCollection.self)
+        } catch {
+            print("Unable to delete OrderCollections")
+        }
+        // Invoice
+        do {
+            try managedObjectContext.deleteEntities(InvoiceCollection.self)
+        } catch {
+            print("Unable to delete InvoiceCollections")
+        }
+        // Item
+        do {
+            try managedObjectContext.deleteEntities(Item.self)
+        } catch {
+            print("Unable to delete Items")
         }
     }
 

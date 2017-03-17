@@ -36,9 +36,6 @@ extension Invoice {
         if let invoiceNo = json["invoice_no"].int32 {
             self.invoiceNo = invoiceNo
         }
-        //if let storeID = json["store_id"].int32 {
-        //    self.storeID = storeID
-        //}
         if let shipDate = json["ship_date"].string {
             self.shipDate = shipDate
         }
@@ -86,7 +83,7 @@ extension Invoice {
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
         myDict["id"] = Int(self.remoteID)
-        myDict["invoiceNo"] = Int(self.invoiceNo)
+        myDict["invoice_no"] = Int(self.invoiceNo)
         myDict["ship_date"] = self.shipDate
         myDict["receive_date"] = self.receiveDate
         myDict["credit"] = Double(self.credit)
@@ -94,6 +91,11 @@ extension Invoice {
         myDict["taxes"] = Double(self.taxes)
         myDict["total_cost"] = Int(self.totalCost)
         myDict["check_no"] = Int(self.checkNo)
+        myDict["store_id"] = Int((self.collection?.storeID)!)
+
+        if let vendor = self.vendor {
+            myDict["vendor_id"] = Int(vendor.remoteID)
+        }
 
         // Generate array of dictionaries for InventoryItems
         guard let items = self.items else {

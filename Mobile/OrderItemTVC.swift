@@ -131,6 +131,9 @@ class OrderItemTVC: UITableViewController {
 
             // TODO - try to send email message?
 
+            // TESTING:
+            completedPlaceOrder(true)
+
             // Let the user know if his/her device isn't able to send text messages
             let errorAlert = createAlert(
                 title: "Cannot Send Text Message",
@@ -227,6 +230,8 @@ extension OrderItemTVC {
     func completedPostOrder(succeeded: Bool, json: JSON) {
         if succeeded {
             parentObject.uploaded = true
+
+            // TODO: set .uploaded of parentObject.collection is all are uploaded
 
             HUD.flash(.success, delay: 1.0) { finished in
                 // Pop view

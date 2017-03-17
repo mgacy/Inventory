@@ -148,7 +148,7 @@ public enum Router: URLRequestConvertible {
             return ["username": username, "email": email, "password": password]
         // General
         case .getItems(let storeID):
-            return ["storeID": storeID]
+            return ["store_id": storeID]
         // case .getUnits:
         // case .getVendors(let storeID):
         // Inventory
@@ -156,7 +156,8 @@ public enum Router: URLRequestConvertible {
         //     return ["active": isActive, "inventory_type_id": typeID, "store_id": storeID]
         case .getNewInventory(let isActive, _, let storeID):
             return ["active": isActive, "store_id": storeID]
-        // case .listInventories(let typeID):
+        case .listInventories(let storeID):
+            return ["store_id": storeID]
         // case .fetchInventory:
         case .postInventory(let parameters):
             return parameters
@@ -217,7 +218,8 @@ public enum Router: URLRequestConvertible {
         // Inventory
         case .getNewInventory:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        // case .listInventories:
+        case .listInventories:
+            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         // case .fetchInventory:
         case .postInventory:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
@@ -225,7 +227,8 @@ public enum Router: URLRequestConvertible {
         // Invoice
         case .getNewInvoice:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        // case .listInvoices:
+        case .listInvoices:
+            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .fetchInvoice:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .postInvoice:
@@ -234,7 +237,8 @@ public enum Router: URLRequestConvertible {
         // Order
         case .getNewOrder:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        // case .listOrders:
+        case .listOrders:
+            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .fetchOrder:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .postOrder:
