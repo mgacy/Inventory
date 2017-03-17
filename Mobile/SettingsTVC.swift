@@ -140,158 +140,30 @@ extension SettingsTVC {
             }
         }
 
-        //var batchDeleteRequest:
-        //var batchDeleteResult:
-
-        // MARK: Inventory
-
-        // Create Fetch Request (Inventory)
-        let inventoryFetchRequest: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-
-        // Initialize and configure Batch Delete Request
-        var batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: inventoryFetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-        batchDeleteRequest.resultType = .resultTypeCount
-
+        // Inventory
         do {
-            // Execute Batch Request
-            //try managedObjectContext.execute(batchDeleteRequest)
-            let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            try managedObjectContext.deleteEntities(Inventory.self)
         } catch {
-            let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            print("Unable to delete Inventories")
         }
-
-        // MARK: Invoice
-
-        // Create Fetch Request (Invoice)
-        let invoiceFetchRequest: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-        batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: invoiceFetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
+        // Order
         do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            try managedObjectContext.deleteEntities(OrderCollection.self)
         } catch {
-            let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            print("Unable to delete OrderCollections")
         }
-
-        // MARK: Order
-
-        // Create Fetch Request (Order)
-        let orderFetchRequest: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
-        batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: orderFetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
+        // Invoice
         do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            try managedObjectContext.deleteEntities(InvoiceCollection.self)
         } catch {
-            let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            print("Unable to delete InvoiceCollections")
         }
-
-        // MARK: Item
-
-        // Create Fetch Request (Item)
-        let itemFetchRequest: NSFetchRequest<Item> = Item.fetchRequest()
-        batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: itemFetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
+        // Item
         do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-
-            // The managed object context is not notified of the consequences of the batch delete request.
-
-            // Reset Managed Object Context
-            // As the request directly interacts with the persistent store, we need need to reset the context
-            // for it to be aware of the changes
-            managedObjectContext.reset()
-            
+            try managedObjectContext.deleteEntities(Item.self)
         } catch {
-            let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            print("Unable to delete Items")
         }
     }
 
 }
-
-/*
-extension SettingsTVC {
-
-    func deleteData3() {
-        guard let managedObjectContext = managedObjectContext else { return }
-
-        /*
-         Since the batch delete request directly interacts with the persistent store we need
-         to make sure that any changes are first pushed to that store.
-         */
-        if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.save()
-            } catch {
-                let saveError = error as NSError
-                print("\(saveError), \(saveError.userInfo)")
-            }
-        }
-
-        // Create Fetch Request (Inventory)
-        let inventoryFetchRequest: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-        executeBatchDelete(forRequest: inventoryFetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Create Fetch Request (Invoice)
-        let invoiceFetchRequest: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-        executeBatchDelete(forRequest: invoiceFetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Create Fetch Request (Order)
-        let orderFetchRequest: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
-        executeBatchDelete(forRequest: orderFetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Create Fetch Request (Item)
-        let itemFetchRequest: NSFetchRequest<Item> = Item.fetchRequest()
-
-        // Initialize / configure batch delete request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: itemFetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-        batchDeleteRequest.resultType = .resultTypeCount
-
-        do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-
-            // The managed object context is not notified of the consequences of the batch delete request.
-
-            // Reset Managed Object Context
-            // As the request directly interacts with the persistent store, we need need to reset the context
-            // for it to be aware of the changes
-            managedObjectContext.reset()
-
-        } catch {
-            let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
-        }
-    }
-
-    func executeBatchDelete(forRequest request: NSFetchRequest<NSFetchRequestResult>) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        // Initialize / configure batch delete request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: request)
-        batchDeleteRequest.resultType = .resultTypeCount
-
-        // Execute batch request
-        do {
-            let batchDeleteResult = try managedObjectContext.execute(request) as! NSBatchDeleteResult
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-        } catch {
-            let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
-        }
-    }
-
-}
-*/
