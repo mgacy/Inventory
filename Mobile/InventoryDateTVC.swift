@@ -130,7 +130,11 @@ class InventoryDateTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = self.fetchedResultsController.sections![section]
+        guard let sections = fetchedResultsController.sections else {
+            return 0
+        }
+
+        let sectionInfo = sections[section]
         return sectionInfo.numberOfObjects
     }
 
@@ -462,7 +466,6 @@ extension InventoryDateTVC {
 
         // Edit the sort key as appropriate.
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-
         fetchRequest.sortDescriptors = [sortDescriptor]
 
         // Edit the section name key path and cache name if appropriate.
@@ -526,12 +529,23 @@ extension InventoryDateTVC: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
+            if let indexPath = newIndexPath {
+                tableView.insertRows(at: [indexPath], with: .fade)
+            }
+            break;
         case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .fade)
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            break;
         case .update:
-            configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
+            if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) {
+                configureCell(cell, atIndexPath: indexPath)
+            }
+            break;
         case .move:
+            // TODO - look at alt method in CocoaCasts tutorial:
+            // ExploringTheFetchedResultsControllerDelegateProtocol-master
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
     }
