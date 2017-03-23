@@ -247,7 +247,6 @@ class InventoryDateTVC: UITableViewController {
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
-        //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
 
         // By leaving filter as nil, we will delete all Inventories
@@ -265,7 +264,6 @@ extension InventoryDateTVC {
 
     func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            //self.noticeError(error!.localizedDescription, autoClear: true); return
             HUD.flash(.error, delay: 1.0); return
         }
         // TODO - distinguish empty response (new account) from error
@@ -286,14 +284,11 @@ extension InventoryDateTVC {
 
         // Save the context.
         saveContext()
-
-        //tableView.activityIndicatorView.stopAnimating()
         //HUD.hide()
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            //self.noticeError(error!.localizedDescription, autoClear: true); return
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -398,9 +393,7 @@ extension InventoryDateTVC {
     }
 
     func deleteChildren(parent: Inventory) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
+        guard let managedObjectContext = managedObjectContext else { return }
 
         /*
          Since the batch delete request directly interacts with the persistent store we need
