@@ -36,18 +36,17 @@ class SyncManager {
     }
 
     // MARK: - Sync Primary Items
+    // TODO - move error handling out into closure of functions calling these methods?
 
     func syncItems(json: JSON?, error: Error?) {
         guard error == nil else {
             print("\(#function) FAILED : \(error)")
-            completionHandler(false, error)
-            return
+            return completionHandler(false, error)
         }
         guard let json = json else {
             print("\(#function) FAILED : unable to get Items")
             // TODO - construct error?
-            completionHandler(false, nil)
-            return
+            return completionHandler(false, nil)
         }
 
         // Create dict from fetch request on Items
@@ -87,14 +86,12 @@ class SyncManager {
     func syncVendors(json: JSON?, error: Error?) {
         guard error == nil else {
             print("\(#function) FAILED : \(error)")
-            completionHandler(false, error)
-            return
+            return completionHandler(false, error)
         }
         guard let json = json else {
             print("\(#function) FAILED : unable to get Items")
             // TODO - construct error?
-            completionHandler(false, nil)
-            return
+            return completionHandler(false, nil)
         }
 
         guard let vendorDict = try? managedObjectContext.fetchEntityDict(Vendor.self) else {
