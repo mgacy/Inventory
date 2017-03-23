@@ -148,6 +148,30 @@ class InventoryDateTVC: UITableViewController {
         return cell
     }
 
+    // MARK: Editing
+
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let inventory = self.fetchedResultsController.object(at: indexPath)
+        switch inventory.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+
+            // Fetch Inventory
+            let inventory = fetchedResultsController.object(at: indexPath)
+
+            // Delete Inventory
+            fetchedResultsController.managedObjectContext.delete(inventory)
+
+        }
+    }
+
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let inventory = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = inventory.date
