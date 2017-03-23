@@ -62,7 +62,7 @@ class SyncManager {
         }
 
         for (_, itemJSON):(String, JSON) in json {
-            guard let itemID = itemJSON["id"].int32 else { break }
+            guard let itemID = itemJSON["id"].int32 else { continue }
 
             // Find + update / create Items
             if let existingItem = itemDict[itemID] {
@@ -99,7 +99,7 @@ class SyncManager {
         }
 
         for (_, vendorJSON):(String, JSON) in json {
-            guard let itemID = vendorJSON["id"].int32 else { break }
+            guard let itemID = vendorJSON["id"].int32 else { continue }
 
             // Find + update / create Items
             if let existingEntity = vendorDict[itemID] {
