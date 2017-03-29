@@ -54,19 +54,18 @@ class OrderDateTVC: UITableViewController {
         // Register tableView cells
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
 
+        // Add refresh control
+        self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
+
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
 
-        // Get list of OrderCollections from server
-        // print("\nFetching existing OrderCollections from server ...")
-
-        // Add refresh control
-        self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
-
         guard let storeID = userManager.storeID else {
             print("\(#function) FAILED: unable to get storeID"); return
         }
+
+        // Get list of OrderCollections from server
         HUD.show(.progress)
         APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
     }
