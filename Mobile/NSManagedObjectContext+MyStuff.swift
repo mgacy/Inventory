@@ -10,9 +10,8 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+// MARK: - Insert
 extension NSManagedObjectContext {
-
-    // MARK: - Insert
 
     public func insertObject<T : NSManagedObject>(_ entity: T.Type) -> T {
         let newItem = T(context: self)
@@ -25,7 +24,10 @@ extension NSManagedObjectContext {
         return newItem
     }
 
-    // MARK: - Fetch
+}
+
+// MARK: - Fetch
+extension NSManagedObjectContext {
 
     // NOTE - this requires (1) entity has remoteID and (2) type is Int32
     // TODO - make T require objects conforming to protocol specifying the above requirements?
@@ -59,10 +61,10 @@ extension NSManagedObjectContext {
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
         request.predicate = predicate
         request.fetchLimit = 2
-        
+
         do {
             let fetchResults = try self.fetch(request)
-            
+
             switch fetchResults.count {
             case 0:
                 //print("Found 0 matches for predicate \(predicate)")
@@ -73,13 +75,13 @@ extension NSManagedObjectContext {
                 print("\(#function) FAILED: found multiple matches: \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
             }
-        
+
         } catch let error {
             print("Error with request: \(error)")
         }
         return nil
     }
-    
+
     // http://codereview.stackexchange.com/questions/147005/swift-3-generic-fetch-request-extension
     func fetchEntities<T: NSManagedObject>(_ entityClass: T.Type, sortBy: [NSSortDescriptor]? = nil, matchingPredicate predicate: NSPredicate? = nil) throws -> [T] {
 
@@ -120,7 +122,7 @@ extension NSManagedObjectContext {
             request = NSFetchRequest(entityName: entityName)
         }
 
-        /* 
+        /*
          Set returnsObjectsAsFaults to false to gain a performance benefit if you know
          you will need to access the property values from the returned objects.
          */
@@ -139,8 +141,12 @@ extension NSManagedObjectContext {
             throw error
         }
     }
+    
+}
 
-    // MARK: - Delete
+
+// MARK: - Delete
+extension NSManagedObjectContext {
 
     func deleteEntities<T: NSManagedObject>(_ entityClass: T.Type, filter: NSPredicate? = nil) throws {
 
