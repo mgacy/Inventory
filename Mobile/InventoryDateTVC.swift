@@ -249,12 +249,22 @@ class InventoryDateTVC: UITableViewController {
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
+        guard let managedObjectContext = managedObjectContext else { return }
+        guard let storeID = userManager.storeID else { return }
+
         HUD.show(.progress)
 
         // By leaving filter as nil, we will delete all Inventories
-        deleteExistingInventories()
-        // Download Inventories from server again
-        completedLogin(true, nil)
+        let fetchPredicate = nil
+        // let fetchPredicate = NSPredicate(format: "uploaded == %@", true as CVarArg)
+        do {
+            try managedObjectContext.deleteEntities(Inventory.self, filter: fetchPredicate)
+        } catch {
+            print("Unable to delete Inventories")
+        }
+
+        // Get list of Inventories from server
+        APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
     }
 
 }
@@ -356,39 +366,12 @@ extension InventoryDateTVC {
 
     // MARK: - Sync
 
-    func deleteExistingInventories(_ filter: NSPredicate? = nil) {
-        print("deleteExistingInventories ...")
 
-        // Create Fetch Request
-        let fetchRequest: NSFetchRequest<Inventory> = Inventory.fetchRequest()
 
-        // Configure Fetch Request
-        if let _filter = filter { fetchRequest.predicate = _filter }
 
-        // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
 
-        // Configure Batch Update Request
-        batchDeleteRequest.resultType = .resultTypeCount
 
-        do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext?.execute(batchDeleteRequest) as! NSBatchDeleteResult
 
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-
-            // Reset Managed Object Context
-            managedObjectContext?.reset()
-
-            // Perform Fetch
-            try self.fetchedResultsController.performFetch()
-
-            // Reload Table View
-            tableView.reloadData()
-
-        } catch {
-            let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
         }
     }
 
