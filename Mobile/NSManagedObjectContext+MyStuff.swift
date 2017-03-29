@@ -180,8 +180,71 @@ extension NSManagedObjectContext {
 
             // Reset Managed Object Context
             self.reset()
-
+            
         } catch {
+            let updateError = error as NSError
+            print("\(updateError), \(updateError.userInfo)")
+        }
+    }
+
+    /*
+    // http://collindonnell.com/2015/07/22/swift-delete-all-objects-extension/
+    func deleteEverything() {
+        // if let entitesByName = persistentStoreCoordinator?.managedObjectModel.entitiesByName as? [String: NSEntityDescription] {
+        if let entitesByName = persistentStoreCoordinator?.managedObjectModel.entitiesByName {
+            for (name, entityDescription) in entitesByName {
+                do {
+                    //try deleteEntities(entityDescription.self)
+                    //try deleteEntities(name)
+
+                } catch {
+                    print("\(#function) FAILED: stuff")
+                }
+                
+            }
+        }
+    }
+    */
+
+}
+
+// MARK: - Sync
+extension NSManagedObjectContext {
+
+    public func syncEntities<T : Syncable>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
+        guard let objectDict = try? fetchEntityDict(T.self) else {
+            print("\(#function) FAILED : unable to create Item dictionary"); return
+        }
+
+        let localIDs = Set(objectDict.keys)
+        var remoteIDs = Set<Int32>()
+
+        for (_, objectJSON):(String, JSON) in json {
+            guard let objectID = objectJSON["id"].int32 else { continue }
+            remoteIDs.insert(objectID)
+
+            // Find + update / create Items
+            if let existingObject = objectDict[objectID] {
+                existingObject.update(context: self, withJSON: objectJSON)
+            } else {
+                let newObject = T(context: self)
+                newObject.update(context: self, withJSON: json)
+            }
+        }
+
+        // Delete objects that were deleted from server. We filter remoteID 0
+        // since that is the default value for new objects
+        let deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 != 0 }
+
+        // TESTING
+        print("remote: \(remoteIDs) - local: \(localIDs)")
+        print("We need to delete: \(deletedObjects)")
+
+        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
+        do {
+            try self.deleteEntities(T.self, filter: fetchPredicate)
+        } catch {
+            // TODO - deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
