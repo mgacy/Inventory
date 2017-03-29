@@ -18,42 +18,10 @@ extension NSManagedObjectContext {
         return newItem
     }
 
-    public func insertObjectWithJSON<T : Syncable>(_ entity: T.Type, withJSON json: JSON) -> T where T: NSManagedObject {
-        let newItem = T(context: self)
-        newItem.update(context: self, withJSON: json)
-        return newItem
-    }
-
 }
 
 // MARK: - Fetch
 extension NSManagedObjectContext {
-
-    public func fetchWithRemoteID<T : Syncable>(_ entity: T.Type, withID id: Int32) -> T? where T: NSManagedObject {
-        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-        request.predicate = NSPredicate(format: "remoteID == \(id)")
-        request.fetchLimit = 2
-
-        do {
-            let fetchResults = try self.fetch(request)
-
-            switch fetchResults.count {
-            case 0:
-                //print("Found 0 matches for remoteID \(id)")
-                return nil
-            case 1:
-                return fetchResults[0]
-            default:
-                print("\(#function) FAILED: found multiple matches for remoteID \(id): \(fetchResults)")
-                fatalError("Returned multiple objects, expected max 1")
-            }
-
-        } catch let error {
-            print("Error with request: \(error)")
-            return nil
-        }
-        //return nil
-    }
 
     // NOTE - this is a more general form of fetchWithRemoteID(_:withID)
     public func fetchSingleEntity<T : NSManagedObject>(_ entity: T.Type, matchingPredicate predicate: NSPredicate) -> T? {
@@ -107,40 +75,6 @@ extension NSManagedObjectContext {
         }
     }
 
-    func fetchEntityDict<T: Syncable>(_ entityClass: T.Type,
-                         matchingPredicate predicate: NSPredicate? = nil,
-                         prefetchingRelationships relationships: [String]? = nil,
-                         returningAsFaults asFaults: Bool = false
-        ) throws -> [Int32: T] where T: NSManagedObject {
-
-        let request: NSFetchRequest<T>
-        if #available(iOS 10.0, *) {
-            request = entityClass.fetchRequest() as! NSFetchRequest<T>
-        } else {
-            let entityName = String(describing: entityClass)
-            request = NSFetchRequest(entityName: entityName)
-        }
-
-        /*
-         Set returnsObjectsAsFaults to false to gain a performance benefit if you know
-         you will need to access the property values from the returned objects.
-         */
-        request.returnsObjectsAsFaults = asFaults
-        request.predicate = predicate
-        request.relationshipKeyPathsForPrefetching = relationships
-
-        //let fetchedResult = try self.fetch(request)
-        //return fetchedResult
-        do {
-            let fetchedResult = try self.fetch(request)
-            let objectDict = fetchedResult.toDictionary { $0.remoteID }
-            return objectDict
-        } catch let error {
-            print(error.localizedDescription)
-            throw error
-        }
-    }
-    
 }
 
 // MARK: - Delete
@@ -208,8 +142,80 @@ extension NSManagedObjectContext {
 
 }
 
-// MARK: - Sync
+// MARK: - Syncable
 extension NSManagedObjectContext {
+
+    // MARK: Insert
+
+    public func insertObjectWithJSON<T : Syncable>(_ entity: T.Type, withJSON json: JSON) -> T where T: NSManagedObject {
+        let newItem = T(context: self)
+        newItem.update(context: self, withJSON: json)
+        return newItem
+    }
+
+    // MARK: Fetch
+
+    public func fetchWithRemoteID<T : Syncable>(_ entity: T.Type, withID id: Int32) -> T? where T: NSManagedObject {
+        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
+        request.predicate = NSPredicate(format: "remoteID == \(id)")
+        request.fetchLimit = 2
+
+        do {
+            let fetchResults = try self.fetch(request)
+
+            switch fetchResults.count {
+            case 0:
+                //print("Found 0 matches for remoteID \(id)")
+                return nil
+            case 1:
+                return fetchResults[0]
+            default:
+                print("\(#function) FAILED: found multiple matches for remoteID \(id): \(fetchResults)")
+                fatalError("Returned multiple objects, expected max 1")
+            }
+
+        } catch let error {
+            print("Error with request: \(error)")
+            return nil
+        }
+        //return nil
+    }
+
+    func fetchEntityDict<T: Syncable>(_ entityClass: T.Type,
+                         matchingPredicate predicate: NSPredicate? = nil,
+                         prefetchingRelationships relationships: [String]? = nil,
+                         returningAsFaults asFaults: Bool = false
+        ) throws -> [Int32: T] where T: NSManagedObject {
+
+        let request: NSFetchRequest<T>
+        if #available(iOS 10.0, *) {
+            request = entityClass.fetchRequest() as! NSFetchRequest<T>
+        } else {
+            let entityName = String(describing: entityClass)
+            request = NSFetchRequest(entityName: entityName)
+        }
+
+        /*
+         Set returnsObjectsAsFaults to false to gain a performance benefit if you know
+         you will need to access the property values from the returned objects.
+         */
+        request.returnsObjectsAsFaults = asFaults
+        request.predicate = predicate
+        request.relationshipKeyPathsForPrefetching = relationships
+
+        //let fetchedResult = try self.fetch(request)
+        //return fetchedResult
+        do {
+            let fetchedResult = try self.fetch(request)
+            let objectDict = fetchedResult.toDictionary { $0.remoteID }
+            return objectDict
+        } catch let error {
+            print(error.localizedDescription)
+            throw error
+        }
+    }
+
+    // MARK: Sync
 
     public func syncEntities<T : Syncable>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         guard let objectDict = try? fetchEntityDict(T.self) else {
