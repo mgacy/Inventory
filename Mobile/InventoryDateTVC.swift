@@ -63,6 +63,9 @@ class InventoryDateTVC: UITableViewController {
         // Register tableView cells
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
 
+        // Add refresh control
+        self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
+
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
@@ -234,6 +237,27 @@ class InventoryDateTVC: UITableViewController {
 
     // MARK: - User Actions
 
+    func refreshTable(_ refreshControl: UIRefreshControl) {
+        guard let managedObjectContext = managedObjectContext else { return }
+        guard let storeID = userManager.storeID else { return }
+
+        // Reload data and update the table view's data source
+        APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: {(json: JSON?, error: Error?) in
+            guard error == nil, let json = json else {
+                HUD.flash(.error, delay: 1.0); return
+            }
+            do {
+                try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
+            } catch {
+                print("Unable to delete Inventories")
+            }
+
+        })
+
+        self.tableView.reloadData()
+        refreshControl.endRefreshing()
+    }
+
     @IBAction func newTapped(_ sender: AnyObject) {
 
         // TODO - check if there is already an Inventory for the current date and of the current type
@@ -342,7 +366,7 @@ extension InventoryDateTVC {
         performSegue(withIdentifier: NewItemSegue, sender: self)
     }
 
-    // TODO - rename `completedSync`(?)
+    // TODO - rename `completedItemSync`(?)
     func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             print("\nCompleted login / sync - succeeded: \(succeeded)")
