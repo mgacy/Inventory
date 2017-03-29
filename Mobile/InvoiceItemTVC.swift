@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import SwiftyJSON
+import PKHUD
 
 class InvoiceItemTVC: UITableViewController {
 
@@ -212,9 +213,16 @@ class InvoiceItemTVC: UITableViewController {
 extension InvoiceItemTVC {
 
     func completedUpload(succeeded: Bool, json: JSON) {
-        print("completedUpload: \(succeeded)")
         if succeeded {
             parentObject.uploaded = true
+
+            // TODO: set .uploaded of parentObject.collection if all are uploaded
+
+            HUD.flash(.success, delay: 1.0) { finished in
+                // Pop view
+                self.navigationController!.popViewController(animated: true)
+            }
+
         } else {
             print("\(#function) FAILED : unable to upload Invoice")
         }
