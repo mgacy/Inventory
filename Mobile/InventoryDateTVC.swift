@@ -56,7 +56,7 @@ class InventoryDateTVC: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Display an Edit button in the navigation bar for this view controller.
-        //self.navigationItem.leftBarButtonItem = self.editButtonItem
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
 
         title = "Inventories"
 
