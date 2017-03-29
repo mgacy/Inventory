@@ -50,8 +50,9 @@ extension NSManagedObjectContext {
 
         } catch let error {
             print("Error with request: \(error)")
+            return nil
         }
-        return nil
+        //return nil
     }
 
     // NOTE - this is a more general form of fetchWithRemoteID(_:withID)

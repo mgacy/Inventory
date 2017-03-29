@@ -231,7 +231,7 @@ extension OrderItemTVC {
         if succeeded {
             parentObject.uploaded = true
 
-            // TODO: set .uploaded of parentObject.collection is all are uploaded
+            // TODO: set .uploaded of parentObject.collection if all are uploaded
 
             HUD.flash(.success, delay: 1.0) { finished in
                 // Pop view
