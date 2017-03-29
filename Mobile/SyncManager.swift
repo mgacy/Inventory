@@ -112,24 +112,11 @@ class SyncManager {
             return completionHandler(false, nil)
         }
 
-        guard let vendorDict = try? managedObjectContext.fetchEntityDict(Vendor.self) else {
-            print("\(#function) FAILED : unable to create Vendor dictionary"); return
+        do {
+            try managedObjectContext.syncEntities(Vendor.self, withJSON: json)
+        } catch let error {
+            print("\(#function) FAILED : \(error)")
         }
-
-        for (_, vendorJSON):(String, JSON) in json {
-            guard let itemID = vendorJSON["id"].int32 else { continue }
-
-            // Find + update / create Items
-            if let existingEntity = vendorDict[itemID] {
-                //print("UPDATE existing Vendor: \(existingEntity)")
-                existingEntity.update(context: managedObjectContext, withJSON: vendorJSON)
-
-            } else {
-                //print("CREATE new Vendor: \(itemJSON)")
-                _ = Vendor(context: managedObjectContext, json: vendorJSON)
-            }
-        }
-
         print("Finished with Vendors")
 
         // Get list of Items from server
