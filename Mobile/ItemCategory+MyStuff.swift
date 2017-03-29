@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-extension ItemCategory: Syncable {
+extension ItemCategory: SyncableItem {
 
     convenience init(context: NSManagedObjectContext, json: JSON) {
         self.init(context: context)
