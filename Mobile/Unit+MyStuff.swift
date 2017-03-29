@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-extension Unit: Syncable {
+extension Unit: SyncableItem {
         
     // MARK: - Lifecycle
     

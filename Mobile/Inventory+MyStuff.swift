@@ -130,3 +130,16 @@ extension Inventory {
     }
 
 }
+
+extension Inventory: Syncable {
+
+    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+        if let date = json["date"].string {
+            self.date = date
+        }
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
+        }
+    }
+
+}

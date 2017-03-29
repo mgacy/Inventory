@@ -55,13 +55,16 @@ class InventoryDateTVC: UITableViewController {
         // Uncomment the following line to preserve selection between presentations.
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        // Display an Edit button in the navigation bar for this view controller.
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
 
         title = "Inventories"
 
         // Register tableView cells
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+
+        // Add refresh control
+        self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
 
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -130,7 +133,11 @@ class InventoryDateTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = self.fetchedResultsController.sections![section]
+        guard let sections = fetchedResultsController.sections else {
+            return 0
+        }
+
+        let sectionInfo = sections[section]
         return sectionInfo.numberOfObjects
     }
 
@@ -142,6 +149,29 @@ class InventoryDateTVC: UITableViewController {
         self.configureCell(cell, atIndexPath: indexPath)
 
         return cell
+    }
+
+    // MARK: Editing
+
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let inventory = self.fetchedResultsController.object(at: indexPath)
+        switch inventory.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+
+            // Fetch Inventory
+            let inventory = fetchedResultsController.object(at: indexPath)
+
+            // Delete Inventory
+            fetchedResultsController.managedObjectContext.delete(inventory)
+        }
     }
 
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
@@ -170,17 +200,20 @@ class InventoryDateTVC: UITableViewController {
             // TODO: enable
             let remoteID = Int(selection.remoteID)
 
-            // TODO: remove; this is a hack for current demo, where we fake uploading an inventory
-            //var remoteID = Int(selection.remoteID)
-            //if remoteID == 0 {
-            //    if let changedID = changeSelectionForDemo(selection: selection) {
-            //        remoteID = changedID
-            //    } else {
-            //        print("\(#function) FAILED : there was a problem with changeSelectionForDemo")
-            //    }
-            //}
+            /*
+            // NOTE - this is a hack for current demo, where we fake uploading an inventory
+            var remoteID = Int(selection.remoteID)
+            if remoteID == 0 {
+                if let changedID = changeSelectionForDemo(selection: selection) {
+                    remoteID = changedID
+                } else {
+                    print("\(#function) FAILED : there was a problem with changeSelectionForDemo")
+                }
+            }
+            */
 
             // TODO - ideally, we would want to deleteInventoryItems *after* fetching data from server
+
             // Delete existing InventoryItems of selected Inventory
             print("Deleting InventoryItems of selected Inventory ...")
             deleteChildren(parent: selection)
@@ -204,6 +237,27 @@ class InventoryDateTVC: UITableViewController {
 
     // MARK: - User Actions
 
+    func refreshTable(_ refreshControl: UIRefreshControl) {
+        guard let managedObjectContext = managedObjectContext else { return }
+        guard let storeID = userManager.storeID else { return }
+
+        // Reload data and update the table view's data source
+        APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: {(json: JSON?, error: Error?) in
+            guard error == nil, let json = json else {
+                HUD.flash(.error, delay: 1.0); return
+            }
+            do {
+                try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
+            } catch {
+                print("Unable to delete Inventories")
+            }
+
+        })
+
+        self.tableView.reloadData()
+        refreshControl.endRefreshing()
+    }
+
     @IBAction func newTapped(_ sender: AnyObject) {
 
         // TODO - check if there is already an Inventory for the current date and of the current type
@@ -219,13 +273,20 @@ class InventoryDateTVC: UITableViewController {
     }
 
     @IBAction func resetTapped(_ sender: AnyObject) {
-        //tableView.activityIndicatorView.startAnimating()
+        guard let managedObjectContext = managedObjectContext else { return }
+        guard let storeID = userManager.storeID else { return }
+
         HUD.show(.progress)
 
-        // By leaving filter as nil, we will delete all Inventories
-        deleteExistingInventories()
-        // Download Inventories from server again
-        completedLogin(true, nil)
+        let fetchPredicate = NSPredicate(format: "uploaded == %@", true as CVarArg)
+        do {
+            try managedObjectContext.deleteEntities(Inventory.self, filter: fetchPredicate)
+        } catch {
+            print("Unable to delete Inventories")
+        }
+
+        // Get list of Inventories from server
+        APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
     }
 
 }
@@ -237,7 +298,6 @@ extension InventoryDateTVC {
 
     func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            //self.noticeError(error!.localizedDescription, autoClear: true); return
             HUD.flash(.error, delay: 1.0); return
         }
         // TODO - distinguish empty response (new account) from error
@@ -258,14 +318,11 @@ extension InventoryDateTVC {
 
         // Save the context.
         saveContext()
-
-        //tableView.activityIndicatorView.stopAnimating()
         //HUD.hide()
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            //self.noticeError(error!.localizedDescription, autoClear: true); return
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -291,7 +348,6 @@ extension InventoryDateTVC {
 
     func completedGetNewInventory(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            //self.noticeError(error!.localizedDescription, autoClear: true); return
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -310,7 +366,7 @@ extension InventoryDateTVC {
         performSegue(withIdentifier: NewItemSegue, sender: self)
     }
 
-    // TODO - rename `completedSync`(?)
+    // TODO - rename `completedItemSync`(?)
     func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             print("\nCompleted login / sync - succeeded: \(succeeded)")
@@ -326,120 +382,27 @@ extension InventoryDateTVC {
         } else {
             print("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
-            //self.noticeError("Error", autoClear: true)
             HUD.flash(.error, delay: 1.0); return
         }
     }
 
     // MARK: - Sync
 
-    func deleteExistingInventories(_ filter: NSPredicate? = nil) {
-        print("deleteExistingInventories ...")
-
-        // Create Fetch Request
-        let fetchRequest: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-
-        // Configure Fetch Request
-        if let _filter = filter { fetchRequest.predicate = _filter }
-
-        // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Configure Batch Update Request
-        batchDeleteRequest.resultType = .resultTypeCount
-
-        do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext?.execute(batchDeleteRequest) as! NSBatchDeleteResult
-
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-
-            // Reset Managed Object Context
-            managedObjectContext?.reset()
-
-            // Perform Fetch
-            try self.fetchedResultsController.performFetch()
-
-            // Reload Table View
-            tableView.reloadData()
-
-        } catch {
-            let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
-        }
-    }
-
     func deleteChildren(parent: Inventory) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        /*
-         Since the batch delete request directly interacts with the persistent store we need
-         to make sure that any changes are first pushed to that store.
-         */
-        if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.save()
-            } catch {
-                let saveError = error as NSError
-                print("\(saveError), \(saveError.userInfo)")
-            }
-        }
-
-        // Create Fetch Request (1)
-        let fetchRequest1: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
-
-        // Configure Fetch Request
-        fetchRequest1.predicate = NSPredicate(format: "inventory == %@", parent)
-
-        // Initialize Batch Delete Request
-        let batchDeleteRequest1 = NSBatchDeleteRequest(fetchRequest: fetchRequest1 as! NSFetchRequest<NSFetchRequestResult>)
-
+        guard let managedObjectContext = managedObjectContext else { return }
+        let fetchPredicate = NSPredicate(format: "inventory == %@", parent)
         do {
-            // Execute Batch Request
-            let batchDeleteResult1 = try managedObjectContext.execute(batchDeleteRequest1) as! NSBatchDeleteResult
-
-            print("The batch delete request has deleted \(batchDeleteResult1.result!) InventoryLocations.")
-
-        } catch {
-            let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
-        }
-
-        // Create Fetch Request (2)
-        let fetchRequest: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
-
-        // Configure Fetch Request
-        fetchRequest.predicate = NSPredicate(format: "inventory == %@", parent)
-
-        // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Configure Batch Update Request
-        batchDeleteRequest.resultType = .resultTypeCount
-        //batchDeleteRequest.resultType = .resultTypeStatusOnly
-
-        do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
-
-            print("The batch delete request has deleted \(batchDeleteResult.result!) InventoryItems.")
-
-            // The managed object context is not notified of the consequences of the batch delete request.
-
-            // Reset Managed Object Context
-            // As the request directly interacts with the persistent store, we need need to reset the context
-            // for it to be aware of the changes
-            managedObjectContext.reset()
+            try managedObjectContext.deleteEntities(InventoryLocation.self, filter: fetchPredicate)
+            try managedObjectContext.deleteEntities(InventoryItem.self, filter: fetchPredicate)
 
             // Perform Fetch
             try self.fetchedResultsController.performFetch()
-            
+
             // Reload Table View
             tableView.reloadData()
-            
+
         } catch {
+            // print("Unable to delete Inventories")
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
@@ -462,7 +425,6 @@ extension InventoryDateTVC {
 
         // Edit the sort key as appropriate.
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-
         fetchRequest.sortDescriptors = [sortDescriptor]
 
         // Edit the section name key path and cache name if appropriate.
@@ -526,12 +488,23 @@ extension InventoryDateTVC: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
+            if let indexPath = newIndexPath {
+                tableView.insertRows(at: [indexPath], with: .fade)
+            }
+            break;
         case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .fade)
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            break;
         case .update:
-            configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
+            if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) {
+                configureCell(cell, atIndexPath: indexPath)
+            }
+            break;
         case .move:
+            // TODO - look at alt method in CocoaCasts tutorial:
+            // ExploringTheFetchedResultsControllerDelegateProtocol-master
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
     }

@@ -36,18 +36,17 @@ class SyncManager {
     }
 
     // MARK: - Sync Primary Items
+    // TODO - move error handling out into closure of functions calling these methods?
 
     func syncItems(json: JSON?, error: Error?) {
         guard error == nil else {
             print("\(#function) FAILED : \(error)")
-            completionHandler(false, error)
-            return
+            return completionHandler(false, error)
         }
         guard let json = json else {
             print("\(#function) FAILED : unable to get Items")
             // TODO - construct error?
-            completionHandler(false, nil)
-            return
+            return completionHandler(false, nil)
         }
 
         // Create dict from fetch request on Items
@@ -62,8 +61,12 @@ class SyncManager {
             print("\(#function) FAILED : unable to create Unit dictionary"); return
         }
 
+        let localIDs = Set(itemDict.keys)
+        var remoteIDs = Set<Int32>()
+
         for (_, itemJSON):(String, JSON) in json {
-            guard let itemID = itemJSON["id"].int32 else { break }
+            guard let itemID = itemJSON["id"].int32 else { continue }
+            remoteIDs.insert(itemID)
 
             // Find + update / create Items
             if let existingItem = itemDict[itemID] {
@@ -78,7 +81,21 @@ class SyncManager {
             }
         }
 
-        // TODO - delete Items that were deleted from server
+        // Delete Items that were deleted from server
+        let deletedItems = localIDs.subtracting(remoteIDs)
+
+        // TESTING
+        print("remote: \(remoteIDs) - local: \(localIDs)")
+        print("We need to delete: \(deletedItems)")
+
+        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedItems)
+        do {
+            try managedObjectContext.deleteEntities(Item.self, filter: fetchPredicate)
+        } catch {
+            // TODO - deleteEntities(_:filter) already prints the error
+            let updateError = error as NSError
+            print("\(updateError), \(updateError.userInfo)")
+        }
 
         print("Finished syncing Items")
         self.completionHandler(true, nil)
@@ -87,34 +104,19 @@ class SyncManager {
     func syncVendors(json: JSON?, error: Error?) {
         guard error == nil else {
             print("\(#function) FAILED : \(error)")
-            completionHandler(false, error)
-            return
+            return completionHandler(false, error)
         }
         guard let json = json else {
             print("\(#function) FAILED : unable to get Items")
             // TODO - construct error?
-            completionHandler(false, nil)
-            return
+            return completionHandler(false, nil)
         }
 
-        guard let vendorDict = try? managedObjectContext.fetchEntityDict(Vendor.self) else {
-            print("\(#function) FAILED : unable to create Vendor dictionary"); return
+        do {
+            try managedObjectContext.syncEntities(Vendor.self, withJSON: json)
+        } catch let error {
+            print("\(#function) FAILED : \(error)")
         }
-
-        for (_, vendorJSON):(String, JSON) in json {
-            guard let itemID = vendorJSON["id"].int32 else { break }
-
-            // Find + update / create Items
-            if let existingEntity = vendorDict[itemID] {
-                //print("UPDATE existing Vendor: \(existingEntity)")
-                existingEntity.update(context: managedObjectContext, withJSON: vendorJSON)
-
-            } else {
-                //print("CREATE new Vendor: \(itemJSON)")
-                _ = Vendor(context: managedObjectContext, json: vendorJSON)
-            }
-        }
-
         print("Finished with Vendors")
 
         // Get list of Items from server
