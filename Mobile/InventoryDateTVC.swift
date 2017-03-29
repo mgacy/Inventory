@@ -197,7 +197,6 @@ class InventoryDateTVC: UITableViewController {
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
 
-            // TODO: enable
             let remoteID = Int(selection.remoteID)
 
             /*
@@ -241,6 +240,9 @@ class InventoryDateTVC: UITableViewController {
         guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
+        // TODO - SyncManager?
+        //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
+
         // Reload data and update the table view's data source
         APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: {(json: JSON?, error: Error?) in
             guard error == nil, let json = json else {
@@ -249,7 +251,7 @@ class InventoryDateTVC: UITableViewController {
             do {
                 try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
             } catch {
-                print("Unable to delete Inventories")
+                print("Unable to sync Inventories")
             }
 
         })
