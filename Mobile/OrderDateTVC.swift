@@ -135,14 +135,12 @@ class OrderDateTVC: UITableViewController {
 
         switch selection.uploaded {
         case true:
-
-            // Get date to use when getting OrderCollection from server
-            guard let collectionDate = selection.date else {
-                print("\(#function) FAILED : unable to get orderCollection.date"); return
-            }
             guard let storeID = userManager.storeID else {
                 print("\(#function) FAILED : unable to get storeID"); return
             }
+
+            // Get date to use when getting OrderCollection from server
+            let collectionDate = selection.date
 
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
@@ -302,8 +300,7 @@ extension OrderDateTVC {
 
             guard let storeID = userManager.storeID else {
                 print("\(#function) FAILED : unable to get storeID")
-                HUD.flash(.error, delay: 1.0)
-                return
+                HUD.flash(.error, delay: 1.0); return
             }
 
             // Get list of OrderCollections from server
