@@ -29,9 +29,7 @@ extension NSManagedObjectContext {
 // MARK: - Fetch
 extension NSManagedObjectContext {
 
-    // NOTE - this requires (1) entity has remoteID and (2) type is Int32
-    // TODO - make T require objects conforming to protocol specifying the above requirements?
-    public func fetchWithRemoteID<T : NSManagedObject>(_ entity: T.Type, withID id: Int32) -> T? {
+    public func fetchWithRemoteID<T : Syncable>(_ entity: T.Type, withID id: Int32) -> T? where T: NSManagedObject {
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
         request.predicate = NSPredicate(format: "remoteID == \(id)")
         request.fetchLimit = 2
