@@ -254,9 +254,7 @@ class InventoryDateTVC: UITableViewController {
 
         HUD.show(.progress)
 
-        // By leaving filter as nil, we will delete all Inventories
-        let fetchPredicate = nil
-        // let fetchPredicate = NSPredicate(format: "uploaded == %@", true as CVarArg)
+        let fetchPredicate = NSPredicate(format: "uploaded == %@", true as CVarArg)
         do {
             try managedObjectContext.deleteEntities(Inventory.self, filter: fetchPredicate)
         } catch {
