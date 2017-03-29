@@ -177,6 +177,8 @@ extension NSManagedObjectContext {
             print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
             // Reset Managed Object Context
+            // As the request directly interacts with the persistent store, we need need to reset the context
+            // for it to be aware of the changes
             self.reset()
             
         } catch {
@@ -225,6 +227,7 @@ extension NSManagedObjectContext {
             if let existingObject = objectDict[objectID] {
                 existingObject.update(context: self, withJSON: objectJSON)
             } else {
+                //_ = T(context: self, json: objectJSON)
                 let newObject = T(context: self)
                 newObject.update(context: self, withJSON: json)
             }
