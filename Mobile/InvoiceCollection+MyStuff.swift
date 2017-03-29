@@ -87,3 +87,18 @@ extension InvoiceCollection {
     }
 }
 
+extension InvoiceCollection: SyncableCollection {
+
+    func update(context: NSManagedObjectContext, withJSON json: JSON) {
+
+        // Set properties
+        if let date = json["date"].string {
+            self.date = date
+        }
+        if let storeID = json["store_id"].int32 {
+            self.storeID = storeID
+        }
+        //self.uploaded = uploaded
+    }
+
+}

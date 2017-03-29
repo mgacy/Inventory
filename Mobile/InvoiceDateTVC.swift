@@ -53,6 +53,9 @@ class InvoiceDateTVC: UITableViewController {
         // Register tableView cells
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
 
+        // Add refresh control
+        self.refreshControl?.addTarget(self, action: #selector(InvoiceDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
+
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
@@ -92,6 +95,29 @@ class InvoiceDateTVC: UITableViewController {
     }
 
     // MARK: - User interaction
+
+    func refreshTable(_ refreshControl: UIRefreshControl) {
+        guard let managedObjectContext = managedObjectContext else { return }
+        guard let storeID = userManager.storeID else { return }
+
+        // TODO - SyncManager?
+        //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
+
+        // Reload data and update the table view's data source
+        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: {(json: JSON?, error: Error?) in
+            guard error == nil, let json = json else {
+                HUD.flash(.error, delay: 1.0); return
+            }
+            do {
+                try managedObjectContext.syncCollections(InvoiceCollection.self, withJSON: json)
+            } catch {
+                print("Unable to sync InvoiceCollections")
+            }
+        })
+
+        self.tableView.reloadData()
+        refreshControl.endRefreshing()
+    }
 
     @IBAction func newTapped(_ sender: AnyObject) {
         guard let storeID = userManager.storeID else {
@@ -180,14 +206,12 @@ class InvoiceDateTVC: UITableViewController {
 
         switch selection.uploaded {
         case true:
-
-            // Get date to use when getting OrderCollection from server
-            guard let collectionDate = selection.date else {
-                print("\(#function) FAILED : unable to get InvoiceCollection.date"); return
-            }
             guard let storeID = userManager.storeID else {
                 print("\(#function) FAILED : unable to get storeID"); return
             }
+
+            // Get date to use when getting OrderCollection from server
+            let collectionDate = selection.date
 
             // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
             // Delete existing invoices of selected collection
