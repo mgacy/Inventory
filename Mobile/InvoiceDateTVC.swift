@@ -45,8 +45,8 @@ class InvoiceDateTVC: UITableViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        // Display an Edit button in the navigation bar for this view controller.
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
 
         title = "Invoices"
 
@@ -57,10 +57,13 @@ class InvoiceDateTVC: UITableViewController {
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
 
+        guard let storeID = userManager.storeID else {
+            print("\(#function) FAILED: unable to get storeID"); return
+        }
+
         // Get list of Invoices from server
-        // print("\nFetching existing InvoiceCollections from server ...")
         HUD.show(.progress)
-        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: userManager.storeID!, completion: self.completedGetListOfInvoiceCollections)
+        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -132,6 +135,29 @@ class InvoiceDateTVC: UITableViewController {
         self.configureCell(cell, atIndexPath: indexPath)
 
         return cell
+    }
+
+    // MARK: Editing
+
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let collection = self.fetchedResultsController.object(at: indexPath)
+        switch collection.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+
+            // Fetch Collection
+            let collection = fetchedResultsController.object(at: indexPath)
+
+            // Delete Collection
+            fetchedResultsController.managedObjectContext.delete(collection)
+        }
     }
 
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
