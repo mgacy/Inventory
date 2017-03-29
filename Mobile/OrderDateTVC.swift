@@ -116,7 +116,6 @@ class OrderDateTVC: UITableViewController {
         return cell
     }
 
-
     // MARK: Editing
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -197,6 +196,9 @@ class OrderDateTVC: UITableViewController {
     func refreshTable(_ refreshControl: UIRefreshControl) {
         guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
+
+        // TODO - SyncManager?
+        //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
 
         // Reload data and update the table view's data source
         APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: {(json: JSON?, error: Error?) in
