@@ -55,8 +55,8 @@ class InventoryDateTVC: UITableViewController {
         // Uncomment the following line to preserve selection between presentations.
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        // Display an Edit button in the navigation bar for this view controller.
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem
 
         title = "Inventories"
 
@@ -387,15 +387,6 @@ extension InventoryDateTVC {
     }
 
     // MARK: - Sync
-
-
-
-
-
-
-
-        }
-    }
 
     func deleteChildren(parent: Inventory) {
         guard let managedObjectContext = managedObjectContext else { return }
