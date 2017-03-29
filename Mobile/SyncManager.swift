@@ -61,8 +61,12 @@ class SyncManager {
             print("\(#function) FAILED : unable to create Unit dictionary"); return
         }
 
+        let localIDs = Set(itemDict.keys)
+        var remoteIDs = Set<Int32>()
+
         for (_, itemJSON):(String, JSON) in json {
             guard let itemID = itemJSON["id"].int32 else { continue }
+            remoteIDs.insert(itemID)
 
             // Find + update / create Items
             if let existingItem = itemDict[itemID] {
@@ -77,7 +81,21 @@ class SyncManager {
             }
         }
 
-        // TODO - delete Items that were deleted from server
+        // Delete Items that were deleted from server
+        let deletedItems = localIDs.subtracting(remoteIDs)
+
+        // TESTING
+        print("remote: \(remoteIDs) - local: \(localIDs)")
+        print("We need to delete: \(deletedItems)")
+
+        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedItems)
+        do {
+            try managedObjectContext.deleteEntities(Item.self, filter: fetchPredicate)
+        } catch {
+            // TODO - deleteEntities(_:filter) already prints the error
+            let updateError = error as NSError
+            print("\(updateError), \(updateError.userInfo)")
+        }
 
         print("Finished syncing Items")
         self.completionHandler(true, nil)
