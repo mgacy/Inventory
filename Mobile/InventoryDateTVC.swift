@@ -404,14 +404,27 @@ extension InventoryDateTVC {
             }
         }
 
-        // Create Fetch Request (1)
+        let fetchPredicate = NSPredicate(format: "inventory == %@", parent)
+
+        // MARK: InventoryLocation
+
+        // Create and Configure Fetch Request
         let fetchRequest1: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
+        fetchRequest1.predicate = fetchPredicate
 
-        // Configure Fetch Request
-        fetchRequest1.predicate = NSPredicate(format: "inventory == %@", parent)
-
-        // Initialize Batch Delete Request
         let batchDeleteRequest1 = NSBatchDeleteRequest(fetchRequest: fetchRequest1 as! NSFetchRequest<NSFetchRequestResult>)
+        batchDeleteRequest1.resultType = .resultTypeCount
+
+        // MARK: - InventoryItem
+
+        // Create and Configure Fetch Request (InventoryItem)
+        let fetchRequest: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
+        fetchRequest.predicate = fetchPredicate
+
+        // Create and Configure Batch Update Request (InventoryItem)
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
+        batchDeleteRequest.resultType = .resultTypeCount
+        //batchDeleteRequest.resultType = .resultTypeStatusOnly
 
         do {
             // Execute Batch Request
@@ -419,25 +432,6 @@ extension InventoryDateTVC {
 
             print("The batch delete request has deleted \(batchDeleteResult1.result!) InventoryLocations.")
 
-        } catch {
-            let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
-        }
-
-        // Create Fetch Request (2)
-        let fetchRequest: NSFetchRequest<InventoryItem> = InventoryItem.fetchRequest()
-
-        // Configure Fetch Request
-        fetchRequest.predicate = NSPredicate(format: "inventory == %@", parent)
-
-        // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Configure Batch Update Request
-        batchDeleteRequest.resultType = .resultTypeCount
-        //batchDeleteRequest.resultType = .resultTypeStatusOnly
-
-        do {
             // Execute Batch Request
             let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
 
