@@ -54,6 +54,7 @@ extension NSManagedObjectContext {
         return nil
     }
 
+    // NOTE - this is a more general form of fetchWithRemoteID(_:withID)
     public func fetchSingleEntity<T : NSManagedObject>(_ entity: T.Type, matchingPredicate predicate: NSPredicate) -> T? {
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
         request.predicate = predicate

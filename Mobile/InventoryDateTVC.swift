@@ -168,7 +168,6 @@ class InventoryDateTVC: UITableViewController {
 
             // Delete Inventory
             fetchedResultsController.managedObjectContext.delete(inventory)
-
         }
     }
 
@@ -198,17 +197,20 @@ class InventoryDateTVC: UITableViewController {
             // TODO: enable
             let remoteID = Int(selection.remoteID)
 
-            // TODO: remove; this is a hack for current demo, where we fake uploading an inventory
-            //var remoteID = Int(selection.remoteID)
-            //if remoteID == 0 {
-            //    if let changedID = changeSelectionForDemo(selection: selection) {
-            //        remoteID = changedID
-            //    } else {
-            //        print("\(#function) FAILED : there was a problem with changeSelectionForDemo")
-            //    }
-            //}
+            /*
+            // NOTE - this is a hack for current demo, where we fake uploading an inventory
+            var remoteID = Int(selection.remoteID)
+            if remoteID == 0 {
+                if let changedID = changeSelectionForDemo(selection: selection) {
+                    remoteID = changedID
+                } else {
+                    print("\(#function) FAILED : there was a problem with changeSelectionForDemo")
+                }
+            }
+            */
 
             // TODO - ideally, we would want to deleteInventoryItems *after* fetching data from server
+
             // Delete existing InventoryItems of selected Inventory
             print("Deleting InventoryItems of selected Inventory ...")
             deleteChildren(parent: selection)
@@ -314,7 +316,6 @@ extension InventoryDateTVC {
 
     func completedGetNewInventory(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            //self.noticeError(error!.localizedDescription, autoClear: true); return
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -349,7 +350,6 @@ extension InventoryDateTVC {
         } else {
             print("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
-            //self.noticeError("Error", autoClear: true)
             HUD.flash(.error, delay: 1.0); return
         }
     }
