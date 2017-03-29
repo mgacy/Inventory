@@ -61,6 +61,9 @@ class OrderDateTVC: UITableViewController {
         // Get list of OrderCollections from server
         // print("\nFetching existing OrderCollections from server ...")
 
+        // Add refresh control
+        self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
+
         guard let storeID = userManager.storeID else {
             print("\(#function) FAILED: unable to get storeID"); return
         }
@@ -191,6 +194,26 @@ class OrderDateTVC: UITableViewController {
     }
 
     // MARK: - User Actions
+
+    func refreshTable(_ refreshControl: UIRefreshControl) {
+        guard let managedObjectContext = managedObjectContext else { return }
+        guard let storeID = userManager.storeID else { return }
+
+        // Reload data and update the table view's data source
+        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: {(json: JSON?, error: Error?) in
+            guard error == nil, let json = json else {
+                HUD.flash(.error, delay: 1.0); return
+            }
+            do {
+                try managedObjectContext.syncCollections(OrderCollection.self, withJSON: json)
+            } catch {
+                print("Unable to sync InvoiceCollections")
+            }
+        })
+
+        self.tableView.reloadData()
+        refreshControl.endRefreshing()
+    }
 
     @IBAction func newTapped(_ sender: AnyObject) {
 
