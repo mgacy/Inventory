@@ -68,4 +68,27 @@ extension SyncableItem where Self : NSManagedObject {
     
 }
 
+// MARK: - SyncableCollection
+@objc public protocol SyncableCollection {
 
+    var date: String { get set }
+    var storeID: Int32 { get set }
+    var uploaded: Bool { get set }
+
+}
+
+extension SyncableCollection where Self : NSManagedObject {
+
+    func update(context: NSManagedObjectContext, withJSON json: JSON) {
+
+        // Set properties
+        if let date = json["date"].string {
+            self.date = date
+        }
+        if let storeID = json["store_id"].int32 {
+            self.storeID = storeID
+        }
+        //self.uploaded = uploaded
+    }
+
+}
