@@ -133,10 +133,10 @@ class OrderDateTVC: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
 
-            // Fetch Inventory
+            // Fetch Collection
             let collection = fetchedResultsController.object(at: indexPath)
 
-            // Delete Inventory
+            // Delete Collection
             fetchedResultsController.managedObjectContext.delete(collection)
         }
     }
