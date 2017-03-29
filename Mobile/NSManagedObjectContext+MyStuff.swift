@@ -142,7 +142,6 @@ extension NSManagedObjectContext {
     
 }
 
-
 // MARK: - Delete
 extension NSManagedObjectContext {
 
@@ -229,7 +228,7 @@ extension NSManagedObjectContext {
             } else {
                 //_ = T(context: self, json: objectJSON)
                 let newObject = T(context: self)
-                newObject.update(context: self, withJSON: json)
+                newObject.update(context: self, withJSON: objectJSON)
             }
         }
 
