@@ -127,18 +127,7 @@ extension SettingsTVC {
     func deleteData() {
         guard let managedObjectContext = managedObjectContext else { return }
 
-        /*
-         Since the batch delete request directly interacts with the persistent store we need
-         to make sure that any changes are first pushed to that store.
-         */
-        if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.save()
-            } catch {
-                let saveError = error as NSError
-                print("\(saveError), \(saveError.userInfo)")
-            }
-        }
+        // TODO - use cascade rules to reduce list of entities we need to manually delete
 
         // Inventory
         do {
@@ -163,6 +152,18 @@ extension SettingsTVC {
             try managedObjectContext.deleteEntities(Item.self)
         } catch {
             print("Unable to delete Items")
+        }
+        // ItemCategory
+        do {
+            try managedObjectContext.deleteEntities(ItemCategory.self)
+        } catch {
+            print("Unable to delete ItemCategories")
+        }
+        // Vendor
+        do {
+            try managedObjectContext.deleteEntities(Vendor.self)
+        } catch {
+            print("Unable to delete Vendors")
         }
     }
 
