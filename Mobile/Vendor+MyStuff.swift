@@ -19,7 +19,7 @@ extension Vendor: SyncableItem {
         self.update(context: context, withJSON: json)
     }
     
-    func update(context: NSManagedObjectContext, withJSON json: JSON) {
+    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
 
         // Properties
         if let remoteID = json["id"].int32 {
