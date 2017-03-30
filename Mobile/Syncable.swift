@@ -18,9 +18,7 @@ import SwiftyJSON
 
     var remoteID: Int32 { get set }
 
-    //func update(withJSON json: JSON)
-
-    //func update(context: NSManagedObjectContext, withJSON json: JSON)
+    // func update(context: NSManagedObjectContext, withJSON json: JSON)
 
 }
 
@@ -34,7 +32,7 @@ extension Syncable where Self : NSManagedObject {
             self.remoteID = remoteID
         }
     }
-    
+
 }
 
 // MARK: - SyncableItem

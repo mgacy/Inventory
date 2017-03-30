@@ -241,7 +241,7 @@ class InventoryDateTVC: UITableViewController {
         guard let storeID = userManager.storeID else { return }
 
         // TODO - SyncManager?
-        //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
+        //_ = SyncManager(storeID: storeID, completionHandler: completedLogin)
 
         // Reload data and update the table view's data source
         APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: {(json: JSON?, error: Error?) in
