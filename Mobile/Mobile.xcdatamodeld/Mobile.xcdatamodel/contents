@@ -66,7 +66,7 @@
         <relationship name="vendor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="invoices" inverseEntity="Vendor" syncable="YES"/>
     </entity>
     <entity name="InvoiceCollection" representedClassName="InvoiceCollection" syncable="YES" codeGenerationType="class">
-        <attribute name="date" attributeType="String" syncable="YES"/>
+        <attribute name="date" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="storeID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="invoices" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Invoice" inverseName="collection" inverseEntity="Invoice" syncable="YES"/>
