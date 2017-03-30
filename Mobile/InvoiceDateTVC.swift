@@ -206,12 +206,13 @@ class InvoiceDateTVC: UITableViewController {
 
         switch selection.uploaded {
         case true:
-            guard let storeID = userManager.storeID else {
-                print("\(#function) FAILED : unable to get storeID"); return
-            }
 
             // Get date to use when getting OrderCollection from server
-            let collectionDate = selection.date
+            guard let storeID = userManager.storeID,
+                  let collectionDate = selection.date else
+            {
+                print("\(#function) FAILED : unable to get storeID"); return
+            }
 
             // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
             // Delete existing invoices of selected collection

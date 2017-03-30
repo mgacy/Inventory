@@ -71,7 +71,7 @@ extension SyncableItem where Self : NSManagedObject {
 // MARK: - SyncableCollection
 @objc public protocol SyncableCollection {
 
-    var date: String { get set }
+    var date: String? { get set }
     var storeID: Int32 { get set }
     var uploaded: Bool { get set }
 

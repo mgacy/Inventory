@@ -315,7 +315,7 @@ extension NSManagedObjectContext {
         //return fetchedResult
         do {
             let fetchedResult = try self.fetch(request)
-            let objectDict = fetchedResult.toDictionary { $0.date }
+            let objectDict = fetchedResult.toDictionary { $0.date! }
             return objectDict
         } catch let error {
             print(error.localizedDescription)

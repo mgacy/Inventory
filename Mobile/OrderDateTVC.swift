@@ -160,12 +160,12 @@ class OrderDateTVC: UITableViewController {
 
         switch selection.uploaded {
         case true:
-            guard let storeID = userManager.storeID else {
-                print("\(#function) FAILED : unable to get storeID"); return
-            }
 
             // Get date to use when getting OrderCollection from server
-            let collectionDate = selection.date
+            guard let storeID = userManager.storeID,
+                  let collectionDate = selection.date else {
+                print("\(#function) FAILED : unable to get storeID"); return
+            }
 
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
