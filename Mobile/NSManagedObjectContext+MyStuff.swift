@@ -257,6 +257,48 @@ extension NSManagedObjectContext {
         }
     }
 
+    // NOTE - if we don't provide another method for SyncableItems, Syncable.update
+    // will override the update method of any(?) SyncableItems
+    public func syncEntities<T : SyncableItem>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
+        guard let objectDict = try? fetchEntityDict(T.self) else {
+            print("\(#function) FAILED : unable to create Item dictionary"); return
+        }
+
+        let localIDs = Set(objectDict.keys)
+        var remoteIDs = Set<Int32>()
+
+        for (_, objectJSON):(String, JSON) in json {
+            guard let objectID = objectJSON["id"].int32 else { continue }
+            remoteIDs.insert(objectID)
+
+            // Find + update / create Items
+            if let existingObject = objectDict[objectID] {
+                existingObject.update(context: self, withJSON: objectJSON)
+            } else {
+                //_ = T(context: self, json: objectJSON)
+                let newObject = T(context: self)
+                newObject.update(context: self, withJSON: objectJSON)
+            }
+        }
+
+        // Delete objects that were deleted from server. We filter remoteID 0
+        // since that is the default value for new objects
+        let deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 != 0 }
+
+        // TESTING
+        print("remote: \(remoteIDs) - local: \(localIDs)")
+        print("We need to delete: \(deletedObjects)")
+
+        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
+        do {
+            try self.deleteEntities(T.self, filter: fetchPredicate)
+        } catch {
+            // TODO - deleteEntities(_:filter) already prints the error
+            let updateError = error as NSError
+            print("\(updateError), \(updateError.userInfo)")
+        }
+    }
+
 }
 
 // MARK: SyncableCollection
