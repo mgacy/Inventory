@@ -174,8 +174,9 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
                     let json = JSON(value)
                     guard let token = json["token"].string else {
-                        let error = BackendError.authentication(error: "Unable to get token" as! Error)
-                        return completion(nil, error)
+                        //debugPrint("\(#function) FAILED : unable to get token")
+                        return completion(nil, BackendError.authentication(
+                            error: BackendError.myError(error: "Unable to parse token from response.")))
                     }
                     self.accessToken = token
                     completion(json, nil)
