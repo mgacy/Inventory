@@ -167,6 +167,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
     public func login(completion: @escaping (JSON?, Error?) -> Void) {
         sessionManager.request(Router.login(email: email, password: password))
+            .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -182,8 +183,8 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                     completion(json, nil)
 
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : unable to get token : \(error)")
-                    completion(nil, error)
+                    //debugPrint("\(#function) FAILED : unable to get token : \(error)")
+                    completion(nil, BackendError.authentication(error: error))
                 }
         }
     }
