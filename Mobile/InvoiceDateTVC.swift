@@ -45,22 +45,28 @@ class InvoiceDateTVC: UITableViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        // Display an Edit button in the navigation bar for this view controller.
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
 
         title = "Invoices"
 
         // Register tableView cells
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
 
+        // Add refresh control
+        self.refreshControl?.addTarget(self, action: #selector(InvoiceDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
+
         // CoreData
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
 
+        guard let storeID = userManager.storeID else {
+            print("\(#function) FAILED: unable to get storeID"); return
+        }
+
         // Get list of Invoices from server
-        // print("\nFetching existing InvoiceCollections from server ...")
         HUD.show(.progress)
-        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: userManager.storeID!, completion: self.completedGetListOfInvoiceCollections)
+        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -89,6 +95,29 @@ class InvoiceDateTVC: UITableViewController {
     }
 
     // MARK: - User interaction
+
+    func refreshTable(_ refreshControl: UIRefreshControl) {
+        guard let managedObjectContext = managedObjectContext else { return }
+        guard let storeID = userManager.storeID else { return }
+
+        // TODO - SyncManager?
+        //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
+
+        // Reload data and update the table view's data source
+        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: {(json: JSON?, error: Error?) in
+            guard error == nil, let json = json else {
+                HUD.flash(.error, delay: 1.0); return
+            }
+            do {
+                try managedObjectContext.syncCollections(InvoiceCollection.self, withJSON: json)
+            } catch {
+                print("Unable to sync InvoiceCollections")
+            }
+        })
+
+        self.tableView.reloadData()
+        refreshControl.endRefreshing()
+    }
 
     @IBAction func newTapped(_ sender: AnyObject) {
         guard let storeID = userManager.storeID else {
@@ -134,6 +163,29 @@ class InvoiceDateTVC: UITableViewController {
         return cell
     }
 
+    // MARK: Editing
+
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let collection = self.fetchedResultsController.object(at: indexPath)
+        switch collection.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+
+            // Fetch Collection
+            let collection = fetchedResultsController.object(at: indexPath)
+
+            // Delete Collection
+            fetchedResultsController.managedObjectContext.delete(collection)
+        }
+    }
+
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let collection = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = collection.date
@@ -156,10 +208,9 @@ class InvoiceDateTVC: UITableViewController {
         case true:
 
             // Get date to use when getting OrderCollection from server
-            guard let collectionDate = selection.date else {
-                print("\(#function) FAILED : unable to get InvoiceCollection.date"); return
-            }
-            guard let storeID = userManager.storeID else {
+            guard let storeID = userManager.storeID,
+                  let collectionDate = selection.date else
+            {
                 print("\(#function) FAILED : unable to get storeID"); return
             }
 
@@ -458,11 +509,23 @@ extension InvoiceDateTVC: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
+            //tableView.insertRows(at: [newIndexPath!], with: .fade)
+            if let indexPath = newIndexPath {
+                tableView.insertRows(at: [indexPath], with: .fade)
+            }
+            break;
         case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .fade)
+            //tableView.deleteRows(at: [indexPath!], with: .fade)
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            break;
         case .update:
-            configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
+            //configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
+            if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) {
+                configureCell(cell, atIndexPath: indexPath)
+            }
+            break;
         case .move:
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
