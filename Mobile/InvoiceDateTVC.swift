@@ -139,7 +139,7 @@ class InvoiceDateTVC: UITableViewController {
         //deleteObjects(entityType: Item.self)
         deleteExistingInvoiceCollections()
 
-        _ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
+        _ = SyncManager(context: managedObjectContext!, storeID: userManager.storeID!, completionHandler: completedLogin)
     }
 
     // MARK: - UITableViewDataSource

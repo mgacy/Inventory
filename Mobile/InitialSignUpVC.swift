@@ -92,8 +92,14 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate {
             let inventoryNavController = tabBarController.viewControllers![0] as! UINavigationController
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
 
+            let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+
+            // Inject dependencies
+            //controller.managedObjectContext = managedObjectContext
+            //controller.userManager = userManager
+
             // Sync with completion handler from the new view controller.
-            _ = SyncManager(storeID: userManager.storeID!, completionHandler: controller.completedLogin)
+            _ = SyncManager(context: managedObjectContext ,storeID: userManager.storeID!, completionHandler: controller.completedLogin)
         case SignUpSegue:
             print("b")
         default:

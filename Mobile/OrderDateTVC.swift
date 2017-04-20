@@ -240,7 +240,7 @@ class OrderDateTVC: UITableViewController {
         deleteObjects(entityType: Item.self)
         deleteExistingOrderCollections()
 
-        _ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
+        _ = SyncManager(context: managedObjectContext!, storeID: userManager.storeID!, completionHandler: completedLogin)
     }
 
 }
