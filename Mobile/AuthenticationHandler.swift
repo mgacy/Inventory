@@ -186,20 +186,6 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                 }
         }
     }
-    /*
-    public func login(completion: @escaping (Bool) -> Void) {
-        sessionManager.request(Router.login(email: email, password: password))
-            .responseJSON { response in
-                if response.result.isSuccess, let token = JSON(response.result.value!)["token"].string {
-                    self.accessToken = token
-                    completion(true)
-                } else {
-                    // TODO: add logging or pass more error info on to handler
-                    debugPrint("\(#function) FAILED : unable to get token")
-                    completion(false)
-                }
-        }
-    }
-    */
+
 }
 
