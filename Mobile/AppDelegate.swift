@@ -63,6 +63,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         */
 
+        // TODO - instead of making CurrentUserManager a singleton, should we a failable
+        // initializier? Alteratively, we could try to login and perform the following in a
+        // completion handler.
+
         // Check if we already have user + credentials
         if userManager.user != nil {
             //print("AppDelegate: has User")

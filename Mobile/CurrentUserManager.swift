@@ -87,6 +87,11 @@ class CurrentUserManager {
 
         // It doesn't make sense to have an authHandler unless we have a corresponding User
 
+        // TODO - I don't like instantiating a User with a fake id here. Currently, the existence
+        // of a user functions to tell AppDelegate whether we need to log in. Should we user
+        // `userExists()` to communicate this instead? That way we could wait until successful
+        // login to create the User.
+
         user = User(id: 1, email: email)
 
         // TODO - should we always login on init?
@@ -121,7 +126,10 @@ class CurrentUserManager {
         // TODO - handle pre-existing user?
         // TODO - handle pre-existing authHandler?
 
-        // We login with AuthenticationHandler since it is responsible for maintaining the token
+        // We login with AuthenticationHandler since it is responsible for maintaining the token.
+        // While something long-lasting like an access token in an OAuth2 scheme should be the
+        // responsibility of the same object handling the email and password, and the refresh
+        // token could be handled by another one, the access token is currently short-lived.
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
 
         authHandler!.login(completion: {(json: JSON?, error: Error?) -> Void in
@@ -140,6 +148,9 @@ class CurrentUserManager {
             let user: Dictionary<String, JSON> = json["user"].dictionaryValue
             let userID: Int = user["id"]!.intValue
             let stores: Array<JSON> = user["stores"]!.arrayValue
+
+            // TODO - parse user.default_store instead use using the index-based method below
+            //let defaultStore = user["default_store"]
 
             // TODO - can we safely assume all users will have at least one store?
             let defaultStore = stores[0]
