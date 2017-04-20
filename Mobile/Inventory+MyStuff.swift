@@ -51,7 +51,7 @@ extension Inventory {
     
     func serialize() -> [String: Any]? {
         guard let items = self.items else {
-            print("\nPROBLEM - Unable to serialize without any InventoryItems")
+            print("\(#function) FAILED : unable to serialize without any InventoryItems")
             return nil
         }
         
@@ -77,7 +77,8 @@ extension Inventory {
     }
     
     // MARK: - Update Existing
-    
+
+    // TODO - should this simply be part of .update()?
     func updateExisting(context: NSManagedObjectContext, json: JSON) {
     
         // Add Default Location
@@ -85,8 +86,7 @@ extension Inventory {
                                                 type: InventoryLocationType.category, inventory: self)
         
         guard let inventoryItems = json["items"].array else {
-            print("\nPROBLEM - Unable to get InventoryItems from JSON")
-            return
+            print("\(#function) FAILED : unable to get InventoryItems from JSON"); return
         }
         
         // Iterate over Items

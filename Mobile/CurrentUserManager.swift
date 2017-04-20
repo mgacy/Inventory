@@ -55,13 +55,8 @@ class CurrentUserManager {
     var storeID: Int? {
         get {
             return defaults.integer(forKey: "store")
-            //let x = defaults.integer(forKey: "store")
-            //print("get storeID: \(x)")
-            //return x
         }
         set {
-            //print("set storeID: \(storeID)")
-            //defaults.set(storeID, forKey: "store")
             if let valueToSave = newValue {
                 defaults.set(valueToSave, forKey: "store")
             } else { // they set it to nil, so delete it
@@ -80,8 +75,6 @@ class CurrentUserManager {
         // TODO - should we store User as a dict or just retrieve info from the server?
 
         guard let email = email, let password = password else {
-            // TEMP
-            //createUser(email: "stevey@mgacy.com", password: "password")
             print("CurrentUserManager: unable to get email or password"); return
         }
 
