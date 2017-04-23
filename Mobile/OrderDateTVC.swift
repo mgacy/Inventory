@@ -12,12 +12,11 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-class OrderDateTVC: UITableViewController {
+class OrderDateTVC: UITableViewController, RootSectionViewController {
 
     // MARK: Properties
 
-    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
-    //var userManager: CurrentUserManager!
+    var userManager: CurrentUserManager!
     var selectedCollection: OrderCollection?
     //var selectedCollectionIndex: IndexPath?
 

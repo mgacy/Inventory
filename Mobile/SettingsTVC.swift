@@ -9,11 +9,10 @@
 import CoreData
 import UIKit
 
-class SettingsTVC: UITableViewController {
+class SettingsTVC: UITableViewController, RootSectionViewController {
 
     // MARK: Properties
-    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
-
+    var userManager: CurrentUserManager!
     var managedObjectContext: NSManagedObjectContext? = nil
 
     // Segues

@@ -12,7 +12,7 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-class InventoryDateTVC: UITableViewController {
+class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
     // MARK: Properties
 

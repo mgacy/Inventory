@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController {
 
@@ -20,6 +21,25 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+}
+
+protocol RootSectionViewController {
+    var userManager: CurrentUserManager! { get set }
+    var managedObjectContext: NSManagedObjectContext? { get set }
+
+    // FetchedResultsController
+    //var filter: NSPredicate? { get }
+    //var cacheName: String? { get }
+    //var sectionNameKeyPath: String? { get }
+    //var fetchBatchSize: Int { get }
+
+    // TableViewCell
+    //var cellIdentifier: String { get }
+
+    // Segues
+    // var SegueIdentifier: RawRepresentable
+
+    //func setContext(_ context: NSManagedObjectContext)
 
 }
 
