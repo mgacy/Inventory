@@ -64,12 +64,8 @@ class InventoryLocationCategoryTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InventoryLocationItemTVC else { return }
-
-        // Get the selection
-        guard let selection = selectedCategory else { return }
+        guard let destinationController = segue.destination as? InventoryLocationItemTVC else { fatalError("Wrong view controller type") }
+        guard let selection = selectedCategory else { fatalError("Showing detail, but no selected row?") }
 
         // Pass the selected object to the new view controller.
         destinationController.title = selection.name

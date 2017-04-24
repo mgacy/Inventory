@@ -74,27 +74,23 @@ class InventoryLocationTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         // Get the selected object.
-        guard let _selectedLocation = selectedLocation else { return }
+        guard let selection = selectedLocation else { fatalError("Showing detail, but no selected row?") }
 
         switch segue.identifier! {
         case CategorySegue:
-
-            // Get the new view controller using segue.destinationViewController.
-            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else { return }
+            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else { fatalError("Wrong view controller type") }
 
             // Pass the selected object to the new view controller.
-            destinationController.location = _selectedLocation
+            destinationController.location = selection
             destinationController.managedObjectContext = self.managedObjectContext
             //destinationController.performFetch()
 
         case ItemSegue:
-
-            // Get the new view controller using segue.destinationViewController.
-            guard let destinationController = segue.destination as? InventoryLocationItemTVC else { return }
+            guard let destinationController = segue.destination as? InventoryLocationItemTVC else { fatalError("Wrong view controller type") }
 
             // Pass the selected object to the new view controller.
-            destinationController.title = _selectedLocation.name
-            destinationController.location = _selectedLocation
+            destinationController.title = selection.name
+            destinationController.location = selection
             destinationController.managedObjectContext = self.managedObjectContext
             //destinationController.performFetch()
 

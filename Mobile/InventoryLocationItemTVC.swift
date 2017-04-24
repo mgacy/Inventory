@@ -62,9 +62,7 @@ class InventoryLocationItemTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InventoryKeypadVC else { return }
+        guard let destinationController = segue.destination as? InventoryKeypadVC else { fatalError("Wrong view controller type") }
 
         // Pass the parent of the selected object to the new view controller.
         // TODO: should I really pass both or just the one != nil?
