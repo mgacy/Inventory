@@ -27,7 +27,7 @@ class InventoryLocationTVC: UITableViewController {
     var managedObjectContext: NSManagedObjectContext?
     //let filter: NSPredicate? = nil
     //let cacheName: String? = nil // "Master"
-    //let sectionNameKeyPath: String? = nil
+    //let objectsAsFaults = false
     let fetchBatchSize = 20 // 0 = No Limit
 
     // TableViewCell
@@ -36,7 +36,12 @@ class InventoryLocationTVC: UITableViewController {
     // Segues
     let CategorySegue = "ShowLocationCategory"
     let ItemSegue = "ShowLocationItem"
-
+    /*
+    enum SegueIdentifiers : String {
+        case categorySegue = "ShowLocationCategory"
+        case itemSegue = "ShowLocationItem"
+    }
+    */
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -92,7 +97,7 @@ class InventoryLocationTVC: UITableViewController {
         }
     }
 
-    // MARK: - New - objc.io
+    // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocationTVC>!
     //fileprivate var observer: ManagedObjectObserver?
 

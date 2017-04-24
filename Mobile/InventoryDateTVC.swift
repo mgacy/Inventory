@@ -24,7 +24,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     var managedObjectContext: NSManagedObjectContext? = nil
     //var filter: NSPredicate? = nil
     //let cacheName: String? = "Master"
-    //let sectionNameKeyPath: String? = nil
     //let objectsAsFaults = false
     let fetchBatchSize = 20 // 0 = No Limit
 
@@ -121,7 +120,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         }
     }
 
-    // MARK: - New - objc.io
+    // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryDateTVC>!
     //fileprivate var observer: ManagedObjectObserver?
 
