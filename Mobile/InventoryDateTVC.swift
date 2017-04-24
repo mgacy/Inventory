@@ -142,7 +142,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         request.returnsObjectsAsFaults = false
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: "InventoryDateTableViewCell", fetchedResultsController: frc, delegate: self)
+        dataSource = InventoryDateDataSource(tableView: tableView, cellIdentifier: "InventoryDateTableViewCell", fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDataSource
@@ -444,6 +444,49 @@ extension InventoryDateTVC {
         } catch {
             print("\(#function) FAILED: error with request: \(error)")
             return nil
+        }
+    }
+
+}
+
+// MARK: - Add support for property-dependent row deletion
+
+// Define protocol adding new method to TableViewDataSourceDelegate protocol
+protocol InventoryDateDelegate: TableViewDataSourceDelegate {
+    func canEdit(_ object: Object) -> Bool
+}
+
+// Subclass `TableViewDataSource` so we can override `.tableView(:canEditRowAt:)` and define a second delegate property which we can access (since `delegate` is `fileprivate`)
+class InventoryDateDataSource<Delegate: InventoryDateDelegate>: TableViewDataSource<Delegate> {
+
+    typealias Object = Delegate.Object
+    typealias Cell = Delegate.Cell
+
+    fileprivate weak var customDelegate: Delegate!
+
+    // NOTE - this is required to supply necessary info (specifically Object)
+    required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Object>, delegate: Delegate) {
+        super.init(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: fetchedResultsController, delegate: delegate)
+
+        self.customDelegate = delegate
+    }
+
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let object = objectAtIndexPath(indexPath)
+        return customDelegate.canEdit(object)
+    }
+    
+}
+
+// MARK: - InventoryDateDelegate Extension
+extension InventoryDateTVC: InventoryDateDelegate {
+
+    func canEdit(_ inventory: Inventory) -> Bool {
+        switch inventory.uploaded {
+        case true:
+            return false
+        case false:
+            return true
         }
     }
 
