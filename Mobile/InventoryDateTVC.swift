@@ -22,7 +22,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
-    //var filter: NSPredicate? = nil
+    //let filter: NSPredicate? = nil
     //let cacheName: String? = "Master"
     //let objectsAsFaults = false
     let fetchBatchSize = 20 // 0 = No Limit

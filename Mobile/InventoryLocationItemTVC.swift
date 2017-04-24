@@ -22,6 +22,7 @@ class InventoryLocationItemTVC: UITableViewController {
     var _fetchedResultsController: NSFetchedResultsController<InventoryLocationItem>? = nil
     //let filter: NSPredicate? = nil
     let cacheName: String? = nil
+    //let objectsAsFaults = false
     let sectionNameKeyPath: String? = nil
     let fetchBatchSize = 20 // 0 = No Limit
 
