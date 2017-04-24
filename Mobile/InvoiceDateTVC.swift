@@ -56,7 +56,6 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         self.refreshControl?.addTarget(self, action: #selector(InvoiceDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
 
         // CoreData
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
 
         guard let storeID = userManager.storeID else {

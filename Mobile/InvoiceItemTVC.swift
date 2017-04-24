@@ -47,7 +47,6 @@ class InvoiceItemTVC: UITableViewController {
         title = parentObject.vendor?.name
 
         // CoreData
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
     }
 

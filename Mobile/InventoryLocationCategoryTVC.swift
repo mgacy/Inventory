@@ -48,7 +48,6 @@ class InventoryLocationCategoryTVC: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
 
         // CoreData
-        //managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
     }
 
