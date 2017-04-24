@@ -75,7 +75,7 @@ class InvoiceVendorTVC: UITableViewController {
 
         // Pass the selected object to the new view controller.
         destinationController.parentObject = selectedObject
-        destinationController.managedObjectContext = self.managedObjectContext
+        destinationController.managedObjectContext = managedObjectContext
     }
 
     // MARK: - UITableViewDataSource

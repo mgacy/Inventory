@@ -89,7 +89,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
 
         // Pass selection to new view controller.
         controller.parentObject = selection
-        controller.managedObjectContext = self.managedObjectContext
+        controller.managedObjectContext = managedObjectContext
     }
 
     // MARK: - User interaction
