@@ -47,7 +47,6 @@ class InvoiceItemTVC: UITableViewController {
         title = parentObject.vendor?.name
 
         // CoreData
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
     }
 
@@ -70,7 +69,7 @@ class InvoiceItemTVC: UITableViewController {
 
         // Pass the parent of the selected object to the new view controller.
         destinationController.parentObject = parentObject
-        destinationController.managedObjectContext = self.managedObjectContext
+        destinationController.managedObjectContext = managedObjectContext
 
         // FIX: fix this
         if let indexPath = self.tableView.indexPathForSelectedRow?.row {

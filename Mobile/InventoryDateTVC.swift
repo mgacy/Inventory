@@ -12,7 +12,7 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-class InventoryDateTVC: UITableViewController {
+class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
     // MARK: Properties
 
@@ -67,7 +67,6 @@ class InventoryDateTVC: UITableViewController {
         self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
 
         // CoreData
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
     }
 

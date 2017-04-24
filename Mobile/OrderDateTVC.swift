@@ -12,12 +12,11 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-class OrderDateTVC: UITableViewController {
+class OrderDateTVC: UITableViewController, RootSectionViewController {
 
     // MARK: Properties
 
-    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
-    //var userManager: CurrentUserManager!
+    var userManager: CurrentUserManager!
     var selectedCollection: OrderCollection?
     //var selectedCollectionIndex: IndexPath?
 
@@ -58,7 +57,6 @@ class OrderDateTVC: UITableViewController {
         self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
 
         // CoreData
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
 
         guard let storeID = userManager.storeID else {

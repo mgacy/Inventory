@@ -13,7 +13,7 @@ import SwiftyJSON
 
 class CurrentUserManager {
 
-    static let sharedInstance = CurrentUserManager()
+    // MARK: - Properties
 
     var user: User?
 

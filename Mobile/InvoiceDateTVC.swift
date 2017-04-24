@@ -12,12 +12,11 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-class InvoiceDateTVC: UITableViewController {
+class InvoiceDateTVC: UITableViewController, RootSectionViewController {
 
     // MARK: - Properties
 
-    let userManager = (UIApplication.shared.delegate as! AppDelegate).userManager
-    //var userManager: CurrentUserManager!
+    var userManager: CurrentUserManager!
     var selectedCollection: InvoiceCollection?
 
     // FetchedResultsController
@@ -57,7 +56,6 @@ class InvoiceDateTVC: UITableViewController {
         self.refreshControl?.addTarget(self, action: #selector(InvoiceDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
 
         // CoreData
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
 
         guard let storeID = userManager.storeID else {
@@ -91,7 +89,7 @@ class InvoiceDateTVC: UITableViewController {
 
         // Pass selection to new view controller.
         controller.parentObject = selection
-        controller.managedObjectContext = self.managedObjectContext
+        controller.managedObjectContext = managedObjectContext
     }
 
     // MARK: - User interaction

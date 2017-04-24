@@ -14,7 +14,7 @@ import PKHUD
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var userManager: CurrentUserManager = CurrentUserManager.sharedInstance
+    let userManager: CurrentUserManager = CurrentUserManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -63,20 +63,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         */
 
-        // TODO - instead of making CurrentUserManager a singleton, should we a failable
-        // initializier? Alteratively, we could try to login and perform the following in a
-        // completion handler.
+        let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as! UITabBarController
+
+        for child in tabBarController.viewControllers ?? [] {
+            guard let navController = child as? UINavigationController
+                else { fatalError("wrong view controller type") }
+            guard let vc = navController.topViewController as? RootSectionViewController
+                else { fatalError("wrong view controller type") }
+
+            // Inject dependencies
+            vc.managedObjectContext = persistentContainer.viewContext
+            vc.userManager = userManager
+        }
+
+        // TODO - Should we use a failable initializier with CurrentUserManager?
+        // Alteratively, we could try to login and perform the following in a
+        // completion handler with success / failure.
 
         // Check if we already have user + credentials
         if userManager.user != nil {
             //print("AppDelegate: has User")
-            let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as! UITabBarController
             let inventoryNavController = tabBarController.viewControllers?[0] as! UINavigationController
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
-
-            // Inject dependencies
-            // controller.managedObjectContext = persistentContainer.viewContext
-            controller.userManager = userManager
 
             // Sync
             HUD.show(.progress)
@@ -89,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             // Inject dependencies
             loginController.userManager = userManager
-
+            // Should we really be changing the root view controller like this?
             self.window?.rootViewController = loginController
         }
 

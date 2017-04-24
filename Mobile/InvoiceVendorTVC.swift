@@ -48,7 +48,6 @@ class InvoiceVendorTVC: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
 
         // CoreData
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.performFetch()
     }
 
@@ -76,7 +75,7 @@ class InvoiceVendorTVC: UITableViewController {
 
         // Pass the selected object to the new view controller.
         destinationController.parentObject = selectedObject
-        destinationController.managedObjectContext = self.managedObjectContext
+        destinationController.managedObjectContext = managedObjectContext
     }
 
     // MARK: - UITableViewDataSource
