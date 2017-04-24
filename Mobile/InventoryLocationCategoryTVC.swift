@@ -92,10 +92,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCategory = dataSource.objectAtIndexPath(indexPath)
-        // print("Selected LocationCategory: \(selectedCategory)")
-
         performSegue(withIdentifier: ItemSegue, sender: self)
-
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

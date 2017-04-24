@@ -124,8 +124,6 @@ class InventoryLocationTVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedLocation = dataSource.objectAtIndexPath(indexPath)
 
-        print("\nSELECTED - Location: \(selectedLocation)\n")
-
         // Perform segue based on locationType of selected Inventory.
         switch selectedLocation!.locationType {
         case "category"?:
@@ -145,7 +143,6 @@ class InventoryLocationTVC: UITableViewController {
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
         print("Uploading Inventory ...")
-        //self.pleaseWait()
         HUD.show(.progress)
 
         guard let dict = self.inventory.serialize() else {

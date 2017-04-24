@@ -146,7 +146,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedInventory = dataSource.objectAtIndexPath(indexPath)
 
-        guard let selection = selectedInventory else { print("Unable to get selection"); return }
+        guard let selection = selectedInventory else { fatalError("Unable to get selection") }
 
         switch selection.uploaded {
         case true:
