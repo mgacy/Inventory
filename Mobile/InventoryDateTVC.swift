@@ -85,33 +85,33 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
         case NewItemSegue:
-
-            // Get the new view controller.
-            guard let controller = segue.destination as? InventoryLocationTVC else { return }
-
-            //  Get the selection
-            guard let selection = selectedInventory else { return }
+            guard let controller = segue.destination as? InventoryLocationTVC else {
+                fatalError("Wrong view controller type")
+            }
+            guard let selection = selectedInventory else {
+                fatalError("Showing detail, but no selected row?")
+            }
 
             // Pass selection to new view controller.
             controller.inventory = selection
             controller.managedObjectContext = self.managedObjectContext
 
         case ExistingItemSegue:
-
-            // Get the new view controller.
-            guard let controller = segue.destination as? InventoryLocationCategoryTVC else { return }
+            guard let controller = segue.destination as? InventoryLocationCategoryTVC else {
+                fatalError("Wrong view controller type")
+            }
 
             // Pass selection to new view controller.
             guard let selection = selectedInventory, let locations = selection.locations?.allObjects else {
-                print("\(#function) FAILED : unable to get selection\n"); return
+                fatalError("Unable to get selection")
             }
 
             // Exisitng Inventories should have 1 Location - "Default"
             guard let defaultLocation = locations[0] as? InventoryLocation else {
-                print("\(#function) FAILED : unable to get Default Location"); return
+                fatalError("Unable to get Default Location")
             }
             if defaultLocation.name != "Default" {
-                print("\(#function) FAILED : unable to get Default Location"); return
+                fatalError("Unable to get Default Location")
             }
             controller.location = defaultLocation
             controller.managedObjectContext = self.managedObjectContext
