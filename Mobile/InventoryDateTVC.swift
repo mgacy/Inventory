@@ -139,7 +139,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         request.returnsObjectsAsFaults = false
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = InventoryDateDataSource(tableView: tableView, cellIdentifier: "InventoryDateTableViewCell", fetchedResultsController: frc, delegate: self)
+        dataSource = InventoryDateDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
