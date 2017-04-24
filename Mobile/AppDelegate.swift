@@ -68,13 +68,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         for child in tabBarController.viewControllers ?? [] {
             guard let navController = child as? UINavigationController
                 else { fatalError("wrong view controller type") }
-            guard var vc = navController.topViewController as? RootSectionViewController
+            guard let vc = navController.topViewController as? RootSectionViewController
                 else { fatalError("wrong view controller type") }
 
             // Inject dependencies
             vc.managedObjectContext = persistentContainer.viewContext
             vc.userManager = userManager
-            //vc.setContext(persistentContainer.viewContext)
         }
 
         // TODO - Should we use a failable initializier with CurrentUserManager?

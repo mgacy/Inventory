@@ -23,7 +23,7 @@ class ViewController: UIViewController {
 
 }
 
-protocol RootSectionViewController {
+protocol RootSectionViewController: class {
     var userManager: CurrentUserManager! { get set }
     var managedObjectContext: NSManagedObjectContext? { get set }
 
@@ -38,8 +38,6 @@ protocol RootSectionViewController {
 
     // Segues
     // var SegueIdentifier: RawRepresentable
-
-    //func setContext(_ context: NSManagedObjectContext)
 
 }
 
