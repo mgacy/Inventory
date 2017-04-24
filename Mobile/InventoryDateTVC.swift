@@ -60,9 +60,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
         title = "Inventories"
 
-        // Register tableView cells
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-
         // Add refresh control
         self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
 
@@ -129,11 +126,11 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
 
-        // TEMP
+        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         request.sortDescriptors = [sortDescriptor]
