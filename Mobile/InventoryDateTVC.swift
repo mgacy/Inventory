@@ -22,10 +22,9 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
-    var _fetchedResultsController: NSFetchedResultsController<Inventory>? = nil
     //var filter: NSPredicate? = nil
     var cacheName: String? = "Master"
-    var sectionNameKeyPath: String? = nil
+    //var sectionNameKeyPath: String? = nil
     var fetchBatchSize = 20 // 0 = No Limit
 
     // TableViewCell
@@ -66,8 +65,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         // Add refresh control
         self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
 
-        // CoreData
-        self.performFetch()
+        setupTableView()
     }
 
     // override func viewWillAppear(_ animated: Bool) { }
@@ -125,70 +123,35 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         }
     }
 
+    // MARK: - New - objc.io
+    fileprivate var dataSource: TableViewDataSource<InventoryDateTVC>!
+    //fileprivate var observer: ManagedObjectObserver?
+
+    fileprivate func setupTableView() {
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 100
+        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
+
+        // TEMP
+        let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        request.sortDescriptors = [sortDescriptor]
+        // / TEMP
+
+        request.fetchBatchSize = 20
+        request.returnsObjectsAsFaults = false
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: "InventoryDateTableViewCell", fetchedResultsController: frc, delegate: self)
+    }
+
     // MARK: - UITableViewDataSource
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return self.fetchedResultsController.sections?.count ?? 0
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sections = fetchedResultsController.sections else {
-            return 0
-        }
-
-        let sectionInfo = sections[section]
-        return sectionInfo.numberOfObjects
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Dequeue Reusable Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
-
-        // Configure Cell
-        self.configureCell(cell, atIndexPath: indexPath)
-
-        return cell
-    }
-
-    // MARK: Editing
-
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        let inventory = self.fetchedResultsController.object(at: indexPath)
-        switch inventory.uploaded {
-        case true:
-            return false
-        case false:
-            return true
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-
-            // Fetch Inventory
-            let inventory = fetchedResultsController.object(at: indexPath)
-
-            // Delete Inventory
-            fetchedResultsController.managedObjectContext.delete(inventory)
-        }
-    }
-
-    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
-        let inventory = self.fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = inventory.date
-
-        switch inventory.uploaded {
-        case true:
-            cell.textLabel?.textColor = UIColor.black
-        case false:
-            cell.textLabel?.textColor = ColorPalette.yellowColor
-        }
-    }
 
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedInventory = self.fetchedResultsController.object(at: indexPath)
+        selectedInventory = dataSource.objectAtIndexPath(indexPath)
+
         guard let selection = selectedInventory else { print("Unable to get selection"); return }
 
         switch selection.uploaded {
@@ -217,7 +180,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             deleteChildren(parent: selection)
 
             // Reset selection since we reset the managedObjectContext in deleteInventoryItems
-            selectedInventory = self.fetchedResultsController.object(at: indexPath)
+            selectedInventory = dataSource.objectAtIndexPath(indexPath)
 
             // GET INVENTORY FROM SERVER
             // print("GET selectedInventory from server - \(remoteID) ...")
@@ -273,6 +236,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
     }
 
+    // TODO - Remove
     @IBAction func resetTapped(_ sender: AnyObject) {
         guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
@@ -288,6 +252,22 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
         // Get list of Inventories from server
         APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
+    }
+
+}
+
+// MARK: - TableViewDataSourceDelegate Extension
+extension InventoryDateTVC: TableViewDataSourceDelegate {
+
+    func configure(_ cell: UITableViewCell, for inventory: Inventory) {
+        cell.textLabel?.text = inventory.date
+
+        switch inventory.uploaded {
+        case true:
+            cell.textLabel?.textColor = UIColor.black
+        case false:
+            cell.textLabel?.textColor = ColorPalette.yellowColor
+        }
     }
 
 }
@@ -397,7 +377,14 @@ extension InventoryDateTVC {
             try managedObjectContext.deleteEntities(InventoryItem.self, filter: fetchPredicate)
 
             // Perform Fetch
-            try self.fetchedResultsController.performFetch()
+            // TODO: implement this (?)
+            /*
+            let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
+            let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+            request.sortDescriptors = [sortDescriptor]
+            dataSource.reconfigureFetchRequest(request)
+            */
+            //try self.fetchedResultsController.performFetch()
 
             // Reload Table View
             tableView.reloadData()
@@ -414,104 +401,15 @@ extension InventoryDateTVC {
 // MARK: - Type-Specific NSFetchedResultsController Extension
 extension InventoryDateTVC {
 
-    var fetchedResultsController: NSFetchedResultsController<Inventory> {
-        if _fetchedResultsController != nil {
-            return _fetchedResultsController!
-        }
-
-        let fetchRequest: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-
-        // Set the batch size to a suitable number.
-        fetchRequest.fetchBatchSize = fetchBatchSize
-
-        // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-
-        // Edit the section name key path and cache name if appropriate.
-        // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(
-            fetchRequest: fetchRequest,
-            managedObjectContext: self.managedObjectContext!,
-            sectionNameKeyPath: self.sectionNameKeyPath,
-            cacheName: self.cacheName)
-
-        aFetchedResultsController.delegate = self
-        _fetchedResultsController = aFetchedResultsController
-
-        return _fetchedResultsController!
-    }
-
-    func performFetch () {
-        self.fetchedResultsController.managedObjectContext.perform ({
-
-            do {
-                try self.fetchedResultsController.performFetch()
-            } catch {
-                print("\(#function) FAILED : \(error)")
-            }
-            self.tableView.reloadData()
-        })
-    }
-
     func saveContext() {
-        let context = self.fetchedResultsController.managedObjectContext
         do {
-            try context.save()
+            try managedObjectContext?.save()
         } catch {
             // Replace this implementation with code to handle the error appropriately.
             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nserror = error as NSError
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
-    }
-
-}
-
-// MARK: - NSFetchedResultsControllerDelegate Extension
-extension InventoryDateTVC: NSFetchedResultsControllerDelegate {
-
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        switch type {
-        case .insert:
-            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
-        case .delete:
-            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
-        default:
-            return
-        }
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            if let indexPath = newIndexPath {
-                tableView.insertRows(at: [indexPath], with: .fade)
-            }
-            break;
-        case .delete:
-            if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-            break;
-        case .update:
-            if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) {
-                configureCell(cell, atIndexPath: indexPath)
-            }
-            break;
-        case .move:
-            // TODO - look at alt method in CocoaCasts tutorial:
-            // ExploringTheFetchedResultsControllerDelegateProtocol-master
-            tableView.moveRow(at: indexPath!, to: newIndexPath!)
-        }
-    }
-
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
     }
 
 }
