@@ -142,8 +142,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         dataSource = InventoryDateDataSource(tableView: tableView, cellIdentifier: "InventoryDateTableViewCell", fetchedResultsController: frc, delegate: self)
     }
 
-    // MARK: - UITableViewDataSource
-
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -224,7 +222,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         // TODO - check if there is already an Inventory for the current date and of the current type
 
         guard let storeID = userManager.storeID else {
-            print("\(#function) FAILED : unable to get storeID"); return
+            fatalError("Unable to get storeID")
         }
 
         // Get new Inventory.
