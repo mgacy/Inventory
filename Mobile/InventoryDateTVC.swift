@@ -23,9 +23,10 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
     //var filter: NSPredicate? = nil
-    var cacheName: String? = "Master"
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    //let cacheName: String? = "Master"
+    //let sectionNameKeyPath: String? = nil
+    //let objectsAsFaults = false
+    let fetchBatchSize = 20 // 0 = No Limit
 
     // TableViewCell
     let cellIdentifier = "InventoryDateTableViewCell"
@@ -136,9 +137,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         request.sortDescriptors = [sortDescriptor]
-        // / TEMP
 
-        request.fetchBatchSize = 20
+        request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
 
