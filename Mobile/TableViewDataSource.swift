@@ -73,6 +73,19 @@ class TableViewDataSource<Delegate: TableViewDataSourceDelegate>: NSObject, UITa
         return cell
     }
 
+    // MARK: - Enable Table Editing
+
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let object = fetchedResultsController.object(at: indexPath)
+            fetchedResultsController.managedObjectContext.delete(object as! NSManagedObject)
+        }
+    }
+
     // MARK: NSFetchedResultsControllerDelegate
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
