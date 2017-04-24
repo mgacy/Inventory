@@ -20,10 +20,10 @@ class InventoryLocationItemTVC: UITableViewController {
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
     var _fetchedResultsController: NSFetchedResultsController<InventoryLocationItem>? = nil
-    //var filter: NSPredicate? = nil
-    var cacheName: String? = nil
-    var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    //let filter: NSPredicate? = nil
+    let cacheName: String? = nil
+    let sectionNameKeyPath: String? = nil
+    let fetchBatchSize = 20 // 0 = No Limit
 
     // TableViewCell
     let cellIdentifier = "InventoryLocationTableViewCell"
