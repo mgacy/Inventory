@@ -165,22 +165,22 @@
         <relationship name="orders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Order" inverseName="vendor" inverseEntity="Order" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Base" positionX="-576" positionY="-81" width="128" height="75"/>
-        <element name="Inventory" positionX="-371" positionY="-135" width="128" height="165"/>
-        <element name="InventoryItem" positionX="-128" positionY="-135" width="128" height="180"/>
-        <element name="InventoryLocation" positionX="-171" positionY="54" width="128" height="135"/>
-        <element name="InventoryLocationCategory" positionX="106" positionY="-36" width="128" height="120"/>
-        <element name="InventoryLocationItem" positionX="306" positionY="261" width="128" height="165"/>
-        <element name="Invoice" positionX="-576" positionY="-81" width="128" height="255"/>
-        <element name="InvoiceCollection" positionX="-558" positionY="-63" width="128" height="105"/>
-        <element name="InvoiceItem" positionX="-567" positionY="-72" width="128" height="165"/>
-        <element name="Item" positionX="-468" positionY="-234" width="128" height="270"/>
-        <element name="ItemCategory" positionX="306" positionY="-0" width="128" height="90"/>
-        <element name="Order" positionX="-504" positionY="330" width="128" height="180"/>
-        <element name="OrderCollection" positionX="-783" positionY="348" width="128" height="120"/>
-        <element name="OrderItem" positionX="-234" positionY="-27" width="128" height="210"/>
-        <element name="Store" positionX="-684" positionY="-126" width="128" height="120"/>
-        <element name="Unit" positionX="-675" positionY="204" width="128" height="240"/>
-        <element name="Vendor" positionX="-576" positionY="12" width="128" height="120"/>
+        <element name="Base" positionX="-947" positionY="-324" width="128" height="75"/>
+        <element name="Inventory" positionX="-549" positionY="-342" width="128" height="165"/>
+        <element name="InventoryItem" positionX="-65" positionY="-333" width="128" height="180"/>
+        <element name="InventoryLocation" positionX="-344" positionY="-117" width="128" height="135"/>
+        <element name="InventoryLocationCategory" positionX="-135" positionY="-135" width="128" height="120"/>
+        <element name="InventoryLocationItem" positionX="124" positionY="-81" width="128" height="165"/>
+        <element name="Invoice" positionX="-371" positionY="45" width="128" height="255"/>
+        <element name="InvoiceCollection" positionX="-677" positionY="162" width="128" height="105"/>
+        <element name="InvoiceItem" positionX="-164" positionY="213" width="128" height="165"/>
+        <element name="Item" positionX="-1512" positionY="-135" width="128" height="270"/>
+        <element name="ItemCategory" positionX="-1287" positionY="-306" width="128" height="90"/>
+        <element name="Order" positionX="-549" positionY="477" width="128" height="180"/>
+        <element name="OrderCollection" positionX="-1091" positionY="510" width="128" height="120"/>
+        <element name="OrderItem" positionX="-92" positionY="447" width="128" height="210"/>
+        <element name="Store" positionX="-1784" positionY="159" width="128" height="120"/>
+        <element name="Unit" positionX="-1278" positionY="201" width="128" height="240"/>
+        <element name="Vendor" positionX="-1278" positionY="51" width="128" height="120"/>
     </elements>
 </model>
