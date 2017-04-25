@@ -144,12 +144,9 @@ extension InvoiceVendorTVC {
         fetchRequest.sortDescriptors = [sortDescriptor]
 
         // Set the fetch predicate
-        if let parent = self.parentObject {
-            let fetchPredicate = NSPredicate(format: "collection == %@", parent)
-            fetchRequest.predicate = fetchPredicate
-        } else {
-            print("\(#function) FAILED : unable able to add predicate")
-        }
+        let fetchPredicate = NSPredicate(format: "collection == %@", parentObject)
+        fetchRequest.predicate = fetchPredicate
+
 
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
