@@ -12,47 +12,6 @@ import SwiftyJSON
 
 extension InventoryLocationCategory {
 
-    // MARK: - Computed Properties
-
-    var status: InventoryStatus {
-
-        var hasValue = false
-        var missingValue = false
-
-        guard let items = self.items else {
-            /// TODO: is this the correct way to handle this?
-            return InventoryStatus.notStarted
-        }
-
-        for item in items {
-            if (item as! InventoryLocationItem).quantity != nil {
-                hasValue = true
-                if missingValue {
-                    return InventoryStatus.incomplete
-                }
-            } else {
-                missingValue = true
-                if hasValue {
-                    return InventoryStatus.incomplete
-                }
-            }
-        }
-
-        // If we made it through all the items ...
-        var status: InventoryStatus
-        switch hasValue {
-        case true:
-            if missingValue {
-                status = InventoryStatus.incomplete
-            } else {
-                status = InventoryStatus.complete
-            }
-        case false:
-            status = InventoryStatus.notStarted
-        }
-        return status
-    }
-
     // MARK: - Lifecycle
 
     convenience init(context: NSManagedObjectContext, json: JSON,
@@ -93,4 +52,48 @@ extension InventoryLocationCategory {
         // Relationship
         self.location = location
     }
+}
+
+// MARK: - Computed Properties
+extension InventoryLocationCategory {
+
+    var status: InventoryStatus {
+
+        var hasValue = false
+        var missingValue = false
+
+        guard let items = self.items else {
+            /// TODO: is this the correct way to handle this?
+            return InventoryStatus.notStarted
+        }
+
+        for item in items {
+            if (item as! InventoryLocationItem).quantity != nil {
+                hasValue = true
+                if missingValue {
+                    return InventoryStatus.incomplete
+                }
+            } else {
+                missingValue = true
+                if hasValue {
+                    return InventoryStatus.incomplete
+                }
+            }
+        }
+
+        // If we made it through all the items ...
+        var status: InventoryStatus
+        switch hasValue {
+        case true:
+            if missingValue {
+                status = InventoryStatus.incomplete
+            } else {
+                status = InventoryStatus.complete
+            }
+        case false:
+            status = InventoryStatus.notStarted
+        }
+        return status
+    }
+
 }
