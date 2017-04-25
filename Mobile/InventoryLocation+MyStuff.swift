@@ -17,9 +17,9 @@ enum InventoryLocationType {
 
 // TODO: rename to InventoryLocationStatus?
 enum InventoryStatus {
+    case notStarted
     case incomplete
     case complete
-    case notStarted
 }
 
 extension InventoryLocation {
@@ -142,7 +142,7 @@ extension InventoryLocation {
         // Relationship
         self.inventory = inventory
 
-        // X based on Location type
+        // Add children based on Location type
         switch self.locationType {
         case "item"?:
             if let itemIDs = json["items"].array {
