@@ -16,13 +16,10 @@ extension InventoryLocationItem {
 
     // For InventoryLocationItems belonging to an InventoryLocation
     convenience init(context: NSManagedObjectContext, itemID: Int,
-                     position: Int?, location: InventoryLocation) {
+                     location: InventoryLocation, position: Int) {
         self.init(context: context)
-
         self.itemID = Int32(itemID)
-        if let _position = position {
-            self.position = Int16(_position)
-        }
+        self.position = Int16(position)
 
         // Relationships
         self.location = location
@@ -40,9 +37,10 @@ extension InventoryLocationItem {
 
     // For InventoryLocationItems belonging to an InventoryLocationCategory
     convenience init(context: NSManagedObjectContext, itemID: Int,
-                     category: InventoryLocationCategory) {
+                     category: InventoryLocationCategory, position: Int) {
         self.init(context: context)
         self.itemID = Int32(itemID)
+        self.position = Int16(position)
 
         // Relationships
         self.category = category

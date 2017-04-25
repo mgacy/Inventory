@@ -199,8 +199,8 @@ extension InventoryLocation {
     private func addLocationItems(context: NSManagedObjectContext, json: [JSON]) {
         for (position, itemID) in json.enumerated() {
             if let itemID = itemID.int {
-                _ = InventoryLocationItem(context: context, itemID: itemID,
-                                          position: position + 1, location: self)
+                _ = InventoryLocationItem(context: context, itemID: itemID, location: self,
+                                          position: position + 1)
             }
         }
     }

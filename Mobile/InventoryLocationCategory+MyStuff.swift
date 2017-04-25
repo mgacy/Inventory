@@ -73,9 +73,10 @@ extension InventoryLocationCategory {
 
         // LocationItems
         if let itemIDs = json["items"].array {
-            for itemID in itemIDs {
+            for (position, itemID) in itemIDs.enumerated() {
                 if let id = itemID.int {
-                    _ = InventoryLocationItem(context: context, itemID: id, category: self)
+                    _ = InventoryLocationItem(context: context, itemID: id, category: self,
+                                              position: position + 1)
                 }
             }
         }
