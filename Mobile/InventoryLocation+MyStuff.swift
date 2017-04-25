@@ -150,7 +150,7 @@ extension InventoryLocation {
             }
         case "category"?:
             if let categories = json["categories"].array {
-                addLocationCategories(context: context, json: categories, location: self)
+                addLocationCategories(context: context, json: categories)
             }
         default:
             fatalError("Unrecognied locationType")
@@ -175,24 +175,10 @@ extension InventoryLocation {
 
     // MARK: - Handle New
 
-    private func addLocationCategories(context: NSManagedObjectContext, json: [JSON],
-                               location: InventoryLocation) {
+    private func addLocationCategories(context: NSManagedObjectContext, json: [JSON]) {
         for (position, category) in json.enumerated() {
-            _ = InventoryLocationCategory(context: context, json: category, location: location, position: position + 1)
-            /*
-            let category = InventoryLocationCategory(context: context, json: object, location: location)
-
-            // LocationItems
-            if let itemIDs = object["items"].array {
-                //addLocationItems(category: &category, json: itemIDs)
-
-                for itemID in itemIDs {
-                    if let id = itemID.int {
-                        _ = InventoryLocationItem(context: context, itemID: id, category: category)
-                    }
-                }
-            }
-            */
+            _ = InventoryLocationCategory(context: context, json: category, location: self,
+                                          position: position + 1)
         }
     }
 
