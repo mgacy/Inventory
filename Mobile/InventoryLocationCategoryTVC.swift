@@ -74,12 +74,8 @@ class InventoryLocationCategoryTVC: UITableViewController {
         request.sortDescriptors = [sortDescriptor]
 
         // Set the fetch predicate.
-        if let parent = self.location {
-            let fetchPredicate = NSPredicate(format: "location == %@", parent)
-            request.predicate = fetchPredicate
-        } else {
-            print("\(#function) FAILED : unable to add predicate")
-        }
+        let fetchPredicate = NSPredicate(format: "location == %@", location)
+        request.predicate = fetchPredicate
 
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
