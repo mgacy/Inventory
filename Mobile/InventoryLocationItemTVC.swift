@@ -25,7 +25,8 @@ class InventoryLocationItemTVC: UITableViewController {
     let fetchBatchSize = 20 // 0 = No Limit
 
     // TableViewCell
-    let cellIdentifier = "InventoryLocationTableViewCell"
+    //let cellIdentifier = "InventoryLocationTableViewCell"
+    let cellIdentifier = "InventoryItemCell"
 
     // Segues
     let KeypadSegue = "ShowInventoryKeypad"
@@ -69,9 +70,8 @@ class InventoryLocationItemTVC: UITableViewController {
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        //tableView.rowHeight = UITableViewAutomaticDimension
-        //tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 70
 
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
@@ -113,19 +113,7 @@ class InventoryLocationItemTVC: UITableViewController {
 
 // MARK: - TableViewDataSourceDelegate Extension
 extension InventoryLocationItemTVC: TableViewDataSourceDelegate {
-
-    func configure(_ cell: UITableViewCell, for locationItem: InventoryLocationItem) {
-        guard let item = locationItem.item else {
-            fatalError("Unable to get Item to configure cell")
-        }
-        cell.textLabel?.text = item.name
-
-        if let quantity = locationItem.quantity {
-            cell.textLabel?.textColor = UIColor.black
-            cell.detailTextLabel?.text = "\(quantity)"
-        } else {
-            cell.textLabel?.textColor = UIColor.lightGray
-            cell.detailTextLabel?.text = " "
-        }
+    func configure(_ cell: InventoryItemTableViewCell, for locationItem: InventoryLocationItem) {
+        cell.configure(for: locationItem)
     }
 }
