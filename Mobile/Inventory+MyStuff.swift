@@ -119,9 +119,8 @@ extension Inventory {
             */
 
             // Fetch / Create corresponding InventoryLocationCategory and create relationships
-            defaultLocation.doStuff(context: context, json: inventoryItemJSON,
-                                    location: defaultLocation,
-                                    locationItem: locationItem)
+            defaultLocation.findOrCreateCategory(context: context, json: inventoryItemJSON,
+                                                 for: locationItem)
 
             print("Created InventoryLocationItem: \(locationItem)")
         }

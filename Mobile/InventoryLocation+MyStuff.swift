@@ -91,8 +91,8 @@ extension InventoryLocation {
 
     // MARK: - Handle existing
 
-    func doStuff(context: NSManagedObjectContext, json: JSON, location: InventoryLocation,
-                 locationItem: InventoryLocationItem) {
+    func findOrCreateCategory(context: NSManagedObjectContext, json: JSON,
+                              for locationItem: InventoryLocationItem) {
 
         // Handle ItemCategory and InventoryLocationCategory
         guard let categoryName = json["item"]["category"]["name"].string else { return }
@@ -107,7 +107,7 @@ extension InventoryLocation {
             /// TODO: handle position
             let locationCategory = InventoryLocationCategory(context: context, id: id,
                                                              name: categoryName, location: self)
-            locationCategory.location = location
+            locationCategory.location = self
             locationItem.category = locationCategory
         }
 
