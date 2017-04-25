@@ -113,7 +113,7 @@ class InvoiceKeypadVC: UIViewController {
 
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
-        print("Tapped '\(digit)'")
+        //print("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
         if currentMode == .status { return }
 
@@ -123,14 +123,14 @@ class InvoiceKeypadVC: UIViewController {
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
-        print("Tapped 'clear'")
+        //print("Tapped 'clear'")
         keypad.popItem()
 
         update()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        print("Tapped '.'")
+        //print("Tapped '.'")
         keypad.pushDecimal()
 
         update()
@@ -178,7 +178,7 @@ class InvoiceKeypadVC: UIViewController {
     /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
         guard let item = currentItem.item else { print("A2"); return  }
-        print("Item: \(item)")
+        //print("Item: \(item)")
         guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
 
         currentItem.unit = purchaseSubUnit

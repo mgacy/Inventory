@@ -79,7 +79,7 @@ class InventoryKeypadVC: UIViewController {
     
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
-        print("Tapped '\(digit)'")
+        //print("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
         keypad.pushDigit(value: number)
         
@@ -88,7 +88,7 @@ class InventoryKeypadVC: UIViewController {
     }
     
     @IBAction func clearTapped(_ sender: AnyObject) {
-        print("Tapped 'clear'")
+        //print("Tapped 'clear'")
         keypad.popItem()
         
         // Update model and display with result of keypad
@@ -96,7 +96,7 @@ class InventoryKeypadVC: UIViewController {
     }
     
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        print("Tapped '.'")
+        //print("Tapped '.'")
         keypad.pushDecimal()
         
         // Update model and display with result of keypad
@@ -106,7 +106,7 @@ class InventoryKeypadVC: UIViewController {
     // MARK: - Uncertain
     
     @IBAction func addTapped(_ sender: AnyObject) {
-        print("Tapped '+'")
+        //print("Tapped '+'")
         keypad.pushOperator()
         
         // Update model and display with result of keypad
@@ -114,11 +114,11 @@ class InventoryKeypadVC: UIViewController {
     }
     
     @IBAction func decrementTapped(_ sender: AnyObject) {
-        print("Tapped '-1'")
+        //print("Tapped '-1'")
     }
     
     @IBAction func incrementTapped(_ sender: AnyObject) {
-        print("Tapped '+1'")
+        //print("Tapped '+1'")
         keypad.pushOperator()
         keypad.pushDigit(value: 1)
         keypad.pushOperator()
