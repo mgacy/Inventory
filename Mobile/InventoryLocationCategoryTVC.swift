@@ -70,8 +70,9 @@ class InventoryLocationCategoryTVC: UITableViewController {
 
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InventoryLocationCategory> = InventoryLocationCategory.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
+        let sortDescriptor1 = NSSortDescriptor(key: "position", ascending: true)
+        let sortDescriptor2 = NSSortDescriptor(key: "name", ascending: true)
+        request.sortDescriptors = [sortDescriptor1, sortDescriptor2]
 
         // Set the fetch predicate.
         let fetchPredicate = NSPredicate(format: "location == %@", location)
