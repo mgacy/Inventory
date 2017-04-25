@@ -11,19 +11,19 @@ import CoreData
 import SwiftyJSON
 
 extension InventoryLocationCategory {
-    
+
     // MARK: - Computed Properties
-    
+
     var status: InventoryStatus {
-        
+
         var hasValue = false
         var missingValue = false
-        
+
         guard let items = self.items else {
-            // TODO - is this the correct way to handle this?
+            /// TODO: is this the correct way to handle this?
             return InventoryStatus.notStarted
         }
-        
+
         for item in items {
             if (item as! InventoryLocationItem).quantity != nil {
                 hasValue = true
@@ -52,13 +52,13 @@ extension InventoryLocationCategory {
         }
         return status
     }
-    
+
     // MARK: - Lifecycle
-    
+
     convenience init(context: NSManagedObjectContext, json: JSON,
                      location: InventoryLocation) {
         self.init(context: context)
-        
+
         // Properties
         if let name = json["name"].string {
             self.name = name
@@ -68,7 +68,7 @@ extension InventoryLocationCategory {
         }
         // Relationship
         self.location = location
-    
+
         // LocationItems
         if let itemIDs = json["items"].array {
             for itemID in itemIDs {
@@ -82,11 +82,11 @@ extension InventoryLocationCategory {
     convenience init(context: NSManagedObjectContext, id: Int, name: String,
                      location: InventoryLocation) {
         self.init(context: context)
-        
+
         // Properties
         self.categoryID = Int32(id)
         self.name = name
-        
+
         // Relationship
         self.location = location
     }

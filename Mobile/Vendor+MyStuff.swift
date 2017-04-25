@@ -11,14 +11,14 @@ import CoreData
 import SwiftyJSON
 
 extension Vendor: SyncableItem {
-    
+
     // MARK: - Lifecycle
-    
+
     convenience init(context: NSManagedObjectContext, json: JSON) {
         self.init(context: context)
         self.update(context: context, withJSON: json)
     }
-    
+
     public func update(context: NSManagedObjectContext, withJSON json: JSON) {
 
         // Properties
@@ -29,7 +29,7 @@ extension Vendor: SyncableItem {
             self.name = name
         }
 
-        // TODO - create separate VendorRep object
+        /// TODO: create separate VendorRep object
     }
 
 }

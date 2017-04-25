@@ -101,7 +101,7 @@ class OrderVendorTVC: UITableViewController {
         let order = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = order.vendor?.name
 
-        // TODO - handle situation where user placed an order but uploading to the server failed;
+        /// TODO: handle situation where user placed an order but uploading to the server failed;
         // we still need to make sure that it ends up getting uploaded
 
         switch order.placed {

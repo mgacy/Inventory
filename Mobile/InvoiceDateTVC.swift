@@ -33,7 +33,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
     // Segues
     let segueIdentifier = "showInvoiceVendors"
 
-    // TODO - provide interface to control these
+    /// TODO: provide interface to control these
     // let invoiceTypeID = 1
 
     // MARK: - Lifecycle
@@ -98,7 +98,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
-        // TODO - SyncManager?
+        /// TODO: SyncManager?
         //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
 
         // Reload data and update the table view's data source
@@ -212,7 +212,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
                 print("\(#function) FAILED : unable to get storeID"); return
             }
 
-            // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
+            /// TODO: ideally, we would want to deleteChildOrders *after* fetching data from server
             // Delete existing invoices of selected collection
             print("Deleting Invoices of selected InvoiceCollection ...")
             deleteChildInvoices(parent: selection)
@@ -309,7 +309,7 @@ extension InvoiceDateTVC {
         saveContext()
         HUD.hide()
 
-        // TODO - if we only added one collection, select it and performSegue
+        /// TODO: if we only added one collection, select it and performSegue
         //selectedCollection = ...
         //performSegue(withIdentifier: segueIdentifier, sender: self)
     }

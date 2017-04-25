@@ -84,7 +84,7 @@ class InvoiceItemTVC: UITableViewController {
 
         guard let dict = self.parentObject.serialize() else {
             print("\nPROBLEM - Unable to serialize Invoice")
-            // TODO - completedUpload(false)
+            /// TODO: completedUpload(false)
             return
         }
         APIManager.sharedInstance.postInvoice(invoice: dict, completion: completedUpload)
@@ -118,9 +118,9 @@ class InvoiceItemTVC: UITableViewController {
         // Name
         cell.textLabel?.text = invoiceItem.item?.name
 
-        // TODO - pack
+        /// TODO: pack
 
-        // TODO - cost
+        /// TODO: cost
 
         //guard let quantity = invoiceItem.quantity else { return }
         let quantity = invoiceItem.quantity
@@ -129,7 +129,7 @@ class InvoiceItemTVC: UITableViewController {
             cell.detailTextLabel?.text = "\(quantity) \(invoiceItem.unit?.abbreviation ?? "")"
         } else {
             cell.textLabel?.textColor = UIColor.lightGray
-            // TODO - should I even both displaying quantity?
+            /// TODO: should I even both displaying quantity?
             cell.detailTextLabel?.text = "\(quantity)"
         }
 
@@ -248,7 +248,7 @@ extension InvoiceItemTVC {
 
         // Actions
 
-        // TODO - use InvoiceItemStatus.description for alert action title?
+        /// TODO: use InvoiceItemStatus.description for alert action title?
 
         // damaged
         let damagedAction = UIAlertAction(title: "Damaged", style: .default, handler: { (action:UIAlertAction!) -> Void in

@@ -24,7 +24,7 @@ import SwiftyJSON
 
 extension Syncable where Self : NSManagedObject {
 
-    // TODO - rename updateWithJSON / updateFromJSON?
+    /// TODO: rename updateWithJSON / updateFromJSON?
     func update(context: NSManagedObjectContext, withJSON json: JSON) {
 
         // Properties
@@ -52,7 +52,7 @@ extension Syncable where Self : NSManagedObject {
 
 extension SyncableItem where Self : NSManagedObject {
 
-    // TODO - rename updateWithJSON / updateFromJSON?
+    /// TODO: rename updateWithJSON / updateFromJSON?
     func update(context: NSManagedObjectContext, withJSON json: JSON) {
 
         // Properties
@@ -63,7 +63,7 @@ extension SyncableItem where Self : NSManagedObject {
             self.name = name
         }
     }
-    
+
 }
 
 // MARK: - SyncableCollection

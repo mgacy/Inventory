@@ -114,7 +114,7 @@ extension NSManagedObjectContext {
             // As the request directly interacts with the persistent store, we need need to reset the context
             // for it to be aware of the changes
             self.reset()
-            
+
         } catch {
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
@@ -134,7 +134,7 @@ extension NSManagedObjectContext {
                 } catch {
                     print("\(#function) FAILED: stuff")
                 }
-                
+
             }
         }
     }
@@ -251,7 +251,7 @@ extension NSManagedObjectContext {
         do {
             try self.deleteEntities(T.self, filter: fetchPredicate)
         } catch {
-            // TODO - deleteEntities(_:filter) already prints the error
+            /// TODO: deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
@@ -293,7 +293,7 @@ extension NSManagedObjectContext {
         do {
             try self.deleteEntities(T.self, filter: fetchPredicate)
         } catch {
-            // TODO - deleteEntities(_:filter) already prints the error
+            /// TODO: deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
@@ -398,7 +398,7 @@ extension NSManagedObjectContext {
         do {
             try self.deleteEntities(T.self, filter: fetchPredicate)
         } catch {
-            // TODO - deleteEntities(_:filter) already prints the error
+            /// TODO: deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }

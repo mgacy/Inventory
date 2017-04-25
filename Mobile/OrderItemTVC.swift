@@ -104,10 +104,10 @@ class OrderItemTVC: UITableViewController {
             completedPlaceOrder(true)
         }
 
-        // TODO - handle different orderMethod
-        // TODO - prevent attempt to send empty order
+        /// TODO: handle different orderMethod
+        /// TODO: prevent attempt to send empty order
 
-        // TODO - Enable usage of vendor.rep.phoneNumber
+        /// TODO: Enable usage of vendor.rep.phoneNumber
         //guard let phoneNumber = parentObject.vendor.rep.phoneNumber else { return }
         let phoneNumber = "602-980-4718"
         guard let message = parentObject.getOrderMessage() else { return }
@@ -128,7 +128,7 @@ class OrderItemTVC: UITableViewController {
 
         } else {
 
-            // TODO - try to send email message?
+            /// TODO: try to send email message?
 
             // TESTING:
             completedPlaceOrder(true)
@@ -172,11 +172,11 @@ class OrderItemTVC: UITableViewController {
         let orderItem = self.fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = orderItem.item?.name
 
-        // TODO - pack?
+        /// TODO: pack?
 
-        // TODO - on hand?
+        /// TODO: on hand?
 
-        // TODO - par
+        /// TODO: par
 
         guard let quantity = orderItem.quantity else { return }
         if Double(quantity) > 0.0 {
@@ -184,10 +184,10 @@ class OrderItemTVC: UITableViewController {
             cell.detailTextLabel?.text = "\(quantity) \(orderItem.orderUnit?.abbreviation ?? "")"
         } else {
             cell.textLabel?.textColor = UIColor.lightGray
-            // TODO - should I even bother displaying quantity?
+            /// TODO: should I even bother displaying quantity?
             cell.detailTextLabel?.text = "\(quantity)"
         }
-        // TODO - add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
+        /// TODO: add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
     }
 
     // MARK: - UITableViewDelegate
@@ -218,7 +218,7 @@ extension OrderItemTVC {
                 APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
             }
 
-            // TODO - handle failure to serialize Order
+            /// TODO: handle failure to serialize Order
 
         } else {
             print("\nPROBLEM - Unable to send Order message")
@@ -259,7 +259,7 @@ extension  OrderItemTVC {
         fetchRequest.fetchBatchSize = fetchBatchSize
 
         // Edit the sort key as appropriate.
-        // TODO - sort by item.category.name as well?
+        /// TODO: sort by item.category.name as well?
         // let categorySortDescriptor = NSSortDescriptor(key: "item.category.name", ascending: true)
         let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
@@ -342,8 +342,8 @@ extension OrderItemTVC {
 
     // If we pass a handler, display a "Cancel" and an "OK" button with the latter calling that handler
     // Otherwise, display a single "OK" button
-    // TODO - shouldn't we allow the specification of the okAction's title?
-    // TODO - should we just present the alert within the function instead of returning it?
+    /// TODO: shouldn't we allow the specification of the okAction's title?
+    /// TODO: should we just present the alert within the function instead of returning it?
     func createAlert(title: String, message: String, handler: (() -> Void)? = nil) -> UIAlertController {
 
         // Create alert controller
@@ -396,7 +396,7 @@ extension OrderItemTVC {
         // Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
         alert.addAction(cancelAction)
-        
+
         present(alert, animated: true, completion: nil)
     }
 

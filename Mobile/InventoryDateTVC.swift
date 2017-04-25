@@ -35,7 +35,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     let ExistingItemSegue = "ShowLocationCategory"
     let SettingsSegue = "ShowSettings"
     /*
-    // TODO - make enum?
+    /// TODO: make enum?
     enum SegueIdentifiers : String {
         case newItemSegue = "FetchExistingInventory"
         case existingItemSegue = "ShowLocationCategory"
@@ -43,7 +43,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     }
     */
 
-    // TODO - provide interface to control these
+    /// TODO: provide interface to control these
     // let inventoryTypeID = 1
 
     // MARK: - Lifecycle
@@ -167,7 +167,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             }
             */
 
-            // TODO - ideally, we would want to deleteInventoryItems *after* fetching data from server
+            /// TODO: ideally, we would want to deleteInventoryItems *after* fetching data from server
 
             // Delete existing InventoryItems of selected Inventory
             print("Deleting InventoryItems of selected Inventory ...")
@@ -196,7 +196,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
-        // TODO - SyncManager?
+        /// TODO: SyncManager?
         //_ = SyncManager(storeID: storeID, completionHandler: completedLogin)
 
         // Reload data and update the table view's data source
@@ -218,7 +218,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
     @IBAction func newTapped(_ sender: AnyObject) {
 
-        // TODO - check if there is already an Inventory for the current date and of the current type
+        /// TODO: check if there is already an Inventory for the current date and of the current type
 
         guard let storeID = userManager.storeID else {
             fatalError("Unable to get storeID")
@@ -230,7 +230,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
     }
 
-    // TODO - Remove
+    /// TODO: Remove
     @IBAction func resetTapped(_ sender: AnyObject) {
         guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
@@ -275,7 +275,7 @@ extension InventoryDateTVC {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
-        // TODO - distinguish empty response (new account) from error
+        /// TODO: distinguish empty response (new account) from error
         guard let json = json else {
             print("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
@@ -341,7 +341,7 @@ extension InventoryDateTVC {
         performSegue(withIdentifier: NewItemSegue, sender: self)
     }
 
-    // TODO - rename `completedItemSync`(?)
+    /// TODO: rename `completedItemSync`(?)
     func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             print("\nCompleted login / sync - succeeded: \(succeeded)")
@@ -469,7 +469,7 @@ class InventoryDateDataSource<Delegate: InventoryDateDelegate>: TableViewDataSou
         let object = objectAtIndexPath(indexPath)
         return customDelegate.canEdit(object)
     }
-    
+
 }
 
 // MARK: - InventoryDateDelegate Extension

@@ -21,45 +21,45 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signupButton: UIButton!
-    
+
     // MARK: Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // Do any additional setup after loading the view.
-        // TODO - enable signup
+        /// TODO: enable signup
         signupButton.isEnabled = false
 
         if let user = userManager.user {
             loginTextField.text = user.email
         }
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     // MARK: UITextFieldDelegate
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Hide the keyboard.
         textField.resignFirstResponder()
         return true
     }
-    
+
     func textFieldDidBeginEditing(_ textField: UITextField) {
         // Disable the LogIn button while editing.
         loginButton.isEnabled = false
     }
-    
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         // checkValidMealName()
     }
-    
+
     // MARK: - User interaction
-    
+
     @IBAction func loginButtonPressed(_ sender: AnyObject) {
         guard let email = loginTextField.text, let pass = passwordTextField.text else {
             return
@@ -67,7 +67,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         HUD.show(.progress)
         userManager.login(email: email, password: pass, completion: completedLogin)
     }
-    
+
     // MARK: - Navigation
 
     @IBAction func cancel(_ sender: UIBarButtonItem) {
@@ -95,7 +95,7 @@ extension LoginVC {
             HUD.hide()
             dismiss(animated: true, completion: nil)
         } else {
-            // TODO - how best to handle this?
+            /// TODO: how best to handle this?
             HUD.flash(.error, delay: 1.0); return
             print("Failed to login")
         }

@@ -11,7 +11,7 @@ import CoreData
 import SwiftyJSON
 
 extension InvoiceCollection {
-    
+
     // MARK: - Lifecycle
 
     convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
@@ -35,41 +35,41 @@ extension InvoiceCollection {
             }
         }
     }
-    
+
     // MARK: - Serialization
-    
+
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-        
-        // TODO - handle conversion from NSDate to string
+
+        /// TODO: handle conversion from NSDate to string
         myDict["date"] = self.date
         myDict["store_id"] = self.storeID
-        
+
         return myDict
     }
-    
+
     // MARK: - Update Existing
-    
+
     func updateExisting(context: NSManagedObjectContext, json: JSON) {
-        
+
         // Iterate over Invoices
         for (_, item) in json {
             _ = Invoice(context: context, json: item, collection: self, uploaded: true)
         }
     }
-    
+
     // MARK: -
-    
+
     static func fetchByDate(context: NSManagedObjectContext, date: String) -> InvoiceCollection? {
         //let predicate = NSPredicate(format: "date == %@", date)
         //return context.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate)
-        
+
         let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
         request.predicate = NSPredicate(format: "date == %@", date)
-        
+
         do {
             let searchResults = try context.fetch(request)
-            
+
             switch searchResults.count {
             case 0:
                 return nil
@@ -79,7 +79,7 @@ extension InvoiceCollection {
                 print("Found multiple matches: \(searchResults)")
                 return searchResults[0]
             }
-            
+
         } catch {
             print("Error with request: \(error)")
         }

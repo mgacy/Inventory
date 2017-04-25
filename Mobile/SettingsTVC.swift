@@ -76,8 +76,8 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
             if let user = userManager.user {
                 print("Logging out \(user.email)")
 
-                // TODO - check for pending Inventory / Invoice / Order
-                // TODO - if so, present warning
+                /// TODO: check for pending Inventory / Invoice / Order
+                /// TODO: if so, present warning
 
                 userManager.logout(completion: completedLogout)
             } else {
@@ -93,7 +93,7 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
 
     // MARK: - Configuration
 
-    // TODO - pass User?
+    /// TODO: pass User?
     func configureAccountCell() {
         if let user = userManager.user {
             AccountCell.textLabel?.text = "Logout \(user.email)"
@@ -126,7 +126,7 @@ extension SettingsTVC {
     func deleteData() {
         guard let managedObjectContext = managedObjectContext else { return }
 
-        // TODO - use cascade rules to reduce list of entities we need to manually delete
+        /// TODO: use cascade rules to reduce list of entities we need to manually delete
 
         // Inventory
         do {

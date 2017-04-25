@@ -36,7 +36,7 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        // TODO - enable signup
+        /// TODO: enable signup
         signupButton.isEnabled = false
 
         if let user = userManager.user {
@@ -86,7 +86,7 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
         case MainSegue:
 
             // Get the new view controller.
-            // TODO - use guards here?
+            /// TODO: use guards here?
             let tabBarController = segue.destination as! UITabBarController
             let inventoryNavController = tabBarController.viewControllers![0] as! UINavigationController
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
@@ -130,7 +130,7 @@ extension InitialLoginVC {
         } else {
             print("Failed to login")
             userManager.removeUser()
-            // TODO - how best to handle this?
+            /// TODO: how best to handle this?
             HUD.flash(.error, delay: 1.0); return
         }
     }

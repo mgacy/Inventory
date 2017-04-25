@@ -12,42 +12,42 @@ import CoreData
 class OrderKeypadVC: UIViewController {
 
     // MARK: - Properties
-    
+
     var parentObject: Order!
     var currentIndex = 0
-    
+
     var items: [OrderItem] {
         let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
         request.predicate = NSPredicate(format: "order == %@", parentObject)
-        
+
         let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
         request.sortDescriptors = [sortDescriptor]
-        
+
         do {
             let searchResults = try managedObjectContext?.fetch(request)
             return searchResults!
-            
+
         } catch {
             print("Error with request: \(error)")
         }
         return [OrderItem]()
     }
-    
+
     var currentItem: OrderItem {
         //print("currentItem: \(items[currentIndex])")
         return items[currentIndex]
     }
-    
+
     typealias keypadOutput = (total: Double?, display: String)
     let keypad = Keypad()
-    
+
     // CoreData
     var managedObjectContext: NSManagedObjectContext?
-    
+
     var numberFormatter: NumberFormatter?
-    
+
     // MARK: - Display Outlets
-    
+
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var par: UILabel!
     @IBOutlet weak var onHand: UILabel!
@@ -88,21 +88,21 @@ class OrderKeypadVC: UIViewController {
         print("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
         keypad.pushDigit(value: number)
-        
+
         update()
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
         print("Tapped 'clear'")
         keypad.popItem()
-        
+
         update()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
         print("Tapped '.'")
         keypad.pushDecimal()
-        
+
         update()
     }
 
@@ -118,7 +118,7 @@ class OrderKeypadVC: UIViewController {
         update()
     }
 
-    // TODO - rename `individualTapped`?
+    /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
         guard let item = currentItem.item else { print("A2"); return  }
         guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
@@ -134,11 +134,11 @@ class OrderKeypadVC: UIViewController {
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
             currentIndex += 1
-            
+
             update(newItem: true)
         } else {
-            // TODO - cleanup?
-            
+            /// TODO: cleanup?
+
             // Pop view
             navigationController!.popViewController(animated: true)
         }
@@ -147,11 +147,11 @@ class OrderKeypadVC: UIViewController {
     @IBAction func previousItemTapped(_ sender: AnyObject) {
         if currentIndex > 0 {
             currentIndex -= 1
-            
+
             update(newItem: true)
         } else {
-            // TODO - cleanup?
-            
+            /// TODO: cleanup?
+
             // Pop view
             navigationController!.popViewController(animated: true)
         }
@@ -228,10 +228,10 @@ class OrderKeypadVC: UIViewController {
             order.textColor = UIColor.black
             orderUnit.textColor = UIColor.black
         }
-        
+
     }
 
-    // TODO - rename `updateUnitButtons`?
+    /// TODO: rename `updateUnitButtons`?
     func updateKeypadButtons(item: OrderItem) {
         guard let orderUnit = currentItem.orderUnit else { print("a"); return }
         guard let item = currentItem.item else { print("b"); return }
@@ -239,7 +239,7 @@ class OrderKeypadVC: UIViewController {
         //print("currentItem: \(currentItem)\n")
         //print("currentItem.item: \(item)\n")
 
-        // TODO - some of this should only be done when we change currentItem
+        /// TODO: some of this should only be done when we change currentItem
         if orderUnit == item.purchaseUnit {
             caseButton.backgroundColor = ColorPalette.navyColor
             caseButton.isEnabled = true
@@ -272,7 +272,7 @@ class OrderKeypadVC: UIViewController {
     private func formDisplayLine(quantity: Double?, abbreviation: String) -> String {
         guard let numberFormatter = numberFormatter else { return "ERROR 3" }
         guard let quantity = quantity else { return "ERROR 4" }
-        
+
         // Quantity
         if let quantityString = numberFormatter.string(from: NSNumber(value: quantity)) {
             return "\(quantityString) \(abbreviation)"

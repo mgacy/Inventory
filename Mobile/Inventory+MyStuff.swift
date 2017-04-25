@@ -11,12 +11,12 @@ import CoreData
 import SwiftyJSON
 
 extension Inventory {
-    
+
     // MARK: - Lifecycle
-    
+
     convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = true) {
         self.init(context: context)
-    
+
         // Set properties
         if let date = json["date"].string {
             self.date = date
@@ -46,18 +46,18 @@ extension Inventory {
             }
         }
     }
-    
+
     // MARK: - Serialization
-    
+
     func serialize() -> [String: Any]? {
         guard let items = self.items else {
             print("\(#function) FAILED : unable to serialize without any InventoryItems")
             return nil
         }
-        
+
         var myDict = [String: Any]()
-        
-        // TODO - handle conversion from NSDate to string
+
+        /// TODO: handle conversion from NSDate to string
         myDict["date"] = self.date
         myDict["store_id"] = storeID
 
@@ -72,42 +72,42 @@ extension Inventory {
             itemsArray.append(item.serialize())
         }
         myDict["items"] = itemsArray
-        
+
         return myDict
     }
-    
+
     // MARK: - Update Existing
 
-    // TODO - should this simply be part of .update()?
+    /// TODO: should this simply be part of .update()?
     func updateExisting(context: NSManagedObjectContext, json: JSON) {
-    
+
         // Add Default Location
         let defaultLocation = InventoryLocation(context: context, name: "Default", remoteID: 1,
                                                 type: InventoryLocationType.category, inventory: self)
-        
+
         guard let inventoryItems = json["items"].array else {
             print("\(#function) FAILED : unable to get InventoryItems from JSON"); return
         }
-        
+
         // Iterate over Items
         for inventoryItemJSON in inventoryItems {
-        
+
             // Create InventoryItem
             let inventoryItem = InventoryItem(context: context, json: inventoryItemJSON,
                                               inventory: self)
             print("Created InventoryItem: \(inventoryItem)")
-            
+
             // Create InventoryLocationItem
             let locationItem = InventoryLocationItem(context: context)
             if let quantity = inventoryItemJSON["quantity"].double {
                 locationItem.quantity = quantity as NSNumber?
             }
             locationItem.item = inventoryItem
-            // TODO - am I still setting location when a LocationItem belongs to a LocationCategory?
+            /// TODO: am I still setting location when a LocationItem belongs to a LocationCategory?
             locationItem.location = defaultLocation
 
             //print("Created InventoryLocationItem: \(locationItem)")
-            
+
             /*
             // Get Corresponding Unit
             if let unitID = inventoryItemJSON["unit_id"].int {
@@ -117,15 +117,15 @@ extension Inventory {
                 //}
             }
             */
-            
+
             // Fetch / Create corresponding InventoryLocationCategory and create relationships
             defaultLocation.doStuff(context: context, json: inventoryItemJSON,
                                     location: defaultLocation,
                                     locationItem: locationItem)
-            
+
             print("Created InventoryLocationItem: \(locationItem)")
         }
-    
+
         print("Created InventoryLocation: \(defaultLocation)")
     }
 

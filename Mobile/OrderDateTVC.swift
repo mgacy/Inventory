@@ -34,7 +34,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
     // Segues
     let segueIdentifier = "showOrderVendors"
 
-    // TODO - provide interface to control these
+    /// TODO: provide interface to control these
     let orderTypeID = 1
 
     // MARK: - Lifecycle
@@ -168,7 +168,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
 
-            // TODO - ideally, we would want to deleteChildOrders *after* fetching data from server
+            /// TODO: ideally, we would want to deleteChildOrders *after* fetching data from server
             // Delete existing orders of selected collection
             print("Deleting Orders of selected OrderCollection ...")
             deleteChildOrders(parent: selection)
@@ -195,7 +195,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
-        // TODO - SyncManager?
+        /// TODO: SyncManager?
         //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
 
         // Reload data and update the table view's data source
@@ -216,7 +216,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
     @IBAction func newTapped(_ sender: AnyObject) {
 
-        // TODO - check if there is already an Order for the current date and of the current type
+        /// TODO: check if there is already an Order for the current date and of the current type
 
         guard let storeID = userManager.storeID else {
             print("\(#function) FAILED : unable to get storeID"); return

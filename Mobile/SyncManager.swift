@@ -25,7 +25,7 @@ class SyncManager {
     init(context: NSManagedObjectContext, storeID: Int, completionHandler: @escaping (Bool, Error?) -> Void) {
         self.storeID = storeID
 
-        // TODO - pass managedObjectContext as init parameter
+        /// TODO: pass managedObjectContext as init parameter
         self.managedObjectContext = context
         self.completionHandler = completionHandler
 
@@ -35,7 +35,7 @@ class SyncManager {
     }
 
     // MARK: - Sync Primary Items
-    // TODO - move error handling out into closure of functions calling these methods?
+    /// TODO: move error handling out into closure of functions calling these methods?
 
     func syncItems(json: JSON?, error: Error?) {
         guard error == nil else {
@@ -44,7 +44,7 @@ class SyncManager {
         }
         guard let json = json else {
             print("\(#function) FAILED : unable to get Items")
-            // TODO - construct error?
+            /// TODO: construct error?
             return completionHandler(false, nil)
         }
 
@@ -91,7 +91,7 @@ class SyncManager {
         do {
             try managedObjectContext.deleteEntities(Item.self, filter: fetchPredicate)
         } catch {
-            // TODO - deleteEntities(_:filter) already prints the error
+            /// TODO: deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
             print("\(updateError), \(updateError.userInfo)")
         }
@@ -107,7 +107,7 @@ class SyncManager {
         }
         guard let json = json else {
             print("\(#function) FAILED : unable to get Items")
-            // TODO - construct error?
+            /// TODO: construct error?
             return completionHandler(false, nil)
         }
 
@@ -124,9 +124,9 @@ class SyncManager {
     }
 
     // MARK: - Completion
-    
+
     func completedStartup(_ succeeded: Bool) {
         self.completionHandler(true, nil)
     }
-    
+
 }

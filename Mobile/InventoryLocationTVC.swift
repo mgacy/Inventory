@@ -147,7 +147,7 @@ class InventoryLocationTVC: UITableViewController {
 
         guard let dict = self.inventory.serialize() else {
             print("\(#function) FAILED : unable to serialize Inventory")
-            // TODO - completedUpload(false)
+            /// TODO: completedUpload(false)
             return
         }
         APIManager.sharedInstance.postInventory(inventory: dict, completion: self.completedUpload)
@@ -200,5 +200,5 @@ extension InventoryLocationTVC: TableViewDataSourceDelegate {
             }
         }
     }
-    
+
 }

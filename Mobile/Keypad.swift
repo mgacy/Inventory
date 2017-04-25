@@ -9,78 +9,78 @@
 import Foundation
 
 class Keypad {
-    
+
     let numberFormatter: NumberFormatter
-    
+
     // State
     var isEditingNumber: Bool
     var currentNumber: String
-    
+
     // MARK: - Lifecycle
-    
+
     init() {
         self.isEditingNumber = false
         self.currentNumber = ""
-        
+
         // Set up formatter
         self.numberFormatter = NumberFormatter()
         self.numberFormatter.numberStyle = .decimal
         self.numberFormatter.roundingMode = .halfUp
         self.numberFormatter.maximumFractionDigits = 2
     }
-    
+
     // MARK: - Stack manipulation
-    
+
     func popItem() {
         // Try to clear from currentNumber
         if !currentNumber.isEmpty {
             currentNumber.remove(at: currentNumber.index(before: currentNumber.endIndex))
-            
+
             if currentNumber.isEmpty {
                 // We just consumed the currentNumber
                 isEditingNumber = false
             } else {
                 isEditingNumber = true
             }
-            
+
             // TESTING
             updateDisplay(button: "clear")
         }
     }
-    
+
     func pushDecimal() {
         isEditingNumber = true
-        
+
         // Add leading '0'
         if currentNumber.isEmpty {
             currentNumber = "0."
-            
+
             // Append decimal point if not already there
         } else if currentNumber.range(of: ".") == nil {
             currentNumber += "."
         }
-        
+
         // TESTING
         updateDisplay(button: ".")
     }
-    
+
     func pushDigit(value: Int) {
         if isEditingNumber {
-            // TODO - prevent '00'
-            // TODO - prevent 'x.yzn'; add setting for max significant digits
+            /// TODO: prevent '00'
+            /// TODO: prevent 'x.yzn'; add setting for max significant digits
             currentNumber += "\(value)"
-            
+
         } else {
             currentNumber = "\(value)"
             isEditingNumber = true
         }
-        
+
         // TESTING
         updateDisplay(button: String(value))
     }
-    
+
     // MARK: - Output
-    
+
     func evaluateNumber() -> Double? {
         if let value = Double(currentNumber) {
             return value
@@ -88,13 +88,13 @@ class Keypad {
             return nil
         }
     }
-    
+
     func _updateNumber(_ newNumber: Double?) {
         guard let _newNumber = newNumber else {
             currentNumber = ""
             return
         }
-        
+
         if let newString = numberFormatter.string(from: NSNumber(value: _newNumber)) {
             currentNumber = newString
         } else {
@@ -103,14 +103,14 @@ class Keypad {
             currentNumber = "Error"
         }
     }
-    
+
     func updateNumber(_ newNumber: Double?) {
         // This allows us to override updateNumber in subclasses with additional
         // functionality while still making use of _updateNumber
         // TODO: should this be done using an extension?
         _updateNumber(newNumber)
     }
-    
+
     func formatTotal(_ result: Double) -> String {
         if let resultString = self.numberFormatter.string(from: NSNumber(value: result)) {
             return resultString
@@ -118,12 +118,12 @@ class Keypad {
             return ""
         }
     }
-    
+
     func outputB() -> (total: Double?, display: String) {
-        
+
         // Result
         let total = evaluateNumber()
-        
+
         // Display
         var display = ""
         if total != nil {
@@ -131,64 +131,64 @@ class Keypad {
         } else {
             display = "0"
         }
-        
+
         return (total: total, display: display)
     }
-    
+
     // MARK: - Testing
-    
+
     func updateDisplay(button: String) {
         print("Pressed '\(button)' - currentNumber: \(currentNumber)")
     }
 }
 
 class KeypadWithHistory: Keypad {
-    
+
     // State
     // isEditingNumber
     // currentNumber
-    
+
     var stack: [String] = []
 
     // MARK: - Lifecycle
-    
+
     override init() {
         super.init()
-        
+
         self.stack = []
-        
-        // TODO - override settings for numberFormatter?
+
+        /// TODO: override settings for numberFormatter?
     }
-    
+
     // MARK: - Stack Manipulation
-    
+
     override func popItem() {
         // Try to clear from currentNumber
         if !currentNumber.isEmpty {
             currentNumber.remove(at: currentNumber.index(before: currentNumber.endIndex))
-            
+
             if currentNumber.isEmpty {
                 // We just consumed the currentNumber
                 isEditingNumber = false
             } else {
                 isEditingNumber = true
             }
-            
+
         } else {
-            
+
             // Try to clear from stack
             if  !stack.isEmpty {
                 currentNumber = stack.popLast()!
                 isEditingNumber = true
             }
         }
-        
+
         // TESTING
         updateDisplay(button: "clear")
     }
-    
+
     func pushOperator() {
-        
+
         switch currentNumber {
         case "", ".", "0", "0.":
             break
@@ -197,18 +197,18 @@ class KeypadWithHistory: Keypad {
             if currentNumber.hasSuffix(".") {
                 self.popItem()
             }
-            
+
             stack.append(currentNumber)
             currentNumber = ""
             isEditingNumber = false
         }
-        
+
         // TESTING
         updateDisplay(button: "+")
     }
-    
+
     // MARK: - B
-    
+
     override func updateNumber(_ newNumber: Double?) {
         stack = []
         _updateNumber(newNumber)
@@ -216,17 +216,17 @@ class KeypadWithHistory: Keypad {
             pushOperator()
         }
     }
-    
+
     // MARK: - Output
-    
+
     /// <#Description#>
     ///
     /// - returns: String representation of stack and currentNumber
     func formHistory() -> String {
-        
+
         // Formatting
         let historySeparator = " + "
-        
+
         var historyString = ""
         if !stack.isEmpty {
             historyString = stack.joined(separator: historySeparator)
@@ -234,19 +234,19 @@ class KeypadWithHistory: Keypad {
                 historyString += historySeparator
             }
         }
-        
+
         if !currentNumber.isEmpty {
             if !stack.isEmpty {
                 historyString += historySeparator
             }
             historyString += currentNumber
         }
-        
+
         return historyString
     }
-    
+
     func evaluateHistory() -> Double? {
-        
+
         // Handle stack
         func evaluateStack() -> Double? {
             switch stack.isEmpty {
@@ -266,13 +266,13 @@ class KeypadWithHistory: Keypad {
                 return total
             }
         }
-        
+
         var total: Double? = nil
-        
+
         if let stackVal = evaluateStack() {
             total = stackVal
         }
-        
+
         if let numberVal = evaluateNumber() {
             if total != nil {
                 total! += numberVal
@@ -280,17 +280,17 @@ class KeypadWithHistory: Keypad {
                 total = numberVal
             }
         }
-        
+
         return total
     }
-    
+
     func output() -> (history: String, total: Double?, display: String) {
         // History
         let history = self.formHistory()
-        
+
         // Result
         let total = evaluateHistory()
-        
+
         // Display
         var display = ""
         if total != nil {
@@ -298,12 +298,12 @@ class KeypadWithHistory: Keypad {
         } else {
             display = "0"
         }
-        
+
         return (history: history, total: total, display: display)
     }
-    
+
     // MARK: - Testing
-    
+
     override func updateDisplay(button: String) {
         print("Pressed '\(button)' - stack: '\(stack.description)' - currentNumber: '\(currentNumber)'")
     }

@@ -37,7 +37,7 @@ extension Order {
             // repPhone = json["vendor"]["rep"]["phone"].int {}
         }
         */
-        
+
         // OrderItems
         if let items = json["items"].array {
             print("\nCreating OrderItems ...")
@@ -51,8 +51,8 @@ extension Order {
 
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-        
-        // TODO - handle conversion from NSDate to string
+
+        /// TODO: handle conversion from NSDate to string
         myDict["order_date"] = self.collection?.date
         myDict["store_id"] = self.collection?.storeID
         myDict["vendor_id"] = self.vendor?.remoteID
@@ -62,7 +62,7 @@ extension Order {
             print("\nPROBLEM - Unable to serialize without any OrderItems")
             return myDict
         }
-        
+
         var itemsArray = [[String: Any]]()
         for case let item as OrderItem in items {
             if let itemDict = item.serialize() {
@@ -70,19 +70,19 @@ extension Order {
             }
         }
         myDict["items"] = itemsArray
-        
+
         return myDict
     }
-    
+
     // MARK: - Order Generation
-    
+
     func getOrderMessage() -> String? {
         guard let items = self.items else { return nil }
 
         var messageItems: [String] = []
         for case let item as OrderItem in items {
             guard let quantity = item.quantity else { return nil }
-            
+
             if Int(quantity) > 0 {
                 guard let name = item.item?.name else { break }
                 messageItems.append("\n\(name) \(quantity) \(item.orderUnit?.abbreviation ?? "")")
@@ -90,11 +90,11 @@ extension Order {
         }
 
         if messageItems.count == 0 { return nil }
-        
+
         messageItems.sort()
         let message = "Order for \(self.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
 
         return message
     }
-    
+
 }

@@ -25,7 +25,7 @@ enum InventoryStatus {
 extension InventoryLocation {
 
     // MARK: - Computed Properties
-    
+
     var status: InventoryStatus? {
         switch self.locationType {
         case "category"?:
@@ -37,17 +37,17 @@ extension InventoryLocation {
             return nil
         }
     }
-    
+
     private var statusForCategory: InventoryStatus {
         guard let categories = self.categories else {
-            // TODO - is this the correct way to handle this?
+            /// TODO: is this the correct way to handle this?
             return InventoryStatus.notStarted
         }
-        
+
         var hasCompleted = false
         var hasIncompleted = false
         var hasNotStarted = false
-        
+
         for category in categories {
             switch (category as! InventoryLocationCategory).status {
             case InventoryStatus.complete:
@@ -67,7 +67,7 @@ extension InventoryLocation {
                 }
             }
         }
-        
+
         // If we made it through all the categories ...
         var status: InventoryStatus
         switch hasCompleted {
@@ -80,19 +80,19 @@ extension InventoryLocation {
         case false:
             status = InventoryStatus.notStarted
         }
-        
+
         return status
     }
-    
+
     private var statusForLocation: InventoryStatus {
         guard let items = self.items else {
-            // TODO - is this the correct way to handle this?
+            /// TODO: is this the correct way to handle this?
             return InventoryStatus.notStarted
         }
-        
+
         var hasValue = false
         var missingValue = false
-        
+
         for item in items {
             if (item as! InventoryLocationItem).quantity != nil {
                 hasValue = true
@@ -106,7 +106,7 @@ extension InventoryLocation {
                 }
             }
         }
-        
+
         // If we made it through all the items ...
         var status: InventoryStatus
         switch hasValue {
@@ -119,16 +119,16 @@ extension InventoryLocation {
         case false:
             status = InventoryStatus.notStarted
         }
-        
+
         return status
     }
-    
+
     // MARK: - Lifecycle
-    
+
     convenience init(context: NSManagedObjectContext, json: JSON,
                      inventory: Inventory) {
         self.init(context: context)
-        
+
         // Properties
         if let name = json["name"].string {
             self.name = name
@@ -139,7 +139,7 @@ extension InventoryLocation {
         if let locationType = json["loc_type"].string {
             self.locationType = locationType
         }
-        
+
         // Relationship
         self.inventory = inventory
 
@@ -157,25 +157,25 @@ extension InventoryLocation {
             print("PROBLEM - Unrecognied locationType")
         }
     }
-    
+
     convenience init(context: NSManagedObjectContext, name: String, remoteID: Int, type: InventoryLocationType, inventory: Inventory) {
         self.init(context: context)
-        
+
         // Properties (A)
         //if let _name = name { self.name = _name}
         //if let _remoteID = remoteID {self.remoteID = _remoteID }
-        
+
         // Properties (B)
         self.name = name
         self.remoteID = Int32(remoteID)
         self.locationType = "\(type)"
-        
+
         // Relationships
         self.inventory = inventory
     }
-    
+
     // MARK: - Handle New
-    
+
     private func addLocationCategories(context: NSManagedObjectContext, json: [JSON],
                                location: InventoryLocation) {
         for object in json {
@@ -186,7 +186,7 @@ extension InventoryLocation {
             // LocationItems
             if let itemIDs = object["items"].array {
                 //addLocationItems(category: &category, json: itemIDs)
-                
+
                 for itemID in itemIDs {
                     if let id = itemID.int {
                         _ = InventoryLocationItem(context: context, itemID: id, category: category)
@@ -196,7 +196,7 @@ extension InventoryLocation {
             */
         }
     }
-    
+
     private func addLocationItems(context: NSManagedObjectContext, json: [JSON]) {
         for (position, itemID) in json.enumerated() {
             if let itemID = itemID.int {
@@ -205,20 +205,20 @@ extension InventoryLocation {
             }
         }
     }
-    
+
     // MARK: - Handle existing
-    
+
     func doStuff(context: NSManagedObjectContext, json: JSON, location: InventoryLocation,
                  locationItem: InventoryLocationItem) {
-        
+
         // Handle ItemCategory and InventoryLocationCategory
         guard let categoryName = json["item"]["category"]["name"].string else { return }
         guard let id = json["item"]["category"]["id"].int else { return }
-        
+
         // Try to fetch corresponding InventoryLocationCategory
         if let locationCategory = fetchCategory(context: context, id: id) {
             locationItem.category = locationCategory
-            
+
         } else {
             // If one does not already exist, create one
             let locationCategory = InventoryLocationCategory(context: context, id: id,
@@ -226,9 +226,9 @@ extension InventoryLocation {
             locationCategory.location = location
             locationItem.category = locationCategory
         }
-        
+
     }
-    
+
     private func fetchCategory(context: NSManagedObjectContext, id: Int) -> InventoryLocationCategory? {
         // TODO: add check for self.locationType?
         let _id = Int32(id)
@@ -238,5 +238,5 @@ extension InventoryLocation {
             return nil
         }
     }
-    
+
 }

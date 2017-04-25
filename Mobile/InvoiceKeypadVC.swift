@@ -12,27 +12,27 @@ import CoreData
 class InvoiceKeypadVC: UIViewController {
 
     // MARK: - Properties
-    
+
     var parentObject: Invoice!
     var currentIndex = 0
-    
+
     var items: [InvoiceItem] {
         let request: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
         request.predicate = NSPredicate(format: "invoice == %@", parentObject)
-        
+
         let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
         request.sortDescriptors = [sortDescriptor]
-        
+
         do {
             let searchResults = try managedObjectContext?.fetch(request)
             return searchResults!
-            
+
         } catch {
             print("Error with request: \(error)")
         }
         return [InvoiceItem]()
     }
-    
+
     var currentItem: InvoiceItem {
         //print("currentItem: \(items[currentIndex])")
         return items[currentIndex]
@@ -55,23 +55,23 @@ class InvoiceKeypadVC: UIViewController {
 
     typealias keypadOutput = (total: Double?, display: String)
     let keypad = Keypad()
-    
-    // TODO - include relevant methods within this?
+
+    /// TODO: include relevant methods within this?
     enum KeypadState {
         case quantity
         case cost
         case status
     }
 
-    // TODO - should default mode be cost, since that is most likely to vary?
+    /// TODO: should default mode be cost, since that is most likely to vary?
     var currentMode: KeypadState = .quantity
-    
+
     // CoreData
     var managedObjectContext: NSManagedObjectContext?
-    
+
     var numberFormatter: NumberFormatter?
     var currencyFormatter: NumberFormatter?
-    
+
     // MARK: - Display Outlets
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var itemQuantity: UILabel!
@@ -83,7 +83,7 @@ class InvoiceKeypadVC: UIViewController {
     @IBOutlet weak var softButton: OperationKeypadButton!
 
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -93,12 +93,12 @@ class InvoiceKeypadVC: UIViewController {
         numberFormatter.numberStyle = .decimal
         numberFormatter.roundingMode = .halfUp
         numberFormatter.maximumFractionDigits = 2
-        
+
         // Setup currencyFormatter
         currencyFormatter = NumberFormatter()
         guard let currencyFormatter = currencyFormatter else { return }
         currencyFormatter.numberStyle = .currency
-        
+
         // Reset mode to quantity; this also calls update(newItem: true)
         switchMode(.quantity)
         //update(newItem: true)
@@ -108,9 +108,9 @@ class InvoiceKeypadVC: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     // MARK: - Keypad
-    
+
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
         print("Tapped '\(digit)'")
@@ -118,24 +118,24 @@ class InvoiceKeypadVC: UIViewController {
         if currentMode == .status { return }
 
         keypad.pushDigit(value: number)
-        
+
         update()
     }
-    
+
     @IBAction func clearTapped(_ sender: AnyObject) {
         print("Tapped 'clear'")
         keypad.popItem()
-        
+
         update()
     }
-    
+
     @IBAction func decimalTapped(_ sender: AnyObject) {
         print("Tapped '.'")
         keypad.pushDecimal()
-        
+
         update()
     }
-    
+
     // MARK: Units
 
     @IBAction func softButtonTapped( _sender: AnyObject) {
@@ -170,55 +170,55 @@ class InvoiceKeypadVC: UIViewController {
     @IBAction func packTapped(_ sender: AnyObject) {
         guard let item = currentItem.item else { print("A1"); return  }
         guard let purchaseUnit = item.purchaseUnit else { print("B1"); return }
-        
+
         currentItem.unit = purchaseUnit
         update()
     }
-    
-    // TODO - rename `individualTapped`?
+
+    /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
         guard let item = currentItem.item else { print("A2"); return  }
         print("Item: \(item)")
         guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
-        
+
         currentItem.unit = purchaseSubUnit
         update()
     }
-    
+
     // MARK: Item Navigation
-    
+
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
             currentIndex += 1
-            
+
             // Reset mode to quantity; this also calls update(newItem: true)
             switchMode(.quantity)
             //update(newItem: true)
         } else {
-            // TODO - cleanup?
-            
+            /// TODO: cleanup?
+
             // Pop view
             navigationController!.popViewController(animated: true)
         }
     }
-    
+
     @IBAction func previousItemTapped(_ sender: AnyObject) {
         if currentIndex > 0 {
             currentIndex -= 1
-            
+
             // Reset mode to quantity; this also calls update(newItem: true)
             switchMode(.quantity)
             //update(newItem: true)
         } else {
-            // TODO - cleanup?
-            
+            /// TODO: cleanup?
+
             // Pop view
             navigationController!.popViewController(animated: true)
         }
     }
-    
+
     // MARK: Mode
-    
+
     @IBAction func modeTapped(_ sender: AnyObject) {
         switch currentMode {
         case .cost:
@@ -267,18 +267,18 @@ class InvoiceKeypadVC: UIViewController {
             softButton.isEnabled = true
         }
 
-        // TODO - what is the best way to handle this?
+        /// TODO: what is the best way to handle this?
         update(newItem: true)
-        // TODO - is this something that should be always be done in Keypad?
+        /// TODO: is this something that should be always be done in Keypad?
         keypad.isEditingNumber = false
     }
 
     // MARK: - C
-    
+
     func update(newItem: Bool = false) {
-        
+
         let output: keypadOutput
-        
+
         switch newItem {
         case true:
             // Update keypad with quantity of new currentItem
@@ -289,40 +289,40 @@ class InvoiceKeypadVC: UIViewController {
             case .quantity:
                 keypad.updateNumber(currentItem.quantity as Double?)
                 output = keypad.outputB()
-                
+
             case .status:
                 print("update - status")
                 // TESTING
                 output = (total: 1.0, display: "Test")
             }
-            
+
         case false:
             // Update model with output of keyapd
             output = keypad.outputB()
-            
+
             switch currentMode {
             case .cost:
                 if let keypadResult = output.total {
                     currentItem.cost = keypadResult
                 } else {
-                    // TODO - how to handle this?
+                    /// TODO: how to handle this?
                     //currentItem.cost = nil
                     print("\nPROBLEM - Unable to set InventoryItem.cost to nil")
                 }
-                
+
             case .quantity:
                 if let keypadResult = output.total {
                     currentItem.quantity = keypadResult
                 } else {
-                    // TODO - how to handle this?
+                    /// TODO: how to handle this?
                     //currentItem.quantity = nil
                     print("\nPROBLEM - Unable to set InventoryItem.quantity to nil")
                 }
-                
+
             case .status:
                 print("update - status")
             }
-            
+
             // Save the context.
             let context = self.managedObjectContext!
             do {
@@ -334,7 +334,7 @@ class InvoiceKeypadVC: UIViewController {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-        
+
         updateDisplay(item: currentItem, keypadOutput: output)
     }
 
@@ -395,12 +395,12 @@ class InvoiceKeypadVC: UIViewController {
     private func formDisplayLine(quantity: Double?, abbreviation: String) -> String {
         guard let numberFormatter = numberFormatter else { return "ERROR 3" }
         guard let quantity = quantity else { return "ERROR 4" }
-        
+
         // Quantity
         if let quantityString = numberFormatter.string(from: NSNumber(value: quantity)) {
             return "\(quantityString) \(abbreviation)"
         }
         return ""
     }
-    
+
 }

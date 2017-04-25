@@ -51,7 +51,7 @@ extension Invoice {
         if let taxes = json["taxes"].double {
             self.taxes = taxes
         }
-        // TODO - this should be a computed property
+        /// TODO: this should be a computed property
         if let totalCost = json["total_cost"].double {
             self.totalCost = totalCost
         }
@@ -59,15 +59,15 @@ extension Invoice {
             self.checkNo = checkNo
         }
         self.uploaded = uploaded
-        
-        // TODO - status
+
+        /// TODO: status
         //if let status = json["status"] {
         //    self.status = status
         //}
 
         // Relationships
         self.collection = collection
-        // TODO - error / log if these fail
+        /// TODO: error / log if these fail
         if let items = json["items"].array {
             for itemJSON in items {
                 _ = InvoiceItem(context: context, json: itemJSON, invoice: self)

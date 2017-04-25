@@ -17,8 +17,7 @@ class CurrentUserManager {
 
     var user: User?
 
-    // TODO - why are we holding on to the AuthenticationHandler instead of simply configuring and
-    // passing off to APIManager?
+    /// TODO: why are we holding on to the AuthenticationHandler instead of simply configuring and passing off to APIManager?
     private var authHandler: AuthenticationHandler?
     private let defaults: UserDefaults
     private let keychain: Keychain
@@ -72,7 +71,7 @@ class CurrentUserManager {
         self.defaults = defaults
         self.keychain = Keychain(service: "***REMOVED***")
 
-        // TODO - should we store User as a dict or just retrieve info from the server?
+        /// TODO: should we store User as a dict or just retrieve info from the server?
 
         guard let email = email, let password = password else {
             print("CurrentUserManager: unable to get email or password"); return
@@ -80,14 +79,11 @@ class CurrentUserManager {
 
         // It doesn't make sense to have an authHandler unless we have a corresponding User
 
-        // TODO - I don't like instantiating a User with a fake id here. Currently, the existence
-        // of a user functions to tell AppDelegate whether we need to log in. Should we user
-        // `userExists()` to communicate this instead? That way we could wait until successful
-        // login to create the User.
+        /// TODO: I don't like instantiating a User with a fake id here. Currently, the existence of a user functions to tell AppDelegate whether we need to log in. Should we use `userExists()` to communicate this instead? That way we could wait until successful login to create the User.
 
         user = User(id: 1, email: email)
 
-        // TODO - should we always login on init?
+        /// TODO: should we always login on init?
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
         APIManager.sharedInstance.configSession(authHandler!)
     }
@@ -116,8 +112,8 @@ class CurrentUserManager {
 
     public func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
 
-        // TODO - handle pre-existing user?
-        // TODO - handle pre-existing authHandler?
+        /// TODO: handle pre-existing user?
+        /// TODO: handle pre-existing authHandler?
 
         // We login with AuthenticationHandler since it is responsible for maintaining the token.
         // While something long-lasting like an access token in an OAuth2 scheme should be the
@@ -126,9 +122,9 @@ class CurrentUserManager {
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
 
         authHandler!.login(completion: {(json: JSON?, error: Error?) -> Void in
-            // TODO - combine the two guards?
-            // TODO - does AuthenticationHandler.login already ensure json != nil?
-            // TODO - set authHandler back to nil / self.removeUser() if guard fails?
+            /// TODO: combine the two guards?
+            /// TODO: does AuthenticationHandler.login already ensure json != nil?
+            /// TODO: set authHandler back to nil / self.removeUser() if guard fails?
             guard error == nil else {
                 print("\(#function) FAILED : \(error)")
                 return completion(false)
@@ -142,10 +138,10 @@ class CurrentUserManager {
             let userID: Int = user["id"]!.intValue
             let stores: Array<JSON> = user["stores"]!.arrayValue
 
-            // TODO - parse user.default_store instead use using the index-based method below
+            /// TODO: parse user.default_store instead use using the index-based method below
             //let defaultStore = user["default_store"]
 
-            // TODO - can we safely assume all users will have at least one store?
+            /// TODO: can we safely assume all users will have at least one store?
             let defaultStore = stores[0]
             let defaultStoreID: Int = defaultStore["id"].intValue
 
@@ -190,7 +186,7 @@ class CurrentUserManager {
     }
 
     func logout(completion: @escaping (Bool) -> Void) {
-        // TODO - removeUser first, regardless of response.result?
+        /// TODO: removeUser first, regardless of response.result?
         APIManager.sharedInstance.logout(completion: {(success: Bool) -> Void in
             switch success {
             case true:

@@ -11,12 +11,12 @@ import CoreData
 import SwiftyJSON
 
 extension OrderCollection {
-    
+
     // MARK: - Lifecycle
 
     convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
         self.init(context: context)
-        
+
         // Set properties
         if let date = json["date"].string {
             self.date = date
@@ -28,7 +28,7 @@ extension OrderCollection {
             self.storeID = storeID
         }
         self.uploaded = uploaded
-        
+
         // Add Orders
         if let orders = json["orders"].array {
             for orderJSON in orders {
@@ -36,21 +36,21 @@ extension OrderCollection {
             }
         }
     }
-    
+
     // MARK: - Serialization
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-        
-        // TODO - handle conversion from NSDate to string
+
+        /// TODO: handle conversion from NSDate to string
         myDict["date"] = self.date
-        
+
         // ...
-        
+
         return myDict
     }
-    
+
     // MARK: - Update Existing
-    
+
     func updateExisting(context: NSManagedObjectContext, json: JSON) {
         guard let orders = json["orders"].array else {
             print("\nPROBLEM - Unable to get orders from JSON"); return
@@ -63,14 +63,14 @@ extension OrderCollection {
     }
 
     // MARK: -
-    
+
     static func fetchByDate(context: NSManagedObjectContext, date: String) -> OrderCollection? {
         let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
         request.predicate = NSPredicate(format: "date == %@", date)
-        
+
         do {
             let searchResults = try context.fetch(request)
-            
+
             switch searchResults.count {
             case 0:
                 return nil
@@ -80,7 +80,7 @@ extension OrderCollection {
                 print("Found multiple matches: \(searchResults)")
                 return searchResults[0]
             }
-            
+
         } catch {
             print("Error with request: \(error)")
         }
