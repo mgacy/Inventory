@@ -56,16 +56,18 @@ extension InventoryLocationCategory {
     // MARK: - Lifecycle
 
     convenience init(context: NSManagedObjectContext, json: JSON,
-                     location: InventoryLocation) {
+                     location: InventoryLocation, position: Int) {
         self.init(context: context)
 
         // Properties
+        self.position = Int16(position)
         if let name = json["name"].string {
             self.name = name
         }
         if let categoryID = json["id"].int32 {
             self.categoryID = categoryID
         }
+
         // Relationship
         self.location = location
 

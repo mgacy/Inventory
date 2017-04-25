@@ -36,6 +36,7 @@
     <entity name="InventoryLocationCategory" representedClassName="InventoryLocationCategory" syncable="YES" codeGenerationType="class">
         <attribute name="categoryID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="position" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="InventoryLocationItem" inverseName="category" inverseEntity="InventoryLocationItem" syncable="YES"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocation" inverseName="categories" inverseEntity="InventoryLocation" syncable="YES"/>
     </entity>
@@ -168,7 +169,7 @@
         <element name="Inventory" positionX="-371" positionY="-135" width="128" height="165"/>
         <element name="InventoryItem" positionX="-128" positionY="-135" width="128" height="180"/>
         <element name="InventoryLocation" positionX="-171" positionY="54" width="128" height="135"/>
-        <element name="InventoryLocationCategory" positionX="106" positionY="-36" width="128" height="103"/>
+        <element name="InventoryLocationCategory" positionX="106" positionY="-36" width="128" height="120"/>
         <element name="InventoryLocationItem" positionX="306" positionY="261" width="128" height="163"/>
         <element name="Invoice" positionX="-576" positionY="-81" width="128" height="255"/>
         <element name="InvoiceCollection" positionX="-558" positionY="-63" width="128" height="105"/>

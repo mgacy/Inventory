@@ -177,8 +177,8 @@ extension InventoryLocation {
 
     private func addLocationCategories(context: NSManagedObjectContext, json: [JSON],
                                location: InventoryLocation) {
-        for object in json {
-            _ = InventoryLocationCategory(context: context, json: object, location: location)
+        for (position, category) in json.enumerated() {
+            _ = InventoryLocationCategory(context: context, json: category, location: location, position: position + 1)
             /*
             let category = InventoryLocationCategory(context: context, json: object, location: location)
 
@@ -220,6 +220,7 @@ extension InventoryLocation {
 
         } else {
             // If one does not already exist, create one
+            /// TODO: handle position
             let locationCategory = InventoryLocationCategory(context: context, id: id,
                                                              name: categoryName, location: self)
             locationCategory.location = location
