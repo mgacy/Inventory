@@ -33,8 +33,7 @@ extension InventoryLocation {
         case "item"?:
             return self.statusForLocation
         default:
-            print("PROBLEM - Unable to get locationType")
-            return nil
+            fatalError("Unrecognied locationType")
         }
     }
 
@@ -154,7 +153,7 @@ extension InventoryLocation {
                 addLocationCategories(context: context, json: categories, location: self)
             }
         default:
-            print("PROBLEM - Unrecognied locationType")
+            fatalError("Unrecognied locationType")
         }
     }
 
