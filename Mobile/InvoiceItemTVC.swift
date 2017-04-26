@@ -138,7 +138,7 @@ class InvoiceItemTVC: UITableViewController {
             cell.textLabel?.textColor = ColorPalette.navyColor
 
         default:
-            print("z")
+            log.warning("\(#function) : unrecognized status")
             // cell.textLabel?.textColor = UIColor.lightGray
         }
 

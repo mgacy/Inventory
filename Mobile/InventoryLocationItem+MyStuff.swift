@@ -31,7 +31,7 @@ extension InventoryLocationItem {
             self.item = item
         } else {
             /// TODO: init should fail since self.item is required
-            print("Unable to fetch InventoryItem \(itemID) for InventoryLocation \(location)")
+            log.error("\(#function) FAILED : unable to fetch InventoryItem \(itemID) for InventoryLocation \(location)")
         }
     }
 
@@ -53,7 +53,7 @@ extension InventoryLocationItem {
             self.item = item
         } else {
             /// TODO: init should fail since self.item is required
-            print("Unable to fetch InventoryItem \(itemID) for InventoryLocationCategory \(category)")
+            log.error("\(#function) FAILED : unable to fetch InventoryItem \(itemID) for InventoryLocationCategory \(category)")
         }
     }
 

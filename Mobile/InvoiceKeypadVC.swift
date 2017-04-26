@@ -39,10 +39,19 @@ class InvoiceKeypadVC: UIViewController {
     }
 
     var inactiveUnit: Unit? {
-        guard let item = currentItem.item else { print("A1"); return nil  }
+        guard let item = currentItem.item else {
+            log.debug("\(#function) : unable to get item of \(currentItem)")
+            return nil
+        }
         // Simply return currentItem.unit instead of nil?
-        guard let pack = item.purchaseUnit else { print("A2"); return nil }
-        guard let unit = item.purchaseSubUnit else { print("A3"); return nil }
+        guard let pack = item.purchaseUnit else {
+            log.debug("\(#function) : unable to get purchaseUnit of \(item)")
+            return nil
+        }
+        guard let unit = item.purchaseSubUnit else {
+            log.debug("\(#function) : unable to get purchaseSubUnit of \(item)")
+            return nil
+        }
 
         if currentItem.unit == unit {
             return pack
@@ -150,7 +159,7 @@ class InvoiceKeypadVC: UIViewController {
             update()
         // ?
         case .cost:
-            print("z2")
+            log.verbose("currentMode: \(currentMode)")
         // ?
         case .status:
             if var status = InvoiceItemStatus(rawValue: currentItem.status) {
@@ -166,8 +175,14 @@ class InvoiceKeypadVC: UIViewController {
     }
 
     @IBAction func packTapped(_ sender: AnyObject) {
-        guard let item = currentItem.item else { print("A1"); return  }
-        guard let purchaseUnit = item.purchaseUnit else { print("B1"); return }
+        guard let item = currentItem.item else {
+            log.debug("\(#function) : unable to get item of \(currentItem)")
+            return
+        }
+        guard let purchaseUnit = item.purchaseUnit else {
+            log.debug("\(#function) : unable to get purchaseUnit of \(item)")
+            return
+        }
 
         currentItem.unit = purchaseUnit
         update()
@@ -175,9 +190,15 @@ class InvoiceKeypadVC: UIViewController {
 
     /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
-        guard let item = currentItem.item else { print("A2"); return  }
+        guard let item = currentItem.item else {
+            log.debug("\(#function) : unable to get item of \(currentItem)")
+            return
+        }
         //log.verbose("Item: \(item)")
-        guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
+        guard let purchaseSubUnit = item.purchaseSubUnit else {
+            log.debug("\(#function) : unable to get purchaseSubUnit of \(item)")
+            return
+        }
 
         currentItem.unit = purchaseSubUnit
         update()
@@ -305,7 +326,7 @@ class InvoiceKeypadVC: UIViewController {
                 } else {
                     /// TODO: how to handle this?
                     //currentItem.cost = nil
-                    log.warning("\(#function) PROBLEM - Unable to set InventoryItem.cost to nil")
+                    log.warning("\(#function) PROBLEM : unable to set InventoryItem.cost to nil")
                 }
 
             case .quantity:
@@ -314,7 +335,7 @@ class InvoiceKeypadVC: UIViewController {
                 } else {
                     /// TODO: how to handle this?
                     //currentItem.quantity = nil
-                    print("\nPROBLEM - Unable to set InventoryItem.quantity to nil")
+                    log.warning("\(#function) PROBLEM : unable to set InventoryItem.quantity to nil")
                 }
 
             case .status:

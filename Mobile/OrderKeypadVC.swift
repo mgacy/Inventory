@@ -109,8 +109,14 @@ class OrderKeypadVC: UIViewController {
     // MARK: Units
 
     @IBAction func packTapped(_ sender: AnyObject) {
-        guard let item = currentItem.item else { print("A1"); return  }
-        guard let purchaseUnit = item.purchaseUnit else { print("B1"); return }
+        guard let item = currentItem.item else {
+            log.debug("\(#function) : unable to get item of \(currentItem)")
+            return
+        }
+        guard let purchaseUnit = item.purchaseUnit else {
+            log.debug("\(#function) : unable to get purchaseUnit of \(item)")
+            return
+        }
 
         currentItem.orderUnit = purchaseUnit
 
@@ -120,8 +126,14 @@ class OrderKeypadVC: UIViewController {
 
     /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
-        guard let item = currentItem.item else { print("A2"); return  }
-        guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
+        guard let item = currentItem.item else {
+            log.debug("\(#function) : unable to get item of \(currentItem)")
+            return
+        }
+        guard let purchaseSubUnit = item.purchaseSubUnit else {
+            log.debug("\(#function) : unable to get purchaseSubUnit of \(item)")
+            return
+        }
 
         currentItem.orderUnit = purchaseSubUnit
 
@@ -134,7 +146,6 @@ class OrderKeypadVC: UIViewController {
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
             currentIndex += 1
-
             update(newItem: true)
         } else {
             /// TODO: cleanup?
@@ -147,7 +158,6 @@ class OrderKeypadVC: UIViewController {
     @IBAction func previousItemTapped(_ sender: AnyObject) {
         if currentIndex > 0 {
             currentIndex -= 1
-
             update(newItem: true)
         } else {
             /// TODO: cleanup?

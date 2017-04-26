@@ -432,7 +432,7 @@ extension OrderDateTVC {
             // Execute Batch Request
             let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
 
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
             // The managed object context is not notified of the consequences of the batch delete request.
 

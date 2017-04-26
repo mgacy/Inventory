@@ -40,7 +40,7 @@ extension Order {
 
         // OrderItems
         if let items = json["items"].array {
-            print("\nCreating OrderItems ...")
+            log.info("Creating OrderItems ...")
             for itemJSON in items {
                 _ = OrderItem(context: context, json: itemJSON, order: self)
             }
@@ -59,7 +59,7 @@ extension Order {
 
         // Generate array of dictionaries for InventoryItems
         guard let items = self.items else {
-            print("\nPROBLEM - Unable to serialize without any OrderItems")
+            log.warning("\(#function) FAILED : unable to serialize without any OrderItems")
             return myDict
         }
 

@@ -53,7 +53,7 @@ extension OrderCollection {
 
     func updateExisting(context: NSManagedObjectContext, json: JSON) {
         guard let orders = json["orders"].array else {
-            print("\nPROBLEM - Unable to get orders from JSON"); return
+            log.error("\(#function) FAILED : unable to get orders from JSON"); return
         }
 
         // Iterate over Orders
@@ -77,12 +77,12 @@ extension OrderCollection {
             case 1:
                 return searchResults[0]
             default:
-                print("Found multiple matches: \(searchResults)")
+                log.warning("Found multiple matches: \(searchResults)")
                 return searchResults[0]
             }
 
         } catch {
-            print("Error with request: \(error)")
+            log.error("Error with request: \(error)")
         }
         return nil
     }

@@ -51,7 +51,7 @@ extension Inventory {
 
     func serialize() -> [String: Any]? {
         guard let items = self.items else {
-            print("\(#function) FAILED : unable to serialize without any InventoryItems")
+            log.error("\(#function) FAILED : unable to serialize without any InventoryItems")
             return nil
         }
 
@@ -86,7 +86,7 @@ extension Inventory {
                                                 type: InventoryLocationType.category, inventory: self)
 
         guard let inventoryItems = json["items"].array else {
-            print("\(#function) FAILED : unable to get InventoryItems from JSON"); return
+            log.error("\(#function) FAILED : unable to get InventoryItems from JSON"); return
         }
 
         // Iterate over Items
@@ -121,7 +121,7 @@ extension Inventory {
 
         }
         /// TODO: add position to LocationCategories
-        print("Created InventoryLocation: \(defaultLocation)")
+        log.verbose("Created InventoryLocation: \(defaultLocation)")
     }
 
 }
