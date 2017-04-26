@@ -101,7 +101,9 @@ class OrderItemTVC: UITableViewController {
         // Simply POST the order if we already sent the message but were unable to POST if previously
         if parentObject.placed {
             log.info("Trying to POST an Order which was already sent ...")
+            /// TODO: should we return after calling completedPlaceOrder
             completedPlaceOrder(true)
+            return
         }
 
         /// TODO: handle different orderMethod
