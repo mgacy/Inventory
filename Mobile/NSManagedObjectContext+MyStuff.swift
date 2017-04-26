@@ -142,6 +142,32 @@ extension NSManagedObjectContext {
 
 }
 
+// MARK: - Save
+// objc.io - Core Data
+extension NSManagedObjectContext {
+
+    public func saveOrRollback() -> Bool {
+        do {
+            try save()
+            return true
+        } catch {
+            let nserror = error as NSError
+            log.error("Unresolved error while saving: \(nserror), \(nserror.userInfo)")
+
+            rollback()
+            return false
+        }
+    }
+
+    public func performChanges(block: @escaping () -> ()) {
+        perform {
+            block()
+            _ = self.saveOrRollback()
+        }
+    }
+
+}
+
 // MARK: - Syncable
 extension NSManagedObjectContext {
 
