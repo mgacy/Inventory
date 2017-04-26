@@ -217,13 +217,15 @@ extension OrderItemTVC {
             HUD.show(.progress)
 
             // Serialize and POST Order
-            if let json = parentObject.serialize() {
-                print("\nPOSTing Order: \(json)")
-                APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
+            guard let json = parentObject.serialize() else {
+                log.error("\(#function) FAILED : unable to serialize Order")
+                /// TODO: show more detailed error message
+                HUD.flash(.error, delay: 1.0); return
             }
 
-            /// TODO: handle failure to serialize Order
-
+            log.info("POSTing Order ...")
+            log.verbose("Order: \(json)")
+            APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
         } else {
             log.error("\(#function) FAILED : unable to send Order message")
             showAlert(title: "Problem", message: "Unable to send Order message")
