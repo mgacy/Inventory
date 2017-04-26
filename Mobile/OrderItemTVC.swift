@@ -112,8 +112,9 @@ class OrderItemTVC: UITableViewController {
         /// TODO: Enable usage of vendor.rep.phoneNumber
         //guard let phoneNumber = parentObject.vendor.rep.phoneNumber else { return }
         let phoneNumber = "602-980-4718"
-        guard let message = parentObject.getOrderMessage() else { return }
-        //print("\nOrder message: \(message)")
+        guard let message = parentObject.getOrderMessage() else {
+            log.error("\(#function) FAILED : unable to getOrderMessage"); return
+        }
 
         log.verbose("Order message: \(message)")
 
