@@ -47,10 +47,10 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success:
-                    print("\n\(#function) - response: \(response)\n")
+                    log.verbose("\n\(#function) - response: \(response)\n")
                     completion(true)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(false)
                 }
         }
@@ -64,11 +64,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -80,11 +80,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -96,11 +96,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -115,11 +115,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -132,11 +132,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -150,11 +150,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -166,11 +166,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("Success: \(value)")
+                    // log.verbose("Success: \(value)")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     let json = JSON(error)
                     completion(json, error)
                 }
@@ -186,11 +186,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -204,11 +204,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -222,11 +222,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -238,11 +238,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    print("Success: \(value)")
+                    log.verbose("Success: \(value)")
                     let json = JSON(value)
                     completion(true, json)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     let json = JSON(error)
                     completion(false, json)
                 }
@@ -258,11 +258,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -276,11 +276,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -295,11 +295,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }
@@ -311,11 +311,11 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    print("Success: \(value)")
+                    log.verbose("Success: \(value)")
                     let json = JSON(value)
                     completion(true, json)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.warning("\(#function) FAILED : \(error)")
                     let json = JSON(error)
                     completion(false, json)
                 }

@@ -38,13 +38,14 @@ class InventoryLocationItemTVC: UITableViewController {
         setupTableView()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        log.warning("\(#function)")
         // Dispose of any resources that can be recreated.
     }
 

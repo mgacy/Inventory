@@ -99,7 +99,7 @@ extension Invoice {
 
         // Generate array of dictionaries for InventoryItems
         guard let items = self.items else {
-            print("\nPROBLEM - Unable to serialize without any InvoiceItems")
+            log.error("\(#function) FAILED : unable to serialize without any InvoiceItems")
             return myDict
         }
 

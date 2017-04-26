@@ -74,7 +74,7 @@ class CurrentUserManager {
         /// TODO: should we store User as a dict or just retrieve info from the server?
 
         guard let email = email, let password = password else {
-            print("CurrentUserManager: unable to get email or password"); return
+            log.warning("CurrentUserManager: unable to get email or password"); return
         }
 
         // It doesn't make sense to have an authHandler unless we have a corresponding User
@@ -122,15 +122,14 @@ class CurrentUserManager {
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
 
         authHandler!.login(completion: {(json: JSON?, error: Error?) -> Void in
-            /// TODO: combine the two guards?
             /// TODO: does AuthenticationHandler.login already ensure json != nil?
             /// TODO: set authHandler back to nil / self.removeUser() if guard fails?
             guard error == nil else {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
                 return completion(false)
             }
             guard let json = json else {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : unable to get JSON")
                 return completion(false)
             }
 
@@ -146,8 +145,8 @@ class CurrentUserManager {
             let defaultStoreID: Int = defaultStore["id"].intValue
 
             // TESTING
-            //print("login response: \(json)")
-            //print("user: \(user)")
+            //log.debug("login response: \(json)")
+            //log.debug("user: \(user)")
 
             self.email = email
             self.password = password
@@ -167,7 +166,7 @@ class CurrentUserManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    print("\n\(#function) - response: \(response)\n")
+                    log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
 
                     let user: Dictionary<String, JSON> = json["user"].dictionaryValue
@@ -179,7 +178,7 @@ class CurrentUserManager {
 
                     completion(json, nil)
                 case .failure(let error):
-                    debugPrint("\(#function) FAILED : \(error)")
+                    log.error("\(#function) FAILED : \(error)")
                     completion(nil, error)
                 }
         }

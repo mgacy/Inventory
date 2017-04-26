@@ -8,7 +8,10 @@
 
 import UIKit
 import CoreData
+import SwiftyBeaver
 import PKHUD
+
+let log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,7 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaults = UserDefaults.standard
         let isPreloaded = defaults.bool(forKey: "isPreloaded")
         if !isPreloaded {
-            print("Preloading data ...")
+            log.info("Preloading data ...")
+            /// TODO: instantiate importer with context rather than using singleton
             CoreDataImporter.shared.preloadData()
             defaults.set(true, forKey: "isPreloaded")
         }
@@ -77,8 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         /// TODO: Should we use a failable initializier with CurrentUserManager?
-        // Alteratively, we could try to login and perform the following in a
-        // completion handler with success / failure.
+        //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
         // Check if we already have user + credentials
         if userManager.user != nil {
@@ -102,6 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         //self.window?.makeKeyAndVisible()
+        setupSwiftyBeaverLogging()
 
         return true
     }
@@ -169,6 +173,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                  * The store could not be migrated to the current model version.
                  Check the error message to determine what the actual problem was.
                  */
+                log.error("Unresolved error \(error), \(error.userInfo)")
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
@@ -186,9 +191,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
+                log.error("Unresolved error \(nserror), \(nserror.userInfo)")
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+
+    // MARK: - Setup
+
+    func setupSwiftyBeaverLogging() {
+        let console = ConsoleDestination()
+        //let file = FileDestination()
+        let platform = SBPlatformDestination(appID: "***REMOVED***",
+                                             appSecret: "***REMOVED***",
+                                             encryptionKey: "***REMOVED***")
+
+        // Config
+        platform.minLevel = .warning
+        //platform.analyticsUserName = ""
+
+        // use custom format and set console output to short time, log level & message
+        //console.format = "$DHH:mm:ss$d $L $M"
+        // or use this for JSON output: console.format = "$J"
+
+        // Filters
+
+        log.addDestination(console)
+        //log.addDestination(file)
+        log.addDestination(platform)
     }
 
 }

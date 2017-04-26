@@ -76,12 +76,12 @@ extension InvoiceCollection {
             case 1:
                 return searchResults[0]
             default:
-                print("Found multiple matches: \(searchResults)")
+                log.warning("Found multiple matches: \(searchResults)")
                 return searchResults[0]
             }
 
         } catch {
-            print("Error with request: \(error)")
+            log.error("Error with request: \(error)")
         }
         return nil
     }

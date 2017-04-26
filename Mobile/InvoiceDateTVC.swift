@@ -59,7 +59,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         self.performFetch()
 
         guard let storeID = userManager.storeID else {
-            print("\(#function) FAILED: unable to get storeID"); return
+            log.error("\(#function) FAILED: unable to get storeID"); return
         }
 
         // Get list of Invoices from server
@@ -67,8 +67,8 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
 
@@ -80,12 +80,12 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller.
-        guard let controller = segue.destination as? InvoiceVendorTVC else { return }
-
-        // Get the selection
-        guard let selection = selectedCollection else { return }
+        guard let controller = segue.destination as? InvoiceVendorTVC else {
+            fatalError("Wrong view controller type")
+        }
+        guard let selection = selectedCollection else {
+            fatalError("Showing detail, but no selected row?")
+        }
 
         // Pass selection to new view controller.
         controller.parentObject = selection
@@ -109,7 +109,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
             do {
                 try managedObjectContext.syncCollections(InvoiceCollection.self, withJSON: json)
             } catch {
-                print("Unable to sync InvoiceCollections")
+                log.error("Unable to sync InvoiceCollections")
             }
         })
 
@@ -119,7 +119,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
 
     @IBAction func newTapped(_ sender: AnyObject) {
         guard let storeID = userManager.storeID else {
-            print("\(#function) FAILED : unable to get storeID"); return
+            log.error("\(#function) FAILED : unable to get storeID"); return
         }
 
         //tableView.activityIndicatorView.startAnimating()
@@ -152,12 +152,8 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Dequeue Reusable Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
-
-        // Configure Cell
         self.configureCell(cell, atIndexPath: indexPath)
-
         return cell
     }
 
@@ -209,24 +205,24 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
             guard let storeID = userManager.storeID,
                   let collectionDate = selection.date else
             {
-                print("\(#function) FAILED : unable to get storeID"); return
+                log.error("\(#function) FAILED : unable to get storeID"); return
             }
 
             /// TODO: ideally, we would want to deleteChildOrders *after* fetching data from server
             // Delete existing invoices of selected collection
-            print("Deleting Invoices of selected InvoiceCollection ...")
+            log.verbose("Deleting Invoices of selected InvoiceCollection ...")
             deleteChildInvoices(parent: selection)
 
             // Reset selection since we reset the managedObjectContext in deleteChildOrders
             selectedCollection = self.fetchedResultsController.object(at: indexPath)
 
-            print("GET InvoiceCollection from server ...")
+            log.verbose("GET InvoiceCollection from server ...")
             APIManager.sharedInstance.getInvoiceCollection(
                 storeID: storeID, invoiceDate: collectionDate,
                 completion: completedGetExistingInvoiceCollection)
 
         case false:
-            print("LOAD NEW selectedCollection from disk ...")
+            log.verbose("LOAD NEW selectedCollection from disk ...")
             performSegue(withIdentifier: segueIdentifier, sender: self)
         }
 
@@ -245,7 +241,7 @@ extension InvoiceDateTVC {
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED : no JSON")
+            log.warning("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
 
@@ -253,14 +249,14 @@ extension InvoiceDateTVC {
         // are still present in the local store
         for (_, collection) in json {
             guard let dateString = collection["date"].string else {
-                print("unable to get date"); continue
+                log.warning("unable to get date"); continue
             }
 
             // Create InvoiceCollection if we can't find one with date `date`
             // if InvoiceCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
             let predicate = NSPredicate(format: "date == %@", dateString)
             if managedObjectContext?.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate) == nil {
-                print("Creating InvoiceCollection: \(dateString)")
+                log.verbose("Creating InvoiceCollection: \(dateString)")
                 _ = InvoiceCollection(context: self.managedObjectContext!, json: collection, uploaded: true)
             }
         }
@@ -271,15 +267,14 @@ extension InvoiceDateTVC {
 
     func completedGetExistingInvoiceCollection(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            print("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED : no JSON")
+            log.error("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
         guard let selection = selectedCollection else {
-            print("\(#function) FAILED : still unable to get selected InvoiceCollection\n"); return
+            log.error("\(#function) FAILED : still unable to get selected InvoiceCollection\n"); return
         }
 
         // Update selected Inventory with full JSON from server.
@@ -293,11 +288,10 @@ extension InvoiceDateTVC {
 
     func completedGetNewInvoiceCollection(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            print("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED : no JSON")
+            log.error("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
 
@@ -316,19 +310,19 @@ extension InvoiceDateTVC {
 
     func completedLogin(_ succeeded: Bool, error: Error?) {
         if succeeded {
-            print("\nCompleted login / sync - succeeded: \(succeeded)")
+            log.verbose("Completed login / sync - succeeded: \(succeeded)")
 
             guard let storeID = userManager.storeID else {
-                print("\(#function) FAILED : unable to get storeID")
+                log.error("\(#function) FAILED : unable to get storeID")
                 HUD.flash(.error, delay: 1.0); return
             }
 
             // Get list of Invoices from server
-            // print("\nFetching existing InvoiceCollections from server ...")
+            // log.info("Fetching existing InvoiceCollections from server ...")
             APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
 
         } else {
-            print("Unable to login / sync ...")
+            log.error("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
             HUD.flash(.error, delay: 1.0)
         }
@@ -337,7 +331,7 @@ extension InvoiceDateTVC {
     // MARK: Sync
 
     func deleteExistingInvoiceCollections(_ filter: NSPredicate? = nil) {
-        print("deleteExistingInvoices...")
+        log.info("deleteExistingInvoices...")
 
         // Create Fetch Request
         let fetchRequest: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
@@ -355,7 +349,7 @@ extension InvoiceDateTVC {
             // Execute Batch Request
             let batchDeleteResult = try managedObjectContext?.execute(batchDeleteRequest) as! NSBatchDeleteResult
 
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
             // Reset Managed Object Context
             managedObjectContext?.reset()
@@ -368,7 +362,7 @@ extension InvoiceDateTVC {
 
         } catch {
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("\(updateError), \(updateError.userInfo)")
         }
     }
 
@@ -384,7 +378,7 @@ extension InvoiceDateTVC {
                 try managedObjectContext.save()
             } catch {
                 let saveError = error as NSError
-                print("\(saveError), \(saveError.userInfo)")
+                log.error("\(saveError), \(saveError.userInfo)")
             }
         }
 
@@ -405,7 +399,7 @@ extension InvoiceDateTVC {
             // Execute Batch Request
             let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
 
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
             // The managed object context is not notified of the consequences of the batch delete request.
 
@@ -422,7 +416,7 @@ extension InvoiceDateTVC {
 
         } catch {
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("\(updateError), \(updateError.userInfo)")
         }
     }
 
@@ -466,7 +460,7 @@ extension InvoiceDateTVC {
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
             }
             self.tableView.reloadData()
         })
@@ -480,6 +474,7 @@ extension InvoiceDateTVC {
             // Replace this implementation with code to handle the error appropriately.
             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nserror = error as NSError
+            log.error("Unresolved error \(nserror), \(nserror.userInfo)")
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
     }

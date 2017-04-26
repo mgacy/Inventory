@@ -42,11 +42,11 @@ class CoreDataImporter {
                 }
 
             } else {
-                print("Could not get json from file, make sure that file contains valid json.")
+                log.error("Could not get json from file, make sure that file contains valid json.")
             }
 
         } else {
-            print("Invalid filename.")
+            log.error("Invalid filename.")
         }
     }
 

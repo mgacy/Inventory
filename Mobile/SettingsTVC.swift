@@ -55,7 +55,7 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
                 let destinationNavController = segue.destination as? UINavigationController,
                 let destinationController = destinationNavController.topViewController as? LoginVC
             else {
-                debugPrint("\(#function) FAILED : unable to get destination"); return
+                fatalError("Wrong view controller type")
             }
 
             // Pass dependencies to the new view controller.
@@ -69,19 +69,19 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected section \(indexPath.section)")
+        log.verbose("Selected section \(indexPath.section)")
 
         // Account
         if indexPath.section == 0 {
             if let user = userManager.user {
-                print("Logging out \(user.email)")
+                log.verbose("Logging out \(user.email)")
 
                 /// TODO: check for pending Inventory / Invoice / Order
                 /// TODO: if so, present warning
 
                 userManager.logout(completion: completedLogout)
             } else {
-                print("Showing AccountVC ...")
+                log.verbose("Showing AccountVC ...")
                 performSegue(withIdentifier: accountSegue, sender: self)
             }
         }
@@ -112,7 +112,7 @@ extension SettingsTVC {
             AccountCell.textLabel?.text = "Login"
             deleteData()
         } else {
-            print("Unable to actually logout")
+            log.warning("Unable to actually logout")
             AccountCell.textLabel?.text = "Login"
             deleteData()
         }
@@ -132,37 +132,37 @@ extension SettingsTVC {
         do {
             try managedObjectContext.deleteEntities(Inventory.self)
         } catch {
-            print("Unable to delete Inventories")
+            log.error("\(#function) FAILED: unable to delete Inventories")
         }
         // Order
         do {
             try managedObjectContext.deleteEntities(OrderCollection.self)
         } catch {
-            print("Unable to delete OrderCollections")
+            log.error("\(#function) FAILED: unable to delete OrderCollections")
         }
         // Invoice
         do {
             try managedObjectContext.deleteEntities(InvoiceCollection.self)
         } catch {
-            print("Unable to delete InvoiceCollections")
+            log.error("\(#function) FAILED: unable to delete InvoiceCollections")
         }
         // Item
         do {
             try managedObjectContext.deleteEntities(Item.self)
         } catch {
-            print("Unable to delete Items")
+            log.error("\(#function) FAILED: unable to delete Items")
         }
         // ItemCategory
         do {
             try managedObjectContext.deleteEntities(ItemCategory.self)
         } catch {
-            print("Unable to delete ItemCategories")
+            log.error("\(#function) FAILED: unable to delete ItemCategories")
         }
         // Vendor
         do {
             try managedObjectContext.deleteEntities(Vendor.self)
         } catch {
-            print("Unable to delete Vendors")
+            log.error("\(#function) FAILED: unable to delete Vendors")
         }
     }
 

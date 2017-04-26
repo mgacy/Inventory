@@ -27,6 +27,7 @@ class OrderItemTVC: UITableViewController {
     var fetchBatchSize = 20 // 0 = No Limit
 
     // Create a MessageComposer
+    /// TODO: should I instantiate this here or only on .tappedMessageOrder(:)?
     let messageComposer = MessageComposer()
 
     // TableView
@@ -56,8 +57,8 @@ class OrderItemTVC: UITableViewController {
         self.performFetch()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
 
@@ -69,9 +70,9 @@ class OrderItemTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? OrderKeypadVC else { return }
+        guard let destinationController = segue.destination as? OrderKeypadVC else {
+            fatalError("Wrong view controller type")
+        }
 
         // Pass the parent of the selected object to the new view controller.
         destinationController.parentObject = parentObject
@@ -86,22 +87,23 @@ class OrderItemTVC: UITableViewController {
     // MARK: - User Actions
 
     @IBAction func tappedMessageOrder(_ sender: UIBarButtonItem) {
+        log.info("Placing Order ...")
 
         // Prevent placing the order twice
         if parentObject.uploaded {
-            //HUD.flash(.label("Order already placed"), delay: 2.0)
-
-            // Alt, more configurable call
+            log.warning("Tried to place the same Order twice")
             PKHUD.sharedHUD.show()
             PKHUD.sharedHUD.contentView = PKHUDErrorView(title: "Error", subtitle: "Order already placed")
             PKHUD.sharedHUD.hide(afterDelay: 2.0)
-
             return
         }
 
         // Simply POST the order if we already sent the message but were unable to POST if previously
         if parentObject.placed {
+            log.info("Trying to POST an Order which was already sent ...")
+            /// TODO: should we return after calling completedPlaceOrder
             completedPlaceOrder(true)
+            return
         }
 
         /// TODO: handle different orderMethod
@@ -110,8 +112,11 @@ class OrderItemTVC: UITableViewController {
         /// TODO: Enable usage of vendor.rep.phoneNumber
         //guard let phoneNumber = parentObject.vendor.rep.phoneNumber else { return }
         let phoneNumber = "602-980-4718"
-        guard let message = parentObject.getOrderMessage() else { return }
-        //print("\nOrder message: \(message)")
+        guard let message = parentObject.getOrderMessage() else {
+            log.error("\(#function) FAILED : unable to getOrderMessage"); return
+        }
+
+        log.verbose("Order message: \(message)")
 
         // Make sure the device can send text messages
         if (messageComposer.canSendText()) {
@@ -127,11 +132,11 @@ class OrderItemTVC: UITableViewController {
             present(messageComposeVC, animated: true, completion: nil)
 
         } else {
-
+            log.error("\(#function) FAILED : messageComposer cannot send text")
             /// TODO: try to send email message?
 
             // TESTING:
-            completedPlaceOrder(true)
+            //completedPlaceOrder(true)
 
             // Let the user know if his/her device isn't able to send text messages
             let errorAlert = createAlert(
@@ -164,7 +169,6 @@ class OrderItemTVC: UITableViewController {
 
         // Configure Cell
         self.configureCell(cell, atIndexPath: indexPath)
-
         return cell
     }
 
@@ -194,7 +198,7 @@ class OrderItemTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
-        // print("Selected OrderItem: \(selectedObject)")
+        // log.verbose("Selected OrderItem: \(selectedObject)")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
 
@@ -213,24 +217,29 @@ extension OrderItemTVC {
             HUD.show(.progress)
 
             // Serialize and POST Order
-            if let json = parentObject.serialize() {
-                print("\nPOSTing Order: \(json)")
-                APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
+            /// TODO: is it possible for this to take long enough to justify showing HUD before?
+            guard let json = parentObject.serialize() else {
+                log.error("\(#function) FAILED : unable to serialize Order")
+                /// TODO: show more detailed error message
+                HUD.flash(.error, delay: 1.0); return
             }
 
-            /// TODO: handle failure to serialize Order
-
+            log.info("POSTing Order ...")
+            log.verbose("Order: \(json)")
+            APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
         } else {
-            print("\nPROBLEM - Unable to send Order message")
+            log.error("\(#function) FAILED : unable to send Order message")
             showAlert(title: "Problem", message: "Unable to send Order message")
         }
     }
+
+    /// TODO: change completion handler to accept standard (JSON?, Error?)
 
     func completedPostOrder(succeeded: Bool, json: JSON) {
         if succeeded {
             parentObject.uploaded = true
 
-            // TODO: set .uploaded of parentObject.collection if all are uploaded
+            /// TODO: set .uploaded of parentObject.collection if all are uploaded
 
             HUD.flash(.success, delay: 1.0) { finished in
                 // Pop view
@@ -238,8 +247,9 @@ extension OrderItemTVC {
             }
 
         } else {
-            print("\nPROBLEM - Unable to POST order \(json)")
-            showAlert(title: "Problem", message: "Unable to upload Order")
+            log.error("\(#function) FAILED : unable to POST order \(json)")
+            HUD.flash(.error, delay: 1.0)
+            //showAlert(title: "Problem", message: "Unable to upload Order")
         }
     }
 
@@ -288,7 +298,7 @@ extension  OrderItemTVC {
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
             }
             self.tableView.reloadData()
         })

@@ -28,13 +28,13 @@ class OrderKeypadVC: UIViewController {
             return searchResults!
 
         } catch {
-            print("Error with request: \(error)")
+            log.error("Error with request: \(error)")
         }
         return [OrderItem]()
     }
 
     var currentItem: OrderItem {
-        //print("currentItem: \(items[currentIndex])")
+        //log.verbose("currentItem: \(items[currentIndex])")
         return items[currentIndex]
     }
 
@@ -85,7 +85,7 @@ class OrderKeypadVC: UIViewController {
 
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
-        //print("Tapped '\(digit)'")
+        //log.verbose("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
         keypad.pushDigit(value: number)
 
@@ -93,14 +93,14 @@ class OrderKeypadVC: UIViewController {
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
-        //print("Tapped 'clear'")
+        //log.verbose("Tapped 'clear'")
         keypad.popItem()
 
         update()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        //print("Tapped '.'")
+        //log.verbose("Tapped '.'")
         keypad.pushDecimal()
 
         update()
@@ -109,8 +109,14 @@ class OrderKeypadVC: UIViewController {
     // MARK: Units
 
     @IBAction func packTapped(_ sender: AnyObject) {
-        guard let item = currentItem.item else { print("A1"); return  }
-        guard let purchaseUnit = item.purchaseUnit else { print("B1"); return }
+        guard let item = currentItem.item else {
+            log.debug("\(#function) : unable to get item of \(currentItem)")
+            return
+        }
+        guard let purchaseUnit = item.purchaseUnit else {
+            log.debug("\(#function) : unable to get purchaseUnit of \(item)")
+            return
+        }
 
         currentItem.orderUnit = purchaseUnit
 
@@ -120,8 +126,14 @@ class OrderKeypadVC: UIViewController {
 
     /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
-        guard let item = currentItem.item else { print("A2"); return  }
-        guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
+        guard let item = currentItem.item else {
+            log.debug("\(#function) : unable to get item of \(currentItem)")
+            return
+        }
+        guard let purchaseSubUnit = item.purchaseSubUnit else {
+            log.debug("\(#function) : unable to get purchaseSubUnit of \(item)")
+            return
+        }
 
         currentItem.orderUnit = purchaseSubUnit
 
@@ -134,7 +146,6 @@ class OrderKeypadVC: UIViewController {
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
             currentIndex += 1
-
             update(newItem: true)
         } else {
             /// TODO: cleanup?
@@ -147,7 +158,6 @@ class OrderKeypadVC: UIViewController {
     @IBAction func previousItemTapped(_ sender: AnyObject) {
         if currentIndex > 0 {
             currentIndex -= 1
-
             update(newItem: true)
         } else {
             /// TODO: cleanup?
@@ -187,6 +197,7 @@ class OrderKeypadVC: UIViewController {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
+                log.error("Unresolved error \(nserror), \(nserror.userInfo)")
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
@@ -194,7 +205,7 @@ class OrderKeypadVC: UIViewController {
         updateKeypadButtons(item: currentItem)
         updateDisplay(item: currentItem, keypadOutput: output)
 
-        //print("currentItem: \(currentItem)")
+        //log.verbose("currentItem: \(currentItem)")
     }
 
     func updateDisplay(item: OrderItem, keypadOutput: keypadOutput) {
@@ -233,11 +244,15 @@ class OrderKeypadVC: UIViewController {
 
     /// TODO: rename `updateUnitButtons`?
     func updateKeypadButtons(item: OrderItem) {
-        guard let orderUnit = currentItem.orderUnit else { print("a"); return }
-        guard let item = currentItem.item else { print("b"); return }
+        guard let orderUnit = currentItem.orderUnit else {
+            log.warning("\(#function) FAILED : 1"); return
+        }
+        guard let item = currentItem.item else {
+            log.warning("\(#function) FAILED : 2"); return
+        }
 
-        //print("currentItem: \(currentItem)\n")
-        //print("currentItem.item: \(item)\n")
+        //log.verbose("currentItem: \(currentItem)")
+        //log.verbose("currentItem.item: \(item)")
 
         /// TODO: some of this should only be done when we change currentItem
         if orderUnit == item.purchaseUnit {
@@ -263,7 +278,7 @@ class OrderKeypadVC: UIViewController {
             }
 
         } else {
-            print("\(#function) FAILED : A")
+            log.warning("\(#function) FAILED : 3")
             caseButton.isEnabled = false
             bottleButton.isEnabled = false
         }

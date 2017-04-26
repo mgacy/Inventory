@@ -36,22 +36,12 @@ class InvoiceItemTVC: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-
-        // Set Title
         title = parentObject.vendor?.name
-
-        // CoreData
         self.performFetch()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
 
@@ -63,9 +53,9 @@ class InvoiceItemTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InvoiceKeypadVC else { return }
+        guard let destinationController = segue.destination as? InvoiceKeypadVC else {
+            fatalError("Wrong view controller type")
+        }
 
         // Pass the parent of the selected object to the new view controller.
         destinationController.parentObject = parentObject
@@ -80,10 +70,10 @@ class InvoiceItemTVC: UITableViewController {
     // MARK: - User interaction
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
-        print("Uploading Invoice ...")
+        log.info("Uploading Invoice ...")
 
         guard let dict = self.parentObject.serialize() else {
-            print("\nPROBLEM - Unable to serialize Invoice")
+            log.error("\(#function) FAILED : unable to serialize Invoice")
             /// TODO: completedUpload(false)
             return
         }
@@ -102,13 +92,8 @@ class InvoiceItemTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        // Dequeue Reusable Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
-
-        // Configure Cell
         self.configureCell(cell, atIndexPath: indexPath)
-
         return cell
     }
 
@@ -153,7 +138,7 @@ class InvoiceItemTVC: UITableViewController {
             cell.textLabel?.textColor = ColorPalette.navyColor
 
         default:
-            print("z")
+            log.warning("\(#function) : unrecognized status")
             // cell.textLabel?.textColor = UIColor.lightGray
         }
 
@@ -163,7 +148,7 @@ class InvoiceItemTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
-        print("Selected InvoiceItem: \(selectedObject)")
+        log.verbose("Selected InvoiceItem: \(selectedObject)")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
 
@@ -211,6 +196,8 @@ class InvoiceItemTVC: UITableViewController {
 // MARK: - Completion Handlers
 extension InvoiceItemTVC {
 
+    /// TODO: change signature to accept standard (JSON?, Error?)
+
     func completedUpload(succeeded: Bool, json: JSON) {
         if succeeded {
             parentObject.uploaded = true
@@ -223,7 +210,7 @@ extension InvoiceItemTVC {
             }
 
         } else {
-            print("\(#function) FAILED : unable to upload Invoice")
+            log.error("\(#function) FAILED : unable to upload Invoice")
         }
     }
 
@@ -239,7 +226,7 @@ extension InvoiceItemTVC {
         func updateItemStatus(forItem invoiceItem: InvoiceItem, withStatus status: InvoiceItemStatus) {
             self.isEditing = false
             invoiceItem.status = status.rawValue
-            print("Updated InvoiceItem: \(invoiceItem)")
+            log.info("Updated InvoiceItem: \(invoiceItem)")
         }
 
         // Alert Controller
@@ -333,7 +320,7 @@ extension InvoiceItemTVC {
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
             }
             self.tableView.reloadData()
         })

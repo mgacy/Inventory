@@ -31,7 +31,7 @@ class InventoryKeypadVC: UIViewController {
             request.sortDescriptors = [sortDescriptor]
 
         } else {
-            print("\nPROBLEM - Unable to add predicate\n")
+            log.error("PROBLEM : Unable to add predicate")
             return [InventoryLocationItem]()
         }
         
@@ -40,7 +40,7 @@ class InventoryKeypadVC: UIViewController {
             return searchResults!
 
         } catch {
-            print("Error with request: \(error)")
+            log.error("Error with request: \(error)")
         }
         return [InventoryLocationItem]()
     }
@@ -72,6 +72,7 @@ class InventoryKeypadVC: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        log.warning("\(#function)")
         // Dispose of any resources that can be recreated.
     }
     
@@ -187,6 +188,7 @@ class InventoryKeypadVC: UIViewController {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
+                log.error("Unresolved error \(nserror), \(nserror.userInfo)")
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }

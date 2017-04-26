@@ -50,13 +50,14 @@ class InventoryLocationTVC: UITableViewController {
         setupTableView()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        log.warning("\(#function)")
         // Dispose of any resources that can be recreated.
     }
 
@@ -86,7 +87,7 @@ class InventoryLocationTVC: UITableViewController {
             //destinationController.performFetch()
 
         default:
-            print("\(#function) FAILED : segue.identifier not recognized\n"); break
+            fatalError("Unrecognized segue.identifier: \(segue.identifier)")
         }
     }
 
@@ -129,7 +130,7 @@ class InventoryLocationTVC: UITableViewController {
             // InventoryLocationItem
             performSegue(withIdentifier: "ShowLocationItem", sender: self)
         default:
-            print("\(#function) FAILED : wrong locationType\n")
+            fatalError("\(#function) FAILED : wrong locationType")
         }
 
         tableView.deselectRow(at: indexPath, animated: true)
@@ -138,11 +139,11 @@ class InventoryLocationTVC: UITableViewController {
     // MARK: - User Actions
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
-        print("Uploading Inventory ...")
+        log.info("Uploading Inventory ...")
         HUD.show(.progress)
 
         guard let dict = self.inventory.serialize() else {
-            print("\(#function) FAILED : unable to serialize Inventory")
+            log.error("\(#function) FAILED : unable to serialize Inventory")
             /// TODO: completedUpload(false)
             return
         }
@@ -159,11 +160,11 @@ extension InventoryLocationTVC {
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED: unable to get JSON")
+            log.error("\(#function) FAILED: unable to get JSON")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let remoteID = json["id"].int else {
-            print("\(#function) FAILED: unable to get remoteID of posted Inventory")
+            log.error("\(#function) FAILED: unable to get remoteID of posted Inventory")
             HUD.flash(.error, delay: 1.0); return
         }
 

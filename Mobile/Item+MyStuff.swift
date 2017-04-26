@@ -59,7 +59,7 @@ extension Item: SyncableItem {
                     newCategory.name = categoryName
                 }
                 self.category = newCategory
-                print("Created ItemCategory: \(newCategory)")
+                log.verbose("Created ItemCategory: \(newCategory)")
             }
         }
 
@@ -77,7 +77,7 @@ extension Item: SyncableItem {
                     newVendor.name = vendorName
                 }
                 self.vendor = newVendor
-                print("Created Vendor: \(newVendor)")
+                log.verbose("Created Vendor: \(newVendor)")
             }
         }
 

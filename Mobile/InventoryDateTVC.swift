@@ -65,15 +65,14 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         setupTableView()
     }
 
-    // override func viewWillAppear(_ animated: Bool) { }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        log.warning("\(#function)")
         // Dispose of any resources that can be recreated.
     }
 
@@ -114,9 +113,9 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             controller.managedObjectContext = self.managedObjectContext
 
         case SettingsSegue:
-            print("Showing Settings ...")
+            log.info("Showing Settings ...")
         default:
-            break
+            fatalError("Unrecognized segue.identifier: \(segue.identifier)")
         }
     }
 
@@ -162,7 +161,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
                 if let changedID = changeSelectionForDemo(selection: selection) {
                     remoteID = changedID
                 } else {
-                    print("\(#function) FAILED : there was a problem with changeSelectionForDemo")
+                    log.error("\(#function) FAILED : there was a problem with changeSelectionForDemo")
                 }
             }
             */
@@ -170,20 +169,20 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             /// TODO: ideally, we would want to deleteInventoryItems *after* fetching data from server
 
             // Delete existing InventoryItems of selected Inventory
-            print("Deleting InventoryItems of selected Inventory ...")
+            log.verbose("Deleting InventoryItems of selected Inventory ...")
             deleteChildren(parent: selection)
 
             // Reset selection since we reset the managedObjectContext in deleteInventoryItems
             selectedInventory = dataSource.objectAtIndexPath(indexPath)
 
             // GET INVENTORY FROM SERVER
-            // print("GET selectedInventory from server - \(remoteID) ...")
+            log.info("GET selectedInventory from server - \(remoteID) ...")
             APIManager.sharedInstance.getInventory(
                 remoteID: remoteID,
                 completion: self.completedGetExistingInventory)
 
         case false:
-            print("LOAD NEW selectedInventory from disk ...")
+            log.info("LOAD NEW selectedInventory from disk ...")
             performSegue(withIdentifier: NewItemSegue, sender: self)
         }
 
@@ -207,7 +206,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             do {
                 try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
             } catch {
-                print("Unable to sync Inventories")
+                log.error("Unable to sync Inventories")
             }
 
         })
@@ -241,7 +240,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         do {
             try managedObjectContext.deleteEntities(Inventory.self, filter: fetchPredicate)
         } catch {
-            print("Unable to delete Inventories")
+            log.error("Unable to delete Inventories")
         }
 
         // Get list of Inventories from server
@@ -275,16 +274,18 @@ extension InventoryDateTVC {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
-        /// TODO: distinguish empty response (new account) from error
         guard let json = json else {
-            print("\(#function) FAILED : \(error)")
-            HUD.flash(.error, delay: 1.0); return
+            log.warning("\(#function) FAILED : unable to get JSON")
+            HUD.hide(); return
         }
 
         HUD.hide()
 
         for (_, item) in json {
-            guard let inventoryID = item["id"].int32 else { print("a"); break }
+            guard let inventoryID = item["id"].int32 else {
+                /// TODO: break or continue?
+                log.warning("Unable to get inventoryID from \(item)"); break
+            }
 
             if managedObjectContext?.fetchWithRemoteID(Inventory.self, withID: inventoryID) == nil {
                 _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
@@ -301,11 +302,11 @@ extension InventoryDateTVC {
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED : \(error)")
+            log.error("\(#function) FAILED : unable to get JSON")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let selection = selectedInventory else {
-            print("\(#function) FAILED : Still failed to get selected Inventory\n")
+            log.error("\(#function) FAILED : Still failed to get selected Inventory")
             HUD.flash(.error, delay: 1.0); return
         }
 
@@ -326,7 +327,7 @@ extension InventoryDateTVC {
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED : \(error)")
+            log.error("\(#function) FAILED : unable to get JSON")
             HUD.flash(.error, delay: 1.0); return
         }
 
@@ -344,18 +345,18 @@ extension InventoryDateTVC {
     /// TODO: rename `completedItemSync`(?)
     func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
-            print("\nCompleted login / sync - succeeded: \(succeeded)")
+            log.info("Completed login / sync - succeeded: \(succeeded)")
 
             guard let storeID = userManager.storeID else {
-                print("\(#function) FAILED : unable to get storeID"); return
+                log.error("\(#function) FAILED : unable to get storeID"); return
             }
 
             // Get list of Inventories from server
-            // print("\nFetching existing Inventories from server ...")
+            // log.info("Fetching existing Inventories from server ...")
             APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
 
         } else {
-            print("Unable to login / sync ...")
+            log.error("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
             HUD.flash(.error, delay: 1.0); return
         }
@@ -384,9 +385,8 @@ extension InventoryDateTVC {
             tableView.reloadData()
 
         } catch {
-            // print("Unable to delete Inventories")
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("Unable to delete Inventories: \(updateError), \(updateError.userInfo)")
         }
     }
 
@@ -402,6 +402,7 @@ extension InventoryDateTVC {
             // Replace this implementation with code to handle the error appropriately.
             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nserror = error as NSError
+            log.error("Unresolved error \(nserror), \(nserror.userInfo)")
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
     }
@@ -419,7 +420,7 @@ extension InventoryDateTVC {
         guard Int(selection.remoteID) == 0 else { return nil }
         guard let managedObjectContext = managedObjectContext else { return nil }
 
-        print("Intercepting selection for the purpose of demo ...")
+        log.info("Intercepting selection for the purpose of demo ...")
 
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Inventory.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "remoteID == \(Int32(defaultRemoteID))")
@@ -427,16 +428,16 @@ extension InventoryDateTVC {
             let fetchResults = try managedObjectContext.fetch(fetchRequest)
             switch fetchResults.count {
             case 0:
-                print("\(#function) FAILED: unable to get Inventory (\(defaultRemoteID))")
+                log.error("\(#function) FAILED: unable to get Inventory (\(defaultRemoteID))")
                 return nil
             default:
                 selectedInventory = fetchResults[0] as? Inventory
-                print("Changed selection for demo")
+                log.info("Changed selection for demo")
                 return defaultRemoteID
             }
 
         } catch {
-            print("\(#function) FAILED: error with request: \(error)")
+            log.error("\(#function) FAILED: error with request: \(error)")
             return nil
         }
     }

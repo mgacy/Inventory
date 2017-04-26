@@ -37,7 +37,7 @@ extension InventoryItem {
             if let item = context.fetchWithRemoteID(Item.self, withID: itemID) {
                 self.item = item
             } else {
-                print("Unable to fetch Item with remoteID \(itemID) for \(self)")
+                log.warning("\(#function) : unable to fetch Item with remoteID \(itemID) for \(self)")
             }
         }
         if let name = json["name"].string {

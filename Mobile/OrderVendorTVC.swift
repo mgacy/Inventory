@@ -50,25 +50,26 @@ class OrderVendorTVC: UITableViewController {
         self.performFetch()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        log.warning("\(#function)")
         // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the selected object.
-        guard let selectedObject = selectedObject else { return }
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? OrderItemTVC else { return }
+        guard let destinationController = segue.destination as? OrderItemTVC else {
+            fatalError("Wrong view controller type")
+        }
+        guard let selectedObject = selectedObject else {
+            fatalError("Showing detail, but no selected row?")
+        }
 
         // Pass the selected object to the new view controller.
         destinationController.parentObject = selectedObject
@@ -117,7 +118,7 @@ class OrderVendorTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
-        print("Selected Order: \(selectedObject)")
+        log.verbose("Selected Order: \(selectedObject)")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
 
@@ -168,7 +169,7 @@ extension OrderVendorTVC {
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
             }
             self.tableView.reloadData()
         })

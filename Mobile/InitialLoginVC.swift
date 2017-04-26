@@ -106,7 +106,7 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
                 let destinationNavController = segue.destination as? UINavigationController,
                 let destinationController = destinationNavController.topViewController as? InitialSignUpVC
                 else {
-                    debugPrint("\(#function) FAILED : unable to get destination"); return
+                    fatalError("\(#function) FAILED : unable to get destination")
             }
 
             // Pass dependencies to the new view controller.
@@ -124,11 +124,11 @@ extension InitialLoginVC {
 
     func completedLogin(success: Bool) {
         if success {
-            print("Logged in")
+            log.verbose("Logged in")
             // TODO: change so we only createUser() on success
             performSegue(withIdentifier: MainSegue, sender: self)
         } else {
-            print("Failed to login")
+            log.error("\(#function) FAILED: unable to login")
             userManager.removeUser()
             /// TODO: how best to handle this?
             HUD.flash(.error, delay: 1.0); return

@@ -101,7 +101,7 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate {
             // Sync with completion handler from the new view controller.
             _ = SyncManager(context: managedObjectContext ,storeID: userManager.storeID!, completionHandler: controller.completedLogin)
         case SignUpSegue:
-            print("b")
+            log.verbose("SignUpSegue")
         default:
             break
         }
@@ -114,10 +114,10 @@ extension InitialSignUpVC {
 
     func completedSignup(json: JSON?, error: Error?) {
         guard error == nil else {
-            print("Failed to sign up")
+            log.error("\(#function) FAILED: unable to sign up")
             HUD.flash(.error, delay: 1.0); return
         }
-        print("Signed up")
+        log.verbose("Signed up")
 
         guard let email = loginTextField.text, let pass = passwordTextField.text else {
             return

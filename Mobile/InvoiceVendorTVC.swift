@@ -51,8 +51,8 @@ class InvoiceVendorTVC: UITableViewController {
         self.performFetch()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
 
@@ -64,14 +64,12 @@ class InvoiceVendorTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the selected object.
-        guard let selectedObject = selectedObject else {
-            print("\(#function) FAILED : unable to get selection"); return
+        guard let destinationController = segue.destination as? InvoiceItemTVC else {
+            fatalError("Wrong view controller type")
         }
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InvoiceItemTVC else { return }
+        guard let selectedObject = selectedObject else {
+            fatalError("Showing detail, but no selected row?")
+        }
 
         // Pass the selected object to the new view controller.
         destinationController.parentObject = selectedObject
@@ -90,13 +88,8 @@ class InvoiceVendorTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        // Dequeue Reusable Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
-
-        // Configure Cell
         self.configureCell(cell, atIndexPath: indexPath)
-
         return cell
     }
 
@@ -117,7 +110,7 @@ class InvoiceVendorTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
-        print("Selected Invoice: \(selectedObject)")
+        log.verbose("Selected Invoice: \(selectedObject)")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
 
@@ -169,7 +162,7 @@ extension InvoiceVendorTVC {
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
             }
             self.tableView.reloadData()
         })
