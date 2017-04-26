@@ -246,7 +246,6 @@ extension OrderDateTVC {
 
     func completedGetListOfOrderCollections(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            print("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
