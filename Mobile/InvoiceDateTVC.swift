@@ -245,7 +245,7 @@ extension InvoiceDateTVC {
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED : no JSON")
+            log.warning("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
 

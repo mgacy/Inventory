@@ -27,6 +27,7 @@ class OrderItemTVC: UITableViewController {
     var fetchBatchSize = 20 // 0 = No Limit
 
     // Create a MessageComposer
+    /// TODO: should I instantiate this here or only on .tappedMessageOrder(:)?
     let messageComposer = MessageComposer()
 
     // TableView
@@ -226,11 +227,13 @@ extension OrderItemTVC {
         }
     }
 
+    /// TODO: change completion handler to accept standard (JSON?, Error?)
+
     func completedPostOrder(succeeded: Bool, json: JSON) {
         if succeeded {
             parentObject.uploaded = true
 
-            // TODO: set .uploaded of parentObject.collection if all are uploaded
+            /// TODO: set .uploaded of parentObject.collection if all are uploaded
 
             HUD.flash(.success, delay: 1.0) { finished in
                 // Pop view

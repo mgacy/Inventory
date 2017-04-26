@@ -122,7 +122,6 @@ class CurrentUserManager {
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
 
         authHandler!.login(completion: {(json: JSON?, error: Error?) -> Void in
-            /// TODO: combine the two guards?
             /// TODO: does AuthenticationHandler.login already ensure json != nil?
             /// TODO: set authHandler back to nil / self.removeUser() if guard fails?
             guard error == nil else {

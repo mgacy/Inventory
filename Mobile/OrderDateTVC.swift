@@ -254,7 +254,8 @@ extension OrderDateTVC {
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED : no JSON")
+            log.error("\(#function) FAILED : unable to get JSON")
+            /// TODO: HUD.flash(.error, delay: 1.0)?
             HUD.hide(); return
         }
 

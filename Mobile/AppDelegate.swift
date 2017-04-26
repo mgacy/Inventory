@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let isPreloaded = defaults.bool(forKey: "isPreloaded")
         if !isPreloaded {
             log.info("Preloading data ...")
+            /// TODO: instantiate importer with context rather than using singleton
             CoreDataImporter.shared.preloadData()
             defaults.set(true, forKey: "isPreloaded")
         }
@@ -80,8 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         /// TODO: Should we use a failable initializier with CurrentUserManager?
-        // Alteratively, we could try to login and perform the following in a
-        // completion handler with success / failure.
+        //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
         // Check if we already have user + credentials
         if userManager.user != nil {

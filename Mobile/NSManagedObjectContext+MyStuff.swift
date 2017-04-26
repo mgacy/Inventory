@@ -155,7 +155,7 @@ extension NSManagedObjectContext {
 
     // MARK: Fetch
 
-    public func fetchWithRemoteID<T : Syncable>(_ entity: T.Type, withID id: Int32) -> T? where T: NSManagedObject {
+    public func fetchWithRemoteID<T: Syncable>(_ entity: T.Type, withID id: Int32) -> T? where T: NSManagedObject {
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
         request.predicate = NSPredicate(format: "remoteID == \(id)")
         request.fetchLimit = 2
@@ -364,7 +364,7 @@ extension NSManagedObjectContext {
         }
     }
 
-    public func syncCollections<T : SyncableCollection>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
+    public func syncCollections<T: SyncableCollection>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         guard let objectDict = try? fetchCollectionDict(T.self) else {
             log.error("\(#function) FAILED : unable to create Collection dictionary"); return
         }

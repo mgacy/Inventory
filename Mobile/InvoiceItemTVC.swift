@@ -211,6 +211,8 @@ class InvoiceItemTVC: UITableViewController {
 // MARK: - Completion Handlers
 extension InvoiceItemTVC {
 
+    /// TODO: change signature to accept standard (JSON?, Error?)
+
     func completedUpload(succeeded: Bool, json: JSON) {
         if succeeded {
             parentObject.uploaded = true
