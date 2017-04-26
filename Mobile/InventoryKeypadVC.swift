@@ -19,7 +19,7 @@ class InventoryKeypadVC: UIViewController {
 
     var items: [InventoryLocationItem] {
         let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
-        
+
         if let parentLocation = self.location {
             request.predicate = NSPredicate(format: "location == %@", parentLocation)
             let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
@@ -34,7 +34,7 @@ class InventoryKeypadVC: UIViewController {
             log.error("PROBLEM : Unable to add predicate")
             return [InventoryLocationItem]()
         }
-        
+
         do {
             let searchResults = try managedObjectContext?.fetch(request)
             return searchResults!
@@ -44,82 +44,81 @@ class InventoryKeypadVC: UIViewController {
         }
         return [InventoryLocationItem]()
     }
-    
+
     var currentItem: InventoryLocationItem {
         return items[currentIndex]
     }
-    
+
     typealias keypadOutput = (history: String, total: Double?, display: String)
     let keypad = KeypadWithHistory()
-    
+
     // CoreData
     var managedObjectContext: NSManagedObjectContext?
-    
+
     // MARK: - Display Outlets
     @IBOutlet weak var itemValue: UILabel!
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var itemHistory: UILabel!
     @IBOutlet weak var itemPack: UILabel!
     @IBOutlet weak var itemUnit: UILabel!
-    
+
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         update(newItem: true)
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         log.warning("\(#function)")
         // Dispose of any resources that can be recreated.
     }
-    
+
     // MARK: - Keypad
-    
+
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
-        //print("Tapped '\(digit)'")
+        //log.verbose("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
         keypad.pushDigit(value: number)
-        
+
         // Update model and display with result of keypad
         update()
     }
-    
+
     @IBAction func clearTapped(_ sender: AnyObject) {
-        //print("Tapped 'clear'")
+        //log.verbose("Tapped 'clear'")
         keypad.popItem()
-        
+
         // Update model and display with result of keypad
         update()
     }
-    
+
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        //print("Tapped '.'")
+        //log.verbose("Tapped '.'")
         keypad.pushDecimal()
-        
+
         // Update model and display with result of keypad
         update()
     }
-    
+
     // MARK: - Uncertain
-    
+
     @IBAction func addTapped(_ sender: AnyObject) {
-        //print("Tapped '+'")
+        //log.verbose("Tapped '+'")
         keypad.pushOperator()
-        
+
         // Update model and display with result of keypad
         update()
     }
     
     @IBAction func decrementTapped(_ sender: AnyObject) {
-        //print("Tapped '-1'")
+        //log.verbose("Tapped '-1'")
     }
     
     @IBAction func incrementTapped(_ sender: AnyObject) {
-        //print("Tapped '+1'")
+        //log.verbose("Tapped '+1'")
         keypad.pushOperator()
         keypad.pushDigit(value: 1)
         keypad.pushOperator()
