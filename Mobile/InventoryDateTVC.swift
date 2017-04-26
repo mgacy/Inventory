@@ -275,10 +275,9 @@ extension InventoryDateTVC {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
-        /// TODO: distinguish empty response (new account) from error
         guard let json = json else {
-            print("\(#function) FAILED : \(error)")
-            HUD.flash(.error, delay: 1.0); return
+            log.warning("\(#function) FAILED : unable to get JSON")
+            HUD.hide(); return
         }
 
         HUD.hide()
