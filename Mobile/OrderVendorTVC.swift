@@ -63,12 +63,12 @@ class OrderVendorTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the selected object.
-        guard let selectedObject = selectedObject else { return }
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? OrderItemTVC else { return }
+        guard let destinationController = segue.destination as? OrderItemTVC else {
+            fatalError("Wrong view controller type")
+        }
+        guard let selectedObject = selectedObject else {
+            fatalError("Showing detail, but no selected row?")
+        }
 
         // Pass the selected object to the new view controller.
         destinationController.parentObject = selectedObject

@@ -63,9 +63,9 @@ class InvoiceItemTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InvoiceKeypadVC else { return }
+        guard let destinationController = segue.destination as? InvoiceKeypadVC else {
+            fatalError("Wrong view controller type")
+        }
 
         // Pass the parent of the selected object to the new view controller.
         destinationController.parentObject = parentObject

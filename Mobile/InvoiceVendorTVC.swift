@@ -64,14 +64,12 @@ class InvoiceVendorTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the selected object.
-        guard let selectedObject = selectedObject else {
-            print("\(#function) FAILED : unable to get selection"); return
+        guard let destinationController = segue.destination as? InvoiceItemTVC else {
+            fatalError("Wrong view controller type")
         }
-
-        // Get the new view controller using segue.destinationViewController.
-        guard let destinationController = segue.destination as? InvoiceItemTVC else { return }
+        guard let selectedObject = selectedObject else {
+            fatalError("Showing detail, but no selected row?")
+        }
 
         // Pass the selected object to the new view controller.
         destinationController.parentObject = selectedObject

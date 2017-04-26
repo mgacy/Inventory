@@ -80,12 +80,12 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the new view controller.
-        guard let controller = segue.destination as? InvoiceVendorTVC else { return }
-
-        // Get the selection
-        guard let selection = selectedCollection else { return }
+        guard let controller = segue.destination as? InvoiceVendorTVC else {
+            fatalError("Wrong view controller type")
+        }
+        guard let selection = selectedCollection else {
+            fatalError("Showing detail, but no selected row?")
+        }
 
         // Pass selection to new view controller.
         controller.parentObject = selection

@@ -55,7 +55,7 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
                 let destinationNavController = segue.destination as? UINavigationController,
                 let destinationController = destinationNavController.topViewController as? LoginVC
             else {
-                debugPrint("\(#function) FAILED : unable to get destination"); return
+                fatalError("Wrong view controller type")
             }
 
             // Pass dependencies to the new view controller.
