@@ -8,7 +8,10 @@
 
 import UIKit
 import CoreData
+import SwiftyBeaver
 import PKHUD
+
+let log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -102,6 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         //self.window?.makeKeyAndVisible()
+        setupSwiftyBeaverLogging()
 
         return true
     }
@@ -189,6 +193,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+
+    // MARK: - Setup
+
+    func setupSwiftyBeaverLogging() {
+        let console = ConsoleDestination()
+        //let file = FileDestination()
+        let platform = SBPlatformDestination(appID: "***REMOVED***",
+                                             appSecret: "***REMOVED***",
+                                             encryptionKey: "***REMOVED***")
+
+        // Config
+        platform.minLevel = .warning
+        //platform.analyticsUserName = ""
+
+        // use custom format and set console output to short time, log level & message
+        //console.format = "$DHH:mm:ss$d $L $M"
+        // or use this for JSON output: console.format = "$J"
+
+        // Filters
+
+        log.addDestination(console)
+        //log.addDestination(file)
+        log.addDestination(platform)
     }
 
 }
