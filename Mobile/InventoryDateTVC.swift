@@ -116,7 +116,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         case SettingsSegue:
             log.info("Showing Settings ...")
         default:
-            break
+            fatalError("Unrecognized segue.identifier: \(segue.identifier)")
         }
     }
 

@@ -86,7 +86,7 @@ class InventoryLocationTVC: UITableViewController {
             //destinationController.performFetch()
 
         default:
-            print("\(#function) FAILED : segue.identifier not recognized\n"); break
+            fatalError("Unrecognized segue.identifier: \(segue.identifier)")
         }
     }
 
