@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-enum InventoryLocationType {
+enum InventoryLocationType: String {
     case category
     case item
 }
@@ -65,7 +65,7 @@ extension InventoryLocation {
         // Properties
         self.name = name
         self.remoteID = Int32(remoteID)
-        self.locationType = "\(type)"
+        self.locationType = type.rawValue
 
         // Relationships
         self.inventory = inventory
