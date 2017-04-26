@@ -30,7 +30,7 @@ class SyncManager {
         self.completionHandler = completionHandler
 
         // Get list of Vendors from server
-        print("\nFetching Vendors from server ...")
+        log.info("\nFetching Vendors from server ...")
         APIManager.sharedInstance.getVendors(storeID: self.storeID, completion: syncVendors)
     }
 
@@ -39,11 +39,11 @@ class SyncManager {
 
     func syncItems(json: JSON?, error: Error?) {
         guard error == nil else {
-            print("\(#function) FAILED : \(error)")
+            log.error("\(#function) FAILED : \(error)")
             return completionHandler(false, error)
         }
         guard let json = json else {
-            print("\(#function) FAILED : unable to get Items")
+            log.error("\(#function) FAILED : unable to get Items JSON")
             /// TODO: construct error?
             return completionHandler(false, nil)
         }
@@ -52,12 +52,12 @@ class SyncManager {
         let prefetch = ["inventoryUnit", "purchaseSubUnit", "purchaseUnit",
                         "subUnit", "vendor"]
         guard let itemDict = try? managedObjectContext.fetchEntityDict(Item.self, prefetchingRelationships: prefetch) else {
-            print("\(#function) FAILED : unable to create Item dictionary"); return
+            log.error("\(#function) FAILED : unable to create Item dictionary"); return
         }
 
         // Create dict from fetch request on Units
         guard let unitDict = try? managedObjectContext.fetchEntityDict(Unit.self) else {
-            print("\(#function) FAILED : unable to create Unit dictionary"); return
+            log.error("\(#function) FAILED : unable to create Unit dictionary"); return
         }
 
         let localIDs = Set(itemDict.keys)
@@ -69,12 +69,12 @@ class SyncManager {
 
             // Find + update / create Items
             if let existingItem = itemDict[itemID] {
-                //print("UPDATE existing Item: \(existingItem)")
+                //log.verbose("UPDATE existing Item: \(existingItem)")
                 existingItem.update(context: managedObjectContext, withJSON: itemJSON)
                 existingItem.updateUnits(withJSON: itemJSON, unitDict: unitDict)
 
             } else {
-                //print("CREATE new Item: \(itemJSON)")
+                //log.verbose("CREATE new Item: \(itemJSON)")
                 let newItem = Item(context: managedObjectContext, json: itemJSON)
                 newItem.updateUnits(withJSON: itemJSON, unitDict: unitDict)
             }
@@ -84,8 +84,8 @@ class SyncManager {
         let deletedItems = localIDs.subtracting(remoteIDs)
 
         // TESTING
-        print("remote: \(remoteIDs) - local: \(localIDs)")
-        print("We need to delete: \(deletedItems)")
+        log.debug("remote: \(remoteIDs) - local: \(localIDs)")
+        log.debug("We need to delete: \(deletedItems)")
 
         let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedItems)
         do {
@@ -93,20 +93,20 @@ class SyncManager {
         } catch {
             /// TODO: deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("\(updateError), \(updateError.userInfo)")
         }
 
-        print("Finished syncing Items")
+        log.verbose("Finished syncing Items")
         self.completionHandler(true, nil)
     }
 
     func syncVendors(json: JSON?, error: Error?) {
         guard error == nil else {
-            print("\(#function) FAILED : \(error)")
+            log.error("\(#function) FAILED : \(error)")
             return completionHandler(false, error)
         }
         guard let json = json else {
-            print("\(#function) FAILED : unable to get Items")
+            log.error("\(#function) FAILED : unable to get Vendors JSON")
             /// TODO: construct error?
             return completionHandler(false, nil)
         }
@@ -114,12 +114,12 @@ class SyncManager {
         do {
             try managedObjectContext.syncEntities(Vendor.self, withJSON: json)
         } catch let error {
-            print("\(#function) FAILED : \(error)")
+            log.error("\(#function) FAILED : \(error)")
         }
-        print("Finished with Vendors")
+        log.verbose("Finished with Vendors")
 
         // Get list of Items from server
-        print("\nFetching Items from server ...")
+        log.info("Fetching Items from server ...")
         APIManager.sharedInstance.getItems(storeID: self.storeID, completion: syncItems)
     }
 

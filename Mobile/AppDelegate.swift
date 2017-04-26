@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaults = UserDefaults.standard
         let isPreloaded = defaults.bool(forKey: "isPreloaded")
         if !isPreloaded {
-            print("Preloading data ...")
+            log.info("Preloading data ...")
             CoreDataImporter.shared.preloadData()
             defaults.set(true, forKey: "isPreloaded")
         }

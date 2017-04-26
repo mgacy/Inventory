@@ -194,7 +194,7 @@ class OrderItemTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
-        // print("Selected OrderItem: \(selectedObject)")
+        // log.verbose("Selected OrderItem: \(selectedObject)")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
 
@@ -221,7 +221,7 @@ extension OrderItemTVC {
             /// TODO: handle failure to serialize Order
 
         } else {
-            print("\nPROBLEM - Unable to send Order message")
+            log.error("\(#function) FAILED : unable to send Order message")
             showAlert(title: "Problem", message: "Unable to send Order message")
         }
     }
@@ -288,7 +288,7 @@ extension  OrderItemTVC {
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
             }
             self.tableView.reloadData()
         })

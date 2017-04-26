@@ -99,7 +99,7 @@ class Keypad {
             currentNumber = newString
         } else {
             // Is it possible to reach this point?
-            print("There was a problem converting '\(_newNumber)' to a string")
+            log.error("There was a problem converting '\(_newNumber)' to a string")
             currentNumber = "Error"
         }
     }
@@ -138,7 +138,7 @@ class Keypad {
     // MARK: - Testing
 
     func updateDisplay(button: String) {
-        print("Pressed '\(button)' - currentNumber: \(currentNumber)")
+        log.verbose("Pressed '\(button)' - currentNumber: \(currentNumber)")
     }
 }
 
@@ -305,6 +305,6 @@ class KeypadWithHistory: Keypad {
     // MARK: - Testing
 
     override func updateDisplay(button: String) {
-        print("Pressed '\(button)' - stack: '\(stack.description)' - currentNumber: '\(currentNumber)'")
+        log.verbose("Pressed '\(button)' - stack: '\(stack.description)' - currentNumber: '\(currentNumber)'")
     }
 }

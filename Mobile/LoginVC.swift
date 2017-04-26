@@ -91,13 +91,13 @@ extension LoginVC {
 
     func completedLogin(success: Bool) {
         if success {
-            print("Logged in")
+            log.info("Logged in")
             HUD.hide()
             dismiss(animated: true, completion: nil)
         } else {
             /// TODO: how best to handle this?
             HUD.flash(.error, delay: 1.0); return
-            print("Failed to login")
+            log.error("Failed to login")
         }
     }
 

@@ -28,13 +28,13 @@ class OrderKeypadVC: UIViewController {
             return searchResults!
 
         } catch {
-            print("Error with request: \(error)")
+            log.error("Error with request: \(error)")
         }
         return [OrderItem]()
     }
 
     var currentItem: OrderItem {
-        //print("currentItem: \(items[currentIndex])")
+        //log.verbose("currentItem: \(items[currentIndex])")
         return items[currentIndex]
     }
 
@@ -85,7 +85,7 @@ class OrderKeypadVC: UIViewController {
 
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
-        //print("Tapped '\(digit)'")
+        //log.verbose("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
         keypad.pushDigit(value: number)
 
@@ -93,14 +93,14 @@ class OrderKeypadVC: UIViewController {
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
-        //print("Tapped 'clear'")
+        //log.verbose("Tapped 'clear'")
         keypad.popItem()
 
         update()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        //print("Tapped '.'")
+        //log.verbose("Tapped '.'")
         keypad.pushDecimal()
 
         update()
@@ -194,7 +194,7 @@ class OrderKeypadVC: UIViewController {
         updateKeypadButtons(item: currentItem)
         updateDisplay(item: currentItem, keypadOutput: output)
 
-        //print("currentItem: \(currentItem)")
+        //log.verbose("currentItem: \(currentItem)")
     }
 
     func updateDisplay(item: OrderItem, keypadOutput: keypadOutput) {
@@ -236,8 +236,8 @@ class OrderKeypadVC: UIViewController {
         guard let orderUnit = currentItem.orderUnit else { print("a"); return }
         guard let item = currentItem.item else { print("b"); return }
 
-        //print("currentItem: \(currentItem)\n")
-        //print("currentItem.item: \(item)\n")
+        //log.verbose("currentItem: \(currentItem)")
+        //log.verbose("currentItem.item: \(item)")
 
         /// TODO: some of this should only be done when we change currentItem
         if orderUnit == item.purchaseUnit {
@@ -263,7 +263,7 @@ class OrderKeypadVC: UIViewController {
             }
 
         } else {
-            print("\(#function) FAILED : A")
+            log.warning("\(#function) FAILED : 3")
             caseButton.isEnabled = false
             bottleButton.isEnabled = false
         }

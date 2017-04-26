@@ -117,7 +117,7 @@ class OrderVendorTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
-        print("Selected Order: \(selectedObject)")
+        log.verbose("Selected Order: \(selectedObject)")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
 
@@ -168,7 +168,7 @@ extension OrderVendorTVC {
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
             }
             self.tableView.reloadData()
         })

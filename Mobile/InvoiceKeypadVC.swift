@@ -28,13 +28,13 @@ class InvoiceKeypadVC: UIViewController {
             return searchResults!
 
         } catch {
-            print("Error with request: \(error)")
+            log.error("Error with request: \(error)")
         }
         return [InvoiceItem]()
     }
 
     var currentItem: InvoiceItem {
-        //print("currentItem: \(items[currentIndex])")
+        //log.verbose("currentItem: \(items[currentIndex])")
         return items[currentIndex]
     }
 
@@ -49,7 +49,7 @@ class InvoiceKeypadVC: UIViewController {
         } else if currentItem.unit == pack {
             return unit
         } else {
-            print("Unable to get inactiveUnit"); return nil
+            log.warning("Unable to get inactiveUnit"); return nil
         }
     }
 
@@ -113,7 +113,7 @@ class InvoiceKeypadVC: UIViewController {
 
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
-        //print("Tapped '\(digit)'")
+        //log.verbose("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
         if currentMode == .status { return }
 
@@ -123,14 +123,14 @@ class InvoiceKeypadVC: UIViewController {
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
-        //print("Tapped 'clear'")
+        //log.verbose("Tapped 'clear'")
         keypad.popItem()
 
         update()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        //print("Tapped '.'")
+        //log.verbose("Tapped '.'")
         keypad.pushDecimal()
 
         update()
@@ -144,7 +144,7 @@ class InvoiceKeypadVC: UIViewController {
         case .quantity:
             let currentUnit = currentItem.unit
             guard let newUnit = inactiveUnit else {
-                print("\(#function) FAILED : unable to get inactiveUnit"); return
+                log.error("\(#function) FAILED : unable to get inactiveUnit"); return
             }
 
             currentItem.unit = newUnit
@@ -178,7 +178,7 @@ class InvoiceKeypadVC: UIViewController {
     /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
         guard let item = currentItem.item else { print("A2"); return  }
-        //print("Item: \(item)")
+        //log.verbose("Item: \(item)")
         guard let purchaseSubUnit = item.purchaseSubUnit else { print("B2"); return }
 
         currentItem.unit = purchaseSubUnit
@@ -291,7 +291,7 @@ class InvoiceKeypadVC: UIViewController {
                 output = keypad.outputB()
 
             case .status:
-                print("update - status")
+                log.verbose("update - status")
                 // TESTING
                 output = (total: 1.0, display: "Test")
             }
@@ -307,7 +307,7 @@ class InvoiceKeypadVC: UIViewController {
                 } else {
                     /// TODO: how to handle this?
                     //currentItem.cost = nil
-                    print("\nPROBLEM - Unable to set InventoryItem.cost to nil")
+                    log.warning("\(#function) PROBLEM - Unable to set InventoryItem.cost to nil")
                 }
 
             case .quantity:
@@ -320,7 +320,7 @@ class InvoiceKeypadVC: UIViewController {
                 }
 
             case .status:
-                print("update - status")
+                log.verbose("update - status")
             }
 
             // Save the context.

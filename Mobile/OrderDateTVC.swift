@@ -60,7 +60,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         self.performFetch()
 
         guard let storeID = userManager.storeID else {
-            print("\(#function) FAILED: unable to get storeID"); return
+            log.error("\(#function) FAILED : unable to get storeID"); return
         }
 
         // Get list of OrderCollections from server
@@ -162,7 +162,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
             // Get date to use when getting OrderCollection from server
             guard let storeID = userManager.storeID,
                   let collectionDate = selection.date else {
-                print("\(#function) FAILED : unable to get storeID"); return
+                log.error("\(#function) FAILED : unable to get storeID"); return
             }
 
             //tableView.activityIndicatorView.startAnimating()
@@ -170,19 +170,19 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
             /// TODO: ideally, we would want to deleteChildOrders *after* fetching data from server
             // Delete existing orders of selected collection
-            print("Deleting Orders of selected OrderCollection ...")
+            log.info("Deleting Orders of selected OrderCollection ...")
             deleteChildOrders(parent: selection)
 
             // Reset selection since we reset the managedObjectContext in deleteChildOrders
             selectedCollection = self.fetchedResultsController.object(at: indexPath)
 
-            print("GET OrderCollection from server ...")
+            log.info("GET OrderCollection from server ...")
             APIManager.sharedInstance.getOrderCollection(
                 storeID: storeID, orderDate: collectionDate,
                 completion: completedGetExistingOrderCollection)
 
         case false:
-            print("LOAD NEW selectedCollection from disk ...")
+            log.info("LOAD NEW selectedCollection from disk ...")
             performSegue(withIdentifier: segueIdentifier, sender: self)
         }
 
@@ -206,7 +206,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
             do {
                 try managedObjectContext.syncCollections(OrderCollection.self, withJSON: json)
             } catch {
-                print("Unable to sync InvoiceCollections")
+                log.error("Unable to sync InvoiceCollections")
             }
         })
 
@@ -219,7 +219,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         /// TODO: check if there is already an Order for the current date and of the current type
 
         guard let storeID = userManager.storeID else {
-            print("\(#function) FAILED : unable to get storeID"); return
+            log.error("\(#function) FAILED : unable to get storeID"); return
         }
 
         //tableView.activityIndicatorView.startAnimating()
@@ -264,7 +264,7 @@ extension OrderDateTVC {
         // are still present in the local store
         for (_, collection) in json {
             guard let dateString = collection["date"].string else {
-                print("unable to get date"); continue
+                log.warning("\(#function) : unable to get date"); continue
             }
 
             // Create OrderCollection if we can't find one with date `date`
@@ -280,11 +280,11 @@ extension OrderDateTVC {
 
     func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            print("\(#function) FAILED : \(error)")
+            //log.error("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED : no JSON")
+            log.error("\(#function) FAILED : unable to get JSON")
             HUD.flash(.error, delay: 1.0); return
         }
 
@@ -304,7 +304,7 @@ extension OrderDateTVC {
         */
 
         guard let selection = selectedCollection else {
-            print("\(#function) FAILED : still unable to get selected OrderCollection\n")
+            log.error("\(#function) FAILED : still unable to get selected OrderCollection\n")
             HUD.flash(.error, delay: 1.0); return
         }
 
@@ -322,14 +322,14 @@ extension OrderDateTVC {
 
     func completedGetNewOrderCollection(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            print("\(#function) FAILED : \(error)")
+            //log.error("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED : no JSON")
+            log.error("\(#function) FAILED : unable to get JSON")
             HUD.flash(.error, delay: 1.0); return
         }
-        //print("\nCreating new OrderCollection ...")
+        //log.info("Creating new OrderCollection ...")
         selectedCollection = OrderCollection(context: self.managedObjectContext!, json: json, uploaded: false)
 
         // Save the context.
@@ -342,10 +342,10 @@ extension OrderDateTVC {
 
     func completedLogin(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
-            print("\nCompleted login / sync - succeeded: \(succeeded)")
+            log.info("Completed login / sync - succeeded: \(succeeded)")
 
             guard let storeID = userManager.storeID else {
-                print("\(#function) FAILED : unable to get storeID")
+                log.error("\(#function) FAILED : unable to get storeID")
                 HUD.flash(.error, delay: 1.0); return
             }
 
@@ -354,7 +354,7 @@ extension OrderDateTVC {
             APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
 
         } else {
-            print("Unable to login / sync ...")
+            log.error("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
             HUD.flash(.error, delay: 1.0)
         }
@@ -363,7 +363,7 @@ extension OrderDateTVC {
     // MARK: Sync
 
     func deleteExistingOrderCollections(_ filter: NSPredicate? = nil) {
-        print("deleteExistingOrders...")
+        log.info("deleteExistingOrders...")
 
         // Create Fetch Request
         let fetchRequest: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
@@ -381,7 +381,7 @@ extension OrderDateTVC {
             // Execute Batch Request
             let batchDeleteResult = try managedObjectContext?.execute(batchDeleteRequest) as! NSBatchDeleteResult
 
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
             // Reset Managed Object Context
             managedObjectContext?.reset()
@@ -394,7 +394,7 @@ extension OrderDateTVC {
 
         } catch {
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("\(updateError), \(updateError.userInfo)")
         }
 
     }
@@ -415,7 +415,7 @@ extension OrderDateTVC {
                 try managedObjectContext.save()
             } catch {
                 let saveError = error as NSError
-                print("\(saveError), \(saveError.userInfo)")
+                log.error("\(saveError), \(saveError.userInfo)")
             }
         }
 
@@ -453,7 +453,7 @@ extension OrderDateTVC {
 
         } catch {
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("\(updateError), \(updateError.userInfo)")
         }
 
     }
@@ -482,7 +482,7 @@ extension OrderDateTVC {
             // Execute Batch Request
             let batchDeleteResult = try managedObjectContext?.execute(batchDeleteRequest) as! NSBatchDeleteResult
 
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
             // Reset Managed Object Context
             managedObjectContext?.reset()
@@ -495,7 +495,7 @@ extension OrderDateTVC {
 
         } catch {
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("\(updateError), \(updateError.userInfo)")
         }
     }
 
@@ -539,7 +539,7 @@ extension OrderDateTVC {
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
             }
             self.tableView.reloadData()
         })

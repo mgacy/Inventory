@@ -49,14 +49,14 @@ class User {
 
             // try to load from keychain
             guard let pass1 = try? keychain.get(email) else {
-                print("FAILED: unable to access keychain"); return nil
+                log.error("FAILED: unable to access keychain"); return nil
             }
             if let pass2 = pass1 {
-                print("Got password from keychain")
+                log.verbose("Got password from keychain")
                 return pass2
             } else {
                 // TODO: remove hard-coded password
-                print("Using hard-coded password")
+                log.verbose("Using hard-coded password")
                 let defaultPass = "***REMOVED***"
 
                 keychain[email] = defaultPass

@@ -34,17 +34,17 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                //print("Found 0 matches for predicate \(predicate)")
+                //log.warning("Found 0 matches for predicate \(predicate)")
                 return nil
             case 1:
                 return fetchResults[0]
             default:
-                print("\(#function) FAILED: found multiple matches: \(fetchResults)")
+                log.error("\(#function) FAILED : found multiple matches: \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
             }
 
         } catch let error {
-            print("Error with request: \(error)")
+            log.error("Error with request: \(error)")
         }
         return nil
     }
@@ -70,7 +70,7 @@ extension NSManagedObjectContext {
             let fetchedResult = try self.fetch(request)
             return fetchedResult
         } catch let error {
-            print(error.localizedDescription)
+            log.error(error.localizedDescription)
             throw error
         }
     }
@@ -88,7 +88,7 @@ extension NSManagedObjectContext {
                 try self.save()
             } catch {
                 let saveError = error as NSError
-                print("\(saveError), \(saveError.userInfo)")
+                log.error("\(saveError), \(saveError.userInfo)")
             }
         }
 
@@ -108,7 +108,7 @@ extension NSManagedObjectContext {
             // Execute Batch Request
             let batchDeleteResult = try self.execute(batchDeleteRequest) as! NSBatchDeleteResult
 
-            print("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
             // Reset Managed Object Context
             // As the request directly interacts with the persistent store, we need need to reset the context
@@ -117,7 +117,7 @@ extension NSManagedObjectContext {
 
         } catch {
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("\(updateError), \(updateError.userInfo)")
         }
     }
 
@@ -132,7 +132,7 @@ extension NSManagedObjectContext {
                     //try deleteEntities(name)
 
                 } catch {
-                    print("\(#function) FAILED: stuff")
+                    log.error("\(#function) FAILED: stuff")
                 }
 
             }
@@ -165,17 +165,16 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                //print("Found 0 matches for remoteID \(id)")
+                //log.warning("Found 0 matches for remoteID \(id)")
                 return nil
             case 1:
                 return fetchResults[0]
             default:
-                print("\(#function) FAILED: found multiple matches for remoteID \(id): \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
             }
 
         } catch let error {
-            print("Error with request: \(error)")
+            log.error("Error with request: \(error)")
             return nil
         }
         //return nil
@@ -210,7 +209,7 @@ extension NSManagedObjectContext {
             let objectDict = fetchedResult.toDictionary { $0.remoteID }
             return objectDict
         } catch let error {
-            print(error.localizedDescription)
+            log.error(error.localizedDescription)
             throw error
         }
     }
@@ -219,7 +218,7 @@ extension NSManagedObjectContext {
 
     public func syncEntities<T : Syncable>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         guard let objectDict = try? fetchEntityDict(T.self) else {
-            print("\(#function) FAILED : unable to create Item dictionary"); return
+            log.error("\(#function) FAILED : unable to create Item dictionary"); return
         }
 
         let localIDs = Set(objectDict.keys)
@@ -244,8 +243,8 @@ extension NSManagedObjectContext {
         let deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 != 0 }
 
         // TESTING
-        print("remote: \(remoteIDs) - local: \(localIDs)")
-        print("We need to delete: \(deletedObjects)")
+        //log.debug("remote: \(remoteIDs) - local: \(localIDs)")
+        //log.debug("We need to delete: \(deletedObjects)")
 
         let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
         do {
@@ -253,7 +252,7 @@ extension NSManagedObjectContext {
         } catch {
             /// TODO: deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("\(updateError), \(updateError.userInfo)")
         }
     }
 
@@ -261,7 +260,7 @@ extension NSManagedObjectContext {
     // will override the update method of any(?) SyncableItems
     public func syncEntities<T : SyncableItem>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         guard let objectDict = try? fetchEntityDict(T.self) else {
-            print("\(#function) FAILED : unable to create Item dictionary"); return
+            log.error("\(#function) FAILED : unable to create Item dictionary"); return
         }
 
         let localIDs = Set(objectDict.keys)
@@ -286,8 +285,8 @@ extension NSManagedObjectContext {
         let deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 != 0 }
 
         // TESTING
-        print("remote: \(remoteIDs) - local: \(localIDs)")
-        print("We need to delete: \(deletedObjects)")
+        log.debug("remote: \(remoteIDs) - local: \(localIDs)")
+        log.debug("We need to delete: \(deletedObjects)")
 
         let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
         do {
@@ -295,7 +294,7 @@ extension NSManagedObjectContext {
         } catch {
             /// TODO: deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("\(updateError), \(updateError.userInfo)")
         }
     }
 
@@ -314,19 +313,19 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                //print("Found 0 matches for predicate \(predicate)")
+                //log.warning("Found 0 matches for predicate \(predicate)")
                 return nil
             case 1:
                 return fetchResults[0]
             default:
-                print("\(#function) FAILED: found multiple matches: \(fetchResults)")
+                log.error("\(#function) FAILED: found multiple matches: \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
                 //print("Found multiple matches: \(searchResults)")
                 //return searchResults[0]
             }
 
         } catch let error {
-            print("Error with request: \(error)")
+            log.error("Error with request: \(error)")
         }
         return nil
     }
@@ -360,14 +359,14 @@ extension NSManagedObjectContext {
             let objectDict = fetchedResult.toDictionary { $0.date! }
             return objectDict
         } catch let error {
-            print(error.localizedDescription)
+            log.error(error.localizedDescription)
             throw error
         }
     }
 
     public func syncCollections<T : SyncableCollection>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         guard let objectDict = try? fetchCollectionDict(T.self) else {
-            print("\(#function) FAILED : unable to create Collection dictionary"); return
+            log.error("\(#function) FAILED : unable to create Collection dictionary"); return
         }
 
         let localDates = Set(objectDict.keys)
@@ -391,8 +390,8 @@ extension NSManagedObjectContext {
         let deletedObjects = localDates.subtracting(remoteDates)
 
         // TESTING
-        print("remote: \(remoteDates) - local: \(localDates)")
-        print("We need to delete: \(deletedObjects)")
+        //log.debug("remote: \(remoteDates) - local: \(localDates)")
+        //log.debug("We need to delete: \(deletedObjects)")
 
         let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
         do {
@@ -400,7 +399,7 @@ extension NSManagedObjectContext {
         } catch {
             /// TODO: deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
-            print("\(updateError), \(updateError.userInfo)")
+            log.error("\(updateError), \(updateError.userInfo)")
         }
     }
 

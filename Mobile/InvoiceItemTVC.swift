@@ -80,10 +80,10 @@ class InvoiceItemTVC: UITableViewController {
     // MARK: - User interaction
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
-        print("Uploading Invoice ...")
+        log.info("Uploading Invoice ...")
 
         guard let dict = self.parentObject.serialize() else {
-            print("\nPROBLEM - Unable to serialize Invoice")
+            log.error("\(#function) FAILED : unable to serialize Invoice")
             /// TODO: completedUpload(false)
             return
         }
@@ -163,7 +163,7 @@ class InvoiceItemTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
-        print("Selected InvoiceItem: \(selectedObject)")
+        log.verbose("Selected InvoiceItem: \(selectedObject)")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
 
@@ -223,7 +223,7 @@ extension InvoiceItemTVC {
             }
 
         } else {
-            print("\(#function) FAILED : unable to upload Invoice")
+            log.error("\(#function) FAILED : unable to upload Invoice")
         }
     }
 
@@ -239,7 +239,7 @@ extension InvoiceItemTVC {
         func updateItemStatus(forItem invoiceItem: InvoiceItem, withStatus status: InvoiceItemStatus) {
             self.isEditing = false
             invoiceItem.status = status.rawValue
-            print("Updated InvoiceItem: \(invoiceItem)")
+            log.info("Updated InvoiceItem: \(invoiceItem)")
         }
 
         // Alert Controller
@@ -333,7 +333,7 @@ extension InvoiceItemTVC {
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
             }
             self.tableView.reloadData()
         })

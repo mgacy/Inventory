@@ -117,7 +117,7 @@ class InvoiceVendorTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = self.fetchedResultsController.object(at: indexPath)
-        print("Selected Invoice: \(selectedObject)")
+        log.verbose("Selected Invoice: \(selectedObject)")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
 
@@ -169,7 +169,7 @@ extension InvoiceVendorTVC {
             do {
                 try self.fetchedResultsController.performFetch()
             } catch {
-                print("\(#function) FAILED : \(error)")
+                log.error("\(#function) FAILED : \(error)")
             }
             self.tableView.reloadData()
         })
