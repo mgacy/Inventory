@@ -74,6 +74,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        log.warning("\(#function)")
         // Dispose of any resources that can be recreated.
     }
 
