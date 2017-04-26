@@ -245,14 +245,17 @@ extension NSManagedObjectContext {
 
     public func syncEntities<T : Syncable>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         guard let objectDict = try? fetchEntityDict(T.self) else {
-            log.error("\(#function) FAILED : unable to create Item dictionary"); return
+            log.error("\(#function) FAILED : unable to create dictionary for \(T.self)"); return
         }
 
         let localIDs = Set(objectDict.keys)
         var remoteIDs = Set<Int32>()
 
         for (_, objectJSON):(String, JSON) in json {
-            guard let objectID = objectJSON["id"].int32 else { continue }
+            guard let objectID = objectJSON["id"].int32 else {
+                log.warning("\(#function) : unable to get id from \(objectJSON)")
+                continue
+            }
             remoteIDs.insert(objectID)
 
             // Find + update / create Items
