@@ -152,12 +152,8 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Dequeue Reusable Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
-
-        // Configure Cell
         self.configureCell(cell, atIndexPath: indexPath)
-
         return cell
     }
 

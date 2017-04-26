@@ -36,17 +36,7 @@ class InvoiceItemTVC: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-
-        // Set Title
         title = parentObject.vendor?.name
-
-        // CoreData
         self.performFetch()
     }
 
@@ -102,13 +92,8 @@ class InvoiceItemTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        // Dequeue Reusable Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
-
-        // Configure Cell
         self.configureCell(cell, atIndexPath: indexPath)
-
         return cell
     }
 

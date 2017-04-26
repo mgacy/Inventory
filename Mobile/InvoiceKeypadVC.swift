@@ -125,14 +125,12 @@ class InvoiceKeypadVC: UIViewController {
     @IBAction func clearTapped(_ sender: AnyObject) {
         //log.verbose("Tapped 'clear'")
         keypad.popItem()
-
         update()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
         //log.verbose("Tapped '.'")
         keypad.pushDecimal()
-
         update()
     }
 

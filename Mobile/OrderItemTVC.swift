@@ -165,7 +165,6 @@ class OrderItemTVC: UITableViewController {
 
         // Configure Cell
         self.configureCell(cell, atIndexPath: indexPath)
-
         return cell
     }
 
