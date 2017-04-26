@@ -284,7 +284,10 @@ extension InventoryDateTVC {
         HUD.hide()
 
         for (_, item) in json {
-            guard let inventoryID = item["id"].int32 else { print("a"); break }
+            guard let inventoryID = item["id"].int32 else {
+                /// TODO: break or continue?
+                log.warning("Unable to get inventoryID from \(item)"); break
+            }
 
             if managedObjectContext?.fetchWithRemoteID(Inventory.self, withID: inventoryID) == nil {
                 _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)

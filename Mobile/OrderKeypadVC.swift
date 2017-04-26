@@ -234,8 +234,12 @@ class OrderKeypadVC: UIViewController {
 
     /// TODO: rename `updateUnitButtons`?
     func updateKeypadButtons(item: OrderItem) {
-        guard let orderUnit = currentItem.orderUnit else { print("a"); return }
-        guard let item = currentItem.item else { print("b"); return }
+        guard let orderUnit = currentItem.orderUnit else {
+            log.warning("\(#function) FAILED : 1"); return
+        }
+        guard let item = currentItem.item else {
+            log.warning("\(#function) FAILED : 2"); return
+        }
 
         //log.verbose("currentItem: \(currentItem)")
         //log.verbose("currentItem.item: \(item)")

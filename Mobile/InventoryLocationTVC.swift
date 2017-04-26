@@ -129,7 +129,7 @@ class InventoryLocationTVC: UITableViewController {
             // InventoryLocationItem
             performSegue(withIdentifier: "ShowLocationItem", sender: self)
         default:
-            print("\(#function) FAILED : wrong locationType\n")
+            fatalError("\(#function) FAILED : wrong locationType")
         }
 
         tableView.deselectRow(at: indexPath, animated: true)

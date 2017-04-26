@@ -87,21 +87,23 @@ class OrderItemTVC: UITableViewController {
     // MARK: - User Actions
 
     @IBAction func tappedMessageOrder(_ sender: UIBarButtonItem) {
+        log.info("Placing Order ...")
 
         // Prevent placing the order twice
         if parentObject.uploaded {
             //HUD.flash(.label("Order already placed"), delay: 2.0)
 
             // Alt, more configurable call
+            log.warning("Tried to place the same Order twice")
             PKHUD.sharedHUD.show()
             PKHUD.sharedHUD.contentView = PKHUDErrorView(title: "Error", subtitle: "Order already placed")
             PKHUD.sharedHUD.hide(afterDelay: 2.0)
-
             return
         }
 
         // Simply POST the order if we already sent the message but were unable to POST if previously
         if parentObject.placed {
+            log.info("Trying to POST an Order which was already sent ...")
             completedPlaceOrder(true)
         }
 
@@ -113,6 +115,8 @@ class OrderItemTVC: UITableViewController {
         let phoneNumber = "602-980-4718"
         guard let message = parentObject.getOrderMessage() else { return }
         //print("\nOrder message: \(message)")
+
+        log.verbose("Order message: \(message)")
 
         // Make sure the device can send text messages
         if (messageComposer.canSendText()) {
@@ -128,7 +132,7 @@ class OrderItemTVC: UITableViewController {
             present(messageComposeVC, animated: true, completion: nil)
 
         } else {
-
+            log.error("\(#function) FAILED : messageComposer cannot send text")
             /// TODO: try to send email message?
 
             // TESTING:
