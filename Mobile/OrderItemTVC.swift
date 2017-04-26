@@ -246,8 +246,9 @@ extension OrderItemTVC {
             }
 
         } else {
-            print("\nPROBLEM - Unable to POST order \(json)")
-            showAlert(title: "Problem", message: "Unable to upload Order")
+            log.error("\(#function) FAILED : unable to POST order \(json)")
+            HUD.flash(.error, delay: 1.0)
+            //showAlert(title: "Problem", message: "Unable to upload Order")
         }
     }
 
