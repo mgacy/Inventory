@@ -95,7 +95,6 @@ extension Inventory {
             // Create InventoryItem
             let inventoryItem = InventoryItem(context: context, json: inventoryItemJSON,
                                               inventory: self)
-            print("Created InventoryItem: \(inventoryItem)")
 
             // Create InventoryLocationItem
             let locationItem = InventoryLocationItem(context: context)
@@ -105,8 +104,6 @@ extension Inventory {
             locationItem.item = inventoryItem
             /// TODO: am I still setting location when a LocationItem belongs to a LocationCategory?
             locationItem.location = defaultLocation
-
-            //print("Created InventoryLocationItem: \(locationItem)")
 
             /*
             // Get Corresponding Unit
@@ -119,13 +116,11 @@ extension Inventory {
             */
 
             // Fetch / Create corresponding InventoryLocationCategory and create relationships
-            defaultLocation.doStuff(context: context, json: inventoryItemJSON,
-                                    location: defaultLocation,
-                                    locationItem: locationItem)
+            defaultLocation.findOrCreateCategory(context: context, json: inventoryItemJSON,
+                                                 for: locationItem)
 
-            print("Created InventoryLocationItem: \(locationItem)")
         }
-
+        /// TODO: add position to LocationCategories
         print("Created InventoryLocation: \(defaultLocation)")
     }
 

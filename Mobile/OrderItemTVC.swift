@@ -265,12 +265,8 @@ extension  OrderItemTVC {
         fetchRequest.sortDescriptors = [sortDescriptor]
 
         // Set the fetch predicate
-        if let parent = self.parentObject {
-            let fetchPredicate = NSPredicate(format: "order == %@", parent)
-            fetchRequest.predicate = fetchPredicate
-        } else {
-            print("\nPROBLEM - Unable able to add predicate")
-        }
+        let fetchPredicate = NSPredicate(format: "order == %@", parentObject)
+        fetchRequest.predicate = fetchPredicate
 
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".

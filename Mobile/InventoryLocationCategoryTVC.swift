@@ -70,16 +70,13 @@ class InventoryLocationCategoryTVC: UITableViewController {
 
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InventoryLocationCategory> = InventoryLocationCategory.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
+        let sortDescriptor1 = NSSortDescriptor(key: "position", ascending: true)
+        let sortDescriptor2 = NSSortDescriptor(key: "name", ascending: true)
+        request.sortDescriptors = [sortDescriptor1, sortDescriptor2]
 
         // Set the fetch predicate.
-        if let parent = self.location {
-            let fetchPredicate = NSPredicate(format: "location == %@", parent)
-            request.predicate = fetchPredicate
-        } else {
-            print("\(#function) FAILED : unable to add predicate")
-        }
+        let fetchPredicate = NSPredicate(format: "location == %@", location)
+        request.predicate = fetchPredicate
 
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
