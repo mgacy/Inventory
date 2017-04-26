@@ -136,7 +136,7 @@ class OrderItemTVC: UITableViewController {
             /// TODO: try to send email message?
 
             // TESTING:
-            completedPlaceOrder(true)
+            //completedPlaceOrder(true)
 
             // Let the user know if his/her device isn't able to send text messages
             let errorAlert = createAlert(
@@ -217,6 +217,7 @@ extension OrderItemTVC {
             HUD.show(.progress)
 
             // Serialize and POST Order
+            /// TODO: is it possible for this to take long enough to justify showing HUD before?
             guard let json = parentObject.serialize() else {
                 log.error("\(#function) FAILED : unable to serialize Order")
                 /// TODO: show more detailed error message
