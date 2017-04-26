@@ -91,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             // Sync
             HUD.show(.progress)
-            _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!, completionHandler: controller.completedLogin)
+            _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!, completionHandler: controller.completedSync)
 
             self.window?.rootViewController = tabBarController
         } else {

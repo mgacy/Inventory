@@ -196,7 +196,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         guard let storeID = userManager.storeID else { return }
 
         /// TODO: SyncManager?
-        //_ = SyncManager(storeID: storeID, completionHandler: completedLogin)
+        //HUD.show(.progress)
+        //_ = SyncManager(storeID: storeID, completionHandler: completedSync)
 
         // Reload data and update the table view's data source
         APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: {(json: JSON?, error: Error?) in
@@ -342,10 +343,9 @@ extension InventoryDateTVC {
         performSegue(withIdentifier: NewItemSegue, sender: self)
     }
 
-    /// TODO: rename `completedItemSync`(?)
-    func completedLogin(_ succeeded: Bool, _ error: Error?) {
+    func completedSync(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
-            log.info("Completed login / sync - succeeded: \(succeeded)")
+            log.info("Completed sync - succeeded: \(succeeded)")
 
             guard let storeID = userManager.storeID else {
                 log.error("\(#function) FAILED : unable to get storeID"); return
@@ -356,8 +356,8 @@ extension InventoryDateTVC {
             APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
 
         } else {
-            log.error("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
+            log.error("Unable to sync ...")
             HUD.flash(.error, delay: 1.0); return
         }
     }
