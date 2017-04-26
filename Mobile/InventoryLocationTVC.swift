@@ -138,11 +138,11 @@ class InventoryLocationTVC: UITableViewController {
     // MARK: - User Actions
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
-        print("Uploading Inventory ...")
+        log.info("Uploading Inventory ...")
         HUD.show(.progress)
 
         guard let dict = self.inventory.serialize() else {
-            print("\(#function) FAILED : unable to serialize Inventory")
+            log.error("\(#function) FAILED : unable to serialize Inventory")
             /// TODO: completedUpload(false)
             return
         }
@@ -159,11 +159,11 @@ extension InventoryLocationTVC {
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            print("\(#function) FAILED: unable to get JSON")
+            log.error("\(#function) FAILED: unable to get JSON")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let remoteID = json["id"].int else {
-            print("\(#function) FAILED: unable to get remoteID of posted Inventory")
+            log.error("\(#function) FAILED: unable to get remoteID of posted Inventory")
             HUD.flash(.error, delay: 1.0); return
         }
 

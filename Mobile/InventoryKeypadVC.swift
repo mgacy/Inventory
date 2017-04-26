@@ -31,7 +31,7 @@ class InventoryKeypadVC: UIViewController {
             request.sortDescriptors = [sortDescriptor]
 
         } else {
-            print("\nPROBLEM - Unable to add predicate\n")
+            log.error("PROBLEM : Unable to add predicate")
             return [InventoryLocationItem]()
         }
         
@@ -40,7 +40,7 @@ class InventoryKeypadVC: UIViewController {
             return searchResults!
 
         } catch {
-            print("Error with request: \(error)")
+            log.error("Error with request: \(error)")
         }
         return [InventoryLocationItem]()
     }

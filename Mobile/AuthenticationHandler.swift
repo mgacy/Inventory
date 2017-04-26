@@ -71,17 +71,17 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
         /*
         // If we don't have an accessToken, we go ahead and get one from the start
         if accessToken == nil {
-            print("No accessToken; logging in ...")
+            log.info("No accessToken; logging in ...")
             login(completion: {(succeeded: Bool) -> Void in
                 switch succeeded {
                 case true:
-                    print("We logged in")
+                    log.info("We logged in")
                 case false:
-                    print("We were unable to log in")
+                    log.info("We were unable to log in")
                 }
             })
         } else {
-            print("Have accessToken")
+            log.info("Have accessToken")
         }
         */
     }
@@ -105,7 +105,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
         lock.lock() ; defer { lock.unlock() }
 
         if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 {
-            print("401: invalid token (probably) ...")
+            log.warning("401: invalid token (probably) ...")
             requestsToRetry.append(completion)
 
             if !isRefreshing {
@@ -122,7 +122,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                          * want to print
                          */
 
-                        print(refreshToken)
+                        log.info(refreshToken)
                         strongSelf.accessToken = accessToken
                         //strongSelf.refreshToken = refreshToken
                     }
@@ -144,18 +144,18 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
         isRefreshing = true
 
         // Log in again
-        print("Logging in again to refreshTokens ...")
+        log.info("Logging in again to refreshTokens ...")
         sessionManager.request(Router.login(email: email, password: password))
             .responseJSON { [weak self] response in
                 guard let strongSelf = self else { return }
 
                 if let accessToken = JSON(response.result.value!)["token"].string {
-                    print("Received new access token ...")
+                    log.verbose("Received new access token ...")
                     // NOTE - we pass a string for refreshToken to keep should() as close to the
                     //        example from the Alamofire README as possible
                     completion(true, accessToken, "Updating accessToken ...")
                 } else {
-                    print("Attempt to login again failed")
+                    log.error("Attempt to login again failed")
                     completion(false, nil, nil)
                 }
 
@@ -171,11 +171,11 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // print("\n\(#function) - response: \(response)\n")
+                    // log.verbose("\(#function) - response: \(response)")
 
                     let json = JSON(value)
                     guard let token = json["token"].string else {
-                        //debugPrint("\(#function) FAILED : unable to get token")
+                        //log.error("\(#function) FAILED : unable to get token")
                         return completion(nil, BackendError.authentication(
                             error: BackendError.myError(error: "Unable to parse token from response.")))
                     }
@@ -183,7 +183,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                     completion(json, nil)
 
                 case .failure(let error):
-                    //debugPrint("\(#function) FAILED : unable to get token : \(error)")
+                    //log.error("\(#function) FAILED : unable to get token : \(error)")
                     completion(nil, BackendError.authentication(error: error))
                 }
         }
