@@ -1,6 +1,6 @@
 //
 //  OperationKeypadButton.swift
-//  Playground
+//  Mobile
 //
 //  http://stackoverflow.com/questions/27079681/how-to-init-a-uibutton-subclass
 //
@@ -14,11 +14,17 @@ class OperationKeypadButton: UIButton {
 
     required init?(coder aDecoder: NSCoder) {        
         super.init(coder: aDecoder)
-        
+
         // set other operations after super.init, if required
-        // let blueColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 255/255.0, alpha: 1.0)
-        backgroundColor = UIColor.blue
-        setTitleColor(UIColor.black, for: .normal)
+        backgroundColor = ColorPalette.secondaryColor
+        setTitleColor(.white, for: .normal)
+        setTitleColor(ColorPalette.yellowColor, for: .highlighted)
+        setTitleColor(ColorPalette.textColor, for: .disabled)
+        //setTitleColor(ColorPalette.darkGrayColor, for: .disabled)
+        /// NOTE: not sure about the following states for UIButton
+        setTitleColor(.red, for: .selected)
+        setTitleColor(.blue, for: .focused)
+        titleLabel?.font = UIFont.systemFont(ofSize: 22.0)
     }
 
 }

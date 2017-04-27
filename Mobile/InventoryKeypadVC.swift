@@ -1,4 +1,3 @@
-
 //
 //  InventoryKeypadVC.swift
 //  Playground
@@ -17,135 +16,119 @@ class InventoryKeypadVC: UIViewController {
     var category: InventoryLocationCategory?
     var location: InventoryLocation?
     var currentIndex = 0
-    
-    // TODO: perform fetch with necessary sorting instead?
-    
-    var items: NSOrderedSet {   // NSMutableOrderedSet?
+
+    var items: [InventoryLocationItem] {
+        let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
+
+        let positionSort = NSSortDescriptor(key: "position", ascending: true)
+        let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
+        request.sortDescriptors = [positionSort, nameSort]
+
         if let parentLocation = self.location {
-            if let items = parentLocation.items {
-                return items
-            }
+            request.predicate = NSPredicate(format: "location == %@", parentLocation)
         } else if let parentCategory = self.category {
-            if let items = parentCategory.items {
-                return items
-            }
+            request.predicate = NSPredicate(format: "category == %@", parentCategory)
         } else {
-            print("\nPROBLEM - Unable to add predicate\n")
-            return NSOrderedSet(array:[])
+            log.error("PROBLEM : Unable to add predicate to InventoryLocationItem fetch request")
+            return [InventoryLocationItem]()
         }
-        return NSOrderedSet(array:[])
+
+        do {
+            let searchResults = try managedObjectContext?.fetch(request)
+            return searchResults!
+
+        } catch {
+            log.error("Error with InventoryLocationItem fetch request: \(error)")
+        }
+        return [InventoryLocationItem]()
     }
-    
+
     var currentItem: InventoryLocationItem {
-        return items[currentIndex] as! InventoryLocationItem
+        return items[currentIndex]
     }
-    
+
+    typealias keypadOutput = (history: String, total: Double?, display: String)
     let keypad = KeypadWithHistory()
-    
+
     // CoreData
     var managedObjectContext: NSManagedObjectContext?
-    
+
     // MARK: - Display Outlets
     @IBOutlet weak var itemValue: UILabel!
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var itemHistory: UILabel!
-    
-    // MARK: - Default
-    
+    @IBOutlet weak var itemPack: UILabel!
+    @IBOutlet weak var itemUnit: UILabel!
+
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        updateForNewItem()
+        update(newItem: true)
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        log.warning("\(#function)")
         // Dispose of any resources that can be recreated.
     }
-    
+
     // MARK: - Keypad
-    
-    /*
-     TODO: should any call to keypad return (quantity: Double, history: String) so
-     that those can then be passed both to currentItem and the display?
-     */
-    
+
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
-        print("Tapped '\(digit)'")
+        //log.verbose("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
         keypad.pushDigit(value: number)
-        
-        // Update model with result of keypad
-        updateModel()
-        
-        // Update display with updated model properties
-        updateDisplay()
+
+        // Update model and display with result of keypad
+        update()
     }
-    
+
     @IBAction func clearTapped(_ sender: AnyObject) {
-        print("Tapped 'clear'")
+        //log.verbose("Tapped 'clear'")
         keypad.popItem()
-        
-        // Update model with result of keypad
-        updateModel()
-        
-        // Update display with updated model properties
-        updateDisplay()
+
+        // Update model and display with result of keypad
+        update()
     }
-    
+
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        print("Tapped '.'")
+        //log.verbose("Tapped '.'")
         keypad.pushDecimal()
-        
-        // Update model with result of keypad
-        updateModel()
-        
-        // Update display with updated model properties
-        updateDisplay()
+        update()
     }
-    
+
     // MARK: - Uncertain
-    
+
     @IBAction func addTapped(_ sender: AnyObject) {
-        print("Tapped '+'")
+        //log.verbose("Tapped '+'")
         keypad.pushOperator()
-        
-        // Update model with result of keypad
-        updateModel()
-        
-        // Update display with updated model properties
-        updateDisplay()
+        update()
     }
     
     @IBAction func decrementTapped(_ sender: AnyObject) {
-        print("Tapped '-1'")
+        //log.verbose("Tapped '-1'")
     }
     
     @IBAction func incrementTapped(_ sender: AnyObject) {
-        print("Tapped '+1'")
+        //log.verbose("Tapped '+1'")
         keypad.pushOperator()
         keypad.pushDigit(value: 1)
         keypad.pushOperator()
-        
-        // Update model with result of keypad
-        updateModel()
-        
-        // Update display with updated model properties
-        updateDisplay()
+        update()
     }
     
     // MARK: - Item Navigation
-    
+
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
             currentIndex += 1
-            
-            updateForNewItem()
+
+            // Update keypad and display with new currentItem
+            update(newItem: true)
         } else {
-            // TODO: cleanup?
-            
-            // Pop view
+            /// TODO: cleanup?
             navigationController!.popViewController(animated: true)
         }
     }
@@ -154,61 +137,78 @@ class InventoryKeypadVC: UIViewController {
         if currentIndex > 0 {
             currentIndex -= 1
 
-            updateForNewItem()
+            // Update keypad and display with new currentItem
+            update(newItem: true)
         } else {
-            // TODO: cleanup?
-            
-            // Pop view
+            /// TODO: cleanup?
             navigationController!.popViewController(animated: true)
         }
     }
-    
-    // MARK: - C
-    
-    func updateModel() {
-        let keypadResult = keypad.evaluateHistory()
-        currentItem.quantity = keypadResult! as NSNumber?
+
+    // MARK: - View
+
+    func update(newItem: Bool = false) {
+        let output: keypadOutput
+
+        switch newItem {
+        case true:
+            // Update keypad with quantity of new currentItem
+            keypad.updateNumber(currentItem.quantity as Double?)
+            output = keypad.output()
+        case false:
+            // Update model with output of keyapd
+            output = keypad.output()
+            
+            if let keypadResult = output.total {
+                currentItem.quantity = keypadResult as NSNumber?
+            } else {
+                currentItem.quantity = nil
+            }
+            
+            // Save the context.
+            let context = self.managedObjectContext!
+            do {
+                try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                log.error("Unresolved error \(nserror), \(nserror.userInfo)")
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+        
+        updateDisplay(item: currentItem, keypadOutput: output)
     }
-    
-    // MARK: NEW
-    
-    func updateDisplay() {
-        let output = keypad.output()
-        print("Output: \(output)")
+
+    // func updateDisplay(item: InventoryLocationItem, history: String, total: Double?, display: String) {}
+    func updateDisplay(item: InventoryLocationItem, keypadOutput: keypadOutput) {
+
+        // Item.quantity
+        itemValue.text = keypadOutput.display
+        if keypadOutput.total != nil {
+            itemValue.textColor = UIColor.black
+        } else {
+            itemValue.textColor = UIColor.lightGray
+        }
         
-        itemValue.text = output.display
-        
-        itemHistory.text = output.history
+        itemHistory.text = keypadOutput.history
         
         // Item.name
-        guard let item = currentItem.item else {
-            itemName.text = "Error (1)"
-            return
+        guard let inventoryItem = currentItem.item else {
+            itemName.text = "Error (1)"; return
         }
-        guard let name = item.name else {
-            itemName.text = "Error (2)"
-            return
+        guard let name = inventoryItem.name else {
+            itemName.text = "Error (2)"; return
         }
         itemName.text = name
-    }
-    
-    func updateForNewItem() {
-        // print("updateForNewItem: \(currentItem.item?.name) - \(currentItem)")
         
-        // Update keypad with info from new currentItem
-        keypad.updateNumber(currentItem.quantity as Double?)
-        
-        // Update display
-        updateDisplay()
+        // Item.pack
+        guard let item = inventoryItem.item else { return }
+        itemPack.text = item.packDisplay
+
+        // Item.unit
+        itemUnit.text = "\(item.inventoryUnit?.abbreviation ?? "")"
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+
 }

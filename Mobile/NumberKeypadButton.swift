@@ -1,6 +1,6 @@
 //
 //  NumberKeypadButton.swift
-//  Playground
+//  Mobile
 //
 //  http://stackoverflow.com/questions/27079681/how-to-init-a-uibutton-subclass
 //
@@ -25,9 +25,10 @@ class NumberKeypadButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        // let blueColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 255/255.0, alpha: 1.0)
-        backgroundColor = UIColor.lightGray
-        setTitleColor(UIColor.black, for: .normal)
+        backgroundColor = ColorPalette.lightGrayColor
+        setTitleColor(UIColor.white, for: .normal)
+        //setTitleColor(UIColor.green, for: .highlighted)
+        titleLabel?.font = UIFont.systemFont(ofSize: 22.0)
     }
     
 }
