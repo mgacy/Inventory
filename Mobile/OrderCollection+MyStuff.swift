@@ -88,18 +88,5 @@ extension OrderCollection {
     }
 }
 
-extension OrderCollection: SyncableCollection {
-
-    func update(context: NSManagedObjectContext, withJSON json: JSON) {
-
-        // Set properties
-        if let date = json["date"].string {
-            self.date = date
-        }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
-        //self.uploaded = uploaded
-    }
-
-}
+// The extension already offers a default implementation; we will use that
+extension OrderCollection: SyncableCollection {}
