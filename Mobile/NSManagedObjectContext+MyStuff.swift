@@ -394,6 +394,8 @@ extension NSManagedObjectContext {
         }
     }
 
+    /// TODO: add `uploaded: Bool = true`?
+
     public func syncCollections<T: SyncableCollection>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         guard let objectDict = try? fetchCollectionDict(T.self) else {
             log.error("\(#function) FAILED : unable to create Collection dictionary"); return

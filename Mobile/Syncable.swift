@@ -78,8 +78,6 @@ extension SyncableItem where Self : NSManagedObject {
 extension SyncableCollection where Self : NSManagedObject {
 
     func update(context: NSManagedObjectContext, withJSON json: JSON) {
-
-        // Set properties
         if let date = json["date"].string {
             self.date = date
         }
