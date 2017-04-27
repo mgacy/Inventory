@@ -34,7 +34,7 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                //log.warning("Found 0 matches for predicate \(predicate)")
+                log.debug("Found 0 matches for predicate \(predicate)")
                 return nil
             case 1:
                 return fetchResults[0]
@@ -191,7 +191,7 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                //log.warning("Found 0 matches for remoteID \(id)")
+                log.warning("\(#function) : found 0 matches for remoteID \(id)")
                 return nil
             case 1:
                 return fetchResults[0]
@@ -201,7 +201,7 @@ extension NSManagedObjectContext {
             }
 
         } catch let error {
-            log.error("Error with request: \(error)")
+            log.error("\(#function) FAILED : error with request: \(error)")
             return nil
         }
         //return nil
@@ -343,19 +343,18 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                //log.warning("Found 0 matches for predicate \(predicate)")
+                log.warning("\(#function) : found 0 matches for date: \(date)")
                 return nil
             case 1:
                 return fetchResults[0]
             default:
-                log.error("\(#function) FAILED: found multiple matches: \(fetchResults)")
+                log.error("\(#function) FAILED : found multiple matches: \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
-                //print("Found multiple matches: \(searchResults)")
                 //return searchResults[0]
             }
 
         } catch let error {
-            log.error("Error with request: \(error)")
+            log.error("\(#function) FAILED : error with request: \(error)")
         }
         return nil
     }
