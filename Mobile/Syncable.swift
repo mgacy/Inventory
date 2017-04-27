@@ -87,4 +87,14 @@ extension SyncableCollection where Self : NSManagedObject {
         //self.uploaded = uploaded
     }
 
+    func update(context: NSManagedObjectContext, withJSON json: JSON, uploaded: Bool) {
+        if let date = json["date"].string {
+            self.date = date
+        }
+        if let storeID = json["store_id"].int32 {
+            self.storeID = storeID
+        }
+        self.uploaded = uploaded
+    }
+
 }
