@@ -271,6 +271,26 @@ extension InventoryDateTVC {
 
     // MARK: - Completion Handlers
 
+    func completedGetListOfInventoriesNEW(json: JSON?, error: Error?) -> Void {
+        guard error == nil else {
+            HUD.flash(.error, delay: 1.0); return
+        }
+        guard let json = json else {
+            log.warning("\(#function) FAILED : unable to get JSON")
+            HUD.hide(); return
+        }
+
+        guard let managedObjectContext = managedObjectContext else { return }
+
+        do {
+            try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
+        } catch {
+            log.error("Unable to sync Inventories")
+        }
+
+        self.tableView.reloadData()
+    }
+
     func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
