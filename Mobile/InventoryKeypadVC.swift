@@ -20,18 +20,16 @@ class InventoryKeypadVC: UIViewController {
     var items: [InventoryLocationItem] {
         let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
 
+        let positionSort = NSSortDescriptor(key: "position", ascending: true)
+        let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
+        request.sortDescriptors = [positionSort, nameSort]
+
         if let parentLocation = self.location {
             request.predicate = NSPredicate(format: "location == %@", parentLocation)
-            let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
-            request.sortDescriptors = [sortDescriptor]
-
         } else if let parentCategory = self.category {
             request.predicate = NSPredicate(format: "category == %@", parentCategory)
-            let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-            request.sortDescriptors = [sortDescriptor]
-
         } else {
-            log.error("PROBLEM : Unable to add predicate")
+            log.error("PROBLEM : Unable to add predicate to InventoryLocationItem fetch request")
             return [InventoryLocationItem]()
         }
 
@@ -40,7 +38,7 @@ class InventoryKeypadVC: UIViewController {
             return searchResults!
 
         } catch {
-            log.error("Error with request: \(error)")
+            log.error("Error with InventoryLocationItem fetch request: \(error)")
         }
         return [InventoryLocationItem]()
     }
