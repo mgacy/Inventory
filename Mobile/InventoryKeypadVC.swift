@@ -96,8 +96,6 @@ class InventoryKeypadVC: UIViewController {
     @IBAction func decimalTapped(_ sender: AnyObject) {
         //log.verbose("Tapped '.'")
         keypad.pushDecimal()
-
-        // Update model and display with result of keypad
         update()
     }
 
@@ -106,8 +104,6 @@ class InventoryKeypadVC: UIViewController {
     @IBAction func addTapped(_ sender: AnyObject) {
         //log.verbose("Tapped '+'")
         keypad.pushOperator()
-
-        // Update model and display with result of keypad
         update()
     }
     
@@ -120,24 +116,19 @@ class InventoryKeypadVC: UIViewController {
         keypad.pushOperator()
         keypad.pushDigit(value: 1)
         keypad.pushOperator()
-        
-        // Update model and display with result of keypad
         update()
     }
     
     // MARK: - Item Navigation
-    
+
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
             currentIndex += 1
-            
+
             // Update keypad and display with new currentItem
             update(newItem: true)
-            
         } else {
-            // TODO: cleanup?
-            
-            // Pop view
+            /// TODO: cleanup?
             navigationController!.popViewController(animated: true)
         }
     }
@@ -145,23 +136,20 @@ class InventoryKeypadVC: UIViewController {
     @IBAction func previousItemTapped(_ sender: AnyObject) {
         if currentIndex > 0 {
             currentIndex -= 1
-            
+
             // Update keypad and display with new currentItem
             update(newItem: true)
-            
         } else {
-            // TODO: cleanup?
-            
-            // Pop view
+            /// TODO: cleanup?
             navigationController!.popViewController(animated: true)
         }
     }
-    
+
     // MARK: - View
-        
+
     func update(newItem: Bool = false) {
         let output: keypadOutput
-        
+
         switch newItem {
         case true:
             // Update keypad with quantity of new currentItem
