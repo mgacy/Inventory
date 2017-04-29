@@ -23,7 +23,7 @@ extension NSManagedObjectContext {
 // MARK: - Fetch
 extension NSManagedObjectContext {
 
-    // NOTE - this is a more general form of fetchWithRemoteID(_:withID)
+    /// NOTE: this is a more general form of fetchWithRemoteID(_:withID)
     public func fetchSingleEntity<T : NSManagedObject>(_ entity: T.Type, matchingPredicate predicate: NSPredicate) -> T? {
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
         request.predicate = predicate
@@ -64,12 +64,11 @@ extension NSManagedObjectContext {
         request.predicate = predicate
         request.sortDescriptors = sortBy
 
-        //let fetchedResult = try self.fetch(request)
-        //return fetchedResult
         do {
             let fetchedResult = try self.fetch(request)
             return fetchedResult
         } catch let error {
+            /// TODO: provide better error info?
             log.error(error.localizedDescription)
             throw error
         }
@@ -82,7 +81,9 @@ extension NSManagedObjectContext {
 
     func deleteEntities<T: NSManagedObject>(_ entityClass: T.Type, filter: NSPredicate? = nil) throws {
 
-        // We need to make sure that any changes are first pushed to the persistent store
+        /// TODO: actually throw on exception?
+
+        // Ensure any changes are first pushed to the persistent store
         if self.hasChanges {
             do {
                 try self.save()
@@ -111,8 +112,7 @@ extension NSManagedObjectContext {
             log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
             // Reset Managed Object Context
-            // As the request directly interacts with the persistent store, we need need to reset the context
-            // for it to be aware of the changes
+            // As the request directly interacts with the persistent store, we need need to reset the context for it to be aware of the changes
             self.reset()
 
         } catch {
@@ -204,7 +204,6 @@ extension NSManagedObjectContext {
             log.error("\(#function) FAILED : error with request: \(error)")
             return nil
         }
-        //return nil
     }
 
     func fetchEntityDict<T: Syncable>(_ entityClass: T.Type,
@@ -229,8 +228,6 @@ extension NSManagedObjectContext {
         request.predicate = predicate
         request.relationshipKeyPathsForPrefetching = relationships
 
-        //let fetchedResult = try self.fetch(request)
-        //return fetchedResult
         do {
             let fetchedResult = try self.fetch(request)
             let objectDict = fetchedResult.toDictionary { $0.remoteID }
