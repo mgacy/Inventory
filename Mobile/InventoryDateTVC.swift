@@ -286,8 +286,9 @@ extension InventoryDateTVC {
             try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
         } catch {
             log.error("Unable to sync Inventories")
+            HUD.flash(.error, delay: 1.0)
         }
-
+        HUD.hide()
         self.tableView.reloadData()
     }
 
