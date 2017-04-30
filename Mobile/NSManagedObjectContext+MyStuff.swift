@@ -191,7 +191,7 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                log.warning("\(#function) : found 0 matches for remoteID \(id)")
+                log.debug("\(#function) : found 0 matches for remoteID \(id)")
                 return nil
             case 1:
                 return fetchResults[0]
@@ -264,14 +264,12 @@ extension NSManagedObjectContext {
                 newObject.update(context: self, withJSON: objectJSON)
             }
         }
+        log.debug("\(T.self) - remote: \(remoteIDs) - local: \(localIDs)")
 
         // Delete objects that were deleted from server. We filter remoteID 0
         // since that is the default value for new objects
         let deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 != 0 }
-
-        // TESTING
-        //log.debug("remote: \(remoteIDs) - local: \(localIDs)")
-        //log.debug("We need to delete: \(deletedObjects)")
+        log.debug("We need to delete: \(deletedObjects)")
 
         let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
         do {
@@ -312,7 +310,7 @@ extension NSManagedObjectContext {
         let deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 != 0 }
 
         // TESTING
-        log.debug("remote: \(remoteIDs) - local: \(localIDs)")
+        log.debug("\(T.self) - remote: \(remoteIDs) - local: \(localIDs)")
         log.debug("We need to delete: \(deletedObjects)")
 
         let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
@@ -340,7 +338,7 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                log.warning("\(#function) : found 0 matches for date: \(date)")
+                log.debug("\(#function) : found 0 matches for date: \(date)")
                 return nil
             case 1:
                 return fetchResults[0]
@@ -413,12 +411,10 @@ extension NSManagedObjectContext {
                 newObject.update(context: self, withJSON: objectJSON)
             }
         }
+        //log.debug("\(T.self) - remote: \(remoteDates) - local: \(localDates)")
 
         // Delete objects that were deleted from server.
         let deletedObjects = localDates.subtracting(remoteDates)
-
-        // TESTING
-        //log.debug("remote: \(remoteDates) - local: \(localDates)")
         //log.debug("We need to delete: \(deletedObjects)")
 
         let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)

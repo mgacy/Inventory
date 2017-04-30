@@ -30,7 +30,7 @@ class SyncManager {
         self.completionHandler = completionHandler
 
         // Get list of Vendors from server
-        log.info("\nFetching Vendors from server ...")
+        log.info("Fetching Vendors from server ...")
         APIManager.sharedInstance.getVendors(storeID: self.storeID, completion: syncVendors)
     }
 
@@ -79,12 +79,10 @@ class SyncManager {
                 newItem.updateUnits(withJSON: itemJSON, unitDict: unitDict)
             }
         }
+        log.debug("Items - remote: \(remoteIDs) - local: \(localIDs)")
 
         // Delete Items that were deleted from server
         let deletedItems = localIDs.subtracting(remoteIDs)
-
-        // TESTING
-        log.debug("remote: \(remoteIDs) - local: \(localIDs)")
         log.debug("We need to delete: \(deletedItems)")
 
         let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedItems)
