@@ -197,7 +197,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
         /// TODO: SyncManager?
         //HUD.show(.progress)
-        //_ = SyncManager(storeID: storeID, completionHandler: completedSync)
+        _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
 
         // Reload data and update the table view's data source
         APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: {(json: JSON?, error: Error?) in
