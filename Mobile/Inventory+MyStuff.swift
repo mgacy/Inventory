@@ -135,6 +135,12 @@ extension Inventory: Syncable {
         if let remoteID = json["id"].int32 {
             self.remoteID = remoteID
         }
+        if let storeID = json["store_id"].int32 {
+            self.storeID = storeID
+        }
+        if let typeID = json["inventory_type_id"].int32 {
+            self.typeID = typeID
+        }
     }
 
 }
