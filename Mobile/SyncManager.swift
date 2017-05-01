@@ -83,15 +83,17 @@ class SyncManager {
 
         // Delete Items that were deleted from server
         let deletedItems = localIDs.subtracting(remoteIDs)
-        log.debug("We need to delete: \(deletedItems)")
-
-        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedItems)
-        do {
-            try managedObjectContext.deleteEntities(Item.self, filter: fetchPredicate)
-        } catch {
-            /// TODO: deleteEntities(_:filter) already prints the error
-            let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
+        if !deletedItems.isEmpty {
+            log.debug("We need to delete: \(deletedItems)")
+            /// TODO: Do we really need to create a new fetch request or can we just get from itemDict?
+            let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedItems)
+            do {
+                try managedObjectContext.deleteEntities(Item.self, filter: fetchPredicate)
+            } catch {
+                /// TODO: deleteEntities(_:filter) already prints the error
+                let updateError = error as NSError
+                log.error("\(updateError), \(updateError.userInfo)")
+            }
         }
 
         log.verbose("Finished syncing Items")
