@@ -20,7 +20,7 @@ extension Vendor: Syncable {
     }
 
     public func update(context: NSManagedObjectContext, withJSON json: Any) {
-        guard let _json = json as? JSON else {
+        guard let json = json as? JSON else {
             log.error("\(#function) FAILED : SwiftyJSON"); return
         }
 
