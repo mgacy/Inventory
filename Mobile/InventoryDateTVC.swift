@@ -230,24 +230,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
     }
 
-    /// TODO: Remove
-    @IBAction func resetTapped(_ sender: AnyObject) {
-        guard let managedObjectContext = managedObjectContext else { return }
-        guard let storeID = userManager.storeID else { return }
-
-        HUD.show(.progress)
-
-        let fetchPredicate = NSPredicate(format: "uploaded == %@", true as CVarArg)
-        do {
-            try managedObjectContext.deleteEntities(Inventory.self, filter: fetchPredicate)
-        } catch {
-            log.error("Unable to delete Inventories")
-        }
-
-        // Get list of Inventories from server
-        APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
-    }
-
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
