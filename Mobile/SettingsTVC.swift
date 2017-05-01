@@ -164,6 +164,9 @@ extension SettingsTVC {
         } catch {
             log.error("\(#function) FAILED: unable to delete Vendors")
         }
+
+        let result = managedObjectContext.saveOrRollback()
+        print("Save result: \(result)")
     }
 
 }
