@@ -19,7 +19,10 @@ extension Vendor: Syncable {
         self.update(context: context, withJSON: json)
     }
 
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+    public func update(context: NSManagedObjectContext, withJSON json: Any) {
+        guard let _json = json as? JSON else {
+            log.error("\(#function) FAILED : SwiftyJSON"); return
+        }
 
         // Properties
         if let remoteID = json["id"].int32 {
@@ -30,6 +33,7 @@ extension Vendor: Syncable {
         }
 
         /// TODO: create separate VendorRep object
+        // if let rep = json["rep"]
     }
 
 }

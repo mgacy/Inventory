@@ -19,7 +19,11 @@ extension Unit: Syncable {
         self.update(context: context, withJSON: json)
     }
 
-    func update(context: NSManagedObjectContext, withJSON json: JSON) {
+    public func update(context: NSManagedObjectContext, withJSON json: Any) {
+        guard let json = json as? JSON else {
+            log.error("\(#function) FAILED : SwiftyJSON"); return
+        }
+
         if let remoteID = json["id"].int32 {
             self.remoteID = remoteID
         }

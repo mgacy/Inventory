@@ -17,4 +17,18 @@ extension ItemCategory: Syncable {
         self.update(context: context, withJSON: json)
     }
 
+    public func update(context: NSManagedObjectContext, withJSON json: Any) {
+        guard let json = json as? JSON else {
+            log.error("\(#function) FAILED : SwiftyJSON"); return
+        }
+
+        // Properties
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
+        }
+        if let name = json["name"].string {
+            self.name = name
+        }
+    }
+
 }

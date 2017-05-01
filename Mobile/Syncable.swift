@@ -18,22 +18,10 @@ import SwiftyJSON
 
     var remoteID: Int32 { get set }
 
-    // func update(context: NSManagedObjectContext, withJSON json: JSON)
-
+    //convenience init(context: NSManagedObjectContext, representation: Any)
+    func update(context: NSManagedObjectContext, withJSON json: Any)
 }
 
-extension Syncable where Self : NSManagedObject {
-
-    /// TODO: rename updateWithJSON / updateFromJSON?
-    func update(context: NSManagedObjectContext, withJSON json: JSON) {
-
-        // Properties
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-    }
-
-}
 // MARK: - SyncableCollection
 @objc public protocol SyncableCollection {
 
