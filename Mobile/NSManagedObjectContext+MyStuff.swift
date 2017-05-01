@@ -269,15 +269,16 @@ extension NSManagedObjectContext {
         // Delete objects that were deleted from server. We filter remoteID 0
         // since that is the default value for new objects
         let deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 != 0 }
-        log.debug("We need to delete: \(deletedObjects)")
-
-        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
-        do {
-            try self.deleteEntities(T.self, filter: fetchPredicate)
-        } catch {
-            /// TODO: deleteEntities(_:filter) already prints the error
-            let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
+        if !deletedObjects.isEmpty {
+            log.debug("We need to delete: \(deletedObjects)")
+            let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
+            do {
+                try self.deleteEntities(T.self, filter: fetchPredicate)
+            } catch {
+                /// TODO: deleteEntities(_:filter) already prints the error
+                let updateError = error as NSError
+                log.error("\(updateError), \(updateError.userInfo)")
+            }
         }
     }
 
