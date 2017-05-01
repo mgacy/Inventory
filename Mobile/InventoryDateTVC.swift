@@ -195,22 +195,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
-        /// TODO: SyncManager?
         //HUD.show(.progress)
         _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
-
-        // Reload data and update the table view's data source
-        APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: {(json: JSON?, error: Error?) in
-            guard error == nil, let json = json else {
-                HUD.flash(.error, delay: 1.0); return
-            }
-            do {
-                try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
-            } catch {
-                log.error("Unable to sync Inventories")
-            }
-
-        })
 
         self.tableView.reloadData()
         refreshControl.endRefreshing()
@@ -253,7 +239,7 @@ extension InventoryDateTVC {
 
     // MARK: - Completion Handlers
 
-    func completedGetListOfInventoriesNEW(json: JSON?, error: Error?) -> Void {
+    func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -272,33 +258,7 @@ extension InventoryDateTVC {
         }
         HUD.hide()
         self.tableView.reloadData()
-    }
-
-    func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
-        guard error == nil else {
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.warning("\(#function) FAILED : unable to get JSON")
-            HUD.hide(); return
-        }
-
-        HUD.hide()
-
-        for (_, item) in json {
-            guard let inventoryID = item["id"].int32 else {
-                /// TODO: break or continue?
-                log.warning("Unable to get inventoryID from \(item)"); break
-            }
-
-            if managedObjectContext?.fetchWithRemoteID(Inventory.self, withID: inventoryID) == nil {
-                _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
-            }
-        }
-
-        // Save the context.
         saveContext()
-        //HUD.hide()
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
