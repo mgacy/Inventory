@@ -39,7 +39,7 @@ extension Item: Syncable {
         }
 
         /* 
-         NOTE - not implemented:
+         NOTE: not implemented:
          * active
          * shelfLife
          * sku
@@ -55,7 +55,7 @@ extension Item: Syncable {
             if let existingCategory = context.fetchWithRemoteID(ItemCategory.self, withID: categoryID) {
                 self.category = existingCategory
             } else {
-                // TODO: should we really create a new ItemCategory if we don't have all its attributes?
+                /// TODO: should we really create a new ItemCategory if we don't have all its attributes?
                 let newCategory = context.insertObject(ItemCategory.self)
                 newCategory.remoteID = categoryID
                 if let categoryName = json["category"]["name"].string {
@@ -73,7 +73,7 @@ extension Item: Syncable {
             if let vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID) {
                 self.vendor = vendor
             } else {
-                // TODO: should we really create a new Vendor if we don't have all its attributes?
+                /// TODO: should we really create a new Vendor if we don't have all its attributes?
                 let newVendor = context.insertObject(Vendor.self)
                 newVendor.remoteID = vendorID
                 if let vendorName = json["vendor"]["name"].string {
@@ -84,10 +84,10 @@ extension Item: Syncable {
             }
         }
 
-        // NOTE - Unit relationships are handled by updateUnits to minimize fetch requests on sync
-        /* 
-         TODO - should we do the same with other relationships? Here, we expect to have all the
-         info necessary to create new objects if they don't already exist (whereas we do not in
+        /// NOTE: Unit relationships are handled by updateUnits to minimize fetch requests on sync
+        /// TODO: should we do the same with other relationships?
+        /*
+         Here, we expect to have all the info necessary to create new objects if they don't already exist (whereas we do not in
          the case of the various Units
          */
 
