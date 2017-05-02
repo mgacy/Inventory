@@ -18,9 +18,7 @@
         <attribute name="categoryID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="itemID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="packSize" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
-        <attribute name="subSize" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="inventory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Inventory" inverseName="items" inverseEntity="Inventory" syncable="YES"/>
         <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="inventoryItems" inverseEntity="Item" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationItem" inverseName="item" inverseEntity="InventoryLocationItem" syncable="YES"/>
@@ -167,7 +165,7 @@
     <elements>
         <element name="Base" positionX="-947" positionY="-324" width="128" height="75"/>
         <element name="Inventory" positionX="-549" positionY="-342" width="128" height="165"/>
-        <element name="InventoryItem" positionX="-65" positionY="-333" width="128" height="180"/>
+        <element name="InventoryItem" positionX="-65" positionY="-333" width="128" height="150"/>
         <element name="InventoryLocation" positionX="-344" positionY="-117" width="128" height="135"/>
         <element name="InventoryLocationCategory" positionX="-135" positionY="-135" width="128" height="120"/>
         <element name="InventoryLocationItem" positionX="124" positionY="-81" width="128" height="165"/>
