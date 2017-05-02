@@ -18,14 +18,17 @@ extension Inventory {
         self.init(context: context)
 
         // Set properties
+        /// TODO: date and storeID are required and lack default values
         if let date = json["date"].string {
             self.date = date
         }
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
         if let storeID = json["store_id"].int32 {
             self.storeID = storeID
+        }
+
+        // Optional / have default value
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
         }
         if let typeID = json["inventory_type_id"].int32 {
             self.typeID = typeID
@@ -128,12 +131,22 @@ extension Inventory {
 
 extension Inventory: Syncable {
 
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+    public func update(context: NSManagedObjectContext, withJSON json: Any) {
+        guard let json = json as? JSON else {
+            log.error("\(#function) FAILED : SwiftyJSON"); return
+        }
+
         if let date = json["date"].string {
             self.date = date
         }
         if let remoteID = json["id"].int32 {
             self.remoteID = remoteID
+        }
+        if let storeID = json["store_id"].int32 {
+            self.storeID = storeID
+        }
+        if let typeID = json["inventory_type_id"].int32 {
+            self.typeID = typeID
         }
     }
 

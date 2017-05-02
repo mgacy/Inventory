@@ -195,22 +195,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
-        /// TODO: SyncManager?
         //HUD.show(.progress)
-        //_ = SyncManager(storeID: storeID, completionHandler: completedSync)
-
-        // Reload data and update the table view's data source
-        APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: {(json: JSON?, error: Error?) in
-            guard error == nil, let json = json else {
-                HUD.flash(.error, delay: 1.0); return
-            }
-            do {
-                try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
-            } catch {
-                log.error("Unable to sync Inventories")
-            }
-
-        })
+        _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
 
         self.tableView.reloadData()
         refreshControl.endRefreshing()
@@ -228,24 +214,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         HUD.show(.progress)
         APIManager.sharedInstance.getNewInventory(
             isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
-    }
-
-    /// TODO: Remove
-    @IBAction func resetTapped(_ sender: AnyObject) {
-        guard let managedObjectContext = managedObjectContext else { return }
-        guard let storeID = userManager.storeID else { return }
-
-        HUD.show(.progress)
-
-        let fetchPredicate = NSPredicate(format: "uploaded == %@", true as CVarArg)
-        do {
-            try managedObjectContext.deleteEntities(Inventory.self, filter: fetchPredicate)
-        } catch {
-            log.error("Unable to delete Inventories")
-        }
-
-        // Get list of Inventories from server
-        APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
     }
 
 }
@@ -280,22 +248,17 @@ extension InventoryDateTVC {
             HUD.hide(); return
         }
 
-        HUD.hide()
+        guard let managedObjectContext = managedObjectContext else { return }
 
-        for (_, item) in json {
-            guard let inventoryID = item["id"].int32 else {
-                /// TODO: break or continue?
-                log.warning("Unable to get inventoryID from \(item)"); break
-            }
-
-            if managedObjectContext?.fetchWithRemoteID(Inventory.self, withID: inventoryID) == nil {
-                _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
-            }
+        do {
+            try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
+        } catch {
+            log.error("Unable to sync Inventories")
+            HUD.flash(.error, delay: 1.0)
         }
-
-        // Save the context.
+        HUD.hide()
+        self.tableView.reloadData()
         saveContext()
-        //HUD.hide()
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {

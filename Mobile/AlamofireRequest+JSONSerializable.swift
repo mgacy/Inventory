@@ -23,12 +23,35 @@ enum BackendError: Error {
     case myError(error: String)
 }
 
+// MARK: - ResponseObjectSerializable
 protocol ResponseObjectSerializable {
-    //init?(response: HTTPURLResponse, representation: Any)
+    init?(response: HTTPURLResponse, representation: Any)
     //init?(response: HTTPURLResponse, representation: SwiftyJSON.JSON)
-    init?(json: SwiftyJSON.JSON)
+    //init?(json: SwiftyJSON.JSON)
 }
 
+// MARK: - ResponseCollectionSerializable
+protocol ResponseCollectionSerializable {
+    static func collection(from response: HTTPURLResponse, withRepresentation representation: Any) -> [Self]
+}
+
+extension ResponseCollectionSerializable where Self: ResponseObjectSerializable {
+    static func collection(from response: HTTPURLResponse, withRepresentation representation: Any) -> [Self] {
+        var collection: [Self] = []
+
+        if let representation = representation as? [[String: Any]] {
+            for itemRepresentation in representation {
+                if let item = Self(response: response, representation: itemRepresentation) {
+                    collection.append(item)
+                }
+            }
+        }
+
+        return collection
+    }
+}
+
+// MARK: - DataRequest
 extension DataRequest {
     
     @discardableResult
@@ -68,7 +91,8 @@ extension DataRequest {
             guard case let .success(jsonObject) = result else {
                 return .failure(BackendError.jsonSerialization(error: result.error!))
             }
-            
+            /*
+            /// NOTE: my changes
             let json = SwiftyJSON.JSON(jsonObject)
             if let errorMessage = json["message"].string {
                 return .failure(BackendError.myError(error: "Message errors in JSON - \(errorMessage)"))
@@ -77,16 +101,20 @@ extension DataRequest {
             guard let responseObject = T(json: json) else {
                 return .failure(BackendError.objectSerialization(reason: "JSON could not be serialized: \(jsonObject)"))
             }
-            
+            */
+
+            guard let response = response, let responseObject = T(response: response, representation: jsonObject) else {
+                return .failure(BackendError.objectSerialization(reason: "JSON could not be serialized: \(jsonObject)"))
+            }
+
             return .success(responseObject)
- 
         }
         
         return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
     }
 
     @discardableResult
-    func responseCollection<T: ResponseObjectSerializable>(
+    func responseCollection<T: ResponseCollectionSerializable>(
         queue: DispatchQueue? = nil,
         completionHandler: @escaping (DataResponse<[T]>) -> Void)
         -> Self
@@ -102,6 +130,8 @@ extension DataRequest {
                 return .failure(BackendError.jsonSerialization(error: result.error!))
             }
 
+            /*
+            /// NOTE: my changes
             let json = SwiftyJSON.JSON(jsonObject)
             if let errorMessage = json["message"].string {
                 return .failure(BackendError.myError(error: "Message errors in JSON - \(errorMessage)"))
@@ -115,7 +145,14 @@ extension DataRequest {
             }
             
             return .success(responseObjects)
-            
+            */
+
+            guard let response = response else {
+                let reason = "Response collection could not be serialized due to nil response."
+                return .failure(BackendError.objectSerialization(reason: reason))
+            }
+
+            return .success(T.collection(from: response, withRepresentation: jsonObject))
         }
         
         return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)

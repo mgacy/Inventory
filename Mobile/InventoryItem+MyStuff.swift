@@ -46,10 +46,6 @@ extension InventoryItem {
         if let categoryID = json["category_id"].int32 {
             self.categoryID = categoryID
         }
-        //if let packSize = json["pack_size"].int {
-        //if let inventoryUnitID = json["inventory_unit_id"].int {
-        //if let subSize = json["sub_size"].int {
-        //if let subUnitID = json["sub_unit_id"].int {
     }
     
     private func initExisting(context: NSManagedObjectContext, json: JSON) {
