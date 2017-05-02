@@ -31,6 +31,7 @@ extension InventoryLocation {
         self.init(context: context)
 
         // Properties
+        /// TODO: name and locationType are required and lack default values
         if let name = json["name"].string {
             self.name = name
         }

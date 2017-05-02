@@ -24,9 +24,9 @@
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationItem" inverseName="item" inverseEntity="InventoryLocationItem" syncable="YES"/>
     </entity>
     <entity name="InventoryLocation" representedClassName="InventoryLocation" syncable="YES" codeGenerationType="class">
-        <attribute name="locationType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
+        <attribute name="locationType" attributeType="String" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
         <relationship name="categories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationCategory" inverseName="location" inverseEntity="InventoryLocationCategory" syncable="YES"/>
         <relationship name="inventory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Inventory" inverseName="locations" inverseEntity="Inventory" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="InventoryLocationItem" inverseName="location" inverseEntity="InventoryLocationItem" syncable="YES"/>
