@@ -14,6 +14,7 @@ import SwiftyJSON
 class InitialSignUpVC: UIViewController, UITextFieldDelegate {
 
     // MARK: Properties
+    //var managedObjectContext: NSManagedObjectContext!
     var userManager: CurrentUserManager!
 
     // Segue

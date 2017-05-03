@@ -6,6 +6,7 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
+import CoreData
 import UIKit
 import KeychainAccess
 import PKHUD
@@ -14,6 +15,7 @@ import PKHUD
 class InitialLoginVC: UIViewController, UITextFieldDelegate {
 
     // MARK: Properties
+    var managedObjectContext: NSManagedObjectContext!
     var userManager: CurrentUserManager!
 
     // Segue
@@ -91,10 +93,8 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
             let inventoryNavController = tabBarController.viewControllers![0] as! UINavigationController
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
 
-            let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
             // Inject dependencies
-            //controller.managedObjectContext = managedObjectContext
+            controller.managedObjectContext = managedObjectContext
             controller.userManager = userManager
 
             // Sync with completion handler from the new view controller.

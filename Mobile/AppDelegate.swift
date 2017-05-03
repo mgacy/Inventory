@@ -99,6 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as! InitialLoginVC
 
             // Inject dependencies
+            loginController.managedObjectContext = persistentContainer.viewContext
             loginController.userManager = userManager
             // Should we really be changing the root view controller like this?
             self.window?.rootViewController = loginController
