@@ -161,6 +161,15 @@
         <relationship name="invoices" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Invoice" inverseName="vendor" inverseEntity="Invoice" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="vendor" inverseEntity="Item" syncable="YES"/>
         <relationship name="orders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Order" inverseName="vendor" inverseEntity="Order" syncable="YES"/>
+        <relationship name="rep" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="VendorRep" inverseName="vendor" inverseEntity="VendorRep" syncable="YES"/>
+    </entity>
+    <entity name="VendorRep" representedClassName="VendorRep" syncable="YES" codeGenerationType="class">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phone" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" usesScalarValueType="YES" indexed="YES" syncable="YES"/>
+        <relationship name="vendor" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="rep" inverseEntity="Vendor" syncable="YES"/>
     </entity>
     <elements>
         <element name="Base" positionX="-947" positionY="-324" width="128" height="75"/>
@@ -179,6 +188,7 @@
         <element name="OrderItem" positionX="-92" positionY="447" width="128" height="210"/>
         <element name="Store" positionX="-1784" positionY="159" width="128" height="120"/>
         <element name="Unit" positionX="-1278" positionY="201" width="128" height="240"/>
-        <element name="Vendor" positionX="-1278" positionY="51" width="128" height="120"/>
+        <element name="Vendor" positionX="-1278" positionY="51" width="128" height="135"/>
+        <element name="VendorRep" positionX="-1575" positionY="-189" width="128" height="135"/>
     </elements>
 </model>

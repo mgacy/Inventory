@@ -32,8 +32,12 @@ extension Vendor: Syncable {
             self.name = name
         }
 
-        /// TODO: create separate VendorRep object
-        // if let rep = json["rep"]
+        // Relationships
+        if let repJSON = json["rep"].dictionary, let repID = json["rep"]["id"].int32 {
+            let repJSON = JSON(repJSON)
+            let rep = VendorRep.findOrCreate(withID: repID, withJSON: repJSON, in: context)
+            rep.vendor = self
+        }
     }
 
 }

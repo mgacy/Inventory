@@ -23,10 +23,8 @@ class SyncManager {
 
     // We will (1) call some endpoints, (2) sync objects, (3) call completionHandler
     init(context: NSManagedObjectContext, storeID: Int, completionHandler: @escaping (Bool, Error?) -> Void) {
-        self.storeID = storeID
-
-        /// TODO: pass managedObjectContext as init parameter
         self.managedObjectContext = context
+        self.storeID = storeID
         self.completionHandler = completionHandler
 
         // Get list of Vendors from server
@@ -126,7 +124,9 @@ class SyncManager {
     // MARK: - Completion
 
     func completedStartup(_ succeeded: Bool) {
-        self.completionHandler(true, nil)
+        /// TODO: save here or count on caller to always save?
+        //managedObjectContext.performSaveOrRollback()
+        completionHandler(true, nil)
     }
 
 }

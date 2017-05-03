@@ -20,6 +20,16 @@ extension NSManagedObjectContext {
 
 }
 
+// MARK: - Managed (objc.io)
+extension NSManagedObjectContext {
+
+    func insertObject<T: NSManagedObject>() -> T where T: Managed {
+        guard let obj = NSEntityDescription.insertNewObject(forEntityName: T.entityName, into: self) as? T else { fatalError("Wrong object type") }
+        return obj
+    }
+    
+}
+
 // MARK: - Fetch
 extension NSManagedObjectContext {
 
@@ -156,6 +166,12 @@ extension NSManagedObjectContext {
 
             rollback()
             return false
+        }
+    }
+
+    public func performSaveOrRollback() {
+        perform {
+            _ = self.saveOrRollback()
         }
     }
 
