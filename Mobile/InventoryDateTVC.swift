@@ -191,8 +191,9 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         //HUD.show(.progress)
         _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
 
-        self.tableView.reloadData()
-        refreshControl.endRefreshing()
+        /// TODO: the following should happen in completedSync / completedGetListOfInventories
+        //tableView.reloadData()
+        //refreshControl.endRefreshing()
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
@@ -204,6 +205,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         }
 
         // Get new Inventory.
+        //refreshControl?.beginRefreshing()
         HUD.show(.progress)
         APIManager.sharedInstance.getNewInventory(
             isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
@@ -254,7 +256,6 @@ extension InventoryDateTVC {
             log.warning("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
-
         guard let managedObjectContext = managedObjectContext else { return }
 
         do {
@@ -263,9 +264,10 @@ extension InventoryDateTVC {
             log.error("Unable to sync Inventories")
             HUD.flash(.error, delay: 1.0)
         }
+        refreshControl?.endRefreshing()
         HUD.hide()
-        self.tableView.reloadData()
         managedObjectContext.performSaveOrRollback()
+        tableView.reloadData()
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
