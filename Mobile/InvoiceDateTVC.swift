@@ -261,7 +261,7 @@ extension InvoiceDateTVC {
             }
         }
 
-        saveContext()
+        managedObjectContext!.performSaveOrRollback()
         HUD.hide()
     }
 
@@ -279,7 +279,7 @@ extension InvoiceDateTVC {
 
         // Update selected Inventory with full JSON from server.
         selection.updateExisting(context: self.managedObjectContext!, json: json)
-        saveContext()
+        managedObjectContext!.performSaveOrRollback()
 
         HUD.hide()
 
@@ -300,7 +300,7 @@ extension InvoiceDateTVC {
             _ = InvoiceCollection(context: self.managedObjectContext!, json: collection, uploaded: false)
         }
 
-        saveContext()
+        managedObjectContext!.performSaveOrRollback()
         HUD.hide()
 
         /// TODO: if we only added one collection, select it and performSegue
@@ -464,19 +464,6 @@ extension InvoiceDateTVC {
             }
             self.tableView.reloadData()
         })
-    }
-
-    func saveContext() {
-        let context = self.fetchedResultsController.managedObjectContext
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            log.error("Unresolved error \(nserror), \(nserror.userInfo)")
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
     }
 
 }

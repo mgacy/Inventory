@@ -157,6 +157,7 @@ extension NSManagedObjectContext {
 extension NSManagedObjectContext {
 
     public func saveOrRollback() -> Bool {
+        /// TODO: proceed only if self.hasChanges?
         do {
             try save()
             return true

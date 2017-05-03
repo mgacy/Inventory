@@ -251,7 +251,7 @@ extension InventoryDateTVC {
         }
         HUD.hide()
         self.tableView.reloadData()
-        saveContext()
+        managedObjectContext.performSaveOrRollback()
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
@@ -268,10 +268,10 @@ extension InventoryDateTVC {
         }
 
         // Update selected Inventory with full JSON from server.
-        selection.updateExisting(context: self.managedObjectContext!, json: json)
+        selection.updateExisting(context: managedObjectContext!, json: json)
 
         // Save the context.
-        saveContext()
+        managedObjectContext!.performSaveOrRollback()
 
         //tableView.activityIndicatorView.stopAnimating()
         HUD.hide()
@@ -294,7 +294,7 @@ extension InventoryDateTVC {
         selectedInventory = Inventory(context: self.managedObjectContext!, json: json, uploaded: false)
 
         // Save the context.
-        saveContext()
+        managedObjectContext!.performSaveOrRollback()
 
         performSegue(withIdentifier: .showNewItem)
     }
@@ -343,23 +343,6 @@ extension InventoryDateTVC {
         } catch {
             let updateError = error as NSError
             log.error("Unable to delete Inventories: \(updateError), \(updateError.userInfo)")
-        }
-    }
-
-}
-
-// MARK: - Type-Specific NSFetchedResultsController Extension
-extension InventoryDateTVC {
-
-    func saveContext() {
-        do {
-            try managedObjectContext?.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            log.error("Unresolved error \(nserror), \(nserror.userInfo)")
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
     }
 
