@@ -19,6 +19,7 @@ import SwiftyJSON
     var remoteID: Int32 { get set }
 
     //convenience init(context: NSManagedObjectContext, representation: Any)
+    //func update(with json: Any, in context: NSManagedObjectContext)
     func update(context: NSManagedObjectContext, withJSON json: Any)
 }
 
