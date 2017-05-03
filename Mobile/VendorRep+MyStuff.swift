@@ -29,19 +29,19 @@ extension VendorRep: Syncable {
 
         // Properties
         /// TODO: remoteID is required
-        if let remoteID = json["rep"]["id"].int32 {
+        if let remoteID = json["id"].int32 {
             self.remoteID = remoteID
         }
-        if let firstName = json["rep"]["first_name"].string {
+        if let firstName = json["first_name"].string {
             self.firstName = firstName
         }
-        if let lastName = json["rep"]["last_name"].string {
+        if let lastName = json["last_name"].string {
             self.lastName = lastName
         }
-        if let email = json["rep"]["email"].string {
+        if let email = json["email"].string {
             self.email = email
         }
-        if let phone = json["rep"]["phone"].string {
+        if let phone = json["phone"].string {
             self.phone = phone
         }
     }
