@@ -17,6 +17,7 @@
 		C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */; };
 		C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */; };
 		C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */; };
+		C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */; };
 		C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F741DF0D61E00166A08 /* CoreDataStack.swift */; };
 		C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */; };
 		C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B4EDB1E5C2863002DA2A5 /* User.swift */; };
@@ -94,6 +95,7 @@
 		C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationItem+MyStuff.swift"; sourceTree = "<group>"; };
 		C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocation+MyStuff.swift"; sourceTree = "<group>"; };
 		C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationCategory+MyStuff.swift"; sourceTree = "<group>"; };
+		C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VendorRep+MyStuff.swift"; sourceTree = "<group>"; };
 		C9124F741DF0D61E00166A08 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataImporter.swift; sourceTree = "<group>"; };
 		C91B4EDB1E5C2863002DA2A5 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 				C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */,
 				C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */,
 				C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */,
+				C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */,
 			);
 			name = "Model Extensions";
 			sourceTree = "<group>";
@@ -661,6 +664,7 @@
 				C92D75C31DC7A93100AA1A02 /* LoginVC.swift in Sources */,
 				C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */,
 				C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */,
+				C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
 				C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */,
 				C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */,
