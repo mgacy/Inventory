@@ -12,7 +12,7 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-class InventoryDateTVC: UITableViewController, RootSectionViewController {
+class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueHandler {
 
     // MARK: Properties
 
@@ -31,17 +31,12 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     let cellIdentifier = "InventoryDateTableViewCell"
 
     // Segues
-    let NewItemSegue = "FetchExistingInventory"
-    let ExistingItemSegue = "ShowLocationCategory"
-    let SettingsSegue = "ShowSettings"
-    /*
-    /// TODO: make enum?
-    enum SegueIdentifiers : String {
-        case newItemSegue = "FetchExistingInventory"
-        case existingItemSegue = "ShowLocationCategory"
-        case settingsSegue = "ShowSettings"
+    enum SegueIdentifier : String {
+        case showNewItem = "FetchExistingInventory"
+        case showExistingItem = "ShowLocationCategory"
+        case showSettings = "ShowSettings"
     }
-    */
+
 
     /// TODO: provide interface to control these
     // let inventoryTypeID = 1
@@ -79,8 +74,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
-        case NewItemSegue:
+        switch segueIdentifier(for: segue) {
+        case .showNewItem:
             guard let controller = segue.destination as? InventoryLocationTVC else {
                 fatalError("Wrong view controller type")
             }
@@ -92,7 +87,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             controller.inventory = selection
             controller.managedObjectContext = self.managedObjectContext
 
-        case ExistingItemSegue:
+        case .showExistingItem:
             guard let controller = segue.destination as? InventoryLocationCategoryTVC else {
                 fatalError("Wrong view controller type")
             }
@@ -112,10 +107,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             controller.location = defaultLocation
             controller.managedObjectContext = self.managedObjectContext
 
-        case SettingsSegue:
+        case .showSettings:
             log.info("Showing Settings ...")
-        default:
-            fatalError("Unrecognized segue.identifier: \(segue.identifier)")
         }
     }
 
@@ -183,7 +176,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
         case false:
             log.info("LOAD NEW selectedInventory from disk ...")
-            performSegue(withIdentifier: NewItemSegue, sender: self)
+            performSegue(withIdentifier: .showNewItem)
         }
 
         tableView.deselectRow(at: indexPath, animated: true)
@@ -283,7 +276,7 @@ extension InventoryDateTVC {
         //tableView.activityIndicatorView.stopAnimating()
         HUD.hide()
 
-        performSegue(withIdentifier: ExistingItemSegue, sender: self)
+        performSegue(withIdentifier: .showExistingItem)
     }
 
     func completedGetNewInventory(json: JSON?, error: Error?) -> Void {
@@ -303,7 +296,7 @@ extension InventoryDateTVC {
         // Save the context.
         saveContext()
 
-        performSegue(withIdentifier: NewItemSegue, sender: self)
+        performSegue(withIdentifier: .showNewItem)
     }
 
     func completedSync(_ succeeded: Bool, _ error: Error?) {

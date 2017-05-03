@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class InventoryLocationCategoryTVC: UITableViewController {
+class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
 
     // MARK: Properties
 
@@ -27,7 +27,9 @@ class InventoryLocationCategoryTVC: UITableViewController {
     let cellIdentifier = "InventoryLocationCategoryTableViewCell"
 
     // Segues
-    let ItemSegue = "ShowLocationItems2"
+    enum SegueIdentifier : String {
+        case showItem = "ShowLocationItems2"
+    }
 
     // MARK: - Lifecycle
 
@@ -57,7 +59,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
         // Pass the selected object to the new view controller.
         destinationController.title = selection.name
         destinationController.category = selection
-        destinationController.managedObjectContext = self.managedObjectContext
+        destinationController.managedObjectContext = managedObjectContext
     }
 
     // MARK: - TableViewDataSource
@@ -90,7 +92,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCategory = dataSource.objectAtIndexPath(indexPath)
-        performSegue(withIdentifier: ItemSegue, sender: self)
+        performSegue(withIdentifier: .showItem)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
