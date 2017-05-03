@@ -194,20 +194,14 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
             periodLength: 28, completion: completedGetNewOrderCollection)
     }
 
-    @IBAction func resetTapped(_ sender: AnyObject) {
-        //tableView.activityIndicatorView.startAnimating()
-        HUD.show(.progress)
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
 extension OrderDateTVC: TableViewDataSourceDelegate {
 
-        deleteObjects(entityType: Item.self)
-        deleteExistingOrderCollections()
     func configure(_ cell: UITableViewCell, for collection: OrderCollection) {
         cell.textLabel?.text = collection.date
 
-        _ = SyncManager(context: managedObjectContext!, storeID: userManager.storeID!, completionHandler: completedLogin)
         switch collection.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black
@@ -351,145 +345,26 @@ extension OrderDateTVC {
 
     // MARK: Sync
 
-    func deleteExistingOrderCollections(_ filter: NSPredicate? = nil) {
-        log.info("deleteExistingOrders...")
-
-        // Create Fetch Request
-        let fetchRequest: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
-
-        // Configure Fetch Request
-        if let _filter = filter { fetchRequest.predicate = _filter }
-
-        // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Configure Batch Update Request
-        batchDeleteRequest.resultType = .resultTypeCount
-
-        do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext?.execute(batchDeleteRequest) as! NSBatchDeleteResult
-
-            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-
-            // Reset Managed Object Context
-            managedObjectContext?.reset()
-
-            // Perform Fetch
-            try self.fetchedResultsController.performFetch()
-
-            // Reload Table View
-            tableView.reloadData()
-
-        } catch {
-            let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
-        }
-
-    }
-
     // Source: https://code.tutsplus.com/tutorials/core-data-and-swift-batch-deletes--cms-25380
-    // NOTE - I believe I scrapped a plan to make this a method because of the involvement of the moc
+    /// NOTE: I believe I scrapped a plan to make this a method because of the involvement of the moc
     func deleteChildOrders(parent: OrderCollection) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        /*
-         Since the batch delete request directly interacts with the persistent store we need
-         to make sure that any changes are first pushed to that store.
-         */
-        if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.save()
-            } catch {
-                let saveError = error as NSError
-                log.error("\(saveError), \(saveError.userInfo)")
-            }
-        }
-
-        // Create Fetch Request
-        let fetchRequest: NSFetchRequest<Order> = Order.fetchRequest()
-
-        // Configure Fetch Request
-        fetchRequest.predicate = NSPredicate(format: "collection == %@", parent)
-
-        // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Configure Batch Update Request
-        batchDeleteRequest.resultType = .resultTypeCount
-        //batchDeleteRequest.resultType = .resultTypeStatusOnly
-
+        guard let managedObjectContext = managedObjectContext else { return }
+        let fetchPredicate = NSPredicate(format: "collection == %@", parent)
         do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
+            try managedObjectContext.deleteEntities(Order.self, filter: fetchPredicate)
 
-            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-
-            // The managed object context is not notified of the consequences of the batch delete request.
-
-            // Reset Managed Object Context
-            // As the request directly interacts with the persistent store, we need need to reset the context
-            // for it to be aware of the changes
-            managedObjectContext.reset()
-
-            // Perform Fetch
-            try self.fetchedResultsController.performFetch()
+            /// TODO: perform fetch again?
+            //let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
+            //let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+            //request.sortDescriptors = [sortDescriptor]
+            //dataSource.reconfigureFetchRequest(request)
 
             // Reload Table View
             tableView.reloadData()
 
         } catch {
             let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
-        }
-
-    }
-
-    func resetData() {
-        deleteObjects(entityType: Item.self)
-        deleteObjects(entityType: Unit.self)
-        deleteObjects(entityType: Vendor.self)
-    }
-
-    func deleteObjects<T: NSManagedObject>(entityType: T.Type, filter: NSPredicate? = nil) {
-
-        // Create Fetch Request
-        let fetchRequest: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-
-        // Configure Fetch Request
-        if let _filter = filter { fetchRequest.predicate = _filter }
-
-        // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Configure Batch Update Request
-        batchDeleteRequest.resultType = .resultTypeCount
-
-        do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext?.execute(batchDeleteRequest) as! NSBatchDeleteResult
-
-            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-
-            // Reset Managed Object Context
-            managedObjectContext?.reset()
-
-            // Perform Fetch
-            //try self.fetchedResultsController.performFetch()
-
-            // Reload Table View
-            tableView.reloadData()
-
-        } catch {
-            let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
-        }
-    }
-
-}
-
+            log.error("Unable to delete Inventories: \(updateError), \(updateError.userInfo)")
         }
     }
 
