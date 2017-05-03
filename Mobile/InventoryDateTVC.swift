@@ -341,15 +341,11 @@ extension InventoryDateTVC {
             try managedObjectContext.deleteEntities(InventoryLocation.self, filter: fetchPredicate)
             try managedObjectContext.deleteEntities(InventoryItem.self, filter: fetchPredicate)
 
-            // Perform Fetch
-            // TODO: implement this (?)
-            /*
-            let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-            let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-            request.sortDescriptors = [sortDescriptor]
-            dataSource.reconfigureFetchRequest(request)
-            */
-            //try self.fetchedResultsController.performFetch()
+            /// TODO: perform fetch again?
+            //let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
+            //let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+            //request.sortDescriptors = [sortDescriptor]
+            //dataSource.reconfigureFetchRequest(request)
 
             // Reload Table View
             tableView.reloadData()
