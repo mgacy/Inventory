@@ -56,8 +56,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         // Add refresh control
         self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
 
-        // CoreData
-        self.performFetch()
+        setupTableView()
 
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : unable to get storeID"); return
@@ -93,64 +92,32 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         controller.managedObjectContext = self.managedObjectContext
     }
 
-    // MARK: - UITableViewDataSource
+    // MARK: - TableViewDataSource
+    fileprivate var dataSource: TableViewDataSource<OrderDateTVC>!
+    //fileprivate var observer: ManagedObjectObserver?
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return self.fetchedResultsController.sections?.count ?? 0
-    }
+    fileprivate func setupTableView() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 100
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = self.fetchedResultsController.sections![section]
-        return sectionInfo.numberOfObjects
-    }
+        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
+        let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        request.sortDescriptors = [sortDescriptor]
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as UITableViewCell
-        self.configureCell(cell, atIndexPath: indexPath)
-        return cell
-    }
+        request.fetchBatchSize = fetchBatchSize
+        request.returnsObjectsAsFaults = false
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
 
-    // MARK: Editing
-
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        let collection = self.fetchedResultsController.object(at: indexPath)
-        switch collection.uploaded {
-        case true:
-            return false
-        case false:
-            return true
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-
-            // Fetch Collection
-            let collection = fetchedResultsController.object(at: indexPath)
-
-            // Delete Collection
-            fetchedResultsController.managedObjectContext.delete(collection)
-        }
-    }
-
-    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
-        let collection = self.fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = collection.date
-
-        switch collection.uploaded {
-        case true:
-            cell.textLabel?.textColor = UIColor.black
-        case false:
-            cell.textLabel?.textColor = ColorPalette.yellowColor
-        }
+        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCollection = self.fetchedResultsController.object(at: indexPath)
-        //selectedCollectionIndex = indexPath
-        guard let selection = selectedCollection else { return }
+        selectedCollection = dataSource.objectAtIndexPath(indexPath)
+        guard let selection = selectedCollection else { fatalError("Unable to get selection") }
 
         switch selection.uploaded {
         case true:
@@ -170,7 +137,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
             deleteChildOrders(parent: selection)
 
             // Reset selection since we reset the managedObjectContext in deleteChildOrders
-            selectedCollection = self.fetchedResultsController.object(at: indexPath)
+            selectedCollection = dataSource.objectAtIndexPath(indexPath)
 
             log.info("GET OrderCollection from server ...")
             APIManager.sharedInstance.getOrderCollection(
@@ -230,13 +197,39 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
     @IBAction func resetTapped(_ sender: AnyObject) {
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
+}
+
+// MARK: - TableViewDataSourceDelegate Extension
+extension OrderDateTVC: TableViewDataSourceDelegate {
 
         deleteObjects(entityType: Item.self)
         deleteExistingOrderCollections()
+    func configure(_ cell: UITableViewCell, for collection: OrderCollection) {
+        cell.textLabel?.text = collection.date
 
         _ = SyncManager(context: managedObjectContext!, storeID: userManager.storeID!, completionHandler: completedLogin)
+        switch collection.uploaded {
+        case true:
+            cell.textLabel?.textColor = UIColor.black
+        case false:
+            cell.textLabel?.textColor = ColorPalette.yellowColor
+        }
     }
+    
+}
 
+// MARK: - CustomDeletionDataSourceDelegate Extension (supports property-dependent row deletion)
+extension OrderDateTVC: CustomDeletionDataSourceDelegate {
+
+    func canEdit(_ collection: OrderCollection) -> Bool {
+        switch collection.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+    
 }
 
 // MARK: - Completion Handlers + Sync
@@ -497,97 +490,7 @@ extension OrderDateTVC {
 
 }
 
-// MARK: - Type-Specific NSFetchedResultsController Extension
-extension OrderDateTVC {
-
-    var fetchedResultsController: NSFetchedResultsController<OrderCollection> {
-        if _fetchedResultsController != nil {
-            return _fetchedResultsController!
         }
-
-        let fetchRequest: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
-
-        // Set the batch size to a suitable number.
-        fetchRequest.fetchBatchSize = fetchBatchSize
-
-        // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-
-        fetchRequest.sortDescriptors = [sortDescriptor]
-
-        // Edit the section name key path and cache name if appropriate.
-        // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(
-            fetchRequest: fetchRequest,
-            managedObjectContext: self.managedObjectContext!,
-            sectionNameKeyPath: self.sectionNameKeyPath,
-            cacheName: self.cacheName)
-
-        aFetchedResultsController.delegate = self
-        _fetchedResultsController = aFetchedResultsController
-
-        return _fetchedResultsController!
-    }
-
-    func performFetch () {
-        self.fetchedResultsController.managedObjectContext.perform ({
-
-            do {
-                try self.fetchedResultsController.performFetch()
-            } catch {
-                log.error("\(#function) FAILED : \(error)")
-            }
-            self.tableView.reloadData()
-        })
-    }
-
-}
-
-// MARK: - NSFetchedResultsControllerDelegate Extension
-extension OrderDateTVC: NSFetchedResultsControllerDelegate {
-
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        switch type {
-        case .insert:
-            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
-        case .delete:
-            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
-        default:
-            return
-        }
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            //tableView.insertRows(at: [newIndexPath!], with: .fade)
-            if let indexPath = newIndexPath {
-                tableView.insertRows(at: [indexPath], with: .fade)
-            }
-            break;
-        case .delete:
-            //tableView.deleteRows(at: [indexPath!], with: .fade)
-            if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-            break;
-        case .update:
-            //configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
-            if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) {
-                configureCell(cell, atIndexPath: indexPath)
-            }
-            break;
-        case .move:
-            tableView.moveRow(at: indexPath!, to: newIndexPath!)
-        }
-    }
-
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
     }
 
 }
