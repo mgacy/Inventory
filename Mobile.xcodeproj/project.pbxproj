@@ -239,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				C9090FFD1EB92D8B0035A1DA /* Managed.swift */,
+				C9428EE61E032FCC002771EA /* Syncable.swift */,
 				C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */,
 			);
 			name = CoreData;
@@ -269,7 +270,6 @@
 		C98A4FB61DCB034D002BB076 /* Model Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C9428EE61E032FCC002771EA /* Syncable.swift */,
 				C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */,
 				C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */,
 				C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */,
