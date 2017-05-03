@@ -24,8 +24,8 @@ class ViewController: UIViewController {
 }
 
 protocol RootSectionViewController: class {
-    var userManager: CurrentUserManager! { get set }
     var managedObjectContext: NSManagedObjectContext? { get set }
+    var userManager: CurrentUserManager! { get set }
 
     // FetchedResultsController
     //var filter: NSPredicate? { get }
@@ -37,10 +37,25 @@ protocol RootSectionViewController: class {
     //var cellIdentifier: String { get }
 
     // Segues
-    // var SegueIdentifier: RawRepresentable
+    //var SegueIdentifier: RawRepresentable
+
+    //func setupTableView()
+
+    // User Actions
+    //func refreshTable(_ refreshControl: UIRefreshControl)
+    //func newTapped(_ sender: AnyObject)
+
+    // CompletionHandlers
+    //func completedGetResourceCollection(json: JSON?, error: Error?) -> Void
+    //func completedGetExistingResource(json: JSON?, error: Error?) -> Void
+    //func completedGetNewResource(json: JSON?, error: Error?) -> Void
+    //func completedSync(json: JSON?, error: Error?) -> Void
+
+    //func deleteChildren
 
 }
 
+/// TODO: can we safely assume all RootSectionViewControllers will implement CustomDeletionDataSource?
 
 // Define protocol adding new method to TableViewDataSourceDelegate protocol
 protocol CustomDeletionDataSourceDelegate: TableViewDataSourceDelegate {
