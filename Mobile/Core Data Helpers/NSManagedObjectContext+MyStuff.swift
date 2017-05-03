@@ -387,19 +387,20 @@ extension NSManagedObjectContext {
                 newObject.update(context: self, withJSON: objectJSON)
             }
         }
-        //log.debug("\(T.self) - remote: \(remoteDates) - local: \(localDates)")
+        log.debug("\(T.self) - remote: \(remoteDates) - local: \(localDates)")
 
         // Delete objects that were deleted from server.
         let deletedObjects = localDates.subtracting(remoteDates)
-        //log.debug("We need to delete: \(deletedObjects)")
-
-        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
-        do {
-            try self.deleteEntities(T.self, filter: fetchPredicate)
-        } catch {
-            /// TODO: deleteEntities(_:filter) already prints the error
-            let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
+        if !deletedObjects.isEmpty {
+            log.debug("We need to delete: \(deletedObjects)")
+            let fetchPredicate = NSPredicate(format: "date IN %@", deletedObjects)
+            do {
+                try self.deleteEntities(T.self, filter: fetchPredicate)
+            } catch {
+                /// TODO: deleteEntities(_:filter) already prints the error
+                let updateError = error as NSError
+                log.error("\(updateError), \(updateError.userInfo)")
+            }
         }
     }
 
