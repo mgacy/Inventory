@@ -158,23 +158,11 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
-        /// TODO: SyncManager?
-        //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedSync)
+        //HUD.show(.progress)
+        _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
 
-        // Reload data and update the table view's data source
-        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: {(json: JSON?, error: Error?) in
-            guard error == nil, let json = json else {
-                HUD.flash(.error, delay: 1.0); return
-            }
-            do {
-                try managedObjectContext.syncCollections(OrderCollection.self, withJSON: json)
-            } catch {
-                log.error("Unable to sync InvoiceCollections")
-            }
-        })
-
-        self.tableView.reloadData()
-        refreshControl.endRefreshing()
+        //tableView.reloadData()
+        //refreshControl.endRefreshing()
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
@@ -237,33 +225,25 @@ extension OrderDateTVC {
         }
         guard let json = json else {
             log.error("\(#function) FAILED : unable to get JSON")
-            /// TODO: HUD.flash(.error, delay: 1.0)?
             HUD.hide(); return
         }
+        guard let managedObjectContext = managedObjectContext else { return }
 
-        HUD.hide()
-
-        // FIX - this does not account for Collections that have been deleted from the server but
-        // are still present in the local store
-        for (_, collection) in json {
-            guard let dateString = collection["date"].string else {
-                log.warning("\(#function) : unable to get date"); continue
-            }
-
-            // Create OrderCollection if we can't find one with date `date`
-            if OrderCollection.fetchByDate(context: managedObjectContext!, date: dateString) == nil {
-                // print("Creating OrderCollection: \(dateString)")
-                _ = OrderCollection(context: self.managedObjectContext!, json: collection, uploaded: true)
-            }
+        do {
+            try managedObjectContext.syncCollections(OrderCollection.self, withJSON: json)
+        } catch {
+            log.error("Unable to sync OrderCollections")
+            HUD.flash(.error, delay: 1.0)
         }
 
-        // Save the context.
-        managedObjectContext!.performSaveOrRollback()
+        refreshControl?.endRefreshing()
+        HUD.hide()
+        managedObjectContext.performSaveOrRollback()
+        tableView.reloadData()
     }
 
     func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            //log.error("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -273,13 +253,13 @@ extension OrderDateTVC {
 
         /*
         guard let selectedCollectionIndex = selectedCollectionIndex else {
-            print("\nPROBLEM - 1a"); return
+            log.error("PROBLEM - 1a"); return
         }
         var selection: OrderCollection
         selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
 
         // Delete existing orders of selected collection
-        print("Deleting Orders of selected OrderCollection ...")
+        log.info("Deleting Orders of selected OrderCollection ...")
         deleteChildOrders(parent: selection)
 
         // Reset selection since we reset the managedObjectContext in deleteChildOrders
