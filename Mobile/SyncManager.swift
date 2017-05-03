@@ -126,7 +126,9 @@ class SyncManager {
     // MARK: - Completion
 
     func completedStartup(_ succeeded: Bool) {
-        self.completionHandler(true, nil)
+        /// TODO: save here or count on caller to always save?
+        //managedObjectContext.performSaveOrRollback()
+        completionHandler(true, nil)
     }
 
 }
