@@ -47,3 +47,5 @@ extension VendorRep: Syncable {
     }
 
 }
+
+extension VendorRep: ManagedSyncable {}
