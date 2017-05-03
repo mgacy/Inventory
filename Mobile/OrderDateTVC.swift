@@ -159,7 +159,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         guard let storeID = userManager.storeID else { return }
 
         /// TODO: SyncManager?
-        //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
+        //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedSync)
 
         // Reload data and update the table view's data source
         APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: {(json: JSON?, error: Error?) in
@@ -323,7 +323,7 @@ extension OrderDateTVC {
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
-    func completedLogin(_ succeeded: Bool, _ error: Error?) {
+    func completedSync(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             log.info("Completed login / sync - succeeded: \(succeeded)")
 
@@ -333,7 +333,7 @@ extension OrderDateTVC {
             }
 
             // Get list of OrderCollections from server
-            // print("\nFetching existing OrderCollections from server ...")
+            // log.info("Fetching existing OrderCollections from server ...")
             APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
 
         } else {
