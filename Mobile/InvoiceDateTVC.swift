@@ -99,7 +99,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         guard let storeID = userManager.storeID else { return }
 
         /// TODO: SyncManager?
-        //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedLogin)
+        //_ = SyncManager(storeID: userManager.storeID!, completionHandler: completedSync)
 
         // Reload data and update the table view's data source
         APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: {(json: JSON?, error: Error?) in
@@ -137,7 +137,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         //deleteObjects(entityType: Item.self)
         deleteExistingInvoiceCollections()
 
-        _ = SyncManager(context: managedObjectContext!, storeID: userManager.storeID!, completionHandler: completedLogin)
+        _ = SyncManager(context: managedObjectContext!, storeID: userManager.storeID!, completionHandler: completedSync)
     }
 
     // MARK: - UITableViewDataSource
@@ -308,7 +308,7 @@ extension InvoiceDateTVC {
         //performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
-    func completedLogin(_ succeeded: Bool, error: Error?) {
+    func completedSync(_ succeeded: Bool, error: Error?) {
         if succeeded {
             log.verbose("Completed login / sync - succeeded: \(succeeded)")
 

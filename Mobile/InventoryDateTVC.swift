@@ -130,7 +130,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         request.returnsObjectsAsFaults = false
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = InventoryDateDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -191,8 +191,9 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         //HUD.show(.progress)
         _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
 
-        self.tableView.reloadData()
-        refreshControl.endRefreshing()
+        /// TODO: the following should happen in completedSync / completedGetListOfInventories
+        //tableView.reloadData()
+        //refreshControl.endRefreshing()
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
@@ -204,6 +205,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         }
 
         // Get new Inventory.
+        //refreshControl?.beginRefreshing()
         HUD.show(.progress)
         APIManager.sharedInstance.getNewInventory(
             isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
@@ -227,6 +229,20 @@ extension InventoryDateTVC: TableViewDataSourceDelegate {
 
 }
 
+// MARK: - CustomDeletionDataSourceDelegate Extension (supports property-dependent row deletion)
+extension InventoryDateTVC: CustomDeletionDataSourceDelegate {
+
+    func canEdit(_ inventory: Inventory) -> Bool {
+        switch inventory.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+    
+}
+
 // MARK: - Completion Handlers + Sync
 extension InventoryDateTVC {
 
@@ -240,7 +256,6 @@ extension InventoryDateTVC {
             log.warning("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
-
         guard let managedObjectContext = managedObjectContext else { return }
 
         do {
@@ -249,9 +264,10 @@ extension InventoryDateTVC {
             log.error("Unable to sync Inventories")
             HUD.flash(.error, delay: 1.0)
         }
+        refreshControl?.endRefreshing()
         HUD.hide()
-        self.tableView.reloadData()
         managedObjectContext.performSaveOrRollback()
+        tableView.reloadData()
     }
 
     func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
@@ -327,15 +343,11 @@ extension InventoryDateTVC {
             try managedObjectContext.deleteEntities(InventoryLocation.self, filter: fetchPredicate)
             try managedObjectContext.deleteEntities(InventoryItem.self, filter: fetchPredicate)
 
-            // Perform Fetch
-            // TODO: implement this (?)
-            /*
-            let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-            let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-            request.sortDescriptors = [sortDescriptor]
-            dataSource.reconfigureFetchRequest(request)
-            */
-            //try self.fetchedResultsController.performFetch()
+            /// TODO: perform fetch again?
+            //let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
+            //let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+            //request.sortDescriptors = [sortDescriptor]
+            //dataSource.reconfigureFetchRequest(request)
 
             // Reload Table View
             tableView.reloadData()
@@ -347,10 +359,6 @@ extension InventoryDateTVC {
     }
 
 }
-
-// MARK: - UITableViewDataSource Extension
-
-// MARK: - UITableViewDelegate Extension
 
 // MARK: - For Demo
 extension InventoryDateTVC {
@@ -378,49 +386,6 @@ extension InventoryDateTVC {
         } catch {
             log.error("\(#function) FAILED: error with request: \(error)")
             return nil
-        }
-    }
-
-}
-
-// MARK: - Add support for property-dependent row deletion
-
-// Define protocol adding new method to TableViewDataSourceDelegate protocol
-protocol InventoryDateDelegate: TableViewDataSourceDelegate {
-    func canEdit(_ object: Object) -> Bool
-}
-
-// Subclass `TableViewDataSource` so we can override `.tableView(:canEditRowAt:)` and define a second delegate property which we can access (since `delegate` is `fileprivate`)
-class InventoryDateDataSource<Delegate: InventoryDateDelegate>: TableViewDataSource<Delegate> {
-
-    typealias Object = Delegate.Object
-    typealias Cell = Delegate.Cell
-
-    fileprivate weak var customDelegate: Delegate!
-
-    // NOTE - this is required to supply necessary info (specifically Object)
-    required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Object>, delegate: Delegate) {
-        super.init(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: fetchedResultsController, delegate: delegate)
-
-        self.customDelegate = delegate
-    }
-
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        let object = objectAtIndexPath(indexPath)
-        return customDelegate.canEdit(object)
-    }
-
-}
-
-// MARK: - InventoryDateDelegate Extension
-extension InventoryDateTVC: InventoryDateDelegate {
-
-    func canEdit(_ inventory: Inventory) -> Bool {
-        switch inventory.uploaded {
-        case true:
-            return false
-        case false:
-            return true
         }
     }
 

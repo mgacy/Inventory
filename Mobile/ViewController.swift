@@ -24,8 +24,8 @@ class ViewController: UIViewController {
 }
 
 protocol RootSectionViewController: class {
-    var userManager: CurrentUserManager! { get set }
     var managedObjectContext: NSManagedObjectContext? { get set }
+    var userManager: CurrentUserManager! { get set }
 
     // FetchedResultsController
     //var filter: NSPredicate? { get }
@@ -37,8 +37,51 @@ protocol RootSectionViewController: class {
     //var cellIdentifier: String { get }
 
     // Segues
-    // var SegueIdentifier: RawRepresentable
+    //var SegueIdentifier: RawRepresentable
 
+    //func setupTableView()
+
+    // User Actions
+    //func refreshTable(_ refreshControl: UIRefreshControl)
+    //func newTapped(_ sender: AnyObject)
+
+    // CompletionHandlers
+    //func completedGetResourceCollection(json: JSON?, error: Error?) -> Void
+    //func completedGetExistingResource(json: JSON?, error: Error?) -> Void
+    //func completedGetNewResource(json: JSON?, error: Error?) -> Void
+    //func completedSync(json: JSON?, error: Error?) -> Void
+
+    //func deleteChildren
+
+}
+
+/// TODO: can we safely assume all RootSectionViewControllers will implement CustomDeletionDataSource?
+
+// Define protocol adding new method to TableViewDataSourceDelegate protocol
+protocol CustomDeletionDataSourceDelegate: TableViewDataSourceDelegate {
+    func canEdit(_ object: Object) -> Bool
+}
+
+// Subclass `TableViewDataSource` so we can override `.tableView(:canEditRowAt:)` and define a second delegate property which we can access (since `delegate` is `fileprivate`)
+class CustomDeletionDataSource<Delegate: CustomDeletionDataSourceDelegate>: TableViewDataSource<Delegate> {
+
+    typealias Object = Delegate.Object
+    typealias Cell = Delegate.Cell
+
+    fileprivate weak var deletionDelegate: Delegate!
+
+    /// NOTE: this is required to supply necessary info (specifically Object)
+    required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Object>, delegate: Delegate) {
+        super.init(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: fetchedResultsController, delegate: delegate)
+
+        self.deletionDelegate = delegate
+    }
+
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let object = objectAtIndexPath(indexPath)
+        return deletionDelegate.canEdit(object)
+    }
+    
 }
 
 /*

@@ -72,7 +72,6 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
             // Pass the selected object to the new view controller.
             destinationController.location = selection
             destinationController.managedObjectContext = self.managedObjectContext
-            //destinationController.performFetch()
 
         case .showItem:
             guard let destinationController = segue.destination as? InventoryLocationItemTVC else { fatalError("Wrong view controller type") }
@@ -81,7 +80,6 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
             destinationController.title = selection.name
             destinationController.location = selection
             destinationController.managedObjectContext = self.managedObjectContext
-            //destinationController.performFetch()
         }
     }
 
