@@ -11,7 +11,7 @@ import CoreData
 import SwiftyJSON
 import PKHUD
 
-class InventoryLocationTVC: UITableViewController {
+class InventoryLocationTVC: UITableViewController, SegueHandler {
 
     // MARK: - Properties
 
@@ -34,14 +34,11 @@ class InventoryLocationTVC: UITableViewController {
     let cellIdentifier = "InventoryLocationTableViewCell"
 
     // Segues
-    let CategorySegue = "ShowLocationCategory"
-    let ItemSegue = "ShowLocationItem"
-    /*
-    enum SegueIdentifiers : String {
-        case categorySegue = "ShowLocationCategory"
-        case itemSegue = "ShowLocationItem"
+    enum SegueIdentifier : String {
+        case showCategory = "ShowLocationCategory"
+        case showItem = "ShowLocationItem"
     }
-    */
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -68,8 +65,8 @@ class InventoryLocationTVC: UITableViewController {
         // Get the selected object.
         guard let selection = selectedLocation else { fatalError("Showing detail, but no selected row?") }
 
-        switch segue.identifier! {
-        case CategorySegue:
+        switch segueIdentifier(for: segue) {
+        case .showCategory:
             guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else { fatalError("Wrong view controller type") }
 
             // Pass the selected object to the new view controller.
@@ -77,7 +74,7 @@ class InventoryLocationTVC: UITableViewController {
             destinationController.managedObjectContext = self.managedObjectContext
             //destinationController.performFetch()
 
-        case ItemSegue:
+        case .showItem:
             guard let destinationController = segue.destination as? InventoryLocationItemTVC else { fatalError("Wrong view controller type") }
 
             // Pass the selected object to the new view controller.
@@ -85,9 +82,6 @@ class InventoryLocationTVC: UITableViewController {
             destinationController.location = selection
             destinationController.managedObjectContext = self.managedObjectContext
             //destinationController.performFetch()
-
-        default:
-            fatalError("Unrecognized segue.identifier: \(segue.identifier)")
         }
     }
 

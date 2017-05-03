@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class InventoryLocationItemTVC: UITableViewController {
+class InventoryLocationItemTVC: UITableViewController, SegueHandler {
 
     // MARK: Properties
 
@@ -29,7 +29,9 @@ class InventoryLocationItemTVC: UITableViewController {
     let cellIdentifier = "InventoryItemCell"
 
     // Segues
-    let KeypadSegue = "ShowInventoryKeypad"
+     enum SegueIdentifier : String {
+        case showKeypad = "ShowInventoryKeypad"
+    }
 
     // MARK: - Lifecycle
 
@@ -106,7 +108,7 @@ class InventoryLocationItemTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedItem = dataSource.objectAtIndexPath(indexPath)
-        performSegue(withIdentifier: KeypadSegue, sender: self)
+        performSegue(withIdentifier: .showKeypad)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
