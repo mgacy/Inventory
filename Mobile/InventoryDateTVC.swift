@@ -130,7 +130,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         request.returnsObjectsAsFaults = false
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = InventoryDateDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -225,6 +225,20 @@ extension InventoryDateTVC: TableViewDataSourceDelegate {
         }
     }
 
+}
+
+// MARK: - CustomDeletionDataSourceDelegate Extension (supports property-dependent row deletion)
+extension InventoryDateTVC: CustomDeletionDataSourceDelegate {
+
+    func canEdit(_ inventory: Inventory) -> Bool {
+        switch inventory.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+    
 }
 
 // MARK: - Completion Handlers + Sync
@@ -348,10 +362,6 @@ extension InventoryDateTVC {
 
 }
 
-// MARK: - UITableViewDataSource Extension
-
-// MARK: - UITableViewDelegate Extension
-
 // MARK: - For Demo
 extension InventoryDateTVC {
 
@@ -378,49 +388,6 @@ extension InventoryDateTVC {
         } catch {
             log.error("\(#function) FAILED: error with request: \(error)")
             return nil
-        }
-    }
-
-}
-
-// MARK: - Add support for property-dependent row deletion
-
-// Define protocol adding new method to TableViewDataSourceDelegate protocol
-protocol InventoryDateDelegate: TableViewDataSourceDelegate {
-    func canEdit(_ object: Object) -> Bool
-}
-
-// Subclass `TableViewDataSource` so we can override `.tableView(:canEditRowAt:)` and define a second delegate property which we can access (since `delegate` is `fileprivate`)
-class InventoryDateDataSource<Delegate: InventoryDateDelegate>: TableViewDataSource<Delegate> {
-
-    typealias Object = Delegate.Object
-    typealias Cell = Delegate.Cell
-
-    fileprivate weak var customDelegate: Delegate!
-
-    // NOTE - this is required to supply necessary info (specifically Object)
-    required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Object>, delegate: Delegate) {
-        super.init(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: fetchedResultsController, delegate: delegate)
-
-        self.customDelegate = delegate
-    }
-
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        let object = objectAtIndexPath(indexPath)
-        return customDelegate.canEdit(object)
-    }
-
-}
-
-// MARK: - InventoryDateDelegate Extension
-extension InventoryDateTVC: InventoryDateDelegate {
-
-    func canEdit(_ inventory: Inventory) -> Bool {
-        switch inventory.uploaded {
-        case true:
-            return false
-        case false:
-            return true
         }
     }
 
