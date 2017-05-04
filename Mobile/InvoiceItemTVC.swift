@@ -60,7 +60,7 @@ class InvoiceItemTVC: UITableViewController {
         destinationController.parentObject = parentObject
         destinationController.managedObjectContext = managedObjectContext
 
-        // FIX: fix this
+        // FIXME: fix this
         if let indexPath = self.tableView.indexPathForSelectedRow?.row {
             destinationController.currentIndex = indexPath
         }
@@ -133,6 +133,7 @@ class InvoiceItemTVC: UITableViewController {
         // Received Button
         let received = UITableViewRowAction(style: .normal, title: "Received") { action, index in
             invoiceItem.status = InvoiceItemStatus.received.rawValue
+            self.managedObjectContext?.performSaveOrRollback()
             self.isEditing = false
         }
         received.backgroundColor = ColorPalette.navyColor
@@ -151,10 +152,9 @@ extension InvoiceItemTVC {
         if succeeded {
             parentObject.uploaded = true
 
-            // TODO: set .uploaded of parentObject.collection if all are uploaded
+            /// TODO: set .uploaded of parentObject.collection if all are uploaded
 
             HUD.flash(.success, delay: 1.0) { finished in
-                // Pop view
                 self.navigationController!.popViewController(animated: true)
             }
 
@@ -175,11 +175,12 @@ extension InvoiceItemTVC {
         func updateItemStatus(forItem invoiceItem: InvoiceItem, withStatus status: InvoiceItemStatus) {
             self.isEditing = false
             invoiceItem.status = status.rawValue
+            managedObjectContext?.performSaveOrRollback()
             log.info("Updated InvoiceItem: \(invoiceItem)")
         }
 
         // Alert Controller
-        let alertController = UIAlertController(title: nil,message: "Why wasn't this item received?",
+        let alertController = UIAlertController(title: nil, message: "Why wasn't this item received?",
                                                 preferredStyle: .actionSheet)
 
         // Actions
@@ -246,7 +247,7 @@ extension InvoiceItemTVC: TableViewDataSourceDelegate {
             cell.detailTextLabel?.text = "\(quantity) \(invoiceItem.unit?.abbreviation ?? "")"
         } else {
             cell.textLabel?.textColor = UIColor.lightGray
-            /// TODO: should I even both displaying quantity?
+            /// TODO: should I even bother displaying quantity?
             cell.detailTextLabel?.text = "\(quantity)"
         }
 
