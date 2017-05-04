@@ -261,7 +261,7 @@ extension InvoiceDateTVC {
 
         //log.info("Creating new InvoiceCollection(s) ...")
         for (_, collection) in json {
-            _ = InvoiceCollection(context: self.managedObjectContext!, json: collection, uploaded: false)
+            _ = InvoiceCollection(context: managedObjectContext!, json: collection, uploaded: false)
         }
 
         managedObjectContext!.performSaveOrRollback()

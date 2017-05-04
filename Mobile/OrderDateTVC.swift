@@ -287,7 +287,7 @@ extension OrderDateTVC {
             HUD.flash(.error, delay: 1.0); return
         }
         //log.info("Creating new OrderCollection ...")
-        selectedCollection = OrderCollection(context: self.managedObjectContext!, json: json, uploaded: false)
+        selectedCollection = OrderCollection(context: managedObjectContext!, json: json, uploaded: false)
 
         // Save the context.
         managedObjectContext!.performSaveOrRollback()
