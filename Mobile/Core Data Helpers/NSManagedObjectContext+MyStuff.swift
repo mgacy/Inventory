@@ -257,6 +257,7 @@ extension NSManagedObjectContext {
 
     // MARK: Sync
 
+    /// TODO: add filter predicate arg with default value of nil to pass to fetchEntityDict?
     public func syncEntities<T : Syncable>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         guard let objectDict = try? fetchEntityDict(T.self) else {
             log.error("\(#function) FAILED : unable to create dictionary for \(T.self)"); return
@@ -367,7 +368,9 @@ extension NSManagedObjectContext {
     /// TODO: add `uploaded: Bool = true`?
 
     public func syncCollections<T: SyncableCollection>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
-        guard let objectDict = try? fetchCollectionDict(T.self) else {
+        // Filter new (uploaded = false) collections
+        let fetchPredicate = NSPredicate(format: "uploaded == %@", NSNumber(value: true))
+        guard let objectDict = try? fetchCollectionDict(T.self, matchingPredicate: fetchPredicate) else {
             log.error("\(#function) FAILED : unable to create Collection dictionary"); return
         }
 
