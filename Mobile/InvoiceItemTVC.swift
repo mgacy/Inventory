@@ -71,7 +71,7 @@ class InvoiceItemTVC: UITableViewController {
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
 
@@ -242,8 +242,8 @@ extension InvoiceItemTVC {
 extension InvoiceItemTVC: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for invoiceItem: InvoiceItem) {
-        // Name
         cell.textLabel?.text = invoiceItem.item?.name
+        cell.detailTextLabel?.textColor = UIColor.lightGray
 
         /// TODO: pack
 
