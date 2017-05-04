@@ -50,9 +50,6 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
         title = "Orders"
 
-        // Register tableView cells
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-
         // Add refresh control
         self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
 
