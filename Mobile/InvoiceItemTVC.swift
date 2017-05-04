@@ -26,7 +26,7 @@ class InvoiceItemTVC: UITableViewController {
     var fetchBatchSize = 20 // 0 = No Limit
 
     // TableView
-    var cellIdentifier = "InvoiceItemTableViewCell"
+    var cellIdentifier = "InvoiceItemCell"
 
     // Segues
     let segueIdentifier = "showInvoiceKeypad"
