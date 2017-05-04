@@ -171,7 +171,6 @@ extension InventoryLocationTVC {
 
 }
 
-
 // MARK: - TableViewDataSourceDelegate Extension
 extension InventoryLocationTVC: TableViewDataSourceDelegate {
 

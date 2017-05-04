@@ -119,13 +119,10 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
 
     @IBAction func newTapped(_ sender: AnyObject) {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED : unable to get storeID"); return
+            fatalError("Unable to get storeID")
         }
-
-        //tableView.activityIndicatorView.startAnimating()
+        //refreshControl?.beginRefreshing()
         HUD.show(.progress)
-
-        // Get new InvoiceCollection.
         APIManager.sharedInstance.getNewInvoiceCollection(
             storeID: storeID, completion: completedGetNewInvoiceCollection)
     }
@@ -285,7 +282,7 @@ extension InvoiceDateTVC {
             HUD.hide(); return
         }
 
-        //print("\nCreating new InvoiceCollection(s) ...")
+        //log.info("Creating new InvoiceCollection(s) ...")
         for (_, collection) in json {
             _ = InvoiceCollection(context: self.managedObjectContext!, json: collection, uploaded: false)
         }
@@ -312,8 +309,8 @@ extension InvoiceDateTVC {
             APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
 
         } else {
-            log.error("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...
+            log.error("Unable to sync ...")
             HUD.flash(.error, delay: 1.0)
         }
     }
@@ -337,7 +334,7 @@ extension InvoiceDateTVC {
 
         } catch {
             let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
+            log.error("Unable to delete Invoices: \(updateError), \(updateError.userInfo)")
         }
     }
 
