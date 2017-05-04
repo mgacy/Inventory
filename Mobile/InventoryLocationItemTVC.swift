@@ -25,7 +25,6 @@ class InventoryLocationItemTVC: UITableViewController, SegueHandler {
     let fetchBatchSize = 20 // 0 = No Limit
 
     // TableViewCell
-    //let cellIdentifier = "InventoryLocationTableViewCell"
     let cellIdentifier = "InventoryItemCell"
 
     // Segues
