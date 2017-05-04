@@ -20,10 +20,9 @@ class InvoiceItemTVC: UITableViewController {
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
-    var _fetchedResultsController: NSFetchedResultsController<InvoiceItem>? = nil
-    var filter: NSPredicate? = nil
-    var cacheName: String? = nil
-    var sectionNameKeyPath: String? = nil
+    //var filter: NSPredicate? = nil
+    //var cacheName: String? = nil
+    //var sectionNameKeyPath: String? = nil
     var fetchBatchSize = 20 // 0 = No Limit
 
     // TableView
@@ -37,7 +36,7 @@ class InvoiceItemTVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = parentObject.vendor?.name
-        self.performFetch()
+        setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -67,6 +66,31 @@ class InvoiceItemTVC: UITableViewController {
         }
     }
 
+    // MARK: - TableViewDataSource
+    fileprivate var dataSource: TableViewDataSource<InvoiceItemTVC>!
+    //fileprivate var observer: ManagedObjectObserver?
+
+    fileprivate func setupTableView() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        //tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.estimatedRowHeight = 100
+
+        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
+        let request: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+
+        // Set the fetch predicate.
+        let fetchPredicate = NSPredicate(format: "invoice == %@", parentObject)
+        request.predicate = fetchPredicate
+
+        request.fetchBatchSize = fetchBatchSize
+        request.returnsObjectsAsFaults = false
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+    }
+
     // MARK: - User interaction
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
@@ -80,83 +104,18 @@ class InvoiceItemTVC: UITableViewController {
         APIManager.sharedInstance.postInvoice(invoice: dict, completion: completedUpload)
     }
 
-    // MARK: - UITableViewDataSource
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return self.fetchedResultsController.sections?.count ?? 0
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = self.fetchedResultsController.sections![section]
-        return sectionInfo.numberOfObjects
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
-        self.configureCell(cell, atIndexPath: indexPath)
-        return cell
-    }
-
-    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
-        let invoiceItem = self.fetchedResultsController.object(at: indexPath)
-
-        // Name
-        cell.textLabel?.text = invoiceItem.item?.name
-
-        /// TODO: pack
-
-        /// TODO: cost
-
-        //guard let quantity = invoiceItem.quantity else { return }
-        let quantity = invoiceItem.quantity
-        if Double(quantity) > 0.0 {
-            cell.textLabel?.textColor = UIColor.black
-            cell.detailTextLabel?.text = "\(quantity) \(invoiceItem.unit?.abbreviation ?? "")"
-        } else {
-            cell.textLabel?.textColor = UIColor.lightGray
-            /// TODO: should I even both displaying quantity?
-            cell.detailTextLabel?.text = "\(quantity)"
-        }
-
-        switch invoiceItem.status {
-        case InvoiceItemStatus.pending.rawValue:
-            cell.textLabel?.textColor = UIColor.lightGray
-        // Received
-        case InvoiceItemStatus.received.rawValue:
-            cell.textLabel?.textColor = UIColor.black
-        // Not Received
-        case InvoiceItemStatus.damaged.rawValue:
-            cell.textLabel?.textColor = ColorPalette.redColor
-        case InvoiceItemStatus.outOfStock.rawValue:
-            cell.textLabel?.textColor = ColorPalette.redColor
-        case InvoiceItemStatus.wrongItem.rawValue:
-            cell.textLabel?.textColor = ColorPalette.redColor
-        // Other
-        case InvoiceItemStatus.promo.rawValue:
-            cell.textLabel?.textColor = ColorPalette.navyColor
-        case InvoiceItemStatus.substitute.rawValue:
-            cell.textLabel?.textColor = ColorPalette.navyColor
-
-        default:
-            log.warning("\(#function) : unrecognized status")
-            // cell.textLabel?.textColor = UIColor.lightGray
-        }
-
-    }
-
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = self.fetchedResultsController.object(at: indexPath)
+        selectedObject = dataSource.objectAtIndexPath(indexPath)
         log.verbose("Selected InvoiceItem: \(selectedObject)")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
-
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let invoiceItem = self.fetchedResultsController.object(at: indexPath)
+        let invoiceItem = dataSource.objectAtIndexPath(indexPath)
         /*
         // More Button
         let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
@@ -279,88 +238,51 @@ extension InvoiceItemTVC {
 
 }
 
-// MARK: - Type-Specific NSFetchedResultsController Extension
-extension InvoiceItemTVC {
+// MARK: - TableViewDataSourceDelegate Extension
+extension InvoiceItemTVC: TableViewDataSourceDelegate {
 
-    var fetchedResultsController: NSFetchedResultsController<InvoiceItem> {
-        if _fetchedResultsController != nil {
-            return _fetchedResultsController!
+    func configure(_ cell: UITableViewCell, for invoiceItem: InvoiceItem) {
+        // Name
+        cell.textLabel?.text = invoiceItem.item?.name
+
+        /// TODO: pack
+
+        /// TODO: cost
+
+        //guard let quantity = invoiceItem.quantity else { return }
+        let quantity = invoiceItem.quantity
+        if Double(quantity) > 0.0 {
+            cell.textLabel?.textColor = UIColor.black
+            cell.detailTextLabel?.text = "\(quantity) \(invoiceItem.unit?.abbreviation ?? "")"
+        } else {
+            cell.textLabel?.textColor = UIColor.lightGray
+            /// TODO: should I even both displaying quantity?
+            cell.detailTextLabel?.text = "\(quantity)"
         }
 
-        let fetchRequest: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
+        switch invoiceItem.status {
+        case InvoiceItemStatus.pending.rawValue:
+            cell.textLabel?.textColor = UIColor.lightGray
+        // Received
+        case InvoiceItemStatus.received.rawValue:
+            cell.textLabel?.textColor = UIColor.black
+        // Not Received
+        case InvoiceItemStatus.damaged.rawValue:
+            cell.textLabel?.textColor = ColorPalette.redColor
+        case InvoiceItemStatus.outOfStock.rawValue:
+            cell.textLabel?.textColor = ColorPalette.redColor
+        case InvoiceItemStatus.wrongItem.rawValue:
+            cell.textLabel?.textColor = ColorPalette.redColor
+        // Other
+        case InvoiceItemStatus.promo.rawValue:
+            cell.textLabel?.textColor = ColorPalette.navyColor
+        case InvoiceItemStatus.substitute.rawValue:
+            cell.textLabel?.textColor = ColorPalette.navyColor
 
-        // Set the batch size to a suitable number.
-        fetchRequest.fetchBatchSize = fetchBatchSize
-
-        // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-
-        // Set the fetch predicate
-        let fetchPredicate = NSPredicate(format: "invoice == %@", parentObject)
-        fetchRequest.predicate = fetchPredicate
-
-        // Edit the section name key path and cache name if appropriate.
-        // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(
-            fetchRequest: fetchRequest,
-            managedObjectContext: self.managedObjectContext!,
-            sectionNameKeyPath: self.sectionNameKeyPath,
-            cacheName: self.cacheName)
-
-        aFetchedResultsController.delegate = self
-        _fetchedResultsController = aFetchedResultsController
-
-        return _fetchedResultsController!
-    }
-
-    func performFetch () {
-        self.fetchedResultsController.managedObjectContext.perform ({
-
-            do {
-                try self.fetchedResultsController.performFetch()
-            } catch {
-                log.error("\(#function) FAILED : \(error)")
-            }
-            self.tableView.reloadData()
-        })
-    }
-
-}
-
-// MARK: - NSFetchedResultsControllerDelegate Extension
-extension InvoiceItemTVC: NSFetchedResultsControllerDelegate {
-
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        switch type {
-        case .insert:
-            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
-        case .delete:
-            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
         default:
-            return
+            log.warning("\(#function) : unrecognized status")
+            // cell.textLabel?.textColor = UIColor.lightGray
         }
     }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
-        case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .fade)
-        case .update:
-            configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
-        case .move:
-            tableView.moveRow(at: indexPath!, to: newIndexPath!)
-        }
-    }
-
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
-    }
-
+    
 }
