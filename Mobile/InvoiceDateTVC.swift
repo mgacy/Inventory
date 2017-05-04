@@ -322,48 +322,15 @@ extension InvoiceDateTVC {
 
     func deleteChildInvoices(parent: InvoiceCollection) {
         guard let managedObjectContext = managedObjectContext else { return }
-
-        /*
-         Since the batch delete request directly interacts with the persistent store we need
-         to make sure that any changes are first pushed to that store.
-         */
-        if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.save()
-            } catch {
-                let saveError = error as NSError
-                log.error("\(saveError), \(saveError.userInfo)")
-            }
-        }
-
-        // Create Fetch Request
-        let fetchRequest: NSFetchRequest<Invoice> = Invoice.fetchRequest()
-
-        // Configure Fetch Request
-        fetchRequest.predicate = NSPredicate(format: "collection == %@", parent)
-
-        // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Configure Batch Update Request
-        batchDeleteRequest.resultType = .resultTypeCount
-        //batchDeleteRequest.resultType = .resultTypeStatusOnly
-
+        let fetchPredicate = NSPredicate(format: "collection == %@", parent)
         do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
+            try managedObjectContext.deleteEntities(Invoice.self, filter: fetchPredicate)
 
-            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-
-            // The managed object context is not notified of the consequences of the batch delete request.
-
-            // Reset Managed Object Context
-            // As the request directly interacts with the persistent store, we need need to reset the context
-            // for it to be aware of the changes
-            managedObjectContext.reset()
-
-            // Perform Fetch
-            try self.fetchedResultsController.performFetch()
+            /// TODO: perform fetch again?
+            //let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
+            //let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+            //request.sortDescriptors = [sortDescriptor]
+            //dataSource.reconfigureFetchRequest(request)
 
             // Reload Table View
             tableView.reloadData()
