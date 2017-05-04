@@ -130,16 +130,6 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
             storeID: storeID, completion: completedGetNewInvoiceCollection)
     }
 
-    @IBAction func resetTapped(_ sender: AnyObject) {
-        //tableView.activityIndicatorView.startAnimating()
-        HUD.show(.progress)
-
-        //deleteObjects(entityType: Item.self)
-        deleteExistingInvoiceCollections()
-
-        _ = SyncManager(context: managedObjectContext!, storeID: userManager.storeID!, completionHandler: completedSync)
-    }
-
     // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -329,42 +319,6 @@ extension InvoiceDateTVC {
     }
 
     // MARK: Sync
-
-    func deleteExistingInvoiceCollections(_ filter: NSPredicate? = nil) {
-        log.info("deleteExistingInvoices...")
-
-        // Create Fetch Request
-        let fetchRequest: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-
-        // Configure Fetch Request
-        if let _filter = filter { fetchRequest.predicate = _filter }
-
-        // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Configure Batch Update Request
-        batchDeleteRequest.resultType = .resultTypeCount
-
-        do {
-            // Execute Batch Request
-            let batchDeleteResult = try managedObjectContext?.execute(batchDeleteRequest) as! NSBatchDeleteResult
-
-            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
-
-            // Reset Managed Object Context
-            managedObjectContext?.reset()
-
-            // Perform Fetch
-            try self.fetchedResultsController.performFetch()
-
-            // Reload Table View
-            tableView.reloadData()
-
-        } catch {
-            let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
-        }
-    }
 
     func deleteChildInvoices(parent: InvoiceCollection) {
         guard let managedObjectContext = managedObjectContext else { return }
