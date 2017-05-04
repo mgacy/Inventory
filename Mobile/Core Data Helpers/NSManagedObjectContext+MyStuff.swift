@@ -375,7 +375,10 @@ extension NSManagedObjectContext {
         var remoteDates = Set<String>()
 
         for (_, objectJSON):(String, JSON) in json {
-            guard let objectDate = objectJSON["date"].string else { continue }
+            guard let objectDate = objectJSON["date"].string else {
+                log.warning("\(#function) : unable to get date from \(objectJSON)")
+                continue
+            }
             remoteDates.insert(objectDate)
 
             // Find + update / create Items
