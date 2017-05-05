@@ -22,10 +22,9 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
     // MARK: FetchedResultsController
     var managedObjectContext: NSManagedObjectContext? = nil
-    var _fetchedResultsController: NSFetchedResultsController<OrderCollection>? = nil
-    var filter: NSPredicate? = nil
-    var cacheName: String? = "Master"
-    var sectionNameKeyPath: String? = nil
+    //var filter: NSPredicate? = nil
+    //var cacheName: String? = "Master"
+    //var sectionNameKeyPath: String? = nil
     var fetchBatchSize = 20 // 0 = No Limit
 
     // TableViewCell
