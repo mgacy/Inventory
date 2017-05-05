@@ -64,7 +64,6 @@ class CurrentUserManager {
         }
     }
 
-
     // MARK: - Lifecycle
 
     init(defaults: UserDefaults = .standard) {
@@ -106,7 +105,6 @@ class CurrentUserManager {
         user = nil
         authHandler = nil
     }
-
 
     // MARK: - Authentication
 

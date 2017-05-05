@@ -137,5 +137,5 @@ extension Item {
     var packDisplay: String {
         return "\(self.packSize) x \(self.subSize) \(self.subUnit?.abbreviation ?? " ")"
     }
-    
+
 }

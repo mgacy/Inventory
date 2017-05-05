@@ -27,7 +27,7 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
     let cellIdentifier = "InventoryLocationCategoryTableViewCell"
 
     // Segues
-    enum SegueIdentifier : String {
+    enum SegueIdentifier: String {
         case showItem = "ShowLocationItems2"
     }
 
@@ -113,5 +113,5 @@ extension InventoryLocationCategoryTVC: TableViewDataSourceDelegate {
             cell.textLabel?.textColor = UIColor.black
         }
     }
-    
+
 }

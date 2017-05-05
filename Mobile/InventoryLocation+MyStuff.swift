@@ -221,7 +221,7 @@ extension InventoryLocation {
         case false:
             status = InventoryStatus.notStarted
         }
-        
+
         return status
     }
 

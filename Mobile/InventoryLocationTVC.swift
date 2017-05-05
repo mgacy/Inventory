@@ -34,7 +34,7 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
     let cellIdentifier = "InventoryLocationTableViewCell"
 
     // Segues
-    enum SegueIdentifier : String {
+    enum SegueIdentifier: String {
         case showCategory = "ShowLocationCategory"
         case showItem = "ShowLocationItem"
     }

@@ -113,5 +113,5 @@ extension InvoiceVendorTVC: TableViewDataSourceDelegate {
             cell.textLabel?.textColor = UIColor.black
         }
     }
-    
+
 }

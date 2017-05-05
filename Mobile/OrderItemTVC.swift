@@ -140,7 +140,7 @@ class OrderItemTVC: UITableViewController {
         log.verbose("Order message: \(message)")
 
         // Make sure the device can send text messages
-        if (messageComposer.canSendText()) {
+        if messageComposer.canSendText() {
 
             // Obtain a configured MFMessageComposeViewController
             let messageComposeVC = messageComposer.configuredMessageComposeViewController(

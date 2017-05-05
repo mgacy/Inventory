@@ -100,7 +100,7 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate {
             //controller.userManager = userManager
 
             // Sync with completion handler from the new view controller.
-            _ = SyncManager(context: managedObjectContext ,storeID: userManager.storeID!, completionHandler: controller.completedSync)
+            _ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!, completionHandler: controller.completedSync)
         case SignUpSegue:
             log.verbose("SignUpSegue")
         default:
@@ -126,6 +126,5 @@ extension InitialSignUpVC {
         userManager.createUser(email: email, password: pass)
         performSegue(withIdentifier: MainSegue, sender: self)
     }
-    
-}
 
+}

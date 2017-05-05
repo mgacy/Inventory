@@ -74,7 +74,7 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
                 completionHandler(false)
             }
         default:
-            break;
+            break
         }
     }
 

@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class InventoryItemTableViewCell: UITableViewCell {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var detail: UILabel!

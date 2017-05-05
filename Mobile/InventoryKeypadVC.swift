@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class InventoryKeypadVC: UIViewController {
-    
+
     // MARK: Properties
 
     var category: InventoryLocationCategory?
@@ -106,11 +106,11 @@ class InventoryKeypadVC: UIViewController {
         keypad.pushOperator()
         update()
     }
-    
+
     @IBAction func decrementTapped(_ sender: AnyObject) {
         //log.verbose("Tapped '-1'")
     }
-    
+
     @IBAction func incrementTapped(_ sender: AnyObject) {
         //log.verbose("Tapped '+1'")
         keypad.pushOperator()
@@ -118,7 +118,7 @@ class InventoryKeypadVC: UIViewController {
         keypad.pushOperator()
         update()
     }
-    
+
     // MARK: - Item Navigation
 
     @IBAction func nextItemTapped(_ sender: AnyObject) {
@@ -132,7 +132,7 @@ class InventoryKeypadVC: UIViewController {
             navigationController!.popViewController(animated: true)
         }
     }
-    
+
     @IBAction func previousItemTapped(_ sender: AnyObject) {
         if currentIndex > 0 {
             currentIndex -= 1
@@ -158,13 +158,13 @@ class InventoryKeypadVC: UIViewController {
         case false:
             // Update model with output of keyapd
             output = keypad.output()
-            
+
             if let keypadResult = output.total {
                 currentItem.quantity = keypadResult as NSNumber?
             } else {
                 currentItem.quantity = nil
             }
-            
+
             // Save the context.
             let context = self.managedObjectContext!
             do {
@@ -177,7 +177,7 @@ class InventoryKeypadVC: UIViewController {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-        
+
         updateDisplay(item: currentItem, keypadOutput: output)
     }
 
@@ -191,9 +191,9 @@ class InventoryKeypadVC: UIViewController {
         } else {
             itemValue.textColor = UIColor.lightGray
         }
-        
+
         itemHistory.text = keypadOutput.history
-        
+
         // Item.name
         guard let inventoryItem = currentItem.item else {
             itemName.text = "Error (1)"; return
@@ -202,7 +202,7 @@ class InventoryKeypadVC: UIViewController {
             itemName.text = "Error (2)"; return
         }
         itemName.text = name
-        
+
         // Item.pack
         guard let item = inventoryItem.item else { return }
         itemPack.text = item.packDisplay

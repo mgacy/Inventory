@@ -194,7 +194,7 @@ extension OrderDateTVC: TableViewDataSourceDelegate {
             cell.textLabel?.textColor = ColorPalette.yellowColor
         }
     }
-    
+
 }
 
 // MARK: - CustomDeletionDataSourceDelegate Extension (supports property-dependent row deletion)
@@ -208,7 +208,7 @@ extension OrderDateTVC: CustomDeletionDataSourceDelegate {
             return true
         }
     }
-    
+
 }
 
 // MARK: - Completion Handlers + Sync
@@ -216,7 +216,7 @@ extension OrderDateTVC {
 
     // MARK: Completion Handlers
 
-    func completedGetListOfOrderCollections(json: JSON?, error: Error?) -> Void {
+    func completedGetListOfOrderCollections(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -239,7 +239,7 @@ extension OrderDateTVC {
         tableView.reloadData()
     }
 
-    func completedGetExistingOrderCollection(json: JSON?, error: Error?) -> Void {
+    func completedGetExistingOrderCollection(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -278,7 +278,7 @@ extension OrderDateTVC {
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
-    func completedGetNewOrderCollection(json: JSON?, error: Error?) -> Void {
+    func completedGetNewOrderCollection(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }

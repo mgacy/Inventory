@@ -198,7 +198,7 @@ extension InvoiceDateTVC: CustomDeletionDataSourceDelegate {
             return true
         }
     }
-    
+
 }
 
 // MARK: - Completion Handlers + Sync
@@ -206,7 +206,7 @@ extension InvoiceDateTVC {
 
     // MARK: Completion Handlers
 
-    func completedGetListOfInvoiceCollections(json: JSON?, error: Error?) -> Void {
+    func completedGetListOfInvoiceCollections(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -229,7 +229,7 @@ extension InvoiceDateTVC {
         tableView.reloadData()
     }
 
-    func completedGetExistingInvoiceCollection(json: JSON?, error: Error?) -> Void {
+    func completedGetExistingInvoiceCollection(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -250,7 +250,7 @@ extension InvoiceDateTVC {
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
-    func completedGetNewInvoiceCollection(json: JSON?, error: Error?) -> Void {
+    func completedGetNewInvoiceCollection(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }

@@ -31,12 +31,11 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
     let cellIdentifier = "InventoryDateTableViewCell"
 
     // Segues
-    enum SegueIdentifier : String {
+    enum SegueIdentifier: String {
         case showNewItem = "FetchExistingInventory"
         case showExistingItem = "ShowLocationCategory"
         case showSettings = "ShowSettings"
     }
-
 
     /// TODO: provide interface to control these
     // let inventoryTypeID = 1
@@ -240,7 +239,7 @@ extension InventoryDateTVC: CustomDeletionDataSourceDelegate {
             return true
         }
     }
-    
+
 }
 
 // MARK: - Completion Handlers + Sync
@@ -248,7 +247,7 @@ extension InventoryDateTVC {
 
     // MARK: - Completion Handlers
 
-    func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
+    func completedGetListOfInventories(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -270,7 +269,7 @@ extension InventoryDateTVC {
         tableView.reloadData()
     }
 
-    func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
+    func completedGetExistingInventory(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -295,7 +294,7 @@ extension InventoryDateTVC {
         performSegue(withIdentifier: .showExistingItem)
     }
 
-    func completedGetNewInventory(json: JSON?, error: Error?) -> Void {
+    func completedGetNewInventory(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }

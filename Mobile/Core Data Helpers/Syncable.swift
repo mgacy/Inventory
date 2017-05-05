@@ -52,7 +52,7 @@ extension ManagedSyncable where Self: NSManagedObject {
         obj.update(context: context, withJSON: json)
         return obj
     }
-    
+
 }
 
 // MARK: - SyncableCollection

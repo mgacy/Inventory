@@ -13,7 +13,7 @@ import SwiftyJSON
 // MARK: - Insert
 extension NSManagedObjectContext {
 
-    public func insertObject<T : NSManagedObject>(_ entity: T.Type) -> T {
+    public func insertObject<T: NSManagedObject>(_ entity: T.Type) -> T {
         let newItem = T(context: self)
         return newItem
     }
@@ -27,14 +27,14 @@ extension NSManagedObjectContext {
         guard let obj = NSEntityDescription.insertNewObject(forEntityName: T.entityName, into: self) as? T else { fatalError("Wrong object type") }
         return obj
     }
-    
+
 }
 
 // MARK: - Fetch
 extension NSManagedObjectContext {
 
     /// NOTE: this is a more general form of fetchWithRemoteID(_:withID)
-    public func fetchSingleEntity<T : NSManagedObject>(_ entity: T.Type, matchingPredicate predicate: NSPredicate) -> T? {
+    public func fetchSingleEntity<T: NSManagedObject>(_ entity: T.Type, matchingPredicate predicate: NSPredicate) -> T? {
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
         request.predicate = predicate
         request.fetchLimit = 2
@@ -176,7 +176,7 @@ extension NSManagedObjectContext {
         }
     }
 
-    public func performChanges(block: @escaping () -> ()) {
+    public func performChanges(block: @escaping () -> Void) {
         perform {
             block()
             _ = self.saveOrRollback()
@@ -190,7 +190,7 @@ extension NSManagedObjectContext {
 
     // MARK: Insert
 
-    public func insertObjectWithJSON<T : Syncable>(_ entity: T.Type, withJSON json: JSON) -> T where T: NSManagedObject {
+    public func insertObjectWithJSON<T: Syncable>(_ entity: T.Type, withJSON json: JSON) -> T where T: NSManagedObject {
         let newItem = T(context: self)
         newItem.update(context: self, withJSON: json)
         return newItem
@@ -258,7 +258,7 @@ extension NSManagedObjectContext {
     // MARK: Sync
 
     /// TODO: add filter predicate arg with default value of nil to pass to fetchEntityDict?
-    public func syncEntities<T : Syncable>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
+    public func syncEntities<T: Syncable>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         guard let objectDict = try? fetchEntityDict(T.self) else {
             log.error("\(#function) FAILED : unable to create dictionary for \(T.self)"); return
         }

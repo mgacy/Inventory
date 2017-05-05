@@ -53,7 +53,7 @@ extension ResponseCollectionSerializable where Self: ResponseObjectSerializable 
 
 // MARK: - DataRequest
 extension DataRequest {
-    
+
     @discardableResult
     func responseObject<T: ResponseObjectSerializable>(
         queue: DispatchQueue? = nil,
@@ -63,10 +63,10 @@ extension DataRequest {
         // Create response serializer working with our generic `T` type implementing ResponseObjectSerializable protocol
         let responseSerializer = DataResponseSerializer<T> { request, response, data, error in
             guard error == nil else { return .failure(BackendError.network(error: error!)) }
-            
+
             let jsonResponseSerializer = DataRequest.jsonResponseSerializer(options: .allowFragments)
             let result = jsonResponseSerializer.serializeResponse(request, response, data, nil)
-            
+
             /*
             // EDIT
             switch result {
@@ -87,7 +87,7 @@ extension DataRequest {
             }
             // /Edit
             */
-            
+
             guard case let .success(jsonObject) = result else {
                 return .failure(BackendError.jsonSerialization(error: result.error!))
             }
@@ -109,7 +109,7 @@ extension DataRequest {
 
             return .success(responseObject)
         }
-        
+
         return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
     }
 
@@ -122,7 +122,7 @@ extension DataRequest {
         // Create response serializer working with our generic `T` type implementing ResponseObjectSerializable protocol
         let responseSerializer = DataResponseSerializer<[T]> { request, response, data, error in
             guard error == nil else { return .failure(BackendError.network(error: error!)) }
-            
+
             let jsonResponseSerializer = DataRequest.jsonResponseSerializer(options: .allowFragments)
             let result = jsonResponseSerializer.serializeResponse(request, response, data, nil)
 
@@ -154,8 +154,8 @@ extension DataRequest {
 
             return .success(T.collection(from: response, withRepresentation: jsonObject))
         }
-        
+
         return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
     }
-        
+
 }

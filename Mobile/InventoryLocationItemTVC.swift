@@ -28,7 +28,7 @@ class InventoryLocationItemTVC: UITableViewController, SegueHandler {
     let cellIdentifier = "InventoryItemCell"
 
     // Segues
-     enum SegueIdentifier : String {
+     enum SegueIdentifier: String {
         case showKeypad = "ShowInventoryKeypad"
     }
 

@@ -81,7 +81,7 @@ class CustomDeletionDataSource<Delegate: CustomDeletionDataSourceDelegate>: Tabl
         let object = objectAtIndexPath(indexPath)
         return deletionDelegate.canEdit(object)
     }
-    
+
 }
 
 /*
