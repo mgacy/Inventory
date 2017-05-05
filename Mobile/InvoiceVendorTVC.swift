@@ -17,7 +17,7 @@ class InvoiceVendorTVC: UITableViewController {
     var selectedObject: Invoice?
 
     // MARK: FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext? = nil
+    var managedObjectContext: NSManagedObjectContext?
     //var filter: NSPredicate? = nil
     //var cacheName: String? = "Master"
     //var sectionNameKeyPath: String? = nil

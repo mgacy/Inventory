@@ -18,7 +18,7 @@ class InventoryLocationItemTVC: UITableViewController, SegueHandler {
     var selectedItem: InventoryLocationItem?
 
     // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext? = nil
+    var managedObjectContext: NSManagedObjectContext?
     //let filter: NSPredicate? = nil
     //let cacheName: String? = nil
     //let objectsAsFaults = false
