@@ -72,7 +72,8 @@ class CustomDeletionDataSource<Delegate: CustomDeletionDataSourceDelegate>: Tabl
 
     /// NOTE: this is required to supply necessary info (specifically Object)
     required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Object>, delegate: Delegate) {
-        super.init(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: fetchedResultsController, delegate: delegate)
+        super.init(tableView: tableView, cellIdentifier: cellIdentifier,
+                   fetchedResultsController: fetchedResultsController, delegate: delegate)
 
         self.deletionDelegate = delegate
     }

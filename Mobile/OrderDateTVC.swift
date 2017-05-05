@@ -50,7 +50,8 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         title = "Orders"
 
         // Add refresh control
-        self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
+        self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)),
+                                       for: UIControlEvents.valueChanged)
 
         setupTableView()
 
@@ -60,7 +61,8 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
         // Get list of OrderCollections from server
         HUD.show(.progress)
-        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
+        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
+                                                            completion: self.completedGetListOfOrderCollections)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -104,9 +106,11 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                              fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -307,7 +311,8 @@ extension OrderDateTVC {
 
             // Get list of OrderCollections from server
             // log.info("Fetching existing OrderCollections from server ...")
-            APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID, completion: self.completedGetListOfOrderCollections)
+            APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
+                                                                completion: self.completedGetListOfOrderCollections)
 
         } else {
             log.error("Unable to login / sync ...")

@@ -45,7 +45,8 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         title = "Invoices"
 
         // Add refresh control
-        self.refreshControl?.addTarget(self, action: #selector(InvoiceDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
+        self.refreshControl?.addTarget(self, action: #selector(InvoiceDateTVC.refreshTable(_:)),
+                                       for: UIControlEvents.valueChanged)
 
         setupTableView()
 
@@ -55,7 +56,8 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
 
         // Get list of InvoiceCollections from server
         HUD.show(.progress)
-        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
+        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
+                                                              completion: self.completedGetListOfInvoiceCollections)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -103,9 +105,11 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
 
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                              fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -283,7 +287,8 @@ extension InvoiceDateTVC {
 
             // Get list of Invoices from server
             // log.info("Fetching existing InvoiceCollections from server ...")
-            APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID, completion: self.completedGetListOfInvoiceCollections)
+            APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
+                                                                  completion: self.completedGetListOfInvoiceCollections)
 
         } else {
             // if let error = error { // present more detailed error ...

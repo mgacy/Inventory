@@ -54,7 +54,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         title = "Inventories"
 
         // Add refresh control
-        self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
+        self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)),
+                                       for: UIControlEvents.valueChanged)
 
         setupTableView()
     }
@@ -127,9 +128,11 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
 
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                              fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -324,7 +327,8 @@ extension InventoryDateTVC {
 
             // Get list of Inventories from server
             // log.info("Fetching existing Inventories from server ...")
-            APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
+            APIManager.sharedInstance.getListOfInventories(storeID: storeID,
+                                                           completion: self.completedGetListOfInventories)
 
         } else {
             // if let error = error { // present more detailed error ...

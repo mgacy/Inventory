@@ -67,14 +67,18 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
 
         switch segueIdentifier(for: segue) {
         case .showCategory:
-            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else { fatalError("Wrong view controller type") }
+            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else {
+                fatalError("Wrong view controller type")
+            }
 
             // Pass the selected object to the new view controller.
             destinationController.location = selection
             destinationController.managedObjectContext = self.managedObjectContext
 
         case .showItem:
-            guard let destinationController = segue.destination as? InventoryLocationItemTVC else { fatalError("Wrong view controller type") }
+            guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
+                fatalError("Wrong view controller type")
+            }
 
             // Pass the selected object to the new view controller.
             destinationController.title = selection.name
@@ -103,9 +107,11 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
 
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                         fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
