@@ -123,7 +123,7 @@ public class InventoryHelper {
             switch location.locationType {
             case "item"?:
                 //if let itemIDs = object["items"].array {
-                print("Type: item")
+                log.verbose("Type: item")
             case "category"?:
                 log.verbose("Type: category")
             default:
@@ -143,13 +143,13 @@ public class InventoryHelper {
 
         switch parentType {
         case "location":
-            print("location")
+            log.verbose("location")
             // InventoryLocationItem.location = parent
         case "category":
-            print("category")
+            log.verbose("category")
             // InventoryLocationItem.category = parent
         default:
-            print("other")
+            log.verbose("other")
         }
 
     }
@@ -225,7 +225,7 @@ public class InventoryHelper {
         do {
             return try context.executeFetchRequest(request)
         } catch {
-            print("\(#function) FAILED to fetch objects for \(entityName) entity")
+            log.error("\(#function) FAILED to fetch objects for \(entityName) entity")
             return nil
         }
     }
@@ -244,12 +244,12 @@ public class InventoryHelper {
             if results.count == 1 {
                 return results[0]
             } else {
-                print("Found multiple matches: \(results)")
+                log.warning("Found multiple matches: \(results)")
                 //return nil
             }
 
         } catch {
-            print("error executing fetch request: \(error)")
+            log.error("error executing fetch request: \(error)")
         }
 
         return nil
