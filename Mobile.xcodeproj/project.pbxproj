@@ -446,6 +446,7 @@
 				52092E81B2BA2C8F6EDD3BBF /* [CP] Embed Pods Frameworks */,
 				ADA2809B8EAE7BBE3EA5C642 /* [CP] Copy Pods Resources */,
 				C95A8DC21E7896BA001F425B /* ShellScript */,
+				C9EFD1341EBCEE0B008F7F02 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -650,6 +651,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [[ $USER == 'matt' ]]; then\n    /Users/matt/scripts/incrementXcodeBuild\nfi";
+		};
+		C9EFD1341EBCEE0B008F7F02 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
