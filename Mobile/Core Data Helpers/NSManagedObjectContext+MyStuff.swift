@@ -26,7 +26,9 @@ extension NSManagedObjectContext {
 extension NSManagedObjectContext {
 
     func insertObject<T: NSManagedObject>() -> T where T: Managed {
-        guard let obj = NSEntityDescription.insertNewObject(forEntityName: T.entityName, into: self) as? T else { fatalError("Wrong object type") }
+        guard let obj = NSEntityDescription.insertNewObject(forEntityName: T.entityName, into: self) as? T else {
+            fatalError("Wrong object type")
+        }
         return obj
     }
 
@@ -112,7 +114,8 @@ extension NSManagedObjectContext {
         if let filter = filter { fetchRequest.predicate = filter }
 
         // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
+        let batchDeleteRequest = NSBatchDeleteRequest(
+            fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
 
         // Configure Batch Update Request
         batchDeleteRequest.resultType = .resultTypeCount
