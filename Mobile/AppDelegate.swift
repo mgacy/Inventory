@@ -69,7 +69,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         */
 
-        let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as! UITabBarController
+        guard let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController else {
+            fatalError("wrong view controller type")
+        }
 
         for child in tabBarController.viewControllers ?? [] {
             guard let navController = child as? UINavigationController
@@ -88,8 +90,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Check if we already have user + credentials
         if userManager.user != nil {
             //log.debug("AppDelegate: has User")
-            let inventoryNavController = tabBarController.viewControllers?[0] as! UINavigationController
-            let controller = inventoryNavController.topViewController as! InventoryDateTVC
+            guard
+                let inventoryNavController = tabBarController.viewControllers?[0] as? UINavigationController,
+                let controller = inventoryNavController.topViewController as? InventoryDateTVC else {
+                    fatalError("wrong view controller type")
+            }
 
             // Sync
             HUD.show(.progress)
@@ -98,7 +103,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = tabBarController
         } else {
             //log.debug("AppDelegate: missing User")
-            let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as! InitialLoginVC
+            guard let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
+                fatalError("Unable to instantiate view controller")
+            }
 
             // Inject dependencies
             loginController.managedObjectContext = persistentContainer.viewContext
