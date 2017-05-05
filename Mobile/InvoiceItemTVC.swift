@@ -204,10 +204,10 @@ extension InvoiceItemTVC {
         alertController.addAction(outOfStockAction)
 
         // wrongItem
-        let wrontItemAction = UIAlertAction(title: "Wrong Item", style: .default, handler: { (action: UIAlertAction) -> Void in
+        let wrongItemAction = UIAlertAction(title: "Wrong Item", style: .default, handler: { (action: UIAlertAction) -> Void in
             updateItemStatus(forItem: invoiceItem, withStatus: .wrongItem)
         })
-        alertController.addAction(wrontItemAction)
+        alertController.addAction(wrongItemAction)
 
         // cancel
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) -> Void in
