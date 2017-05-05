@@ -50,9 +50,6 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
         title = "Orders"
 
-        // Register tableView cells
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-
         // Add refresh control
         self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
 
@@ -125,7 +122,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
             // Get date to use when getting OrderCollection from server
             guard let storeID = userManager.storeID,
                   let collectionDate = selection.date else {
-                log.error("\(#function) FAILED : unable to get storeID"); return
+                log.error("\(#function) FAILED : unable to get storeID or collection date"); return
             }
 
             //tableView.activityIndicatorView.startAnimating()
@@ -273,8 +270,6 @@ extension OrderDateTVC {
 
         // Update selected Inventory with full JSON from server.
         selection.updateExisting(context: self.managedObjectContext!, json: json)
-
-        // Save the context.
         managedObjectContext!.performSaveOrRollback()
 
         //tableView.activityIndicatorView.stopAnimating()
@@ -285,7 +280,6 @@ extension OrderDateTVC {
 
     func completedGetNewOrderCollection(json: JSON?, error: Error?) -> Void {
         guard error == nil else {
-            //log.error("\(#function) FAILED : \(error)")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -293,7 +287,7 @@ extension OrderDateTVC {
             HUD.flash(.error, delay: 1.0); return
         }
         //log.info("Creating new OrderCollection ...")
-        selectedCollection = OrderCollection(context: self.managedObjectContext!, json: json, uploaded: false)
+        selectedCollection = OrderCollection(context: managedObjectContext!, json: json, uploaded: false)
 
         // Save the context.
         managedObjectContext!.performSaveOrRollback()
@@ -344,7 +338,7 @@ extension OrderDateTVC {
 
         } catch {
             let updateError = error as NSError
-            log.error("Unable to delete Inventories: \(updateError), \(updateError.userInfo)")
+            log.error("Unable to delete Orders: \(updateError), \(updateError.userInfo)")
         }
     }
 
