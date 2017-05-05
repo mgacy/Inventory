@@ -85,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Check if we already have user + credentials
         if userManager.user != nil {
-            //print("AppDelegate: has User")
+            //log.debug("AppDelegate: has User")
             let inventoryNavController = tabBarController.viewControllers?[0] as! UINavigationController
             let controller = inventoryNavController.topViewController as! InventoryDateTVC
 
@@ -95,7 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             self.window?.rootViewController = tabBarController
         } else {
-            //print("AppDelegate: missing User")
+            //log.debug("AppDelegate: missing User")
             let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as! InitialLoginVC
 
             // Inject dependencies
