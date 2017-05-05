@@ -58,8 +58,7 @@ extension DataRequest {
     func responseObject<T: ResponseObjectSerializable>(
         queue: DispatchQueue? = nil,
         completionHandler: @escaping (DataResponse<T>) -> Void)
-        -> Self
-    {
+        -> Self {
         // Create response serializer working with our generic `T` type implementing ResponseObjectSerializable protocol
         let responseSerializer = DataResponseSerializer<T> { request, response, data, error in
             guard error == nil else { return .failure(BackendError.network(error: error!)) }
@@ -117,8 +116,7 @@ extension DataRequest {
     func responseCollection<T: ResponseCollectionSerializable>(
         queue: DispatchQueue? = nil,
         completionHandler: @escaping (DataResponse<[T]>) -> Void)
-        -> Self
-    {
+        -> Self {
         // Create response serializer working with our generic `T` type implementing ResponseObjectSerializable protocol
         let responseSerializer = DataResponseSerializer<[T]> { request, response, data, error in
             guard error == nil else { return .failure(BackendError.network(error: error!)) }

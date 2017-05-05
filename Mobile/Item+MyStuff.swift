@@ -101,29 +101,25 @@ extension Item: Syncable {
     public func updateUnits(withJSON json: JSON, unitDict: [Int32: Unit]) {
         if let
             inventoryUnitID = json["inventory_unit"]["id"].int32,
-            inventoryUnitID != self.inventoryUnit?.remoteID
-        {
+            inventoryUnitID != self.inventoryUnit?.remoteID {
             self.inventoryUnit = unitDict[inventoryUnitID]
         }
 
         if let
             purchaseUnitID = json["purchase_unit"]["id"].int32,
-            purchaseUnitID != self.purchaseUnit?.remoteID
-        {
+            purchaseUnitID != self.purchaseUnit?.remoteID {
             self.purchaseUnit = unitDict[purchaseUnitID]
         }
 
         if let
             purchaseSubUnitID = json["purchase_sub_unit"]["id"].int32,
-            purchaseSubUnitID != self.purchaseSubUnit?.remoteID
-        {
+            purchaseSubUnitID != self.purchaseSubUnit?.remoteID {
             self.purchaseSubUnit = unitDict[purchaseSubUnitID]
         }
 
         if let
             subUnitID = json["sub_unit"]["id"].int32,
-            subUnitID != self.subUnit?.remoteID
-        {
+            subUnitID != self.subUnit?.remoteID {
             self.subUnit = unitDict[subUnitID]
         }
     }

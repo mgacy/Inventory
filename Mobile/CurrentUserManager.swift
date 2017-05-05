@@ -131,9 +131,9 @@ class CurrentUserManager {
                 return completion(false)
             }
 
-            let user: Dictionary<String, JSON> = json["user"].dictionaryValue
+            let user: [String: JSON] = json["user"].dictionaryValue
             let userID: Int = user["id"]!.intValue
-            let stores: Array<JSON> = user["stores"]!.arrayValue
+            let stores: [JSON] = user["stores"]!.arrayValue
 
             /// TODO: parse user.default_store instead use using the index-based method below
             //let defaultStore = user["default_store"]
@@ -167,7 +167,7 @@ class CurrentUserManager {
                     log.verbose("\n\(#function) - response: \(response)\n")
                     let json = JSON(value)
 
-                    let user: Dictionary<String, JSON> = json["user"].dictionaryValue
+                    let user: [String: JSON] = json["user"].dictionaryValue
                     let userID: Int = user["id"]!.intValue
 
                     self.email = email

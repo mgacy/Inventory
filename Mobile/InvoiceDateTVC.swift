@@ -118,10 +118,10 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         case true:
 
             // Get date to use when getting InvoiceCollection from server
-            guard let storeID = userManager.storeID,
-                let collectionDate = selection.date else
-            {
-                log.error("\(#function) FAILED : unable to get storeID or collection date"); return
+            guard
+                let storeID = userManager.storeID,
+                let collectionDate = selection.date else {
+                    log.error("\(#function) FAILED : unable to get storeID or collection date"); return
             }
 
             HUD.show(.progress)
