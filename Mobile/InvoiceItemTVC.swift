@@ -188,13 +188,13 @@ extension InvoiceItemTVC {
         /// TODO: use InvoiceItemStatus.description for alert action title?
 
         // damaged
-        let damagedAction = UIAlertAction(title: "Damaged", style: .default, handler: { (action:UIAlertAction!) -> Void in
+        let damagedAction = UIAlertAction(title: "Damaged", style: .default, handler: { (action: UIAlertAction!) -> Void in
             updateItemStatus(forItem: invoiceItem, withStatus: .damaged)
         })
         alertController.addAction(damagedAction)
 
         // outOfStock
-        let outOfStockAction = UIAlertAction(title: "Out of Stock", style: .default, handler: { (action:UIAlertAction!) -> Void in
+        let outOfStockAction = UIAlertAction(title: "Out of Stock", style: .default, handler: { (action: UIAlertAction!) -> Void in
             updateItemStatus(forItem: invoiceItem, withStatus: .outOfStock)
         })
         alertController.addAction(outOfStockAction)
