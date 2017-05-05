@@ -145,7 +145,7 @@ class InvoiceKeypadVC: UIViewController {
 
     // MARK: Units
 
-    @IBAction func softButtonTapped( _sender: AnyObject) {
+    @IBAction func softButtonTapped(_ sender: AnyObject) {
         switch currentMode {
         // Toggle currentItem.unit
         case .quantity:
