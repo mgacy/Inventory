@@ -47,7 +47,7 @@ class InventoryKeypadVC: UIViewController {
         return items[currentIndex]
     }
 
-    typealias keypadOutput = (history: String, total: Double?, display: String)
+    typealias KeypadOutput = (history: String, total: Double?, display: String)
     let keypad = KeypadWithHistory()
 
     // CoreData
@@ -148,7 +148,7 @@ class InventoryKeypadVC: UIViewController {
     // MARK: - View
 
     func update(newItem: Bool = false) {
-        let output: keypadOutput
+        let output: KeypadOutput
 
         switch newItem {
         case true:
@@ -182,7 +182,7 @@ class InventoryKeypadVC: UIViewController {
     }
 
     // func updateDisplay(item: InventoryLocationItem, history: String, total: Double?, display: String) {}
-    func updateDisplay(item: InventoryLocationItem, keypadOutput: keypadOutput) {
+    func updateDisplay(item: InventoryLocationItem, keypadOutput: KeypadOutput) {
 
         // Item.quantity
         itemValue.text = keypadOutput.display

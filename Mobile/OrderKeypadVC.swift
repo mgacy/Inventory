@@ -38,7 +38,7 @@ class OrderKeypadVC: UIViewController {
         return items[currentIndex]
     }
 
-    typealias keypadOutput = (total: Double?, display: String)
+    typealias KeypadOutput = (total: Double?, display: String)
     let keypad = Keypad()
 
     // CoreData
@@ -171,7 +171,7 @@ class OrderKeypadVC: UIViewController {
 
     func update(newItem: Bool = false) {
 
-        let output: keypadOutput
+        let output: KeypadOutput
 
         switch newItem {
         case true:
@@ -208,7 +208,7 @@ class OrderKeypadVC: UIViewController {
         //log.verbose("currentItem: \(currentItem)")
     }
 
-    func updateDisplay(item: OrderItem, keypadOutput: keypadOutput) {
+    func updateDisplay(item: OrderItem, keypadOutput: KeypadOutput) {
         guard let item = currentItem.item else {
             itemName.text = "Error (1)"; return
         }
