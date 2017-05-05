@@ -124,7 +124,7 @@ class InvoiceItemTVC: UITableViewController {
         // More Button
         let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
             self.isEditing = false
-            print("more button tapped")
+            log.info("more button tapped")
         }
         more.backgroundColor = UIColor.lightGray
         */

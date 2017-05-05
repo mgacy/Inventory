@@ -167,7 +167,7 @@ extension SettingsTVC {
         }
 
         let result = managedObjectContext.saveOrRollback()
-        print("Save result: \(result)")
+        log.info("Save result: \(result)")
     }
 
 }

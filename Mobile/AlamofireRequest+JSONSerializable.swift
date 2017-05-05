@@ -72,7 +72,7 @@ extension DataRequest {
             case .failure(let error):
                 return .failure(BackendError.jsonSerialization(error: error))
             case .success(let value):
-                print("Value: \(value)")
+                log.info("Value: \(value)")
                 let json = SwiftyJSON.JSON(value)
                 // TODO: check for "message" errors in the JSON
                 if let errorMessage = json["message"].string {
