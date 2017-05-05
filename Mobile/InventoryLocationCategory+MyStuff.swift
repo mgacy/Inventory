@@ -68,6 +68,7 @@ extension InventoryLocationCategory {
         }
 
         for item in items {
+            // swiftlint:disable:next force_cast
             if (item as! InventoryLocationItem).quantity != nil {
                 hasValue = true
                 if missingValue {

@@ -11,6 +11,8 @@ import CoreData
 import SwiftyJSON
 import PKHUD
 
+// swiftlint:disable unused_closure_parameter
+
 class InvoiceItemTVC: UITableViewController {
 
     // MARK: - Properties

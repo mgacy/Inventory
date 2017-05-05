@@ -9,6 +9,8 @@
 import CoreData
 import SwiftyJSON
 
+// swiftlint:disable force_try
+
 protocol Managed: class, NSFetchRequestResult {
     static var entityName: String { get }
     static var defaultSortDescriptors: [NSSortDescriptor] { get }

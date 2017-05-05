@@ -16,6 +16,7 @@ protocol TableViewDataSourceDelegate: class {
 }
 
 /// Note: this class doesn't support working with multiple sections
+// swiftlint:disable force_cast force_try
 class TableViewDataSource<Delegate: TableViewDataSourceDelegate>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell

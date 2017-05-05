@@ -32,6 +32,7 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
         configureAccountCell()
 
         // CoreData
+        // swiftlint:disable:next force_cast
         managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
 

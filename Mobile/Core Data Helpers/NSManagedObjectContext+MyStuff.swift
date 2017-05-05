@@ -10,6 +10,8 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+// swiftlint:disable force_cast
+
 // MARK: - Insert
 extension NSManagedObjectContext {
 

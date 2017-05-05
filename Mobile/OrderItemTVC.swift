@@ -205,6 +205,7 @@ extension OrderItemTVC {
 
             /// TODO: set .uploaded of parentObject.collection if all are uploaded
 
+            // swiftlint:disable:next unused_closure_parameter
             HUD.flash(.success, delay: 1.0) { finished in
                 // Pop view
                 self.navigationController!.popViewController(animated: true)
@@ -264,6 +265,7 @@ extension OrderItemTVC {
             cancelTitle = "Cancel"
 
             // Create and add the OK action
+            // swiftlint:disable:next unused_closure_parameter
             let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { action -> Void in
                 // Do some stuff
                 handler!()
@@ -292,6 +294,7 @@ extension OrderItemTVC {
             cancelTitle = "Cancel"
 
             // Create and add the OK action
+            // swiftlint:disable:next unused_closure_parameter
             let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { action -> Void in
                 // Do some stuff
                 handler!()

@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+// swiftlint:disable force_cast
 public class InventoryHelper {
 
     public static let sharedInstance = InventoryHelper()

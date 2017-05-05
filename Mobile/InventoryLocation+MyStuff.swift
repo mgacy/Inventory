@@ -117,6 +117,7 @@ extension InventoryLocation {
     private func fetchCategory(context: NSManagedObjectContext, id: Int) -> InventoryLocationCategory? {
         // TODO: add check for self.locationType?
         let _id = Int32(id)
+        // swiftlint:disable:next force_cast
         if let locationCategory = self.categories?.filter({ ($0 as! InventoryLocationCategory).categoryID == _id }).first {
             return locationCategory as? InventoryLocationCategory
         } else {
@@ -151,6 +152,7 @@ extension InventoryLocation {
         var hasNotStarted = false
 
         for category in categories {
+            // swiftlint:disable:next force_cast
             switch (category as! InventoryLocationCategory).status {
             case InventoryStatus.complete:
                 hasCompleted = true
@@ -196,6 +198,7 @@ extension InventoryLocation {
         var missingValue = false
 
         for item in items {
+            // swiftlint:disable:next force_cast
             if (item as! InventoryLocationItem).quantity != nil {
                 hasValue = true
                 if missingValue {

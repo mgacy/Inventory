@@ -190,6 +190,7 @@ public enum Router: URLRequestConvertible {
 
     // MARK: URLRequestConvertible
 
+    // swiftlint:disable:next cyclomatic_complexity
     public func asURLRequest() throws -> URLRequest {
         // TODO: can I simply add apiURL here?
         //let urlString = Router.baseURLString + Router.apiURL
