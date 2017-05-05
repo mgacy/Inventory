@@ -69,6 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         */
 
+        // swiftlint:disable:next line_length
         guard let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController else {
             fatalError("wrong view controller type")
         }
@@ -104,6 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = tabBarController
         } else {
             //log.debug("AppDelegate: missing User")
+            // swiftlint:disable:next line_length
             guard let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
                 fatalError("Unable to instantiate view controller")
             }

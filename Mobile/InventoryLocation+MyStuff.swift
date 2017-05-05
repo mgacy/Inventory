@@ -117,7 +117,7 @@ extension InventoryLocation {
     private func fetchCategory(context: NSManagedObjectContext, id: Int) -> InventoryLocationCategory? {
         // TODO: add check for self.locationType?
         let _id = Int32(id)
-        // swiftlint:disable:next force_cast
+        // swiftlint:disable:next force_cast line_length
         if let locationCategory = self.categories?.filter({ ($0 as! InventoryLocationCategory).categoryID == _id }).first {
             return locationCategory as? InventoryLocationCategory
         } else {

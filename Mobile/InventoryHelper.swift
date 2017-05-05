@@ -275,6 +275,7 @@ public class InventoryHelper {
         item.categoryID = categoryID
 
         var theLocCat: InventoryLocationCategory
+        // swiftlint:disable:next line_length
         if let theLocCat = location.categories?.filter({ ($0 as! InventoryLocationCategory).categoryID == categoryID }).first {
 
             // Found InventoryLocationCategory
