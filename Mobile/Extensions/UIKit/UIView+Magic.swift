@@ -9,7 +9,7 @@
 
 import Foundation
 import UIKit
-
+/*
 fileprivate var ActivityIndicatorViewAssociativeKey = "ActivityIndicatorViewAssociativeKey"
 public extension UIView {
 
@@ -42,10 +42,10 @@ public extension UIView {
     }
 
 }
-
+*/
 /*
  
-// NOTE - this version was causing problems with the indicator failing to be dismissed when .stopAnimating() was called
+ /// NOTE: this version was causing problems with the indicator failing to be dismissed when .stopAnimating() was called
 
 fileprivate var ActivityIndicatorViewAssociativeKey = "ActivityIndicatorViewAssociativeKey"
 public extension UIView {
