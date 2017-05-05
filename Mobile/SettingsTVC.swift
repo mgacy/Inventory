@@ -18,7 +18,7 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
     // Segues
     let accountSegue = "showAccount"
 
-    @IBOutlet weak var AccountCell: UITableViewCell!
+    @IBOutlet weak var accountCell: UITableViewCell!
 
     // MARK: - Lifecycle
 
@@ -96,9 +96,9 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
     /// TODO: pass User?
     func configureAccountCell() {
         if let user = userManager.user {
-            AccountCell.textLabel?.text = "Logout \(user.email)"
+            accountCell.textLabel?.text = "Logout \(user.email)"
         } else {
-            AccountCell.textLabel?.text = "Login"
+            accountCell.textLabel?.text = "Login"
         }
     }
 
@@ -109,11 +109,11 @@ extension SettingsTVC {
 
     func completedLogout(suceeded: Bool) {
         if suceeded {
-            AccountCell.textLabel?.text = "Login"
+            accountCell.textLabel?.text = "Login"
             deleteData()
         } else {
             log.warning("Unable to actually logout")
-            AccountCell.textLabel?.text = "Login"
+            accountCell.textLabel?.text = "Login"
             deleteData()
         }
     }

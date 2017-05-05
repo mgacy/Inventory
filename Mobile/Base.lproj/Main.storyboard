@@ -1439,6 +1439,7 @@
                     <navigationItem key="navigationItem" id="CGJ-W2-4gF"/>
                     <connections>
                         <outlet property="AccountCell" destination="EG4-hE-eoB" id="HOe-BO-FPp"/>
+                        <outlet property="accountCell" destination="EG4-hE-eoB" id="LTj-bn-TiC"/>
                         <segue destination="cCC-W6-7FV" kind="presentation" identifier="showAccount" id="PaH-ar-rGK"/>
                     </connections>
                 </tableViewController>
