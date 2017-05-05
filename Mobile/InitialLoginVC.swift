@@ -12,19 +12,21 @@ import KeychainAccess
 import PKHUD
 //import SwiftyJSON
 
-class InitialLoginVC: UIViewController, UITextFieldDelegate {
+class InitialLoginVC: UIViewController, UITextFieldDelegate, SegueHandler {
 
     // MARK: Properties
     var managedObjectContext: NSManagedObjectContext!
     var userManager: CurrentUserManager!
 
     // Segue
-    //let InventorySegue = "showInventories"
-    //let OrderSegue = "showOrders"
-    //let InvoiceSegue = "showInvoices"
-    //let SettingSegue = "showSettings"
-    let MainSegue = "showTabController"
-    let SignUpSegue = "showSignUpController"
+    enum SegueIdentifier: String {
+        //case showInventories = "showInventories"
+        //case showOrders = "showOrders"
+        //case showInvoices = "showInvoices"
+        //case showSettings = "showSettings"
+        case showMain = "showTabController"
+        case showSignUp = "showSignUpController"
+    }
 
     // MARK: Interface
     @IBOutlet weak var loginTextField: UITextField!
@@ -84,14 +86,17 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
-        case MainSegue:
+        switch segueIdentifier(for: segue) {
+        case .showMain:
 
             // Get the new view controller.
-            /// TODO: use guards here?
-            let tabBarController = segue.destination as! UITabBarController
-            let inventoryNavController = tabBarController.viewControllers![0] as! UINavigationController
-            let controller = inventoryNavController.topViewController as! InventoryDateTVC
+            guard
+                let tabBarController = segue.destination as? UITabBarController,
+                let inventoryNavController = tabBarController.viewControllers![0] as? UINavigationController,
+                let controller = inventoryNavController.topViewController as? InventoryDateTVC
+            else {
+                fatalError("Wrong view controller type")
+            }
 
             // Inject dependencies
             controller.managedObjectContext = managedObjectContext
@@ -99,7 +104,7 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
 
             // Sync with completion handler from the new view controller.
             _ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!, completionHandler: controller.completedSync)
-        case SignUpSegue:
+        case .showSignUp:
 
             // Get the new view controller.
             guard
@@ -110,10 +115,8 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
             }
 
             // Pass dependencies to the new view controller.
+            destinationController.managedObjectContext = managedObjectContext
             destinationController.userManager = userManager
-
-        default:
-            break
         }
     }
 
@@ -126,7 +129,7 @@ extension InitialLoginVC {
         if success {
             log.verbose("Logged in")
             // TODO: change so we only createUser() on success
-            performSegue(withIdentifier: MainSegue, sender: self)
+            performSegue(withIdentifier: .showMain)
         } else {
             log.error("\(#function) FAILED: unable to login")
             userManager.removeUser()

@@ -7,21 +7,24 @@
 //
 
 import UIKit
+import CoreData
 import KeychainAccess
 import PKHUD
 import SwiftyJSON
 
-class InitialSignUpVC: UIViewController, UITextFieldDelegate {
+class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
 
     // MARK: Properties
-    //var managedObjectContext: NSManagedObjectContext!
+    var managedObjectContext: NSManagedObjectContext!
     var userManager: CurrentUserManager!
 
     // Segue
-    //let InventorySegue = "showInventories"
-    //let LoginSegue = "showLogin"
-    let MainSegue = "showTabController"
-    let SignUpSegue = "showSignUpController"
+    enum SegueIdentifier: String {
+        case showMain = "showTabController"
+        case showSignUp = "showSignUpController"
+        //case showInventories = "showInventories"
+        //case showLogin = "showLogin"
+    }
 
     // MARK: Interface
     @IBOutlet weak var usernameTextField: UITextField!
@@ -85,26 +88,32 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
-        case MainSegue:
+        switch segueIdentifier(for: segue) {
+        case .showMain:
 
             // Get the new view controller.
-            let tabBarController = segue.destination as! UITabBarController
-            let inventoryNavController = tabBarController.viewControllers![0] as! UINavigationController
-            let controller = inventoryNavController.topViewController as! InventoryDateTVC
+            guard
+                let tabBarController = segue.destination as? UITabBarController,
+                let inventoryNavController = tabBarController.viewControllers![0] as? UINavigationController,
+                let controller = inventoryNavController.topViewController as? InventoryDateTVC
+            else {
+                fatalError("Wrong view controller type")
+            }
 
-            let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            // Inject dependencies
+            controller.managedObjectContext = managedObjectContext
+            controller.userManager = userManager
+
+            // Sync with completion handler from the new view controller.
+            _ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!, completionHandler: controller.completedSync)
+        case .showSignUp:
+            log.verbose("SignUpSegue")
+
+            // ...
 
             // Inject dependencies
             //controller.managedObjectContext = managedObjectContext
             //controller.userManager = userManager
-
-            // Sync with completion handler from the new view controller.
-            _ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!, completionHandler: controller.completedSync)
-        case SignUpSegue:
-            log.verbose("SignUpSegue")
-        default:
-            break
         }
     }
 
@@ -124,7 +133,7 @@ extension InitialSignUpVC {
             return
         }
         userManager.createUser(email: email, password: pass)
-        performSegue(withIdentifier: MainSegue, sender: self)
+        performSegue(withIdentifier: .showMain)
     }
 
 }
