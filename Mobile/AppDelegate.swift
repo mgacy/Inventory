@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
+        setupSwiftyBeaverLogging()
+
         /// TODO: set up CoreDataStack
 
         // Check if we have already preloaded data
@@ -29,8 +31,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let isPreloaded = defaults.bool(forKey: "isPreloaded")
         if !isPreloaded {
             log.info("Preloading data ...")
-            /// TODO: instantiate importer with context rather than using singleton
-            CoreDataImporter.shared.preloadData()
+            let importer = CoreDataImporter()
+            importer.preloadData(in: persistentContainer.viewContext)
             defaults.set(true, forKey: "isPreloaded")
         }
 
@@ -42,10 +44,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         /*
         //enum RootControllers: String {
-        //    case InventoryRoot: "InventoryDateTVC"
-        //    case OrderRoot: "OrderDateTVC"
-        //    case InvoiceRoot: "InvoiceDateTVC"
-        //    case SettingsRoot: "SettingsTVC"
+        //    case inventoryRoot: "InventoryDateTVC"
+        //    case orderRoot: "OrderDateTVC"
+        //    case invoiceRoot: "InvoiceDateTVC"
+        //    case settingsRoot: "SettingsTVC"
         //}
 
         let rootInventoryController = storyboard.instantiateViewController(withIdentifier: "InventoryDateTVC")
@@ -106,8 +108,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         //self.window?.makeKeyAndVisible()
-        setupSwiftyBeaverLogging()
-
         return true
     }
 
