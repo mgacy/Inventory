@@ -228,11 +228,7 @@ extension NSManagedObjectContext {
         }
     }
 
-    func fetchEntityDict<T: Syncable>(_ entityClass: T.Type,
-                         matchingPredicate predicate: NSPredicate? = nil,
-                         prefetchingRelationships relationships: [String]? = nil,
-                         returningAsFaults asFaults: Bool = false
-        ) throws -> [Int32: T] where T: NSManagedObject {
+    func fetchEntityDict<T: Syncable>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [Int32: T] where T: NSManagedObject {
 
         let request: NSFetchRequest<T>
         if #available(iOS 10.0, *) {
@@ -336,11 +332,7 @@ extension NSManagedObjectContext {
         return nil
     }
 
-    func fetchCollectionDict<T: SyncableCollection>(_ entityClass: T.Type,
-                             matchingPredicate predicate: NSPredicate? = nil,
-                             prefetchingRelationships relationships: [String]? = nil,
-                             returningAsFaults asFaults: Bool = false
-        ) throws -> [String: T] where T: NSManagedObject {
+    func fetchCollectionDict<T: SyncableCollection>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [String: T] where T: NSManagedObject {
 
         let request: NSFetchRequest<T>
         if #available(iOS 10.0, *) {
@@ -375,7 +367,7 @@ extension NSManagedObjectContext {
     public func syncCollections<T: SyncableCollection>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         // Filter new (uploaded = false) collections
         let fetchPredicate = NSPredicate(format: "uploaded == %@", NSNumber(value: true))
-        guard let objectDict = try? fetchCollectionDict(T.self, matchingPredicate: fetchPredicate) else {
+        guard let objectDict = try? fetchCollectionDict(T.self, matching: fetchPredicate) else {
             log.error("\(#function) FAILED : unable to create Collection dictionary"); return
         }
 
