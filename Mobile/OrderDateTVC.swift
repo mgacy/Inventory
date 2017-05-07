@@ -155,7 +155,6 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
     // MARK: - User Actions
 
     func refreshTable(_ refreshControl: UIRefreshControl) {
-        guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
         //HUD.show(.progress)
@@ -227,7 +226,6 @@ extension OrderDateTVC {
             log.error("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
-        guard let managedObjectContext = managedObjectContext else { return }
 
         do {
             try managedObjectContext.syncCollections(OrderCollection.self, withJSON: json)
@@ -326,7 +324,6 @@ extension OrderDateTVC {
     // Source: https://code.tutsplus.com/tutorials/core-data-and-swift-batch-deletes--cms-25380
     /// NOTE: I believe I scrapped a plan to make this a method because of the involvement of the moc
     func deleteChildOrders(parent: OrderCollection) {
-        guard let managedObjectContext = managedObjectContext else { return }
         let fetchPredicate = NSPredicate(format: "collection == %@", parent)
         do {
             try managedObjectContext.deleteEntities(Order.self, filter: fetchPredicate)

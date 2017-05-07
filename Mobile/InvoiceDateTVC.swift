@@ -153,7 +153,6 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
     // MARK: - User interaction
 
     func refreshTable(_ refreshControl: UIRefreshControl) {
-        guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
         //HUD.show(.progress)
@@ -218,7 +217,6 @@ extension InvoiceDateTVC {
             log.warning("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
-        guard let managedObjectContext = managedObjectContext else { return }
 
         do {
             try managedObjectContext.syncCollections(InvoiceCollection.self, withJSON: json)
@@ -300,7 +298,6 @@ extension InvoiceDateTVC {
     // MARK: Sync
 
     func deleteChildInvoices(parent: InvoiceCollection) {
-        guard let managedObjectContext = managedObjectContext else { return }
         let fetchPredicate = NSPredicate(format: "collection == %@", parent)
         do {
             try managedObjectContext.deleteEntities(Invoice.self, filter: fetchPredicate)

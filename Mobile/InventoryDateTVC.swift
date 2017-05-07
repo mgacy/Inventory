@@ -187,7 +187,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
     // MARK: - User Actions
 
     func refreshTable(_ refreshControl: UIRefreshControl) {
-        guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
         //HUD.show(.progress)
@@ -258,7 +257,6 @@ extension InventoryDateTVC {
             log.warning("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
-        guard let managedObjectContext = managedObjectContext else { return }
 
         do {
             try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
@@ -340,7 +338,6 @@ extension InventoryDateTVC {
     // MARK: - Sync
 
     func deleteChildren(parent: Inventory) {
-        guard let managedObjectContext = managedObjectContext else { return }
         let fetchPredicate = NSPredicate(format: "inventory == %@", parent)
         do {
             try managedObjectContext.deleteEntities(InventoryLocation.self, filter: fetchPredicate)
@@ -368,7 +365,6 @@ extension InventoryDateTVC {
 
     func changeSelectionForDemo(selection: Inventory, defaultRemoteID: Int = 19) -> Int? {
         guard Int(selection.remoteID) == 0 else { return nil }
-        guard let managedObjectContext = managedObjectContext else { return nil }
 
         log.info("Intercepting selection for the purpose of demo ...")
 
