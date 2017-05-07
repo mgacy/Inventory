@@ -32,7 +32,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if !isPreloaded {
             log.info("Preloading data ...")
             let importer = CoreDataImporter()
-            importer.preloadData(in: persistentContainer.viewContext)
+            guard importer.preloadData(in: persistentContainer.viewContext) == true else {
+                /// TODO: tell user why we are crashing?
+                fatalError("Unable to import Unit data")
+            }
             defaults.set(true, forKey: "isPreloaded")
         }
 

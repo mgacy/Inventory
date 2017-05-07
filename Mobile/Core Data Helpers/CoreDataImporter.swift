@@ -17,27 +17,46 @@ import SwiftyJSON
 
 class CoreDataImporter {
 
-    func isDefaultDataAlreadyPreloaded() -> Bool {
-        let defaults = UserDefaults.standard
-        return defaults.bool(forKey: "isPreloaded")
+    /// TODO: should this really handle setting defaults?
+    /*
+    private let defaults: UserDefaults
+
+    // MARK: - Lifecycle
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
     }
 
-    func preloadData(in context: NSManagedObjectContext) {
+    // MARK: - 
+
+    func isDefaultDataAlreadyPreloaded() -> Bool {
+        /// TODO: use getter?
+        return defaults.bool(forKey: "isPreloaded")
+    }
+    */
+
+    func preloadData(in context: NSManagedObjectContext) -> Bool {
         // Retrieve data from the source file
         guard let asset = NSDataAsset(name: "units", bundle: Bundle.main) else {
             log.error("Invalid filename.")
-            return
+            return false
         }
-
-        let data = asset.data
-        let jsonArray = JSON(data: data)
+        let jsonArray = JSON(data: asset.data)
         guard jsonArray != JSON.null else {
             log.error("Could not get json from file, make sure that file contains valid json.")
-            return
+            return false
         }
 
         for (_, unitJSON):(String, JSON) in jsonArray {
             _ = Unit(context: context, json: unitJSON)
+        }
+
+        if context.saveOrRollback() == true {
+            //defaults.set(true, forKey: "isPreloaded")
+            return true
+        } else {
+            log.error("\(#function) FAILED : unable to load Unit data")
+            return false
         }
     }
 
