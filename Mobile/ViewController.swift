@@ -92,7 +92,7 @@ class RootViewController: UITabBarController, UITabBarControllerDelegate {
     // MARK: - Properties
 
     var userManager: CurrentUserManager!
-    var managedObjectContext: NSManagedObjectContext?
+    var managedObjectContext: NSManagedObjectContext!
 
     // MARK: - Lifecycle
 
@@ -101,8 +101,12 @@ class RootViewController: UITabBarController, UITabBarControllerDelegate {
     }
 
     override func viewDidLoad() {
-        for viewController in self.childViewControllers {
-            guard let vc = viewController as? RootSectionViewController else { fatalError("wrong view controller type") }
+        for child in self.childViewControllers {
+            guard
+                let nc = child as? UINavigationController,
+                let vc = nc.topViewController as? RootSectionViewController else {
+                    fatalError("wrong view controller type")
+            }
             vc.managedObjectContext = managedObjectContext
             vc.userManager = userManager
         }
@@ -116,10 +120,15 @@ class RootViewController: UITabBarController, UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         // Get your view controller using the correct protocol.
         // Use guard to make sure the correct type of viewController has been provided.
-        guard let vc = viewController as? SectionNavController
-            else { fatalError("wrong view controller type") }
+        guard
+            let nc = viewController as? UINavigationController,
+            let vc = nc.topViewController as? RootSectionViewController else {
+                fatalError("wrong view controller type")
+        }
+
         // Assign the protocol variable to whatever you want injected into the class instance.
-        vc.managedObjectContext = _managedObjectContext
+        vc.managedObjectContext = managedObjectContext
+        vc.userManager = userManager
         // This method is declared in the protocol to by type bool, so you need to return a bool.
         return true
     }
