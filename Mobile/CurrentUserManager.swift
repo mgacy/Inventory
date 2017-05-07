@@ -13,7 +13,7 @@ import SwiftyJSON
 
 class CurrentUserManager {
 
-    //typealias CompletionHandlerType = (JSON?, Error?) -> Void
+    typealias CompletionHandlerType = (JSON?, Error?) -> Void
 
     // MARK: - Properties
 
@@ -123,13 +123,13 @@ class CurrentUserManager {
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
 
         authHandler!.login(completion: {(json: JSON?, error: Error?) -> Void in
-            /// TODO: does AuthenticationHandler.login already ensure json != nil?
-            /// TODO: set authHandler back to nil / self.removeUser() if guard fails?
             guard error == nil else {
                 /// TODO: pass error to completion handler
+                /// TODO: set authHandler back to nil / self.removeUser()?
                 log.error("\(#function) FAILED : \(error)")
                 return completion(false)
             }
+            // AuthenticationHandler.login ensures json != nil, but we need to unwrap json.
             guard let json = json else {
                 log.error("\(#function) FAILED : unable to get JSON")
                 return completion(false)
@@ -146,10 +146,6 @@ class CurrentUserManager {
             let defaultStore = stores[0]
             let defaultStoreID: Int = defaultStore["id"].intValue
 
-            // TESTING
-            //log.debug("login response: \(json)")
-            //log.debug("user: \(user)")
-
             self.email = email
             self.password = password
             self.storeID = defaultStoreID
@@ -161,7 +157,7 @@ class CurrentUserManager {
         })
     }
 
-    public func signUp(username: String, email: String, password: String, completion: @escaping (JSON?, Error?) -> Void) {
+    public func signUp(username: String, email: String, password: String, completion: @escaping CompletionHandlerType) {
 
         Alamofire.request(Router.signUp(username: username, email: email, password: password))
             .validate()
