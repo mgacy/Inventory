@@ -13,6 +13,8 @@ import SwiftyJSON
 
 class CurrentUserManager {
 
+    //typealias CompletionHandlerType = (JSON?, Error?) -> Void
+
     // MARK: - Properties
 
     var user: User?
@@ -88,6 +90,7 @@ class CurrentUserManager {
     }
 
     // MARK: -
+    /// TODO: should the following be fileprivate?
 
     func createUser(email: String, password: String) {
         self.email = email
@@ -114,15 +117,16 @@ class CurrentUserManager {
         /// TODO: handle pre-existing authHandler?
 
         // We login with AuthenticationHandler since it is responsible for maintaining the token.
-        // While something long-lasting like an access token in an OAuth2 scheme should be the
-        // responsibility of the same object handling the email and password, and the refresh
-        // token could be handled by another one, the access token is currently short-lived.
+        // Something long-lasting like an access token in an OAuth2 scheme should be the
+        // responsibility of the same object handling the email and password, while the refresh
+        // token could be handled by another one. However, the access token is currently short-lived.
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
 
         authHandler!.login(completion: {(json: JSON?, error: Error?) -> Void in
             /// TODO: does AuthenticationHandler.login already ensure json != nil?
             /// TODO: set authHandler back to nil / self.removeUser() if guard fails?
             guard error == nil else {
+                /// TODO: pass error to completion handler
                 log.error("\(#function) FAILED : \(error)")
                 return completion(false)
             }
@@ -164,7 +168,7 @@ class CurrentUserManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    log.verbose("\n\(#function) - response: \(response)\n")
+                    log.verbose("\(#function) - response: \(response)")
                     let json = JSON(value)
 
                     let user: [String: JSON] = json["user"].dictionaryValue
@@ -182,7 +186,7 @@ class CurrentUserManager {
         }
     }
 
-    func logout(completion: @escaping (Bool) -> Void) {
+    public func logout(completion: @escaping (Bool) -> Void) {
         /// TODO: removeUser first, regardless of response.result?
         APIManager.sharedInstance.logout(completion: {(success: Bool) -> Void in
             switch success {
