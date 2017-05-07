@@ -137,7 +137,7 @@ extension InventoryLocation {
         case "item"?:
             return self.statusForLocation
         default:
-            fatalError("Unrecognied locationType")
+            fatalError("Unrecognied locationType: \(self.locationType)")
         }
     }
 
