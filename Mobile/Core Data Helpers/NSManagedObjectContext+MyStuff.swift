@@ -387,7 +387,7 @@ extension NSManagedObjectContext {
             } else {
                 //_ = T(context: self, json: objectJSON)
                 let newObject = T(context: self)
-                newObject.update(context: self, withJSON: objectJSON)
+                newObject.update(context: self, withJSON: objectJSON, uploaded: true)
             }
         }
         log.debug("\(T.self) - remote: \(remoteDates) - local: \(localDates)")
