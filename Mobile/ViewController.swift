@@ -24,7 +24,7 @@ class ViewController: UIViewController {
 }
 
 protocol RootSectionViewController: class {
-    var managedObjectContext: NSManagedObjectContext? { get set }
+    var managedObjectContext: NSManagedObjectContext! { get set }
     var userManager: CurrentUserManager! { get set }
 
     // FetchedResultsController

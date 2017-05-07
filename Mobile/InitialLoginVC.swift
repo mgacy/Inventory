@@ -12,7 +12,7 @@ import KeychainAccess
 import PKHUD
 //import SwiftyJSON
 
-class InitialLoginVC: UIViewController, UITextFieldDelegate, SegueHandler {
+class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewController, SegueHandler {
 
     // MARK: Properties
     var managedObjectContext: NSManagedObjectContext!

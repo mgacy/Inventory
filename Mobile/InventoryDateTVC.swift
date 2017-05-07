@@ -21,7 +21,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
     var userManager: CurrentUserManager!
 
     // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
+    var managedObjectContext: NSManagedObjectContext!
     //let filter: NSPredicate? = nil
     //let cacheName: String? = "Master"
     //let objectsAsFaults = false

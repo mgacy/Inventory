@@ -21,7 +21,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
     //var selectedCollectionIndex: IndexPath?
 
     // MARK: FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
+    var managedObjectContext: NSManagedObjectContext!
     //var filter: NSPredicate? = nil
     //var cacheName: String? = "Master"
     //var sectionNameKeyPath: String? = nil

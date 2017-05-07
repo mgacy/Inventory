@@ -13,7 +13,7 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
 
     // MARK: Properties
     var userManager: CurrentUserManager!
-    var managedObjectContext: NSManagedObjectContext?
+    var managedObjectContext: NSManagedObjectContext!
 
     // Segues
     let accountSegue = "showAccount"

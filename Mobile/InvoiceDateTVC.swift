@@ -20,7 +20,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
     var selectedCollection: InvoiceCollection?
 
     // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
+    var managedObjectContext: NSManagedObjectContext!
     //var filter: NSPredicate? = nil
     //var cacheName: String? = "Master"
     //var sectionNameKeyPath: String? = nil
