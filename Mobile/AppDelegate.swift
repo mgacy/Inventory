@@ -79,6 +79,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Fix dark shadow in nav bar on segue
         tabBarController.view.backgroundColor = UIColor.white
+        //tabBarController.managedObjectContext = persistentContainer.viewContext
+        //tabBarController.userManager = userManager
+        //self.window?.rootViewController = tabBarController
 
         for child in tabBarController.viewControllers ?? [] {
             guard let navController = child as? UINavigationController
