@@ -217,7 +217,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.window?.rootViewController = tabBarController
         //self.window?.makeKeyAndVisible()
-
     }
 
 }
