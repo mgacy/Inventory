@@ -52,7 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if userManager.user != nil {
             prepareTabBarController()
         } else {
-            //log.debug("AppDelegate: missing User")
             // swiftlint:disable:next line_length
             guard let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
                 fatalError("Unable to instantiate view controller")
@@ -61,8 +60,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Inject dependencies
             loginController.managedObjectContext = persistentContainer.viewContext
             loginController.userManager = userManager
-            // Should we really be changing the root view controller like this?
             self.window?.rootViewController = loginController
+            //self.window?.makeKeyAndVisible()
         }
 
         //self.window?.makeKeyAndVisible()
