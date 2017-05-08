@@ -89,16 +89,20 @@ class LoginVC: UIViewController, UITextFieldDelegate {
 // MARK: - Completion Handlers
 extension LoginVC {
 
-    func completedLogin(success: Bool) {
-        if success {
-            log.info("Logged in")
-            HUD.hide()
-            dismiss(animated: true, completion: nil)
-        } else {
-            /// TODO: how best to handle this?
-            HUD.flash(.error, delay: 1.0); return
+    func completedLogin(error: BackendError? = nil) {
+        guard error == nil else {
             log.error("Failed to login")
+            switch error! {
+            case .authentication:
+                HUD.flash(.error, delay: 1.0)
+            default:
+                HUD.flash(.error, delay: 1.0)
+            }
+            return
         }
+        log.verbose("Logged in")
+        HUD.hide()
+        dismiss(animated: true, completion: nil)
     }
 
     // func completedSignup(json: JSON?, error: Error?) -> Void {}

@@ -126,16 +126,20 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewCont
 // MARK: - Completion Handlers
 extension InitialLoginVC {
 
-    func completedLogin(success: Bool) {
-        if success {
-            log.verbose("Logged in")
-            // TODO: change so we only createUser() on success
-            performSegue(withIdentifier: .showMain)
-        } else {
-            log.error("\(#function) FAILED: unable to login")
-            /// TODO: how best to handle this?
-            HUD.flash(.error, delay: 1.0); return
+    func completedLogin(_ error: BackendError? = nil) {
+        guard error == nil else {
+            log.error("Failed to login")
+            switch error! {
+            case .authentication:
+                showError(title: "Error", subtitle: "Wrong email or password")
+            default:
+                HUD.flash(.error, delay: 1.0)
+            }
+            return
         }
+        log.verbose("Logged in")
+        // TODO: change so we only createUser() on success
+        performSegue(withIdentifier: .showMain)
     }
 
 }

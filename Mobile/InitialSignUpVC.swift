@@ -82,7 +82,6 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
 
         HUD.show(.progress)
         userManager.signUp(username: username, email: email, password: pass, completion: completedSignup)
-        //APIManager.sharedInstance.signUp(username: username, email: email, password: pass, completion: completedSignup)
     }
 
     // MARK: - Navigation
@@ -123,7 +122,7 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
 // MARK: - Completion Handlers
 extension InitialSignUpVC {
 
-    func completedSignup(json: JSON?, error: Error?) {
+    func completedSignup(error: BackendError?) {
         guard error == nil else {
             log.error("\(#function) FAILED: unable to sign up")
             HUD.flash(.error, delay: 1.0); return

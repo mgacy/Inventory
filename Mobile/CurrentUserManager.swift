@@ -13,7 +13,7 @@ import SwiftyJSON
 
 class CurrentUserManager {
 
-    typealias CompletionHandlerType = (JSON?, Error?) -> Void
+    typealias CompletionHandlerType = (BackendError?) -> Void
 
     // MARK: - Properties
 
@@ -94,6 +94,7 @@ class CurrentUserManager {
     fileprivate func createUser(userID: Int, email: String, password: String) {
         self.email = email
         self.password = password
+        /// TODO: what about storeID?
         user = User(id: userID, email: email)
 
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
@@ -110,10 +111,9 @@ class CurrentUserManager {
 
     // MARK: - Authentication
 
-    public func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
+    public func login(email: String, password: String, completion: @escaping CompletionHandlerType) {
 
         /// TODO: handle pre-existing user?
-        /// TODO: handle pre-existing authHandler?
 
         // We login with AuthenticationHandler since it is responsible for maintaining the token.
         // Something long-lasting like an access token in an OAuth2 scheme should be the
@@ -123,15 +123,15 @@ class CurrentUserManager {
 
         authHandler!.login(completion: {(json: JSON?, error: Error?) -> Void in
             guard error == nil else {
-                /// TODO: pass error to completion handler
-                /// TODO: set authHandler back to nil / self.removeUser()?
-                log.error("\(#function) FAILED : \(error)")
-                return completion(false)
+                log.error("\(#function) FAILED : \(error!)")
+                self.authHandler = nil
+                return completion(BackendError.network(error: error!))
             }
             // AuthenticationHandler.login ensures json != nil, but we need to unwrap json.
             guard let json = json else {
                 log.error("\(#function) FAILED : unable to get JSON")
-                return completion(false)
+                self.authHandler = nil
+                return completion(BackendError.myError(error: "Unable to get JSON from response."))
             }
 
             let user: [String: JSON] = json["user"].dictionaryValue
@@ -149,10 +149,8 @@ class CurrentUserManager {
             self.password = password
             self.storeID = defaultStoreID
             self.user = User(id: userID, email: email)
-
             APIManager.sharedInstance.configSession(self.authHandler!)
-
-            completion(true)
+            completion(nil)
         })
     }
 
@@ -166,17 +164,15 @@ class CurrentUserManager {
                     log.verbose("\(#function) - response: \(response)")
                     let json = JSON(value)
 
-                    let user: [String: JSON] = json["user"].dictionaryValue
-                    let userID: Int = user["id"]!.intValue
+                    //let user: [String: JSON] = json["user"].dictionaryValue
+                    //let userID: Int = user["id"]!.intValue
+                    let userID = json["user"]["id"].intValue
 
-                    self.email = email
-                    self.password = password
-                    self.user = User(id: userID, email: email)
-
-                    completion(json, nil)
+                    self.createUser(userID: userID, email: email, password: password)
+                    completion(nil)
                 case .failure(let error):
                     log.error("\(#function) FAILED : \(error)")
-                    completion(nil, error)
+                    completion(BackendError.network(error: error))
                 }
         }
     }
