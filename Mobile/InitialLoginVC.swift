@@ -133,7 +133,6 @@ extension InitialLoginVC {
             performSegue(withIdentifier: .showMain)
         } else {
             log.error("\(#function) FAILED: unable to login")
-            userManager.removeUser()
             /// TODO: how best to handle this?
             HUD.flash(.error, delay: 1.0); return
         }

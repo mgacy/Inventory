@@ -129,11 +129,6 @@ extension InitialSignUpVC {
             HUD.flash(.error, delay: 1.0); return
         }
         log.verbose("Signed up")
-
-        guard let email = loginTextField.text, let pass = passwordTextField.text else {
-            return
-        }
-        userManager.createUser(email: email, password: pass)
         performSegue(withIdentifier: .showMain)
     }
 

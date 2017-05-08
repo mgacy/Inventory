@@ -90,18 +90,17 @@ class CurrentUserManager {
     }
 
     // MARK: -
-    /// TODO: should the following be fileprivate?
 
-    func createUser(email: String, password: String) {
+    fileprivate func createUser(userID: Int, email: String, password: String) {
         self.email = email
         self.password = password
-        user = User(id: 1, email: email)
+        user = User(id: userID, email: email)
 
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
         APIManager.sharedInstance.configSession(authHandler!)
     }
 
-    func removeUser() {
+    fileprivate func removeUser() {
         self.email = nil
         self.password = nil
         keychain["authToken"] = nil
