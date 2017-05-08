@@ -96,9 +96,9 @@ class RootViewController: UITabBarController, UITabBarControllerDelegate {
 
     // MARK: - Lifecycle
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) is not supported")
-    }
+    //required init?(coder: NSCoder) {
+    //    fatalError("init(coder:) is not supported")
+    //}
 
     override func viewDidLoad() {
         for child in self.childViewControllers {
