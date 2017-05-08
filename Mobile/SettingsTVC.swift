@@ -42,18 +42,13 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
         case accountSegue:
-
-            // Get the new view controller.
             guard
                 let destinationNavController = segue.destination as? UINavigationController,
                 let destinationController = destinationNavController.topViewController as? LoginVC
             else {
                 fatalError("Wrong view controller type")
             }
-
-            // Pass dependencies to the new view controller.
             destinationController.userManager = userManager
-
         default:
             break
         }

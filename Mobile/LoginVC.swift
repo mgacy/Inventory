@@ -26,8 +26,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         /// TODO: enable signup
         signupButton.isEnabled = false
 
