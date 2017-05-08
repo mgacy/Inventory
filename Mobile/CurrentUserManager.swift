@@ -135,14 +135,14 @@ class CurrentUserManager {
             }
 
             /// TODO: move parsing out somewhere else?
-            let user: [String: JSON] = json["user"].dictionaryValue
-            let userID: Int = user["id"]!.intValue
+            //let user: [String: JSON] = json["user"].dictionaryValue
+            //let userID: Int = user["id"]!.intValue
 
             //let stores: [JSON] = user["stores"]!.arrayValue
             //let defaultStore = stores[0]
             //let defaultStoreID: Int = defaultStore["id"].intValue
 
-            //let defaultStore = user["default_store"]
+            let userID = json["user"]["id"].intValue
             let defaultStoreID: Int = json["user"]["default_store"]["id"].intValue
 
             self.email = email
