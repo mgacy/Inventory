@@ -89,27 +89,10 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewCont
         switch segueIdentifier(for: segue) {
         case .showMain:
 
-            // Get the new view controller.
-            guard
-                let tabBarController = segue.destination as? UITabBarController,
-                let inventoryNavController = tabBarController.viewControllers![0] as? UINavigationController,
-                let controller = inventoryNavController.topViewController as? InventoryDateTVC
-            else {
-                fatalError("Wrong view controller type")
-            }
+            // swiftlint:disable:next force_cast
+            let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+            appDelegate.prepareTabBarController()
 
-            //let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-            //appDelegate.window?.rootViewController = tabBarController
-            //appDelegate.window?.makeKeyAndVisible()
-            //tabBarController.view.backgroundColor = UIColor.white
-
-            // Inject dependencies
-            controller.managedObjectContext = managedObjectContext
-            controller.userManager = userManager
-
-            // Sync with completion handler from the new view controller.
-            _ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!,
-                            completionHandler: controller.completedSync)
         case .showSignUp:
 
             // Get the new view controller.
