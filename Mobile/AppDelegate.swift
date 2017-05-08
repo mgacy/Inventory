@@ -45,75 +45,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         HUD.dimsBackground = false
         HUD.allowsInteraction = false
 
-        /*
-        //enum RootControllers: String {
-        //    case inventoryRoot: "InventoryDateTVC"
-        //    case orderRoot: "OrderDateTVC"
-        //    case invoiceRoot: "InvoiceDateTVC"
-        //    case settingsRoot: "SettingsTVC"
-        //}
-
-        let rootInventoryController = storyboard.instantiateViewController(withIdentifier: "InventoryDateTVC")
-         let rootInventoryNavController = UINavigationController(rootViewController: rootInventoryController)
-
-        let rootOrderController = storyboard.instantiateViewController(withIdentifier: "OrderDateTVC")
-        let rootOrderNavController = UINavigationController(rootViewController: rootOrderController)
-
-        let rootInvoiceController = storyboard.instantiateViewController(withIdentifier: "InvoiceDateTVC")
-        let rootInvoiceNavController = UINavigationController(rootViewController: rootInvoiceController)
-
-        let rootSettingsController = storyboard.instantiateViewController(withIdentifier: "SettingsTVC")
-        let rootSettingsNavController = UINavigationController(rootViewController: rootSettingsController)
-
-        let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [
-            rootInventoryNavController, rootOrderNavController,
-            rootInvoiceNavController, rootSettingsNavController
-        ]
-        */
-
-        // swiftlint:disable:next line_length
-        guard let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController else {
-            fatalError("wrong view controller type")
-        }
-
-        // Fix dark shadow in nav bar on segue
-        tabBarController.view.backgroundColor = UIColor.white
-        //tabBarController.managedObjectContext = persistentContainer.viewContext
-        //tabBarController.userManager = userManager
-        //self.window?.rootViewController = tabBarController
-
-        for child in tabBarController.viewControllers ?? [] {
-            guard let navController = child as? UINavigationController
-                else { fatalError("wrong view controller type") }
-            guard let vc = navController.topViewController as? RootSectionViewController
-                else { fatalError("wrong view controller type") }
-
-            // Inject dependencies
-            vc.managedObjectContext = persistentContainer.viewContext
-            vc.userManager = userManager
-        }
-
         /// TODO: Should we use a failable initializier with CurrentUserManager?
         //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
         // Check if we already have user + credentials
         if userManager.user != nil {
-            //log.debug("AppDelegate: has User")
-            guard
-                let inventoryNavController = tabBarController.viewControllers?[0] as? UINavigationController,
-                let controller = inventoryNavController.topViewController as? InventoryDateTVC else {
-                    fatalError("wrong view controller type")
-            }
-
-            // Sync
-            HUD.show(.progress)
-            _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!,
-                            completionHandler: controller.completedSync)
-
-            self.window?.rootViewController = tabBarController
+            prepareTabBarController()
         } else {
-            //log.debug("AppDelegate: missing User")
             // swiftlint:disable:next line_length
             guard let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
                 fatalError("Unable to instantiate view controller")
@@ -122,8 +60,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Inject dependencies
             loginController.managedObjectContext = persistentContainer.viewContext
             loginController.userManager = userManager
-            // Should we really be changing the root view controller like this?
             self.window?.rootViewController = loginController
+            //self.window?.makeKeyAndVisible()
         }
 
         //self.window?.makeKeyAndVisible()
@@ -240,6 +178,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.addDestination(console)
         //log.addDestination(file)
         log.addDestination(platform)
+    }
+
+    // func prepareTabBarController(context: NSManagedObjectContext, userManager: CurrentUserManager) {}
+
+    func prepareTabBarController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        // swiftlint:disable:next line_length
+        guard let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController else {
+            fatalError("Unable to instantiate tab bar controller")
+        }
+
+        // Fix dark shadow in nav bar on segue
+        tabBarController.view.backgroundColor = UIColor.white
+        //tabBarController.managedObjectContext = persistentContainer.viewContext
+        //tabBarController.userManager = userManager
+
+        for child in tabBarController.viewControllers ?? [] {
+            guard let navController = child as? UINavigationController
+                else { fatalError("wrong view controller type") }
+            guard let vc = navController.topViewController as? RootSectionViewController
+                else { fatalError("wrong view controller type") }
+
+            // Inject dependencies
+            vc.managedObjectContext = persistentContainer.viewContext
+            vc.userManager = userManager
+        }
+
+        // Sync
+        guard
+            let inventoryNavController = tabBarController.viewControllers?[0] as? UINavigationController,
+            let controller = inventoryNavController.topViewController as? InventoryDateTVC else {
+                fatalError("wrong view controller type")
+        }
+        HUD.show(.progress)
+        _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!,
+                        completionHandler: controller.completedSync)
+
+        self.window?.rootViewController = tabBarController
+        //self.window?.makeKeyAndVisible()
+
     }
 
 }
