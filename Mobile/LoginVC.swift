@@ -26,8 +26,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         /// TODO: enable signup
         signupButton.isEnabled = false
 
@@ -80,7 +78,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        print("Preparing for segue ...")
+        log.verbose("Preparing for segue ...")
     }
     */
 
@@ -89,16 +87,20 @@ class LoginVC: UIViewController, UITextFieldDelegate {
 // MARK: - Completion Handlers
 extension LoginVC {
 
-    func completedLogin(success: Bool) {
-        if success {
-            log.info("Logged in")
-            HUD.hide()
-            dismiss(animated: true, completion: nil)
-        } else {
-            /// TODO: how best to handle this?
-            HUD.flash(.error, delay: 1.0); return
+    func completedLogin(error: BackendError? = nil) {
+        guard error == nil else {
             log.error("Failed to login")
+            switch error! {
+            case .authentication:
+                HUD.flash(.error, delay: 1.0)
+            default:
+                HUD.flash(.error, delay: 1.0)
+            }
+            return
         }
+        log.verbose("Logged in")
+        HUD.hide()
+        dismiss(animated: true, completion: nil)
     }
 
     // func completedSignup(json: JSON?, error: Error?) -> Void {}

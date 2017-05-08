@@ -35,11 +35,11 @@ public enum Router: URLRequestConvertible {
     case listOrders(storeID: Int)
     case fetchOrder(storeID: Int, orderDate: String)
     case postOrder([String: Any])
-    
+
     //static let baseURLString = "http://localhost:5000"
     static let baseURLString = "***REMOVED***"
     static let apiPath = "/api/v1.0"
-    
+
     var method: HTTPMethod {
         switch self {
         // Authorization
@@ -87,7 +87,7 @@ public enum Router: URLRequestConvertible {
             return .post
         }
     }
-    
+
     var path: String {
         switch self {
         // Authentication
@@ -135,7 +135,7 @@ public enum Router: URLRequestConvertible {
             return "\(Router.apiPath)/orders"
         }
     }
-    
+
     var parameters: Parameters {
         switch self {
         // Authentication
@@ -187,19 +187,20 @@ public enum Router: URLRequestConvertible {
             return [:]
         }
     }
-    
+
     // MARK: URLRequestConvertible
-    
+
+    // swiftlint:disable:next cyclomatic_complexity
     public func asURLRequest() throws -> URLRequest {
         // TODO: can I simply add apiURL here?
         //let urlString = Router.baseURLString + Router.apiURL
         //let url = try urlString.asURL()
-        
+
         let url = try Router.baseURLString.asURL()
-        
+
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.httpMethod = method.rawValue
-        
+
         switch self {
         // Authentication
         case .forgotPassword:
@@ -214,7 +215,7 @@ public enum Router: URLRequestConvertible {
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         // case .getUnits:
         // case .getVendors:
-        
+
         // Inventory
         case .getNewInventory:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
@@ -223,7 +224,7 @@ public enum Router: URLRequestConvertible {
         // case .fetchInventory:
         case .postInventory:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
-            
+
         // Invoice
         case .getNewInvoice:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
@@ -233,7 +234,7 @@ public enum Router: URLRequestConvertible {
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .postInvoice:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
-        
+
         // Order
         case .getNewOrder:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
@@ -246,8 +247,8 @@ public enum Router: URLRequestConvertible {
         default:
             break
         }
-        
+
         return urlRequest
     }
-    
+
 }

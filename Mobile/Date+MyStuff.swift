@@ -24,7 +24,7 @@ extension Date {
     struct Formatter {
         static let shortDate = DateFormatter(dateStyle: .short)
     }
-    
+
     var shortDate: String {
         return Formatter.shortDate.string(from: self)
     }

@@ -17,6 +17,7 @@ final class CoreDataStack {
     lazy var persistentContainer: NSPersistentContainer = {
         //let container = NSPersistentContainer(name: "DataModel")
         let container = NSPersistentContainer(name: "Mobile")
+        // swiftlint:disable:next unused_closure_parameter
         container.loadPersistentStores(completionHandler: { [weak self](storeDescription, error) in
             if let error = error {
                 NSLog("CoreData error \(error), \(error._userInfo)")

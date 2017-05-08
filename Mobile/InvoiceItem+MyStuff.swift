@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-@objc public enum InvoiceItemStatus : Int16 {
+@objc public enum InvoiceItemStatus: Int16 {
     case pending        = 0
     case received       = 1
     case damaged        = 2

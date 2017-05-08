@@ -89,7 +89,7 @@ class Keypad {
         }
     }
 
-    func _updateNumber(_ newNumber: Double?) {
+    func updateNumber(_ newNumber: Double?) {
         guard let _newNumber = newNumber else {
             currentNumber = ""
             return
@@ -102,13 +102,6 @@ class Keypad {
             log.error("There was a problem converting '\(_newNumber)' to a string")
             currentNumber = "Error"
         }
-    }
-
-    func updateNumber(_ newNumber: Double?) {
-        // This allows us to override updateNumber in subclasses with additional
-        // functionality while still making use of _updateNumber
-        // TODO: should this be done using an extension?
-        _updateNumber(newNumber)
     }
 
     func formatTotal(_ result: Double) -> String {
@@ -211,7 +204,7 @@ class KeypadWithHistory: Keypad {
 
     override func updateNumber(_ newNumber: Double?) {
         stack = []
-        _updateNumber(newNumber)
+        super.updateNumber(newNumber)
         if newNumber != nil {
             pushOperator()
         }

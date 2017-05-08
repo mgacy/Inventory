@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class InventoryLocationItemTVC: UITableViewController {
+class InventoryLocationItemTVC: UITableViewController, SegueHandler {
 
     // MARK: Properties
 
@@ -18,18 +18,19 @@ class InventoryLocationItemTVC: UITableViewController {
     var selectedItem: InventoryLocationItem?
 
     // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext? = nil
+    var managedObjectContext: NSManagedObjectContext?
     //let filter: NSPredicate? = nil
     //let cacheName: String? = nil
     //let objectsAsFaults = false
     let fetchBatchSize = 20 // 0 = No Limit
 
     // TableViewCell
-    //let cellIdentifier = "InventoryLocationTableViewCell"
     let cellIdentifier = "InventoryItemCell"
 
     // Segues
-    let KeypadSegue = "ShowInventoryKeypad"
+     enum SegueIdentifier: String {
+        case showKeypad = "ShowInventoryKeypad"
+    }
 
     // MARK: - Lifecycle
 
@@ -52,7 +53,9 @@ class InventoryLocationItemTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InventoryKeypadVC else { fatalError("Wrong view controller type") }
+        guard let destinationController = segue.destination as? InventoryKeypadVC else {
+            fatalError("Wrong view controller type")
+        }
 
         // Pass the parent of the selected object to the new view controller.
         // TODO: should I really pass both or just the one != nil?
@@ -97,16 +100,18 @@ class InventoryLocationItemTVC: UITableViewController {
 
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                         fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedItem = dataSource.objectAtIndexPath(indexPath)
-        performSegue(withIdentifier: KeypadSegue, sender: self)
+        performSegue(withIdentifier: .showKeypad)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

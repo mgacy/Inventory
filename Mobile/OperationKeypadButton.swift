@@ -12,7 +12,7 @@ import UIKit
 
 class OperationKeypadButton: UIButton {
 
-    required init?(coder aDecoder: NSCoder) {        
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 
         // set other operations after super.init, if required

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class InventoryLocationCategoryTVC: UITableViewController {
+class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
 
     // MARK: Properties
 
@@ -27,7 +27,9 @@ class InventoryLocationCategoryTVC: UITableViewController {
     let cellIdentifier = "InventoryLocationCategoryTableViewCell"
 
     // Segues
-    let ItemSegue = "ShowLocationItems2"
+    enum SegueIdentifier: String {
+        case showItem = "ShowLocationItems2"
+    }
 
     // MARK: - Lifecycle
 
@@ -51,13 +53,15 @@ class InventoryLocationCategoryTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InventoryLocationItemTVC else { fatalError("Wrong view controller type") }
+        guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
+            fatalError("Wrong view controller type")
+        }
         guard let selection = selectedCategory else { fatalError("Showing detail, but no selected row?") }
 
         // Pass the selected object to the new view controller.
         destinationController.title = selection.name
         destinationController.category = selection
-        destinationController.managedObjectContext = self.managedObjectContext
+        destinationController.managedObjectContext = managedObjectContext
     }
 
     // MARK: - TableViewDataSource
@@ -81,16 +85,18 @@ class InventoryLocationCategoryTVC: UITableViewController {
 
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                         fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCategory = dataSource.objectAtIndexPath(indexPath)
-        performSegue(withIdentifier: ItemSegue, sender: self)
+        performSegue(withIdentifier: .showItem)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -111,5 +117,5 @@ extension InventoryLocationCategoryTVC: TableViewDataSourceDelegate {
             cell.textLabel?.textColor = UIColor.black
         }
     }
-    
+
 }

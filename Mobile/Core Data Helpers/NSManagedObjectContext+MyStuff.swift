@@ -10,12 +10,26 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+// swiftlint:disable force_cast
+
 // MARK: - Insert
 extension NSManagedObjectContext {
 
-    public func insertObject<T : NSManagedObject>(_ entity: T.Type) -> T {
+    public func insertObject<T: NSManagedObject>(_ entity: T.Type) -> T {
         let newItem = T(context: self)
         return newItem
+    }
+
+}
+
+// MARK: - Managed (objc.io)
+extension NSManagedObjectContext {
+
+    func insertObject<T: NSManagedObject>() -> T where T: Managed {
+        guard let obj = NSEntityDescription.insertNewObject(forEntityName: T.entityName, into: self) as? T else {
+            fatalError("Wrong object type")
+        }
+        return obj
     }
 
 }
@@ -23,8 +37,8 @@ extension NSManagedObjectContext {
 // MARK: - Fetch
 extension NSManagedObjectContext {
 
-    // NOTE - this is a more general form of fetchWithRemoteID(_:withID)
-    public func fetchSingleEntity<T : NSManagedObject>(_ entity: T.Type, matchingPredicate predicate: NSPredicate) -> T? {
+    /// NOTE: this is a more general form of fetchWithRemoteID(_:withID)
+    public func fetchSingleEntity<T: NSManagedObject>(_ entity: T.Type, matchingPredicate predicate: NSPredicate) -> T? {
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
         request.predicate = predicate
         request.fetchLimit = 2
@@ -34,7 +48,7 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                //log.warning("Found 0 matches for predicate \(predicate)")
+                log.debug("Found 0 matches for predicate \(predicate)")
                 return nil
             case 1:
                 return fetchResults[0]
@@ -64,12 +78,11 @@ extension NSManagedObjectContext {
         request.predicate = predicate
         request.sortDescriptors = sortBy
 
-        //let fetchedResult = try self.fetch(request)
-        //return fetchedResult
         do {
             let fetchedResult = try self.fetch(request)
             return fetchedResult
         } catch let error {
+            /// TODO: provide better error info?
             log.error(error.localizedDescription)
             throw error
         }
@@ -82,7 +95,9 @@ extension NSManagedObjectContext {
 
     func deleteEntities<T: NSManagedObject>(_ entityClass: T.Type, filter: NSPredicate? = nil) throws {
 
-        // We need to make sure that any changes are first pushed to the persistent store
+        /// TODO: actually throw on exception?
+
+        // Ensure any changes are first pushed to the persistent store
         if self.hasChanges {
             do {
                 try self.save()
@@ -99,7 +114,8 @@ extension NSManagedObjectContext {
         if let filter = filter { fetchRequest.predicate = filter }
 
         // Initialize Batch Delete Request
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
+        let batchDeleteRequest = NSBatchDeleteRequest(
+            fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
 
         // Configure Batch Update Request
         batchDeleteRequest.resultType = .resultTypeCount
@@ -111,8 +127,7 @@ extension NSManagedObjectContext {
             log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
             // Reset Managed Object Context
-            // As the request directly interacts with the persistent store, we need need to reset the context
-            // for it to be aware of the changes
+            // As the request directly interacts with the persistent store, we need need to reset the context for it to be aware of the changes
             self.reset()
 
         } catch {
@@ -147,6 +162,7 @@ extension NSManagedObjectContext {
 extension NSManagedObjectContext {
 
     public func saveOrRollback() -> Bool {
+        /// TODO: proceed only if self.hasChanges?
         do {
             try save()
             return true
@@ -159,7 +175,13 @@ extension NSManagedObjectContext {
         }
     }
 
-    public func performChanges(block: @escaping () -> ()) {
+    public func performSaveOrRollback() {
+        perform {
+            _ = self.saveOrRollback()
+        }
+    }
+
+    public func performChanges(block: @escaping () -> Void) {
         perform {
             block()
             _ = self.saveOrRollback()
@@ -173,7 +195,7 @@ extension NSManagedObjectContext {
 
     // MARK: Insert
 
-    public func insertObjectWithJSON<T : Syncable>(_ entity: T.Type, withJSON json: JSON) -> T where T: NSManagedObject {
+    public func insertObjectWithJSON<T: Syncable>(_ entity: T.Type, withJSON json: JSON) -> T where T: NSManagedObject {
         let newItem = T(context: self)
         newItem.update(context: self, withJSON: json)
         return newItem
@@ -191,7 +213,7 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                //log.warning("Found 0 matches for remoteID \(id)")
+                log.debug("\(#function) : found 0 matches for remoteID \(id)")
                 return nil
             case 1:
                 return fetchResults[0]
@@ -201,17 +223,12 @@ extension NSManagedObjectContext {
             }
 
         } catch let error {
-            log.error("Error with request: \(error)")
+            log.error("\(#function) FAILED : error with request: \(error)")
             return nil
         }
-        //return nil
     }
 
-    func fetchEntityDict<T: Syncable>(_ entityClass: T.Type,
-                         matchingPredicate predicate: NSPredicate? = nil,
-                         prefetchingRelationships relationships: [String]? = nil,
-                         returningAsFaults asFaults: Bool = false
-        ) throws -> [Int32: T] where T: NSManagedObject {
+    func fetchEntityDict<T: Syncable>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [Int32: T] where T: NSManagedObject {
 
         let request: NSFetchRequest<T>
         if #available(iOS 10.0, *) {
@@ -229,8 +246,6 @@ extension NSManagedObjectContext {
         request.predicate = predicate
         request.relationshipKeyPathsForPrefetching = relationships
 
-        //let fetchedResult = try self.fetch(request)
-        //return fetchedResult
         do {
             let fetchedResult = try self.fetch(request)
             let objectDict = fetchedResult.toDictionary { $0.remoteID }
@@ -243,7 +258,8 @@ extension NSManagedObjectContext {
 
     // MARK: Sync
 
-    public func syncEntities<T : Syncable>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
+    /// TODO: add filter predicate arg with default value of nil to pass to fetchEntityDict?
+    public func syncEntities<T: Syncable>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
         guard let objectDict = try? fetchEntityDict(T.self) else {
             log.error("\(#function) FAILED : unable to create dictionary for \(T.self)"); return
         }
@@ -267,64 +283,21 @@ extension NSManagedObjectContext {
                 newObject.update(context: self, withJSON: objectJSON)
             }
         }
+        log.debug("\(T.self) - remote: \(remoteIDs) - local: \(localIDs)")
 
         // Delete objects that were deleted from server. We filter remoteID 0
         // since that is the default value for new objects
         let deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 != 0 }
-
-        // TESTING
-        //log.debug("remote: \(remoteIDs) - local: \(localIDs)")
-        //log.debug("We need to delete: \(deletedObjects)")
-
-        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
-        do {
-            try self.deleteEntities(T.self, filter: fetchPredicate)
-        } catch {
-            /// TODO: deleteEntities(_:filter) already prints the error
-            let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
-        }
-    }
-
-    // NOTE - if we don't provide another method for SyncableItems, Syncable.update
-    // will override the update method of any(?) SyncableItems
-    public func syncEntities<T : SyncableItem>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
-        guard let objectDict = try? fetchEntityDict(T.self) else {
-            log.error("\(#function) FAILED : unable to create Item dictionary"); return
-        }
-
-        let localIDs = Set(objectDict.keys)
-        var remoteIDs = Set<Int32>()
-
-        for (_, objectJSON):(String, JSON) in json {
-            guard let objectID = objectJSON["id"].int32 else { continue }
-            remoteIDs.insert(objectID)
-
-            // Find + update / create Items
-            if let existingObject = objectDict[objectID] {
-                existingObject.update(context: self, withJSON: objectJSON)
-            } else {
-                //_ = T(context: self, json: objectJSON)
-                let newObject = T(context: self)
-                newObject.update(context: self, withJSON: objectJSON)
+        if !deletedObjects.isEmpty {
+            log.debug("We need to delete: \(deletedObjects)")
+            let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
+            do {
+                try self.deleteEntities(T.self, filter: fetchPredicate)
+            } catch {
+                /// TODO: deleteEntities(_:filter) already prints the error
+                let updateError = error as NSError
+                log.error("\(updateError), \(updateError.userInfo)")
             }
-        }
-
-        // Delete objects that were deleted from server. We filter remoteID 0
-        // since that is the default value for new objects
-        let deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 != 0 }
-
-        // TESTING
-        log.debug("remote: \(remoteIDs) - local: \(localIDs)")
-        log.debug("We need to delete: \(deletedObjects)")
-
-        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
-        do {
-            try self.deleteEntities(T.self, filter: fetchPredicate)
-        } catch {
-            /// TODO: deleteEntities(_:filter) already prints the error
-            let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
         }
     }
 
@@ -343,28 +316,23 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                //log.warning("Found 0 matches for predicate \(predicate)")
+                log.debug("\(#function) : found 0 matches for date: \(date)")
                 return nil
             case 1:
                 return fetchResults[0]
             default:
-                log.error("\(#function) FAILED: found multiple matches: \(fetchResults)")
+                log.error("\(#function) FAILED : found multiple matches: \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
-                //print("Found multiple matches: \(searchResults)")
                 //return searchResults[0]
             }
 
         } catch let error {
-            log.error("Error with request: \(error)")
+            log.error("\(#function) FAILED : error with request: \(error)")
         }
         return nil
     }
 
-    func fetchCollectionDict<T: SyncableCollection>(_ entityClass: T.Type,
-                             matchingPredicate predicate: NSPredicate? = nil,
-                             prefetchingRelationships relationships: [String]? = nil,
-                             returningAsFaults asFaults: Bool = false
-        ) throws -> [String: T] where T: NSManagedObject {
+    func fetchCollectionDict<T: SyncableCollection>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [String: T] where T: NSManagedObject {
 
         let request: NSFetchRequest<T>
         if #available(iOS 10.0, *) {
@@ -397,7 +365,9 @@ extension NSManagedObjectContext {
     /// TODO: add `uploaded: Bool = true`?
 
     public func syncCollections<T: SyncableCollection>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
-        guard let objectDict = try? fetchCollectionDict(T.self) else {
+        // Filter new (uploaded = false) collections
+        let fetchPredicate = NSPredicate(format: "uploaded == %@", NSNumber(value: true))
+        guard let objectDict = try? fetchCollectionDict(T.self, matching: fetchPredicate) else {
             log.error("\(#function) FAILED : unable to create Collection dictionary"); return
         }
 
@@ -405,7 +375,10 @@ extension NSManagedObjectContext {
         var remoteDates = Set<String>()
 
         for (_, objectJSON):(String, JSON) in json {
-            guard let objectDate = objectJSON["date"].string else { continue }
+            guard let objectDate = objectJSON["date"].string else {
+                log.warning("\(#function) : unable to get date from \(objectJSON)")
+                continue
+            }
             remoteDates.insert(objectDate)
 
             // Find + update / create Items
@@ -414,24 +387,23 @@ extension NSManagedObjectContext {
             } else {
                 //_ = T(context: self, json: objectJSON)
                 let newObject = T(context: self)
-                newObject.update(context: self, withJSON: objectJSON)
+                newObject.update(context: self, withJSON: objectJSON, uploaded: true)
             }
         }
+        log.debug("\(T.self) - remote: \(remoteDates) - local: \(localDates)")
 
         // Delete objects that were deleted from server.
         let deletedObjects = localDates.subtracting(remoteDates)
-
-        // TESTING
-        //log.debug("remote: \(remoteDates) - local: \(localDates)")
-        //log.debug("We need to delete: \(deletedObjects)")
-
-        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
-        do {
-            try self.deleteEntities(T.self, filter: fetchPredicate)
-        } catch {
-            /// TODO: deleteEntities(_:filter) already prints the error
-            let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
+        if !deletedObjects.isEmpty {
+            log.debug("We need to delete: \(deletedObjects)")
+            let fetchPredicate = NSPredicate(format: "date IN %@", deletedObjects)
+            do {
+                try self.deleteEntities(T.self, filter: fetchPredicate)
+            } catch {
+                /// TODO: deleteEntities(_:filter) already prints the error
+                let updateError = error as NSError
+                log.error("\(updateError), \(updateError.userInfo)")
+            }
         }
     }
 

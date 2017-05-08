@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-extension Vendor: SyncableItem {
+extension Vendor: Syncable {
 
     // MARK: - Lifecycle
 
@@ -19,7 +19,10 @@ extension Vendor: SyncableItem {
         self.update(context: context, withJSON: json)
     }
 
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+    public func update(context: NSManagedObjectContext, withJSON json: Any) {
+        guard let json = json as? JSON else {
+            log.error("\(#function) FAILED : SwiftyJSON"); return
+        }
 
         // Properties
         if let remoteID = json["id"].int32 {
@@ -29,7 +32,12 @@ extension Vendor: SyncableItem {
             self.name = name
         }
 
-        /// TODO: create separate VendorRep object
+        // Relationships
+        if let repJSON = json["rep"].dictionary, let repID = json["rep"]["id"].int32 {
+            let repJSON = JSON(repJSON)
+            let rep = VendorRep.findOrCreate(withID: repID, withJSON: repJSON, in: context)
+            rep.vendor = self
+        }
     }
 
 }

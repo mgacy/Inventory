@@ -23,14 +23,12 @@ class SyncManager {
 
     // We will (1) call some endpoints, (2) sync objects, (3) call completionHandler
     init(context: NSManagedObjectContext, storeID: Int, completionHandler: @escaping (Bool, Error?) -> Void) {
-        self.storeID = storeID
-
-        /// TODO: pass managedObjectContext as init parameter
         self.managedObjectContext = context
+        self.storeID = storeID
         self.completionHandler = completionHandler
 
         // Get list of Vendors from server
-        log.info("\nFetching Vendors from server ...")
+        log.info("Fetching Vendors from server ...")
         APIManager.sharedInstance.getVendors(storeID: self.storeID, completion: syncVendors)
     }
 
@@ -51,6 +49,7 @@ class SyncManager {
         // Create dict from fetch request on Items
         let prefetch = ["inventoryUnit", "purchaseSubUnit", "purchaseUnit",
                         "subUnit", "vendor"]
+        // swiftlint:disable:next line_length
         guard let itemDict = try? managedObjectContext.fetchEntityDict(Item.self, prefetchingRelationships: prefetch) else {
             log.error("\(#function) FAILED : unable to create Item dictionary"); return
         }
@@ -79,21 +78,21 @@ class SyncManager {
                 newItem.updateUnits(withJSON: itemJSON, unitDict: unitDict)
             }
         }
+        log.debug("Items - remote: \(remoteIDs) - local: \(localIDs)")
 
         // Delete Items that were deleted from server
         let deletedItems = localIDs.subtracting(remoteIDs)
-
-        // TESTING
-        log.debug("remote: \(remoteIDs) - local: \(localIDs)")
-        log.debug("We need to delete: \(deletedItems)")
-
-        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedItems)
-        do {
-            try managedObjectContext.deleteEntities(Item.self, filter: fetchPredicate)
-        } catch {
-            /// TODO: deleteEntities(_:filter) already prints the error
-            let updateError = error as NSError
-            log.error("\(updateError), \(updateError.userInfo)")
+        if !deletedItems.isEmpty {
+            log.debug("We need to delete: \(deletedItems)")
+            /// TODO: Do we really need to create a new fetch request or can we just get from itemDict?
+            let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedItems)
+            do {
+                try managedObjectContext.deleteEntities(Item.self, filter: fetchPredicate)
+            } catch {
+                /// TODO: deleteEntities(_:filter) already prints the error
+                let updateError = error as NSError
+                log.error("\(updateError), \(updateError.userInfo)")
+            }
         }
 
         log.verbose("Finished syncing Items")
@@ -126,7 +125,9 @@ class SyncManager {
     // MARK: - Completion
 
     func completedStartup(_ succeeded: Bool) {
-        self.completionHandler(true, nil)
+        /// TODO: save here or count on caller to always save?
+        //managedObjectContext.performSaveOrRollback()
+        completionHandler(true, nil)
     }
 
 }

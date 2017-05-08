@@ -31,6 +31,7 @@ extension InventoryLocation {
         self.init(context: context)
 
         // Properties
+        /// TODO: name and locationType are required and lack default values
         if let name = json["name"].string {
             self.name = name
         }
@@ -116,6 +117,7 @@ extension InventoryLocation {
     private func fetchCategory(context: NSManagedObjectContext, id: Int) -> InventoryLocationCategory? {
         // TODO: add check for self.locationType?
         let _id = Int32(id)
+        // swiftlint:disable:next force_cast line_length
         if let locationCategory = self.categories?.filter({ ($0 as! InventoryLocationCategory).categoryID == _id }).first {
             return locationCategory as? InventoryLocationCategory
         } else {
@@ -135,7 +137,7 @@ extension InventoryLocation {
         case "item"?:
             return self.statusForLocation
         default:
-            fatalError("Unrecognied locationType")
+            fatalError("Unrecognied locationType: \(self.locationType)")
         }
     }
 
@@ -150,6 +152,7 @@ extension InventoryLocation {
         var hasNotStarted = false
 
         for category in categories {
+            // swiftlint:disable:next force_cast
             switch (category as! InventoryLocationCategory).status {
             case InventoryStatus.complete:
                 hasCompleted = true
@@ -195,6 +198,7 @@ extension InventoryLocation {
         var missingValue = false
 
         for item in items {
+            // swiftlint:disable:next force_cast
             if (item as! InventoryLocationItem).quantity != nil {
                 hasValue = true
                 if missingValue {
@@ -220,7 +224,7 @@ extension InventoryLocation {
         case false:
             status = InventoryStatus.notStarted
         }
-        
+
         return status
     }
 

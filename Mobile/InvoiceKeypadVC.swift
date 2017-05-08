@@ -62,7 +62,7 @@ class InvoiceKeypadVC: UIViewController {
         }
     }
 
-    typealias keypadOutput = (total: Double?, display: String)
+    typealias KeypadOutput = (total: Double?, display: String)
     let keypad = Keypad()
 
     /// TODO: include relevant methods within this?
@@ -145,7 +145,7 @@ class InvoiceKeypadVC: UIViewController {
 
     // MARK: Units
 
-    @IBAction func softButtonTapped( _sender: AnyObject) {
+    @IBAction func softButtonTapped(_ sender: AnyObject) {
         switch currentMode {
         // Toggle currentItem.unit
         case .quantity:
@@ -296,7 +296,7 @@ class InvoiceKeypadVC: UIViewController {
 
     func update(newItem: Bool = false) {
 
-        let output: keypadOutput
+        let output: KeypadOutput
 
         switch newItem {
         case true:
@@ -360,7 +360,7 @@ class InvoiceKeypadVC: UIViewController {
 
     // MARK: - B
 
-    func updateDisplay(item: InvoiceItem, keypadOutput: keypadOutput) {
+    func updateDisplay(item: InvoiceItem, keypadOutput: KeypadOutput) {
         guard let item = currentItem.item else {
             itemName.text = "Error (1)"; return
         }

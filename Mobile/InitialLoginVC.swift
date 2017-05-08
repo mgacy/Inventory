@@ -6,23 +6,27 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
+import CoreData
 import UIKit
 import KeychainAccess
 import PKHUD
 //import SwiftyJSON
 
-class InitialLoginVC: UIViewController, UITextFieldDelegate {
+class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewController, SegueHandler {
 
     // MARK: Properties
+    var managedObjectContext: NSManagedObjectContext!
     var userManager: CurrentUserManager!
 
     // Segue
-    //let InventorySegue = "showInventories"
-    //let OrderSegue = "showOrders"
-    //let InvoiceSegue = "showInvoices"
-    //let SettingSegue = "showSettings"
-    let MainSegue = "showTabController"
-    let SignUpSegue = "showSignUpController"
+    enum SegueIdentifier: String {
+        //case showInventories = "showInventories"
+        //case showOrders = "showOrders"
+        //case showInvoices = "showInvoices"
+        //case showSettings = "showSettings"
+        case showMain = "showTabController"
+        case showSignUp = "showSignUpController"
+    }
 
     // MARK: Interface
     @IBOutlet weak var loginTextField: UITextField!
@@ -82,24 +86,14 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
-        case MainSegue:
+        switch segueIdentifier(for: segue) {
+        case .showMain:
 
-            // Get the new view controller.
-            /// TODO: use guards here?
-            let tabBarController = segue.destination as! UITabBarController
-            let inventoryNavController = tabBarController.viewControllers![0] as! UINavigationController
-            let controller = inventoryNavController.topViewController as! InventoryDateTVC
+            // swiftlint:disable:next force_cast
+            let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+            appDelegate.prepareTabBarController()
 
-            let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
-            // Inject dependencies
-            //controller.managedObjectContext = managedObjectContext
-            controller.userManager = userManager
-
-            // Sync with completion handler from the new view controller.
-            _ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!, completionHandler: controller.completedSync)
-        case SignUpSegue:
+        case .showSignUp:
 
             // Get the new view controller.
             guard
@@ -110,10 +104,8 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
             }
 
             // Pass dependencies to the new view controller.
+            destinationController.managedObjectContext = managedObjectContext
             destinationController.userManager = userManager
-
-        default:
-            break
         }
     }
 
@@ -122,17 +114,31 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate {
 // MARK: - Completion Handlers
 extension InitialLoginVC {
 
-    func completedLogin(success: Bool) {
-        if success {
-            log.verbose("Logged in")
-            // TODO: change so we only createUser() on success
-            performSegue(withIdentifier: MainSegue, sender: self)
-        } else {
-            log.error("\(#function) FAILED: unable to login")
-            userManager.removeUser()
-            /// TODO: how best to handle this?
-            HUD.flash(.error, delay: 1.0); return
+    func completedLogin(_ error: BackendError? = nil) {
+        guard error == nil else {
+            log.error("Failed to login")
+            switch error! {
+            case .authentication:
+                showError(title: "Error", subtitle: "Wrong email or password")
+            default:
+                HUD.flash(.error, delay: 1.0)
+            }
+            return
         }
+        log.verbose("Logged in")
+        // TODO: change so we only createUser() on success
+        performSegue(withIdentifier: .showMain)
+    }
+
+}
+
+/// TODO: make extension of PKHUD
+extension InitialLoginVC {
+
+    func showError(title: String, subtitle: String?, delay: Double = 2.0) {
+        PKHUD.sharedHUD.show()
+        PKHUD.sharedHUD.contentView = PKHUDErrorView(title: title, subtitle: subtitle)
+        PKHUD.sharedHUD.hide(afterDelay: delay)
     }
 
 }

@@ -11,7 +11,7 @@ import CoreData
 import SwiftyJSON
 import PKHUD
 
-class InventoryLocationTVC: UITableViewController {
+class InventoryLocationTVC: UITableViewController, SegueHandler {
 
     // MARK: - Properties
 
@@ -34,14 +34,11 @@ class InventoryLocationTVC: UITableViewController {
     let cellIdentifier = "InventoryLocationTableViewCell"
 
     // Segues
-    let CategorySegue = "ShowLocationCategory"
-    let ItemSegue = "ShowLocationItem"
-    /*
-    enum SegueIdentifiers : String {
-        case categorySegue = "ShowLocationCategory"
-        case itemSegue = "ShowLocationItem"
+    enum SegueIdentifier: String {
+        case showCategory = "ShowLocationCategory"
+        case showItem = "ShowLocationItem"
     }
-    */
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -68,26 +65,25 @@ class InventoryLocationTVC: UITableViewController {
         // Get the selected object.
         guard let selection = selectedLocation else { fatalError("Showing detail, but no selected row?") }
 
-        switch segue.identifier! {
-        case CategorySegue:
-            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else { fatalError("Wrong view controller type") }
+        switch segueIdentifier(for: segue) {
+        case .showCategory:
+            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else {
+                fatalError("Wrong view controller type")
+            }
 
             // Pass the selected object to the new view controller.
             destinationController.location = selection
             destinationController.managedObjectContext = self.managedObjectContext
-            //destinationController.performFetch()
 
-        case ItemSegue:
-            guard let destinationController = segue.destination as? InventoryLocationItemTVC else { fatalError("Wrong view controller type") }
+        case .showItem:
+            guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
+                fatalError("Wrong view controller type")
+            }
 
             // Pass the selected object to the new view controller.
             destinationController.title = selection.name
             destinationController.location = selection
             destinationController.managedObjectContext = self.managedObjectContext
-            //destinationController.performFetch()
-
-        default:
-            fatalError("Unrecognized segue.identifier: \(segue.identifier)")
         }
     }
 
@@ -111,9 +107,11 @@ class InventoryLocationTVC: UITableViewController {
 
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                         fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -178,7 +176,6 @@ extension InventoryLocationTVC {
     }
 
 }
-
 
 // MARK: - TableViewDataSourceDelegate Extension
 extension InventoryLocationTVC: TableViewDataSourceDelegate {

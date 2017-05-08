@@ -13,26 +13,19 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
 
     // MARK: Properties
     var userManager: CurrentUserManager!
-    var managedObjectContext: NSManagedObjectContext? = nil
+    var managedObjectContext: NSManagedObjectContext!
 
     // Segues
     let accountSegue = "showAccount"
 
-    @IBOutlet weak var AccountCell: UITableViewCell!
+    @IBOutlet weak var accountCell: UITableViewCell!
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
         title = "Settings"
         configureAccountCell()
-
-        // CoreData
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -49,18 +42,13 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
         case accountSegue:
-
-            // Get the new view controller.
             guard
                 let destinationNavController = segue.destination as? UINavigationController,
                 let destinationController = destinationNavController.topViewController as? LoginVC
             else {
                 fatalError("Wrong view controller type")
             }
-
-            // Pass dependencies to the new view controller.
             destinationController.userManager = userManager
-
         default:
             break
         }
@@ -96,9 +84,9 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
     /// TODO: pass User?
     func configureAccountCell() {
         if let user = userManager.user {
-            AccountCell.textLabel?.text = "Logout \(user.email)"
+            accountCell.textLabel?.text = "Logout \(user.email)"
         } else {
-            AccountCell.textLabel?.text = "Login"
+            accountCell.textLabel?.text = "Login"
         }
     }
 
@@ -109,11 +97,11 @@ extension SettingsTVC {
 
     func completedLogout(suceeded: Bool) {
         if suceeded {
-            AccountCell.textLabel?.text = "Login"
+            accountCell.textLabel?.text = "Login"
             deleteData()
         } else {
             log.warning("Unable to actually logout")
-            AccountCell.textLabel?.text = "Login"
+            accountCell.textLabel?.text = "Login"
             deleteData()
         }
     }
@@ -164,6 +152,9 @@ extension SettingsTVC {
         } catch {
             log.error("\(#function) FAILED: unable to delete Vendors")
         }
+
+        let result = managedObjectContext.saveOrRollback()
+        log.info("Save result: \(result)")
     }
 
 }

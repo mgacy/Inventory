@@ -17,7 +17,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
     private let sessionManager: Alamofire.SessionManager = {
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = Alamofire.SessionManager.defaultHTTPHeaders
-        
+
         return Alamofire.SessionManager(configuration: configuration)
     }()
 
@@ -87,7 +87,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
     }
 
     // MARK: - RequestAdapter
-    
+
     public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
         // TODO: include call to requestToken if accessToken == nil?
         if let accessToken = accessToken, let url = urlRequest.url, url.absoluteString.hasPrefix(baseURLString) {
@@ -98,7 +98,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
         return urlRequest
     }
-    
+
     // MARK: - RequestRetrier
 
     func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
@@ -190,4 +190,3 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
     }
 
 }
-

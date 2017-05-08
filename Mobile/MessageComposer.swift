@@ -15,8 +15,8 @@ import MessageUI
 class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
 
     /// TODO: this really how I want to do this, or should I just move this into the controller?
-    var completionHandler: ((_ succeeded: Bool) -> Void?)? = nil
-    //var completionHandler: ((_ result: MessageComposeResult) -> Void?)? = nil
+    var completionHandler: ((_ succeeded: Bool) -> Void?)?
+    //var completionHandler: ((_ result: MessageComposeResult) -> Void?)?
 
     /*
     init(completionHandler: @escaping (Bool) -> Void?) {
@@ -74,7 +74,7 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
                 completionHandler(false)
             }
         default:
-            break;
+            break
         }
     }
 

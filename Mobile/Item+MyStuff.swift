@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-extension Item: SyncableItem {
+extension Item: Syncable {
 
     // MARK: - Lifecycle
 
@@ -19,7 +19,10 @@ extension Item: SyncableItem {
         self.update(context: context, withJSON: json)
     }
 
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+    public func update(context: NSManagedObjectContext, withJSON json: Any) {
+        guard let json = json as? JSON else {
+            log.error("\(#function) FAILED : SwiftyJSON"); return
+        }
 
         // Properties
         if let remoteID = json["id"].int32 {
@@ -36,7 +39,7 @@ extension Item: SyncableItem {
         }
 
         /* 
-         NOTE - not implemented:
+         NOTE: not implemented:
          * active
          * shelfLife
          * sku
@@ -52,7 +55,7 @@ extension Item: SyncableItem {
             if let existingCategory = context.fetchWithRemoteID(ItemCategory.self, withID: categoryID) {
                 self.category = existingCategory
             } else {
-                // TODO: should we really create a new ItemCategory if we don't have all its attributes?
+                /// TODO: should we really create a new ItemCategory if we don't have all its attributes?
                 let newCategory = context.insertObject(ItemCategory.self)
                 newCategory.remoteID = categoryID
                 if let categoryName = json["category"]["name"].string {
@@ -70,7 +73,7 @@ extension Item: SyncableItem {
             if let vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID) {
                 self.vendor = vendor
             } else {
-                // TODO: should we really create a new Vendor if we don't have all its attributes?
+                /// TODO: should we really create a new Vendor if we don't have all its attributes?
                 let newVendor = context.insertObject(Vendor.self)
                 newVendor.remoteID = vendorID
                 if let vendorName = json["vendor"]["name"].string {
@@ -81,10 +84,10 @@ extension Item: SyncableItem {
             }
         }
 
-        // NOTE - Unit relationships are handled by updateUnits to minimize fetch requests on sync
-        /* 
-         TODO - should we do the same with other relationships? Here, we expect to have all the
-         info necessary to create new objects if they don't already exist (whereas we do not in
+        /// NOTE: Unit relationships are handled by updateUnits to minimize fetch requests on sync
+        /// TODO: should we do the same with other relationships?
+        /*
+         Here, we expect to have all the info necessary to create new objects if they don't already exist (whereas we do not in
          the case of the various Units
          */
 
@@ -98,29 +101,25 @@ extension Item: SyncableItem {
     public func updateUnits(withJSON json: JSON, unitDict: [Int32: Unit]) {
         if let
             inventoryUnitID = json["inventory_unit"]["id"].int32,
-            inventoryUnitID != self.inventoryUnit?.remoteID
-        {
+            inventoryUnitID != self.inventoryUnit?.remoteID {
             self.inventoryUnit = unitDict[inventoryUnitID]
         }
 
         if let
             purchaseUnitID = json["purchase_unit"]["id"].int32,
-            purchaseUnitID != self.purchaseUnit?.remoteID
-        {
+            purchaseUnitID != self.purchaseUnit?.remoteID {
             self.purchaseUnit = unitDict[purchaseUnitID]
         }
 
         if let
             purchaseSubUnitID = json["purchase_sub_unit"]["id"].int32,
-            purchaseSubUnitID != self.purchaseSubUnit?.remoteID
-        {
+            purchaseSubUnitID != self.purchaseSubUnit?.remoteID {
             self.purchaseSubUnit = unitDict[purchaseSubUnitID]
         }
 
         if let
             subUnitID = json["sub_unit"]["id"].int32,
-            subUnitID != self.subUnit?.remoteID
-        {
+            subUnitID != self.subUnit?.remoteID {
             self.subUnit = unitDict[subUnitID]
         }
     }
@@ -134,5 +133,5 @@ extension Item {
     var packDisplay: String {
         return "\(self.packSize) x \(self.subSize) \(self.subUnit?.abbreviation ?? " ")"
     }
-    
+
 }

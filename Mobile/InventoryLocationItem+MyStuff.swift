@@ -53,6 +53,7 @@ extension InventoryLocationItem {
             self.item = item
         } else {
             /// TODO: init should fail since self.item is required
+            // swiftlint:disable:next line_length
             log.error("\(#function) FAILED : unable to fetch InventoryItem \(itemID) for InventoryLocationCategory \(category)")
         }
     }

@@ -10,14 +10,12 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-
 @objc public enum InvoiceStatus: Int16 {
     case notReceived    = 0
     case outOfStock     = 1
     case received       = 2
     case substitute     = 3
 }
-
 
 extension Invoice {
 

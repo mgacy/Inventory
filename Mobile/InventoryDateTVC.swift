@@ -12,7 +12,7 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-class InventoryDateTVC: UITableViewController, RootSectionViewController {
+class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueHandler {
 
     // MARK: Properties
 
@@ -21,7 +21,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     var userManager: CurrentUserManager!
 
     // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext? = nil
+    var managedObjectContext: NSManagedObjectContext!
     //let filter: NSPredicate? = nil
     //let cacheName: String? = "Master"
     //let objectsAsFaults = false
@@ -31,17 +31,11 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     let cellIdentifier = "InventoryDateTableViewCell"
 
     // Segues
-    let NewItemSegue = "FetchExistingInventory"
-    let ExistingItemSegue = "ShowLocationCategory"
-    let SettingsSegue = "ShowSettings"
-    /*
-    /// TODO: make enum?
-    enum SegueIdentifiers : String {
-        case newItemSegue = "FetchExistingInventory"
-        case existingItemSegue = "ShowLocationCategory"
-        case settingsSegue = "ShowSettings"
+    enum SegueIdentifier: String {
+        case showNewItem = "FetchExistingInventory"
+        case showExistingItem = "ShowLocationCategory"
+        case showSettings = "ShowSettings"
     }
-    */
 
     /// TODO: provide interface to control these
     // let inventoryTypeID = 1
@@ -60,7 +54,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         title = "Inventories"
 
         // Add refresh control
-        self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)), for: UIControlEvents.valueChanged)
+        self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)),
+                                       for: UIControlEvents.valueChanged)
 
         setupTableView()
     }
@@ -79,8 +74,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
-        case NewItemSegue:
+        switch segueIdentifier(for: segue) {
+        case .showNewItem:
             guard let controller = segue.destination as? InventoryLocationTVC else {
                 fatalError("Wrong view controller type")
             }
@@ -92,7 +87,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             controller.inventory = selection
             controller.managedObjectContext = self.managedObjectContext
 
-        case ExistingItemSegue:
+        case .showExistingItem:
             guard let controller = segue.destination as? InventoryLocationCategoryTVC else {
                 fatalError("Wrong view controller type")
             }
@@ -112,10 +107,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
             controller.location = defaultLocation
             controller.managedObjectContext = self.managedObjectContext
 
-        case SettingsSegue:
+        case .showSettings:
             log.info("Showing Settings ...")
-        default:
-            fatalError("Unrecognized segue.identifier: \(segue.identifier)")
         }
     }
 
@@ -135,9 +128,11 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = InventoryDateDataSource(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                              fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -183,7 +178,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
 
         case false:
             log.info("LOAD NEW selectedInventory from disk ...")
-            performSegue(withIdentifier: NewItemSegue, sender: self)
+            performSegue(withIdentifier: .showNewItem)
         }
 
         tableView.deselectRow(at: indexPath, animated: true)
@@ -192,28 +187,14 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
     // MARK: - User Actions
 
     func refreshTable(_ refreshControl: UIRefreshControl) {
-        guard let managedObjectContext = managedObjectContext else { return }
         guard let storeID = userManager.storeID else { return }
 
-        /// TODO: SyncManager?
         //HUD.show(.progress)
-        //_ = SyncManager(storeID: storeID, completionHandler: completedSync)
+        _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
 
-        // Reload data and update the table view's data source
-        APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: {(json: JSON?, error: Error?) in
-            guard error == nil, let json = json else {
-                HUD.flash(.error, delay: 1.0); return
-            }
-            do {
-                try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
-            } catch {
-                log.error("Unable to sync Inventories")
-            }
-
-        })
-
-        self.tableView.reloadData()
-        refreshControl.endRefreshing()
+        /// TODO: the following should happen in completedSync / completedGetListOfInventories
+        //tableView.reloadData()
+        //refreshControl.endRefreshing()
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
@@ -225,27 +206,10 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController {
         }
 
         // Get new Inventory.
+        //refreshControl?.beginRefreshing()
         HUD.show(.progress)
         APIManager.sharedInstance.getNewInventory(
             isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
-    }
-
-    /// TODO: Remove
-    @IBAction func resetTapped(_ sender: AnyObject) {
-        guard let managedObjectContext = managedObjectContext else { return }
-        guard let storeID = userManager.storeID else { return }
-
-        HUD.show(.progress)
-
-        let fetchPredicate = NSPredicate(format: "uploaded == %@", true as CVarArg)
-        do {
-            try managedObjectContext.deleteEntities(Inventory.self, filter: fetchPredicate)
-        } catch {
-            log.error("Unable to delete Inventories")
-        }
-
-        // Get list of Inventories from server
-        APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
     }
 
 }
@@ -266,12 +230,26 @@ extension InventoryDateTVC: TableViewDataSourceDelegate {
 
 }
 
+// MARK: - CustomDeletionDataSourceDelegate Extension (supports property-dependent row deletion)
+extension InventoryDateTVC: CustomDeletionDataSourceDelegate {
+
+    func canEdit(_ inventory: Inventory) -> Bool {
+        switch inventory.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+
+}
+
 // MARK: - Completion Handlers + Sync
 extension InventoryDateTVC {
 
     // MARK: - Completion Handlers
 
-    func completedGetListOfInventories(json: JSON?, error: Error?) -> Void {
+    func completedGetListOfInventories(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -280,25 +258,19 @@ extension InventoryDateTVC {
             HUD.hide(); return
         }
 
-        HUD.hide()
-
-        for (_, item) in json {
-            guard let inventoryID = item["id"].int32 else {
-                /// TODO: break or continue?
-                log.warning("Unable to get inventoryID from \(item)"); break
-            }
-
-            if managedObjectContext?.fetchWithRemoteID(Inventory.self, withID: inventoryID) == nil {
-                _ = Inventory(context: self.managedObjectContext!, json: item, uploaded: true)
-            }
+        do {
+            try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
+        } catch {
+            log.error("Unable to sync Inventories")
+            HUD.flash(.error, delay: 1.0)
         }
-
-        // Save the context.
-        saveContext()
-        //HUD.hide()
+        refreshControl?.endRefreshing()
+        HUD.hide()
+        managedObjectContext.performSaveOrRollback()
+        tableView.reloadData()
     }
 
-    func completedGetExistingInventory(json: JSON?, error: Error?) -> Void {
+    func completedGetExistingInventory(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -312,18 +284,18 @@ extension InventoryDateTVC {
         }
 
         // Update selected Inventory with full JSON from server.
-        selection.updateExisting(context: self.managedObjectContext!, json: json)
+        selection.updateExisting(context: managedObjectContext!, json: json)
 
         // Save the context.
-        saveContext()
+        managedObjectContext!.performSaveOrRollback()
 
         //tableView.activityIndicatorView.stopAnimating()
         HUD.hide()
 
-        performSegue(withIdentifier: ExistingItemSegue, sender: self)
+        performSegue(withIdentifier: .showExistingItem)
     }
 
-    func completedGetNewInventory(json: JSON?, error: Error?) -> Void {
+    func completedGetNewInventory(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -338,9 +310,9 @@ extension InventoryDateTVC {
         selectedInventory = Inventory(context: self.managedObjectContext!, json: json, uploaded: false)
 
         // Save the context.
-        saveContext()
+        managedObjectContext!.performSaveOrRollback()
 
-        performSegue(withIdentifier: NewItemSegue, sender: self)
+        performSegue(withIdentifier: .showNewItem)
     }
 
     func completedSync(_ succeeded: Bool, _ error: Error?) {
@@ -353,7 +325,8 @@ extension InventoryDateTVC {
 
             // Get list of Inventories from server
             // log.info("Fetching existing Inventories from server ...")
-            APIManager.sharedInstance.getListOfInventories(storeID: storeID, completion: self.completedGetListOfInventories)
+            APIManager.sharedInstance.getListOfInventories(storeID: storeID,
+                                                           completion: self.completedGetListOfInventories)
 
         } else {
             // if let error = error { // present more detailed error ...
@@ -365,21 +338,16 @@ extension InventoryDateTVC {
     // MARK: - Sync
 
     func deleteChildren(parent: Inventory) {
-        guard let managedObjectContext = managedObjectContext else { return }
         let fetchPredicate = NSPredicate(format: "inventory == %@", parent)
         do {
             try managedObjectContext.deleteEntities(InventoryLocation.self, filter: fetchPredicate)
             try managedObjectContext.deleteEntities(InventoryItem.self, filter: fetchPredicate)
 
-            // Perform Fetch
-            // TODO: implement this (?)
-            /*
-            let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-            let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-            request.sortDescriptors = [sortDescriptor]
-            dataSource.reconfigureFetchRequest(request)
-            */
-            //try self.fetchedResultsController.performFetch()
+            /// TODO: perform fetch again?
+            //let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
+            //let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+            //request.sortDescriptors = [sortDescriptor]
+            //dataSource.reconfigureFetchRequest(request)
 
             // Reload Table View
             tableView.reloadData()
@@ -392,33 +360,11 @@ extension InventoryDateTVC {
 
 }
 
-// MARK: - Type-Specific NSFetchedResultsController Extension
-extension InventoryDateTVC {
-
-    func saveContext() {
-        do {
-            try managedObjectContext?.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            log.error("Unresolved error \(nserror), \(nserror.userInfo)")
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-    }
-
-}
-
-// MARK: - UITableViewDataSource Extension
-
-// MARK: - UITableViewDelegate Extension
-
 // MARK: - For Demo
 extension InventoryDateTVC {
 
     func changeSelectionForDemo(selection: Inventory, defaultRemoteID: Int = 19) -> Int? {
         guard Int(selection.remoteID) == 0 else { return nil }
-        guard let managedObjectContext = managedObjectContext else { return nil }
 
         log.info("Intercepting selection for the purpose of demo ...")
 
@@ -439,49 +385,6 @@ extension InventoryDateTVC {
         } catch {
             log.error("\(#function) FAILED: error with request: \(error)")
             return nil
-        }
-    }
-
-}
-
-// MARK: - Add support for property-dependent row deletion
-
-// Define protocol adding new method to TableViewDataSourceDelegate protocol
-protocol InventoryDateDelegate: TableViewDataSourceDelegate {
-    func canEdit(_ object: Object) -> Bool
-}
-
-// Subclass `TableViewDataSource` so we can override `.tableView(:canEditRowAt:)` and define a second delegate property which we can access (since `delegate` is `fileprivate`)
-class InventoryDateDataSource<Delegate: InventoryDateDelegate>: TableViewDataSource<Delegate> {
-
-    typealias Object = Delegate.Object
-    typealias Cell = Delegate.Cell
-
-    fileprivate weak var customDelegate: Delegate!
-
-    // NOTE - this is required to supply necessary info (specifically Object)
-    required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Object>, delegate: Delegate) {
-        super.init(tableView: tableView, cellIdentifier: cellIdentifier, fetchedResultsController: fetchedResultsController, delegate: delegate)
-
-        self.customDelegate = delegate
-    }
-
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        let object = objectAtIndexPath(indexPath)
-        return customDelegate.canEdit(object)
-    }
-
-}
-
-// MARK: - InventoryDateDelegate Extension
-extension InventoryDateTVC: InventoryDateDelegate {
-
-    func canEdit(_ inventory: Inventory) -> Bool {
-        switch inventory.uploaded {
-        case true:
-            return false
-        case false:
-            return true
         }
     }
 

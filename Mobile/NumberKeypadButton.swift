@@ -11,7 +11,7 @@
 import UIKit
 
 class NumberKeypadButton: UIButton {
-    
+
     /*
     // Override to support programmatic creation.
     override init(frame: CGRect) {
@@ -21,14 +21,14 @@ class NumberKeypadButton: UIButton {
         backgroundColor = UIColor.blue
     }
     */
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
+
         backgroundColor = ColorPalette.lightGrayColor
         setTitleColor(UIColor.white, for: .normal)
         //setTitleColor(UIColor.green, for: .highlighted)
         titleLabel?.font = UIFont.systemFont(ofSize: 22.0)
     }
-    
+
 }

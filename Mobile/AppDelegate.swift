@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
+        setupSwiftyBeaverLogging()
+
         /// TODO: set up CoreDataStack
 
         // Check if we have already preloaded data
@@ -29,8 +31,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let isPreloaded = defaults.bool(forKey: "isPreloaded")
         if !isPreloaded {
             log.info("Preloading data ...")
-            /// TODO: instantiate importer with context rather than using singleton
-            CoreDataImporter.shared.preloadData()
+            let importer = CoreDataImporter()
+            guard importer.preloadData(in: persistentContainer.viewContext) == true else {
+                /// TODO: tell user why we are crashing?
+                fatalError("Unable to import Unit data")
+            }
             defaults.set(true, forKey: "isPreloaded")
         }
 
@@ -40,73 +45,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         HUD.dimsBackground = false
         HUD.allowsInteraction = false
 
-        /*
-        //enum RootControllers: String {
-        //    case InventoryRoot: "InventoryDateTVC"
-        //    case OrderRoot: "OrderDateTVC"
-        //    case InvoiceRoot: "InvoiceDateTVC"
-        //    case SettingsRoot: "SettingsTVC"
-        //}
-
-        let rootInventoryController = storyboard.instantiateViewController(withIdentifier: "InventoryDateTVC")
-         let rootInventoryNavController = UINavigationController(rootViewController: rootInventoryController)
-
-        let rootOrderController = storyboard.instantiateViewController(withIdentifier: "OrderDateTVC")
-        let rootOrderNavController = UINavigationController(rootViewController: rootOrderController)
-
-        let rootInvoiceController = storyboard.instantiateViewController(withIdentifier: "InvoiceDateTVC")
-        let rootInvoiceNavController = UINavigationController(rootViewController: rootInvoiceController)
-
-        let rootSettingsController = storyboard.instantiateViewController(withIdentifier: "SettingsTVC")
-        let rootSettingsNavController = UINavigationController(rootViewController: rootSettingsController)
-
-        let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [
-            rootInventoryNavController, rootOrderNavController,
-            rootInvoiceNavController, rootSettingsNavController
-        ]
-        */
-
-        let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as! UITabBarController
-
-        for child in tabBarController.viewControllers ?? [] {
-            guard let navController = child as? UINavigationController
-                else { fatalError("wrong view controller type") }
-            guard let vc = navController.topViewController as? RootSectionViewController
-                else { fatalError("wrong view controller type") }
-
-            // Inject dependencies
-            vc.managedObjectContext = persistentContainer.viewContext
-            vc.userManager = userManager
-        }
-
         /// TODO: Should we use a failable initializier with CurrentUserManager?
         //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
         // Check if we already have user + credentials
         if userManager.user != nil {
-            //print("AppDelegate: has User")
-            let inventoryNavController = tabBarController.viewControllers?[0] as! UINavigationController
-            let controller = inventoryNavController.topViewController as! InventoryDateTVC
-
-            // Sync
-            HUD.show(.progress)
-            _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!, completionHandler: controller.completedSync)
-
-            self.window?.rootViewController = tabBarController
+            prepareTabBarController()
         } else {
-            //print("AppDelegate: missing User")
-            let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as! InitialLoginVC
+            // swiftlint:disable:next line_length
+            guard let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
+                fatalError("Unable to instantiate view controller")
+            }
 
             // Inject dependencies
+            loginController.managedObjectContext = persistentContainer.viewContext
             loginController.userManager = userManager
-            // Should we really be changing the root view controller like this?
             self.window?.rootViewController = loginController
+            //self.window?.makeKeyAndVisible()
         }
 
         //self.window?.makeKeyAndVisible()
-        setupSwiftyBeaverLogging()
-
         return true
     }
 
@@ -160,6 +118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          error conditions that could cause the creation of the store to fail.
         */
         let container = NSPersistentContainer(name: "Mobile")
+        // swiftlint:disable:next unused_closure_parameter
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
@@ -221,5 +180,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.addDestination(platform)
     }
 
-}
+    // func prepareTabBarController(context: NSManagedObjectContext, userManager: CurrentUserManager) {}
 
+    func prepareTabBarController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        // swiftlint:disable:next line_length
+        guard let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController else {
+            fatalError("Unable to instantiate tab bar controller")
+        }
+
+        // Fix dark shadow in nav bar on segue
+        tabBarController.view.backgroundColor = UIColor.white
+        //tabBarController.managedObjectContext = persistentContainer.viewContext
+        //tabBarController.userManager = userManager
+
+        for child in tabBarController.viewControllers ?? [] {
+            guard let navController = child as? UINavigationController
+                else { fatalError("wrong view controller type") }
+            guard let vc = navController.topViewController as? RootSectionViewController
+                else { fatalError("wrong view controller type") }
+
+            // Inject dependencies
+            vc.managedObjectContext = persistentContainer.viewContext
+            vc.userManager = userManager
+        }
+
+        // Sync
+        guard
+            let inventoryNavController = tabBarController.viewControllers?[0] as? UINavigationController,
+            let controller = inventoryNavController.topViewController as? InventoryDateTVC else {
+                fatalError("wrong view controller type")
+        }
+        HUD.show(.progress)
+        _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!,
+                        completionHandler: controller.completedSync)
+
+        self.window?.rootViewController = tabBarController
+        //self.window?.makeKeyAndVisible()
+    }
+
+}
