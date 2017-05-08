@@ -134,16 +134,16 @@ class CurrentUserManager {
                 return completion(BackendError.myError(error: "Unable to get JSON from response."))
             }
 
+            /// TODO: move parsing out somewhere else?
             let user: [String: JSON] = json["user"].dictionaryValue
             let userID: Int = user["id"]!.intValue
-            let stores: [JSON] = user["stores"]!.arrayValue
 
-            /// TODO: parse user.default_store instead use using the index-based method below
+            //let stores: [JSON] = user["stores"]!.arrayValue
+            //let defaultStore = stores[0]
+            //let defaultStoreID: Int = defaultStore["id"].intValue
+
             //let defaultStore = user["default_store"]
-
-            /// TODO: can we safely assume all users will have at least one store?
-            let defaultStore = stores[0]
-            let defaultStoreID: Int = defaultStore["id"].intValue
+            let defaultStoreID: Int = json["user"]["default_store"]["id"].intValue
 
             self.email = email
             self.password = password
