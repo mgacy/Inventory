@@ -98,6 +98,11 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewCont
                 fatalError("Wrong view controller type")
             }
 
+            //let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+            //appDelegate.window?.rootViewController = tabBarController
+            //appDelegate.window?.makeKeyAndVisible()
+            //tabBarController.view.backgroundColor = UIColor.white
+
             // Inject dependencies
             controller.managedObjectContext = managedObjectContext
             controller.userManager = userManager
@@ -140,6 +145,17 @@ extension InitialLoginVC {
         log.verbose("Logged in")
         // TODO: change so we only createUser() on success
         performSegue(withIdentifier: .showMain)
+    }
+
+}
+
+/// TODO: make extension of PKHUD
+extension InitialLoginVC {
+
+    func showError(title: String, subtitle: String?, delay: Double = 2.0) {
+        PKHUD.sharedHUD.show()
+        PKHUD.sharedHUD.contentView = PKHUDErrorView(title: title, subtitle: subtitle)
+        PKHUD.sharedHUD.hide(afterDelay: delay)
     }
 
 }
