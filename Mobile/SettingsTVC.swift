@@ -24,16 +24,8 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
         title = "Settings"
         configureAccountCell()
-
-        // CoreData
-        // swiftlint:disable:next force_cast
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
 
     override func viewWillAppear(_ animated: Bool) {
