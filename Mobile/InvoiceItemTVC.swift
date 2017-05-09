@@ -112,7 +112,7 @@ class InvoiceItemTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected InvoiceItem: \(selectedObject)")
+        log.verbose("Selected InvoiceItem: \(String(describing: selectedObject))")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
