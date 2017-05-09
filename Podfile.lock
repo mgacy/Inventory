@@ -1,22 +1,22 @@
 PODS:
   - Alamofire (4.2.0)
   - KeychainAccess (3.0.2)
-  - PKHUD (4.0.0)
-  - SwiftyBeaver (1.2.1)
+  - PKHUD (4.2.1)
+  - SwiftyBeaver (1.2.2)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
   - Alamofire (~> 4.2)
   - KeychainAccess
-  - PKHUD (~> 4.0)
+  - PKHUD (~> 4.2)
   - SwiftyBeaver
   - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
   KeychainAccess: a986406022dfc7c634c691ad3bec670cc6a32002
-  PKHUD: 2bb45c936bb8afa39f3cd33ec14e8cc89f624255
-  SwiftyBeaver: f29dc64b0ae619d73ee94fd04bd532f895765208
+  PKHUD: 957ce2a68b3c97a51839b30216120c1dbc0c3a78
+  SwiftyBeaver: 90a39e3dc5136b7285f2e4c870b107e3933b8b84
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
 PODFILE CHECKSUM: 950666d161e4ddce305270016f93056d09e30270
