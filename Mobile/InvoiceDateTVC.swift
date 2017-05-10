@@ -108,8 +108,8 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
                                              sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                              fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                         fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -177,6 +177,15 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
 // MARK: - TableViewDataSourceDelegate Extension
 extension InvoiceDateTVC: TableViewDataSourceDelegate {
 
+    func canEdit(_ collection: InvoiceCollection) -> Bool {
+        switch collection.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+
     func configure(_ cell: UITableViewCell, for collection: InvoiceCollection) {
         cell.textLabel?.text = collection.date
 
@@ -185,20 +194,6 @@ extension InvoiceDateTVC: TableViewDataSourceDelegate {
             cell.textLabel?.textColor = UIColor.black
         case false:
             cell.textLabel?.textColor = ColorPalette.yellowColor
-        }
-    }
-
-}
-
-// MARK: - CustomDeletionDataSourceDelegate Extension (supports property-dependent row deletion)
-extension InvoiceDateTVC: CustomDeletionDataSourceDelegate {
-
-    func canEdit(_ collection: InvoiceCollection) -> Bool {
-        switch collection.uploaded {
-        case true:
-            return false
-        case false:
-            return true
         }
     }
 

@@ -131,8 +131,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
                                              sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                              fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                         fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -217,6 +217,15 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
 // MARK: - TableViewDataSourceDelegate Extension
 extension InventoryDateTVC: TableViewDataSourceDelegate {
 
+    func canEdit(_ inventory: Inventory) -> Bool {
+        switch inventory.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+
     func configure(_ cell: UITableViewCell, for inventory: Inventory) {
         cell.textLabel?.text = inventory.date
 
@@ -225,20 +234,6 @@ extension InventoryDateTVC: TableViewDataSourceDelegate {
             cell.textLabel?.textColor = UIColor.black
         case false:
             cell.textLabel?.textColor = ColorPalette.yellowColor
-        }
-    }
-
-}
-
-// MARK: - CustomDeletionDataSourceDelegate Extension (supports property-dependent row deletion)
-extension InventoryDateTVC: CustomDeletionDataSourceDelegate {
-
-    func canEdit(_ inventory: Inventory) -> Bool {
-        switch inventory.uploaded {
-        case true:
-            return false
-        case false:
-            return true
         }
     }
 

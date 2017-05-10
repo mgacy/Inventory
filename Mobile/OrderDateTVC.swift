@@ -109,8 +109,8 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
                                              sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                              fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                         fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -186,6 +186,15 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 // MARK: - TableViewDataSourceDelegate Extension
 extension OrderDateTVC: TableViewDataSourceDelegate {
 
+    func canEdit(_ collection: OrderCollection) -> Bool {
+        switch collection.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+
     func configure(_ cell: UITableViewCell, for collection: OrderCollection) {
         cell.textLabel?.text = collection.date
 
@@ -194,20 +203,6 @@ extension OrderDateTVC: TableViewDataSourceDelegate {
             cell.textLabel?.textColor = UIColor.black
         case false:
             cell.textLabel?.textColor = ColorPalette.yellowColor
-        }
-    }
-
-}
-
-// MARK: - CustomDeletionDataSourceDelegate Extension (supports property-dependent row deletion)
-extension OrderDateTVC: CustomDeletionDataSourceDelegate {
-
-    func canEdit(_ collection: OrderCollection) -> Bool {
-        switch collection.uploaded {
-        case true:
-            return false
-        case false:
-            return true
         }
     }
 
