@@ -588,6 +588,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="messageButton" destination="nuB-um-LQm" id="JyW-Bk-S4K"/>
                         <segue destination="e6G-Uh-Dbm" kind="show" identifier="showOrderKeypad" id="mde-XZ-uGW"/>
                     </connections>
                 </tableViewController>

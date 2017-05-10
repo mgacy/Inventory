@@ -35,6 +35,9 @@ class OrderItemTVC: UITableViewController {
     // Segues
     let segueIdentifier = "showOrderKeypad"
 
+    // MARK: - Display Outlets
+    @IBOutlet weak var messageButton: UIBarButtonItem!
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
