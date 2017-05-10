@@ -61,10 +61,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             loginController.managedObjectContext = persistentContainer.viewContext
             loginController.userManager = userManager
             self.window?.rootViewController = loginController
-            //self.window?.makeKeyAndVisible()
+            self.window?.makeKeyAndVisible()
         }
-
-        //self.window?.makeKeyAndVisible()
         return true
     }
 
@@ -204,6 +202,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             vc.managedObjectContext = persistentContainer.viewContext
             vc.userManager = userManager
         }
+        self.window?.rootViewController = tabBarController
+        self.window?.makeKeyAndVisible()
 
         // Sync
         guard
@@ -214,9 +214,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         HUD.show(.progress)
         _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!,
                         completionHandler: controller.completedSync)
-
-        self.window?.rootViewController = tabBarController
-        //self.window?.makeKeyAndVisible()
     }
 
 }
