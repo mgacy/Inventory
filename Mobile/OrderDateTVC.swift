@@ -214,11 +214,13 @@ extension OrderDateTVC {
     // MARK: Completion Handlers
 
     func completedGetListOfOrderCollections(json: JSON?, error: Error?) {
+        refreshControl?.endRefreshing()
         guard error == nil else {
+            //if error?._code == NSURLErrorTimedOut {}
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            log.error("\(#function) FAILED : unable to get JSON")
+            log.warning("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
 
@@ -228,8 +230,6 @@ extension OrderDateTVC {
             log.error("Unable to sync OrderCollections")
             HUD.flash(.error, delay: 1.0)
         }
-
-        refreshControl?.endRefreshing()
         HUD.hide()
         managedObjectContext.performSaveOrRollback()
         tableView.reloadData()

@@ -31,7 +31,10 @@ class APIManager {
     // MARK: Lifecycle
 
     init() {
-        sessionManager = Alamofire.SessionManager.default
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 8 // seconds
+        configuration.timeoutIntervalForResource = 8
+        sessionManager = Alamofire.SessionManager(configuration: configuration)
     }
 
     func configSession(_ authHandler: AuthenticationHandler?) {

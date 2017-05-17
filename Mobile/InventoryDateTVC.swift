@@ -245,7 +245,9 @@ extension InventoryDateTVC {
     // MARK: - Completion Handlers
 
     func completedGetListOfInventories(json: JSON?, error: Error?) {
+        refreshControl?.endRefreshing()
         guard error == nil else {
+            //if error?._code == NSURLErrorTimedOut {}
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -259,7 +261,6 @@ extension InventoryDateTVC {
             log.error("Unable to sync Inventories")
             HUD.flash(.error, delay: 1.0)
         }
-        refreshControl?.endRefreshing()
         HUD.hide()
         managedObjectContext.performSaveOrRollback()
         tableView.reloadData()
