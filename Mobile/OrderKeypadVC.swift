@@ -88,21 +88,18 @@ class OrderKeypadVC: UIViewController {
         //log.verbose("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
         keypad.pushDigit(value: number)
-
         update()
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
         //log.verbose("Tapped 'clear'")
         keypad.popItem()
-
         update()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
         //log.verbose("Tapped '.'")
         keypad.pushDecimal()
-
         update()
     }
 
@@ -149,8 +146,6 @@ class OrderKeypadVC: UIViewController {
             update(newItem: true)
         } else {
             /// TODO: cleanup?
-
-            // Pop view
             navigationController!.popViewController(animated: true)
         }
     }
@@ -161,8 +156,6 @@ class OrderKeypadVC: UIViewController {
             update(newItem: true)
         } else {
             /// TODO: cleanup?
-
-            // Pop view
             navigationController!.popViewController(animated: true)
         }
     }
@@ -180,6 +173,10 @@ class OrderKeypadVC: UIViewController {
             output = keypad.outputB()
 
         case false:
+            guard let managedObjectContext = managedObjectContext else {
+                fatalError("Unable to get managedObjectContext")
+            }
+
             // Update model with output of keypad
             output = keypad.outputB()
 
@@ -188,18 +185,7 @@ class OrderKeypadVC: UIViewController {
             } else {
                 currentItem.quantity = nil
             }
-
-            // Save the context.
-            let context = self.managedObjectContext!
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                log.error("Unresolved error \(nserror), \(nserror.userInfo)")
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
+            managedObjectContext.performSaveOrRollback()
         }
 
         updateKeypadButtons(item: currentItem)
