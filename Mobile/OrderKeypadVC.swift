@@ -85,20 +85,17 @@ class OrderKeypadVC: UIViewController {
 
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
-        //log.verbose("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
         keypad.pushDigit(value: number)
         update()
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
-        //log.verbose("Tapped 'clear'")
         keypad.popItem()
         update()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        //log.verbose("Tapped '.'")
         keypad.pushDecimal()
         update()
     }

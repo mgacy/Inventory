@@ -18,6 +18,7 @@ class Keypad {
 
     // MARK: - Lifecycle
 
+    /// TODO: pass NumberFormatter?
     init() {
         self.isEditingNumber = false
         self.currentNumber = ""
@@ -42,9 +43,6 @@ class Keypad {
             } else {
                 isEditingNumber = true
             }
-
-            // TESTING
-            updateDisplay(button: "clear")
         }
     }
 
@@ -59,9 +57,6 @@ class Keypad {
         } else if currentNumber.range(of: ".") == nil {
             currentNumber += "."
         }
-
-        // TESTING
-        updateDisplay(button: ".")
     }
 
     func pushDigit(value: Int) {
@@ -74,9 +69,6 @@ class Keypad {
             currentNumber = "\(value)"
             isEditingNumber = true
         }
-
-        // TESTING
-        updateDisplay(button: String(value))
     }
 
     // MARK: - Output
@@ -128,11 +120,6 @@ class Keypad {
         return (total: total, display: display)
     }
 
-    // MARK: - Testing
-
-    func updateDisplay(button: String) {
-        log.verbose("Pressed '\(button)' - currentNumber: \(currentNumber)")
-    }
 }
 
 class KeypadWithHistory: Keypad {
@@ -175,9 +162,6 @@ class KeypadWithHistory: Keypad {
                 isEditingNumber = true
             }
         }
-
-        // TESTING
-        updateDisplay(button: "clear")
     }
 
     func pushOperator() {
@@ -195,9 +179,6 @@ class KeypadWithHistory: Keypad {
             currentNumber = ""
             isEditingNumber = false
         }
-
-        // TESTING
-        updateDisplay(button: "+")
     }
 
     // MARK: - B
@@ -295,9 +276,4 @@ class KeypadWithHistory: Keypad {
         return (history: history, total: total, display: display)
     }
 
-    // MARK: - Testing
-
-    override func updateDisplay(button: String) {
-        log.verbose("Pressed '\(button)' - stack: '\(stack.description)' - currentNumber: '\(currentNumber)'")
-    }
 }
