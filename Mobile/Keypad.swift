@@ -33,7 +33,6 @@ class Keypad {
     // MARK: - Stack manipulation
 
     func popItem() {
-        // Try to clear from currentNumber
         if !currentNumber.isEmpty {
             currentNumber.remove(at: currentNumber.index(before: currentNumber.endIndex))
 
@@ -229,10 +228,7 @@ class KeypadWithHistory: Keypad {
             case false:
                 var total = 0.0
                 for item in stack {
-                    /*
-                     TODO - replace `evaluateNumber()` with .string(from:) and use
-                     that here?
-                     */
+                    /// TODO: replace `evaluateNumber()` with `.string(from:)` and use that here?
                     if let number = Double(item) {
                         total += number
                     }
