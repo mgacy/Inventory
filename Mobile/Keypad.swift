@@ -16,6 +16,14 @@ class Keypad {
     var isEditingNumber: Bool
     var currentNumber: String
 
+    var display: String {
+        if let total = evaluateNumber() {
+            return formatTotal(total)
+        } else {
+            return "0"
+        }
+    }
+
     // MARK: - Lifecycle
 
     /// TODO: pass NumberFormatter?
@@ -101,22 +109,6 @@ class Keypad {
         } else {
             return ""
         }
-    }
-
-    func outputB() -> (total: Double?, display: String) {
-
-        // Result
-        let total = evaluateNumber()
-
-        // Display
-        var display = ""
-        if total != nil {
-            display = formatTotal(total!)
-        } else {
-            display = "0"
-        }
-
-        return (total: total, display: display)
     }
 
 }

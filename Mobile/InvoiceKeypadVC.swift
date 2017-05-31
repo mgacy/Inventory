@@ -62,7 +62,6 @@ class InvoiceKeypadVC: UIViewController {
         }
     }
 
-    typealias KeypadOutput = (total: Double?, display: String)
     let keypad = Keypad()
 
     /// TODO: include relevant methods within this?
@@ -291,41 +290,31 @@ class InvoiceKeypadVC: UIViewController {
 
     func update(newItem: Bool = false) {
 
-        let output: KeypadOutput
-
         switch newItem {
         case true:
             // Update keypad with quantity of new currentItem
             switch currentMode {
             case .cost:
                 keypad.updateNumber(currentItem.cost as Double?)
-                output = keypad.outputB()
             case .quantity:
                 keypad.updateNumber(currentItem.quantity as Double?)
-                output = keypad.outputB()
-
             case .status:
                 log.verbose("update - status")
-                // TESTING
-                output = (total: 1.0, display: "Test")
             }
 
         case false:
             // Update model with output of keyapd
-            output = keypad.outputB()
-
             switch currentMode {
             case .cost:
-                if let keypadResult = output.total {
+                if let keypadResult = keypad.evaluateNumber() {
                     currentItem.cost = keypadResult
                 } else {
                     /// TODO: how to handle this?
                     //currentItem.cost = nil
                     log.warning("\(#function) PROBLEM : unable to set InventoryItem.cost to nil")
                 }
-
             case .quantity:
-                if let keypadResult = output.total {
+                if let keypadResult = keypad.evaluateNumber() {
                     currentItem.quantity = keypadResult
                 } else {
                     /// TODO: how to handle this?
@@ -349,13 +338,12 @@ class InvoiceKeypadVC: UIViewController {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-
-        updateDisplay(item: currentItem, keypadOutput: output)
+        updateDisplay(item: currentItem)
     }
 
     // MARK: - B
 
-    func updateDisplay(item: InvoiceItem, keypadOutput: KeypadOutput) {
+    func updateDisplay(item: InvoiceItem) {
         guard let item = currentItem.item else {
             itemName.text = "Error (1)"; return
         }
