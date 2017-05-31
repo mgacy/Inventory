@@ -13,38 +13,10 @@ class OrderKeypadVC: UIViewController {
 
     // MARK: - Properties
 
-    var parentObject: Order!
-    var currentIndex = 0
+    var viewModel: OrderKeypadViewModel!
 
-    var items: [OrderItem] {
-        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
-        request.predicate = NSPredicate(format: "order == %@", parentObject)
-
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        do {
-            let searchResults = try managedObjectContext?.fetch(request)
-            return searchResults!
-
-        } catch {
-            log.error("Error with request: \(error)")
-        }
-        return [OrderItem]()
-    }
-
-    var currentItem: OrderItem {
-        //log.verbose("currentItem: \(items[currentIndex])")
-        return items[currentIndex]
-    }
-
-    typealias KeypadOutput = (total: Double?, display: String)
-    let keypad = Keypad()
-
-    // CoreData
-    var managedObjectContext: NSManagedObjectContext?
-
-    var numberFormatter: NumberFormatter?
+    //typealias KeypadOutput = (total: Double?, display: String)
+    //let keypad = Keypad()
 
     // MARK: - Display Outlets
 
@@ -63,17 +35,11 @@ class OrderKeypadVC: UIViewController {
 
     // MARK: - Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    //override func viewDidLoad() {}
 
-        // Setup numberFormatter
-        numberFormatter = NumberFormatter()
-        guard let numberFormatter = numberFormatter else { return }
-        numberFormatter.numberStyle = .decimal
-        numberFormatter.roundingMode = .halfUp
-        numberFormatter.maximumFractionDigits = 2
-
-        update(newItem: true)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateDisplay()
     }
 
     override func didReceiveMemoryWarning() {
@@ -86,23 +52,24 @@ class OrderKeypadVC: UIViewController {
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
         guard let number = Int(digit!) else { return }
-        keypad.pushDigit(value: number)
-        update()
+        viewModel.pushDigit(value: number)
+        //update()
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
-        keypad.popItem()
-        update()
+        viewModel.popCharacter()
+        //update()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        keypad.pushDecimal()
-        update()
+        viewModel.pushDecimal()
+        //update()
     }
 
     // MARK: Units
 
     @IBAction func packTapped(_ sender: AnyObject) {
+        /*
         guard let item = currentItem.item else {
             log.debug("\(#function) : unable to get item of \(currentItem)")
             return
@@ -116,10 +83,12 @@ class OrderKeypadVC: UIViewController {
 
         // Update display, keypad buttons
         update()
+        */
     }
 
     /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
+        /*
         guard let item = currentItem.item else {
             log.debug("\(#function) : unable to get item of \(currentItem)")
             return
@@ -133,32 +102,69 @@ class OrderKeypadVC: UIViewController {
 
         // Update display, keypad buttons
         update()
+        */
     }
 
     // MARK: Item Navigation
 
     @IBAction func nextItemTapped(_ sender: AnyObject) {
-        if currentIndex < items.count - 1 {
-            currentIndex += 1
-            update(newItem: true)
-        } else {
-            /// TODO: cleanup?
+        switch viewModel.nextItem() {
+        case true:
+            updateDisplay()
+        case false:
             navigationController!.popViewController(animated: true)
         }
     }
 
     @IBAction func previousItemTapped(_ sender: AnyObject) {
-        if currentIndex > 0 {
-            currentIndex -= 1
-            update(newItem: true)
-        } else {
-            /// TODO: cleanup?
+        switch viewModel.previousItem() {
+        case true:
+            updateDisplay()
+        case false:
             navigationController!.popViewController(animated: true)
         }
     }
 
     // MARK: - C
 
+    func updateDisplay() {
+        itemName.text = viewModel.name
+
+        caseSize.text = viewModel.pack
+        par.text = viewModel.par
+        onHand.text = viewModel.onHand
+        minOrder.text = viewModel.suggestedOrder
+
+        order.text = viewModel.orderQuantity
+        orderUnit.text = viewModel.orderUnit
+        /*
+        switch keypadOutput.total {
+        case nil:
+            order.textColor = UIColor.lightGray
+            orderUnit.textColor = UIColor.lightGray
+        case 0.0?:
+            order.textColor = UIColor.lightGray
+            orderUnit.textColor = UIColor.lightGray
+        default:
+            order.textColor = UIColor.black
+            orderUnit.textColor = UIColor.black
+        }
+        */
+    }
+
+    func updateKeypad() {
+
+        caseButton.setTitle(viewModel.packUnitLabel, for: .normal)
+        caseButton.backgroundColor = ColorPalette.navyColor
+        caseButton.isEnabled = true
+
+        bottleButton.setTitle(viewModel.singleUnitLabel, for: .normal)
+        bottleButton.backgroundColor = ColorPalette.secondaryColor
+        bottleButton.isEnabled = true
+
+    }
+
+    /*
     func update(newItem: Bool = false) {
 
         let output: KeypadOutput
@@ -267,15 +273,5 @@ class OrderKeypadVC: UIViewController {
         }
     }
 
-    private func formDisplayLine(quantity: Double?, abbreviation: String) -> String {
-        guard let numberFormatter = numberFormatter else { return "ERROR 3" }
-        guard let quantity = quantity else { return "ERROR 4" }
-
-        // Quantity
-        if let quantityString = numberFormatter.string(from: NSNumber(value: quantity)) {
-            return "\(quantityString) \(abbreviation)"
-        }
-        return ""
-    }
-
+    */
 }

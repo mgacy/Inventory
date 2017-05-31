@@ -63,15 +63,14 @@ class OrderItemTVC: UITableViewController {
         guard let destinationController = segue.destination as? OrderKeypadVC else {
             fatalError("Wrong view controller type")
         }
-
-        // Pass the parent of the selected object to the new view controller.
-        destinationController.parentObject = parentObject
-        destinationController.managedObjectContext = managedObjectContext
-
-        // FIXME: fix this
-        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
-            destinationController.currentIndex = indexPath
+        guard
+            let indexPath = self.tableView.indexPathForSelectedRow?.row,
+            let managedObjectContext = managedObjectContext else {
+                fatalError("Unable to get indexPath")
         }
+
+        destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath,
+                                                               inContext: managedObjectContext)
     }
 
     // MARK: - TableViewDataSource
