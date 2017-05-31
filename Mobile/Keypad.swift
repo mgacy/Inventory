@@ -70,16 +70,6 @@ class Keypad {
         }
     }
 
-    // MARK: - Output
-
-    func evaluateNumber() -> Double? {
-        if let value = Double(currentNumber) {
-            return value
-        } else {
-            return nil
-        }
-    }
-
     func updateNumber(_ newNumber: Double?) {
         guard let _newNumber = newNumber else {
             currentNumber = ""
@@ -92,6 +82,16 @@ class Keypad {
             // Is it possible to reach this point?
             log.error("There was a problem converting '\(_newNumber)' to a string")
             currentNumber = "Error"
+        }
+    }
+
+    // MARK: - Output
+
+    func evaluateNumber() -> Double? {
+        if let value = Double(currentNumber) {
+            return value
+        } else {
+            return nil
         }
     }
 
