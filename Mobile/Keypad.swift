@@ -56,12 +56,11 @@ class Keypad {
     func pushDecimal() {
         isEditingNumber = true
 
-        // Add leading '0'
         if currentNumber.isEmpty {
+            // Add leading '0'
             currentNumber = "0."
-
-            // Append decimal point if not already there
         } else if currentNumber.range(of: ".") == nil {
+            // Append decimal point if not already there
             currentNumber += "."
         }
     }
