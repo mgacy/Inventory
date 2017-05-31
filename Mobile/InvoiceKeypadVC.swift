@@ -127,7 +127,6 @@ class InvoiceKeypadVC: UIViewController {
         if currentMode == .status { return }
 
         keypad.pushDigit(value: number)
-
         update()
     }
 
@@ -215,8 +214,6 @@ class InvoiceKeypadVC: UIViewController {
             //update(newItem: true)
         } else {
             /// TODO: cleanup?
-
-            // Pop view
             navigationController!.popViewController(animated: true)
         }
     }
@@ -230,8 +227,6 @@ class InvoiceKeypadVC: UIViewController {
             //update(newItem: true)
         } else {
             /// TODO: cleanup?
-
-            // Pop view
             navigationController!.popViewController(animated: true)
         }
     }
