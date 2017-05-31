@@ -309,34 +309,22 @@ class InvoiceKeypadVC: UIViewController {
                 if let keypadResult = keypad.evaluateNumber() {
                     currentItem.cost = keypadResult
                 } else {
-                    /// TODO: how to handle this?
-                    //currentItem.cost = nil
-                    log.warning("\(#function) PROBLEM : unable to set InventoryItem.cost to nil")
+                    currentItem.cost = 0
                 }
             case .quantity:
                 if let keypadResult = keypad.evaluateNumber() {
                     currentItem.quantity = keypadResult
                 } else {
-                    /// TODO: how to handle this?
-                    //currentItem.quantity = nil
-                    log.warning("\(#function) PROBLEM : unable to set InventoryItem.quantity to nil")
+                    currentItem.quantity = 0
                 }
-
             case .status:
                 log.verbose("update - status")
             }
 
-            // Save the context.
-            let context = self.managedObjectContext!
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                log.error("Unresolved error \(nserror), \(nserror.userInfo)")
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            guard let context = managedObjectContext else {
+                fatalError("Unable to get managedObjectContext")
             }
+            context.performSaveOrRollback()
         }
         updateDisplay(item: currentItem)
     }
