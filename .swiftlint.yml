@@ -1,5 +1,6 @@
 ﻿disabled_rules: # rule identifiers to exclude from running
   - todo
+  - cyclomatic_complexity
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Pods
 
@@ -32,4 +33,5 @@ type_name:
     warning: 30
     error: 35
   excluded: iPhone # excluded via string
+  excluded: in
 reporter: "xcode"
