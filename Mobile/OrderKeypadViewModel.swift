@@ -24,13 +24,11 @@ protocol KeypadViewModel: class {
     func nextItem() -> Bool
     func previousItem() -> Bool
     func didChangeItem(_: ChildType)
-    //func updateCurrentItem()
 }
 
 extension KeypadViewModel {
 
     var currentItem: ChildType {
-        //log.verbose("currentItem: \(items[currentIndex])")
         return items[currentIndex]
     }
 
@@ -59,7 +57,7 @@ extension KeypadViewModel {
 }
 
 protocol KeypadStuff: class {
-    var keypad: Keypad { get }
+    var keypad: NewKeypad { get }
     func pushDigit(value: Int)
     func pushDecimal()
     func popItem()
@@ -90,7 +88,7 @@ class OrderKeypadViewModel: KeypadViewModel {
     var currentIndex: Int
 
     // MARK: Keypad
-    let keypad: Keypad
+    let keypad: NewKeypad
 
     var numberFormatter: NumberFormatter
 
@@ -125,7 +123,15 @@ class OrderKeypadViewModel: KeypadViewModel {
         self.numberFormatter.roundingMode = .halfUp
         self.numberFormatter.maximumFractionDigits = 2
 
-        self.keypad = Keypad()
+        // Keypad
+        let keypadFormatter = NumberFormatter()
+        keypadFormatter.numberStyle = .decimal
+        keypadFormatter.roundingMode = .halfUp
+        keypadFormatter.maximumFractionDigits = 2
+        self.keypad = NewKeypad(formatter: keypadFormatter, delegate: nil)
+
+        // We can only set the keypad's delegate after we have set all required attrs for self
+        keypad.delegate = self
 
         self.didChangeItem(self.currentItem)
     }
@@ -164,22 +170,9 @@ class OrderKeypadViewModel: KeypadViewModel {
         // ... keypad ...
 
         // Update keypad with quantity of new currentItem
-        keypad.updateNumber(currentItem.quantity as Double?)
+        keypad.updateNumber(currentItem.quantity)
 
-        orderQuantity = keypad.display
-    }
-
-    func updateItem() {
-        // Update model with output of keypad
-        if let keypadResult = keypad.evaluateNumber() {
-            currentItem.quantity = keypadResult as NSNumber?
-        } else {
-            currentItem.quantity = nil
-        }
-        managedObjectContext.performSaveOrRollback()
-
-        /// TODO: update display
-        /// TODO: update keypad
+        orderQuantity = keypad.displayValue
     }
 
     // MARK: -
@@ -197,15 +190,13 @@ class OrderKeypadViewModel: KeypadViewModel {
 }
 
 // MARK: - Keypad
-extension OrderKeypadViewModel {
+extension OrderKeypadViewModel: KeypadStuff {
 
     func pushDigit(value: Int) {
-        //currentItem.quantity = keypad.pushDigit(value: value)
         keypad.pushDigit(value: value)
     }
 
     func pushDecimal() {
-        //currentItem.quantity = keypad.pushDecimal()
         keypad.pushDecimal()
     }
 
@@ -213,8 +204,22 @@ extension OrderKeypadViewModel {
         keypad.popItem()
     }
 
-    func reset(with number: Double?) {
-        keypad.updateNumber(number)
+    //func reset(with number: NSNumber?) {
+    //    keypad.updateNumber(number)
+    //}
+
+}
+
+extension OrderKeypadViewModel: KeypadDelegate {
+
+    func updateModel(_ newValue: NSNumber?) {
+        if let newValue = newValue {
+            currentItem.quantity = newValue
+        } else {
+            currentItem.quantity = nil
+        }
+        managedObjectContext.performSaveOrRollback()
+        orderQuantity = keypad.displayValue
     }
 
 }

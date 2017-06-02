@@ -8,6 +8,130 @@
 
 import Foundation
 
+protocol KeypadDelegate: class {
+    //var keypad: NewKeypad { get }
+    //func pushDigit(value: Int)
+    //func pushDecimal()
+    //func popItem()
+    //func updateDisplay()
+    func updateModel(_: NSNumber?)
+}
+
+class NewKeypad {
+
+    public var displayValue: String {
+        return currentNumber
+    }
+    public var currentValue: NSNumber? {
+        //return evaluateNumber()
+        if let value = numberFormatter.number(from: currentNumber) {
+            return value
+        } else {
+            return nil
+        }
+    }
+
+    weak var delegate: KeypadDelegate?
+
+    private let numberFormatter: NumberFormatter
+
+    // State
+    private var isEditingNumber: Bool
+    private var currentNumber: String
+
+    // MARK: - Lifecycle
+
+    required init(formatter: NumberFormatter, delegate: KeypadDelegate?) {
+        self.isEditingNumber = false
+        self.currentNumber = ""
+
+        self.numberFormatter = formatter
+        self.delegate = delegate
+    }
+
+    // MARK: - Stack manipulation
+
+    public func popItem() {
+        if !currentNumber.isEmpty {
+            currentNumber.remove(at: currentNumber.index(before: currentNumber.endIndex))
+
+            if currentNumber.isEmpty {
+                // We just consumed the currentNumber
+                isEditingNumber = false
+            } else {
+                isEditingNumber = true
+            }
+        }
+        delegate?.updateModel(currentValue)
+    }
+
+    public func pushDecimal() {
+        isEditingNumber = true
+
+        if currentNumber.isEmpty {
+            // Add leading '0'
+            currentNumber = "0."
+            delegate?.updateModel(currentValue)
+
+        } else if currentNumber.range(of: ".") == nil {
+            // Append decimal point if not already there; we do not update the model b/c we are not actually changing
+            // the value
+            currentNumber += "."
+        }
+    }
+
+    public func pushDigit(value: Int) {
+        if isEditingNumber {
+            /// TODO: prevent '00'
+            /// TODO: prevent 'x.yzn'; add setting for max significant digits
+            currentNumber += "\(value)"
+
+        } else {
+            currentNumber = "\(value)"
+            isEditingNumber = true
+        }
+        delegate?.updateModel(currentValue)
+    }
+
+    public func updateNumber(_ newNumber: NSNumber?) {
+        guard let _newNumber = newNumber else {
+            currentNumber = ""
+            return
+        }
+
+        if let newString = numberFormatter.string(from: _newNumber) {
+            currentNumber = newString
+            isEditingNumber = false
+        } else {
+            // Is it possible to reach this point?
+            log.error("There was a problem converting '\(_newNumber)' to a string")
+            currentNumber = "Error"
+        }
+    }
+
+    // MARK: - Output
+
+    /*
+    private func evaluateNumber() -> Double? {
+        if let value = Double(currentNumber) {
+            return value
+        } else {
+            return nil
+        }
+    }
+
+    func formatTotal(_ result: Double) -> String {
+        if let resultString = self.numberFormatter.string(from: NSNumber(value: result)) {
+            return resultString
+        } else {
+            return ""
+        }
+    }
+    */
+}
+
+// MARK: -
+
 class Keypad {
 
     let numberFormatter: NumberFormatter
