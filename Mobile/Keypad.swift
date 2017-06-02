@@ -66,18 +66,30 @@ class NewKeypad {
     }
 
     public func pushDecimal() {
-        isEditingNumber = true
+        if isEditingNumber {
+            if currentNumber.isEmpty {
+                // Add leading '0'
+                currentNumber = "0."
+                //delegate?.updateModel(currentValue)
 
-        if currentNumber.isEmpty {
-            // Add leading '0'
+            } else if currentNumber.range(of: ".") == nil {
+                /*
+                 Append decimal point if not already there; we do not need to update the model b/c we are not actually
+                 changing its value
+                 */
+                currentNumber += "."
+            }
+
+        } else {
+            isEditingNumber = true
             currentNumber = "0."
-            delegate?.updateModel(currentValue)
-
-        } else if currentNumber.range(of: ".") == nil {
-            // Append decimal point if not already there; we do not update the model b/c we are not actually changing
-            // the value
-            currentNumber += "."
+            //delegate?.updateModel(currentValue)
         }
+        /*
+         Since we currently use `delegate?.updateModel(:)` to update both the model AND view model, call that method
+         even if we are not actually changing the value of the model.
+         */
+        delegate?.updateModel(currentValue)
     }
 
     public func pushDigit(value: Int) {
