@@ -193,7 +193,7 @@ class OrderKeypadViewModel: KeypadViewModel {
 extension OrderKeypadViewModel: KeypadStuff {
 
     func pushDigit(value: Int) {
-        keypad.pushDigit(value: value)
+        keypad.pushDigit(value)
     }
 
     func pushDecimal() {

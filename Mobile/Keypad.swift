@@ -34,6 +34,7 @@ class NewKeypad {
     weak var delegate: KeypadDelegate?
 
     private let numberFormatter: NumberFormatter
+    private let maximumFractionDigits: Int
 
     // State
     private var isEditingNumber: Bool
@@ -41,7 +42,8 @@ class NewKeypad {
 
     // MARK: - Lifecycle
 
-    required init(formatter: NumberFormatter, delegate: KeypadDelegate?) {
+    required init(formatter: NumberFormatter, delegate: KeypadDelegate?, maximumFractionDigits: Int = 2) {
+        self.maximumFractionDigits = maximumFractionDigits
         self.isEditingNumber = false
         self.currentNumber = ""
 
@@ -92,12 +94,24 @@ class NewKeypad {
         delegate?.updateModel(currentValue)
     }
 
-    public func pushDigit(value: Int) {
+    public func pushDigit(_ value: Int) {
         if isEditingNumber {
-            /// TODO: prevent '00'
-            /// TODO: prevent 'x.yzn'; add setting for max significant digits
-            currentNumber += "\(value)"
-
+            if currentNumber.range(of: ".") == nil {
+                // Prevent '00'
+                if currentNumber == "0" {
+                    currentNumber = "\(value)"
+                } else {
+                    currentNumber += "\(value)"
+                }
+            } else {
+                // Limit significant digits to maximumFractionDigits
+                guard let decimalIndex = currentNumber.range(of: ".")?.lowerBound else {
+                    fatalError("\(#function) FAILED: problem detecting '.'")
+                }
+                if currentNumber.substring(from: decimalIndex).characters.count <= maximumFractionDigits {
+                    currentNumber += "\(value)"
+                }
+            }
         } else {
             currentNumber = "\(value)"
             isEditingNumber = true

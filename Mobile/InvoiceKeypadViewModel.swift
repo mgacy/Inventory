@@ -182,7 +182,7 @@ extension InvoiceKeypadViewModel: KeypadStuff {
 
     func pushDigit(value: Int) {
         if currentMode == .status { return }
-        keypad.pushDigit(value: value)
+        keypad.pushDigit(value)
     }
 
     func pushDecimal() {
