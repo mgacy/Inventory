@@ -23,7 +23,6 @@ class NewKeypad {
         return currentNumber
     }
     public var currentValue: NSNumber? {
-        //return evaluateNumber()
         if let value = numberFormatter.number(from: currentNumber) {
             return value
         } else {
@@ -75,10 +74,7 @@ class NewKeypad {
                 //delegate?.updateModel(currentValue)
 
             } else if currentNumber.range(of: ".") == nil {
-                /*
-                 Append decimal point if not already there; we do not need to update the model b/c we are not actually
-                 changing its value
-                 */
+                // We do not need to update the model b/c we are not actually changing its value
                 currentNumber += "."
             }
 
