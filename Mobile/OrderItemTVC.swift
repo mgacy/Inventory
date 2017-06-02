@@ -66,7 +66,7 @@ class OrderItemTVC: UITableViewController {
         guard
             let indexPath = self.tableView.indexPathForSelectedRow?.row,
             let managedObjectContext = managedObjectContext else {
-                fatalError("Unable to get indexPath")
+                fatalError("Unable to get indexPath or moc")
         }
 
         destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath,
