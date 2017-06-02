@@ -131,25 +131,6 @@ class NewKeypad {
         }
     }
 
-    // MARK: - Output
-
-    /*
-    private func evaluateNumber() -> Double? {
-        if let value = Double(currentNumber) {
-            return value
-        } else {
-            return nil
-        }
-    }
-
-    func formatTotal(_ result: Double) -> String {
-        if let resultString = self.numberFormatter.string(from: NSNumber(value: result)) {
-            return resultString
-        } else {
-            return ""
-        }
-    }
-    */
 }
 
 // MARK: -
