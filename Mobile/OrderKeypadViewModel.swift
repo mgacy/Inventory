@@ -216,7 +216,7 @@ extension OrderKeypadViewModel: KeypadDelegate {
         if let newValue = newValue {
             currentItem.quantity = newValue
         } else {
-            currentItem.quantity = nil
+            currentItem.quantity = 0
         }
         managedObjectContext.performSaveOrRollback()
         orderQuantity = keypad.displayValue
