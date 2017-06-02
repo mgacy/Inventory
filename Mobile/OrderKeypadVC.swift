@@ -50,14 +50,17 @@ class OrderKeypadVC: UIViewController {
         guard let digit = sender.currentTitle else { return }
         guard let number = Int(digit!) else { return }
         viewModel.pushDigit(value: number)
+        order.text = viewModel.orderQuantity
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
         viewModel.popItem()
+        order.text = viewModel.orderQuantity
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
         viewModel.pushDecimal()
+        order.text = viewModel.orderQuantity
     }
 
     // MARK: Units
