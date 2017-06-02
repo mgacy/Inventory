@@ -15,9 +15,6 @@ class OrderKeypadVC: UIViewController {
 
     var viewModel: OrderKeypadViewModel!
 
-    //typealias KeypadOutput = (total: Double?, display: String)
-    //let keypad = Keypad()
-
     // MARK: - Display Outlets
 
     @IBOutlet weak var itemName: UILabel!
@@ -53,17 +50,14 @@ class OrderKeypadVC: UIViewController {
         guard let digit = sender.currentTitle else { return }
         guard let number = Int(digit!) else { return }
         viewModel.pushDigit(value: number)
-        //update()
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
-        viewModel.popCharacter()
-        //update()
+        viewModel.popItem()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
         viewModel.pushDecimal()
-        //update()
     }
 
     // MARK: Units
@@ -153,7 +147,6 @@ class OrderKeypadVC: UIViewController {
     }
 
     func updateKeypad() {
-
         caseButton.setTitle(viewModel.packUnitLabel, for: .normal)
         caseButton.backgroundColor = ColorPalette.navyColor
         caseButton.isEnabled = true
@@ -161,87 +154,12 @@ class OrderKeypadVC: UIViewController {
         bottleButton.setTitle(viewModel.singleUnitLabel, for: .normal)
         bottleButton.backgroundColor = ColorPalette.secondaryColor
         bottleButton.isEnabled = true
-
     }
 
     /*
-    func update(newItem: Bool = false) {
-
-        let output: KeypadOutput
-
-        switch newItem {
-        case true:
-            // Update keypad with quantity of new currentItem
-            keypad.updateNumber(currentItem.quantity as Double?)
-            output = keypad.outputB()
-
-        case false:
-            guard let managedObjectContext = managedObjectContext else {
-                fatalError("Unable to get managedObjectContext")
-            }
-
-            // Update model with output of keypad
-            output = keypad.outputB()
-
-            if let keypadResult = output.total {
-                currentItem.quantity = keypadResult as NSNumber?
-            } else {
-                currentItem.quantity = nil
-            }
-            managedObjectContext.performSaveOrRollback()
-        }
-
-        updateKeypadButtons(item: currentItem)
-        updateDisplay(item: currentItem, keypadOutput: output)
-
-        //log.verbose("currentItem: \(currentItem)")
-    }
-
-    func updateDisplay(item: OrderItem, keypadOutput: KeypadOutput) {
-        guard let item = currentItem.item else {
-            itemName.text = "Error (1)"; return
-        }
-        guard let name = item.name else {
-            itemName.text = "Error (2)" ; return
-        }
-        itemName.text = name
-
-        caseSize.text = item.packDisplay
-        par.text = formDisplayLine(
-            quantity: currentItem.par, abbreviation: currentItem.parUnit?.abbreviation ?? " ")
-        onHand.text = formDisplayLine(
-            quantity: currentItem.onHand, abbreviation: currentItem.item?.inventoryUnit?.abbreviation ?? " ")
-        minOrder.text = formDisplayLine(
-            quantity: currentItem.minOrder, abbreviation: currentItem.minOrderUnit?.abbreviation ?? " ")
-
-        order.text = keypadOutput.display
-        orderUnit.text = currentItem.orderUnit?.abbreviation
-
-        switch keypadOutput.total {
-        case nil:
-            order.textColor = UIColor.lightGray
-            orderUnit.textColor = UIColor.lightGray
-        case 0.0?:
-            order.textColor = UIColor.lightGray
-            orderUnit.textColor = UIColor.lightGray
-        default:
-            order.textColor = UIColor.black
-            orderUnit.textColor = UIColor.black
-        }
-
-    }
 
     /// TODO: rename `updateUnitButtons`?
     func updateKeypadButtons(item: OrderItem) {
-        guard let orderUnit = currentItem.orderUnit else {
-            log.warning("\(#function) FAILED : 1"); return
-        }
-        guard let item = currentItem.item else {
-            log.warning("\(#function) FAILED : 2"); return
-        }
-
-        //log.verbose("currentItem: \(currentItem)")
-        //log.verbose("currentItem.item: \(item)")
 
         /// TODO: some of this should only be done when we change currentItem
         if orderUnit == item.purchaseUnit {

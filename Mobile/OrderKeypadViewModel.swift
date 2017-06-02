@@ -60,7 +60,7 @@ extension KeypadViewModel {
 
 protocol KeypadStuff: class {
     var keypad: Keypad { get }
-    func pushDigit(_: Int)
+    func pushDigit(value: Int)
     func pushDecimal()
     func popItem()
     //func update(_: Double?)
@@ -209,8 +209,7 @@ extension OrderKeypadViewModel {
         keypad.pushDecimal()
     }
 
-    func popCharacter() {
-        //currentItem.quantity = keypad.popItem()
+    func popItem() {
         keypad.popItem()
     }
 
