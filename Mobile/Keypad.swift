@@ -266,6 +266,10 @@ class KeypadWithHistory: Keypad {
 
     var stack: [String] = []
 
+    //var history: String {
+    //    return formHistory()
+    //}
+
     // MARK: - Lifecycle
 
     override init() {
