@@ -66,40 +66,34 @@ class OrderKeypadVC: UIViewController {
     // MARK: Units
 
     @IBAction func packTapped(_ sender: AnyObject) {
-        /*
-        guard let item = currentItem.item else {
-            log.debug("\(#function) : unable to get item of \(currentItem)")
+        guard let itemUnits = viewModel.currentItemUnits else {
             return
         }
-        guard let purchaseUnit = item.purchaseUnit else {
-            log.debug("\(#function) : unable to get purchaseUnit of \(item)")
-            return
+        switch itemUnits.currentUnit {
+        case .singleUnit:
+            viewModel.toggleUnit()
+        case .packUnit:
+            log.debug("AA")
+        case .error:
+            log.debug("AB")
         }
-
-        currentItem.orderUnit = purchaseUnit
-
-        // Update display, keypad buttons
-        update()
-        */
+        updateDisplay()
     }
 
     /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
-        /*
-        guard let item = currentItem.item else {
-            log.debug("\(#function) : unable to get item of \(currentItem)")
+        guard let itemUnits = viewModel.currentItemUnits else {
             return
         }
-        guard let purchaseSubUnit = item.purchaseSubUnit else {
-            log.debug("\(#function) : unable to get purchaseSubUnit of \(item)")
-            return
+        switch itemUnits.currentUnit {
+        case .singleUnit:
+            log.debug("BA")
+        case .packUnit:
+            viewModel.toggleUnit()
+        case .error:
+            log.debug("BB")
         }
-
-        currentItem.orderUnit = purchaseSubUnit
-
-        // Update display, keypad buttons
-        update()
-        */
+        updateDisplay()
     }
 
     // MARK: Item Navigation
