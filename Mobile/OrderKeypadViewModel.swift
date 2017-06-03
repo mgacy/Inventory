@@ -236,7 +236,6 @@ class OrderKeypadViewModel: KeypadViewModel {
         keypadFormatter.roundingMode = .halfUp
         keypadFormatter.maximumFractionDigits = 2
         self.keypad = NewKeypad(formatter: keypadFormatter, delegate: nil)
-
         // We can only set the keypad's delegate after we have set all required attrs for self
         keypad.delegate = self
 
@@ -260,25 +259,23 @@ class OrderKeypadViewModel: KeypadViewModel {
     internal func didChangeItem(_ currentItem: OrderItem) {
         /// TODO: make `OrderItem.item` non-optional
         guard let item = currentItem.item else {
-            // fatalError("FIXME")
+            log.error("\(#function) FAILED: unable to get currentItem.item")
             name = "Error (1)"
             return
         }
         name = item.name ?? "Error (2)"
         pack = item.packDisplay
 
-        /// TODO: handle purchaseUnit, purchaseSubUnit
+        // Handle purchaseUnit, purchaseSubUnit
         currentItemUnits = ItemUnits(item: currentItem)
 
         par = formDisplayLine(
-            quantity: currentItem.par, abbreviation: currentItem.parUnit?.abbreviation ?? " ")
+            quantity: currentItem.par, abbreviation: currentItem.parUnit?.abbreviation)
         onHand = formDisplayLine(
-            quantity: currentItem.onHand, abbreviation: currentItem.item?.inventoryUnit?.abbreviation ?? " ")
+            quantity: currentItem.onHand, abbreviation: currentItem.item?.inventoryUnit?.abbreviation)
         suggestedOrder = formDisplayLine(
-            quantity: currentItem.minOrder, abbreviation: currentItem.minOrderUnit?.abbreviation ?? " ")
+            quantity: currentItem.minOrder, abbreviation: currentItem.minOrderUnit?.abbreviation)
         orderUnit = currentItem.orderUnit?.abbreviation ?? " "
-
-        // ... keypad ...
 
         // Update keypad with quantity of new currentItem
         keypad.updateNumber(currentItem.quantity)
@@ -288,12 +285,12 @@ class OrderKeypadViewModel: KeypadViewModel {
 
     // MARK: -
 
-    private func formDisplayLine(quantity: Double?, abbreviation: String) -> String {
+    private func formDisplayLine(quantity: Double?, abbreviation: String?) -> String {
         guard let quantity = quantity else { return "ERROR 4" }
 
         // Quantity
         if let quantityString = numberFormatter.string(from: NSNumber(value: quantity)) {
-            return "\(quantityString) \(abbreviation)"
+            return "\(quantityString) \(abbreviation ?? "")"
         }
         return ""
     }
