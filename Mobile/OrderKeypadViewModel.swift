@@ -77,13 +77,13 @@ struct ItemUnits {
     var singleUnit: Unit?
     var currentUnit: CurrentUnit
 
-    init(item orderItem: OrderItem) {
+    init?(item orderItem: OrderItem) {
         self.packUnit = orderItem.item?.purchaseUnit
         self.singleUnit = orderItem.item?.purchaseSubUnit
 
         guard let currentUnit = orderItem.orderUnit else {
-            self.currentUnit = .error
-            return
+        //self.currentUnit = .error
+            return nil
         }
 
         if let pUnit = self.packUnit, currentUnit == pUnit {
@@ -95,21 +95,21 @@ struct ItemUnits {
         }
     }
 
-    public mutating func toggle() -> Unit {
+    public mutating func toggle(_ newUnit: CurrentUnit) -> Unit? {
         switch self.currentUnit {
         case .singleUnit(let unit):
             guard let packUnit = packUnit else {
-                return unit
+                return nil
             }
             currentUnit = .packUnit(packUnit)
             return packUnit
         case .packUnit(let unit):
             guard let singleUnit = singleUnit else {
-                return unit
+                return nil
             }
             currentUnit = .singleUnit(singleUnit)
             return singleUnit
-        default:
+        case.error:
             fatalError("MEH")
         }
     }
