@@ -120,6 +120,7 @@ struct ItemUnits {
 enum CurrentUnit {
     case packUnit
     case singleUnit
+    //case noUnit?
     case error
 }
 
@@ -172,17 +173,18 @@ struct ItemUnits {
     public mutating func toggle() -> Unit? {
         switch self.currentUnit {
         case .singleUnit:
-            guard let packUnit = packUnit else {
+            guard let newUnit = packUnit else {
                 return nil
             }
             currentUnit = .packUnit
-            return packUnit
+            return newUnit
         case .packUnit:
-            guard let singleUnit = singleUnit else {
+            guard let newUnit = singleUnit else {
                 return nil
             }
             currentUnit = .singleUnit
-            return singleUnit
+            return newUnit
+        /// TODO: how to handle `noUnit`?
         default:
             log.error("\(#function) FAILED: currentUnit.error")
             return nil
