@@ -146,6 +146,29 @@ struct ItemUnits {
         }
     }
 
+    init?(item: Item?, currentUnit: Unit?) {
+        /// TODO: remove once .item is non-optional for OrderItem, InvoiceItem
+        guard let item = item else {
+            return nil
+        }
+
+        self.packUnit = item.purchaseUnit
+        self.singleUnit = item.purchaseSubUnit
+
+        guard let currentUnit = currentUnit else {
+            //self.currentUnit = .error
+            return nil
+        }
+
+        if let pUnit = self.packUnit, currentUnit == pUnit {
+            self.currentUnit = .packUnit
+        } else if let sUnit = self.singleUnit, currentUnit == sUnit {
+            self.currentUnit = .singleUnit
+        } else {
+            self.currentUnit = .error
+        }
+    }
+
     public mutating func toggle() -> Unit? {
         switch self.currentUnit {
         case .singleUnit:
