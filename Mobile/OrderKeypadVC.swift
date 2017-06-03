@@ -66,32 +66,16 @@ class OrderKeypadVC: UIViewController {
     // MARK: Units
 
     @IBAction func packTapped(_ sender: AnyObject) {
-        guard let itemUnits = viewModel.currentItemUnits else {
+        guard viewModel.switchUnit(.packUnit) == true else {
             return
-        }
-        switch itemUnits.currentUnit {
-        case .singleUnit:
-            viewModel.toggleUnit()
-        case .packUnit:
-            log.debug("AA")
-        case .error:
-            log.debug("AB")
         }
         updateDisplay()
     }
 
     /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
-        guard let itemUnits = viewModel.currentItemUnits else {
+        guard viewModel.switchUnit(.singleUnit) == true else {
             return
-        }
-        switch itemUnits.currentUnit {
-        case .singleUnit:
-            log.debug("BA")
-        case .packUnit:
-            viewModel.toggleUnit()
-        case .error:
-            log.debug("BB")
         }
         updateDisplay()
     }

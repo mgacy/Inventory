@@ -277,6 +277,26 @@ class OrderKeypadViewModel: KeypadViewModel {
         }
     }
 
+    // rename `changeUnit`; return `CurrentUnit`?
+    func switchUnit(_ newUnit: CurrentUnit) -> Bool {
+        guard currentItemUnits?.currentUnit != .error else {
+            log.warning("\(#function) FAILED: A - \(String(describing: currentItemUnits))")
+            return false
+        }
+        guard currentItemUnits?.currentUnit != newUnit else {
+            log.warning("\(#function) FAILED: B - \(String(describing: currentItemUnits))")
+            return false
+        }
+        guard let newUnit = currentItemUnits?.toggle() else {
+            log.warning("\(#function) FAILED: C")
+            return false
+        }
+        currentItem.orderUnit = newUnit
+        orderUnit = newUnit.abbreviation ?? ""
+        /// TODO: save context?
+        return true
+    }
+
     //func updateQuantity(_ quantity: Double) {}
 
     // MARK: -
