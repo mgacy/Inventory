@@ -64,7 +64,111 @@ protocol KeypadStuff: class {
     //func update(_: Double?)
 }
 
+// MARK: - Units
+/*
+enum CurrentUnit {
+    case packUnit(Unit)
+    case singleUnit(Unit)
+    case error
+}
+
+struct ItemUnits {
+    var packUnit: Unit?
+    var singleUnit: Unit?
+    var currentUnit: CurrentUnit
+
+    init(item orderItem: OrderItem) {
+        self.packUnit = orderItem.item?.purchaseUnit
+        self.singleUnit = orderItem.item?.purchaseSubUnit
+
+        guard let currentUnit = orderItem.orderUnit else {
+            self.currentUnit = .error
+            return
+        }
+
+        if let pUnit = self.packUnit, currentUnit == pUnit {
+            self.currentUnit = .packUnit(pUnit)
+        } else if let sUnit = self.singleUnit, currentUnit == sUnit {
+            self.currentUnit = .singleUnit(sUnit)
+        } else {
+            self.currentUnit = .error
+        }
+    }
+
+    public mutating func toggle() -> Unit {
+        switch self.currentUnit {
+        case .singleUnit(let unit):
+            guard let packUnit = packUnit else {
+                return unit
+            }
+            currentUnit = .packUnit(packUnit)
+            return packUnit
+        case .packUnit(let unit):
+            guard let singleUnit = singleUnit else {
+                return unit
+            }
+            currentUnit = .singleUnit(singleUnit)
+            return singleUnit
+        default:
+            fatalError("MEH")
+        }
+    }
+}
+*/
+// MARK: - ALT
+
+enum CurrentUnit {
+    case packUnit
+    case singleUnit
+    case error
+}
+
+struct ItemUnits {
+    var packUnit: Unit?
+    var singleUnit: Unit?
+    var currentUnit: CurrentUnit
+
+    init?(item orderItem: OrderItem) {
+        self.packUnit = orderItem.item?.purchaseUnit
+        self.singleUnit = orderItem.item?.purchaseSubUnit
+
+        guard let currentUnit = orderItem.orderUnit else {
+            //self.currentUnit = .error
+            return nil
+        }
+
+        if let pUnit = self.packUnit, currentUnit == pUnit {
+            self.currentUnit = .packUnit
+        } else if let sUnit = self.singleUnit, currentUnit == sUnit {
+            self.currentUnit = .singleUnit
+        } else {
+            self.currentUnit = .error
+        }
+    }
+
+    public mutating func toggle() -> Unit? {
+        switch self.currentUnit {
+        case .singleUnit:
+            guard let packUnit = packUnit else {
+                return nil
+            }
+            currentUnit = .packUnit
+            return packUnit
+        case .packUnit:
+            guard let singleUnit = singleUnit else {
+                return nil
+            }
+            currentUnit = .singleUnit
+            return singleUnit
+        default:
+            log.error("\(#function) FAILED: currentUnit.error")
+            return nil
+        }
+    }
+}
+
 // MARK: - Actual
+
 class OrderKeypadViewModel: KeypadViewModel {
 
     var managedObjectContext: NSManagedObjectContext
@@ -86,6 +190,8 @@ class OrderKeypadViewModel: KeypadViewModel {
         return [OrderItem]()
     }
     var currentIndex: Int
+
+    public var currentItemUnits: ItemUnits?
 
     // MARK: Keypad
     let keypad: NewKeypad
@@ -118,6 +224,7 @@ class OrderKeypadViewModel: KeypadViewModel {
         self.managedObjectContext = context
 
         // Setup numberFormatter
+        /// TODO: do I even need this anymore?
         self.numberFormatter = NumberFormatter()
         self.numberFormatter.numberStyle = .decimal
         self.numberFormatter.roundingMode = .halfUp
@@ -138,10 +245,13 @@ class OrderKeypadViewModel: KeypadViewModel {
 
     // MARK: -
 
-    /// TODO: pass unit or simply toggle unit?
-    //func updateUnit(_ unit: Unit) {}
-
-    //func toggleUnit() {}
+    func toggleUnit() {
+        if let newUnit = currentItemUnits?.toggle() {
+            currentItem.orderUnit = newUnit
+            orderUnit = newUnit.abbreviation ?? ""
+            /// TODO: save context?
+        }
+    }
 
     //func updateQuantity(_ quantity: Double) {}
 
@@ -158,6 +268,7 @@ class OrderKeypadViewModel: KeypadViewModel {
         pack = item.packDisplay
 
         /// TODO: handle purchaseUnit, purchaseSubUnit
+        currentItemUnits = ItemUnits(item: currentItem)
 
         par = formDisplayLine(
             quantity: currentItem.par, abbreviation: currentItem.parUnit?.abbreviation ?? " ")
