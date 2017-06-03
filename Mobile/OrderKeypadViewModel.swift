@@ -235,11 +235,11 @@ class OrderKeypadViewModel: KeypadViewModel {
     var suggestedOrder: String = ""
     // Keypad
     var singleUnitLabel: String = ""
+    var singleUnitIsEnabled: Bool = true
+    var singleUnitIsActive: Bool = false
     var packUnitLabel: String = ""
-    // ???
-    // purchaseUnit: Unit?
-    // purchaseSubUnit: Unit?
-    // ???
+    var packUnitIsEnabled: Bool = true
+    var packUnitIsActive: Bool = false
 
     // MARK: - Lifecycle
 
@@ -293,6 +293,8 @@ class OrderKeypadViewModel: KeypadViewModel {
 
         // Handle purchaseUnit, purchaseSubUnit
         currentItemUnits = ItemUnits(item: currentItem)
+        packUnitLabel = currentItemUnits?.packUnit?.abbreviation ?? ""
+        singleUnitLabel = currentItemUnits?.singleUnit?.abbreviation ?? ""
 
         par = formDisplayLine(
             quantity: currentItem.par, abbreviation: currentItem.parUnit?.abbreviation)
