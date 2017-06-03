@@ -216,7 +216,15 @@ class OrderKeypadViewModel: KeypadViewModel {
     }
     var currentIndex: Int
 
-    public var currentItemUnits: ItemUnits?
+    private var currentItemUnits: ItemUnits?
+
+    public var currentUnit: CurrentUnit {
+        //return currentItemUnits?.currentUnit
+        guard let current = currentItemUnits else {
+            return .error
+        }
+        return current.currentUnit
+    }
 
     // MARK: Keypad
     let keypad: NewKeypad

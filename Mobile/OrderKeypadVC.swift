@@ -125,52 +125,28 @@ class OrderKeypadVC: UIViewController {
             orderUnit.textColor = UIColor.black
         }
         */
+        updateKeypad()
     }
-
-    func updateKeypad() {
-        caseButton.setTitle(viewModel.packUnitLabel, for: .normal)
-        caseButton.backgroundColor = ColorPalette.navyColor
-        caseButton.isEnabled = true
-
-        bottleButton.setTitle(viewModel.singleUnitLabel, for: .normal)
-        bottleButton.backgroundColor = ColorPalette.secondaryColor
-        bottleButton.isEnabled = true
-    }
-
-    /*
 
     /// TODO: rename `updateUnitButtons`?
-    func updateKeypadButtons(item: OrderItem) {
+    func updateKeypad() {
+        caseButton.setTitle(viewModel.packUnitLabel, for: .normal)
+        caseButton.isEnabled = viewModel.singleUnitIsEnabled
 
-        /// TODO: some of this should only be done when we change currentItem
-        if orderUnit == item.purchaseUnit {
-            caseButton.backgroundColor = ColorPalette.navyColor
-            caseButton.isEnabled = true
+        bottleButton.setTitle(viewModel.singleUnitLabel, for: .normal)
+        bottleButton.isEnabled = viewModel.packUnitIsEnabled
 
-            bottleButton.backgroundColor = ColorPalette.secondaryColor
-            if item.purchaseSubUnit != nil {
-                bottleButton.isEnabled = true
-            } else {
-                bottleButton.isEnabled = false
-            }
-
-        } else if orderUnit == item.purchaseSubUnit {
-            bottleButton.backgroundColor = ColorPalette.navyColor
-            bottleButton.isEnabled = true
-
+        switch viewModel.currentUnit {
+        case .singleUnit:
             caseButton.backgroundColor = ColorPalette.secondaryColor
-            if item.purchaseUnit != nil {
-                caseButton.isEnabled = true
-            } else {
-                caseButton.isEnabled = false
-            }
-
-        } else {
-            log.warning("\(#function) FAILED : 3")
-            caseButton.isEnabled = false
-            bottleButton.isEnabled = false
+            bottleButton.backgroundColor = ColorPalette.navyColor
+        case .packUnit:
+            caseButton.backgroundColor = ColorPalette.navyColor
+            bottleButton.backgroundColor = ColorPalette.secondaryColor
+        case .error:
+            caseButton.backgroundColor = ColorPalette.secondaryColor
+            bottleButton.backgroundColor = ColorPalette.secondaryColor
         }
     }
 
-    */
 }
