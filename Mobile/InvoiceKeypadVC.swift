@@ -41,9 +41,6 @@ class InvoiceKeypadVC: UIViewController {
     }
     */
 
-    var numberFormatter: NumberFormatter?
-    var currencyFormatter: NumberFormatter?
-
     // MARK: - Display Outlets
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var itemQuantity: UILabel!
@@ -56,21 +53,7 @@ class InvoiceKeypadVC: UIViewController {
 
     // MARK: - Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Setup numberFormatter
-        numberFormatter = NumberFormatter()
-        guard let numberFormatter = numberFormatter else { return }
-        numberFormatter.numberStyle = .decimal
-        numberFormatter.roundingMode = .halfUp
-        numberFormatter.maximumFractionDigits = 2
-
-        // Setup currencyFormatter
-        currencyFormatter = NumberFormatter()
-        guard let currencyFormatter = currencyFormatter else { return }
-        currencyFormatter.numberStyle = .currency
-    }
+    //override func viewDidLoad() {}
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -133,35 +116,6 @@ class InvoiceKeypadVC: UIViewController {
         }
     }
 
-    @IBAction func packTapped(_ sender: AnyObject) {
-        guard let item = currentItem.item else {
-            log.debug("\(#function) : unable to get item of \(currentItem)")
-            return
-        }
-        guard let purchaseUnit = item.purchaseUnit else {
-            log.debug("\(#function) : unable to get purchaseUnit of \(item)")
-            return
-        }
-
-        currentItem.unit = purchaseUnit
-        update()
-    }
-
-    /// TODO: rename `individualTapped`?
-    @IBAction func unitTapped(_ sender: AnyObject) {
-        guard let item = currentItem.item else {
-            log.debug("\(#function) : unable to get item of \(currentItem)")
-            return
-        }
-        //log.verbose("Item: \(item)")
-        guard let purchaseSubUnit = item.purchaseSubUnit else {
-            log.debug("\(#function) : unable to get purchaseSubUnit of \(item)")
-            return
-        }
-
-        currentItem.unit = purchaseSubUnit
-        update()
-    }
     */
     // MARK: Item Navigation
 
@@ -202,8 +156,6 @@ class InvoiceKeypadVC: UIViewController {
         }
     }
 
-    // MARK: -
-
     // MARK: - C
 
     func updateDisplay() {
@@ -228,7 +180,6 @@ class InvoiceKeypadVC: UIViewController {
             itemCost.textColor = UIColor.lightGray
             itemQuantity.textColor = UIColor.black
             itemStatus.textColor = UIColor.lightGray
-
             /*
              // Should inactiveUnit simply return currentItem.unit instead of nil?
              if let altUnit = inactiveUnit {
