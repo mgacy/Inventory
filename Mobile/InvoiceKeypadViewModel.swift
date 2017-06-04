@@ -31,21 +31,30 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     }
     var currentIndex: Int
 
+    // MARK: Units
+    private var currentItemUnits: ItemUnits?
+    public var currentUnit: CurrentUnit {
+        guard let current = currentItemUnits else {
+            return .error
+        }
+        return current.currentUnit
+    }
+
     // MARK: Keypad
     let keypad: NewKeypad
 
     var numberFormatter: NumberFormatter
     var currencyFormatter: NumberFormatter
 
-    /// TODO: include relevant methods within this?
+    // MARK: Mode
     enum KeypadState {
-        case quantity
         case cost
+        case quantity
         case status
     }
 
-    /// TODO: should default mode be cost, since that is most likely to vary?
-    var currentMode: KeypadState = .quantity
+    //var currentMode: KeypadState = .quantity
+    var currentMode: KeypadState = .cost
 
     // MARK: X
 
@@ -83,7 +92,6 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         keypadFormatter.roundingMode = .halfUp
         keypadFormatter.maximumFractionDigits = 2
         self.keypad = NewKeypad(formatter: keypadFormatter, delegate: nil)
-
         // We can only set the keypad's delegate after we have set all required attrs for self
         keypad.delegate = self
 
@@ -93,31 +101,34 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     // MARK: -
 
     internal func didChangeItem(_ currentItem: InvoiceItem) {
-        /// TODO: make `InvoiceItem.item` non-optional
-        guard let item = currentItem.item else {
-            // fatalError("FIXME")
-            itemName = "Error (1)"; return
-        }
-        guard let name = item.name else {
-            itemName = "Error (2)" ; return
-        }
-        itemName = name
 
-        currentMode = .quantity
-        keypad.updateNumber(currentItem.quantity as NSNumber)
+        // Handle purchaseUnit, purchaseSubUnit
+        currentItemUnits = ItemUnits(item: currentItem.item, currentUnit: currentItem.unit)
+
+        /// TODO: this would be a good place to use an associated value w/ the enum
+        switch currentUnit {
+        case .singleUnit:
+            unitButtonTitle = currentItemUnits?.singleUnit?.abbreviation ?? ""
+        case .packUnit:
+            unitButtonTitle = currentItemUnits?.packUnit?.abbreviation ?? ""
+        case .error:
+            unitButtonTitle = "ERR"
+        }
+
+        /// TODO: cost as default
+        //currentMode = .quantity
+        //keypad.updateNumber(currentItem.quantity as NSNumber)
 
         // Get strings for display
-        displayQuantity = formDisplayLine(
-            quantity: keypad.displayValue,
-            abbreviation: currentItem.unit?.abbreviation)
-
-        itemQuantity = displayQuantity
+        itemName = currentItem.item?.name ?? "Error (1)"
         itemCost = currencyFormatter.string(from: NSNumber(value: currentItem.cost)) ?? " "
-        if let statusString = InvoiceItemStatus(rawValue: currentItem.status)?.description {
-            itemStatus = statusString
-        } else {
-            itemStatus = ""
-        }
+        itemQuantity = formDisplayLine(
+            quantity: currentItem.quantity,
+            abbreviation: currentItem.unit?.abbreviation)
+        itemStatus = InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
+
+        switchMode(.cost)
+        //switchMode(.quantity)
     }
 
     // MARK: -
