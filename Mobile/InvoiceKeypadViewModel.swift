@@ -174,18 +174,6 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         }
     }
 
-    /*
-    func formDisplayLine(quantity: Double?, abbreviation: String?) -> String {
-        guard let quantity = quantity else { return "ERROR 4" }
-
-        // Quantity
-        if let quantityString = numberFormatter.string(from: NSNumber(value: quantity)) {
-            return "\(quantityString) \(abbreviation)"
-        }
-        return ""
-    }
-    */
-
 }
 
 // MARK: - Keypad
