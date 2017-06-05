@@ -51,6 +51,21 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         case cost
         case quantity
         case status
+
+        /// TODO: include relevant methods?
+
+        /// TODO: return new state?
+        mutating func next() {
+            switch self {
+            case .cost:
+                self = .quantity
+            case .quantity:
+                self = .status
+            case .status:
+                self = .cost
+            }
+            //return self
+        }
     }
 
     //var currentMode: KeypadState = .quantity
@@ -66,7 +81,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     var displayQuantity: String = ""
 
     // Keypad
-    var softButtonTitle: String = ""
+    var softButtonTitle: String = "m"
     var unitButtonTitle: String = ""
 
     // MARK: - Lifecycle
