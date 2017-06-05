@@ -155,6 +155,9 @@ class InvoiceKeypadVC: UIViewController {
             itemCost.textColor = UIColor.lightGray
             itemQuantity.textColor = UIColor.black
             itemStatus.textColor = UIColor.lightGray
+            softButton.setTitle(viewModel.unitButtonTitle, for: .normal)
+            /// TODO: only enable if we are able to choose an alternate unit for CurrentItem?
+            softButton.isEnabled = true
             /*
              // Should inactiveUnit simply return currentItem.unit instead of nil?
              if let altUnit = inactiveUnit {
