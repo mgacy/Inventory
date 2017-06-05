@@ -79,24 +79,6 @@ struct ItemUnits {
     var singleUnit: Unit?
     var currentUnit: CurrentUnit
 
-    init?(item orderItem: OrderItem) {
-        self.packUnit = orderItem.item?.purchaseUnit
-        self.singleUnit = orderItem.item?.purchaseSubUnit
-
-        guard let currentUnit = orderItem.orderUnit else {
-            //self.currentUnit = .error
-            return nil
-        }
-
-        if let pUnit = self.packUnit, currentUnit == pUnit {
-            self.currentUnit = .packUnit
-        } else if let sUnit = self.singleUnit, currentUnit == sUnit {
-            self.currentUnit = .singleUnit
-        } else {
-            self.currentUnit = .error
-        }
-    }
-
     init?(item: Item?, currentUnit: Unit?) {
         /// TODO: remove once .item is non-optional for OrderItem, InvoiceItem
         guard let item = item else {
@@ -264,7 +246,7 @@ class OrderKeypadViewModel: KeypadViewModel {
         pack = currentItem.item?.packDisplay ?? ""
 
         // Handle purchaseUnit, purchaseSubUnit
-        currentItemUnits = ItemUnits(item: currentItem)
+        currentItemUnits = ItemUnits(item: currentItem.item, currentUnit: currentItem.orderUnit)
         packUnitLabel = currentItemUnits?.packUnit?.abbreviation ?? ""
         singleUnitLabel = currentItemUnits?.singleUnit?.abbreviation ?? ""
 
