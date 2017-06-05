@@ -208,7 +208,6 @@ class OrderKeypadViewModel: KeypadViewModel {
         do {
             let searchResults = try managedObjectContext.fetch(request)
             return searchResults
-
         } catch {
             log.error("Error with request: \(error)")
         }
@@ -219,7 +218,7 @@ class OrderKeypadViewModel: KeypadViewModel {
     private var currentItemUnits: ItemUnits?
 
     public var currentUnit: CurrentUnit {
-        //return currentItemUnits?.currentUnit
+        /// NOTE: it could be useful to return an associated value (either Unit or .abbreviation)
         guard let current = currentItemUnits else {
             return .error
         }
