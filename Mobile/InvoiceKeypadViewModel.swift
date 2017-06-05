@@ -123,9 +123,9 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         /// TODO: this would be a good place to use an associated value w/ the enum
         switch currentUnit {
         case .singleUnit:
-            unitButtonTitle = currentItemUnits?.singleUnit?.abbreviation ?? ""
-        case .packUnit:
             unitButtonTitle = currentItemUnits?.packUnit?.abbreviation ?? ""
+        case .packUnit:
+            unitButtonTitle = currentItemUnits?.singleUnit?.abbreviation ?? ""
         case .error:
             unitButtonTitle = "ERR"
         }
