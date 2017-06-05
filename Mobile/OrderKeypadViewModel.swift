@@ -145,6 +145,14 @@ struct ItemUnits {
             return newUnit
         case .invalidUnit:
             log.error("\(#function) FAILED: currentUnit.invalidUnit")
+
+            if let newUnit = packUnit {
+                currentUnit = .packUnit
+                return newUnit
+            } else if let newUnit = singleUnit {
+                currentUnit = .singleUnit
+                return newUnit
+            }
             return nil
         }
     }
