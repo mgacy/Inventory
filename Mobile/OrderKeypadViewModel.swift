@@ -310,13 +310,8 @@ class OrderKeypadViewModel: KeypadViewModel {
 
     internal func didChangeItem(_ currentItem: OrderItem) {
         /// TODO: make `OrderItem.item` non-optional
-        guard let item = currentItem.item else {
-            log.error("\(#function) FAILED: unable to get currentItem.item")
-            name = "Error (1)"
-            return
-        }
-        name = item.name ?? "Error (2)"
-        pack = item.packDisplay
+        name = currentItem.item?.name ?? "Error (2)"
+        pack = currentItem.item?.packDisplay ?? ""
 
         // Handle purchaseUnit, purchaseSubUnit
         currentItemUnits = ItemUnits(item: currentItem)
