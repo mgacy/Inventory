@@ -78,10 +78,9 @@ struct ItemUnits {
     var singleUnit: Unit?
     var currentUnit: CurrentUnit?
 
-    init?(item: Item?, currentUnit: Unit?) {
-        /// TODO: remove once .item is non-optional for OrderItem, InvoiceItem
+    init(item: Item?, currentUnit: Unit?) {
         guard let item = item else {
-            return nil
+            return
         }
 
         self.packUnit = item.purchaseUnit
@@ -182,9 +181,9 @@ class OrderKeypadViewModel: KeypadViewModel {
     }
     var currentIndex: Int
 
-    private var currentItemUnits: ItemUnits?
+    private var currentItemUnits: ItemUnits
     public var currentUnit: CurrentUnit? {
-        return currentItemUnits?.currentUnit
+        return currentItemUnits.currentUnit
     }
 
     // MARK: Keypad
@@ -216,6 +215,7 @@ class OrderKeypadViewModel: KeypadViewModel {
         self.parentObject = order
         self.currentIndex = index
         self.managedObjectContext = context
+        self.currentItemUnits = ItemUnits(item: nil, currentUnit: nil)
 
         // Setup numberFormatter
         /// TODO: do I even need this anymore?
@@ -249,7 +249,7 @@ class OrderKeypadViewModel: KeypadViewModel {
 
     // rename `changeUnit`; return `CurrentUnit`?
     func switchUnit(_ newUnit: CurrentUnit) -> Bool {
-        guard let newUnit = currentItemUnits?.switchUnit(newUnit) else {
+        guard let newUnit = currentItemUnits.switchUnit(newUnit) else {
             log.warning("\(#function) FAILED")
             return false
         }
@@ -270,8 +270,8 @@ class OrderKeypadViewModel: KeypadViewModel {
 
         // Handle purchaseUnit, purchaseSubUnit
         currentItemUnits = ItemUnits(item: currentItem.item, currentUnit: currentItem.orderUnit)
-        packUnitLabel = currentItemUnits?.packUnit?.abbreviation ?? ""
-        singleUnitLabel = currentItemUnits?.singleUnit?.abbreviation ?? ""
+        packUnitLabel = currentItemUnits.packUnit?.abbreviation ?? ""
+        singleUnitLabel = currentItemUnits.singleUnit?.abbreviation ?? ""
 
         par = formDisplayLine(
             quantity: currentItem.par, abbreviation: currentItem.parUnit?.abbreviation)

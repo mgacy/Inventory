@@ -32,9 +32,9 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     var currentIndex: Int
 
     // MARK: Units
-    private var currentItemUnits: ItemUnits?
+    private var currentItemUnits: ItemUnits
     public var currentUnit: CurrentUnit? {
-        return currentItemUnits?.currentUnit
+        return currentItemUnits.currentUnit
     }
 
     // MARK: Keypad
@@ -87,6 +87,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         self.parentObject = invoice
         self.currentIndex = index
         self.managedObjectContext = context
+        self.currentItemUnits = ItemUnits(item: nil, currentUnit: nil)
 
         // Setup numberFormatter
         numberFormatter = NumberFormatter()
@@ -121,9 +122,9 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         if let currentUnit = currentUnit {
             switch currentUnit {
             case .singleUnit:
-                unitButtonTitle = currentItemUnits?.packUnit?.abbreviation ?? ""
+                unitButtonTitle = currentItemUnits.packUnit?.abbreviation ?? ""
             case .packUnit:
-                unitButtonTitle = currentItemUnits?.singleUnit?.abbreviation ?? ""
+                unitButtonTitle = currentItemUnits.singleUnit?.abbreviation ?? ""
             case .invalidUnit:
                 unitButtonTitle = "ERR"
             }
@@ -178,7 +179,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     // MARK: -
 
     func toggleUnit() -> Bool {
-        guard let newUnit = currentItemUnits?.toggle() else {
+        guard let newUnit = currentItemUnits.toggle() else {
             return false
         }
         currentItem.unit = newUnit
@@ -189,9 +190,6 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         displayQuantity = itemQuantity
 
         //unitButtonTitle = newUnit.abbreviation ?? ""
-        guard let currentItemUnits = currentItemUnits else {
-            return true
-        }
         guard let currentUnit = currentItemUnits.currentUnit else {
             return true
         }
