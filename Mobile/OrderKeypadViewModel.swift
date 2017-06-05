@@ -65,58 +65,8 @@ protocol KeypadStuff: class {
 }
 
 // MARK: - Units
-/*
-enum CurrentUnit {
-    case packUnit(Unit)
-    case singleUnit(Unit)
-    case error
-}
 
-struct ItemUnits {
-    var packUnit: Unit?
-    var singleUnit: Unit?
-    var currentUnit: CurrentUnit
-
-    init?(item orderItem: OrderItem) {
-        self.packUnit = orderItem.item?.purchaseUnit
-        self.singleUnit = orderItem.item?.purchaseSubUnit
-
-        guard let currentUnit = orderItem.orderUnit else {
-        //self.currentUnit = .error
-            return nil
-        }
-
-        if let pUnit = self.packUnit, currentUnit == pUnit {
-            self.currentUnit = .packUnit(pUnit)
-        } else if let sUnit = self.singleUnit, currentUnit == sUnit {
-            self.currentUnit = .singleUnit(sUnit)
-        } else {
-            self.currentUnit = .error
-        }
-    }
-
-    public mutating func toggle(_ newUnit: CurrentUnit) -> Unit? {
-        switch self.currentUnit {
-        case .singleUnit(let unit):
-            guard let packUnit = packUnit else {
-                return nil
-            }
-            currentUnit = .packUnit(packUnit)
-            return packUnit
-        case .packUnit(let unit):
-            guard let singleUnit = singleUnit else {
-                return nil
-            }
-            currentUnit = .singleUnit(singleUnit)
-            return singleUnit
-        case.error:
-            fatalError("MEH")
-        }
-    }
-}
-*/
-// MARK: - ALT
-
+/// TODO: use abbreviation as associated value?
 enum CurrentUnit {
     case packUnit
     case singleUnit
