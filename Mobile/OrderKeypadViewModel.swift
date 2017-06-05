@@ -291,8 +291,6 @@ class OrderKeypadViewModel: KeypadViewModel {
 
     private func formDisplayLine(quantity: Double?, abbreviation: String?) -> String {
         guard let quantity = quantity else { return "ERROR 4" }
-
-        // Quantity
         if let quantityString = numberFormatter.string(from: NSNumber(value: quantity)) {
             return "\(quantityString) \(abbreviation ?? "")"
         }
@@ -315,10 +313,6 @@ extension OrderKeypadViewModel: KeypadStuff {
     func popItem() {
         keypad.popItem()
     }
-
-    //func reset(with number: NSNumber?) {
-    //    keypad.updateNumber(number)
-    //}
 
 }
 

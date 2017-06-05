@@ -212,7 +212,6 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     // MARK: - Formatting
 
     func formDisplayLine(quantity: String, abbreviation: String?) -> String {
-        //return "\(quantity) \(abbreviation)"
         if let abbreviation = abbreviation {
             return "\(quantity) \(abbreviation)"
         } else {
@@ -250,10 +249,6 @@ extension InvoiceKeypadViewModel: KeypadStuff {
         if currentMode == .status { return }
         keypad.popItem()
     }
-
-    //func reset(with number: NSNumber?) {
-    //    keypad.updateNumber(number)
-    //}
 
 }
 
