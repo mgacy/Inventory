@@ -60,24 +60,25 @@ class InvoiceKeypadVC: UIViewController {
     }
 
     // MARK: Units
-    /*
+
     @IBAction func softButtonTapped(_ sender: AnyObject) {
-        switch currentMode {
+        switch viewModel.currentMode {
         // Toggle currentItem.unit
         case .quantity:
-            let currentUnit = currentItem.unit
-            guard let newUnit = inactiveUnit else {
-                log.error("\(#function) FAILED : unable to get inactiveUnit"); return
+            log.verbose("currentMode: quantity")
+            if viewModel.toggleUnit() {
+                updateDisplay()
+                softButton.setTitle(viewModel.unitButtonTitle, for: .normal)
+            } else {
+                log.error("\(#function) FAILED: unable to update InvoiceItem Unit")
             }
-
-            currentItem.unit = newUnit
-            softButton.setTitle(currentUnit?.abbreviation, for: .normal)
-            update()
         // ?
         case .cost:
-            log.verbose("currentMode: \(currentMode)")
+            log.verbose("currentMode: \(viewModel.currentMode)")
         // ?
         case .status:
+            log.verbose("currentMode: \(viewModel.currentMode)")
+            /*
             if var status = InvoiceItemStatus(rawValue: currentItem.status) {
                 status.next()
                 currentItem.status = status.rawValue
@@ -87,10 +88,10 @@ class InvoiceKeypadVC: UIViewController {
             }
             softButton.setTitle("s", for: .normal)
             update()
+            */
         }
     }
 
-    */
     // MARK: Item Navigation
 
     @IBAction func nextItemTapped(_ sender: AnyObject) {
