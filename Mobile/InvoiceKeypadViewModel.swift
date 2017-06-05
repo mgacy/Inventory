@@ -33,11 +33,8 @@ class InvoiceKeypadViewModel: KeypadViewModel {
 
     // MARK: Units
     private var currentItemUnits: ItemUnits?
-    public var currentUnit: CurrentUnit {
-        guard let current = currentItemUnits else {
-            return .error
-        }
-        return current.currentUnit
+    public var currentUnit: CurrentUnit? {
+        return currentItemUnits?.currentUnit
     }
 
     // MARK: Keypad
@@ -121,12 +118,17 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         currentItemUnits = ItemUnits(item: currentItem.item, currentUnit: currentItem.unit)
 
         /// TODO: this would be a good place to use an associated value w/ the enum
-        switch currentUnit {
-        case .singleUnit:
-            unitButtonTitle = currentItemUnits?.packUnit?.abbreviation ?? ""
-        case .packUnit:
-            unitButtonTitle = currentItemUnits?.singleUnit?.abbreviation ?? ""
-        case .error:
+        if let currentUnit = currentUnit {
+            switch currentUnit {
+            case .singleUnit:
+                unitButtonTitle = currentItemUnits?.packUnit?.abbreviation ?? ""
+            case .packUnit:
+                unitButtonTitle = currentItemUnits?.singleUnit?.abbreviation ?? ""
+            case .invalidUnit:
+                unitButtonTitle = "ERR"
+            }
+        } else {
+            /// TODO: is there a better way to handle this?
             unitButtonTitle = "ERR"
         }
 
@@ -190,7 +192,11 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         guard let currentItemUnits = currentItemUnits else {
             return true
         }
-        switch currentItemUnits.currentUnit {
+        guard let currentUnit = currentItemUnits.currentUnit else {
+            return true
+        }
+
+        switch currentUnit {
         case .singleUnit:
             /// TODO: disable softButton if .packUnit is nil?
             unitButtonTitle = currentItemUnits.packUnit?.abbreviation ?? ""

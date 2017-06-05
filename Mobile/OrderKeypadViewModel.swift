@@ -70,14 +70,13 @@ protocol KeypadStuff: class {
 enum CurrentUnit {
     case packUnit
     case singleUnit
-    //case noUnit?
     case invalidUnit
 }
 
 struct ItemUnits {
     var packUnit: Unit?
     var singleUnit: Unit?
-    var currentUnit: CurrentUnit
+    var currentUnit: CurrentUnit?
 
     init?(item: Item?, currentUnit: Unit?) {
         /// TODO: remove once .item is non-optional for OrderItem, InvoiceItem
@@ -89,8 +88,8 @@ struct ItemUnits {
         self.singleUnit = item.purchaseSubUnit
 
         guard let currentUnit = currentUnit else {
-            //self.currentUnit = .error
-            return nil
+            self.currentUnit = nil
+            return
         }
 
         if let pUnit = self.packUnit, currentUnit == pUnit {
@@ -102,8 +101,36 @@ struct ItemUnits {
         }
     }
 
+    public mutating func switchUnit(_ newUnitCase: CurrentUnit) -> Unit? {
+        guard newUnitCase != currentUnit else {
+            log.debug("\(#function) FAILED: tried to switchUnit to currentUnit")
+            return nil
+        }
+        switch newUnitCase {
+        case .singleUnit:
+            guard let newUnit = singleUnit else {
+                return nil
+            }
+            currentUnit = .singleUnit
+            return newUnit
+        case .packUnit:
+            guard let newUnit = packUnit else {
+                return nil
+            }
+            currentUnit = .packUnit
+            return newUnit
+        default:
+            log.error("\(#function)) FAILED: tried to switch unit to .invalidUnit")
+            return nil
+        }
+    }
+
     public mutating func toggle() -> Unit? {
-        switch self.currentUnit {
+        guard let currentUnitCase = self.currentUnit else {
+            return nil
+        }
+
+        switch currentUnitCase {
         case .singleUnit:
             guard let newUnit = packUnit else {
                 return nil
@@ -116,12 +143,12 @@ struct ItemUnits {
             }
             currentUnit = .singleUnit
             return newUnit
-        /// TODO: how to handle `noUnit`?
         case .invalidUnit:
             log.error("\(#function) FAILED: currentUnit.invalidUnit")
             return nil
         }
     }
+
 }
 
 // MARK: - Actual
@@ -148,13 +175,8 @@ class OrderKeypadViewModel: KeypadViewModel {
     var currentIndex: Int
 
     private var currentItemUnits: ItemUnits?
-
-    public var currentUnit: CurrentUnit {
-        /// NOTE: it could be useful to return an associated value (either Unit or .abbreviation)
-        guard let current = currentItemUnits else {
-            return .error
-        }
-        return current.currentUnit
+    public var currentUnit: CurrentUnit? {
+        return currentItemUnits?.currentUnit
     }
 
     // MARK: Keypad
@@ -207,7 +229,7 @@ class OrderKeypadViewModel: KeypadViewModel {
     }
 
     // MARK: -
-
+    /*
     func toggleUnit() {
         if let newUnit = currentItemUnits?.toggle() {
             currentItem.orderUnit = newUnit
@@ -215,19 +237,12 @@ class OrderKeypadViewModel: KeypadViewModel {
             /// TODO: save context?
         }
     }
+    */
 
     // rename `changeUnit`; return `CurrentUnit`?
     func switchUnit(_ newUnit: CurrentUnit) -> Bool {
-        guard currentItemUnits?.currentUnit != .error else {
-            log.warning("\(#function) FAILED: A - \(String(describing: currentItemUnits))")
-            return false
-        }
-        guard currentItemUnits?.currentUnit != newUnit else {
-            log.warning("\(#function) FAILED: B - \(String(describing: currentItemUnits))")
-            return false
-        }
-        guard let newUnit = currentItemUnits?.toggle() else {
-            log.warning("\(#function) FAILED: C")
+        guard let newUnit = currentItemUnits?.switchUnit(newUnit) else {
+            log.warning("\(#function) FAILED")
             return false
         }
         currentItem.orderUnit = newUnit

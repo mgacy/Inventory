@@ -136,7 +136,13 @@ class OrderKeypadVC: UIViewController {
         bottleButton.setTitle(viewModel.singleUnitLabel, for: .normal)
         bottleButton.isEnabled = viewModel.packUnitIsEnabled
 
-        switch viewModel.currentUnit {
+        guard let currentUnit = viewModel.currentUnit else {
+            caseButton.backgroundColor = ColorPalette.secondaryColor
+            bottleButton.backgroundColor = ColorPalette.secondaryColor
+            return
+        }
+
+        switch currentUnit {
         case .singleUnit:
             caseButton.backgroundColor = ColorPalette.secondaryColor
             bottleButton.backgroundColor = ColorPalette.navyColor
