@@ -135,7 +135,7 @@ struct ItemUnits {
             currentUnit = .singleUnit
             return newUnit
         /// TODO: how to handle `noUnit`?
-        default:
+        case .error:
             log.error("\(#function) FAILED: currentUnit.error")
             return nil
         }
