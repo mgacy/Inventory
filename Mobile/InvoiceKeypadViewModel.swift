@@ -144,22 +144,19 @@ class InvoiceKeypadViewModel: KeypadViewModel {
 
     // MARK: -
 
-    func switchMode(_ newMode: KeypadState) {
+    public func switchMode(_ newMode: KeypadState) {
         currentMode = newMode
 
         switch newMode {
         case .cost:
             keypad.updateNumber(currentItem.cost as NSNumber)
-            displayQuantity = keypad.displayValue
+            displayQuantity = "$\(keypad.displayValue)"
         case .quantity:
             keypad.updateNumber(currentItem.quantity as NSNumber)
-            displayQuantity = keypad.displayValue
+            displayQuantity = formDisplayLine(quantity: keypad.displayValue,
+                                              abbreviation: currentItem.unit?.abbreviation)
         case .status:
-            if let statusString = InvoiceItemStatus(rawValue: currentItem.status)?.description {
-                displayQuantity = statusString
-            } else {
-                displayQuantity = ""
-            }
+            displayQuantity =  InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
         }
     }
 
