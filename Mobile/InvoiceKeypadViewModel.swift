@@ -196,7 +196,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
             unitButtonTitle = currentItemUnits.packUnit?.abbreviation ?? ""
         case .packUnit:
             unitButtonTitle = currentItemUnits.singleUnit?.abbreviation ?? ""
-        case .error:
+        case .invalidUnit:
             unitButtonTitle = "ERR"
         }
 

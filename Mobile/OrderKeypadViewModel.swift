@@ -71,7 +71,7 @@ enum CurrentUnit {
     case packUnit
     case singleUnit
     //case noUnit?
-    case error
+    case invalidUnit
 }
 
 struct ItemUnits {
@@ -98,7 +98,7 @@ struct ItemUnits {
         } else if let sUnit = self.singleUnit, currentUnit == sUnit {
             self.currentUnit = .singleUnit
         } else {
-            self.currentUnit = .error
+            self.currentUnit = .invalidUnit
         }
     }
 
@@ -117,8 +117,8 @@ struct ItemUnits {
             currentUnit = .singleUnit
             return newUnit
         /// TODO: how to handle `noUnit`?
-        case .error:
-            log.error("\(#function) FAILED: currentUnit.error")
+        case .invalidUnit:
+            log.error("\(#function) FAILED: currentUnit.invalidUnit")
             return nil
         }
     }

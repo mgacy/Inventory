@@ -143,7 +143,7 @@ class OrderKeypadVC: UIViewController {
         case .packUnit:
             caseButton.backgroundColor = ColorPalette.navyColor
             bottleButton.backgroundColor = ColorPalette.secondaryColor
-        case .error:
+        case .invalidUnit:
             caseButton.backgroundColor = ColorPalette.secondaryColor
             bottleButton.backgroundColor = ColorPalette.secondaryColor
         }
