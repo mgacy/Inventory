@@ -115,10 +115,6 @@ class InvoiceKeypadViewModel: KeypadViewModel {
             unitButtonTitle = "ERR"
         }
 
-        /// TODO: cost as default
-        //currentMode = .quantity
-        //keypad.updateNumber(currentItem.quantity as NSNumber)
-
         // Get strings for display
         itemName = currentItem.item?.name ?? "Error (1)"
         itemCost = currencyFormatter.string(from: NSNumber(value: currentItem.cost)) ?? " "

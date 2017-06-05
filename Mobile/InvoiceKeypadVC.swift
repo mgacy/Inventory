@@ -15,32 +15,6 @@ class InvoiceKeypadVC: UIViewController {
 
     var viewModel: InvoiceKeypadViewModel!
 
-    /*
-    var inactiveUnit: Unit? {
-        guard let item = currentItem.item else {
-            log.debug("\(#function) : unable to get item of \(currentItem)")
-            return nil
-        }
-        // Simply return currentItem.unit instead of nil?
-        guard let pack = item.purchaseUnit else {
-            log.debug("\(#function) : unable to get purchaseUnit of \(item)")
-            return nil
-        }
-        guard let unit = item.purchaseSubUnit else {
-            log.debug("\(#function) : unable to get purchaseSubUnit of \(item)")
-            return nil
-        }
-
-        if currentItem.unit == unit {
-            return pack
-        } else if currentItem.unit == pack {
-            return unit
-        } else {
-            log.warning("Unable to get inactiveUnit"); return nil
-        }
-    }
-    */
-
     // MARK: - Display Outlets
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var itemQuantity: UILabel!
