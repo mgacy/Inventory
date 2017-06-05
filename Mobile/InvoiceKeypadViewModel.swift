@@ -159,8 +159,51 @@ class InvoiceKeypadViewModel: KeypadViewModel {
             displayQuantity =  InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
         }
     }
-
+    /*
+    public func softAction() -> Bool {
+        switch currentMode {
+        case .cost:
+            return true
+        case .quantity:
+            let result = toggleUnit()
+            /// TODO: update properties
+            return result
+        case .status:
+            return true
+        }
+    }
+    */
     // MARK: -
+
+    func toggleUnit() -> Bool {
+        guard let newUnit = currentItemUnits?.toggle() else {
+            return false
+        }
+        currentItem.unit = newUnit
+        /// TODO: save context?
+        itemQuantity = formDisplayLine(
+            quantity: currentItem.quantity,
+            abbreviation: currentItem.unit?.abbreviation)
+        displayQuantity = itemQuantity
+
+        //unitButtonTitle = newUnit.abbreviation ?? ""
+        guard let currentItemUnits = currentItemUnits else {
+            return true
+        }
+        switch currentItemUnits.currentUnit {
+        case .singleUnit:
+            /// TODO: disable softButton if .packUnit is nil?
+            unitButtonTitle = currentItemUnits.packUnit?.abbreviation ?? ""
+        case .packUnit:
+            unitButtonTitle = currentItemUnits.singleUnit?.abbreviation ?? ""
+        case .error:
+            unitButtonTitle = "ERR"
+        }
+
+        return true
+    }
+
+    // MARK: - Formatting
 
     func formDisplayLine(quantity: String, abbreviation: String?) -> String {
         //return "\(quantity) \(abbreviation)"
