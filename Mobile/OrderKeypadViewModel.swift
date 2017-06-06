@@ -192,7 +192,7 @@ class OrderKeypadViewModel: KeypadViewModel {
 
     var numberFormatter: NumberFormatter
 
-    // MARK: X
+    // MARK: - X
 
     // Display
     var name: String = ""
@@ -284,11 +284,10 @@ class OrderKeypadViewModel: KeypadViewModel {
 
         // Update keypad with quantity of new currentItem
         keypad.updateNumber(currentItem.quantity)
-
         orderQuantity = keypad.displayValue
     }
 
-    // MARK: -
+    // MARK: - Formatting
 
     private func formDisplayLine(quantity: Double?, abbreviation: String?) -> String {
         guard let quantity = quantity else { return "ERROR 4" }
@@ -301,6 +300,7 @@ class OrderKeypadViewModel: KeypadViewModel {
 }
 
 // MARK: - Keypad
+/// TODO: simply move to default implementation of KeypadStuff?
 extension OrderKeypadViewModel: KeypadStuff {
 
     func pushDigit(value: Int) {
