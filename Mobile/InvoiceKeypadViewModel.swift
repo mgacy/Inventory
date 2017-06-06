@@ -162,20 +162,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
             displayQuantity =  InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
         }
     }
-    /*
-    public func softAction() -> Bool {
-        switch currentMode {
-        case .cost:
-            return true
-        case .quantity:
-            let result = toggleUnit()
-            /// TODO: update properties
-            return result
-        case .status:
-            return true
-        }
-    }
-    */
+
     // MARK: -
 
     func toggleUnit() -> Bool {
