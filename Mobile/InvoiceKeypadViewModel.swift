@@ -91,6 +91,23 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     var softButtonTitle: String = "m"
     var unitButtonTitle: String = ""
 
+    /*
+    var unitButtonTitle: String {
+        guard let currentUnit = currentUnit else {
+            /// TODO: is there a better way to handle this?
+            return "ERR"
+        }
+        switch currentUnit {
+        case .singleUnit:
+            return currentItemUnits.packUnit?.abbreviation ?? ""
+        case .packUnit:
+            return currentItemUnits.singleUnit?.abbreviation ?? ""
+        case .invalidUnit:
+            return "ERR"
+        }
+    }
+    */
+
     // MARK: - Lifecycle
 
     required init(for invoice: Invoice, atIndex index: Int, inContext context: NSManagedObjectContext) {
