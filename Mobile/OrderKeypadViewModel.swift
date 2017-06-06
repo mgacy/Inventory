@@ -322,11 +322,12 @@ extension OrderKeypadViewModel: KeypadDelegate {
     func updateModel(_ newValue: NSNumber?) {
         if let newValue = newValue {
             currentItem.quantity = newValue
+            orderQuantity = keypad.displayValue
         } else {
             currentItem.quantity = 0
+            orderQuantity = "0"
         }
         managedObjectContext.performSaveOrRollback()
-        orderQuantity = keypad.displayValue
     }
 
 }
