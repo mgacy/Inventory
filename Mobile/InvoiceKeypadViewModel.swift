@@ -138,32 +138,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         self.didChangeItem(self.currentItem)
     }
 
-    // MARK: -
-
-    internal func didChangeItem(_ currentItem: InvoiceItem) {
-
-        // Handle purchaseUnit, purchaseSubUnit
-        currentItemUnits = ItemUnits(item: currentItem.item, currentUnit: currentItem.unit)
-
-        /// TODO: this would be a good place to use an associated value w/ the enum
-        if let currentUnit = currentUnit {
-            switch currentUnit {
-            case .singleUnit:
-                unitButtonTitle = currentItemUnits.packUnit?.abbreviation ?? ""
-            case .packUnit:
-                unitButtonTitle = currentItemUnits.singleUnit?.abbreviation ?? ""
-            case .invalidUnit:
-                unitButtonTitle = "ERR"
-            }
-        } else {
-            /// TODO: is there a better way to handle this?
-            unitButtonTitle = "ERR"
-        }
-
-        switchMode(.cost)
-    }
-
-    // MARK: -
+    // MARK: - Actions from View Controller
 
     public func switchMode(_ newMode: KeypadState) {
         currentMode = newMode
@@ -180,8 +155,6 @@ class InvoiceKeypadViewModel: KeypadViewModel {
             displayQuantity =  InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
         }
     }
-
-    // MARK: -
 
     func toggleUnit() -> Bool {
         guard let newUnit = currentItemUnits.toggle() else {
@@ -209,6 +182,31 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         }
 
         return true
+    }
+
+    // MARK: -
+
+    internal func didChangeItem(_ currentItem: InvoiceItem) {
+
+        // Handle purchaseUnit, purchaseSubUnit
+        currentItemUnits = ItemUnits(item: currentItem.item, currentUnit: currentItem.unit)
+
+        /// TODO: this would be a good place to use an associated value w/ the enum
+        if let currentUnit = currentUnit {
+            switch currentUnit {
+            case .singleUnit:
+                unitButtonTitle = currentItemUnits.packUnit?.abbreviation ?? ""
+            case .packUnit:
+                unitButtonTitle = currentItemUnits.singleUnit?.abbreviation ?? ""
+            case .invalidUnit:
+                unitButtonTitle = "ERR"
+            }
+        } else {
+            /// TODO: is there a better way to handle this?
+            unitButtonTitle = "ERR"
+        }
+
+        switchMode(.cost)
     }
 
     // MARK: - Formatting

@@ -257,7 +257,7 @@ class OrderKeypadViewModel: KeypadViewModel {
         self.didChangeItem(self.currentItem)
     }
 
-    // MARK: -
+    // MARK: - Actions from View Controller
 
     // rename `changeUnit`; return `CurrentUnit`?
     func switchUnit(_ newUnit: CurrentUnit) -> Bool {
