@@ -71,11 +71,21 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     // MARK: - X
 
     // Display
-    var itemName: String = ""
-    var itemQuantity: String = ""
-    var itemCost: String = ""
-    var itemStatus: String = ""
     var displayQuantity: String = ""
+
+    var itemName: String {
+        return currentItem.item?.name ?? "Error (1)"
+    }
+    var itemCost: String {
+        return currencyFormatter.string(from: NSNumber(value: currentItem.cost)) ?? " "
+    }
+    var itemQuantity: String {
+        return formDisplayLine(quantity: currentItem.quantity,
+                               abbreviation: currentItem.unit?.abbreviation)
+    }
+    var itemStatus: String {
+        return InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
+    }
 
     // Keypad
     var softButtonTitle: String = "m"
@@ -133,14 +143,6 @@ class InvoiceKeypadViewModel: KeypadViewModel {
             unitButtonTitle = "ERR"
         }
 
-        // Get strings for display
-        itemName = currentItem.item?.name ?? "Error (1)"
-        itemCost = currencyFormatter.string(from: NSNumber(value: currentItem.cost)) ?? " "
-        itemQuantity = formDisplayLine(
-            quantity: currentItem.quantity,
-            abbreviation: currentItem.unit?.abbreviation)
-        itemStatus = InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
-
         switchMode(.cost)
     }
 
@@ -170,9 +172,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         }
         currentItem.unit = newUnit
         /// TODO: save context?
-        itemQuantity = formDisplayLine(
-            quantity: currentItem.quantity,
-            abbreviation: currentItem.unit?.abbreviation)
+
         displayQuantity = itemQuantity
 
         guard let currentUnit = currentItemUnits.currentUnit else {
@@ -247,9 +247,7 @@ extension InvoiceKeypadViewModel: KeypadDelegate {
             } else {
                 currentItem.cost = 0
             }
-
-            displayQuantity = keypad.displayValue
-            itemCost = displayQuantity
+            displayQuantity = "$\(keypad.displayValue)"
         case .quantity:
             if let newValue = newValue {
                 currentItem.quantity = Double(newValue)
@@ -259,8 +257,6 @@ extension InvoiceKeypadViewModel: KeypadDelegate {
             displayQuantity = formDisplayLine(
                 quantity: keypad.displayValue,
                 abbreviation: currentItem.unit?.abbreviation ?? " ")
-            itemQuantity = displayQuantity
-
         case .status:
             log.verbose("update - status")
         }
