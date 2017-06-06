@@ -44,6 +44,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     var currencyFormatter: NumberFormatter
 
     // MARK: Mode
+    /// TODO: move outside InvoiceKeypadViewModel?
     enum KeypadState {
         case cost
         case quantity
@@ -65,10 +66,9 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         }
     }
 
-    //var currentMode: KeypadState = .quantity
     var currentMode: KeypadState = .cost
 
-    // MARK: X
+    // MARK: - X
 
     // Display
     var itemName: String = ""
@@ -142,7 +142,6 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         itemStatus = InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
 
         switchMode(.cost)
-        //switchMode(.quantity)
     }
 
     // MARK: -
@@ -176,17 +175,16 @@ class InvoiceKeypadViewModel: KeypadViewModel {
             abbreviation: currentItem.unit?.abbreviation)
         displayQuantity = itemQuantity
 
-        //unitButtonTitle = newUnit.abbreviation ?? ""
         guard let currentUnit = currentItemUnits.currentUnit else {
             /// TODO: what should the label be in this situation?
             unitButtonTitle = "?"
             return true
         }
-
+        // We want the label to be the inactive unit
         switch currentUnit {
         case .singleUnit:
-            /// TODO: disable softButton if .packUnit is nil?
             unitButtonTitle = currentItemUnits.packUnit?.abbreviation ?? ""
+            /// TODO: disable softButton if .packUnit is nil?
         case .packUnit:
             unitButtonTitle = currentItemUnits.singleUnit?.abbreviation ?? ""
         case .invalidUnit:
@@ -264,7 +262,6 @@ extension InvoiceKeypadViewModel: KeypadDelegate {
             itemQuantity = displayQuantity
 
         case .status:
-            /// NOTE: we should not ever reach this case
             log.verbose("update - status")
         }
         managedObjectContext.performSaveOrRollback()
