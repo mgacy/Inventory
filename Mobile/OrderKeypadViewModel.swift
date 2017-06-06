@@ -195,18 +195,38 @@ class OrderKeypadViewModel: KeypadViewModel {
     // MARK: - X
 
     // Display
-    var name: String = ""
     var orderQuantity: String = ""
-    var orderUnit: String = ""
-    var pack: String = ""
-    var par: String = ""
-    var onHand: String = ""
-    var suggestedOrder: String = ""
+    var name: String {
+        return currentItem.item?.name ?? "Error (2)"
+    }
+    var orderUnit: String {
+        return currentItem.orderUnit?.abbreviation ?? ""
+    }
+    var pack: String {
+        return currentItem.item?.packDisplay ?? ""
+    }
+    var par: String {
+        return formDisplayLine(quantity: currentItem.par,
+                               abbreviation: currentItem.parUnit?.abbreviation)
+    }
+    var onHand: String {
+        return formDisplayLine(quantity: currentItem.onHand,
+                               abbreviation: currentItem.item?.inventoryUnit?.abbreviation)
+    }
+    var suggestedOrder: String {
+        return formDisplayLine(quantity: currentItem.minOrder,
+                               abbreviation: currentItem.minOrderUnit?.abbreviation)
+    }
+
     // Keypad
-    var singleUnitLabel: String = ""
+    var singleUnitLabel: String {
+        return currentItemUnits.singleUnit?.abbreviation ?? ""
+    }
     var singleUnitIsEnabled: Bool = true
     var singleUnitIsActive: Bool = false
-    var packUnitLabel: String = ""
+    var packUnitLabel: String {
+        return currentItemUnits.packUnit?.abbreviation ?? ""
+    }
     var packUnitIsEnabled: Bool = true
     var packUnitIsActive: Bool = false
 
@@ -255,7 +275,6 @@ class OrderKeypadViewModel: KeypadViewModel {
             return false
         }
         currentItem.orderUnit = newUnit
-        orderUnit = newUnit.abbreviation ?? ""
         /// TODO: save context?
         return true
     }
@@ -265,22 +284,9 @@ class OrderKeypadViewModel: KeypadViewModel {
     // MARK: -
 
     internal func didChangeItem(_ currentItem: OrderItem) {
-        /// TODO: make `OrderItem.item` non-optional
-        name = currentItem.item?.name ?? "Error (2)"
-        pack = currentItem.item?.packDisplay ?? ""
-
-        // Handle purchaseUnit, purchaseSubUnit
         currentItemUnits = ItemUnits(item: currentItem.item, currentUnit: currentItem.orderUnit)
-        packUnitLabel = currentItemUnits.packUnit?.abbreviation ?? ""
-        singleUnitLabel = currentItemUnits.singleUnit?.abbreviation ?? ""
-
-        par = formDisplayLine(
-            quantity: currentItem.par, abbreviation: currentItem.parUnit?.abbreviation)
-        onHand = formDisplayLine(
-            quantity: currentItem.onHand, abbreviation: currentItem.item?.inventoryUnit?.abbreviation)
-        suggestedOrder = formDisplayLine(
-            quantity: currentItem.minOrder, abbreviation: currentItem.minOrderUnit?.abbreviation)
-        orderUnit = currentItem.orderUnit?.abbreviation ?? " "
+        //packUnitLabel = currentItemUnits.packUnit?.abbreviation ?? ""
+        //singleUnitLabel = currentItemUnits.singleUnit?.abbreviation ?? ""
 
         // Update keypad with quantity of new currentItem
         keypad.updateNumber(currentItem.quantity)
