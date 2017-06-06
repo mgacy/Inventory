@@ -126,6 +126,7 @@ struct ItemUnits {
 
     public mutating func toggle() -> Unit? {
         guard let currentUnitCase = self.currentUnit else {
+            /// TODO: can we somehow still change the unit?
             return nil
         }
 

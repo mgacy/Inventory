@@ -191,6 +191,8 @@ class InvoiceKeypadViewModel: KeypadViewModel {
 
         //unitButtonTitle = newUnit.abbreviation ?? ""
         guard let currentUnit = currentItemUnits.currentUnit else {
+            /// TODO: what should the label be in this situation?
+            unitButtonTitle = "?"
             return true
         }
 
