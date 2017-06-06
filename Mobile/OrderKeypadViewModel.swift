@@ -258,15 +258,6 @@ class OrderKeypadViewModel: KeypadViewModel {
     }
 
     // MARK: -
-    /*
-    func toggleUnit() {
-        if let newUnit = currentItemUnits?.toggle() {
-            currentItem.orderUnit = newUnit
-            orderUnit = newUnit.abbreviation ?? ""
-            /// TODO: save context?
-        }
-    }
-    */
 
     // rename `changeUnit`; return `CurrentUnit`?
     func switchUnit(_ newUnit: CurrentUnit) -> Bool {
@@ -279,14 +270,10 @@ class OrderKeypadViewModel: KeypadViewModel {
         return true
     }
 
-    //func updateQuantity(_ quantity: Double) {}
-
     // MARK: -
 
     internal func didChangeItem(_ currentItem: OrderItem) {
         currentItemUnits = ItemUnits(item: currentItem.item, currentUnit: currentItem.orderUnit)
-        //packUnitLabel = currentItemUnits.packUnit?.abbreviation ?? ""
-        //singleUnitLabel = currentItemUnits.singleUnit?.abbreviation ?? ""
 
         // Update keypad with quantity of new currentItem
         keypad.updateNumber(currentItem.quantity)
