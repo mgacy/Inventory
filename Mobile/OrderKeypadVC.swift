@@ -100,7 +100,7 @@ class OrderKeypadVC: UIViewController {
         }
     }
 
-    // MARK: - C
+    // MARK: - Display
 
     func updateDisplay() {
         itemName.text = viewModel.name
