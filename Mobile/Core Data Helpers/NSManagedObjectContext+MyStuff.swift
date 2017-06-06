@@ -350,8 +350,6 @@ extension NSManagedObjectContext {
         request.predicate = predicate
         request.relationshipKeyPathsForPrefetching = relationships
 
-        //let fetchedResult = try self.fetch(request)
-        //return fetchedResult
         do {
             let fetchedResult = try self.fetch(request)
             let objectDict = fetchedResult.toDictionary { $0.date! }

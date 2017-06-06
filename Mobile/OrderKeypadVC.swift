@@ -13,38 +13,7 @@ class OrderKeypadVC: UIViewController {
 
     // MARK: - Properties
 
-    var parentObject: Order!
-    var currentIndex = 0
-
-    var items: [OrderItem] {
-        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
-        request.predicate = NSPredicate(format: "order == %@", parentObject)
-
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        do {
-            let searchResults = try managedObjectContext?.fetch(request)
-            return searchResults!
-
-        } catch {
-            log.error("Error with request: \(error)")
-        }
-        return [OrderItem]()
-    }
-
-    var currentItem: OrderItem {
-        //log.verbose("currentItem: \(items[currentIndex])")
-        return items[currentIndex]
-    }
-
-    typealias KeypadOutput = (total: Double?, display: String)
-    let keypad = Keypad()
-
-    // CoreData
-    var managedObjectContext: NSManagedObjectContext?
-
-    var numberFormatter: NumberFormatter?
+    var viewModel: OrderKeypadViewModel!
 
     // MARK: - Display Outlets
 
@@ -63,17 +32,11 @@ class OrderKeypadVC: UIViewController {
 
     // MARK: - Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    //override func viewDidLoad() {}
 
-        // Setup numberFormatter
-        numberFormatter = NumberFormatter()
-        guard let numberFormatter = numberFormatter else { return }
-        numberFormatter.numberStyle = .decimal
-        numberFormatter.roundingMode = .halfUp
-        numberFormatter.maximumFractionDigits = 2
-
-        update(newItem: true)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateDisplay()
     }
 
     override func didReceiveMemoryWarning() {
@@ -85,149 +48,71 @@ class OrderKeypadVC: UIViewController {
 
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
-        //log.verbose("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
-        keypad.pushDigit(value: number)
-
-        update()
+        viewModel.pushDigit(value: number)
+        order.text = viewModel.orderQuantity
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
-        //log.verbose("Tapped 'clear'")
-        keypad.popItem()
-
-        update()
+        viewModel.popItem()
+        order.text = viewModel.orderQuantity
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        //log.verbose("Tapped '.'")
-        keypad.pushDecimal()
-
-        update()
+        viewModel.pushDecimal()
+        order.text = viewModel.orderQuantity
     }
 
     // MARK: Units
 
     @IBAction func packTapped(_ sender: AnyObject) {
-        guard let item = currentItem.item else {
-            log.debug("\(#function) : unable to get item of \(currentItem)")
+        guard viewModel.switchUnit(.packUnit) == true else {
             return
         }
-        guard let purchaseUnit = item.purchaseUnit else {
-            log.debug("\(#function) : unable to get purchaseUnit of \(item)")
-            return
-        }
-
-        currentItem.orderUnit = purchaseUnit
-
-        // Update display, keypad buttons
-        update()
+        updateDisplay()
     }
 
     /// TODO: rename `individualTapped`?
     @IBAction func unitTapped(_ sender: AnyObject) {
-        guard let item = currentItem.item else {
-            log.debug("\(#function) : unable to get item of \(currentItem)")
+        guard viewModel.switchUnit(.singleUnit) == true else {
             return
         }
-        guard let purchaseSubUnit = item.purchaseSubUnit else {
-            log.debug("\(#function) : unable to get purchaseSubUnit of \(item)")
-            return
-        }
-
-        currentItem.orderUnit = purchaseSubUnit
-
-        // Update display, keypad buttons
-        update()
+        updateDisplay()
     }
 
     // MARK: Item Navigation
 
     @IBAction func nextItemTapped(_ sender: AnyObject) {
-        if currentIndex < items.count - 1 {
-            currentIndex += 1
-            update(newItem: true)
-        } else {
-            /// TODO: cleanup?
-
-            // Pop view
+        switch viewModel.nextItem() {
+        case true:
+            updateDisplay()
+        case false:
             navigationController!.popViewController(animated: true)
         }
     }
 
     @IBAction func previousItemTapped(_ sender: AnyObject) {
-        if currentIndex > 0 {
-            currentIndex -= 1
-            update(newItem: true)
-        } else {
-            /// TODO: cleanup?
-
-            // Pop view
+        switch viewModel.previousItem() {
+        case true:
+            updateDisplay()
+        case false:
             navigationController!.popViewController(animated: true)
         }
     }
 
-    // MARK: - C
+    // MARK: - Display
 
-    func update(newItem: Bool = false) {
+    func updateDisplay() {
+        itemName.text = viewModel.name
 
-        let output: KeypadOutput
+        caseSize.text = viewModel.pack
+        par.text = viewModel.par
+        onHand.text = viewModel.onHand
+        minOrder.text = viewModel.suggestedOrder
 
-        switch newItem {
-        case true:
-            // Update keypad with quantity of new currentItem
-            keypad.updateNumber(currentItem.quantity as Double?)
-            output = keypad.outputB()
-
-        case false:
-            // Update model with output of keypad
-            output = keypad.outputB()
-
-            if let keypadResult = output.total {
-                currentItem.quantity = keypadResult as NSNumber?
-            } else {
-                currentItem.quantity = nil
-            }
-
-            // Save the context.
-            let context = self.managedObjectContext!
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                log.error("Unresolved error \(nserror), \(nserror.userInfo)")
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-
-        updateKeypadButtons(item: currentItem)
-        updateDisplay(item: currentItem, keypadOutput: output)
-
-        //log.verbose("currentItem: \(currentItem)")
-    }
-
-    func updateDisplay(item: OrderItem, keypadOutput: KeypadOutput) {
-        guard let item = currentItem.item else {
-            itemName.text = "Error (1)"; return
-        }
-        guard let name = item.name else {
-            itemName.text = "Error (2)" ; return
-        }
-        itemName.text = name
-
-        caseSize.text = item.packDisplay
-        par.text = formDisplayLine(
-            quantity: currentItem.par, abbreviation: currentItem.parUnit?.abbreviation ?? " ")
-        onHand.text = formDisplayLine(
-            quantity: currentItem.onHand, abbreviation: currentItem.item?.inventoryUnit?.abbreviation ?? " ")
-        minOrder.text = formDisplayLine(
-            quantity: currentItem.minOrder, abbreviation: currentItem.minOrderUnit?.abbreviation ?? " ")
-
-        order.text = keypadOutput.display
-        orderUnit.text = currentItem.orderUnit?.abbreviation
-
+        order.text = viewModel.orderQuantity
+        orderUnit.text = viewModel.orderUnit
+        /*
         switch keypadOutput.total {
         case nil:
             order.textColor = UIColor.lightGray
@@ -239,60 +124,35 @@ class OrderKeypadVC: UIViewController {
             order.textColor = UIColor.black
             orderUnit.textColor = UIColor.black
         }
-
+        */
+        updateKeypad()
     }
 
     /// TODO: rename `updateUnitButtons`?
-    func updateKeypadButtons(item: OrderItem) {
-        guard let orderUnit = currentItem.orderUnit else {
-            log.warning("\(#function) FAILED : 1"); return
-        }
-        guard let item = currentItem.item else {
-            log.warning("\(#function) FAILED : 2"); return
-        }
+    func updateKeypad() {
+        caseButton.setTitle(viewModel.packUnitLabel, for: .normal)
+        caseButton.isEnabled = viewModel.singleUnitIsEnabled
 
-        //log.verbose("currentItem: \(currentItem)")
-        //log.verbose("currentItem.item: \(item)")
+        bottleButton.setTitle(viewModel.singleUnitLabel, for: .normal)
+        bottleButton.isEnabled = viewModel.packUnitIsEnabled
 
-        /// TODO: some of this should only be done when we change currentItem
-        if orderUnit == item.purchaseUnit {
-            caseButton.backgroundColor = ColorPalette.navyColor
-            caseButton.isEnabled = true
-
-            bottleButton.backgroundColor = ColorPalette.secondaryColor
-            if item.purchaseSubUnit != nil {
-                bottleButton.isEnabled = true
-            } else {
-                bottleButton.isEnabled = false
-            }
-
-        } else if orderUnit == item.purchaseSubUnit {
-            bottleButton.backgroundColor = ColorPalette.navyColor
-            bottleButton.isEnabled = true
-
+        guard let currentUnit = viewModel.currentUnit else {
             caseButton.backgroundColor = ColorPalette.secondaryColor
-            if item.purchaseUnit != nil {
-                caseButton.isEnabled = true
-            } else {
-                caseButton.isEnabled = false
-            }
-
-        } else {
-            log.warning("\(#function) FAILED : 3")
-            caseButton.isEnabled = false
-            bottleButton.isEnabled = false
+            bottleButton.backgroundColor = ColorPalette.secondaryColor
+            return
         }
-    }
 
-    private func formDisplayLine(quantity: Double?, abbreviation: String) -> String {
-        guard let numberFormatter = numberFormatter else { return "ERROR 3" }
-        guard let quantity = quantity else { return "ERROR 4" }
-
-        // Quantity
-        if let quantityString = numberFormatter.string(from: NSNumber(value: quantity)) {
-            return "\(quantityString) \(abbreviation)"
+        switch currentUnit {
+        case .singleUnit:
+            caseButton.backgroundColor = ColorPalette.secondaryColor
+            bottleButton.backgroundColor = ColorPalette.navyColor
+        case .packUnit:
+            caseButton.backgroundColor = ColorPalette.navyColor
+            bottleButton.backgroundColor = ColorPalette.secondaryColor
+        case .invalidUnit:
+            caseButton.backgroundColor = ColorPalette.secondaryColor
+            bottleButton.backgroundColor = ColorPalette.secondaryColor
         }
-        return ""
     }
 
 }

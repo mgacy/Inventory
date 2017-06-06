@@ -26,7 +26,7 @@ class OrderItemTVC: UITableViewController {
     var fetchBatchSize = 20 // 0 = No Limit
 
     // Create a MessageComposer
-    /// TODO: should I instantiate this here or only on .tappedMessageOrder(:)?
+    /// TODO: should I instantiate this here or only in `.setupView()`?
     let messageComposer = MessageComposer()
 
     // TableView
@@ -49,6 +49,7 @@ class OrderItemTVC: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
+        setupView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,15 +63,14 @@ class OrderItemTVC: UITableViewController {
         guard let destinationController = segue.destination as? OrderKeypadVC else {
             fatalError("Wrong view controller type")
         }
-
-        // Pass the parent of the selected object to the new view controller.
-        destinationController.parentObject = parentObject
-        destinationController.managedObjectContext = managedObjectContext
-
-        // FIXME: fix this
-        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
-            destinationController.currentIndex = indexPath
+        guard
+            let indexPath = self.tableView.indexPathForSelectedRow?.row,
+            let managedObjectContext = managedObjectContext else {
+                fatalError("Unable to get indexPath or moc")
         }
+
+        destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath,
+                                                               inContext: managedObjectContext)
     }
 
     // MARK: - TableViewDataSource
@@ -115,16 +115,7 @@ class OrderItemTVC: UITableViewController {
     @IBAction func tappedMessageOrder(_ sender: UIBarButtonItem) {
         log.info("Placing Order ...")
 
-        // Prevent placing the order twice
-        if parentObject.uploaded {
-            log.warning("Tried to place the same Order twice")
-            PKHUD.sharedHUD.show()
-            PKHUD.sharedHUD.contentView = PKHUDErrorView(title: "Error", subtitle: "Order already placed")
-            PKHUD.sharedHUD.hide(afterDelay: 2.0)
-            return
-        }
-
-        // Simply POST the order if we already sent the message but were unable to POST if previously
+        // Simply POST the order if we already sent the message but were unable to POST it previously
         if parentObject.placed {
             log.info("Trying to POST an Order which was already sent ...")
             /// TODO: should we return after calling completedPlaceOrder
@@ -135,9 +126,10 @@ class OrderItemTVC: UITableViewController {
         /// TODO: handle different orderMethod
         /// TODO: prevent attempt to send empty order
 
-        /// TODO: Enable usage of vendor.rep.phoneNumber
-        //guard let phoneNumber = parentObject.vendor.rep.phoneNumber else { return }
-        let phoneNumber = "602-980-4718"
+        guard let phoneNumber = parentObject.vendor?.rep?.phone else {
+            log.error("Unable to get phoneNumber"); return
+        }
+        //let phoneNumber = "602-980-4718"
         guard let message = parentObject.getOrderMessage() else {
             log.error("\(#function) FAILED : unable to getOrderMessage"); return
         }
@@ -171,6 +163,44 @@ class OrderItemTVC: UITableViewController {
                 handler: nil)
 
             present(errorAlert, animated: true, completion: nil)
+        }
+    }
+
+    func setupView() {
+        /// TODO: should most of the following be part of a ViewModel?
+        guard
+            let vendor = parentObject.vendor,
+            let rep = vendor.rep else {
+                messageButton.isEnabled = false
+                log.warning("Unable to get vendor or rep")
+                return
+        }
+
+        /// TODO: get rep.firstName, rep.lastName to display in view
+
+        guard let phoneNumber = rep.phone else {
+            /// TODO: try to get email in order to send Order that way
+            messageButton.isEnabled = false
+            log.warning("Unable to get phone number")
+            return
+        }
+        /// TODO: format phoneNumber for display in view
+        /// TODO: disable button if there are no Items with Orders
+        log.info("phone number: \(phoneNumber)")
+
+        /// NOTE: disable for testing
+//        guard messageComposer.canSendText() else {
+//            messageButton.isEnabled = false
+//            return
+//        }
+
+        /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
+
+        if parentObject.uploaded {
+            // Prevent placing the order twice
+            messageButton.isEnabled = false
+        } else {
+            messageButton.isEnabled = true
         }
     }
 

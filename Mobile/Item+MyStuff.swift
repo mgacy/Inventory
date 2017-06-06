@@ -130,6 +130,7 @@ extension Item: Syncable {
 
 extension Item {
 
+    /// TODO: move this to a view model
     var packDisplay: String {
         return "\(self.packSize) x \(self.subSize) \(self.subUnit?.abbreviation ?? " ")"
     }

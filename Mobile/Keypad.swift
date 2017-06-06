@@ -8,6 +8,133 @@
 
 import Foundation
 
+protocol KeypadDelegate: class {
+    //var keypad: NewKeypad { get }
+    //func pushDigit(value: Int)
+    //func pushDecimal()
+    //func popItem()
+    //func updateDisplay()
+    func updateModel(_: NSNumber?)
+}
+
+class NewKeypad {
+
+    public var displayValue: String {
+        return currentNumber
+    }
+    public var currentValue: NSNumber? {
+        if let value = numberFormatter.number(from: currentNumber) {
+            return value
+        } else {
+            return nil
+        }
+    }
+
+    weak var delegate: KeypadDelegate?
+
+    private let numberFormatter: NumberFormatter
+    private let maximumFractionDigits: Int
+
+    // State
+    private var isEditingNumber: Bool
+    private var currentNumber: String
+
+    // MARK: - Lifecycle
+
+    required init(formatter: NumberFormatter, delegate: KeypadDelegate?, maximumFractionDigits: Int = 2) {
+        self.maximumFractionDigits = maximumFractionDigits
+        self.isEditingNumber = false
+        self.currentNumber = ""
+
+        self.numberFormatter = formatter
+        self.delegate = delegate
+    }
+
+    // MARK: - Stack manipulation
+
+    public func popItem() {
+        if !currentNumber.isEmpty {
+            currentNumber.remove(at: currentNumber.index(before: currentNumber.endIndex))
+
+            if currentNumber.isEmpty {
+                // We just consumed the currentNumber
+                isEditingNumber = false
+            } else {
+                isEditingNumber = true
+            }
+        }
+        delegate?.updateModel(currentValue)
+    }
+
+    public func pushDecimal() {
+        if isEditingNumber {
+            if currentNumber.isEmpty {
+                // Add leading '0'
+                currentNumber = "0."
+                //delegate?.updateModel(currentValue)
+
+            } else if currentNumber.range(of: ".") == nil {
+                // We do not need to update the model b/c we are not actually changing its value
+                currentNumber += "."
+            }
+
+        } else {
+            isEditingNumber = true
+            currentNumber = "0."
+            //delegate?.updateModel(currentValue)
+        }
+        /*
+         Since we currently use `delegate?.updateModel(:)` to update both the model AND view model, call that method
+         even if we are not actually changing the value of the model.
+         */
+        delegate?.updateModel(currentValue)
+    }
+
+    public func pushDigit(_ value: Int) {
+        if isEditingNumber {
+            if currentNumber.range(of: ".") == nil {
+                // Prevent '00'
+                if currentNumber == "0" {
+                    currentNumber = "\(value)"
+                } else {
+                    currentNumber += "\(value)"
+                }
+            } else {
+                // Limit significant digits to maximumFractionDigits
+                guard let decimalIndex = currentNumber.range(of: ".")?.lowerBound else {
+                    fatalError("\(#function) FAILED: problem detecting '.'")
+                }
+                if currentNumber.substring(from: decimalIndex).characters.count <= maximumFractionDigits {
+                    currentNumber += "\(value)"
+                }
+            }
+        } else {
+            currentNumber = "\(value)"
+            isEditingNumber = true
+        }
+        delegate?.updateModel(currentValue)
+    }
+
+    public func updateNumber(_ newNumber: NSNumber?) {
+        guard let _newNumber = newNumber else {
+            currentNumber = ""
+            return
+        }
+
+        if let newString = numberFormatter.string(from: _newNumber) {
+            currentNumber = newString
+            isEditingNumber = false
+        } else {
+            // Is it possible to reach this point?
+            log.error("There was a problem converting '\(_newNumber)' to a string")
+            currentNumber = "Error"
+        }
+    }
+
+}
+
+// MARK: -
+
 class Keypad {
 
     let numberFormatter: NumberFormatter
@@ -16,8 +143,17 @@ class Keypad {
     var isEditingNumber: Bool
     var currentNumber: String
 
+    var display: String {
+        if let total = evaluateNumber() {
+            return formatTotal(total)
+        } else {
+            return "0"
+        }
+    }
+
     // MARK: - Lifecycle
 
+    /// TODO: pass NumberFormatter?
     init() {
         self.isEditingNumber = false
         self.currentNumber = ""
@@ -32,7 +168,6 @@ class Keypad {
     // MARK: - Stack manipulation
 
     func popItem() {
-        // Try to clear from currentNumber
         if !currentNumber.isEmpty {
             currentNumber.remove(at: currentNumber.index(before: currentNumber.endIndex))
 
@@ -42,26 +177,19 @@ class Keypad {
             } else {
                 isEditingNumber = true
             }
-
-            // TESTING
-            updateDisplay(button: "clear")
         }
     }
 
     func pushDecimal() {
         isEditingNumber = true
 
-        // Add leading '0'
         if currentNumber.isEmpty {
+            // Add leading '0'
             currentNumber = "0."
-
-            // Append decimal point if not already there
         } else if currentNumber.range(of: ".") == nil {
+            // Append decimal point if not already there
             currentNumber += "."
         }
-
-        // TESTING
-        updateDisplay(button: ".")
     }
 
     func pushDigit(value: Int) {
@@ -73,19 +201,6 @@ class Keypad {
         } else {
             currentNumber = "\(value)"
             isEditingNumber = true
-        }
-
-        // TESTING
-        updateDisplay(button: String(value))
-    }
-
-    // MARK: - Output
-
-    func evaluateNumber() -> Double? {
-        if let value = Double(currentNumber) {
-            return value
-        } else {
-            return nil
         }
     }
 
@@ -104,6 +219,16 @@ class Keypad {
         }
     }
 
+    // MARK: - Output
+
+    func evaluateNumber() -> Double? {
+        if let value = Double(currentNumber) {
+            return value
+        } else {
+            return nil
+        }
+    }
+
     func formatTotal(_ result: Double) -> String {
         if let resultString = self.numberFormatter.string(from: NSNumber(value: result)) {
             return resultString
@@ -112,27 +237,6 @@ class Keypad {
         }
     }
 
-    func outputB() -> (total: Double?, display: String) {
-
-        // Result
-        let total = evaluateNumber()
-
-        // Display
-        var display = ""
-        if total != nil {
-            display = formatTotal(total!)
-        } else {
-            display = "0"
-        }
-
-        return (total: total, display: display)
-    }
-
-    // MARK: - Testing
-
-    func updateDisplay(button: String) {
-        log.verbose("Pressed '\(button)' - currentNumber: \(currentNumber)")
-    }
 }
 
 class KeypadWithHistory: Keypad {
@@ -142,6 +246,10 @@ class KeypadWithHistory: Keypad {
     // currentNumber
 
     var stack: [String] = []
+
+    //var history: String {
+    //    return formHistory()
+    //}
 
     // MARK: - Lifecycle
 
@@ -175,9 +283,6 @@ class KeypadWithHistory: Keypad {
                 isEditingNumber = true
             }
         }
-
-        // TESTING
-        updateDisplay(button: "clear")
     }
 
     func pushOperator() {
@@ -195,9 +300,6 @@ class KeypadWithHistory: Keypad {
             currentNumber = ""
             isEditingNumber = false
         }
-
-        // TESTING
-        updateDisplay(button: "+")
     }
 
     // MARK: - B
@@ -248,10 +350,7 @@ class KeypadWithHistory: Keypad {
             case false:
                 var total = 0.0
                 for item in stack {
-                    /*
-                     TODO - replace `evaluateNumber()` with .string(from:) and use
-                     that here?
-                     */
+                    /// TODO: replace `evaluateNumber()` with `.string(from:)` and use that here?
                     if let number = Double(item) {
                         total += number
                     }
@@ -295,9 +394,4 @@ class KeypadWithHistory: Keypad {
         return (history: history, total: total, display: display)
     }
 
-    // MARK: - Testing
-
-    override func updateDisplay(button: String) {
-        log.verbose("Pressed '\(button)' - stack: '\(stack.description)' - currentNumber: '\(currentNumber)'")
-    }
 }
