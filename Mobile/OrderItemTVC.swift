@@ -132,6 +132,7 @@ class OrderItemTVC: UITableViewController {
         guard let message = parentObject.getOrderMessage() else {
             log.error("\(#function) FAILED : unable to getOrderMessage"); return
         }
+        log.debug("Order Message: \(message)")
 
         if messageComposer.canSendText() {
             let messageComposeVC = messageComposer.configuredMessageComposeViewController(
