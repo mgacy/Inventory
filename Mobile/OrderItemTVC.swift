@@ -28,6 +28,7 @@ class OrderItemTVC: UITableViewController {
 
     // Create a MessageComposer
     /// TODO: should I instantiate this here or only in `.setupView()`?
+    // var mailComposer: MailComposer? = nil
     let messageComposer = MessageComposer()
 
     // TableView
@@ -132,19 +133,10 @@ class OrderItemTVC: UITableViewController {
             log.error("\(#function) FAILED : unable to getOrderMessage"); return
         }
 
-        log.verbose("Order message: \(message)")
-
-        // Make sure the device can send text messages
         if messageComposer.canSendText() {
-
-            // Obtain a configured MFMessageComposeViewController
             let messageComposeVC = messageComposer.configuredMessageComposeViewController(
                 phoneNumber: phoneNumber, message: message,
                 completionHandler: completedPlaceOrder)
-
-            // Present the configured MFMessageComposeViewController instance
-            // Note that the dismissal of the VC will be handled by the messageComposer instance,
-            // since it implements the appropriate delegate call-back
             present(messageComposeVC, animated: true, completion: nil)
 
         } else {
@@ -154,7 +146,6 @@ class OrderItemTVC: UITableViewController {
             // TESTING:
             //completedPlaceOrder(true)
 
-            // Let the user know if her device isn't able to send text messages
             let errorAlert = createAlert(title: "Cannot Send Text Message",
                                          message: "Your device is not able to send text messages.",
                                          handler: nil)
@@ -205,7 +196,6 @@ class OrderItemTVC: UITableViewController {
 // MARK: - Completion Handlers
 extension OrderItemTVC {
 
-    /// TODO: accept a custom enum that is valid for both emails and messages
     func completedPlaceOrder(_ result: MessageComposeResult) {
         switch result {
         case .cancelled:
@@ -221,7 +211,6 @@ extension OrderItemTVC {
             // Serialize and POST Order
             guard let json = parentObject.serialize() else {
                 log.error("\(#function) FAILED : unable to serialize Order")
-                /// TODO: show more detailed error message
                 HUD.flash(.error, delay: 1.0); return
             }
             log.info("POSTing Order ...")
