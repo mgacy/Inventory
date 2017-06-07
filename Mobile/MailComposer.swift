@@ -56,11 +56,11 @@ class MailComposer: NSObject, MFMailComposeViewControllerDelegate {
         //completionHandler(result)
 
         switch result {
-        case .canceled:
-            completionHandler(.canceled)
+        case .cancelled:
+            completionHandler(.cancelled)
         case .saved:
             /// TODO: is this the best way to handle this?
-            completionHandler(.canceled)
+            completionHandler(.cancelled)
         case .sent:
             completionHandler(.sent)
         case .failed:
