@@ -93,7 +93,7 @@ extension Order {
 
         messageItems.sort()
         let message = "Order for \(self.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
-
+        log.debug("Order Message: \(message)")
         return message
     }
 
