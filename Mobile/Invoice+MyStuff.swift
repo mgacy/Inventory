@@ -68,7 +68,7 @@ extension Invoice {
         /// TODO: error / log if these fail
         if let items = json["items"].array {
             for itemJSON in items {
-                _ = InvoiceItem(context: context, json: itemJSON, invoice: self)
+                _ = InvoiceItem(context: context, json: itemJSON, invoice: self, uploaded: uploaded)
             }
         }
         if let vendorID = json["vendor"]["id"].int32 {
