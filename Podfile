@@ -8,6 +8,7 @@ def basic_pods
   pod 'KeychainAccess'
   pod 'PKHUD', '~> 4.2'
   pod 'SwiftyBeaver'
+  # pod '1PasswordExtension', '~> 1.8.4'
   # A
   # pod 'DATAStack', '~> 6'
   # pod 'DATASource', '~> 6'
