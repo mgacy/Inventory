@@ -70,4 +70,3 @@ class MailComposer: NSObject, MFMailComposeViewControllerDelegate {
     }
 
 }
-
