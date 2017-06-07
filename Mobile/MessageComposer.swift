@@ -14,12 +14,10 @@ import MessageUI
 
 class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
 
-    /// TODO: this really how I want to do this, or should I just move this into the controller?
-    var completionHandler: ((_ succeeded: Bool) -> Void?)?
-    //var completionHandler: ((_ result: MessageComposeResult) -> Void?)?
+    var completionHandler: ((_ result: MessageComposeResult) -> Void?)?
 
     /*
-    init(completionHandler: @escaping (Bool) -> Void?) {
+    init(completionHandler: @escaping (MessageComposeResult) -> Void?) {
         self.completionHandler = completionHandler
     }
     */
@@ -30,8 +28,7 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
     }
 
     // Configures and returns a MFMessageComposeViewController instance
-    /// TODO: simply pass the Order instance and let this handle everything?
-    func configuredMessageComposeViewController(phoneNumber: String, message: String, completionHandler: ((Bool) -> Void)?) -> MFMessageComposeViewController {
+    func configuredMessageComposeViewController(phoneNumber: String, message: String, completionHandler: ((MessageComposeResult) -> Void)?) -> MFMessageComposeViewController {
 
         if let handler = completionHandler {
             self.completionHandler = handler
@@ -48,34 +45,13 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
 
     // MFMessageComposeViewControllerDelegate callback - dismisses the view controller when the user is finished with it
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        controller.dismiss(animated: true, completion: nil)
 
-        switch result.rawValue {
-        case MessageComposeResult.cancelled.rawValue:  // cancelled
-            log.info("Message was cancelled")
-            controller.dismiss(animated: true, completion: nil)
-
-            if let completionHandler = completionHandler {
-                /// TODO: change to false
-                completionHandler(true)
-            }
-        case MessageComposeResult.sent.rawValue: // sent
-            log.info("Message was sent")
-            controller.dismiss(animated: true, completion: nil)
-
-            if let completionHandler = completionHandler {
-                completionHandler(true)
-            }
-
-        case MessageComposeResult.failed.rawValue: // failed
-            log.warning("Message failed")
-            controller.dismiss(animated: true, completion: nil)
-
-            if let completionHandler = completionHandler {
-                completionHandler(false)
-            }
-        default:
-            break
+        guard let completionHandler = completionHandler else {
+            log.error("\(#function) : no completion handler")
+            return
         }
+        completionHandler(result)
     }
 
 }

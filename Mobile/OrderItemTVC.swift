@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import MessageUI
 import SwiftyJSON
 import PKHUD
 
@@ -118,8 +119,7 @@ class OrderItemTVC: UITableViewController {
         // Simply POST the order if we already sent the message but were unable to POST it previously
         if parentObject.placed {
             log.info("Trying to POST an Order which was already sent ...")
-            /// TODO: should we return after calling completedPlaceOrder
-            completedPlaceOrder(true)
+            completedPlaceOrder(.sent)
             return
         }
 
@@ -189,10 +189,10 @@ class OrderItemTVC: UITableViewController {
         log.info("phone number: \(phoneNumber)")
 
         /// NOTE: disable for testing
-//        guard messageComposer.canSendText() else {
-//            messageButton.isEnabled = false
-//            return
-//        }
+        guard messageComposer.canSendText() else {
+            messageButton.isEnabled = false
+            return
+        }
 
         /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
 
@@ -209,26 +209,28 @@ class OrderItemTVC: UITableViewController {
 // MARK: - Completion Handlers
 extension OrderItemTVC {
 
-    func completedPlaceOrder(_ succeeded: Bool) {
-        if succeeded {
+    /// TODO: accept a custom enum that is valid for both emails and messages
+    func completedPlaceOrder(_ result: MessageComposeResult) {
+        switch result {
+        case .cancelled:
+            log.info("Message was cancelled")
+        case .failed:
+            log.error("\(#function) FAILED : unable to send Order message")
+            showAlert(title: "Problem", message: "Unable to send Order message")
+        case .sent:
+            log.info("Sent Order message")
             parentObject.placed = true
-
             HUD.show(.progress)
 
             // Serialize and POST Order
-            /// TODO: is it possible for this to take long enough to justify showing HUD before?
             guard let json = parentObject.serialize() else {
                 log.error("\(#function) FAILED : unable to serialize Order")
                 /// TODO: show more detailed error message
                 HUD.flash(.error, delay: 1.0); return
             }
-
             log.info("POSTing Order ...")
             log.verbose("Order: \(json)")
             APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
-        } else {
-            log.error("\(#function) FAILED : unable to send Order message")
-            showAlert(title: "Problem", message: "Unable to send Order message")
         }
     }
 
