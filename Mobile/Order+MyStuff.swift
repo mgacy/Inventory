@@ -81,10 +81,10 @@ extension Order {
 
         var messageItems: [String] = []
         for case let item as OrderItem in items {
-            guard let quantity = item.quantity else { return nil }
+            guard let quantity = item.quantity else { continue }
 
             if Int(quantity) > 0 {
-                guard let name = item.item?.name else { break }
+                guard let name = item.item?.name else { continue }
                 messageItems.append("\n\(name) \(quantity) \(item.orderUnit?.abbreviation ?? "")")
             }
         }
