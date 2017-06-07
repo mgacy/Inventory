@@ -237,6 +237,10 @@ extension InvoiceItemTVC {
 // MARK: - TableViewDataSourceDelegate Extension
 extension InvoiceItemTVC: TableViewDataSourceDelegate {
 
+    func canEdit(_ item: InvoiceItem) -> Bool {
+        return true
+    }
+
     func configure(_ cell: UITableViewCell, for invoiceItem: InvoiceItem) {
         cell.textLabel?.text = invoiceItem.item?.name
         cell.detailTextLabel?.textColor = UIColor.lightGray
