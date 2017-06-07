@@ -254,7 +254,12 @@ extension OrderItemTVC: TableViewDataSourceDelegate {
 
         /// TODO: par
 
-        guard let quantity = orderItem.quantity else { return }
+        guard let quantity = orderItem.quantity else {
+            // Highlight OrderItems w/o order
+            cell.textLabel?.textColor = ColorPalette.yellowColor
+            cell.detailTextLabel?.text = "?"
+            return
+        }
         if Double(quantity) > 0.0 {
             cell.textLabel?.textColor = UIColor.black
             cell.detailTextLabel?.text = "\(quantity) \(orderItem.orderUnit?.abbreviation ?? "")"
