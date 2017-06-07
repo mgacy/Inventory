@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import MessageUI
 import SwiftyJSON
 import PKHUD
 
@@ -27,6 +28,7 @@ class OrderItemTVC: UITableViewController {
 
     // Create a MessageComposer
     /// TODO: should I instantiate this here or only in `.setupView()`?
+    // var mailComposer: MailComposer? = nil
     let messageComposer = MessageComposer()
 
     // TableView
@@ -75,14 +77,12 @@ class OrderItemTVC: UITableViewController {
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<OrderItemTVC>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
         //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
 
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
         request.sortDescriptors = [sortDescriptor]
@@ -118,8 +118,7 @@ class OrderItemTVC: UITableViewController {
         // Simply POST the order if we already sent the message but were unable to POST it previously
         if parentObject.placed {
             log.info("Trying to POST an Order which was already sent ...")
-            /// TODO: should we return after calling completedPlaceOrder
-            completedPlaceOrder(true)
+            completedPlaceOrder(.sent)
             return
         }
 
@@ -134,19 +133,10 @@ class OrderItemTVC: UITableViewController {
             log.error("\(#function) FAILED : unable to getOrderMessage"); return
         }
 
-        log.verbose("Order message: \(message)")
-
-        // Make sure the device can send text messages
         if messageComposer.canSendText() {
-
-            // Obtain a configured MFMessageComposeViewController
             let messageComposeVC = messageComposer.configuredMessageComposeViewController(
                 phoneNumber: phoneNumber, message: message,
                 completionHandler: completedPlaceOrder)
-
-            // Present the configured MFMessageComposeViewController instance
-            // Note that the dismissal of the VC will be handled by the messageComposer instance,
-            // since it implements the appropriate delegate call-back
             present(messageComposeVC, animated: true, completion: nil)
 
         } else {
@@ -156,12 +146,9 @@ class OrderItemTVC: UITableViewController {
             // TESTING:
             //completedPlaceOrder(true)
 
-            // Let the user know if his/her device isn't able to send text messages
-            let errorAlert = createAlert(
-                title: "Cannot Send Text Message",
-                message: "Your device is not able to send text messages.",
-                handler: nil)
-
+            let errorAlert = createAlert(title: "Cannot Send Text Message",
+                                         message: "Your device is not able to send text messages.",
+                                         handler: nil)
             present(errorAlert, animated: true, completion: nil)
         }
     }
@@ -189,10 +176,10 @@ class OrderItemTVC: UITableViewController {
         log.info("phone number: \(phoneNumber)")
 
         /// NOTE: disable for testing
-//        guard messageComposer.canSendText() else {
-//            messageButton.isEnabled = false
-//            return
-//        }
+        guard messageComposer.canSendText() else {
+            messageButton.isEnabled = false
+            return
+        }
 
         /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
 
@@ -209,26 +196,26 @@ class OrderItemTVC: UITableViewController {
 // MARK: - Completion Handlers
 extension OrderItemTVC {
 
-    func completedPlaceOrder(_ succeeded: Bool) {
-        if succeeded {
+    func completedPlaceOrder(_ result: MessageComposeResult) {
+        switch result {
+        case .cancelled:
+            log.info("Message was cancelled")
+        case .failed:
+            log.error("\(#function) FAILED : unable to send Order message")
+            showAlert(title: "Problem", message: "Unable to send Order message")
+        case .sent:
+            log.info("Sent Order message")
             parentObject.placed = true
-
             HUD.show(.progress)
 
             // Serialize and POST Order
-            /// TODO: is it possible for this to take long enough to justify showing HUD before?
             guard let json = parentObject.serialize() else {
                 log.error("\(#function) FAILED : unable to serialize Order")
-                /// TODO: show more detailed error message
                 HUD.flash(.error, delay: 1.0); return
             }
-
             log.info("POSTing Order ...")
             log.verbose("Order: \(json)")
             APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
-        } else {
-            log.error("\(#function) FAILED : unable to send Order message")
-            showAlert(title: "Problem", message: "Unable to send Order message")
         }
     }
 
@@ -294,7 +281,6 @@ extension OrderItemTVC {
         // Create alert controller
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         let cancelTitle: String
-
         switch handler != nil {
         case true:
             cancelTitle = "Cancel"
@@ -322,7 +308,6 @@ extension OrderItemTVC {
 
         // Create alert controller
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-
         let cancelTitle: String
         switch handler != nil {
         case true:

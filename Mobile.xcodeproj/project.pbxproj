@@ -58,6 +58,7 @@
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
 		C9D3E3A91EAEE15B0008F444 /* InventoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A81EAEE15B0008F444 /* InventoryItemTableViewCell.swift */; };
 		C9E198D51DC5669E0065FB98 /* OrderDateTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */; };
+		C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB7D891EE7910000515429 /* MailComposer.swift */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
 		C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E21DB7EF98004C10E6 /* ViewController.swift */; };
 		C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* Main.storyboard */; };
@@ -140,6 +141,7 @@
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
 		C9D3E3A81EAEE15B0008F444 /* InventoryItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemTableViewCell.swift; sourceTree = "<group>"; };
 		C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderDateTVC.swift; sourceTree = "<group>"; };
+		C9EB7D891EE7910000515429 /* MailComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9F515E21DB7EF98004C10E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -237,8 +239,9 @@
 				C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */,
 				C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */,
 				C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */,
-				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
 				C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */,
+				C9EB7D891EE7910000515429 /* MailComposer.swift */,
+				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
 			);
 			name = Order;
 			sourceTree = "<group>";
@@ -730,6 +733,7 @@
 				C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */,
 				C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */,
 				C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */,
+				C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */,
 				C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */,
 				C96870E61DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift in Sources */,
 				C902FF3E1DBD8B3F0063CD02 /* NumberKeypadButton.swift in Sources */,
