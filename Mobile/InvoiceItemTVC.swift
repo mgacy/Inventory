@@ -238,7 +238,12 @@ extension InvoiceItemTVC {
 extension InvoiceItemTVC: TableViewDataSourceDelegate {
 
     func canEdit(_ item: InvoiceItem) -> Bool {
-        return true
+        switch item.status {
+        case InvoiceItemStatus.received.rawValue:
+            return false
+        default:
+            return true
+        }
     }
 
     func configure(_ cell: UITableViewCell, for invoiceItem: InvoiceItem) {
