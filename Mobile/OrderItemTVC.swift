@@ -76,14 +76,12 @@ class OrderItemTVC: UITableViewController {
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<OrderItemTVC>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
         //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
 
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
         request.sortDescriptors = [sortDescriptor]
@@ -156,12 +154,10 @@ class OrderItemTVC: UITableViewController {
             // TESTING:
             //completedPlaceOrder(true)
 
-            // Let the user know if his/her device isn't able to send text messages
-            let errorAlert = createAlert(
-                title: "Cannot Send Text Message",
-                message: "Your device is not able to send text messages.",
-                handler: nil)
-
+            // Let the user know if her device isn't able to send text messages
+            let errorAlert = createAlert(title: "Cannot Send Text Message",
+                                         message: "Your device is not able to send text messages.",
+                                         handler: nil)
             present(errorAlert, animated: true, completion: nil)
         }
     }
@@ -296,7 +292,6 @@ extension OrderItemTVC {
         // Create alert controller
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         let cancelTitle: String
-
         switch handler != nil {
         case true:
             cancelTitle = "Cancel"
@@ -324,7 +319,6 @@ extension OrderItemTVC {
 
         // Create alert controller
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-
         let cancelTitle: String
         switch handler != nil {
         case true:
