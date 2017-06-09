@@ -177,7 +177,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
         // Get new OrderCollection.
         APIManager.sharedInstance.getNewOrderCollection(
-            storeID: storeID, typeID: orderTypeID, returnUsage: true,
+            storeID: storeID, typeID: orderTypeID, returnUsage: false,
             periodLength: 28, completion: completedGetNewOrderCollection)
     }
 
