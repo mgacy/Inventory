@@ -37,7 +37,7 @@ class SyncManager {
 
     func syncItems(json: JSON?, error: Error?) {
         guard error == nil else {
-            log.error("\(#function) FAILED : \(error)")
+            log.error("\(#function) FAILED : \(String(describing: error))")
             return completionHandler(false, error)
         }
         guard let json = json else {
@@ -101,7 +101,7 @@ class SyncManager {
 
     func syncVendors(json: JSON?, error: Error?) {
         guard error == nil else {
-            log.error("\(#function) FAILED : \(error)")
+            log.error("\(#function) FAILED : \(String(describing: error))")
             return completionHandler(false, error)
         }
         guard let json = json else {

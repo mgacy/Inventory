@@ -109,8 +109,8 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
                                              sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                              fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                         fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -177,7 +177,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
         // Get new OrderCollection.
         APIManager.sharedInstance.getNewOrderCollection(
-            storeID: storeID, typeID: orderTypeID, returnUsage: true,
+            storeID: storeID, typeID: orderTypeID, returnUsage: false,
             periodLength: 28, completion: completedGetNewOrderCollection)
     }
 
@@ -185,6 +185,15 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
 // MARK: - TableViewDataSourceDelegate Extension
 extension OrderDateTVC: TableViewDataSourceDelegate {
+
+    func canEdit(_ collection: OrderCollection) -> Bool {
+        switch collection.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
 
     func configure(_ cell: UITableViewCell, for collection: OrderCollection) {
         cell.textLabel?.text = collection.date
@@ -199,31 +208,19 @@ extension OrderDateTVC: TableViewDataSourceDelegate {
 
 }
 
-// MARK: - CustomDeletionDataSourceDelegate Extension (supports property-dependent row deletion)
-extension OrderDateTVC: CustomDeletionDataSourceDelegate {
-
-    func canEdit(_ collection: OrderCollection) -> Bool {
-        switch collection.uploaded {
-        case true:
-            return false
-        case false:
-            return true
-        }
-    }
-
-}
-
 // MARK: - Completion Handlers + Sync
 extension OrderDateTVC {
 
     // MARK: Completion Handlers
 
     func completedGetListOfOrderCollections(json: JSON?, error: Error?) {
+        refreshControl?.endRefreshing()
         guard error == nil else {
+            //if error?._code == NSURLErrorTimedOut {}
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
-            log.error("\(#function) FAILED : unable to get JSON")
+            log.warning("\(#function) FAILED : unable to get JSON")
             HUD.hide(); return
         }
 
@@ -233,8 +230,6 @@ extension OrderDateTVC {
             log.error("Unable to sync OrderCollections")
             HUD.flash(.error, delay: 1.0)
         }
-
-        refreshControl?.endRefreshing()
         HUD.hide()
         managedObjectContext.performSaveOrRollback()
         tableView.reloadData()

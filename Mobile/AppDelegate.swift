@@ -22,12 +22,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-        setupSwiftyBeaverLogging()
-
         /// TODO: set up CoreDataStack
 
-        // Check if we have already preloaded data
         let defaults = UserDefaults.standard
+
+        setupSwiftyBeaverLogging(defaults: defaults)
+
+        // Check if we have already preloaded data
         let isPreloaded = defaults.bool(forKey: "isPreloaded")
         if !isPreloaded {
             log.info("Preloading data ...")
@@ -61,10 +62,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             loginController.managedObjectContext = persistentContainer.viewContext
             loginController.userManager = userManager
             self.window?.rootViewController = loginController
-            //self.window?.makeKeyAndVisible()
+            self.window?.makeKeyAndVisible()
         }
-
-        //self.window?.makeKeyAndVisible()
         return true
     }
 
@@ -158,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Setup
 
-    func setupSwiftyBeaverLogging() {
+    func setupSwiftyBeaverLogging(defaults: UserDefaults) {
         let console = ConsoleDestination()
         //let file = FileDestination()
         let platform = SBPlatformDestination(appID: "***REMOVED***",
@@ -166,8 +165,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                              encryptionKey: "***REMOVED***")
 
         // Config
+        if let userName = defaults.string(forKey: "email") {
+            platform.analyticsUserName = userName
+        }
+        /// TODO: try to get minLevel from defaults (so user can set verbose logging)
         platform.minLevel = .warning
-        //platform.analyticsUserName = ""
 
         // use custom format and set console output to short time, log level & message
         //console.format = "$DHH:mm:ss$d $L $M"
@@ -204,6 +206,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             vc.managedObjectContext = persistentContainer.viewContext
             vc.userManager = userManager
         }
+        self.window?.rootViewController = tabBarController
+        self.window?.makeKeyAndVisible()
 
         // Sync
         guard
@@ -214,9 +218,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         HUD.show(.progress)
         _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!,
                         completionHandler: controller.completedSync)
-
-        self.window?.rootViewController = tabBarController
-        //self.window?.makeKeyAndVisible()
     }
 
 }

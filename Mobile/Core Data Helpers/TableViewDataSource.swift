@@ -12,7 +12,17 @@ import CoreData
 protocol TableViewDataSourceDelegate: class {
     associatedtype Object: NSFetchRequestResult
     associatedtype Cell: UITableViewCell
+    /// TODO: pass object or just indexPath?
+    func canEdit(_ object: Object) -> Bool
     func configure(_ cell: Cell, for object: Object)
+}
+
+extension TableViewDataSourceDelegate {
+
+    func canEdit(_ object: Object) -> Bool {
+        return false
+    }
+
 }
 
 /// Note: this class doesn't support working with multiple sections
@@ -75,7 +85,8 @@ class TableViewDataSource<Delegate: TableViewDataSourceDelegate>: NSObject, UITa
     // MARK: - Enable Table Editing
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        let object = fetchedResultsController.object(at: indexPath)
+        return delegate.canEdit(object)
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {

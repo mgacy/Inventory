@@ -57,15 +57,13 @@ class InvoiceItemTVC: UITableViewController {
         guard let destinationController = segue.destination as? InvoiceKeypadVC else {
             fatalError("Wrong view controller type")
         }
-
-        // Pass the parent of the selected object to the new view controller.
-        destinationController.parentObject = parentObject
-        destinationController.managedObjectContext = managedObjectContext
-
-        // FIXME: fix this
-        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
-            destinationController.currentIndex = indexPath
+        guard
+            let indexPath = self.tableView.indexPathForSelectedRow?.row,
+            let managedObjectContext = managedObjectContext else {
+                fatalError("Unable to get indexPath or moc")
         }
+        destinationController.viewModel = InvoiceKeypadViewModel(for: parentObject, atIndex: indexPath,
+                                                                 inContext: managedObjectContext)
     }
 
     // MARK: - TableViewDataSource
@@ -112,7 +110,7 @@ class InvoiceItemTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected InvoiceItem: \(selectedObject)")
+        log.verbose("Selected InvoiceItem: \(String(describing: selectedObject))")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
@@ -238,6 +236,15 @@ extension InvoiceItemTVC {
 
 // MARK: - TableViewDataSourceDelegate Extension
 extension InvoiceItemTVC: TableViewDataSourceDelegate {
+
+    func canEdit(_ item: InvoiceItem) -> Bool {
+        switch item.status {
+        case InvoiceItemStatus.received.rawValue:
+            return false
+        default:
+            return true
+        }
+    }
 
     func configure(_ cell: UITableViewCell, for invoiceItem: InvoiceItem) {
         cell.textLabel?.text = invoiceItem.item?.name

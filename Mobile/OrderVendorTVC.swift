@@ -95,7 +95,7 @@ class OrderVendorTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected Order: \(selectedObject)")
+        log.verbose("Selected Order: \(String(describing: selectedObject))")
 
         performSegue(withIdentifier: segueIdentifier, sender: self)
 

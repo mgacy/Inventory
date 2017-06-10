@@ -101,7 +101,10 @@ extension InvoiceItem {
             self.cost = cost
         }
 
-        /// TODO: status
+        /// TODO: get status from JSON
+        if uploaded {
+            self.status = InvoiceItemStatus.received.rawValue
+        }
 
         // Relationships
         self.invoice = invoice

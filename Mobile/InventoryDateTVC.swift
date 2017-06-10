@@ -131,8 +131,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
                                              sectionNameKeyPath: nil, cacheName: nil)
 
-        dataSource = CustomDeletionDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                              fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                         fetchedResultsController: frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -217,6 +217,15 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
 // MARK: - TableViewDataSourceDelegate Extension
 extension InventoryDateTVC: TableViewDataSourceDelegate {
 
+    func canEdit(_ inventory: Inventory) -> Bool {
+        switch inventory.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+
     func configure(_ cell: UITableViewCell, for inventory: Inventory) {
         cell.textLabel?.text = inventory.date
 
@@ -230,27 +239,15 @@ extension InventoryDateTVC: TableViewDataSourceDelegate {
 
 }
 
-// MARK: - CustomDeletionDataSourceDelegate Extension (supports property-dependent row deletion)
-extension InventoryDateTVC: CustomDeletionDataSourceDelegate {
-
-    func canEdit(_ inventory: Inventory) -> Bool {
-        switch inventory.uploaded {
-        case true:
-            return false
-        case false:
-            return true
-        }
-    }
-
-}
-
 // MARK: - Completion Handlers + Sync
 extension InventoryDateTVC {
 
     // MARK: - Completion Handlers
 
     func completedGetListOfInventories(json: JSON?, error: Error?) {
+        refreshControl?.endRefreshing()
         guard error == nil else {
+            //if error?._code == NSURLErrorTimedOut {}
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -264,7 +261,6 @@ extension InventoryDateTVC {
             log.error("Unable to sync Inventories")
             HUD.flash(.error, delay: 1.0)
         }
-        refreshControl?.endRefreshing()
         HUD.hide()
         managedObjectContext.performSaveOrRollback()
         tableView.reloadData()

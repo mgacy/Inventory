@@ -3,11 +3,12 @@ platform :ios, '10.0'
 
 # Basic
 def basic_pods
-  pod 'Alamofire', '~> 4.2'
+  pod 'Alamofire', '~> 4.4'
   pod 'SwiftyJSON'
   pod 'KeychainAccess'
-  pod 'PKHUD', '~> 4.0'
+  pod 'PKHUD', '~> 4.2'
   pod 'SwiftyBeaver'
+  # pod '1PasswordExtension', '~> 1.8.4'
   # A
   # pod 'DATAStack', '~> 6'
   # pod 'DATASource', '~> 6'
