@@ -17,6 +17,7 @@
 		C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */; };
 		C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */; };
 		C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */; };
+		C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90477201EEE30D60082D894 /* KeypadViewModel.swift */; };
 		C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */; };
 		C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9090FFD1EB92D8B0035A1DA /* Managed.swift */; };
 		C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F741DF0D61E00166A08 /* CoreDataStack.swift */; };
@@ -100,6 +101,7 @@
 		C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationItem+MyStuff.swift"; sourceTree = "<group>"; };
 		C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocation+MyStuff.swift"; sourceTree = "<group>"; };
 		C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InventoryLocationCategory+MyStuff.swift"; sourceTree = "<group>"; };
+		C90477201EEE30D60082D894 /* KeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeypadViewModel.swift; path = Protocols/KeypadViewModel.swift; sourceTree = "<group>"; };
 		C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VendorRep+MyStuff.swift"; sourceTree = "<group>"; };
 		C9090FFD1EB92D8B0035A1DA /* Managed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Managed.swift; path = "Core Data Helpers/Managed.swift"; sourceTree = "<group>"; };
 		C9124F741DF0D61E00166A08 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataStack.swift; path = "Core Data Helpers/CoreDataStack.swift"; sourceTree = "<group>"; };
@@ -258,6 +260,15 @@
 			name = "Model Extensions";
 			sourceTree = "<group>";
 		};
+		C904771F1EEE30770082D894 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */,
+				C90477201EEE30D60082D894 /* KeypadViewModel.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
 		C96870E01DDA1ED000EC06AB /* Model Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -366,10 +377,10 @@
 				C9F515E21DB7EF98004C10E6 /* ViewController.swift */,
 				C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */,
 				C91B4EDB1E5C2863002DA2A5 /* User.swift */,
-				C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */,
 				C9B825E61EB9A0A4009B92F0 /* Core Data Helpers */,
 				C9BA91271DEB957400DA2C6C /* Extensions */,
 				C98A4FB61DCB034D002BB076 /* Model Extensions */,
+				C904771F1EEE30770082D894 /* Protocols */,
 				C9F516101DB7F144004C10E6 /* Networking */,
 				C902FF301DB81BE20063CD02 /* Custom Views */,
 				C9B825E71EB9A0ED009B92F0 /* Initial */,
@@ -707,6 +718,7 @@
 				C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
 				C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */,
+				C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */,
 				C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */,
 				C935E9A41E60D713003BF386 /* InitialLoginVC.swift in Sources */,
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
