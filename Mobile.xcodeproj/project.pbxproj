@@ -136,7 +136,7 @@
 		C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OrderCollection+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Order+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OrderItem+MyStuff.swift"; sourceTree = "<group>"; };
-		C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueHandler.swift; sourceTree = "<group>"; };
+		C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegueHandler.swift; path = Protocols/SegueHandler.swift; sourceTree = "<group>"; };
 		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSObject+Magic.swift"; path = "Extensions/Foundation/NSObject+Magic.swift"; sourceTree = "<group>"; };
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Magic.swift"; path = "Extensions/UIKit/UIView+Magic.swift"; sourceTree = "<group>"; };
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
@@ -263,8 +263,8 @@
 		C904771F1EEE30770082D894 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */,
 				C90477201EEE30D60082D894 /* KeypadViewModel.swift */,
+				C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
