@@ -225,7 +225,8 @@ extension OrderItemTVC {
         if succeeded {
             parentObject.uploaded = true
 
-            /// TODO: set .uploaded of parentObject.collection if all are uploaded
+            // Set .uploaded of parentObject.collection if all are uploaded
+            parentObject.collection?.updateStatus()
 
             // swiftlint:disable:next unused_closure_parameter
             HUD.flash(.success, delay: 1.0) { finished in
