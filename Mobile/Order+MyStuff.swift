@@ -10,6 +10,28 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+@objc public enum OrderStatus: Int16 {
+    case empty      = 0
+    case pending    = 1
+    // case reviewed?
+    case placed     = 2
+    case uploaded   = 3
+
+    // ?
+    mutating func next() {
+        switch self {
+        case .empty:
+            self = .pending
+        case .pending:
+            self = .placed
+        case .placed:
+            self = .uploaded
+        default:
+            break
+        }
+    }
+}
+
 extension Order {
 
     // MARK: - Lifecycle
@@ -95,6 +117,31 @@ extension Order {
         let message = "Order for \(self.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
         log.debug("Order Message: \(message)")
         return message
+    }
+
+}
+
+extension Order {
+
+    func setStatus() {
+        guard !placed, !uploaded else {
+            return
+        }
+        guard let items = items else {
+            log.debug("Order appears to be empty"); return
+            //status = .empty.rawValue
+        }
+
+        for item in items {
+            if let quantity = (item as? OrderItem)?.quantity {
+                if quantity.intValue > 0 {
+                    //status = .pending.rawValue
+                    return
+                }
+            }
+        }
+        log.debug("It looks like we have an empty order.")
+        //status = .empty.rawValue
     }
 
 }
