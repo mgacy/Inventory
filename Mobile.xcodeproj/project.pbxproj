@@ -120,6 +120,7 @@
 		C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Invoice+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InvoiceItem+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObjectContext+MyStuff.swift"; path = "Core Data Helpers/NSManagedObjectContext+MyStuff.swift"; sourceTree = "<group>"; };
+		C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 2.xcdatamodel"; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		C982341A1DCD3B3A00E3E353 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		C988CE701DF5050D00A8028B /* Array+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+MyStuff.swift"; path = "Extensions/Foundation/Array+MyStuff.swift"; sourceTree = "<group>"; };
@@ -994,9 +995,10 @@
 		C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */,
 				C9F515E81DB7EF98004C10E6 /* Mobile.xcdatamodel */,
 			);
-			currentVersion = C9F515E81DB7EF98004C10E6 /* Mobile.xcdatamodel */;
+			currentVersion = C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */;
 			path = Mobile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
