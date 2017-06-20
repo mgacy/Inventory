@@ -67,8 +67,8 @@ extension UITableViewController {
         // Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
         alert.addAction(cancelAction)
-        
+
         present(alert, animated: true, completion: nil)
     }
-    
+
 }
