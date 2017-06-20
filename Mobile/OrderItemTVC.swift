@@ -116,7 +116,7 @@ class OrderItemTVC: UITableViewController {
         log.info("Placing Order ...")
 
         // Simply POST the order if we already sent the message but were unable to POST it previously
-        if parentObject.placed {
+        if parentObject.status == OrderStatus.placed.rawValue {
             log.info("Trying to POST an Order which was already sent ...")
             completedPlaceOrder(.sent)
             return
@@ -205,7 +205,7 @@ extension OrderItemTVC {
             showAlert(title: "Problem", message: "Unable to send Order message")
         case .sent:
             log.info("Sent Order message")
-            parentObject.placed = true
+            parentObject.status = OrderStatus.placed.rawValue
             HUD.show(.progress)
 
             // Serialize and POST Order
@@ -223,7 +223,7 @@ extension OrderItemTVC {
 
     func completedPostOrder(succeeded: Bool, json: JSON) {
         if succeeded {
-            parentObject.uploaded = true
+            parentObject.status = OrderStatus.uploaded.rawValue
 
             // Set .uploaded of parentObject.collection if all are uploaded
             parentObject.collection?.updateStatus()

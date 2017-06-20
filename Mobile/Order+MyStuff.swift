@@ -42,8 +42,11 @@ extension Order {
         // Properties
         // if let orderCost = json["order_cost"].float {}
         // if let orderDate = json["order_date"].string {}
-        self.placed = uploaded
-        self.uploaded = uploaded
+        if uploaded {
+            self.status = OrderStatus.uploaded.rawValue
+        } else {
+            self.status = OrderStatus.pending.rawValue
+        }
 
         // Relationships
         self.collection = collection
@@ -124,24 +127,26 @@ extension Order {
 extension Order {
 
     func setStatus() {
-        guard !placed, !uploaded else {
-            return
+        guard status != OrderStatus.placed.rawValue,
+              status != OrderStatus.uploaded.rawValue else {
+                return
         }
+
         guard let items = items else {
             log.debug("Order appears to be empty"); return
-            //status = .empty.rawValue
+            status = OrderStatus.empty.rawValue
         }
 
         for item in items {
             if let quantity = (item as? OrderItem)?.quantity {
                 if quantity.intValue > 0 {
-                    //status = .pending.rawValue
+                    status = OrderStatus.pending.rawValue
                     return
                 }
             }
         }
         log.debug("It looks like we have an empty order.")
-        //status = .empty.rawValue
+        status = OrderStatus.empty.rawValue
     }
 
 }

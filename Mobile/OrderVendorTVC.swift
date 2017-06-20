@@ -113,11 +113,18 @@ extension OrderVendorTVC: TableViewDataSourceDelegate {
         /// TODO: handle situation where user placed an order but uploading to the server failed;
         // we still need to make sure that it ends up getting uploaded
 
-        switch order.placed {
-        case false:
-            //cell.textLabel?.textColor = UIColor.lightGray
+        switch order.status {
+        case OrderStatus.empty.rawValue:
+            cell.textLabel?.textColor = UIColor.lightGray
+        case OrderStatus.pending.rawValue:
             cell.textLabel?.textColor = ColorPalette.yellowColor
-        case true:
+        case OrderStatus.placed.rawValue:
+            /// TODO: use another color?
+            cell.textLabel?.textColor = UIColor.black
+        case OrderStatus.uploaded.rawValue:
+            cell.textLabel?.textColor = UIColor.black
+        default:
+            /// TODO: use another color for values that aren't captured above
             cell.textLabel?.textColor = UIColor.black
         }
     }
