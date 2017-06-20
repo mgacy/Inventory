@@ -127,7 +127,7 @@
         <!--InvoiceVendor-->
         <scene sceneID="YZi-Qr-cTX">
             <objects>
-                <tableViewController storyboardIdentifier="InvoiceVendorTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="VhV-VD-YI0" userLabel="InvoiceVendor" customClass="InvoiceVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="InvoiceVendorTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="VhV-VD-YI0" userLabel="InvoiceVendor" customClass="InvoiceVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ahH-Or-Iyl">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -148,7 +148,7 @@
         <!--InvoiceItem-->
         <scene sceneID="sAK-Ak-TeE">
             <objects>
-                <tableViewController storyboardIdentifier="InvoiceItemTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="l7g-UY-PfL" userLabel="InvoiceItem" customClass="InvoiceItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="InvoiceItemTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="l7g-UY-PfL" userLabel="InvoiceItem" customClass="InvoiceItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="8U1-sa-wNz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -523,7 +523,7 @@
         <!--OrderVendor-->
         <scene sceneID="Sdp-Sd-Wvi">
             <objects>
-                <tableViewController storyboardIdentifier="OrderVendorTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zlj-V1-U9C" userLabel="OrderVendor" customClass="OrderVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="OrderVendorTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zlj-V1-U9C" userLabel="OrderVendor" customClass="OrderVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ol5-oj-Brx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -544,7 +544,7 @@
         <!--OrderItem-->
         <scene sceneID="RYd-Fb-0K8">
             <objects>
-                <tableViewController storyboardIdentifier="OrderItemTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="yHa-97-WdW" userLabel="OrderItem" customClass="OrderItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="OrderItemTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="yHa-97-WdW" userLabel="OrderItem" customClass="OrderItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="hX6-m9-oGy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -937,7 +937,7 @@
         <!--InventoryLocation-->
         <scene sceneID="FUc-Sc-EDt">
             <objects>
-                <tableViewController storyboardIdentifier="InventoryLocationTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="H3s-md-9Gz" userLabel="InventoryLocation" customClass="InventoryLocationTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="InventoryLocationTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="H3s-md-9Gz" userLabel="InventoryLocation" customClass="InventoryLocationTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DzA-AY-wbP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1720,8 +1720,8 @@
         <image name="settingsTab" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="RYI-Jx-XiF"/>
         <segue reference="4yW-DD-bsH"/>
+        <segue reference="RYI-Jx-XiF"/>
         <segue reference="iyW-Ae-r5B"/>
     </inferredMetricsTieBreakers>
 </document>
