@@ -70,6 +70,10 @@ extension Order {
                 _ = OrderItem(context: context, json: itemJSON, order: self)
             }
         }
+
+        if !uploaded {
+            updateStatus()
+        }
     }
 
     // MARK: - Serialization
@@ -126,7 +130,7 @@ extension Order {
 
 extension Order {
 
-    func setStatus() {
+    func updateStatus() {
         guard status != OrderStatus.placed.rawValue,
               status != OrderStatus.uploaded.rawValue else {
                 return

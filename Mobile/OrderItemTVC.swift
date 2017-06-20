@@ -51,6 +51,8 @@ class OrderItemTVC: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
+        // Update in case we have returned from the keypad where we updated the quantity of an OrderItem
+        parentObject.updateStatus()
         setupView()
     }
 
