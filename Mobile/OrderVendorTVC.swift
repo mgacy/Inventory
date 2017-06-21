@@ -35,8 +35,8 @@ class OrderVendorTVC: UITableViewController {
         title = "Vendors"
         setupTableView()
 
-        let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneToolBar"), style: .done, target: self,
-                                                  action: #selector(tappedCompleteOrders))
+        let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneBarButton"), style: .done, target: self,
+                                                 action: #selector(tappedCompleteOrders))
         navigationItem.rightBarButtonItem = completeButtonItem
     }
 
