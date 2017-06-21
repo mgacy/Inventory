@@ -34,10 +34,15 @@ class OrderVendorTVC: UITableViewController {
         super.viewDidLoad()
         title = "Vendors"
         setupTableView()
+
+        let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneToolBar"), style: .done, target: self,
+                                                  action: #selector(tappedCompleteOrders))
+        navigationItem.rightBarButtonItem = completeButtonItem
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        parentObject.updateStatus()
         self.tableView.reloadData()
     }
 
@@ -127,6 +132,61 @@ extension OrderVendorTVC: TableViewDataSourceDelegate {
             /// TODO: use another color for values that aren't captured above
             cell.textLabel?.textColor = UIColor.black
         }
+    }
+
+}
+
+// MARK: - User Actions
+extension OrderVendorTVC {
+
+    func tappedCompleteOrders() {
+        // If there are pending orders we want to warn the user about marking this collection as completed
+        guard checkStatusIsSafe() else {
+            let errorAlert = createAlert(title: "Warning: Pending Orders",
+                                         message: "Marking order collection as completed will delete any pending " +
+                                                  "orders. Are you sure you want to proceed?",
+                                         handler: completeOrders)
+            present(errorAlert, animated: true, completion: nil)
+            return
+        }
+        completeOrders()
+    }
+
+    func checkStatusIsSafe() -> Bool {
+        guard let orders = parentObject.orders else {
+            return true
+        }
+
+        var hasEmpty = false
+        var hasPending = false
+
+        for order in orders {
+            if let status = (order as? Order)?.status {
+                switch status {
+                case OrderStatus.empty.rawValue:
+                    hasEmpty = true
+                case OrderStatus.pending.rawValue:
+                    hasPending = true
+                //case OrderStatus.placed.rawValue:
+                //case OrderStatus.uploaded.rawValue:
+                default:
+                    /// TODO: use another color for values that aren't captured above
+                    continue
+                }
+            }
+        }
+
+        if hasPending {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    func completeOrders() {
+        parentObject.uploaded = true
+        /// TODO: refresh OrderDateTVC
+        self.navigationController!.popViewController(animated: true)
     }
 
 }
