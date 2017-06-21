@@ -955,7 +955,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="EVU-Sa-EdD" kind="show" identifier="ShowLocationCategory" id="iyW-Ae-r5B"/>
                         <segue destination="2re-X1-JiU" kind="show" identifier="ShowLocationItem" id="4yW-DD-bsH"/>
