@@ -63,6 +63,7 @@ class OrderVendorTVC: UITableViewController {
         }
 
         // Pass the selected object to the new view controller.
+        destinationController.viewModel = OrderViewModel(forOrder: selectedObject)
         destinationController.parentObject = selectedObject
         destinationController.managedObjectContext = self.managedObjectContext
     }

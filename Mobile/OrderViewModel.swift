@@ -131,7 +131,6 @@ class OrderViewModel {
 
 // Mobile Dan
 // https://stackoverflow.com/a/41668104
-
 func format(phoneNumber sourcePhoneNumber: String) -> String? {
 
     // Remove any character that is not a number
@@ -181,6 +180,8 @@ func format(phoneNumber sourcePhoneNumber: String) -> String? {
     return leadingOne + areaCode + prefix + "-" + suffix
 }
 
+// Mobile Dan
+// https://stackoverflow.com/a/41668104
 extension String.CharacterView {
     /// This method makes it easier extract a substring by character index where a character is viewed as a human-readable character (grapheme cluster).
     internal func substring(start: Int, offsetBy: Int) -> String? {

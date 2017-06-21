@@ -16,6 +16,7 @@ class OrderItemTVC: UITableViewController {
 
     // MARK: - Properties
 
+    var viewModel: OrderViewModel!
     var parentObject: Order!
     var selectedObject: OrderItem?
 
@@ -118,65 +119,22 @@ class OrderItemTVC: UITableViewController {
         log.info("Placing Order ...")
 
         // Simply POST the order if we already sent the message but were unable to POST it previously
-        if parentObject.status == OrderStatus.placed.rawValue {
-            log.info("Trying to POST an Order which was already sent ...")
-            completedPlaceOrder(.sent)
-            return
-        }
-
-        /// TODO: handle different orderMethod
-        /// TODO: prevent attempt to send empty order
 
         guard let phoneNumber = parentObject.vendor?.rep?.phone else {
             log.error("Unable to get phoneNumber"); return
         }
         //let phoneNumber = "602-980-4718"
-        guard let message = parentObject.getOrderMessage() else {
+        guard let message = viewModel.orderMessage else {
             log.error("\(#function) FAILED : unable to getOrderMessage"); return
         }
 
-        if messageComposer.canSendText() {
-            let messageComposeVC = messageComposer.configuredMessageComposeViewController(
-                phoneNumber: phoneNumber, message: message,
-                completionHandler: completedPlaceOrder)
-            present(messageComposeVC, animated: true, completion: nil)
-
-        } else {
-            log.error("\(#function) FAILED : messageComposer cannot send text")
-            /// TODO: try to send email message?
-
-            // TESTING:
-            //completedPlaceOrder(true)
-
-            let errorAlert = createAlert(title: "Cannot Send Text Message",
-                                         message: "Your device is not able to send text messages.",
-                                         handler: nil)
-            present(errorAlert, animated: true, completion: nil)
-        }
+        let messageComposeVC = messageComposer.configuredMessageComposeViewController(
+            phoneNumber: phoneNumber, message: message,
+            completionHandler: completedPlaceOrder)
+        present(messageComposeVC, animated: true, completion: nil)
     }
 
     func setupView() {
-        /// TODO: should most of the following be part of a ViewModel?
-        guard
-            let vendor = parentObject.vendor,
-            let rep = vendor.rep else {
-                messageButton.isEnabled = false
-                log.warning("Unable to get vendor or rep")
-                return
-        }
-
-        /// TODO: get rep.firstName, rep.lastName to display in view
-
-        guard let phoneNumber = rep.phone else {
-            /// TODO: try to get email in order to send Order that way
-            messageButton.isEnabled = false
-            log.warning("Unable to get phone number")
-            return
-        }
-        /// TODO: format phoneNumber for display in view
-        /// TODO: disable button if there are no Items with Orders
-        log.info("phone number: \(phoneNumber)")
-
         /// NOTE: disable for testing
         guard messageComposer.canSendText() else {
             messageButton.isEnabled = false
@@ -184,27 +142,7 @@ class OrderItemTVC: UITableViewController {
         }
 
         /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
-
-        /*
-        switch parentObject.status {
-        case OrderStatus.empty.rawValue:
-            messageButton.isEnabled = false
-        case OrderStatus.pending.rawValue:
-            messageButton.isEnabled = true
-        case OrderStatus.placed.rawValue:
-            messageButton.isEnabled = false
-        case OrderStatus.uploaded.rawValue:
-            messageButton.isEnabled = false
-        default:
-            messageButton.isEnabled = false
-        }
-        */
-        if parentObject.status == OrderStatus.pending.rawValue {
-            messageButton.isEnabled = true
-        } else {
-            // Prevent placing the order twice
-            messageButton.isEnabled = true
-        }
+        messageButton.isEnabled = viewModel.canMessageOrder
     }
 
 }
@@ -221,17 +159,9 @@ extension OrderItemTVC {
             showAlert(title: "Problem", message: "Unable to send Order message")
         case .sent:
             log.info("Sent Order message")
-            parentObject.status = OrderStatus.placed.rawValue
             HUD.show(.progress)
-
-            // Serialize and POST Order
-            guard let json = parentObject.serialize() else {
-                log.error("\(#function) FAILED : unable to serialize Order")
-                HUD.flash(.error, delay: 1.0); return
-            }
-            log.info("POSTing Order ...")
-            log.verbose("Order: \(json)")
-            APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
+            /// TODO: simply pass closure?
+            viewModel.postOrder(completion: completedPostOrder)
         }
     }
 
@@ -239,13 +169,10 @@ extension OrderItemTVC {
 
     func completedPostOrder(succeeded: Bool, json: JSON) {
         if succeeded {
-            parentObject.status = OrderStatus.uploaded.rawValue
-
-            // Set .uploaded of parentObject.collection if all are uploaded
-            parentObject.collection?.updateStatus()
+            viewModel.completedPostOrder()
 
             // swiftlint:disable:next unused_closure_parameter
-            HUD.flash(.success, delay: 1.0) { finished in
+            HUD.flash(.success, delay: 0.5) { finished in
                 // Pop view
                 self.navigationController!.popViewController(animated: true)
             }
