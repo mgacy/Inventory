@@ -1004,7 +1004,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wnn-9T-KVj">
-                                            <rect key="frame" x="8" y="8" width="359" height="21"/>
+                                            <rect key="frame" x="16" y="8" width="351" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="5z1-cO-jcS"/>
                                             </constraints>
@@ -1013,21 +1013,21 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TgX-Ki-413" userLabel="Detail">
-                                            <rect key="frame" x="8" y="33" width="359" height="18"/>
+                                            <rect key="frame" x="16" y="33" width="351" height="18"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="leadingMargin" secondItem="TgX-Ki-413" secondAttribute="leading" id="ADS-nv-VTV"/>
+                                        <constraint firstItem="TgX-Ki-413" firstAttribute="leading" secondItem="R6r-aj-eeq" secondAttribute="leadingMargin" constant="8" id="ADS-nv-VTV"/>
                                         <constraint firstItem="TgX-Ki-413" firstAttribute="top" secondItem="Wnn-9T-KVj" secondAttribute="bottom" constant="4" id="BVD-xn-vkV"/>
                                         <constraint firstAttribute="topMargin" secondItem="Wnn-9T-KVj" secondAttribute="top" id="MTQ-Qg-3rt"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="TgX-Ki-413" secondAttribute="bottom" constant="4" id="Zqz-Qr-UxI"/>
                                         <constraint firstItem="TgX-Ki-413" firstAttribute="width" secondItem="Wnn-9T-KVj" secondAttribute="width" id="hwC-FU-ZEu"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="TgX-Ki-413" secondAttribute="trailing" id="rbx-fa-r4p"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="Wnn-9T-KVj" secondAttribute="trailing" id="urv-tb-9vz"/>
-                                        <constraint firstAttribute="leadingMargin" secondItem="Wnn-9T-KVj" secondAttribute="leading" id="wXB-g9-CfJ"/>
+                                        <constraint firstItem="Wnn-9T-KVj" firstAttribute="leading" secondItem="R6r-aj-eeq" secondAttribute="leadingMargin" constant="8" id="wXB-g9-CfJ"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
