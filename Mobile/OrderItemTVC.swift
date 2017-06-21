@@ -185,10 +185,24 @@ class OrderItemTVC: UITableViewController {
 
         /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
 
-        if parentObject.uploaded {
-            // Prevent placing the order twice
+        /*
+        switch parentObject.status {
+        case OrderStatus.empty.rawValue:
             messageButton.isEnabled = false
+        case OrderStatus.pending.rawValue:
+            messageButton.isEnabled = true
+        case OrderStatus.placed.rawValue:
+            messageButton.isEnabled = false
+        case OrderStatus.uploaded.rawValue:
+            messageButton.isEnabled = false
+        default:
+            messageButton.isEnabled = false
+        }
+        */
+        if parentObject.status == OrderStatus.pending.rawValue {
+            messageButton.isEnabled = true
         } else {
+            // Prevent placing the order twice
             messageButton.isEnabled = true
         }
     }
