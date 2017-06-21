@@ -13,23 +13,9 @@ import SwiftyJSON
 @objc public enum OrderStatus: Int16 {
     case empty      = 0
     case pending    = 1
-    // case reviewed?
+    // case reviewed - for empty but acceptd as such (that's right, no order this week)?
     case placed     = 2
     case uploaded   = 3
-
-    // ?
-    mutating func next() {
-        switch self {
-        case .empty:
-            self = .pending
-        case .pending:
-            self = .placed
-        case .placed:
-            self = .uploaded
-        default:
-            break
-        }
-    }
 }
 
 extension Order {
