@@ -157,8 +157,9 @@ func format(phoneNumber sourcePhoneNumber: String) -> String? {
     var areaCode = ""
     if hasAreaCode {
         let areaCodeLength = 3
-        guard let areaCodeSubstring = numbersOnly.characters.substring(start: sourceIndex, offsetBy: areaCodeLength) else {
-            return nil
+        guard let areaCodeSubstring = numbersOnly.characters.substring(
+            start: sourceIndex, offsetBy: areaCodeLength) else {
+                return nil
         }
         areaCode = String(format: "(%@) ", areaCodeSubstring)
         sourceIndex += areaCodeLength
