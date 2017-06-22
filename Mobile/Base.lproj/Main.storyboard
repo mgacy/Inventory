@@ -1057,41 +1057,36 @@
                                                             </label>
                                                         </subviews>
                                                     </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="qmk-Xk-t0K" userLabel="Value Stack">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="yXs-MC-qMu" userLabel="Value/History + Unit">
                                                         <rect key="frame" x="0.0" y="54" width="359" height="96"/>
                                                         <subviews>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="yXs-MC-qMu">
-                                                                <rect key="frame" x="0.0" y="0.0" width="359" height="96"/>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="LA3-gw-8vm" userLabel="Value + History">
+                                                                <rect key="frame" x="0.0" y="0.0" width="285.5" height="96"/>
                                                                 <subviews>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="LA3-gw-8vm" userLabel="Value + History">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="285.5" height="96"/>
-                                                                        <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2l9-Xd-wol">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="285.5" height="72"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="60"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item History" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tJU-Hv-GXO">
-                                                                                <rect key="frame" x="0.0" y="72" width="285.5" height="24"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                        </subviews>
-                                                                    </stackView>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Unit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ARd-lw-q92">
-                                                                        <rect key="frame" x="287.5" y="0.0" width="71.5" height="72"/>
-                                                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="60"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2l9-Xd-wol">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="285.5" height="72"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item History" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tJU-Hv-GXO">
+                                                                        <rect key="frame" x="0.0" y="72" width="285.5" height="24"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
                                                                 </subviews>
-                                                                <constraints>
-                                                                    <constraint firstItem="LA3-gw-8vm" firstAttribute="width" secondItem="ARd-lw-q92" secondAttribute="width" multiplier="4" id="4Rn-pc-O5m"/>
-                                                                </constraints>
                                                             </stackView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Unit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ARd-lw-q92">
+                                                                <rect key="frame" x="287.5" y="0.0" width="71.5" height="72"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="60"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="LA3-gw-8vm" firstAttribute="width" secondItem="ARd-lw-q92" secondAttribute="width" multiplier="4" id="4Rn-pc-O5m"/>
+                                                        </constraints>
                                                     </stackView>
                                                 </subviews>
                                             </stackView>
