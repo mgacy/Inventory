@@ -162,7 +162,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZSW-Um-Cbs">
-                                            <rect key="frame" x="15" y="12" width="33.5" height="20.5"/>
+                                            <rect key="frame" x="16" y="12" width="33.5" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -217,8 +217,8 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5h7-na-aXp" userLabel="Display">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="241"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="v9Q-OW-cDf" userLabel="Display Stack">
-                                                <rect key="frame" x="8" y="8" width="359" height="225"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="v9Q-OW-cDf" userLabel="Display Stack">
+                                                <rect key="frame" x="8" y="8" width="359" height="233"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C2W-cU-qdG" userLabel="Item Name">
                                                         <rect key="frame" x="0.0" y="0.0" width="359" height="36"/>
@@ -336,8 +336,8 @@
                                                             <constraint firstItem="2oN-1z-dfh" firstAttribute="width" secondItem="DAo-Dt-msB" secondAttribute="width" multiplier="2" id="TYc-ei-3rU"/>
                                                         </constraints>
                                                     </stackView>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P3M-zi-hss" userLabel="Spacer - Bottom">
-                                                        <rect key="frame" x="0.0" y="183" width="359" height="42"/>
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P3M-zi-hss" userLabel="Spacer - Bottom">
+                                                        <rect key="frame" x="0.0" y="183" width="359" height="50"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </view>
                                                 </subviews>
@@ -350,10 +350,9 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="v9Q-OW-cDf" firstAttribute="trailing" secondItem="5h7-na-aXp" secondAttribute="trailing" constant="-8" id="4kg-Jb-uMf"/>
-                                            <constraint firstItem="v9Q-OW-cDf" firstAttribute="leading" secondItem="5h7-na-aXp" secondAttribute="leading" constant="8" id="Zxf-OM-05N"/>
-                                            <constraint firstItem="v9Q-OW-cDf" firstAttribute="top" secondItem="5h7-na-aXp" secondAttribute="top" constant="8" id="dVU-DB-8M1"/>
-                                            <constraint firstItem="v9Q-OW-cDf" firstAttribute="bottom" secondItem="5h7-na-aXp" secondAttribute="bottom" constant="-8" id="nex-ih-DBn"/>
+                                            <constraint firstItem="v9Q-OW-cDf" firstAttribute="trailing" secondItem="5h7-na-aXp" secondAttribute="trailingMargin" id="4kg-Jb-uMf"/>
+                                            <constraint firstItem="v9Q-OW-cDf" firstAttribute="leading" secondItem="5h7-na-aXp" secondAttribute="leadingMargin" id="Zxf-OM-05N"/>
+                                            <constraint firstItem="v9Q-OW-cDf" firstAttribute="top" secondItem="5h7-na-aXp" secondAttribute="topMargin" id="dVU-DB-8M1"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="tEE-zx-uYN" userLabel="Keypad">
