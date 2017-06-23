@@ -148,6 +148,7 @@
 		C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegueHandler.swift; path = Protocols/SegueHandler.swift; sourceTree = "<group>"; };
 		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSObject+Magic.swift"; path = "Extensions/Foundation/NSObject+Magic.swift"; sourceTree = "<group>"; };
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Magic.swift"; path = "Extensions/UIKit/UIView+Magic.swift"; sourceTree = "<group>"; };
+		C9C221171EFCD2F0009C7D01 /* OrderItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemTableViewCell.swift; sourceTree = "<group>"; };
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
 		C9D3E3A81EAEE15B0008F444 /* InventoryItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemTableViewCell.swift; sourceTree = "<group>"; };
@@ -379,6 +380,7 @@
 			children = (
 				C9EB7D891EE7910000515429 /* MailComposer.swift */,
 				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
+				C9C221171EFCD2F0009C7D01 /* OrderItemTableViewCell.swift */,
 				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
 				C94084771EFCCB7F00638E25 /* OrderItemViewController.storyboard */,
 				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
