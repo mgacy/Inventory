@@ -116,6 +116,10 @@
 		C92D75C21DC7A93100AA1A02 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		C92D75C41DC7A94100AA1A02 /* SettingsTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTVC.swift; sourceTree = "<group>"; };
 		C935E9A31E60D713003BF386 /* InitialLoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialLoginVC.swift; sourceTree = "<group>"; };
+		C94084761EFCCB7F00638E25 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
+		C94084771EFCCB7F00638E25 /* OrderItemViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderItemViewController.storyboard; sourceTree = "<group>"; };
+		C94084781EFCCB7F00638E25 /* OrderKeypadViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderKeypadViewController.storyboard; sourceTree = "<group>"; };
+		C94084791EFCCB7F00638E25 /* VendorRepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorRepView.swift; sourceTree = "<group>"; };
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Syncable.swift; path = "Core Data Helpers/Syncable.swift"; sourceTree = "<group>"; };
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InvoiceCollection+MyStuff.swift"; sourceTree = "<group>"; };
@@ -275,6 +279,26 @@
 			name = Protocols;
 			sourceTree = "<group>";
 		};
+		C94084741EFCCB7F00638E25 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				C9B825E71EB9A0ED009B92F0 /* Initial */,
+				C94084751EFCCB7F00638E25 /* Order */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		C94084751EFCCB7F00638E25 /* Order */ = {
+			isa = PBXGroup;
+			children = (
+				C94084761EFCCB7F00638E25 /* Dynamic.swift */,
+				C94084771EFCCB7F00638E25 /* OrderItemViewController.storyboard */,
+				C94084781EFCCB7F00638E25 /* OrderKeypadViewController.storyboard */,
+				C94084791EFCCB7F00638E25 /* VendorRepView.swift */,
+			);
+			path = Order;
+			sourceTree = "<group>";
+		};
 		C96870E01DDA1ED000EC06AB /* Model Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -317,6 +341,7 @@
 				C9A0B2EB1E63D2A300404320 /* InitialSignUpVC.swift */,
 			);
 			name = Initial;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		C9BA91271DEB957400DA2C6C /* Extensions */ = {
@@ -390,7 +415,7 @@
 				C904771F1EEE30770082D894 /* Protocols */,
 				C9F516101DB7F144004C10E6 /* Networking */,
 				C902FF301DB81BE20063CD02 /* Custom Views */,
-				C9B825E71EB9A0ED009B92F0 /* Initial */,
+				C94084741EFCCB7F00638E25 /* Scenes */,
 				C902FF2F1DB81BD00063CD02 /* Settings */,
 				C9F516051DB7F11D004C10E6 /* Inventory */,
 				C902FF311DB81BF70063CD02 /* Invoice */,
