@@ -36,6 +36,7 @@
 		C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */; };
 		C96870E61DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */; };
 		C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */; };
+		C968B85E1EF7275E005CE2FC /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */; };
 		C968B8611EF9D171005CE2FC /* UITableViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B8601EF9D171005CE2FC /* UITableViewController+Alert.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
 		C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* SyncManager.swift */; };
@@ -47,7 +48,7 @@
 		C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */; };
 		C9A0B2EC1E63D2A300404320 /* InitialSignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0B2EB1E63D2A300404320 /* InitialSignUpVC.swift */; };
 		C9A14ABC1DC6742700ACDE69 /* OrderVendorTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */; };
-		C9A14ABE1DC6746300ACDE69 /* OrderItemTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */; };
+		C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */; };
 		C9A14AC01DC6748000ACDE69 /* OrderKeypadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */; };
 		C9A14AC21DC67A0F00ACDE69 /* InvoiceDateTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */; };
 		C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */; };
@@ -121,6 +122,7 @@
 		C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Invoice+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InvoiceItem+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObjectContext+MyStuff.swift"; path = "Core Data Helpers/NSManagedObjectContext+MyStuff.swift"; sourceTree = "<group>"; };
+		C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 2.xcdatamodel"; sourceTree = "<group>"; };
 		C968B8601EF9D171005CE2FC /* UITableViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UITableViewController+Alert.swift"; path = "Extensions/UIKit/UITableViewController+Alert.swift"; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
@@ -133,7 +135,7 @@
 		C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A0B2EB1E63D2A300404320 /* InitialSignUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSignUpVC.swift; sourceTree = "<group>"; };
 		C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderVendorTVC.swift; sourceTree = "<group>"; };
-		C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemTVC.swift; sourceTree = "<group>"; };
+		C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemViewController.swift; sourceTree = "<group>"; };
 		C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadVC.swift; sourceTree = "<group>"; };
 		C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceDateTVC.swift; sourceTree = "<group>"; };
 		C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OrderCollection+MyStuff.swift"; sourceTree = "<group>"; };
@@ -242,9 +244,10 @@
 				C9E198D31DC566780065FB98 /* Model Extensions */,
 				C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */,
 				C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */,
-				C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */,
+				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
 				C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */,
 				C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */,
+				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
 				C9EB7D891EE7910000515429 /* MailComposer.swift */,
 				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
 			);
@@ -707,7 +710,7 @@
 				C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */,
 				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
 				C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */,
-				C9A14ABE1DC6746300ACDE69 /* OrderItemTVC.swift in Sources */,
+				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
 				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift in Sources */,
 				C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */,
 				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,
@@ -741,6 +744,7 @@
 				C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */,
 				C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */,
 				C9A14ABC1DC6742700ACDE69 /* OrderVendorTVC.swift in Sources */,
+				C968B85E1EF7275E005CE2FC /* OrderViewModel.swift in Sources */,
 				C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */,
 				C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */,
 				C9E198D51DC5669E0065FB98 /* OrderDateTVC.swift in Sources */,
