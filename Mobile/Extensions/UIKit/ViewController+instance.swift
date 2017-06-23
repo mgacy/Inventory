@@ -6,9 +6,10 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
+// https://medium.cobeisfresh.com/a-case-for-using-storyboards-on-ios-3bbe69efbdf4
+
 import UIKit
 
-// https://medium.cobeisfresh.com/a-case-for-using-storyboards-on-ios-3bbe69efbdf4
 extension UIViewController {
     class func instance() -> Self? {
         let storyboardName = String(describing: self)
@@ -17,7 +18,6 @@ extension UIViewController {
     }
 }
 
-// https://medium.cobeisfresh.com/a-case-for-using-storyboards-on-ios-3bbe69efbdf4
 extension UIStoryboard {
     func initialViewController<T: UIViewController>() -> T? {
         return self.instantiateInitialViewController() as? T
