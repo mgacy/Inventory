@@ -281,18 +281,12 @@
 			isa = PBXGroup;
 			children = (
 				C9E198D31DC566780065FB98 /* Model Extensions */,
+				C94084761EFCCB7F00638E25 /* Dynamic.swift */,
 				C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */,
 				C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */,
-				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
 				C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */,
-				C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */,
-				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
-				C9EB7D891EE7910000515429 /* MailComposer.swift */,
-				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
-				C94084761EFCCB7F00638E25 /* Dynamic.swift */,
-				C94084771EFCCB7F00638E25 /* OrderItemViewController.storyboard */,
-				C94084781EFCCB7F00638E25 /* OrderKeypadViewController.storyboard */,
-				C94084791EFCCB7F00638E25 /* VendorRepView.swift */,
+				C9C221151EFCCE4A009C7D01 /* Item List */,
+				C9C221161EFCCE61009C7D01 /* Keypad */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -376,6 +370,28 @@
 				C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */,
 			);
 			name = Foundation;
+			sourceTree = "<group>";
+		};
+		C9C221151EFCCE4A009C7D01 /* Item List */ = {
+			isa = PBXGroup;
+			children = (
+				C9EB7D891EE7910000515429 /* MailComposer.swift */,
+				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
+				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
+				C94084771EFCCB7F00638E25 /* OrderItemViewController.storyboard */,
+				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
+				C94084791EFCCB7F00638E25 /* VendorRepView.swift */,
+			);
+			name = "Item List";
+			sourceTree = "<group>";
+		};
+		C9C221161EFCCE61009C7D01 /* Keypad */ = {
+			isa = PBXGroup;
+			children = (
+				C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */,
+				C94084781EFCCB7F00638E25 /* OrderKeypadViewController.storyboard */,
+			);
+			name = Keypad;
 			sourceTree = "<group>";
 		};
 		C9E198D31DC566780065FB98 /* Model Extensions */ = {
