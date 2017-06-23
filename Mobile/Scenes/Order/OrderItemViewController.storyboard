@@ -29,58 +29,57 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oqI-Pp-nRw" customClass="VendorRepView" customModule="Mobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="129.5"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="8qR-xH-n0g">
-                                                <rect key="frame" x="8" y="8" width="359" height="113.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CLf-Ir-QL3">
+                                                <rect key="frame" x="8" y="8" width="359" height="29"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" distribution="equalCentering" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="1JF-BN-UuQ" userLabel="Buttons Stack">
+                                                <rect key="frame" x="99" y="63" width="176" height="32"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CLf-Ir-QL3">
-                                                        <rect key="frame" x="0.0" y="0.0" width="359" height="56.5"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="1JF-BN-UuQ" userLabel="Buttons Stack">
-                                                        <rect key="frame" x="0.0" y="56.5" width="359" height="57"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kd9-x3-K3Y" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="12.5" width="32" height="32"/>
-                                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="32" id="S7k-d4-L76"/>
-                                                                    <constraint firstAttribute="width" constant="32" id="dHX-dN-45d"/>
-                                                                </constraints>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLk-lJ-C9b" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
-                                                                <rect key="frame" x="163.5" y="12.5" width="32" height="32"/>
-                                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="32" id="S1e-zp-vj3"/>
-                                                                    <constraint firstAttribute="width" constant="32" id="gjg-dD-Cot"/>
-                                                                </constraints>
-                                                                <state key="normal" title="Button"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfS-J2-HkZ" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
-                                                                <rect key="frame" x="327" y="12.5" width="32" height="32"/>
-                                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="32" id="GmI-6U-NdR"/>
-                                                                    <constraint firstAttribute="height" constant="32" id="na0-QN-4O5"/>
-                                                                </constraints>
-                                                                <state key="normal" title="Button"/>
-                                                            </button>
-                                                        </subviews>
-                                                    </stackView>
+                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kd9-x3-K3Y" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="32" id="S7k-d4-L76"/>
+                                                            <constraint firstAttribute="width" constant="32" id="dHX-dN-45d"/>
+                                                        </constraints>
+                                                        <state key="normal" image="SmallMessageButton"/>
+                                                        <connections>
+                                                            <action selector="tappedMessageButton:" destination="B45-2k-J96" eventType="touchUpInside" id="Pfo-cI-301"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLk-lJ-C9b" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
+                                                        <rect key="frame" x="72" y="0.0" width="32" height="32"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="32" id="S1e-zp-vj3"/>
+                                                            <constraint firstAttribute="width" constant="32" id="gjg-dD-Cot"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <connections>
+                                                            <action selector="tappedEmailButton:" destination="B45-2k-J96" eventType="touchUpInside" id="oPj-gS-j8M"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfS-J2-HkZ" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
+                                                        <rect key="frame" x="144" y="0.0" width="32" height="32"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="32" id="GmI-6U-NdR"/>
+                                                            <constraint firstAttribute="height" constant="32" id="na0-QN-4O5"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                    </button>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="1JF-BN-UuQ" firstAttribute="height" secondItem="CLf-Ir-QL3" secondAttribute="height" id="Q4i-vy-JzX"/>
-                                                </constraints>
                                             </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottomMargin" secondItem="8qR-xH-n0g" secondAttribute="bottom" id="HeV-Rx-ie6"/>
-                                            <constraint firstItem="8qR-xH-n0g" firstAttribute="top" secondItem="oqI-Pp-nRw" secondAttribute="topMargin" id="QuU-YI-pbH"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="8qR-xH-n0g" secondAttribute="trailing" id="jrl-cX-7dT"/>
-                                            <constraint firstItem="8qR-xH-n0g" firstAttribute="leading" secondItem="oqI-Pp-nRw" secondAttribute="leadingMargin" id="pWo-5F-27o"/>
+                                            <constraint firstAttribute="trailing" secondItem="CLf-Ir-QL3" secondAttribute="trailing" constant="8" id="P3r-NX-cBx"/>
+                                            <constraint firstItem="CLf-Ir-QL3" firstAttribute="top" secondItem="oqI-Pp-nRw" secondAttribute="top" constant="8" id="fOt-a7-JMh"/>
+                                            <constraint firstItem="CLf-Ir-QL3" firstAttribute="leading" secondItem="oqI-Pp-nRw" secondAttribute="leading" constant="8" id="qcx-1L-Om7"/>
                                         </constraints>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="maV-wQ-KpH">
@@ -164,6 +163,9 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="callButton" destination="pfS-J2-HkZ" id="nGd-RJ-6Vb"/>
+                        <outlet property="emailButton" destination="yLk-lJ-C9b" id="KUi-u6-0P9"/>
+                        <outlet property="messageButton" destination="Kd9-x3-K3Y" id="ERt-lt-jhw"/>
                         <outlet property="repNameTextLabel" destination="CLf-Ir-QL3" id="6NT-04-RHl"/>
                         <outlet property="tableView" destination="maV-wQ-KpH" id="1pa-D4-noI"/>
                     </connections>
@@ -173,4 +175,7 @@
             <point key="canvasLocation" x="117.59999999999999" y="151.57421289355324"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="SmallMessageButton" width="12" height="11"/>
+    </resources>
 </document>
