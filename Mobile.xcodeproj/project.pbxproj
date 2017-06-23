@@ -244,13 +244,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		C902FF321DB81C000063CD02 /* Order */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Order;
-			sourceTree = "<group>";
-		};
 		C902FF4A1DBE77290063CD02 /* Model Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,6 +297,19 @@
 			path = Order;
 			sourceTree = "<group>";
 		};
+		C940847A1EFCCC8B00638E25 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */,
+				C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */,
+				C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */,
+				C91B4EDB1E5C2863002DA2A5 /* User.swift */,
+				C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */,
+				C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		C96870E01DDA1ED000EC06AB /* Model Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -317,11 +323,6 @@
 		C98A4FB61DCB034D002BB076 /* Model Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */,
-				C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */,
-				C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */,
-				C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */,
-				C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */,
 			);
 			name = "Model Extensions";
 			sourceTree = "<group>";
@@ -414,15 +415,14 @@
 				C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */,
 				C9F515E21DB7EF98004C10E6 /* ViewController.swift */,
 				C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */,
-				C91B4EDB1E5C2863002DA2A5 /* User.swift */,
 				C9B825E61EB9A0A4009B92F0 /* Core Data Helpers */,
 				C9BA91271DEB957400DA2C6C /* Extensions */,
 				C98A4FB61DCB034D002BB076 /* Model Extensions */,
+				C940847A1EFCCC8B00638E25 /* Models */,
 				C904771F1EEE30770082D894 /* Protocols */,
 				C9F516101DB7F144004C10E6 /* Networking */,
 				C902FF301DB81BE20063CD02 /* Custom Views */,
 				C94084741EFCCB7F00638E25 /* Scenes */,
-				C902FF321DB81C000063CD02 /* Order */,
 				C9F515E41DB7EF98004C10E6 /* Main.storyboard */,
 				C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */,
 				C902FF2D1DB816EB0063CD02 /* Keypad.swift */,
