@@ -233,7 +233,6 @@
 		C902FF311DB81BF70063CD02 /* Invoice */ = {
 			isa = PBXGroup;
 			children = (
-				C96870E01DDA1ED000EC06AB /* Model Extensions */,
 				C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */,
 				C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */,
 				C92D75BE1DC7A7E500AA1A02 /* InvoiceItemTVC.swift */,
@@ -244,7 +243,7 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		C902FF4A1DBE77290063CD02 /* Model Extensions */ = {
+		C902FF4A1DBE77290063CD02 /* Inventory Models */ = {
 			isa = PBXGroup;
 			children = (
 				C902FF401DBE70290063CD02 /* Inventory+MyStuff.swift */,
@@ -253,7 +252,8 @@
 				C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */,
 				C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */,
 			);
-			name = "Model Extensions";
+			name = "Inventory Models";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		C904771F1EEE30770082D894 /* Protocols */ = {
@@ -280,7 +280,6 @@
 		C94084751EFCCB7F00638E25 /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				C9E198D31DC566780065FB98 /* Model Extensions */,
 				C94084761EFCCB7F00638E25 /* Dynamic.swift */,
 				C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */,
 				C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */,
@@ -294,6 +293,9 @@
 		C940847A1EFCCC8B00638E25 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C902FF4A1DBE77290063CD02 /* Inventory Models */,
+				C96870E01DDA1ED000EC06AB /* Invoice Models */,
+				C9E198D31DC566780065FB98 /* Order Models */,
 				C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */,
 				C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */,
 				C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */,
@@ -304,14 +306,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		C96870E01DDA1ED000EC06AB /* Model Extensions */ = {
+		C96870E01DDA1ED000EC06AB /* Invoice Models */ = {
 			isa = PBXGroup;
 			children = (
 				C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */,
 				C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */,
 				C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */,
 			);
-			name = "Model Extensions";
+			name = "Invoice Models";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		C98A4FB61DCB034D002BB076 /* Model Extensions */ = {
@@ -394,15 +397,15 @@
 			name = Keypad;
 			sourceTree = "<group>";
 		};
-		C9E198D31DC566780065FB98 /* Model Extensions */ = {
+		C9E198D31DC566780065FB98 /* Order Models */ = {
 			isa = PBXGroup;
 			children = (
 				C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */,
 				C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */,
 				C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */,
 			);
-			name = "Model Extensions";
-			path = ../..;
+			name = "Order Models";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		C9F515D41DB7EF98004C10E6 = {
@@ -470,7 +473,6 @@
 		C9F516051DB7F11D004C10E6 /* Inventory */ = {
 			isa = PBXGroup;
 			children = (
-				C902FF4A1DBE77290063CD02 /* Model Extensions */,
 				C9F516061DB7F133004C10E6 /* InventoryDateTVC.swift */,
 				C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */,
 				C9F516081DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift */,
