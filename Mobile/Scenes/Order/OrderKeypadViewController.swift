@@ -1,5 +1,5 @@
 //
-//  OrderKeypadVC.swift
+//  OrderKeypadViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/30/16.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class OrderKeypadVC: UIViewController {
+class OrderKeypadViewController: UIViewController {
 
     // MARK: - Properties
 
