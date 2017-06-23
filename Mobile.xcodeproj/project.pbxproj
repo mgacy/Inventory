@@ -216,6 +216,7 @@
 				C92D75C21DC7A93100AA1A02 /* LoginVC.swift */,
 			);
 			name = Settings;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		C902FF301DB81BE20063CD02 /* Custom Views */ = {
@@ -240,20 +241,12 @@
 				C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */,
 			);
 			name = Invoice;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		C902FF321DB81C000063CD02 /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				C9E198D31DC566780065FB98 /* Model Extensions */,
-				C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */,
-				C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */,
-				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
-				C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */,
-				C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */,
-				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
-				C9EB7D891EE7910000515429 /* MailComposer.swift */,
-				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
 			);
 			name = Order;
 			sourceTree = "<group>";
@@ -283,7 +276,10 @@
 			isa = PBXGroup;
 			children = (
 				C9B825E71EB9A0ED009B92F0 /* Initial */,
+				C9F516051DB7F11D004C10E6 /* Inventory */,
+				C902FF311DB81BF70063CD02 /* Invoice */,
 				C94084751EFCCB7F00638E25 /* Order */,
+				C902FF2F1DB81BD00063CD02 /* Settings */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -291,6 +287,15 @@
 		C94084751EFCCB7F00638E25 /* Order */ = {
 			isa = PBXGroup;
 			children = (
+				C9E198D31DC566780065FB98 /* Model Extensions */,
+				C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */,
+				C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */,
+				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
+				C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */,
+				C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */,
+				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
+				C9EB7D891EE7910000515429 /* MailComposer.swift */,
+				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
 				C94084761EFCCB7F00638E25 /* Dynamic.swift */,
 				C94084771EFCCB7F00638E25 /* OrderItemViewController.storyboard */,
 				C94084781EFCCB7F00638E25 /* OrderKeypadViewController.storyboard */,
@@ -380,6 +385,7 @@
 				C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */,
 			);
 			name = "Model Extensions";
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		C9F515D41DB7EF98004C10E6 = {
@@ -416,9 +422,6 @@
 				C9F516101DB7F144004C10E6 /* Networking */,
 				C902FF301DB81BE20063CD02 /* Custom Views */,
 				C94084741EFCCB7F00638E25 /* Scenes */,
-				C902FF2F1DB81BD00063CD02 /* Settings */,
-				C9F516051DB7F11D004C10E6 /* Inventory */,
-				C902FF311DB81BF70063CD02 /* Invoice */,
 				C902FF321DB81C000063CD02 /* Order */,
 				C9F515E41DB7EF98004C10E6 /* Main.storyboard */,
 				C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */,
@@ -459,6 +462,7 @@
 				C9F5160A1DB7F133004C10E6 /* InventoryKeypadVC.swift */,
 			);
 			name = Inventory;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		C9F516101DB7F144004C10E6 /* Networking */ = {
