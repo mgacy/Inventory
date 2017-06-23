@@ -65,7 +65,7 @@ class OrderItemViewController: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? OrderKeypadVC else {
+        guard let destinationController = segue.destination as? OrderKeypadViewController else {
             fatalError("Wrong view controller type")
         }
         guard
