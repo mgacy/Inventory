@@ -80,12 +80,10 @@ class InventoryLocationItemTVC: UITableViewController, SegueHandler {
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
 
-        // Edit the sort key as appropriate.
         let positionSort = NSSortDescriptor(key: "position", ascending: true)
         let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
         request.sortDescriptors = [positionSort, nameSort]
 
-        // Set the fetch predicate.
         if let parentLocation = self.location {
             let fetchPredicate = NSPredicate(format: "location == %@", parentLocation)
             request.predicate = fetchPredicate
