@@ -1,5 +1,5 @@
 //
-//  OrderItemTVC.swift
+//  OrderItemViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/30/16.
@@ -12,10 +12,11 @@ import MessageUI
 import SwiftyJSON
 import PKHUD
 
-class OrderItemTVC: UITableViewController {
+class OrderItemViewController: UITableViewController {
 
     // MARK: - Properties
 
+    var viewModel: OrderViewModel!
     var parentObject: Order!
     var selectedObject: OrderItem?
 
@@ -51,6 +52,8 @@ class OrderItemTVC: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
+        // Update in case we have returned from the keypad where we updated the quantity of an OrderItem
+        parentObject.updateStatus()
         setupView()
     }
 
@@ -76,7 +79,7 @@ class OrderItemTVC: UITableViewController {
     }
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<OrderItemTVC>!
+    fileprivate var dataSource: TableViewDataSource<OrderItemViewController>!
 
     fileprivate func setupTableView() {
         //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -116,65 +119,22 @@ class OrderItemTVC: UITableViewController {
         log.info("Placing Order ...")
 
         // Simply POST the order if we already sent the message but were unable to POST it previously
-        if parentObject.placed {
-            log.info("Trying to POST an Order which was already sent ...")
-            completedPlaceOrder(.sent)
-            return
-        }
-
-        /// TODO: handle different orderMethod
-        /// TODO: prevent attempt to send empty order
 
         guard let phoneNumber = parentObject.vendor?.rep?.phone else {
             log.error("Unable to get phoneNumber"); return
         }
         //let phoneNumber = "602-980-4718"
-        guard let message = parentObject.getOrderMessage() else {
+        guard let message = viewModel.orderMessage else {
             log.error("\(#function) FAILED : unable to getOrderMessage"); return
         }
 
-        if messageComposer.canSendText() {
-            let messageComposeVC = messageComposer.configuredMessageComposeViewController(
-                phoneNumber: phoneNumber, message: message,
-                completionHandler: completedPlaceOrder)
-            present(messageComposeVC, animated: true, completion: nil)
-
-        } else {
-            log.error("\(#function) FAILED : messageComposer cannot send text")
-            /// TODO: try to send email message?
-
-            // TESTING:
-            //completedPlaceOrder(true)
-
-            let errorAlert = createAlert(title: "Cannot Send Text Message",
-                                         message: "Your device is not able to send text messages.",
-                                         handler: nil)
-            present(errorAlert, animated: true, completion: nil)
-        }
+        let messageComposeVC = messageComposer.configuredMessageComposeViewController(
+            phoneNumber: phoneNumber, message: message,
+            completionHandler: completedPlaceOrder)
+        present(messageComposeVC, animated: true, completion: nil)
     }
 
     func setupView() {
-        /// TODO: should most of the following be part of a ViewModel?
-        guard
-            let vendor = parentObject.vendor,
-            let rep = vendor.rep else {
-                messageButton.isEnabled = false
-                log.warning("Unable to get vendor or rep")
-                return
-        }
-
-        /// TODO: get rep.firstName, rep.lastName to display in view
-
-        guard let phoneNumber = rep.phone else {
-            /// TODO: try to get email in order to send Order that way
-            messageButton.isEnabled = false
-            log.warning("Unable to get phone number")
-            return
-        }
-        /// TODO: format phoneNumber for display in view
-        /// TODO: disable button if there are no Items with Orders
-        log.info("phone number: \(phoneNumber)")
-
         /// NOTE: disable for testing
         guard messageComposer.canSendText() else {
             messageButton.isEnabled = false
@@ -182,19 +142,13 @@ class OrderItemTVC: UITableViewController {
         }
 
         /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
-
-        if parentObject.uploaded {
-            // Prevent placing the order twice
-            messageButton.isEnabled = false
-        } else {
-            messageButton.isEnabled = true
-        }
+        messageButton.isEnabled = viewModel.canMessageOrder
     }
 
 }
 
 // MARK: - Completion Handlers
-extension OrderItemTVC {
+extension OrderItemViewController {
 
     func completedPlaceOrder(_ result: MessageComposeResult) {
         switch result {
@@ -205,17 +159,9 @@ extension OrderItemTVC {
             showAlert(title: "Problem", message: "Unable to send Order message")
         case .sent:
             log.info("Sent Order message")
-            parentObject.placed = true
             HUD.show(.progress)
-
-            // Serialize and POST Order
-            guard let json = parentObject.serialize() else {
-                log.error("\(#function) FAILED : unable to serialize Order")
-                HUD.flash(.error, delay: 1.0); return
-            }
-            log.info("POSTing Order ...")
-            log.verbose("Order: \(json)")
-            APIManager.sharedInstance.postOrder(order: json, completion: completedPostOrder)
+            /// TODO: simply pass closure?
+            viewModel.postOrder(completion: completedPostOrder)
         }
     }
 
@@ -223,12 +169,10 @@ extension OrderItemTVC {
 
     func completedPostOrder(succeeded: Bool, json: JSON) {
         if succeeded {
-            parentObject.uploaded = true
-
-            /// TODO: set .uploaded of parentObject.collection if all are uploaded
+            viewModel.completedPostOrder()
 
             // swiftlint:disable:next unused_closure_parameter
-            HUD.flash(.success, delay: 1.0) { finished in
+            HUD.flash(.success, delay: 0.5) { finished in
                 // Pop view
                 self.navigationController!.popViewController(animated: true)
             }
@@ -243,7 +187,7 @@ extension OrderItemTVC {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension OrderItemTVC: TableViewDataSourceDelegate {
+extension OrderItemViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for orderItem: OrderItem) {
         cell.textLabel?.text = orderItem.item?.name
@@ -270,71 +214,6 @@ extension OrderItemTVC: TableViewDataSourceDelegate {
             cell.detailTextLabel?.text = "\(quantity)"
         }
         /// TODO: add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
-    }
-
-}
-
-// MARK: - Notifications
-extension OrderItemTVC {
-
-    // If we pass a handler, display a "Cancel" and an "OK" button with the latter calling that handler
-    // Otherwise, display a single "OK" button
-    /// TODO: shouldn't we allow the specification of the okAction's title?
-    /// TODO: should we just present the alert within the function instead of returning it?
-    func createAlert(title: String, message: String, handler: (() -> Void)? = nil) -> UIAlertController {
-
-        // Create alert controller
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let cancelTitle: String
-        switch handler != nil {
-        case true:
-            cancelTitle = "Cancel"
-
-            // Create and add the OK action
-            // swiftlint:disable:next unused_closure_parameter
-            let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { action -> Void in
-                // Do some stuff
-                handler!()
-            }
-            alert.addAction(okAction)
-
-        case false:
-            cancelTitle = "OK"
-        }
-
-        // Create and add the Cancel action
-        let cancelAction: UIAlertAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
-        alert.addAction(cancelAction)
-
-        return alert
-    }
-
-    func showAlert(title: String, message: String, handler: (() -> Void)? = nil) {
-
-        // Create alert controller
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let cancelTitle: String
-        switch handler != nil {
-        case true:
-            cancelTitle = "Cancel"
-
-            // Create and add the OK action
-            // swiftlint:disable:next unused_closure_parameter
-            let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { action -> Void in
-                // Do some stuff
-                handler!()
-            }
-            alert.addAction(okAction)
-
-        case false:
-            cancelTitle = "OK"
-        }
-
-        // Create and add the Cancel action
-        let cancelAction: UIAlertAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
-        alert.addAction(cancelAction)
-
-        present(alert, animated: true, completion: nil)
     }
 
 }

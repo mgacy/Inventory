@@ -19,6 +19,7 @@ protocol KeypadDelegate: class {
 
 class NewKeypad {
 
+    /// TODO: rename `currentDisplay` to better differentiate purpose from currentValue?
     public var displayValue: String {
         return currentNumber
     }
@@ -115,6 +116,7 @@ class NewKeypad {
         delegate?.updateModel(currentValue)
     }
 
+    /// Essentially, reset currentNumber with newNumber
     public func updateNumber(_ newNumber: NSNumber?) {
         guard let _newNumber = newNumber else {
             currentNumber = ""

@@ -10,6 +10,14 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+@objc public enum OrderStatus: Int16 {
+    case empty      = 0
+    case pending    = 1
+    // case reviewed - for empty but acceptd as such (that's right, no order this week)?
+    case placed     = 2
+    case uploaded   = 3
+}
+
 extension Order {
 
     // MARK: - Lifecycle
@@ -20,8 +28,11 @@ extension Order {
         // Properties
         // if let orderCost = json["order_cost"].float {}
         // if let orderDate = json["order_date"].string {}
-        self.placed = uploaded
-        self.uploaded = uploaded
+        if uploaded {
+            self.status = OrderStatus.uploaded.rawValue
+        } else {
+            self.status = OrderStatus.pending.rawValue
+        }
 
         // Relationships
         self.collection = collection
@@ -44,6 +55,10 @@ extension Order {
             for itemJSON in items {
                 _ = OrderItem(context: context, json: itemJSON, order: self)
             }
+        }
+
+        if !uploaded {
+            updateStatus()
         }
     }
 
@@ -95,6 +110,33 @@ extension Order {
         let message = "Order for \(self.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
         log.debug("Order Message: \(message)")
         return message
+    }
+
+}
+
+extension Order {
+
+    func updateStatus() {
+        guard status != OrderStatus.placed.rawValue,
+              status != OrderStatus.uploaded.rawValue else {
+                return
+        }
+
+        guard let items = items else {
+            log.debug("Order appears to be empty"); return
+            status = OrderStatus.empty.rawValue
+        }
+
+        for item in items {
+            if let quantity = (item as? OrderItem)?.quantity {
+                if quantity.intValue > 0 {
+                    status = OrderStatus.pending.rawValue
+                    return
+                }
+            }
+        }
+        log.debug("It looks like we have an empty order.")
+        status = OrderStatus.empty.rawValue
     }
 
 }
