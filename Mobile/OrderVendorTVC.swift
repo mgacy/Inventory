@@ -55,7 +55,7 @@ class OrderVendorTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? OrderItemTVC else {
+        guard let destinationController = segue.destination as? OrderItemViewController else {
             fatalError("Wrong view controller type")
         }
         guard let selectedObject = selectedObject else {

@@ -48,7 +48,7 @@
 		C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */; };
 		C9A0B2EC1E63D2A300404320 /* InitialSignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0B2EB1E63D2A300404320 /* InitialSignUpVC.swift */; };
 		C9A14ABC1DC6742700ACDE69 /* OrderVendorTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */; };
-		C9A14ABE1DC6746300ACDE69 /* OrderItemTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */; };
+		C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */; };
 		C9A14AC01DC6748000ACDE69 /* OrderKeypadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */; };
 		C9A14AC21DC67A0F00ACDE69 /* InvoiceDateTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */; };
 		C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */; };
@@ -135,7 +135,7 @@
 		C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A0B2EB1E63D2A300404320 /* InitialSignUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSignUpVC.swift; sourceTree = "<group>"; };
 		C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderVendorTVC.swift; sourceTree = "<group>"; };
-		C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemTVC.swift; sourceTree = "<group>"; };
+		C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemViewController.swift; sourceTree = "<group>"; };
 		C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadVC.swift; sourceTree = "<group>"; };
 		C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceDateTVC.swift; sourceTree = "<group>"; };
 		C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OrderCollection+MyStuff.swift"; sourceTree = "<group>"; };
@@ -244,10 +244,10 @@
 				C9E198D31DC566780065FB98 /* Model Extensions */,
 				C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */,
 				C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */,
-				C9A14ABD1DC6746300ACDE69 /* OrderItemTVC.swift */,
 				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
 				C9A14ABF1DC6748000ACDE69 /* OrderKeypadVC.swift */,
 				C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */,
+				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
 				C9EB7D891EE7910000515429 /* MailComposer.swift */,
 				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
 			);
@@ -710,7 +710,7 @@
 				C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */,
 				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
 				C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */,
-				C9A14ABE1DC6746300ACDE69 /* OrderItemTVC.swift in Sources */,
+				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
 				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift in Sources */,
 				C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */,
 				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,

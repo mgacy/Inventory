@@ -1,5 +1,5 @@
 //
-//  OrderItemTVC.swift
+//  OrderItemViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/30/16.
@@ -12,7 +12,7 @@ import MessageUI
 import SwiftyJSON
 import PKHUD
 
-class OrderItemTVC: UITableViewController {
+class OrderItemViewController: UITableViewController {
 
     // MARK: - Properties
 
@@ -79,7 +79,7 @@ class OrderItemTVC: UITableViewController {
     }
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<OrderItemTVC>!
+    fileprivate var dataSource: TableViewDataSource<OrderItemViewController>!
 
     fileprivate func setupTableView() {
         //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -148,7 +148,7 @@ class OrderItemTVC: UITableViewController {
 }
 
 // MARK: - Completion Handlers
-extension OrderItemTVC {
+extension OrderItemViewController {
 
     func completedPlaceOrder(_ result: MessageComposeResult) {
         switch result {
@@ -187,7 +187,7 @@ extension OrderItemTVC {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension OrderItemTVC: TableViewDataSourceDelegate {
+extension OrderItemViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for orderItem: OrderItem) {
         cell.textLabel?.text = orderItem.item?.name

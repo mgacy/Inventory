@@ -520,7 +520,7 @@
         <!--OrderItem-->
         <scene sceneID="RYd-Fb-0K8">
             <objects>
-                <tableViewController storyboardIdentifier="OrderItemTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="yHa-97-WdW" userLabel="OrderItem" customClass="OrderItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="OrderItemViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="yHa-97-WdW" userLabel="OrderItem" customClass="OrderItemViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="hX6-m9-oGy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
