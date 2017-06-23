@@ -7,7 +7,6 @@
 //
 
 import Foundation
-//import CoreData
 import SwiftyJSON
 
 class OrderViewModel {
@@ -58,9 +57,9 @@ class OrderViewModel {
     required init(forOrder order: Order) {
         self.order = order
         self.vendorName = order.vendor?.name ?? ""
-        self.repName = order.vendor?.rep?.firstName ?? ""
+        self.repName = "\(order.vendor?.rep?.firstName ?? "") \(order.vendor?.rep?.lastName ?? "")"
         self.phone = order.vendor?.rep?.phone ?? ""
-        self.email = ""
+        self.email = order.vendor?.rep?.email ?? ""
     }
 
     // MARK: - Actions
