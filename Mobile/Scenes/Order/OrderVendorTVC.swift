@@ -26,7 +26,7 @@ class OrderVendorTVC: UITableViewController {
      var cellIdentifier = "Cell"
 
     // Segues
-    let segueIdentifier = "showOrderItems"
+    //let segueIdentifier = "showOrderItems"
 
     // MARK: - Lifecycle
 
@@ -53,7 +53,7 @@ class OrderVendorTVC: UITableViewController {
     }
 
     // MARK: - Navigation
-
+    /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let destinationController = segue.destination as? OrderItemViewController else {
             fatalError("Wrong view controller type")
@@ -67,7 +67,7 @@ class OrderVendorTVC: UITableViewController {
         destinationController.parentObject = selectedObject
         destinationController.managedObjectContext = self.managedObjectContext
     }
-
+    */
     // MARK: - UITableViewDataSource
 
     // MARK: - TableViewDataSource
@@ -103,9 +103,25 @@ class OrderVendorTVC: UITableViewController {
         selectedObject = dataSource.objectAtIndexPath(indexPath)
         log.verbose("Selected Order: \(String(describing: selectedObject))")
 
-        performSegue(withIdentifier: segueIdentifier, sender: self)
+        //performSegue(withIdentifier: segueIdentifier, sender: self)
+        guard let selection = selectedObject else {
+            fatalError("Couldn't get selected Order")
+        }
+        showOrderItemView(withOrder: selection)
 
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    private func showOrderItemView(withOrder order: Order) {
+        guard let destinationController = OrderItemViewController.instance() else {
+            fatalError("\(#function) FAILED: unable to get destination view controller.")
+        }
+
+        destinationController.viewModel = OrderViewModel(forOrder: order)
+        destinationController.parentObject = order
+        destinationController.managedObjectContext = self.managedObjectContext
+
+        navigationController?.pushViewController(destinationController, animated: true)
     }
 
 }
