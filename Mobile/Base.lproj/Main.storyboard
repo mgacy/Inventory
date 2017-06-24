@@ -148,7 +148,6 @@
         <!--InvoiceItem-->
         <scene sceneID="sAK-Ak-TeE">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="WNf-PQ-5Fe" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController storyboardIdentifier="InvoiceItemTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="l7g-UY-PfL" userLabel="InvoiceItem" customClass="InvoiceItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="8U1-sa-wNz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -159,18 +158,18 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PwH-kH-Iz3" id="nJM-Ce-rBd">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZSW-Um-Cbs">
-                                            <rect key="frame" x="16" y="12" width="34" height="20"/>
+                                            <rect key="frame" x="15" y="12" width="33.5" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4Wf-pu-g5Y">
-                                            <rect key="frame" x="316" y="12" width="44" height="20"/>
+                                            <rect key="frame" x="316" y="12" width="44" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -196,6 +195,7 @@
                         <segue destination="YYD-4x-u8L" kind="show" identifier="showInvoiceKeypad" id="dUN-FR-aP7"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WNf-PQ-5Fe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3902" y="2015"/>
         </scene>
@@ -215,7 +215,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5h7-na-aXp" userLabel="Display">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="241"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="241.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="v9Q-OW-cDf" userLabel="Display Stack">
                                                 <rect key="frame" x="8" y="8" width="359" height="134.5"/>
@@ -333,34 +333,34 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="tEE-zx-uYN" userLabel="Keypad">
-                                        <rect key="frame" x="0.0" y="241" width="375" height="362"/>
+                                        <rect key="frame" x="0.0" y="241.5" width="375" height="361.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="dOh-43-kLb" userLabel="Number Col 1">
-                                                <rect key="frame" x="0.0" y="0.0" width="93" height="362"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="93" height="361.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HEJ-gf-4sW" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="89.5"/>
                                                         <state key="normal" title="7"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="fsj-ZZ-AsP"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jd8-Fl-vP2" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="90.5" width="93" height="89.5"/>
                                                         <state key="normal" title="4"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="R2O-vv-png"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KG0-1K-MXv" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="181" width="93" height="90"/>
                                                         <state key="normal" title="1"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="qWf-Le-mHE"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p2V-1k-QoJ" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="272" width="93" height="89.5"/>
                                                         <state key="normal" title="0"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="3wT-f9-BVh"/>
@@ -369,31 +369,31 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="Foa-qu-xHm" userLabel="Number Col 2">
-                                                <rect key="frame" x="94" y="0.0" width="93" height="362"/>
+                                                <rect key="frame" x="94" y="0.0" width="93" height="361.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cPQ-S2-jJy" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="89.5"/>
                                                         <state key="normal" title="8"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="ROh-W8-wGS"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RHI-f6-3VF" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="90.5" width="93" height="89.5"/>
                                                         <state key="normal" title="5"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="hVX-my-SZK"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gAK-FR-h4G" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="181" width="93" height="90"/>
                                                         <state key="normal" title="2"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="Q7G-4h-yZf"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kzl-0l-00i" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="272" width="93" height="89.5"/>
                                                         <state key="normal" title="."/>
                                                         <connections>
                                                             <action selector="decimalTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="Ebf-0G-v84"/>
@@ -402,31 +402,31 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="555-PH-FqJ" userLabel="Number Col 3">
-                                                <rect key="frame" x="188" y="0.0" width="93" height="362"/>
+                                                <rect key="frame" x="188" y="0.0" width="93" height="361.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wzf-s8-N22" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="89.5"/>
                                                         <state key="normal" title="9"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="APS-hL-1AO"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TI5-M9-fE5" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="90.5" width="93" height="89.5"/>
                                                         <state key="normal" title="6"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="ZPM-R9-5TG"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j7k-Ro-aCF" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="181" width="93" height="90"/>
                                                         <state key="normal" title="3"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="bth-We-kqb"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZH5-sk-T1x" userLabel="Prev" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="272" width="93" height="89.5"/>
                                                         <state key="normal" image="prev"/>
                                                         <connections>
                                                             <action selector="previousItemTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="Iyd-gh-ZhW"/>
@@ -435,31 +435,31 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="bVq-90-PgX" userLabel="Number Col 4">
-                                                <rect key="frame" x="282" y="0.0" width="93" height="362"/>
+                                                <rect key="frame" x="282" y="0.0" width="93" height="361.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4IA-pI-Pp2" userLabel="Clear" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="89.5"/>
                                                         <state key="normal" image="delete"/>
                                                         <connections>
                                                             <action selector="clearTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="CSE-Pc-s9V"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eyO-aL-s47" userLabel="Mode" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="90.5" width="93" height="89.5"/>
                                                         <state key="normal" title="m"/>
                                                         <connections>
                                                             <action selector="modeTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="NgU-9c-8Fa"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="whb-DC-c3i" userLabel="Soft Button" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="181" width="93" height="90"/>
                                                         <state key="normal" title="BT"/>
                                                         <connections>
                                                             <action selector="softButtonTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="xjd-GD-qnh"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uEt-it-Qcq" userLabel="Next" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="272" width="93" height="89.5"/>
                                                         <state key="normal" image="next"/>
                                                         <connections>
                                                             <action selector="nextItemTapped:" destination="YYD-4x-u8L" eventType="touchUpInside" id="fww-8v-aOn"/>
@@ -513,297 +513,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d7d-b3-GeE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2985" y="1199"/>
-        </scene>
-        <!--OrderKeypad-->
-        <scene sceneID="3gh-C2-Cya">
-            <objects>
-                <viewController storyboardIdentifier="OrderKeypadViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="e6G-Uh-Dbm" userLabel="OrderKeypad" customClass="OrderKeypadViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="1du-vi-zGv"/>
-                        <viewControllerLayoutGuide type="bottom" id="0ck-it-Yoe"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ZeX-sD-Uf9">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="1kC-qA-dXu">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3mE-b9-hE2" userLabel="Display">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="241"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="d9D-pb-01h" userLabel="Display Stack">
-                                                <rect key="frame" x="8" y="8" width="359" height="166"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IhG-CO-DzN" userLabel="Item Name">
-                                                        <rect key="frame" x="0.0" y="0.0" width="359" height="36"/>
-                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nH1-zi-8kM">
-                                                        <rect key="frame" x="0.0" y="36" width="359" height="130"/>
-                                                        <subviews>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="SW2-XC-zAC" userLabel="Info Stack">
-                                                                <rect key="frame" x="0.0" y="0.0" width="119.5" height="130"/>
-                                                                <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pack" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1gR-mn-ueV" userLabel="Label - Pack">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="119.5" height="12"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ICH-iB-fZk" userLabel="Case Size">
-                                                                        <rect key="frame" x="0.0" y="12" width="119.5" height="20.5"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <nil key="textColor"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Par" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OlU-hY-gEm" userLabel="Label - Par">
-                                                                        <rect key="frame" x="0.0" y="32.5" width="119.5" height="12"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8PU-Gc-PcR" userLabel="Par">
-                                                                        <rect key="frame" x="0.0" y="44.5" width="119.5" height="20.5"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <nil key="textColor"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="On Hand" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eOU-vm-lJx" userLabel="Label - On Hand">
-                                                                        <rect key="frame" x="0.0" y="65" width="119.5" height="12"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HYQ-mA-BC5" userLabel="On Hand">
-                                                                        <rect key="frame" x="0.0" y="77" width="119.5" height="20.5"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <nil key="textColor"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Suggested" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="whX-zp-VoS" userLabel="Label - Suggested">
-                                                                        <rect key="frame" x="0.0" y="97.5" width="119.5" height="12"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="He8-0w-cSb" userLabel="Suggested Order">
-                                                                        <rect key="frame" x="0.0" y="109.5" width="119.5" height="20.5"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <nil key="textColor"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                </subviews>
-                                                            </stackView>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ZK1-fP-u16" userLabel="Quantity Stack">
-                                                                <rect key="frame" x="119.5" y="0.0" width="239.5" height="130"/>
-                                                                <subviews>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="e9c-rp-LLz" userLabel="Order Stack">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="239.5" height="130"/>
-                                                                        <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wt3-sp-CIQ" userLabel="Order">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="158.5" height="72"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="60"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CXJ-fC-p1W" userLabel="Unit">
-                                                                                <rect key="frame" x="160.5" y="0.0" width="79" height="72"/>
-                                                                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="60"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                        </subviews>
-                                                                        <constraints>
-                                                                            <constraint firstItem="CXJ-fC-p1W" firstAttribute="height" secondItem="wt3-sp-CIQ" secondAttribute="height" id="3Zc-YJ-rSt"/>
-                                                                            <constraint firstItem="wt3-sp-CIQ" firstAttribute="width" secondItem="CXJ-fC-p1W" secondAttribute="width" multiplier="2" id="FxJ-84-HSy"/>
-                                                                        </constraints>
-                                                                    </stackView>
-                                                                </subviews>
-                                                            </stackView>
-                                                        </subviews>
-                                                        <constraints>
-                                                            <constraint firstItem="ZK1-fP-u16" firstAttribute="width" secondItem="SW2-XC-zAC" secondAttribute="width" multiplier="2" id="rHT-wg-cPs"/>
-                                                        </constraints>
-                                                    </stackView>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="d9D-pb-01h" firstAttribute="trailing" secondItem="3mE-b9-hE2" secondAttribute="trailingMargin" id="ILf-M4-7fV"/>
-                                            <constraint firstItem="d9D-pb-01h" firstAttribute="leading" secondItem="3mE-b9-hE2" secondAttribute="leadingMargin" id="dDj-ZW-B1V"/>
-                                            <constraint firstItem="d9D-pb-01h" firstAttribute="top" secondItem="3mE-b9-hE2" secondAttribute="topMargin" id="wrt-gQ-5hv"/>
-                                        </constraints>
-                                    </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="cwV-BA-0M5" userLabel="Keypad">
-                                        <rect key="frame" x="0.0" y="241" width="375" height="362"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="ny7-hS-eqG" userLabel="Number Col 1">
-                                                <rect key="frame" x="0.0" y="0.0" width="93" height="362"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhw-LO-BgO" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
-                                                        <state key="normal" title="7"/>
-                                                        <connections>
-                                                            <action selector="numberTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="8Jg-9K-ePr"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nl-Q7-a40" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
-                                                        <state key="normal" title="4"/>
-                                                        <connections>
-                                                            <action selector="numberTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="R0l-vR-qXg"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bEX-ci-aEp" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
-                                                        <state key="normal" title="1"/>
-                                                        <connections>
-                                                            <action selector="numberTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="NOC-uZ-WbR"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1X6-xS-pOE" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
-                                                        <state key="normal" title="0"/>
-                                                        <connections>
-                                                            <action selector="numberTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="AOx-vz-N8J"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="p79-M6-85Q" userLabel="Number Col 2">
-                                                <rect key="frame" x="94" y="0.0" width="93" height="362"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="njG-GJ-d96" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
-                                                        <state key="normal" title="8"/>
-                                                        <connections>
-                                                            <action selector="numberTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="JaA-vB-ifU"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iUn-J3-6At" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
-                                                        <state key="normal" title="5"/>
-                                                        <connections>
-                                                            <action selector="numberTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="mch-1u-e2O"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Gx-T4-rfs" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
-                                                        <state key="normal" title="2"/>
-                                                        <connections>
-                                                            <action selector="numberTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="9A2-MY-8ka"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5cs-hD-CKb" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
-                                                        <state key="normal" title="."/>
-                                                        <connections>
-                                                            <action selector="decimalTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="7ge-hM-Hkm"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="xyh-4P-NLq" userLabel="Number Col 3">
-                                                <rect key="frame" x="188" y="0.0" width="93" height="362"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DR1-C5-1Mn" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
-                                                        <state key="normal" title="9"/>
-                                                        <connections>
-                                                            <action selector="numberTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="tdW-0U-OoB"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RlM-so-KFi" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
-                                                        <state key="normal" title="6"/>
-                                                        <connections>
-                                                            <action selector="numberTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="VKX-Cr-6oh"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y4o-3b-2gj" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
-                                                        <state key="normal" title="3"/>
-                                                        <connections>
-                                                            <action selector="numberTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="6k1-nh-YCP"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iOl-3x-Yc2" userLabel="Prev" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
-                                                        <state key="normal" image="prev"/>
-                                                        <connections>
-                                                            <action selector="previousItemTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="8D2-WC-Rpg"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="SJc-1m-QZO" userLabel="Number Col 4">
-                                                <rect key="frame" x="282" y="0.0" width="93" height="362"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y6E-LQ-0ei" userLabel="Clear" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
-                                                        <state key="normal" image="delete"/>
-                                                        <connections>
-                                                            <action selector="clearTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="Z2P-Ds-d7Q"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xRx-du-mNh" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
-                                                        <state key="normal" title="CS"/>
-                                                        <connections>
-                                                            <action selector="packTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="QB4-J9-cpL"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gJv-O0-NQF" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
-                                                        <state key="normal" title="BT"/>
-                                                        <connections>
-                                                            <action selector="unitTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="Xwy-Ia-yqq"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cz8-u6-Esw" userLabel="Next" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
-                                                        <state key="normal" image="next"/>
-                                                        <connections>
-                                                            <action selector="nextItemTapped:" destination="e6G-Uh-Dbm" eventType="touchUpInside" id="M7k-FR-HbK"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="cwV-BA-0M5" firstAttribute="height" secondItem="3mE-b9-hE2" secondAttribute="height" multiplier="1.5" id="DIz-xh-o9E"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="1kC-qA-dXu" firstAttribute="top" secondItem="1du-vi-zGv" secondAttribute="bottom" id="INO-JW-OVP"/>
-                            <constraint firstItem="1kC-qA-dXu" firstAttribute="bottom" secondItem="ZeX-sD-Uf9" secondAttribute="bottom" id="Mqt-zQ-jSr"/>
-                            <constraint firstItem="1kC-qA-dXu" firstAttribute="leading" secondItem="ZeX-sD-Uf9" secondAttribute="leading" id="OFr-Ty-ztS"/>
-                            <constraint firstItem="1kC-qA-dXu" firstAttribute="trailing" secondItem="ZeX-sD-Uf9" secondAttribute="trailing" id="uaL-5c-dnF"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="bottleButton" destination="gJv-O0-NQF" id="5K0-dR-Rh8"/>
-                        <outlet property="caseButton" destination="xRx-du-mNh" id="TJi-5B-IuX"/>
-                        <outlet property="caseSize" destination="ICH-iB-fZk" id="kC7-ze-Hkl"/>
-                        <outlet property="itemName" destination="IhG-CO-DzN" id="kdw-6h-pro"/>
-                        <outlet property="minOrder" destination="He8-0w-cSb" id="weM-4D-zos"/>
-                        <outlet property="onHand" destination="HYQ-mA-BC5" id="Hay-r5-7ec"/>
-                        <outlet property="order" destination="wt3-sp-CIQ" id="8Qb-D3-JTw"/>
-                        <outlet property="orderUnit" destination="CXJ-fC-p1W" id="V8L-kC-akB"/>
-                        <outlet property="par" destination="8PU-Gc-PcR" id="vFN-HI-tgV"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="phs-wM-42Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4773.6000000000004" y="1198.6506746626687"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="hQS-dZ-Fpm">
@@ -910,7 +619,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dwk-3L-FP7" id="R6r-aj-eeq">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wnn-9T-KVj">
@@ -977,7 +686,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="top" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-Db-yD3" userLabel="Display">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="241"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="241.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="RE1-mV-8eR" userLabel="Display Stack">
                                                 <rect key="frame" x="8" y="8" width="359" height="150"/>
@@ -1040,34 +749,34 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="uuP-os-zjA" userLabel="Keypad">
-                                        <rect key="frame" x="0.0" y="241" width="375" height="362"/>
+                                        <rect key="frame" x="0.0" y="241.5" width="375" height="361.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="03q-x2-WWk" userLabel="Number Col 1">
-                                                <rect key="frame" x="0.0" y="0.0" width="93" height="362"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="93" height="361.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PDt-cP-YxR" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="89.5"/>
                                                         <state key="normal" title="7"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="GsY-jo-GRM"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0jg-8f-sXM" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="90.5" width="93" height="89.5"/>
                                                         <state key="normal" title="4"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="hzZ-8c-8yL"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kjz-yR-49j" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="181" width="93" height="90"/>
                                                         <state key="normal" title="1"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="lNa-tW-WKJ"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cbq-38-fLr" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="272" width="93" height="89.5"/>
                                                         <state key="normal" title="0"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="mvR-WV-o6n"/>
@@ -1076,31 +785,31 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="6wy-Rz-1nF" userLabel="Number Col 2">
-                                                <rect key="frame" x="94" y="0.0" width="93" height="362"/>
+                                                <rect key="frame" x="94" y="0.0" width="93" height="361.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ICl-bp-QD7" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="89.5"/>
                                                         <state key="normal" title="8"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="TWu-4d-F9k"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pjv-So-6hQ" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="90.5" width="93" height="89.5"/>
                                                         <state key="normal" title="5"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="Iab-I1-lnH"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6t3-NA-mFK" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="181" width="93" height="90"/>
                                                         <state key="normal" title="2"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="oED-vR-BOe"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ekR-nX-2Z2" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="272" width="93" height="89.5"/>
                                                         <state key="normal" title="."/>
                                                         <connections>
                                                             <action selector="decimalTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="68B-Wk-JLg"/>
@@ -1109,31 +818,31 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="k4y-cO-ZME" userLabel="Number Col 3">
-                                                <rect key="frame" x="188" y="0.0" width="93" height="362"/>
+                                                <rect key="frame" x="188" y="0.0" width="93" height="361.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQ6-iQ-nGa" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="89.5"/>
                                                         <state key="normal" title="9"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="OOG-99-lrb"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5XF-DP-JJB" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="90.5" width="93" height="89.5"/>
                                                         <state key="normal" title="6"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="aAv-hg-8sx"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGY-7y-nwd" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="181" width="93" height="90"/>
                                                         <state key="normal" title="3"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="DO7-P2-uqG"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFJ-ea-4yB" userLabel="Prev" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="272" width="93" height="89.5"/>
                                                         <state key="normal" image="prev"/>
                                                         <connections>
                                                             <action selector="previousItemTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="hl1-an-W8d"/>
@@ -1142,31 +851,31 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="QqA-un-ZW9" userLabel="Number Col 4">
-                                                <rect key="frame" x="282" y="0.0" width="93" height="362"/>
+                                                <rect key="frame" x="282" y="0.0" width="93" height="361.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6I9-Yn-6J7" userLabel="Clear" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="89.5"/>
                                                         <state key="normal" image="delete"/>
                                                         <connections>
                                                             <action selector="clearTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="GhW-qn-DYU"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WNO-eL-0Ce" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="91" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="90.5" width="93" height="89.5"/>
                                                         <state key="normal" title="+1"/>
                                                         <connections>
                                                             <action selector="incrementTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="Dua-lT-zzt"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ag-cF-XKu" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="181.5" width="93" height="90"/>
+                                                        <rect key="frame" x="0.0" y="181" width="93" height="90"/>
                                                         <state key="normal" title="+"/>
                                                         <connections>
                                                             <action selector="addTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="Ex0-CJ-7ft"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zlz-LA-qO9" userLabel="Next" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="272.5" width="93" height="89.5"/>
+                                                        <rect key="frame" x="0.0" y="272" width="93" height="89.5"/>
                                                         <state key="normal" image="next"/>
                                                         <connections>
                                                             <action selector="nextItemTapped:" destination="WFi-DU-OgF" eventType="touchUpInside" id="sbW-NA-fyQ"/>
