@@ -20,6 +20,7 @@
 		C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90477201EEE30D60082D894 /* KeypadViewModel.swift */; };
 		C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */; };
 		C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9090FFD1EB92D8B0035A1DA /* Managed.swift */; };
+		C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */; };
 		C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F741DF0D61E00166A08 /* CoreDataStack.swift */; };
 		C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */; };
 		C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B4EDB1E5C2863002DA2A5 /* User.swift */; };
@@ -112,6 +113,7 @@
 		C90477201EEE30D60082D894 /* KeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeypadViewModel.swift; path = Protocols/KeypadViewModel.swift; sourceTree = "<group>"; };
 		C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VendorRep+MyStuff.swift"; sourceTree = "<group>"; };
 		C9090FFD1EB92D8B0035A1DA /* Managed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Managed.swift; path = "Core Data Helpers/Managed.swift"; sourceTree = "<group>"; };
+		C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIButton+setBackgroundColor.swift"; path = "Extensions/UIKit/UIButton+setBackgroundColor.swift"; sourceTree = "<group>"; };
 		C9124F741DF0D61E00166A08 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataStack.swift; path = "Core Data Helpers/CoreDataStack.swift"; sourceTree = "<group>"; };
 		C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataImporter.swift; path = "Core Data Helpers/CoreDataImporter.swift"; sourceTree = "<group>"; };
 		C91B4EDB1E5C2863002DA2A5 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 		C9BA91281DEB958200DA2C6C /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */,
 				C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */,
 				C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */,
 				C9C221181EFCD423009C7D01 /* ViewController+instance.swift */,
@@ -795,6 +798,7 @@
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
 				C9D3E3A91EAEE15B0008F444 /* InventoryItemTableViewCell.swift in Sources */,
 				C92D75C11DC7A81400AA1A02 /* InvoiceKeypadVC.swift in Sources */,
+				C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */,
 				C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */,
 				C92D75C51DC7A94100AA1A02 /* SettingsTVC.swift in Sources */,
 				C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */,
