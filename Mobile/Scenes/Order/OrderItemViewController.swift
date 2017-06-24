@@ -47,10 +47,9 @@ class OrderItemViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.delegate = self
         title = parentObject.vendor?.name
+        tableView.delegate = self
         setupTableView()
-        log.debug("A")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -110,6 +109,10 @@ class OrderItemViewController: UIViewController {
     func setupView() {
         repNameTextLabel.text = viewModel.repName
 
+        callButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
+        emailButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
+        messageButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
+
         /// NOTE: disable for testing
         guard messageComposer.canSendText() else {
             messageButton.isEnabled = false
@@ -117,6 +120,8 @@ class OrderItemViewController: UIViewController {
         }
 
         /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
+        callButton.isEnabled = false
+        emailButton.isEnabled = false
         messageButton.isEnabled = viewModel.canMessageOrder
     }
 
