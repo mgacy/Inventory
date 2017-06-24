@@ -97,11 +97,11 @@
                                                 <rect key="frame" x="0.0" y="28" width="375" height="50"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k53-am-Xcu" id="MHc-Wh-0Mc">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="49.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="5g4-cC-fPt" userLabel="Name + Pack">
-                                                            <rect key="frame" x="8" y="8" width="45" height="35"/>
+                                                            <rect key="frame" x="16" y="8" width="45" height="35"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SKb-sm-K1O">
                                                                     <rect key="frame" x="0.0" y="0.0" width="45" height="20"/>
@@ -121,7 +121,7 @@
                                                             </subviews>
                                                         </stackView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="zdC-Eh-Law" userLabel="Quantity + Unit">
-                                                            <rect key="frame" x="268.5" y="8" width="98.5" height="20.5"/>
+                                                            <rect key="frame" x="260.5" y="8" width="98.5" height="20.5"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quantity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MOq-0b-0vY">
                                                                     <rect key="frame" x="0.0" y="0.0" width="65" height="20.5"/>
@@ -142,8 +142,8 @@
                                                         <constraint firstItem="5g4-cC-fPt" firstAttribute="top" secondItem="zdC-Eh-Law" secondAttribute="top" id="2a9-B7-LvF"/>
                                                         <constraint firstItem="5g4-cC-fPt" firstAttribute="top" secondItem="MHc-Wh-0Mc" secondAttribute="topMargin" id="8yy-n1-Rh5"/>
                                                         <constraint firstItem="5g4-cC-fPt" firstAttribute="centerY" secondItem="MHc-Wh-0Mc" secondAttribute="centerY" id="NLp-M6-vxL"/>
-                                                        <constraint firstItem="zdC-Eh-Law" firstAttribute="trailing" secondItem="MHc-Wh-0Mc" secondAttribute="trailingMargin" id="ier-Po-Sxk"/>
-                                                        <constraint firstItem="5g4-cC-fPt" firstAttribute="leading" secondItem="MHc-Wh-0Mc" secondAttribute="leadingMargin" id="qtE-kz-U4c"/>
+                                                        <constraint firstItem="zdC-Eh-Law" firstAttribute="trailing" secondItem="MHc-Wh-0Mc" secondAttribute="trailingMargin" constant="-8" id="ier-Po-Sxk"/>
+                                                        <constraint firstItem="5g4-cC-fPt" firstAttribute="leading" secondItem="MHc-Wh-0Mc" secondAttribute="leadingMargin" constant="8" id="qtE-kz-U4c"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <connections>
