@@ -30,64 +30,64 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="259"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="YDE-Q1-WM8" userLabel="Display Stack">
-                                                <rect key="frame" x="8" y="8" width="359" height="166"/>
+                                                <rect key="frame" x="16" y="16" width="343" height="166"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HB9-Cu-nXh" userLabel="Item Name">
-                                                        <rect key="frame" x="0.0" y="0.0" width="359" height="36"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="343" height="36"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UPx-jx-Js8">
-                                                        <rect key="frame" x="0.0" y="36" width="359" height="130"/>
+                                                        <rect key="frame" x="0.0" y="36" width="343" height="130"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="YuV-cc-3ho" userLabel="Info Stack">
-                                                                <rect key="frame" x="0.0" y="0.0" width="119.5" height="130"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="114.5" height="130"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pack" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Qd-Bc-O4A" userLabel="Label - Pack">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="119.5" height="12"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="114.5" height="12"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gdt-Yw-VB7" userLabel="Case Size">
-                                                                        <rect key="frame" x="0.0" y="12" width="119.5" height="20.5"/>
+                                                                        <rect key="frame" x="0.0" y="12" width="114.5" height="20.5"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Par" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qCy-9I-J5Q" userLabel="Label - Par">
-                                                                        <rect key="frame" x="0.0" y="32.5" width="119.5" height="12"/>
+                                                                        <rect key="frame" x="0.0" y="32.5" width="114.5" height="12"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hss-pr-9MH" userLabel="Par">
-                                                                        <rect key="frame" x="0.0" y="44.5" width="119.5" height="20.5"/>
+                                                                        <rect key="frame" x="0.0" y="44.5" width="114.5" height="20.5"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="On Hand" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bLh-bZ-Ezb" userLabel="Label - On Hand">
-                                                                        <rect key="frame" x="0.0" y="65" width="119.5" height="12"/>
+                                                                        <rect key="frame" x="0.0" y="65" width="114.5" height="12"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6hc-J6-XXL" userLabel="On Hand">
-                                                                        <rect key="frame" x="0.0" y="77" width="119.5" height="20.5"/>
+                                                                        <rect key="frame" x="0.0" y="77" width="114.5" height="20.5"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Suggested" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxr-YM-W4U" userLabel="Label - Suggested">
-                                                                        <rect key="frame" x="0.0" y="97.5" width="119.5" height="12"/>
+                                                                        <rect key="frame" x="0.0" y="97.5" width="114.5" height="12"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="alc-hg-NKw" userLabel="Suggested Order">
-                                                                        <rect key="frame" x="0.0" y="109.5" width="119.5" height="20.5"/>
+                                                                        <rect key="frame" x="0.0" y="109.5" width="114.5" height="20.5"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
@@ -95,19 +95,19 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hrX-Ks-HkK" userLabel="Quantity Stack">
-                                                                <rect key="frame" x="119.5" y="0.0" width="239.5" height="130"/>
+                                                                <rect key="frame" x="114.5" y="0.0" width="228.5" height="130"/>
                                                                 <subviews>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="e3i-IF-t2A" userLabel="Order Stack">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="239.5" height="130"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="228.5" height="130"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2vw-mJ-CMY" userLabel="Order">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="158.5" height="72"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="151" height="72"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DyQ-Ed-A4c" userLabel="Unit">
-                                                                                <rect key="frame" x="160.5" y="0.0" width="79" height="72"/>
+                                                                                <rect key="frame" x="153" y="0.0" width="75.5" height="72"/>
                                                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="60"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
@@ -130,9 +130,9 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="YDE-Q1-WM8" firstAttribute="top" secondItem="WEN-sW-inc" secondAttribute="topMargin" id="FWw-xG-MmK"/>
-                                            <constraint firstItem="YDE-Q1-WM8" firstAttribute="trailing" secondItem="WEN-sW-inc" secondAttribute="trailingMargin" id="UyP-E8-45u"/>
-                                            <constraint firstItem="YDE-Q1-WM8" firstAttribute="leading" secondItem="WEN-sW-inc" secondAttribute="leadingMargin" id="yh2-aT-QQ1"/>
+                                            <constraint firstItem="YDE-Q1-WM8" firstAttribute="top" secondItem="WEN-sW-inc" secondAttribute="topMargin" constant="8" id="FWw-xG-MmK"/>
+                                            <constraint firstItem="YDE-Q1-WM8" firstAttribute="trailing" secondItem="WEN-sW-inc" secondAttribute="trailingMargin" constant="-8" id="UyP-E8-45u"/>
+                                            <constraint firstItem="YDE-Q1-WM8" firstAttribute="leading" secondItem="WEN-sW-inc" secondAttribute="leadingMargin" constant="8" id="yh2-aT-QQ1"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="bXl-qy-T8Z" userLabel="Keypad">
@@ -142,28 +142,28 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="93" height="388"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DfD-uV-ED5" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="96"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="96.5"/>
                                                         <state key="normal" title="7"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="I9U-T5-xcg"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="84R-gj-Fsv" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="97" width="93" height="96.5"/>
+                                                        <rect key="frame" x="0.0" y="97.5" width="93" height="96"/>
                                                         <state key="normal" title="4"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="lNJ-Yg-vPo"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7gN-RA-2kc" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="194.5" width="93" height="96"/>
+                                                        <rect key="frame" x="0.0" y="194.5" width="93" height="96.5"/>
                                                         <state key="normal" title="1"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="RHK-U1-pmt"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hib-HR-39r" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="291.5" width="93" height="96.5"/>
+                                                        <rect key="frame" x="0.0" y="292" width="93" height="96"/>
                                                         <state key="normal" title="0"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="6NF-lN-NTC"/>
@@ -175,28 +175,28 @@
                                                 <rect key="frame" x="94" y="0.0" width="93" height="388"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RH3-DF-Ype" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="96"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="96.5"/>
                                                         <state key="normal" title="8"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="1dO-KD-l61"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eIs-aF-bDh" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="97" width="93" height="96.5"/>
+                                                        <rect key="frame" x="0.0" y="97.5" width="93" height="96"/>
                                                         <state key="normal" title="5"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="5fv-JK-nRb"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DFO-Xu-FRR" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="194.5" width="93" height="96"/>
+                                                        <rect key="frame" x="0.0" y="194.5" width="93" height="96.5"/>
                                                         <state key="normal" title="2"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="Oha-e3-ElA"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r7G-Pg-fMd" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="291.5" width="93" height="96.5"/>
+                                                        <rect key="frame" x="0.0" y="292" width="93" height="96"/>
                                                         <state key="normal" title="."/>
                                                         <connections>
                                                             <action selector="decimalTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="2P2-H4-Bw0"/>
@@ -208,28 +208,28 @@
                                                 <rect key="frame" x="188" y="0.0" width="93" height="388"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M08-Nk-VyN" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="96"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="96.5"/>
                                                         <state key="normal" title="9"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="Afm-Fa-EgS"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ogo-Yc-iA9" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="97" width="93" height="96.5"/>
+                                                        <rect key="frame" x="0.0" y="97.5" width="93" height="96"/>
                                                         <state key="normal" title="6"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="5Pj-Bo-Iz4"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g5K-d7-RqI" customClass="NumberKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="194.5" width="93" height="96"/>
+                                                        <rect key="frame" x="0.0" y="194.5" width="93" height="96.5"/>
                                                         <state key="normal" title="3"/>
                                                         <connections>
                                                             <action selector="numberTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="mfP-HH-pmO"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6tC-CS-dRl" userLabel="Prev" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="291.5" width="93" height="96.5"/>
+                                                        <rect key="frame" x="0.0" y="292" width="93" height="96"/>
                                                         <state key="normal" image="prev"/>
                                                         <connections>
                                                             <action selector="previousItemTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="8nj-GC-4Ws"/>
@@ -241,28 +241,28 @@
                                                 <rect key="frame" x="282" y="0.0" width="93" height="388"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ptD-wI-5Fa" userLabel="Clear" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="96"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="93" height="96.5"/>
                                                         <state key="normal" image="delete"/>
                                                         <connections>
                                                             <action selector="clearTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="MCO-CU-Bwq"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8TF-aS-1Mx" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="97" width="93" height="96.5"/>
+                                                        <rect key="frame" x="0.0" y="97.5" width="93" height="96"/>
                                                         <state key="normal" title="CS"/>
                                                         <connections>
                                                             <action selector="packTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="tq8-ch-laT"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RT4-Ev-c5r" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="194.5" width="93" height="96"/>
+                                                        <rect key="frame" x="0.0" y="194.5" width="93" height="96.5"/>
                                                         <state key="normal" title="BT"/>
                                                         <connections>
                                                             <action selector="unitTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="hMy-IY-6na"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xYj-9c-IzU" userLabel="Next" customClass="OperationKeypadButton" customModule="Mobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="291.5" width="93" height="96.5"/>
+                                                        <rect key="frame" x="0.0" y="292" width="93" height="96"/>
                                                         <state key="normal" image="next"/>
                                                         <connections>
                                                             <action selector="nextItemTapped:" destination="nsS-AC-9G5" eventType="touchUpInside" id="WdY-cW-Aid"/>
