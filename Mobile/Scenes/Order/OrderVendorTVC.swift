@@ -136,6 +136,8 @@ extension OrderVendorTVC: TableViewDataSourceDelegate {
         // we still need to make sure that it ends up getting uploaded
 
         switch order.status {
+        case OrderStatus.incomplete.rawValue:
+            cell.textLabel?.textColor = ColorPalette.redColor
         case OrderStatus.empty.rawValue:
             cell.textLabel?.textColor = UIColor.lightGray
         case OrderStatus.pending.rawValue:
