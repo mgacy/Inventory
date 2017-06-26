@@ -183,8 +183,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="SmallMessageButton" width="22" height="21"/>
         <image name="SmallEmailButton" width="22" height="22"/>
+        <image name="SmallMessageButton" width="24" height="24"/>
         <image name="SmallPhoneButton" width="22" height="22"/>
     </resources>
 </document>
