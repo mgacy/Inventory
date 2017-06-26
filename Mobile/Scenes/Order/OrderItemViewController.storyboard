@@ -53,26 +53,26 @@
                                                                     <action selector="tappedMessageButton:" destination="B45-2k-J96" eventType="touchUpInside" id="Pfo-cI-301"/>
                                                                 </connections>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLk-lJ-C9b" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLk-lJ-C9b" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
                                                                 <rect key="frame" x="80" y="0.0" width="40" height="40"/>
                                                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="S1e-zp-vj3"/>
                                                                     <constraint firstAttribute="width" constant="40" id="gjg-dD-Cot"/>
                                                                 </constraints>
-                                                                <state key="normal" title="Button"/>
+                                                                <state key="normal" image="SmallEmailButton"/>
                                                                 <connections>
                                                                     <action selector="tappedEmailButton:" destination="B45-2k-J96" eventType="touchUpInside" id="oPj-gS-j8M"/>
                                                                 </connections>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfS-J2-HkZ" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfS-J2-HkZ" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
                                                                 <rect key="frame" x="160" y="0.0" width="40" height="40"/>
                                                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="40" id="GmI-6U-NdR"/>
                                                                     <constraint firstAttribute="height" constant="40" id="na0-QN-4O5"/>
                                                                 </constraints>
-                                                                <state key="normal" title="Button"/>
+                                                                <state key="normal" image="SmallPhoneButton"/>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
@@ -97,7 +97,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="375" height="50"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k53-am-Xcu" id="MHc-Wh-0Mc">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="49.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="5g4-cC-fPt" userLabel="Name + Pack">
@@ -184,5 +184,7 @@
     </scenes>
     <resources>
         <image name="SmallMessageButton" width="22" height="21"/>
+        <image name="SmallEmailButton" width="22" height="22"/>
+        <image name="SmallPhoneButton" width="22" height="22"/>
     </resources>
 </document>
