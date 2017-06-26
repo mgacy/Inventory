@@ -80,7 +80,7 @@
 		C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */; };
 		C9F5160D1DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516081DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift */; };
 		C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516091DB7F133004C10E6 /* InventoryLocationItemTVC.swift */; };
-		C9F5160F1DB7F133004C10E6 /* InventoryKeypadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5160A1DB7F133004C10E6 /* InventoryKeypadVC.swift */; };
+		C9F5160F1DB7F133004C10E6 /* InventoryKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */; };
 		C9F516151DB7F158004C10E6 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516111DB7F158004C10E6 /* Router.swift */; };
 		C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516121DB7F158004C10E6 /* APIManager.swift */; };
 		C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516131DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift */; };
@@ -180,7 +180,7 @@
 		C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocationTVC.swift; sourceTree = "<group>"; };
 		C9F516081DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocationCategoryTVC.swift; sourceTree = "<group>"; };
 		C9F516091DB7F133004C10E6 /* InventoryLocationItemTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocationItemTVC.swift; sourceTree = "<group>"; };
-		C9F5160A1DB7F133004C10E6 /* InventoryKeypadVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryKeypadVC.swift; sourceTree = "<group>"; };
+		C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryKeypadViewController.swift; sourceTree = "<group>"; };
 		C9F516111DB7F158004C10E6 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		C9F516121DB7F158004C10E6 /* APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		C9F516131DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlamofireRequest+JSONSerializable.swift"; sourceTree = "<group>"; };
@@ -484,7 +484,7 @@
 				C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */,
 				C9F516081DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift */,
 				C9F516091DB7F133004C10E6 /* InventoryLocationItemTVC.swift */,
-				C9F5160A1DB7F133004C10E6 /* InventoryKeypadVC.swift */,
+				C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */,
 			);
 			name = Inventory;
 			path = ..;
@@ -821,7 +821,7 @@
 				C9A0B2EC1E63D2A300404320 /* InitialSignUpVC.swift in Sources */,
 				C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */,
 				C91C92861EFCDD9000566CEB /* RoundButton.swift in Sources */,
-				C9F5160F1DB7F133004C10E6 /* InventoryKeypadVC.swift in Sources */,
+				C9F5160F1DB7F133004C10E6 /* InventoryKeypadViewController.swift in Sources */,
 				C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */,
 				C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */,
 				C98A4FB31DCB0233002BB076 /* Unit+MyStuff.swift in Sources */,

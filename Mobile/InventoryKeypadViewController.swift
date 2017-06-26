@@ -1,5 +1,5 @@
 //
-//  InventoryKeypadVC.swift
+//  InventoryKeypadViewController.swift
 //  Playground
 //
 //  Created by Mathew Gacy on 10/10/16.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class InventoryKeypadVC: UIViewController {
+class InventoryKeypadViewController: UIViewController {
 
     // MARK: Properties
 

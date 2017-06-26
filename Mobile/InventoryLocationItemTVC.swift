@@ -53,7 +53,7 @@ class InventoryLocationItemTVC: UITableViewController, SegueHandler {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InventoryKeypadVC else {
+        guard let destinationController = segue.destination as? InventoryKeypadViewController else {
             fatalError("Wrong view controller type")
         }
 
