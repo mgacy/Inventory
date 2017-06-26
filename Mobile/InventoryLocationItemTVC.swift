@@ -69,6 +69,24 @@ class InventoryLocationItemTVC: UITableViewController, SegueHandler {
         }
     }
 
+    fileprivate func showKeypad(withItem item: InventoryLocationItem) {
+        guard let destinationController = InventoryKeypadViewController.instance() else {
+            fatalError("\(#function) FAILED: unable to get destination view controller.")
+        }
+        guard
+            let indexPath = self.tableView.indexPathForSelectedRow?.row,
+            let managedObjectContext = managedObjectContext else {
+                fatalError("\(#function) FAILED: unable to get indexPath or moc")
+        }
+
+        destinationController.category = category
+        destinationController.location = location
+        destinationController.currentIndex = indexPath
+        destinationController.managedObjectContext = managedObjectContext
+
+        navigationController?.pushViewController(destinationController, animated: true)
+    }
+
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocationItemTVC>!
     //fileprivate var observer: ManagedObjectObserver?
@@ -109,7 +127,13 @@ class InventoryLocationItemTVC: UITableViewController, SegueHandler {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedItem = dataSource.objectAtIndexPath(indexPath)
-        performSegue(withIdentifier: .showKeypad)
+        //performSegue(withIdentifier: .showKeypad)
+
+        guard let selection = selectedItem else {
+            fatalError("Couldn't get selected Order")
+        }
+        showKeypad(withItem: selection)
+
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

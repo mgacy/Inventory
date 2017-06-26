@@ -64,6 +64,7 @@
 		C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */; };
 		C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */; };
 		C9C221191EFCD424009C7D01 /* ViewController+instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C221181EFCD423009C7D01 /* ViewController+instance.swift */; };
+		C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */; };
 		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
 		C9D3E3A91EAEE15B0008F444 /* InventoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A81EAEE15B0008F444 /* InventoryItemTableViewCell.swift */; };
@@ -159,6 +160,7 @@
 		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSObject+Magic.swift"; path = "Extensions/Foundation/NSObject+Magic.swift"; sourceTree = "<group>"; };
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Magic.swift"; path = "Extensions/UIKit/UIView+Magic.swift"; sourceTree = "<group>"; };
 		C9C221181EFCD423009C7D01 /* ViewController+instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ViewController+instance.swift"; path = "Extensions/UIKit/ViewController+instance.swift"; sourceTree = "<group>"; };
+		C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = InventoryKeypadViewController.storyboard; path = Scenes/Inventory/InventoryKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
 		C9D3E3A81EAEE15B0008F444 /* InventoryItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemTableViewCell.swift; sourceTree = "<group>"; };
@@ -405,6 +407,15 @@
 			name = Keypad;
 			sourceTree = "<group>";
 		};
+		C9CB6FC71F01D28F0094ED07 /* Keypad */ = {
+			isa = PBXGroup;
+			children = (
+				C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */,
+				C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */,
+			);
+			name = Keypad;
+			sourceTree = "<group>";
+		};
 		C9E198D31DC566780065FB98 /* Order Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -484,7 +495,7 @@
 				C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */,
 				C9F516081DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift */,
 				C9F516091DB7F133004C10E6 /* InventoryLocationItemTVC.swift */,
-				C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */,
+				C9CB6FC71F01D28F0094ED07 /* Keypad */,
 			);
 			name = Inventory;
 			path = ..;
@@ -616,6 +627,7 @@
 			files = (
 				C9F515EE1DB7EF98004C10E6 /* LaunchScreen.storyboard in Resources */,
 				C9F515EB1DB7EF98004C10E6 /* Assets.xcassets in Resources */,
+				C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */,
 				C91C928A1EFCE65800566CEB /* OrderKeypadViewController.storyboard in Resources */,
 				C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */,
 				C91C92821EFCD98F00566CEB /* OrderItemViewController.storyboard in Resources */,
