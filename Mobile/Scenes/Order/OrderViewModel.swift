@@ -17,8 +17,12 @@ class OrderViewModel {
 
     var vendorName: String
     var repName: String
-    var phone: String
     var email: String
+    var phone: String
+
+    var formattedPhone: String {
+        return format(phoneNumber: phone) ?? ""
+    }
 
     var canMessageOrder: Bool {
         guard order.vendor?.rep?.phone != nil else {
