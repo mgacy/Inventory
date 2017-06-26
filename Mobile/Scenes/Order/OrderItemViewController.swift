@@ -195,7 +195,6 @@ extension OrderItemViewController {
 extension OrderItemViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        log.debug("\(#function)")
         selectedObject = dataSource.objectAtIndexPath(indexPath)
         log.verbose("Selected Order: \(String(describing: selectedObject))")
 
