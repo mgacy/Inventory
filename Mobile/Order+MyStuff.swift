@@ -11,11 +11,12 @@ import CoreData
 import SwiftyJSON
 
 @objc public enum OrderStatus: Int16 {
-    case empty      = 0
-    case pending    = 1
+    case incomplete = 0
+    case empty      = 1
+    case pending    = 2
     // case reviewed - for empty but acceptd as such (that's right, no order this week)?
-    case placed     = 2
-    case uploaded   = 3
+    case placed     = 3
+    case uploaded   = 4
 }
 
 extension Order {
@@ -123,20 +124,29 @@ extension Order {
         }
 
         guard let items = items else {
-            log.debug("Order appears to be empty"); return
+            log.debug("Order appears to be empty")
             status = OrderStatus.empty.rawValue
+            return
         }
 
+        var hasOrder = false
         for item in items {
             if let quantity = (item as? OrderItem)?.quantity {
                 if quantity.intValue > 0 {
-                    status = OrderStatus.pending.rawValue
-                    return
+                    hasOrder = true
                 }
+            } else {
+                status = OrderStatus.incomplete.rawValue
+                return
             }
         }
-        log.debug("It looks like we have an empty order.")
-        status = OrderStatus.empty.rawValue
+
+        if hasOrder {
+            status = OrderStatus.pending.rawValue
+        } else {
+            log.debug("It looks like we have an empty order.")
+            status = OrderStatus.empty.rawValue
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 //
-//  UITableViewController+Alert.swift
+//  UIViewController+Alert.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 6/20/17.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-extension UITableViewController {
+extension UIViewController {
 
     // If we pass a handler, display a "Cancel" and an "OK" button with the latter calling that handler
     // Otherwise, display a single "OK" button

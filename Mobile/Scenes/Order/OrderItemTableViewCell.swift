@@ -27,22 +27,27 @@ extension OrderItemTableViewCell {
 
         guard let quantity = orderItem.quantity else {
             // Highlight OrderItems w/o order
-            nameTextLabel.textColor = ColorPalette.yellowColor
+            nameTextLabel.textColor = ColorPalette.redColor
             quantityTextLabel.text = "?"
+            quantityTextLabel.textColor = ColorPalette.redColor
             unitTextLabel.text = ""
+            unitTextLabel.textColor = ColorPalette.redColor
             return
         }
         if Double(quantity) > 0.0 {
             nameTextLabel.textColor = UIColor.black
-            //cell.detailTextLabel?.text = "\(quantity) \(orderItem.orderUnit?.abbreviation ?? "")"
             quantityTextLabel.text = "\(quantity)"
+            quantityTextLabel.textColor =  UIColor.black
             unitTextLabel.text = orderItem.orderUnit?.abbreviation ?? ""
+            unitTextLabel.textColor = UIColor.black
+
         } else {
             nameTextLabel.textColor = UIColor.lightGray
             /// TODO: should I even bother displaying quantity?
-            //cell.detailTextLabel?.text = "\(quantity)"
             quantityTextLabel.text = "\(quantity)"
+            quantityTextLabel.textColor = UIColor.lightGray
             unitTextLabel.text = orderItem.orderUnit?.abbreviation ?? ""
+            unitTextLabel.textColor = UIColor.lightGray
         }
         /// TODO: add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
 

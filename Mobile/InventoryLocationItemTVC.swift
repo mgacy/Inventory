@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class InventoryLocationItemTVC: UITableViewController, SegueHandler {
+class InventoryLocationItemTVC: UITableViewController {
 
     // MARK: Properties
 
@@ -26,11 +26,6 @@ class InventoryLocationItemTVC: UITableViewController, SegueHandler {
 
     // TableViewCell
     let cellIdentifier = "InventoryItemCell"
-
-    // Segues
-     enum SegueIdentifier: String {
-        case showKeypad = "ShowInventoryKeypad"
-    }
 
     // MARK: - Lifecycle
 
@@ -52,21 +47,22 @@ class InventoryLocationItemTVC: UITableViewController, SegueHandler {
 
     // MARK: - Navigation
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InventoryKeypadVC else {
-            fatalError("Wrong view controller type")
+    fileprivate func showKeypad(withItem item: InventoryLocationItem) {
+        guard let destinationController = InventoryKeypadViewController.instance() else {
+            fatalError("\(#function) FAILED: unable to get destination view controller.")
+        }
+        guard
+            let indexPath = self.tableView.indexPathForSelectedRow?.row,
+            let managedObjectContext = managedObjectContext else {
+                fatalError("\(#function) FAILED: unable to get indexPath or moc")
         }
 
-        // Pass the parent of the selected object to the new view controller.
-        // TODO: should I really pass both or just the one != nil?
         destinationController.category = category
         destinationController.location = location
-        destinationController.managedObjectContext = self.managedObjectContext
+        destinationController.currentIndex = indexPath
+        destinationController.managedObjectContext = managedObjectContext
 
-        // FIX: fix this
-        if let indexPath = self.tableView.indexPathForSelectedRow?.row {
-            destinationController.currentIndex = indexPath
-        }
+        navigationController?.pushViewController(destinationController, animated: true)
     }
 
     // MARK: - TableViewDataSource
@@ -109,7 +105,11 @@ class InventoryLocationItemTVC: UITableViewController, SegueHandler {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedItem = dataSource.objectAtIndexPath(indexPath)
-        performSegue(withIdentifier: .showKeypad)
+        guard let selection = selectedItem else {
+            fatalError("Couldn't get selected Order")
+        }
+        showKeypad(withItem: selection)
+
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

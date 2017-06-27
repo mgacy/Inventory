@@ -12,7 +12,7 @@ import MessageUI
 import SwiftyJSON
 import PKHUD
 
-class OrderItemViewController: UITableViewController {
+class OrderItemViewController: UIViewController {
 
     // MARK: - Properties
 
@@ -33,19 +33,22 @@ class OrderItemViewController: UITableViewController {
     let messageComposer = MessageComposer()
 
     // TableView
-    var cellIdentifier = "OrderItemCell"
-
-    // Segues
-    let segueIdentifier = "showOrderKeypad"
+    //var cellIdentifier = "OrderItemCell"
+    let cellIdentifier = "NewOrderItemCell"
 
     // MARK: - Display Outlets
-    @IBOutlet weak var messageButton: UIBarButtonItem!
+    @IBOutlet weak var repNameTextLabel: UILabel!
+    @IBOutlet weak var messageButton: RoundButton!
+    @IBOutlet weak var emailButton: RoundButton!
+    @IBOutlet weak var callButton: RoundButton!
+    @IBOutlet weak var tableView: UITableView!
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = parentObject.vendor?.name
+        tableView.delegate = self
         setupTableView()
     }
 
@@ -64,18 +67,19 @@ class OrderItemViewController: UITableViewController {
 
     // MARK: - Navigation
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? OrderKeypadViewController else {
-            fatalError("Wrong view controller type")
+    fileprivate func showKeypad(withItem item: OrderItem) {
+        guard let destinationController = OrderKeypadViewController.instance() else {
+            fatalError("\(#function) FAILED: unable to get destination view controller.")
         }
         guard
             let indexPath = self.tableView.indexPathForSelectedRow?.row,
             let managedObjectContext = managedObjectContext else {
-                fatalError("Unable to get indexPath or moc")
+                fatalError("\(#function) FAILED: unable to get indexPath or moc")
         }
 
         destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath,
                                                                inContext: managedObjectContext)
+        navigationController?.pushViewController(destinationController, animated: true)
     }
 
     // MARK: - TableViewDataSource
@@ -90,7 +94,6 @@ class OrderItemViewController: UITableViewController {
         let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
         request.sortDescriptors = [sortDescriptor]
 
-        // Set the fetch predicate.
         let fetchPredicate = NSPredicate(format: "order == %@", parentObject)
         request.predicate = fetchPredicate
 
@@ -103,20 +106,29 @@ class OrderItemViewController: UITableViewController {
                                          fetchedResultsController: frc, delegate: self)
     }
 
-    // MARK: - UITableViewDelegate
+    func setupView() {
+        repNameTextLabel.text = viewModel.repName
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = dataSource.objectAtIndexPath(indexPath)
-        // log.verbose("Selected OrderItem: \(selectedObject)")
+        callButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
+        emailButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
+        messageButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
 
-        performSegue(withIdentifier: segueIdentifier, sender: self)
-        tableView.deselectRow(at: indexPath, animated: true)
+        /// NOTE: disable for testing
+        guard messageComposer.canSendText() else {
+            messageButton.isEnabled = false
+            return
+        }
+
+        /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
+        callButton.isEnabled = false
+        emailButton.isEnabled = false
+        messageButton.isEnabled = viewModel.canMessageOrder
     }
 
     // MARK: - User Actions
 
-    @IBAction func tappedMessageOrder(_ sender: UIBarButtonItem) {
-        log.info("Placing Order ...")
+    @IBAction func tappedMessageButton(_ sender: Any) {
+        log.debug("Send message ...")
 
         // Simply POST the order if we already sent the message but were unable to POST it previously
 
@@ -134,15 +146,8 @@ class OrderItemViewController: UITableViewController {
         present(messageComposeVC, animated: true, completion: nil)
     }
 
-    func setupView() {
-        /// NOTE: disable for testing
-        guard messageComposer.canSendText() else {
-            messageButton.isEnabled = false
-            return
-        }
-
-        /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
-        messageButton.isEnabled = viewModel.canMessageOrder
+    @IBAction func tappedEmailButton(_ sender: Any) {
+        log.debug("Email message ...")
     }
 
 }
@@ -186,34 +191,29 @@ extension OrderItemViewController {
 
 }
 
+// MARK: - UITableViewDelegate Extension
+extension OrderItemViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedObject = dataSource.objectAtIndexPath(indexPath)
+        log.verbose("Selected Order: \(String(describing: selectedObject))")
+
+        //performSegue(withIdentifier: segueIdentifier, sender: self)
+        guard let selection = selectedObject else {
+            fatalError("Couldn't get selected Order")
+        }
+        showKeypad(withItem: selection)
+
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+}
+
 // MARK: - TableViewDataSourceDelegate Extension
 extension OrderItemViewController: TableViewDataSourceDelegate {
 
-    func configure(_ cell: UITableViewCell, for orderItem: OrderItem) {
-        cell.textLabel?.text = orderItem.item?.name
-        cell.detailTextLabel?.textColor = UIColor.lightGray
-
-        /// TODO: pack?
-
-        /// TODO: on hand?
-
-        /// TODO: par
-
-        guard let quantity = orderItem.quantity else {
-            // Highlight OrderItems w/o order
-            cell.textLabel?.textColor = ColorPalette.yellowColor
-            cell.detailTextLabel?.text = "?"
-            return
-        }
-        if Double(quantity) > 0.0 {
-            cell.textLabel?.textColor = UIColor.black
-            cell.detailTextLabel?.text = "\(quantity) \(orderItem.orderUnit?.abbreviation ?? "")"
-        } else {
-            cell.textLabel?.textColor = UIColor.lightGray
-            /// TODO: should I even bother displaying quantity?
-            cell.detailTextLabel?.text = "\(quantity)"
-        }
-        /// TODO: add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
+    func configure(_ cell: OrderItemTableViewCell, for orderItem: OrderItem) {
+        cell.configure(forOrderItem: orderItem)
     }
 
 }
