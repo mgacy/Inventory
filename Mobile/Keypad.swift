@@ -123,14 +123,14 @@ class NewKeypad {
             return
         }
 
-        if let newString = numberFormatter.string(from: _newNumber) {
-            currentNumber = newString
-            isEditingNumber = false
-        } else {
+        guard let newString = numberFormatter.string(from: _newNumber) else {
             // Is it possible to reach this point?
             log.error("There was a problem converting '\(_newNumber)' to a string")
             currentNumber = "Error"
+            return
         }
+        currentNumber = newString
+        isEditingNumber = false
     }
 
 }
