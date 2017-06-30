@@ -152,21 +152,21 @@ class OrderKeypadViewModel: KeypadViewModel {
     }
     var par: String {
         guard currentItem.par >= 0 else {
-            return "None"
+            return "--"
         }
         return formDisplayLine(quantity: currentItem.par,
                                abbreviation: currentItem.parUnit?.abbreviation)
     }
     var onHand: String {
-        guard currentItem.minOrder >= 0 else {
-            return "?"
+        guard currentItem.onHand >= 0 else {
+            return "--"
         }
         return formDisplayLine(quantity: currentItem.onHand,
                                abbreviation: currentItem.item?.inventoryUnit?.abbreviation)
     }
     var suggestedOrder: String {
         guard currentItem.minOrder >= 0 else {
-            return "?"
+            return "--"
         }
         return formDisplayLine(quantity: currentItem.minOrder,
                                abbreviation: currentItem.minOrderUnit?.abbreviation)
