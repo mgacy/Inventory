@@ -113,7 +113,6 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
         switch selection.uploaded {
         case true:
-
             // Get date to use when getting OrderCollection from server
             guard let storeID = userManager.storeID,
                   let collectionDate = selection.date else {
@@ -231,6 +230,7 @@ extension OrderDateTVC {
             HUD.flash(.error, delay: 1.0); return
         }
 
+        /// TODO: delete child orders after, rather than before fetching from server
         /*
         guard let selectedCollectionIndex = selectedCollectionIndex else {
             log.error("PROBLEM - 1a"); return
@@ -283,13 +283,11 @@ extension OrderDateTVC {
     func completedSync(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             log.info("Completed login / sync - succeeded: \(succeeded)")
-
             guard let storeID = userManager.storeID else {
                 log.error("\(#function) FAILED : unable to get storeID")
                 HUD.flash(.error, delay: 1.0); return
             }
 
-            // Get list of OrderCollections from server
             // log.info("Fetching existing OrderCollections from server ...")
             APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
                                                                 completion: self.completedGetListOfOrderCollections)
