@@ -55,6 +55,7 @@ extension KeypadViewModel {
 
 }
 
+/// TODO: make this part of KeypadViewModel?
 protocol KeypadStuff: class {
     var keypad: NewKeypad { get }
     func pushDigit(value: Int)
