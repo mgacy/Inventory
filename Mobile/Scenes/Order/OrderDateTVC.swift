@@ -160,10 +160,28 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
             log.error("\(#function) FAILED : unable to get storeID"); return
         }
 
+        /// TODO: should we first check if there are any valid Inventories to use for generating the Orders?
+        let alertController = UIAlertController(
+            title: "Create Order", message: "Set order quantities from the most recent inventory or simply use pars?",
+            preferredStyle: .actionSheet)
+
+        alertController.addAction(UIAlertAction(title: "From Count", style: .default, handler: { (_) in
+            self.createOrderCollection(storeID: storeID, generateFrom: .count)
+        }))
+        alertController.addAction(UIAlertAction(title: "From Par", style: .default, handler: { (_) in
+            self.createOrderCollection(storeID: storeID, generateFrom: .par)
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        present(alertController, animated: true, completion: nil)
+
+    }
+
+    func createOrderCollection(storeID: Int, generateFrom method: NewOrderGenerationMethod) {
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
         APIManager.sharedInstance.getNewOrderCollection(
-            storeID: storeID, generateFrom: .count, returnUsage: false,
+            storeID: storeID, generateFrom: method, returnUsage: false,
             periodLength: 28, completion: completedGetNewOrderCollection)
     }
 
