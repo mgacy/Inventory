@@ -164,7 +164,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
         APIManager.sharedInstance.getNewOrderCollection(
-            storeID: storeID, typeID: orderTypeID, returnUsage: false,
+            storeID: storeID, generateFrom: .count, returnUsage: false,
             periodLength: 28, completion: completedGetNewOrderCollection)
     }
 
