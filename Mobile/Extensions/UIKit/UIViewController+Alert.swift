@@ -25,8 +25,7 @@ extension UIViewController {
             cancelTitle = "Cancel"
 
             // Create and add the OK action
-            // swiftlint:disable:next unused_closure_parameter
-            let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { action -> Void in
+            let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { _ -> Void in
                 // Do some stuff
                 handler!()
             }
@@ -53,8 +52,7 @@ extension UIViewController {
             cancelTitle = "Cancel"
 
             // Create and add the OK action
-            // swiftlint:disable:next unused_closure_parameter
-            let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { action -> Void in
+            let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { _ -> Void in
                 // Do some stuff
                 handler!()
             }

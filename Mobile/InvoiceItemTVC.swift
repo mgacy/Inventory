@@ -11,8 +11,6 @@ import CoreData
 import SwiftyJSON
 import PKHUD
 
-// swiftlint:disable unused_closure_parameter
-
 class InvoiceItemTVC: UITableViewController {
 
     // MARK: - Properties
@@ -127,13 +125,13 @@ class InvoiceItemTVC: UITableViewController {
         more.backgroundColor = UIColor.lightGray
         */
         // Not Received Button
-        let notReceived = UITableViewRowAction(style: .normal, title: "Not Received ...") { action, index in
+        let notReceived = UITableViewRowAction(style: .normal, title: "Not Received ...") { _, _ in
             self.showNotReceivedAlert(forItem: invoiceItem)
         }
         notReceived.backgroundColor = ColorPalette.redColor
 
         // Received Button
-        let received = UITableViewRowAction(style: .normal, title: "Received") { action, index in
+        let received = UITableViewRowAction(style: .normal, title: "Received") { _, _ in
             invoiceItem.status = InvoiceItemStatus.received.rawValue
             self.managedObjectContext?.performSaveOrRollback()
             self.isEditing = false
@@ -156,7 +154,7 @@ extension InvoiceItemTVC {
 
             /// TODO: set .uploaded of parentObject.collection if all are uploaded
 
-            HUD.flash(.success, delay: 1.0) { finished in
+            HUD.flash(.success, delay: 1.0) { _ in
                 self.navigationController!.popViewController(animated: true)
             }
 
