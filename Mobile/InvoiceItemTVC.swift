@@ -188,31 +188,24 @@ extension InvoiceItemTVC {
         /// TODO: use InvoiceItemStatus.description for alert action title?
 
         // damaged
-        // swiftlint:disable:next line_length
-        let damagedAction = UIAlertAction(title: "Damaged", style: .default, handler: { (action: UIAlertAction!) -> Void in
+        alertController.addAction(UIAlertAction(title: "Damaged", style: .default, handler: { (_) in
             updateItemStatus(forItem: invoiceItem, withStatus: .damaged)
-        })
-        alertController.addAction(damagedAction)
+        }))
 
         // outOfStock
-        // swiftlint:disable:next line_length
-        let outOfStockAction = UIAlertAction(title: "Out of Stock", style: .default, handler: { (action: UIAlertAction!) -> Void in
+        alertController.addAction(UIAlertAction(title: "Out of Stock", style: .default, handler: { (_) in
             updateItemStatus(forItem: invoiceItem, withStatus: .outOfStock)
-        })
-        alertController.addAction(outOfStockAction)
+        }))
 
         // wrongItem
-        // swiftlint:disable:next line_length
-        let wrongItemAction = UIAlertAction(title: "Wrong Item", style: .default, handler: { (action: UIAlertAction) -> Void in
+        alertController.addAction(UIAlertAction(title: "Wrong Item", style: .default, handler: { (_) in
             updateItemStatus(forItem: invoiceItem, withStatus: .wrongItem)
-        })
-        alertController.addAction(wrongItemAction)
+        }))
 
         // cancel
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) -> Void in
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
             self.isEditing = false
-        })
-        alertController.addAction(cancelAction)
+        }))
 
         // Present Alert
         present(alertController, animated: true, completion: nil)
