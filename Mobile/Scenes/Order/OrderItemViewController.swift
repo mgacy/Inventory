@@ -33,8 +33,7 @@ class OrderItemViewController: UIViewController {
     let messageComposer = MessageComposer()
 
     // TableView
-    //var cellIdentifier = "OrderItemCell"
-    let cellIdentifier = "NewOrderItemCell"
+    let cellIdentifier = "OrderItemCell"
 
     // MARK: - Display Outlets
     @IBOutlet weak var repNameTextLabel: UILabel!
@@ -177,7 +176,6 @@ extension OrderItemViewController {
             viewModel.completedPostOrder()
 
             HUD.flash(.success, delay: 0.5) { _ in
-                // Pop view
                 self.navigationController!.popViewController(animated: true)
             }
 
