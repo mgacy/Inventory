@@ -292,7 +292,6 @@ class KeypadWithHistory: Keypad {
     }
 
     func pushOperator() {
-
         switch currentNumber {
         case "", ".", "0", "0.":
             break
@@ -385,10 +384,8 @@ class KeypadWithHistory: Keypad {
     func output() -> (history: String, total: Double?, display: String) {
         // History
         let history = self.formHistory()
-
         // Result
         let total = evaluateHistory()
-
         // Display
         var display = ""
         if total != nil {
@@ -396,7 +393,6 @@ class KeypadWithHistory: Keypad {
         } else {
             display = "0"
         }
-
         return (history: history, total: total, display: display)
     }
 
