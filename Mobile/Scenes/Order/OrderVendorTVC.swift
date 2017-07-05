@@ -176,14 +176,14 @@ extension OrderVendorTVC {
             return true
         }
 
-        var hasEmpty = false
+        //var hasEmpty = false
         var hasPending = false
 
         for order in orders {
             if let status = (order as? Order)?.status {
                 switch status {
-                case OrderStatus.empty.rawValue:
-                    hasEmpty = true
+                //case OrderStatus.empty.rawValue:
+                //    hasEmpty = true
                 case OrderStatus.pending.rawValue:
                     hasPending = true
                 //case OrderStatus.placed.rawValue:
