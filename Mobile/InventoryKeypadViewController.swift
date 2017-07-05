@@ -86,15 +86,11 @@ class InventoryKeypadViewController: UIViewController {
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
-        //log.verbose("Tapped 'clear'")
         keypad.popItem()
-
-        // Update model and display with result of keypad
         update()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        //log.verbose("Tapped '.'")
         keypad.pushDecimal()
         update()
     }
@@ -102,7 +98,6 @@ class InventoryKeypadViewController: UIViewController {
     // MARK: - Uncertain
 
     @IBAction func addTapped(_ sender: AnyObject) {
-        //log.verbose("Tapped '+'")
         keypad.pushOperator()
         update()
     }
@@ -112,7 +107,6 @@ class InventoryKeypadViewController: UIViewController {
     }
 
     @IBAction func incrementTapped(_ sender: AnyObject) {
-        //log.verbose("Tapped '+1'")
         keypad.pushOperator()
         keypad.pushDigit(value: 1)
         keypad.pushOperator()
@@ -124,7 +118,6 @@ class InventoryKeypadViewController: UIViewController {
     @IBAction func nextItemTapped(_ sender: AnyObject) {
         if currentIndex < items.count - 1 {
             currentIndex += 1
-
             // Update keypad and display with new currentItem
             update(newItem: true)
         } else {
@@ -136,7 +129,6 @@ class InventoryKeypadViewController: UIViewController {
     @IBAction func previousItemTapped(_ sender: AnyObject) {
         if currentIndex > 0 {
             currentIndex -= 1
-
             // Update keypad and display with new currentItem
             update(newItem: true)
         } else {
