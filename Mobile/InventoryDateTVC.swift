@@ -44,16 +44,11 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Uncomment the following line to preserve selection between presentations.
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
-
         title = "Inventories"
-
-        // Add refresh control
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
 
@@ -82,8 +77,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
             guard let selection = selectedInventory else {
                 fatalError("Showing detail, but no selected row?")
             }
-
-            // Pass selection to new view controller.
             controller.inventory = selection
             controller.managedObjectContext = self.managedObjectContext
 
@@ -91,8 +84,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
             guard let controller = segue.destination as? InventoryLocationCategoryTVC else {
                 fatalError("Wrong view controller type")
             }
-
-            // Pass selection to new view controller.
             guard let selection = selectedInventory, let locations = selection.locations?.allObjects else {
                 fatalError("Unable to get selection")
             }
@@ -170,7 +161,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
             // Reset selection since we reset the managedObjectContext in deleteInventoryItems
             selectedInventory = dataSource.objectAtIndexPath(indexPath)
 
-            // GET INVENTORY FROM SERVER
             log.info("GET selectedInventory from server - \(remoteID) ...")
             APIManager.sharedInstance.getInventory(
                 remoteID: remoteID,
@@ -205,7 +195,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
             fatalError("Unable to get storeID")
         }
 
-        // Get new Inventory.
         //refreshControl?.beginRefreshing()
         HUD.show(.progress)
         APIManager.sharedInstance.getNewInventory(
@@ -282,12 +271,10 @@ extension InventoryDateTVC {
         // Update selected Inventory with full JSON from server.
         selection.updateExisting(context: managedObjectContext!, json: json)
 
-        // Save the context.
         managedObjectContext!.performSaveOrRollback()
 
         //tableView.activityIndicatorView.stopAnimating()
         HUD.hide()
-
         performSegue(withIdentifier: .showExistingItem)
     }
 
@@ -345,9 +332,7 @@ extension InventoryDateTVC {
             //request.sortDescriptors = [sortDescriptor]
             //dataSource.reconfigureFetchRequest(request)
 
-            // Reload Table View
             tableView.reloadData()
-
         } catch {
             let updateError = error as NSError
             log.error("Unable to delete Inventories: \(updateError), \(updateError.userInfo)")
