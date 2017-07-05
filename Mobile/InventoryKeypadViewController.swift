@@ -145,7 +145,8 @@ class InventoryKeypadViewController: UIViewController {
         switch newItem {
         case true:
             // Update keypad with quantity of new currentItem
-            keypad.updateNumber(currentItem.quantity as Double?)
+            //keypad.updateNumber(currentItem.quantity as Double?)
+            keypad.updateNumber(currentItem.quantity?.doubleValue)
             output = keypad.output()
         case false:
             // Update model with output of keyapd
