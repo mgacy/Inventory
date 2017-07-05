@@ -10,6 +10,12 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
+public enum NewOrderGenerationMethod: String {
+    case count
+    case par
+    case sales
+}
+
 public enum Router: URLRequestConvertible {
     // Authentication
     case forgotPassword(email: String)
@@ -31,7 +37,7 @@ public enum Router: URLRequestConvertible {
     case fetchInvoice(storeID: Int, invoiceDate: String)
     case postInvoice([String: Any])
     // Order
-    case getNewOrder(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?)
+    case getNewOrder(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?)
     case listOrders(storeID: Int)
     case fetchOrder(storeID: Int, orderDate: String)
     case postOrder([String: Any])
@@ -174,8 +180,8 @@ public enum Router: URLRequestConvertible {
         // case .getNewOrder(let storeID, let typeID, let returnUsage, let periodLength):
         //     return ["store_id": storeID, "inventory_type": typeID,
         //             "return_usage": returnUsage, "period_length": periodLength ?? 28]
-        case .getNewOrder(let storeID, _, let returnUsage, let periodLength):
-            return ["store_id": storeID, "return_usage": returnUsage,
+        case .getNewOrder(let storeID, let generationMethod, let returnUsage, let periodLength):
+            return ["store_id": storeID, "generation_method": generationMethod, "return_usage": returnUsage,
                     "period_length": periodLength ?? 28]
         case .listOrders(let storeID):
             return ["store_id": storeID]

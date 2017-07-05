@@ -44,22 +44,16 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
-
         title = "Orders"
-
-        // Add refresh control
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
-
         setupTableView()
 
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : unable to get storeID"); return
         }
 
-        // Get list of OrderCollections from server
         HUD.show(.progress)
         APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
                                                             completion: self.completedGetListOfOrderCollections)
@@ -84,8 +78,6 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         guard let selection = selectedCollection else {
             fatalError("Showing detail, but no selected row?")
         }
-
-        // Pass selection to new view controller.
         controller.parentObject = selection
         controller.managedObjectContext = self.managedObjectContext
     }
@@ -121,7 +113,6 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
         switch selection.uploaded {
         case true:
-
             // Get date to use when getting OrderCollection from server
             guard let storeID = userManager.storeID,
                   let collectionDate = selection.date else {
@@ -132,7 +123,6 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
             HUD.show(.progress)
 
             /// TODO: ideally, we would want to deleteChildOrders *after* fetching data from server
-            // Delete existing orders of selected collection
             log.info("Deleting Orders of selected OrderCollection ...")
             deleteChildOrders(parent: selection)
 
@@ -165,19 +155,33 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
-
         /// TODO: check if there is already an Order for the current date and of the current type
-
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : unable to get storeID"); return
         }
 
+        /// TODO: should we first check if there are any valid Inventories to use for generating the Orders?
+        let alertController = UIAlertController(
+            title: "Create Order", message: "Set order quantities from the most recent inventory or simply use pars?",
+            preferredStyle: .actionSheet)
+
+        alertController.addAction(UIAlertAction(title: "From Count", style: .default, handler: { (_) in
+            self.createOrderCollection(storeID: storeID, generateFrom: .count)
+        }))
+        alertController.addAction(UIAlertAction(title: "From Par", style: .default, handler: { (_) in
+            self.createOrderCollection(storeID: storeID, generateFrom: .par)
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        present(alertController, animated: true, completion: nil)
+
+    }
+
+    func createOrderCollection(storeID: Int, generateFrom method: NewOrderGenerationMethod) {
         //tableView.activityIndicatorView.startAnimating()
         HUD.show(.progress)
-
-        // Get new OrderCollection.
         APIManager.sharedInstance.getNewOrderCollection(
-            storeID: storeID, typeID: orderTypeID, returnUsage: false,
+            storeID: storeID, generateFrom: method, returnUsage: false,
             periodLength: 28, completion: completedGetNewOrderCollection)
     }
 
@@ -244,6 +248,7 @@ extension OrderDateTVC {
             HUD.flash(.error, delay: 1.0); return
         }
 
+        /// TODO: delete child orders after, rather than before fetching from server
         /*
         guard let selectedCollectionIndex = selectedCollectionIndex else {
             log.error("PROBLEM - 1a"); return
@@ -296,13 +301,11 @@ extension OrderDateTVC {
     func completedSync(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             log.info("Completed login / sync - succeeded: \(succeeded)")
-
             guard let storeID = userManager.storeID else {
                 log.error("\(#function) FAILED : unable to get storeID")
                 HUD.flash(.error, delay: 1.0); return
             }
 
-            // Get list of OrderCollections from server
             // log.info("Fetching existing OrderCollections from server ...")
             APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
                                                                 completion: self.completedGetListOfOrderCollections)

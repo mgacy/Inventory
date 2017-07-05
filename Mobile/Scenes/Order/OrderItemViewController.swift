@@ -176,8 +176,7 @@ extension OrderItemViewController {
         if succeeded {
             viewModel.completedPostOrder()
 
-            // swiftlint:disable:next unused_closure_parameter
-            HUD.flash(.success, delay: 0.5) { finished in
+            HUD.flash(.success, delay: 0.5) { _ in
                 // Pop view
                 self.navigationController!.popViewController(animated: true)
             }
