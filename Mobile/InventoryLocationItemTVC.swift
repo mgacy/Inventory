@@ -70,8 +70,9 @@ class InventoryLocationItemTVC: UITableViewController {
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
+        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 70
+        tableView.estimatedRowHeight = 80
 
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
@@ -117,7 +118,8 @@ class InventoryLocationItemTVC: UITableViewController {
 
 // MARK: - TableViewDataSourceDelegate Extension
 extension InventoryLocationItemTVC: TableViewDataSourceDelegate {
-    func configure(_ cell: InventoryItemTableViewCell, for locationItem: InventoryLocationItem) {
-        cell.configure(for: locationItem)
+    func configure(_ cell: SubItemTableViewCell, for locationItem: InventoryLocationItem) {
+        let viewModel = InventoryLocationItemViewModel(forLocationItem: locationItem)
+        cell.configure(withViewModel: viewModel)
     }
 }

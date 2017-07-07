@@ -85,9 +85,9 @@ class OrderItemViewController: UIViewController {
     fileprivate var dataSource: TableViewDataSource<OrderItemViewController>!
 
     fileprivate func setupTableView() {
-        //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        //tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
-        //tableView.estimatedRowHeight = 100
+        //tableView.estimatedRowHeight = 80
 
         let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
@@ -194,13 +194,10 @@ extension OrderItemViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = dataSource.objectAtIndexPath(indexPath)
         log.verbose("Selected Order: \(String(describing: selectedObject))")
-
-        //performSegue(withIdentifier: segueIdentifier, sender: self)
         guard let selection = selectedObject else {
             fatalError("Couldn't get selected Order")
         }
         showKeypad(withItem: selection)
-
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -211,6 +208,8 @@ extension OrderItemViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: OrderItemTableViewCell, for orderItem: OrderItem) {
         cell.configure(forOrderItem: orderItem)
+        //let viewModel = OrderItemCellViewModel(forOrderItem: orderItem)
+        //cell.configure(withViewModel: viewModel)
     }
 
 }
