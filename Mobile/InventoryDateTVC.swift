@@ -37,6 +37,8 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         case showSettings = "ShowSettings"
     }
 
+    var dateFormatter: DateFormatter?
+
     /// TODO: provide interface to control these
     // let inventoryTypeID = 1
 
@@ -51,6 +53,15 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
+
+        // Configure date formatter
+        self.dateFormatter = DateFormatter()
+        self.dateFormatter?.locale = Locale.current
+        self.dateFormatter?.timeZone = TimeZone.current
+        //self.dateFormatter?.timeZone = TimeZone(abbreviation: "UTC")
+        self.dateFormatter?.dateFormat = "yyyy/MM/dd"
+        //self.dateFormatter?.dateStyle = .short
+        //self.dateFormatter?.dateStyle = .full
 
         setupTableView()
     }
@@ -216,7 +227,10 @@ extension InventoryDateTVC: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: UITableViewCell, for inventory: Inventory) {
-        cell.textLabel?.text = inventory.date
+        if let date = inventory.date as Date?,
+           let dateString = dateFormatter?.string(from: date) {
+                cell.textLabel?.text = dateString
+        }
 
         switch inventory.uploaded {
         case true:
@@ -291,10 +305,7 @@ extension InventoryDateTVC {
         HUD.hide()
 
         selectedInventory = Inventory(context: self.managedObjectContext!, json: json, uploaded: false)
-
-        // Save the context.
         managedObjectContext!.performSaveOrRollback()
-
         performSegue(withIdentifier: .showNewItem)
     }
 
