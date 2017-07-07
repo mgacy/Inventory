@@ -65,6 +65,7 @@
 		C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */; };
 		C9C221191EFCD424009C7D01 /* ViewController+instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C221181EFCD423009C7D01 /* ViewController+instance.swift */; };
 		C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */; };
+		C9C2DA081F0F3EC2007263FB /* InventoryLocationItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA071F0F3EC2007263FB /* InventoryLocationItemViewModel.swift */; };
 		C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */; };
 		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
@@ -162,6 +163,7 @@
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Magic.swift"; path = "Extensions/UIKit/UIView+Magic.swift"; sourceTree = "<group>"; };
 		C9C221181EFCD423009C7D01 /* ViewController+instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ViewController+instance.swift"; path = "Extensions/UIKit/ViewController+instance.swift"; sourceTree = "<group>"; };
 		C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubItemTableViewCell.swift; path = Common/SubItemTableViewCell.swift; sourceTree = "<group>"; };
+		C9C2DA071F0F3EC2007263FB /* InventoryLocationItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InventoryLocationItemViewModel.swift; path = Scenes/Inventory/InventoryLocationItemViewModel.swift; sourceTree = "<group>"; };
 		C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = InventoryKeypadViewController.storyboard; path = Scenes/Inventory/InventoryKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
@@ -418,6 +420,15 @@
 			name = Common;
 			sourceTree = "<group>";
 		};
+		C9C2DA091F0F3F56007263FB /* LocationItem List */ = {
+			isa = PBXGroup;
+			children = (
+				C9F516091DB7F133004C10E6 /* InventoryLocationItemTVC.swift */,
+				C9C2DA071F0F3EC2007263FB /* InventoryLocationItemViewModel.swift */,
+			);
+			name = "LocationItem List";
+			sourceTree = "<group>";
+		};
 		C9CB6FC71F01D28F0094ED07 /* Keypad */ = {
 			isa = PBXGroup;
 			children = (
@@ -505,7 +516,7 @@
 				C9F516061DB7F133004C10E6 /* InventoryDateTVC.swift */,
 				C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */,
 				C9F516081DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift */,
-				C9F516091DB7F133004C10E6 /* InventoryLocationItemTVC.swift */,
+				C9C2DA091F0F3F56007263FB /* LocationItem List */,
 				C9CB6FC71F01D28F0094ED07 /* Keypad */,
 			);
 			name = Inventory;
@@ -805,6 +816,7 @@
 				C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */,
 				C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */,
 				C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */,
+				C9C2DA081F0F3EC2007263FB /* InventoryLocationItemViewModel.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
 				C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */,
 				C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */,
