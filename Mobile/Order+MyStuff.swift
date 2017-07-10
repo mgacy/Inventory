@@ -108,6 +108,7 @@ extension Order {
         if messageItems.count == 0 { return nil }
 
         messageItems.sort()
+        /// TODO: handle conversion from NSDate to String
         let message = "Order for \(self.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
         log.debug("Order Message: \(message)")
         return message

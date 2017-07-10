@@ -161,6 +161,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
         }
 
         /// TODO: should we first check if there are any valid Inventories to use for generating the Orders?
+        /// TODO: break out into `createAlertController() -> UIAlertController`
         let alertController = UIAlertController(
             title: "Create Order", message: "Set order quantities from the most recent inventory or simply use pars?",
             preferredStyle: .actionSheet)
