@@ -34,10 +34,12 @@ extension Invoice {
         if let invoiceNo = json["invoice_no"].int32 {
             self.invoiceNo = invoiceNo
         }
-        if let shipDate = json["ship_date"].string {
-            self.shipDate = shipDate
+        if let shipDateString = json["ship_date"].string,
+           let shipDate = NSDate().dateFromString(date: shipDateString) {
+                self.shipDate = shipDate
         }
-        if let receiveDate = json["receive_date"].string {
+        if let receiveDateString = json["receive_date"].string,
+           let receiveDate = NSDate().dateFromString(date: receiveDateString) {
             self.receiveDate = receiveDate
         }
         if let credit = json["credit"].double {
@@ -82,8 +84,8 @@ extension Invoice {
         var myDict = [String: Any]()
         myDict["id"] = Int(self.remoteID)
         myDict["invoice_no"] = Int(self.invoiceNo)
-        myDict["ship_date"] = self.shipDate
-        myDict["receive_date"] = self.receiveDate
+        myDict["ship_date"] = self.shipDate?.stringFromDate()
+        myDict["receive_date"] = self.receiveDate?.stringFromDate()
         myDict["credit"] = Double(self.credit)
         myDict["shipping"] = Double(self.shipping)
         myDict["taxes"] = Double(self.taxes)
