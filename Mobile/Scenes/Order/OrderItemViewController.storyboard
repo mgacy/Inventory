@@ -88,7 +88,7 @@
                                             </stackView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ElO-Rj-H8F" userLabel="Divider">
                                                 <rect key="frame" x="0.0" y="120.5" width="375" height="0.0"/>
-                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="0.5" id="g6p-Op-Ft7"/>
                                                 </constraints>
