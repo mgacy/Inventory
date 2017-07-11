@@ -81,11 +81,21 @@
                                                     <constraint firstItem="CLf-Ir-QL3" firstAttribute="height" secondItem="1JF-BN-UuQ" secondAttribute="height" id="52z-GG-qbH"/>
                                                 </constraints>
                                             </stackView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GSs-mJ-fcf" userLabel="Divider">
+                                                <rect key="frame" x="0.0" y="129" width="375" height="0.0"/>
+                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="0.5" id="aqZ-Kh-tpa"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstItem="GSs-mJ-fcf" firstAttribute="bottom" secondItem="oqI-Pp-nRw" secondAttribute="bottom" id="HXf-j5-eRD"/>
                                             <constraint firstItem="XRa-Pb-wmd" firstAttribute="leading" secondItem="oqI-Pp-nRw" secondAttribute="leading" constant="20" id="Za9-dF-jXp"/>
+                                            <constraint firstItem="GSs-mJ-fcf" firstAttribute="leading" secondItem="oqI-Pp-nRw" secondAttribute="leading" id="cUC-0Q-jGF"/>
                                             <constraint firstItem="XRa-Pb-wmd" firstAttribute="trailing" secondItem="oqI-Pp-nRw" secondAttribute="trailing" constant="-20" id="dhk-va-lsr"/>
+                                            <constraint firstItem="GSs-mJ-fcf" firstAttribute="trailing" secondItem="oqI-Pp-nRw" secondAttribute="trailing" id="oGS-ch-OkR"/>
                                             <constraint firstItem="XRa-Pb-wmd" firstAttribute="top" secondItem="oqI-Pp-nRw" secondAttribute="top" constant="20" id="wha-vb-A7v"/>
                                         </constraints>
                                     </view>
