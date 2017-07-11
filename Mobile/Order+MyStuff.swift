@@ -29,6 +29,10 @@ extension Order {
         // Properties
         // if let orderCost = json["order_cost"].float {}
         // if let orderDate = json["order_date"].string {}
+        if let dateString = json["order_date"].string,
+            let date = NSDate().dateFromString(date: dateString, format: "yyyy-MM-dd") {
+            self.date = date
+        }
         if uploaded {
             self.status = OrderStatus.uploaded.rawValue
         } else {
@@ -70,6 +74,7 @@ extension Order {
 
         /// TODO: handle conversion from NSDate to string
         myDict["order_date"] = self.collection?.date
+        //myDict["order_date"] = self.date.stringFromDate()
         myDict["store_id"] = self.collection?.storeID
         myDict["vendor_id"] = self.vendor?.remoteID
 
