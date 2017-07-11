@@ -112,6 +112,9 @@ class OrderItemViewController: UIViewController {
         emailButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
         messageButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
 
+        callButton.isEnabled = false
+        emailButton.isEnabled = false
+
         /// NOTE: disable for testing
         guard messageComposer.canSendText() else {
             messageButton.isEnabled = false
@@ -119,8 +122,6 @@ class OrderItemViewController: UIViewController {
         }
 
         /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
-        callButton.isEnabled = false
-        emailButton.isEnabled = false
         messageButton.isEnabled = viewModel.canMessageOrder
     }
 
