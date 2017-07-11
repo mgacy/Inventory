@@ -23,6 +23,14 @@ extension InvoiceCollection {
         } else {
             self.date = Date().shortDate
         }
+        /*
+        if let dateString = json["date"].string,
+           let date = NSDate().dateFromString(date: dateString, format: "yyyy-MM-dd") {
+                self.date = date
+        } else {
+            self.date = Date() as NSDate
+        }
+        */
         if let storeID = json["store_id"].int32 {
             self.storeID = storeID
         }
@@ -43,6 +51,7 @@ extension InvoiceCollection {
 
         /// TODO: handle conversion from NSDate to string
         myDict["date"] = self.date
+        //myDict["date"] = self.date?.stringFromDate()
         myDict["store_id"] = self.storeID
 
         return myDict
