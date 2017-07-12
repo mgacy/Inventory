@@ -68,9 +68,9 @@ class InvoiceItemViewController: UITableViewController {
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
-        //tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        //tableView.rowHeight = UITableViewAutomaticDimension
-        //tableView.estimatedRowHeight = 100
+        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 80
 
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
@@ -237,48 +237,9 @@ extension InvoiceItemViewController: TableViewDataSourceDelegate {
         }
     }
 
-    func configure(_ cell: UITableViewCell, for invoiceItem: InvoiceItem) {
-        cell.textLabel?.text = invoiceItem.item?.name
-        cell.detailTextLabel?.textColor = UIColor.lightGray
-
-        /// TODO: pack
-
-        /// TODO: cost
-
-        //guard let quantity = invoiceItem.quantity else { return }
-        let quantity = invoiceItem.quantity
-        if Double(quantity) > 0.0 {
-            cell.textLabel?.textColor = UIColor.black
-            cell.detailTextLabel?.text = "\(quantity) \(invoiceItem.unit?.abbreviation ?? "")"
-        } else {
-            cell.textLabel?.textColor = UIColor.lightGray
-            /// TODO: should I even bother displaying quantity?
-            cell.detailTextLabel?.text = "\(quantity)"
-        }
-
-        switch invoiceItem.status {
-        case InvoiceItemStatus.pending.rawValue:
-            cell.textLabel?.textColor = UIColor.lightGray
-        // Received
-        case InvoiceItemStatus.received.rawValue:
-            cell.textLabel?.textColor = UIColor.black
-        // Not Received
-        case InvoiceItemStatus.damaged.rawValue:
-            cell.textLabel?.textColor = ColorPalette.redColor
-        case InvoiceItemStatus.outOfStock.rawValue:
-            cell.textLabel?.textColor = ColorPalette.redColor
-        case InvoiceItemStatus.wrongItem.rawValue:
-            cell.textLabel?.textColor = ColorPalette.redColor
-        // Other
-        case InvoiceItemStatus.promo.rawValue:
-            cell.textLabel?.textColor = ColorPalette.navyColor
-        case InvoiceItemStatus.substitute.rawValue:
-            cell.textLabel?.textColor = ColorPalette.navyColor
-
-        default:
-            log.warning("\(#function) : unrecognized status")
-            // cell.textLabel?.textColor = UIColor.lightGray
-        }
+    func configure(_ cell: SubItemTableViewCell, for invoiceItem: InvoiceItem) {
+        let viewModel = InvoiceItemViewModel(forInvoiceItem: invoiceItem)
+        cell.configure(withViewModel: viewModel)
     }
 
 }
