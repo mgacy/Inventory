@@ -28,9 +28,6 @@ class InvoiceItemTVC: UITableViewController {
     // TableView
     var cellIdentifier = "InvoiceItemCell"
 
-    // Segues
-    let segueIdentifier = "showInvoiceKeypad"
-
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -51,17 +48,19 @@ class InvoiceItemTVC: UITableViewController {
 
     // MARK: - Navigation
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InvoiceKeypadViewController else {
-            fatalError("Wrong view controller type")
+    fileprivate func showKeypad(withItem item: InvoiceItem) {
+        guard let destinationController = InvoiceKeypadViewController.instance() else {
+            fatalError("\(#function) FAILED: unable to get destination view controller.")
         }
         guard
             let indexPath = self.tableView.indexPathForSelectedRow?.row,
             let managedObjectContext = managedObjectContext else {
-                fatalError("Unable to get indexPath or moc")
+                fatalError("\(#function) FAILED: unable to get indexPath or moc")
         }
+
         destinationController.viewModel = InvoiceKeypadViewModel(for: parentObject, atIndex: indexPath,
                                                                  inContext: managedObjectContext)
+        navigationController?.pushViewController(destinationController, animated: true)
     }
 
     // MARK: - TableViewDataSource
@@ -108,8 +107,10 @@ class InvoiceItemTVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = dataSource.objectAtIndexPath(indexPath)
         log.verbose("Selected InvoiceItem: \(String(describing: selectedObject))")
-
-        performSegue(withIdentifier: segueIdentifier, sender: self)
+        guard let selection = selectedObject else {
+            fatalError("Couldn't get selected Invoice")
+        }
+        showKeypad(withItem: selection)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
