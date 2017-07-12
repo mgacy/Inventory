@@ -1,5 +1,5 @@
 //
-//  InvoiceDateTVC.swift
+//  InvoiceDateViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/30/16.
@@ -12,7 +12,7 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-class InvoiceDateTVC: UITableViewController, RootSectionViewController {
+class InvoiceDateViewController: UITableViewController, RootSectionViewController {
 
     // MARK: - Properties
 
@@ -45,7 +45,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         title = "Invoices"
 
         // Add refresh control
-        self.refreshControl?.addTarget(self, action: #selector(InvoiceDateTVC.refreshTable(_:)),
+        self.refreshControl?.addTarget(self, action: #selector(InvoiceDateViewController.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
 
         setupTableView()
@@ -83,7 +83,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
     }
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<InvoiceDateTVC>!
+    fileprivate var dataSource: TableViewDataSource<InvoiceDateViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
@@ -171,7 +171,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension InvoiceDateTVC: TableViewDataSourceDelegate {
+extension InvoiceDateViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ collection: InvoiceCollection) -> Bool {
         switch collection.uploaded {
@@ -196,7 +196,7 @@ extension InvoiceDateTVC: TableViewDataSourceDelegate {
 }
 
 // MARK: - Completion Handlers + Sync
-extension InvoiceDateTVC {
+extension InvoiceDateViewController {
 
     // MARK: Completion Handlers
 
