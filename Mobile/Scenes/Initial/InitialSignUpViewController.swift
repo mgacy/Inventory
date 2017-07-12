@@ -1,5 +1,5 @@
 //
-//  InitialSignUpVC.swift
+//  InitialSignUpViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 2/26/17.
@@ -12,7 +12,7 @@ import KeychainAccess
 import PKHUD
 import SwiftyJSON
 
-class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
+class InitialSignUpViewController: UIViewController, UITextFieldDelegate, SegueHandler {
 
     // MARK: Properties
     var managedObjectContext: NSManagedObjectContext!
@@ -110,7 +110,7 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
 }
 
 // MARK: - Completion Handlers
-extension InitialSignUpVC {
+extension InitialSignUpViewController {
 
     func completedSignup(error: BackendError?) {
         guard error == nil else {

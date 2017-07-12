@@ -587,7 +587,7 @@
         <!--InitialSignUp-->
         <scene sceneID="lZ4-in-Zpe">
             <objects>
-                <viewController storyboardIdentifier="InitialSignUpViewController" id="Sgv-j7-TMT" userLabel="InitialSignUp" customClass="InitialSignUpVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InitialSignUpViewController" id="Sgv-j7-TMT" userLabel="InitialSignUp" customClass="InitialSignUpViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QkT-Ne-izo"/>
                         <viewControllerLayoutGuide type="bottom" id="tsB-vK-iMe"/>
