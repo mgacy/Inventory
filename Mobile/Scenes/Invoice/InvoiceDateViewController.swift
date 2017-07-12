@@ -72,7 +72,7 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let controller = segue.destination as? InvoiceVendorTVC else {
+        guard let controller = segue.destination as? InvoiceVendorViewController else {
             fatalError("Wrong view controller type")
         }
         guard let selection = selectedCollection else {

@@ -1,5 +1,5 @@
 //
-//  InvoiceVendorTVC.swift
+//  InvoiceVendorViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/31/16.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class InvoiceVendorTVC: UITableViewController {
+class InvoiceVendorViewController: UITableViewController {
 
     // MARK: - Properties
 
@@ -61,7 +61,7 @@ class InvoiceVendorTVC: UITableViewController {
     }
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<InvoiceVendorTVC>!
+    fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
@@ -99,7 +99,7 @@ class InvoiceVendorTVC: UITableViewController {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension InvoiceVendorTVC: TableViewDataSourceDelegate {
+extension InvoiceVendorViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for invoice: Invoice) {
        cell.textLabel?.text = invoice.vendor?.name
