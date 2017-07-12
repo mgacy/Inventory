@@ -199,9 +199,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
-
         /// TODO: check if there is already an Inventory for the current date and of the current type
-
         guard let storeID = userManager.storeID else {
             fatalError("Unable to get storeID")
         }

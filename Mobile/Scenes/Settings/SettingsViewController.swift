@@ -1,5 +1,5 @@
 //
-//  SettingsTVC.swift
+//  SettingsViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/31/16.
@@ -9,7 +9,7 @@
 import CoreData
 import UIKit
 
-class SettingsTVC: UITableViewController, RootSectionViewController {
+class SettingsViewController: UITableViewController, RootSectionViewController {
 
     // MARK: Properties
     var userManager: CurrentUserManager!
@@ -44,7 +44,7 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
         case accountSegue:
             guard
                 let destinationNavController = segue.destination as? UINavigationController,
-                let destinationController = destinationNavController.topViewController as? LoginVC
+                let destinationController = destinationNavController.topViewController as? LoginViewController
             else {
                 fatalError("Wrong view controller type")
             }
@@ -93,7 +93,7 @@ class SettingsTVC: UITableViewController, RootSectionViewController {
 }
 
 // MARK: - Completion Handlers
-extension SettingsTVC {
+extension SettingsViewController {
 
     func completedLogout(suceeded: Bool) {
         if suceeded {
@@ -109,7 +109,7 @@ extension SettingsTVC {
 }
 
 // MARK: - Delete Data
-extension SettingsTVC {
+extension SettingsViewController {
 
     func deleteData() {
         guard let managedObjectContext = managedObjectContext else { return }

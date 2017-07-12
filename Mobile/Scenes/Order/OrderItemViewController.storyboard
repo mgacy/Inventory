@@ -24,25 +24,25 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="4vU-iY-U9a">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oqI-Pp-nRw" customClass="VendorRepView" customModule="Mobile" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="129.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="120.5"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="XRa-Pb-wmd">
-                                                <rect key="frame" x="20" y="20" width="335" height="95"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XRa-Pb-wmd">
+                                                <rect key="frame" x="20" y="0.0" width="335" height="120.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a test of how this works" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CLf-Ir-QL3">
-                                                        <rect key="frame" x="4" y="0.0" width="327.5" height="40"/>
+                                                        <rect key="frame" x="4" y="0.0" width="327.5" height="76.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="1JF-BN-UuQ" userLabel="Buttons Stack">
-                                                        <rect key="frame" x="67.5" y="55" width="200" height="40"/>
+                                                        <rect key="frame" x="67.5" y="44" width="200" height="76.5"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kd9-x3-K3Y" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                                                                <rect key="frame" x="0.0" y="18.5" width="40" height="40"/>
                                                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="S7k-d4-L76"/>
@@ -54,7 +54,7 @@
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLk-lJ-C9b" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
-                                                                <rect key="frame" x="80" y="0.0" width="40" height="40"/>
+                                                                <rect key="frame" x="80" y="18.5" width="40" height="40"/>
                                                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="S1e-zp-vj3"/>
@@ -66,7 +66,7 @@
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfS-J2-HkZ" customClass="RoundButton" customModule="Mobile" customModuleProvider="target">
-                                                                <rect key="frame" x="160" y="0.0" width="40" height="40"/>
+                                                                <rect key="frame" x="160" y="18.5" width="40" height="40"/>
                                                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="40" id="GmI-6U-NdR"/>
@@ -80,27 +80,33 @@
                                                 <constraints>
                                                     <constraint firstItem="CLf-Ir-QL3" firstAttribute="height" secondItem="1JF-BN-UuQ" secondAttribute="height" id="52z-GG-qbH"/>
                                                 </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="52z-GG-qbH"/>
+                                                    </mask>
+                                                </variation>
                                             </stackView>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GSs-mJ-fcf" userLabel="Divider">
-                                                <rect key="frame" x="0.0" y="129" width="375" height="0.0"/>
-                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ElO-Rj-H8F" userLabel="Divider">
+                                                <rect key="frame" x="0.0" y="120.5" width="375" height="0.0"/>
+                                                <color key="backgroundColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="0.5" id="aqZ-Kh-tpa"/>
+                                                    <constraint firstAttribute="height" constant="0.5" id="g6p-Op-Ft7"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="GSs-mJ-fcf" firstAttribute="bottom" secondItem="oqI-Pp-nRw" secondAttribute="bottom" id="HXf-j5-eRD"/>
+                                            <constraint firstItem="ElO-Rj-H8F" firstAttribute="leading" secondItem="oqI-Pp-nRw" secondAttribute="leading" id="3VA-4C-x3E"/>
+                                            <constraint firstItem="ElO-Rj-H8F" firstAttribute="trailing" secondItem="oqI-Pp-nRw" secondAttribute="trailing" id="BBL-7S-ajt"/>
+                                            <constraint firstItem="ElO-Rj-H8F" firstAttribute="top" secondItem="XRa-Pb-wmd" secondAttribute="bottom" id="Ny2-QW-wxN"/>
+                                            <constraint firstItem="ElO-Rj-H8F" firstAttribute="bottom" secondItem="oqI-Pp-nRw" secondAttribute="bottom" id="T8J-vD-HH3"/>
                                             <constraint firstItem="XRa-Pb-wmd" firstAttribute="leading" secondItem="oqI-Pp-nRw" secondAttribute="leading" constant="20" id="Za9-dF-jXp"/>
-                                            <constraint firstItem="GSs-mJ-fcf" firstAttribute="leading" secondItem="oqI-Pp-nRw" secondAttribute="leading" id="cUC-0Q-jGF"/>
                                             <constraint firstItem="XRa-Pb-wmd" firstAttribute="trailing" secondItem="oqI-Pp-nRw" secondAttribute="trailing" constant="-20" id="dhk-va-lsr"/>
-                                            <constraint firstItem="GSs-mJ-fcf" firstAttribute="trailing" secondItem="oqI-Pp-nRw" secondAttribute="trailing" id="oGS-ch-OkR"/>
-                                            <constraint firstItem="XRa-Pb-wmd" firstAttribute="top" secondItem="oqI-Pp-nRw" secondAttribute="top" constant="20" id="wha-vb-A7v"/>
+                                            <constraint firstItem="XRa-Pb-wmd" firstAttribute="top" secondItem="oqI-Pp-nRw" secondAttribute="top" id="wha-vb-A7v"/>
                                         </constraints>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="maV-wQ-KpH">
-                                        <rect key="frame" x="0.0" y="129.5" width="375" height="517.5"/>
+                                        <rect key="frame" x="0.0" y="120.5" width="375" height="482.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="OrderItemCell" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OrderItemCell" rowHeight="50" id="k53-am-Xcu" customClass="OrderItemTableViewCell" customModule="Mobile" customModuleProvider="target">
@@ -179,6 +185,7 @@
                             <constraint firstItem="4vU-iY-U9a" firstAttribute="leading" secondItem="Okh-iD-bKO" secondAttribute="leading" id="yLx-G7-Np5"/>
                         </constraints>
                     </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="callButton" destination="pfS-J2-HkZ" id="nGd-RJ-6Vb"/>
                         <outlet property="emailButton" destination="yLk-lJ-C9b" id="KUi-u6-0P9"/>

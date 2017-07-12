@@ -112,6 +112,9 @@ class OrderItemViewController: UIViewController {
         emailButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
         messageButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
 
+        callButton.isEnabled = false
+        emailButton.isEnabled = false
+
         /// NOTE: disable for testing
         guard messageComposer.canSendText() else {
             messageButton.isEnabled = false
@@ -119,8 +122,6 @@ class OrderItemViewController: UIViewController {
         }
 
         /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
-        callButton.isEnabled = false
-        emailButton.isEnabled = false
         messageButton.isEnabled = viewModel.canMessageOrder
     }
 
@@ -201,10 +202,42 @@ extension OrderItemViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let orderItem = dataSource.objectAtIndexPath(indexPath)
+
+        // Set to 0
+        let setToZero = UITableViewRowAction(style: .normal, title: "No Order") { _, _ in
+            orderItem.quantity = 0
+            self.managedObjectContext?.performSaveOrRollback()
+            tableView.isEditing = false
+            // ALT
+            // https://stackoverflow.com/a/43626096/4472195
+            //self.tableView.cellForRow(at: cellIndex)?.setEditing(false, animated: true)
+            //self.tableView.reloadData() // this is necessary, otherwise, it won't animate
+        }
+        setToZero.backgroundColor = ColorPalette.lightGrayColor
+
+        return [setToZero]
+    }
+
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
 extension OrderItemViewController: TableViewDataSourceDelegate {
+
+    func canEdit(_ item: OrderItem) -> Bool {
+        guard parentObject.status == OrderStatus.pending.rawValue else {
+            return false
+        }
+        guard let quantity = item.quantity else {
+            return false
+        }
+        if Double(quantity) > 0.0 {
+            return true
+        } else {
+            return false
+        }
+    }
 
     func configure(_ cell: OrderItemTableViewCell, for orderItem: OrderItem) {
         cell.configure(forOrderItem: orderItem)

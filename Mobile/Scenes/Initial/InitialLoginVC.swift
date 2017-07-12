@@ -98,7 +98,7 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewCont
             // Get the new view controller.
             guard
                 let destinationNavController = segue.destination as? UINavigationController,
-                let destinationController = destinationNavController.topViewController as? InitialSignUpVC
+                let destinationController = destinationNavController.topViewController as? InitialSignUpViewController
                 else {
                     fatalError("\(#function) FAILED : unable to get destination")
             }

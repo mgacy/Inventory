@@ -1,5 +1,5 @@
 //
-//  InvoiceDateTVC.swift
+//  InvoiceDateViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/30/16.
@@ -12,7 +12,7 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-class InvoiceDateTVC: UITableViewController, RootSectionViewController {
+class InvoiceDateViewController: UITableViewController, RootSectionViewController {
 
     // MARK: - Properties
 
@@ -45,7 +45,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         title = "Invoices"
 
         // Add refresh control
-        self.refreshControl?.addTarget(self, action: #selector(InvoiceDateTVC.refreshTable(_:)),
+        self.refreshControl?.addTarget(self, action: #selector(InvoiceDateViewController.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
 
         setupTableView()
@@ -54,7 +54,6 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
             log.error("\(#function) FAILED: unable to get storeID"); return
         }
 
-        // Get list of InvoiceCollections from server
         HUD.show(.progress)
         APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
                                                               completion: self.completedGetListOfInvoiceCollections)
@@ -73,20 +72,18 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let controller = segue.destination as? InvoiceVendorTVC else {
+        guard let controller = segue.destination as? InvoiceVendorViewController else {
             fatalError("Wrong view controller type")
         }
         guard let selection = selectedCollection else {
             fatalError("Showing detail, but no selected row?")
         }
-
-        // Pass selection to new view controller.
         controller.parentObject = selection
         controller.managedObjectContext = managedObjectContext
     }
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<InvoiceDateTVC>!
+    fileprivate var dataSource: TableViewDataSource<InvoiceDateViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
@@ -99,7 +96,6 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         request.sortDescriptors = [sortDescriptor]
 
-        // Set the fetch predicate.
         //let fetchPredicate = NSPredicate(format: "inventory == %@", inventory)
         //request.predicate = fetchPredicate
 
@@ -175,7 +171,7 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension InvoiceDateTVC: TableViewDataSourceDelegate {
+extension InvoiceDateViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ collection: InvoiceCollection) -> Bool {
         switch collection.uploaded {
@@ -200,7 +196,7 @@ extension InvoiceDateTVC: TableViewDataSourceDelegate {
 }
 
 // MARK: - Completion Handlers + Sync
-extension InvoiceDateTVC {
+extension InvoiceDateViewController {
 
     // MARK: Completion Handlers
 
@@ -243,7 +239,6 @@ extension InvoiceDateTVC {
         managedObjectContext!.performSaveOrRollback()
 
         HUD.hide()
-
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 

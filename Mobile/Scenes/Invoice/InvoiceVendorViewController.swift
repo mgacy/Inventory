@@ -1,41 +1,39 @@
 //
-//  InventoryLocationCategoryTVC.swift
-//  Playground
+//  InvoiceVendorViewController.swift
+//  Mobile
 //
-//  Created by Mathew Gacy on 10/9/16.
+//  Created by Mathew Gacy on 10/31/16.
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
-class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
+class InvoiceVendorViewController: UITableViewController {
 
-    // MARK: Properties
+    // MARK: - Properties
 
-    var location: InventoryLocation!
-    var selectedCategory: InventoryLocationCategory?
+    var parentObject: InvoiceCollection!
+    var selectedObject: Invoice?
 
-    // FetchedResultsController
+    // MARK: FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
-    //let filter: NSPredicate? = nil
-    //let cacheName: String? = nil // "Master"
-    //let objectsAsFaults = false
-    let fetchBatchSize = 20 // 0 = No Limit
+    //var filter: NSPredicate? = nil
+    //var cacheName: String? = "Master"
+    //var sectionNameKeyPath: String? = nil
+    var fetchBatchSize = 20 // 0 = No Limit
 
     // TableViewCell
-    let cellIdentifier = "InventoryLocationCategoryTableViewCell"
+    let cellIdentifier = "Cell"
 
     // Segues
-    enum SegueIdentifier: String {
-        case showItem = "ShowLocationItems2"
-    }
+    let segueIdentifier = "showInvoiceItems"
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = location.name
+        title = "Vendors"
         setupTableView()
     }
 
@@ -46,26 +44,24 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        log.warning("\(#function)")
         // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
+        guard let destinationController = segue.destination as? InvoiceItemViewController else {
             fatalError("Wrong view controller type")
         }
-        guard let selection = selectedCategory else { fatalError("Showing detail, but no selected row?") }
-
-        // Pass the selected object to the new view controller.
-        destinationController.title = selection.name
-        destinationController.category = selection
+        guard let selectedObject = selectedObject else {
+            fatalError("Showing detail, but no selected row?")
+        }
+        destinationController.parentObject = selectedObject
         destinationController.managedObjectContext = managedObjectContext
     }
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<InventoryLocationCategoryTVC>!
+    fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
@@ -74,13 +70,11 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
         //tableView.estimatedRowHeight = 100
 
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<InventoryLocationCategory> = InventoryLocationCategory.fetchRequest()
-        let positionSort = NSSortDescriptor(key: "position", ascending: true)
-        let nameSort = NSSortDescriptor(key: "name", ascending: true)
-        request.sortDescriptors = [positionSort, nameSort]
+        let request: NSFetchRequest<Invoice> = Invoice.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
 
-        // Set the fetch predicate.
-        let fetchPredicate = NSPredicate(format: "location == %@", location)
+        let fetchPredicate = NSPredicate(format: "collection == %@", parentObject)
         request.predicate = fetchPredicate
 
         request.fetchBatchSize = fetchBatchSize
@@ -95,25 +89,26 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCategory = dataSource.objectAtIndexPath(indexPath)
-        performSegue(withIdentifier: .showItem)
+        selectedObject = dataSource.objectAtIndexPath(indexPath)
+        log.verbose("Selected Invoice: \(String(describing: selectedObject))")
+
+        performSegue(withIdentifier: segueIdentifier, sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension InventoryLocationCategoryTVC: TableViewDataSourceDelegate {
+extension InvoiceVendorViewController: TableViewDataSourceDelegate {
 
-    func configure(_ cell: UITableViewCell, for locationCategory: InventoryLocationCategory) {
-        cell.textLabel?.text = locationCategory.name
+    func configure(_ cell: UITableViewCell, for invoice: Invoice) {
+       cell.textLabel?.text = invoice.vendor?.name
 
-        switch locationCategory.status {
-        case .notStarted:
-            cell.textLabel?.textColor = UIColor.lightGray
-        case .incomplete:
+        switch invoice.uploaded {
+        case false:
+            //cell.textLabel?.textColor = UIColor.lightGray
             cell.textLabel?.textColor = ColorPalette.yellowColor
-        case .complete:
+        case true:
             cell.textLabel?.textColor = UIColor.black
         }
     }
