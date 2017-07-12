@@ -1,5 +1,5 @@
 //
-//  InvoiceVendorTVC.swift
+//  InvoiceVendorViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/31/16.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class InvoiceVendorTVC: UITableViewController {
+class InvoiceVendorViewController: UITableViewController {
 
     // MARK: - Properties
 
@@ -50,20 +50,18 @@ class InvoiceVendorTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InvoiceItemTVC else {
+        guard let destinationController = segue.destination as? InvoiceItemViewController else {
             fatalError("Wrong view controller type")
         }
         guard let selectedObject = selectedObject else {
             fatalError("Showing detail, but no selected row?")
         }
-
-        // Pass the selected object to the new view controller.
         destinationController.parentObject = selectedObject
         destinationController.managedObjectContext = managedObjectContext
     }
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<InvoiceVendorTVC>!
+    fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
@@ -101,7 +99,7 @@ class InvoiceVendorTVC: UITableViewController {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension InvoiceVendorTVC: TableViewDataSourceDelegate {
+extension InvoiceVendorViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for invoice: Invoice) {
        cell.textLabel?.text = invoice.vendor?.name

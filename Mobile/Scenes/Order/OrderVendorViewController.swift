@@ -1,5 +1,5 @@
 //
-//  OrderVendorTVC.swift
+//  OrderVendorViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/30/16.
@@ -9,7 +9,8 @@
 import UIKit
 import CoreData
 
-class OrderVendorTVC: UITableViewController {
+class OrderVendorViewController: UITableViewController {
+
     // MARK: - Properties
 
     var parentObject: OrderCollection!
@@ -23,10 +24,7 @@ class OrderVendorTVC: UITableViewController {
     var fetchBatchSize = 20 // 0 = No Limit
 
     // TableView
-     var cellIdentifier = "Cell"
-
-    // Segues
-    //let segueIdentifier = "showOrderItems"
+    var cellIdentifier = "Cell"
 
     // MARK: - Lifecycle
 
@@ -53,25 +51,19 @@ class OrderVendorTVC: UITableViewController {
     }
 
     // MARK: - Navigation
-    /*
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? OrderItemViewController else {
-            fatalError("Wrong view controller type")
-        }
-        guard let selectedObject = selectedObject else {
-            fatalError("Showing detail, but no selected row?")
-        }
 
-        // Pass the selected object to the new view controller.
-        destinationController.viewModel = OrderViewModel(forOrder: selectedObject)
-        destinationController.parentObject = selectedObject
+    private func showOrderItemView(withOrder order: Order) {
+        guard let destinationController = OrderItemViewController.instance() else {
+            fatalError("\(#function) FAILED: unable to get destination view controller.")
+        }
+        destinationController.viewModel = OrderViewModel(forOrder: order)
+        destinationController.parentObject = order
         destinationController.managedObjectContext = self.managedObjectContext
+        navigationController?.pushViewController(destinationController, animated: true)
     }
-    */
-    // MARK: - UITableViewDataSource
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<OrderVendorTVC>!
+    fileprivate var dataSource: TableViewDataSource<OrderVendorViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
@@ -84,7 +76,6 @@ class OrderVendorTVC: UITableViewController {
         let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
         request.sortDescriptors = [sortDescriptor]
 
-        // Set the fetch predicate
         let fetchPredicate = NSPredicate(format: "collection == %@", parentObject)
         request.predicate = fetchPredicate
 
@@ -103,31 +94,17 @@ class OrderVendorTVC: UITableViewController {
         selectedObject = dataSource.objectAtIndexPath(indexPath)
         log.verbose("Selected Order: \(String(describing: selectedObject))")
 
-        //performSegue(withIdentifier: segueIdentifier, sender: self)
         guard let selection = selectedObject else {
             fatalError("Couldn't get selected Order")
         }
         showOrderItemView(withOrder: selection)
-
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-
-    private func showOrderItemView(withOrder order: Order) {
-        guard let destinationController = OrderItemViewController.instance() else {
-            fatalError("\(#function) FAILED: unable to get destination view controller.")
-        }
-
-        destinationController.viewModel = OrderViewModel(forOrder: order)
-        destinationController.parentObject = order
-        destinationController.managedObjectContext = self.managedObjectContext
-
-        navigationController?.pushViewController(destinationController, animated: true)
     }
 
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension OrderVendorTVC: TableViewDataSourceDelegate {
+extension OrderVendorViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for order: Order) {
         cell.textLabel?.text = order.vendor?.name
@@ -156,7 +133,7 @@ extension OrderVendorTVC: TableViewDataSourceDelegate {
 }
 
 // MARK: - User Actions
-extension OrderVendorTVC {
+extension OrderVendorViewController {
 
     func tappedCompleteOrders() {
         // If there are pending orders we want to warn the user about marking this collection as completed
@@ -204,7 +181,7 @@ extension OrderVendorTVC {
 
     func completeOrders() {
         parentObject.uploaded = true
-        /// TODO: refresh OrderDateTVC
+        /// TODO: refresh OrderDateViewController
         self.navigationController!.popViewController(animated: true)
     }
 

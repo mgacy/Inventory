@@ -1,5 +1,5 @@
 //
-//  InitialSignUpVC.swift
+//  InitialSignUpViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 2/26/17.
@@ -12,7 +12,7 @@ import KeychainAccess
 import PKHUD
 import SwiftyJSON
 
-class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
+class InitialSignUpViewController: UIViewController, UITextFieldDelegate, SegueHandler {
 
     // MARK: Properties
     var managedObjectContext: NSManagedObjectContext!
@@ -36,9 +36,7 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,16 +68,13 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
     }
 
     @IBAction func signupButtonPressed(_ sender: AnyObject) {
-        guard let username = usernameTextField.text else {
+        guard
+            let username = usernameTextField.text,
+            let email = loginTextField.text,
+            let pass = passwordTextField.text
+        else {
             return
         }
-        guard let email = loginTextField.text else {
-            return
-        }
-        guard let pass = passwordTextField.text else {
-            return
-        }
-
         HUD.show(.progress)
         userManager.signUp(username: username, email: email, password: pass, completion: completedSignup)
     }
@@ -89,8 +84,6 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segueIdentifier(for: segue) {
         case .showMain:
-
-            // Get the new view controller.
             guard
                 let tabBarController = segue.destination as? UITabBarController,
                 let inventoryNavController = tabBarController.viewControllers![0] as? UINavigationController,
@@ -98,8 +91,6 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
             else {
                 fatalError("Wrong view controller type")
             }
-
-            // Inject dependencies
             controller.managedObjectContext = managedObjectContext
             controller.userManager = userManager
 
@@ -111,7 +102,6 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
 
             // ...
 
-            // Inject dependencies
             //controller.managedObjectContext = managedObjectContext
             //controller.userManager = userManager
         }
@@ -120,7 +110,7 @@ class InitialSignUpVC: UIViewController, UITextFieldDelegate, SegueHandler {
 }
 
 // MARK: - Completion Handlers
-extension InitialSignUpVC {
+extension InitialSignUpViewController {
 
     func completedSignup(error: BackendError?) {
         guard error == nil else {
