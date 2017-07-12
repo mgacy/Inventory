@@ -56,8 +56,6 @@ class InvoiceVendorTVC: UITableViewController {
         guard let selectedObject = selectedObject else {
             fatalError("Showing detail, but no selected row?")
         }
-
-        // Pass the selected object to the new view controller.
         destinationController.parentObject = selectedObject
         destinationController.managedObjectContext = managedObjectContext
     }

@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 
 class OrderVendorViewController: UITableViewController {
+
     // MARK: - Properties
 
     var parentObject: OrderCollection!

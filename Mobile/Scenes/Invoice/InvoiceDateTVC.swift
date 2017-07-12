@@ -54,7 +54,6 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
             log.error("\(#function) FAILED: unable to get storeID"); return
         }
 
-        // Get list of InvoiceCollections from server
         HUD.show(.progress)
         APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
                                                               completion: self.completedGetListOfInvoiceCollections)
@@ -79,8 +78,6 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         guard let selection = selectedCollection else {
             fatalError("Showing detail, but no selected row?")
         }
-
-        // Pass selection to new view controller.
         controller.parentObject = selection
         controller.managedObjectContext = managedObjectContext
     }
