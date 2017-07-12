@@ -1,5 +1,5 @@
 //
-//  InvoiceKeypadVC.swift
+//  InvoiceKeypadViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/31/16.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class InvoiceKeypadVC: UIViewController {
+class InvoiceKeypadViewController: UIViewController {
 
     // MARK: - Properties
 

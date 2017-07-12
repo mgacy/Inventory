@@ -52,7 +52,7 @@ class InvoiceItemTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InvoiceKeypadVC else {
+        guard let destinationController = segue.destination as? InvoiceKeypadViewController else {
             fatalError("Wrong view controller type")
         }
         guard

@@ -242,8 +242,7 @@
 				C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */,
 				C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */,
 				C92D75BE1DC7A7E500AA1A02 /* InvoiceItemTVC.swift */,
-				C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */,
-				C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */,
+				C949C2091F15E210008A5EC4 /* Keypad */,
 			);
 			name = Invoice;
 			path = ..;
@@ -309,6 +308,15 @@
 				C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		C949C2091F15E210008A5EC4 /* Keypad */ = {
+			isa = PBXGroup;
+			children = (
+				C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */,
+				C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */,
+			);
+			name = Keypad;
 			sourceTree = "<group>";
 		};
 		C96870E01DDA1ED000EC06AB /* Invoice Models */ = {
