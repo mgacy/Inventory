@@ -339,7 +339,7 @@
         <!--Settings-->
         <scene sceneID="KFd-N6-8u3">
             <objects>
-                <tableViewController storyboardIdentifier="SettingsTVC" id="lN6-oK-Pdf" userLabel="Settings" customClass="SettingsTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SettingsViewController" id="lN6-oK-Pdf" userLabel="Settings" customClass="SettingsViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="nnN-Er-7NR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
