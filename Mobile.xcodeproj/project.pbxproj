@@ -33,7 +33,7 @@
 		C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */; };
 		C92D75BF1DC7A7E500AA1A02 /* InvoiceItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BE1DC7A7E500AA1A02 /* InvoiceItemViewController.swift */; };
 		C92D75C11DC7A81400AA1A02 /* InvoiceKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */; };
-		C92D75C31DC7A93100AA1A02 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C21DC7A93100AA1A02 /* LoginVC.swift */; };
+		C92D75C31DC7A93100AA1A02 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C21DC7A93100AA1A02 /* LoginViewController.swift */; };
 		C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */; };
 		C935E9A41E60D713003BF386 /* InitialLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E9A31E60D713003BF386 /* InitialLoginVC.swift */; };
 		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
@@ -130,7 +130,7 @@
 		C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InvoiceVendorTVC.swift; path = Scenes/Invoice/InvoiceVendorTVC.swift; sourceTree = "<group>"; };
 		C92D75BE1DC7A7E500AA1A02 /* InvoiceItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InvoiceItemViewController.swift; path = Scenes/Invoice/InvoiceItemViewController.swift; sourceTree = "<group>"; };
 		C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InvoiceKeypadViewController.swift; path = Scenes/Invoice/InvoiceKeypadViewController.swift; sourceTree = "<group>"; };
-		C92D75C21DC7A93100AA1A02 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginVC.swift; path = Scenes/Settings/LoginVC.swift; sourceTree = "<group>"; };
+		C92D75C21DC7A93100AA1A02 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = Scenes/Settings/LoginViewController.swift; sourceTree = "<group>"; };
 		C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = Scenes/Settings/SettingsViewController.swift; sourceTree = "<group>"; };
 		C935E9A31E60D713003BF386 /* InitialLoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InitialLoginVC.swift; path = Scenes/Initial/InitialLoginVC.swift; sourceTree = "<group>"; };
 		C94084761EFCCB7F00638E25 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Dynamic.swift; path = Order/Dynamic.swift; sourceTree = "<group>"; };
@@ -232,7 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */,
-				C92D75C21DC7A93100AA1A02 /* LoginVC.swift */,
+				C92D75C21DC7A93100AA1A02 /* LoginViewController.swift */,
 			);
 			name = Settings;
 			path = ..;
@@ -822,7 +822,7 @@
 				C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */,
 				C902FF431DBE769C0063CD02 /* InventoryItem+MyStuff.swift in Sources */,
 				C9F645591EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift in Sources */,
-				C92D75C31DC7A93100AA1A02 /* LoginVC.swift in Sources */,
+				C92D75C31DC7A93100AA1A02 /* LoginViewController.swift in Sources */,
 				C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */,
 				C9C221191EFCD424009C7D01 /* ViewController+instance.swift in Sources */,
 				C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */,

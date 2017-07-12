@@ -1,5 +1,5 @@
 //
-//  LoginVC.swift
+//  LoginViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/31/16.
@@ -11,7 +11,7 @@ import KeychainAccess
 import PKHUD
 //import SwiftyJSON
 
-class LoginVC: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: Properties
     var userManager: CurrentUserManager!
@@ -85,7 +85,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
 }
 
 // MARK: - Completion Handlers
-extension LoginVC {
+extension LoginViewController {
 
     func completedLogin(error: BackendError? = nil) {
         guard error == nil else {

@@ -44,7 +44,7 @@ class SettingsViewController: UITableViewController, RootSectionViewController {
         case accountSegue:
             guard
                 let destinationNavController = segue.destination as? UINavigationController,
-                let destinationController = destinationNavController.topViewController as? LoginVC
+                let destinationController = destinationNavController.topViewController as? LoginViewController
             else {
                 fatalError("Wrong view controller type")
             }
