@@ -50,7 +50,7 @@ class InvoiceVendorTVC: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InvoiceItemTVC else {
+        guard let destinationController = segue.destination as? InvoiceItemViewController else {
             fatalError("Wrong view controller type")
         }
         guard let selectedObject = selectedObject else {

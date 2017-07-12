@@ -11,7 +11,7 @@ import CoreData
 import SwiftyJSON
 import PKHUD
 
-class InvoiceItemTVC: UITableViewController {
+class InvoiceItemViewController: UITableViewController {
 
     // MARK: - Properties
 
@@ -64,7 +64,7 @@ class InvoiceItemTVC: UITableViewController {
     }
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<InvoiceItemTVC>!
+    fileprivate var dataSource: TableViewDataSource<InvoiceItemViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
@@ -144,7 +144,7 @@ class InvoiceItemTVC: UITableViewController {
 }
 
 // MARK: - Completion Handlers
-extension InvoiceItemTVC {
+extension InvoiceItemViewController {
 
     /// TODO: change signature to accept standard (JSON?, Error?)
 
@@ -166,7 +166,7 @@ extension InvoiceItemTVC {
 }
 
 // MARK: - Alert Controller Extension
-extension InvoiceItemTVC {
+extension InvoiceItemViewController {
 
     func showNotReceivedAlert(forItem invoiceItem: InvoiceItem) {
 
@@ -226,7 +226,7 @@ extension InvoiceItemTVC {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension InvoiceItemTVC: TableViewDataSourceDelegate {
+extension InvoiceItemViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ item: InvoiceItem) -> Bool {
         switch item.status {
