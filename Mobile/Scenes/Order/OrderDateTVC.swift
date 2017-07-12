@@ -72,7 +72,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let controller = segue.destination as? OrderVendorTVC else {
+        guard let controller = segue.destination as? OrderVendorViewController else {
             fatalError("Wrong view controller type")
         }
         guard let selection = selectedCollection else {

@@ -172,7 +172,7 @@
         <!--OrderVendor-->
         <scene sceneID="Sdp-Sd-Wvi">
             <objects>
-                <tableViewController storyboardIdentifier="OrderVendorTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zlj-V1-U9C" userLabel="OrderVendor" customClass="OrderVendorTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="OrderVendorViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zlj-V1-U9C" userLabel="OrderVendor" customClass="OrderVendorViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ol5-oj-Brx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

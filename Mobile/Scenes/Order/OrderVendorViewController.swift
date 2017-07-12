@@ -1,5 +1,5 @@
 //
-//  OrderVendorTVC.swift
+//  OrderVendorViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/30/16.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class OrderVendorTVC: UITableViewController {
+class OrderVendorViewController: UITableViewController {
     // MARK: - Properties
 
     var parentObject: OrderCollection!
@@ -64,7 +64,7 @@ class OrderVendorTVC: UITableViewController {
     // MARK: - UITableViewDataSource
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<OrderVendorTVC>!
+    fileprivate var dataSource: TableViewDataSource<OrderVendorViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
@@ -107,7 +107,7 @@ class OrderVendorTVC: UITableViewController {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension OrderVendorTVC: TableViewDataSourceDelegate {
+extension OrderVendorViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for order: Order) {
         cell.textLabel?.text = order.vendor?.name
@@ -136,7 +136,7 @@ extension OrderVendorTVC: TableViewDataSourceDelegate {
 }
 
 // MARK: - User Actions
-extension OrderVendorTVC {
+extension OrderVendorViewController {
 
     func tappedCompleteOrders() {
         // If there are pending orders we want to warn the user about marking this collection as completed
@@ -184,7 +184,7 @@ extension OrderVendorTVC {
 
     func completeOrders() {
         parentObject.uploaded = true
-        /// TODO: refresh OrderDateTVC
+        /// TODO: refresh OrderDateViewController
         self.navigationController!.popViewController(animated: true)
     }
 

@@ -55,7 +55,7 @@
 		C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */; };
 		C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */; };
 		C9A0B2EC1E63D2A300404320 /* InitialSignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0B2EB1E63D2A300404320 /* InitialSignUpVC.swift */; };
-		C9A14ABC1DC6742700ACDE69 /* OrderVendorTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */; };
+		C9A14ABC1DC6742700ACDE69 /* OrderVendorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABB1DC6742700ACDE69 /* OrderVendorViewController.swift */; };
 		C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */; };
 		C9A14AC01DC6748000ACDE69 /* OrderKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABF1DC6748000ACDE69 /* OrderKeypadViewController.swift */; };
 		C9A14AC21DC67A0F00ACDE69 /* InvoiceDateTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */; };
@@ -154,7 +154,7 @@
 		C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadViewModel.swift; sourceTree = "<group>"; };
 		C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A0B2EB1E63D2A300404320 /* InitialSignUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSignUpVC.swift; sourceTree = "<group>"; };
-		C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderVendorTVC.swift; sourceTree = "<group>"; };
+		C9A14ABB1DC6742700ACDE69 /* OrderVendorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderVendorViewController.swift; sourceTree = "<group>"; };
 		C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemViewController.swift; sourceTree = "<group>"; };
 		C9A14ABF1DC6748000ACDE69 /* OrderKeypadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadViewController.swift; sourceTree = "<group>"; };
 		C9A14AC11DC67A0F00ACDE69 /* InvoiceDateTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InvoiceDateTVC.swift; path = Scenes/Invoice/InvoiceDateTVC.swift; sourceTree = "<group>"; };
@@ -289,7 +289,7 @@
 			isa = PBXGroup;
 			children = (
 				C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */,
-				C9A14ABB1DC6742700ACDE69 /* OrderVendorTVC.swift */,
+				C9A14ABB1DC6742700ACDE69 /* OrderVendorViewController.swift */,
 				C9C221151EFCCE4A009C7D01 /* Item List */,
 				C9C221161EFCCE61009C7D01 /* Keypad */,
 			);
@@ -850,7 +850,7 @@
 				C92D75C51DC7A94100AA1A02 /* SettingsTVC.swift in Sources */,
 				C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */,
 				C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */,
-				C9A14ABC1DC6742700ACDE69 /* OrderVendorTVC.swift in Sources */,
+				C9A14ABC1DC6742700ACDE69 /* OrderVendorViewController.swift in Sources */,
 				C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */,
 				C968B85E1EF7275E005CE2FC /* OrderViewModel.swift in Sources */,
 				C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */,
