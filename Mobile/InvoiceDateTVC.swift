@@ -99,7 +99,6 @@ class InvoiceDateTVC: UITableViewController, RootSectionViewController {
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         request.sortDescriptors = [sortDescriptor]
 
-        // Set the fetch predicate.
         //let fetchPredicate = NSPredicate(format: "inventory == %@", inventory)
         //request.predicate = fetchPredicate
 
@@ -243,7 +242,6 @@ extension InvoiceDateTVC {
         managedObjectContext!.performSaveOrRollback()
 
         HUD.hide()
-
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 

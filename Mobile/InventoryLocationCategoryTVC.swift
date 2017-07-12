@@ -57,8 +57,6 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
             fatalError("Wrong view controller type")
         }
         guard let selection = selectedCategory else { fatalError("Showing detail, but no selected row?") }
-
-        // Pass the selected object to the new view controller.
         destinationController.title = selection.name
         destinationController.category = selection
         destinationController.managedObjectContext = managedObjectContext
@@ -79,7 +77,6 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
         let nameSort = NSSortDescriptor(key: "name", ascending: true)
         request.sortDescriptors = [positionSort, nameSort]
 
-        // Set the fetch predicate.
         let fetchPredicate = NSPredicate(format: "location == %@", location)
         request.predicate = fetchPredicate
 

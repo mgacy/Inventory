@@ -157,8 +157,6 @@ class InventoryKeypadViewController: UIViewController {
             } else {
                 currentItem.quantity = nil
             }
-
-            // Save the context.
             managedObjectContext?.performSaveOrRollback()
         }
 

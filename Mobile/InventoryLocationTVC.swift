@@ -61,8 +61,6 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
     // MARK: Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        // Get the selected object.
         guard let selection = selectedLocation else { fatalError("Showing detail, but no selected row?") }
 
         switch segueIdentifier(for: segue) {
@@ -70,8 +68,6 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
             guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else {
                 fatalError("Wrong view controller type")
             }
-
-            // Pass the selected object to the new view controller.
             destinationController.location = selection
             destinationController.managedObjectContext = self.managedObjectContext
 
@@ -79,8 +75,6 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
             guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
                 fatalError("Wrong view controller type")
             }
-
-            // Pass the selected object to the new view controller.
             destinationController.title = selection.name
             destinationController.location = selection
             destinationController.managedObjectContext = self.managedObjectContext
@@ -101,7 +95,6 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         request.sortDescriptors = [sortDescriptor]
 
-        // Set the fetch predicate.
         let fetchPredicate = NSPredicate(format: "inventory == %@", inventory)
         request.predicate = fetchPredicate
 
@@ -118,19 +111,14 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedLocation = dataSource.objectAtIndexPath(indexPath)
-
-        // Perform segue based on locationType of selected Inventory.
         switch selectedLocation!.locationType {
         case "category"?:
-            //  InventoryLocationCategory
             performSegue(withIdentifier: "ShowLocationCategory", sender: self)
         case "item"?:
-            // InventoryLocationItem
             performSegue(withIdentifier: "ShowLocationItem", sender: self)
         default:
             fatalError("\(#function) FAILED : wrong locationType")
         }
-
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -170,8 +158,6 @@ extension InventoryLocationTVC {
         inventory.remoteID = Int32(remoteID)
 
         HUD.flash(.success, delay: 1.0)
-
-        // Pop view
         navigationController!.popViewController(animated: true)
     }
 

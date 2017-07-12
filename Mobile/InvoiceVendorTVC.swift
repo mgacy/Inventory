@@ -76,7 +76,6 @@ class InvoiceVendorTVC: UITableViewController {
         let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
         request.sortDescriptors = [sortDescriptor]
 
-        // Set the fetch predicate.
         let fetchPredicate = NSPredicate(format: "collection == %@", parentObject)
         request.predicate = fetchPredicate
 
