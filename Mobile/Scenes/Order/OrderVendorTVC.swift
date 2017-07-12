@@ -23,10 +23,7 @@ class OrderVendorTVC: UITableViewController {
     var fetchBatchSize = 20 // 0 = No Limit
 
     // TableView
-     var cellIdentifier = "Cell"
-
-    // Segues
-    //let segueIdentifier = "showOrderItems"
+    var cellIdentifier = "Cell"
 
     // MARK: - Lifecycle
 
@@ -53,21 +50,17 @@ class OrderVendorTVC: UITableViewController {
     }
 
     // MARK: - Navigation
-    /*
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? OrderItemViewController else {
-            fatalError("Wrong view controller type")
-        }
-        guard let selectedObject = selectedObject else {
-            fatalError("Showing detail, but no selected row?")
-        }
 
-        // Pass the selected object to the new view controller.
-        destinationController.viewModel = OrderViewModel(forOrder: selectedObject)
-        destinationController.parentObject = selectedObject
+    private func showOrderItemView(withOrder order: Order) {
+        guard let destinationController = OrderItemViewController.instance() else {
+            fatalError("\(#function) FAILED: unable to get destination view controller.")
+        }
+        destinationController.viewModel = OrderViewModel(forOrder: order)
+        destinationController.parentObject = order
         destinationController.managedObjectContext = self.managedObjectContext
+        navigationController?.pushViewController(destinationController, animated: true)
     }
-    */
+
     // MARK: - UITableViewDataSource
 
     // MARK: - TableViewDataSource
@@ -84,7 +77,6 @@ class OrderVendorTVC: UITableViewController {
         let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
         request.sortDescriptors = [sortDescriptor]
 
-        // Set the fetch predicate
         let fetchPredicate = NSPredicate(format: "collection == %@", parentObject)
         request.predicate = fetchPredicate
 
@@ -110,18 +102,6 @@ class OrderVendorTVC: UITableViewController {
         showOrderItemView(withOrder: selection)
 
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-
-    private func showOrderItemView(withOrder order: Order) {
-        guard let destinationController = OrderItemViewController.instance() else {
-            fatalError("\(#function) FAILED: unable to get destination view controller.")
-        }
-
-        destinationController.viewModel = OrderViewModel(forOrder: order)
-        destinationController.parentObject = order
-        destinationController.managedObjectContext = self.managedObjectContext
-
-        navigationController?.pushViewController(destinationController, animated: true)
     }
 
 }
