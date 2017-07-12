@@ -1,5 +1,5 @@
 //
-//  OrderDateTVC.swift
+//  OrderDateViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/29/16.
@@ -12,7 +12,7 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-class OrderDateTVC: UITableViewController, RootSectionViewController {
+class OrderDateViewController: UITableViewController, RootSectionViewController {
 
     // MARK: Properties
 
@@ -46,7 +46,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 
         title = "Orders"
         self.navigationItem.leftBarButtonItem = self.editButtonItem
-        self.refreshControl?.addTarget(self, action: #selector(OrderDateTVC.refreshTable(_:)),
+        self.refreshControl?.addTarget(self, action: #selector(OrderDateViewController.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
         setupTableView()
 
@@ -83,7 +83,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
     }
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<OrderDateTVC>!
+    fileprivate var dataSource: TableViewDataSource<OrderDateViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
@@ -188,7 +188,7 @@ class OrderDateTVC: UITableViewController, RootSectionViewController {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension OrderDateTVC: TableViewDataSourceDelegate {
+extension OrderDateViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ collection: OrderCollection) -> Bool {
         switch collection.uploaded {
@@ -213,7 +213,7 @@ extension OrderDateTVC: TableViewDataSourceDelegate {
 }
 
 // MARK: - Completion Handlers + Sync
-extension OrderDateTVC {
+extension OrderDateViewController {
 
     // MARK: Completion Handlers
 
