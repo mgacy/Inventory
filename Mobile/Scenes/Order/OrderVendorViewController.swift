@@ -61,8 +61,6 @@ class OrderVendorViewController: UITableViewController {
         navigationController?.pushViewController(destinationController, animated: true)
     }
 
-    // MARK: - UITableViewDataSource
-
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<OrderVendorViewController>!
     //fileprivate var observer: ManagedObjectObserver?
@@ -95,12 +93,10 @@ class OrderVendorViewController: UITableViewController {
         selectedObject = dataSource.objectAtIndexPath(indexPath)
         log.verbose("Selected Order: \(String(describing: selectedObject))")
 
-        //performSegue(withIdentifier: segueIdentifier, sender: self)
         guard let selection = selectedObject else {
             fatalError("Couldn't get selected Order")
         }
         showOrderItemView(withOrder: selection)
-
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
