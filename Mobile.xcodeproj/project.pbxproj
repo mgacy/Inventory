@@ -71,7 +71,6 @@
 		C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */; };
 		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
-		C9D3E3A91EAEE15B0008F444 /* InventoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A81EAEE15B0008F444 /* InventoryItemTableViewCell.swift */; };
 		C9E198D51DC5669E0065FB98 /* OrderDateTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */; };
 		C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB7D891EE7910000515429 /* MailComposer.swift */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
@@ -171,7 +170,6 @@
 		C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = InventoryKeypadViewController.storyboard; path = Scenes/Inventory/InventoryKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
-		C9D3E3A81EAEE15B0008F444 /* InventoryItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemTableViewCell.swift; sourceTree = "<group>"; };
 		C9E198D41DC5669E0065FB98 /* OrderDateTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderDateTVC.swift; sourceTree = "<group>"; };
 		C9EB7D891EE7910000515429 /* MailComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -529,7 +527,6 @@
 				C9F516061DB7F133004C10E6 /* InventoryDateTVC.swift */,
 				C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */,
 				C9F516081DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift */,
-				C9D3E3A81EAEE15B0008F444 /* InventoryItemTableViewCell.swift */,
 				C9C2DA091F0F3F56007263FB /* LocationItem List */,
 				C9CB6FC71F01D28F0094ED07 /* Keypad */,
 			);
@@ -847,7 +844,6 @@
 				C91C92841EFCDBE400566CEB /* OrderItemTableViewCell.swift in Sources */,
 				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
-				C9D3E3A91EAEE15B0008F444 /* InventoryItemTableViewCell.swift in Sources */,
 				C92D75C11DC7A81400AA1A02 /* InvoiceKeypadViewController.swift in Sources */,
 				C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */,
 				C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */,
