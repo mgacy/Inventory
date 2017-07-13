@@ -15,10 +15,10 @@ class OrderViewModel {
 
     private var order: Order
 
-    var vendorName: String
-    var repName: String
-    var email: String
-    var phone: String
+    var vendorName: String { return order.vendor?.name ?? "" }
+    var repName: String { return "\(order.vendor?.rep?.firstName ?? "") \(order.vendor?.rep?.lastName ?? "")" }
+    var email: String { return order.vendor?.rep?.email ?? "" }
+    var phone: String { return order.vendor?.rep?.phone ?? "" }
 
     var formattedPhone: String {
         return format(phoneNumber: phone) ?? ""
@@ -34,6 +34,9 @@ class OrderViewModel {
         }
         return true
     }
+
+    /// TODO: make optional?
+    var orderSubject: String { return "Order for \(order.collection?.date ?? "")" }
 
     var orderMessage: String? {
         guard let items = order.items else { return nil }
@@ -60,10 +63,6 @@ class OrderViewModel {
 
     required init(forOrder order: Order) {
         self.order = order
-        self.vendorName = order.vendor?.name ?? ""
-        self.repName = "\(order.vendor?.rep?.firstName ?? "") \(order.vendor?.rep?.lastName ?? "")"
-        self.phone = order.vendor?.rep?.phone ?? ""
-        self.email = order.vendor?.rep?.email ?? ""
     }
 
     // MARK: - Actions
