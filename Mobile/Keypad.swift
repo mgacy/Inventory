@@ -124,6 +124,7 @@ class NewKeypad {
 
     /// Essentially, reset currentNumber with newNumber
     public func updateNumber(_ newNumber: NSNumber?) {
+        isEditingNumber = false
         guard let _newNumber = newNumber else {
             currentNumber = nil
             return
@@ -134,7 +135,6 @@ class NewKeypad {
             return
         }
         currentNumber = newString
-        isEditingNumber = false
     }
 
 }
