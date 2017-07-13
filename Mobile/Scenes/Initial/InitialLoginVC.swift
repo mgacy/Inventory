@@ -38,8 +38,6 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewCont
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         /// TODO: enable signup
         signupButton.isEnabled = false
 
@@ -94,16 +92,12 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewCont
             appDelegate.prepareTabBarController()
 
         case .showSignUp:
-
-            // Get the new view controller.
             guard
                 let destinationNavController = segue.destination as? UINavigationController,
                 let destinationController = destinationNavController.topViewController as? InitialSignUpViewController
                 else {
                     fatalError("\(#function) FAILED : unable to get destination")
             }
-
-            // Pass dependencies to the new view controller.
             destinationController.managedObjectContext = managedObjectContext
             destinationController.userManager = userManager
         }
