@@ -45,6 +45,7 @@
 		C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */; };
 		C968B85E1EF7275E005CE2FC /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */; };
 		C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */; };
+		C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
 		C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* SyncManager.swift */; };
 		C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988CE701DF5050D00A8028B /* Array+MyStuff.swift */; };
@@ -143,6 +144,7 @@
 		C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 2.xcdatamodel"; sourceTree = "<group>"; };
 		C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+Alert.swift"; path = "Extensions/UIKit/UIViewController+Alert.swift"; sourceTree = "<group>"; };
+		C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UITextField+Stuff.swift"; path = "Extensions/UIKit/UITextField+Stuff.swift"; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColorPalette.swift; path = Common/ColorPalette.swift; sourceTree = "<group>"; };
 		C982341A1DCD3B3A00E3E353 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		C988CE701DF5050D00A8028B /* Array+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+MyStuff.swift"; path = "Extensions/Foundation/Array+MyStuff.swift"; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */,
+				C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */,
 				C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */,
 				C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */,
 				C9C221181EFCD423009C7D01 /* ViewController+instance.swift */,
@@ -841,6 +844,7 @@
 				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
 				C92D75C11DC7A81400AA1A02 /* InvoiceKeypadViewController.swift in Sources */,
+				C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */,
 				C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */,
 				C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */,
 				C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */,
