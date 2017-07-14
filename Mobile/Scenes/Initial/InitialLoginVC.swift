@@ -134,25 +134,12 @@ extension InitialLoginVC: UITextFieldDelegate {
 extension InitialLoginVC {
 
     func setupTextFieldFor1Password() {
-        let padding = 8
-        let size = 20
-
-        let onePasswordButton = UIButton(frame: CGRect(x: 0, y: 0, width: size, height: size))
-        onePasswordButton.contentMode = UIViewContentMode.center
+        guard let onePasswordButton = OnePasswordExtension.shared().getButton(ofWidth: 20) else {
+            return
+        }
         onePasswordButton.addTarget(self, action: #selector(findLoginFrom1Password(sender:)), for: .touchUpInside)
 
-        let path = Bundle(for: type(of: OnePasswordExtension.shared())).path(
-            forResource: "OnePasswordExtensionResources", ofType: "bundle") as String?
-        let onepasswordExtensionResourcesBundle = Bundle(path: path!)
-        let image = UIImage(named: "onepassword-button.png", in: onepasswordExtensionResourcesBundle,
-                            compatibleWith: nil)
-        onePasswordButton.setImage(image, for: .normal)
-
-        let outerView = UIView(frame: CGRect(x: 0, y: 0, width: size + padding, height: size) )
-        outerView.addSubview(onePasswordButton)
-
-        passwordTextField.rightViewMode = UITextFieldViewMode.always
-        passwordTextField.rightView = outerView
+        passwordTextField.addButton(button: onePasswordButton, direction: .right)
     }
 
     func findLoginFrom1Password(sender: AnyObject) {
