@@ -1,4 +1,5 @@
 PODS:
+  - 1PasswordExtension (1.8.4)
   - Alamofire (4.5.0)
   - KeychainAccess (3.0.2)
   - PKHUD (4.2.3)
@@ -6,19 +7,31 @@ PODS:
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
+  - 1PasswordExtension (from `https://github.com/AgileBits/onepassword-app-extension.git`, branch `new/ios10`)
   - Alamofire (~> 4.4)
   - KeychainAccess
   - PKHUD (~> 4.2)
   - SwiftyBeaver
   - SwiftyJSON
 
+EXTERNAL SOURCES:
+  1PasswordExtension:
+    :branch: new/ios10
+    :git: https://github.com/AgileBits/onepassword-app-extension.git
+
+CHECKOUT OPTIONS:
+  1PasswordExtension:
+    :commit: 0fc27b2bf4af2978e9a1b8e1008003335d53e72e
+    :git: https://github.com/AgileBits/onepassword-app-extension.git
+
 SPEC CHECKSUMS:
+  1PasswordExtension: e775a29310c65851e5a6cec1afc349ab4e334e47
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
   KeychainAccess: a986406022dfc7c634c691ad3bec670cc6a32002
   PKHUD: c7692163a09875cbf15827dc581df3c5cf7f1015
   SwiftyBeaver: 90a39e3dc5136b7285f2e4c870b107e3933b8b84
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: f20281107103505f2b8aa31128b054f9417f0726
+PODFILE CHECKSUM: bcd47642376676c96d910b5e67337e25a3bb37d1
 
 COCOAPODS: 1.2.1
