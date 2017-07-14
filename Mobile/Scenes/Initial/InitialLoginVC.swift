@@ -12,11 +12,17 @@ import KeychainAccess
 import PKHUD
 //import SwiftyJSON
 
-class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewController, SegueHandler {
+class InitialLoginVC: UIViewController, RootSectionViewController, SegueHandler {
 
     // MARK: Properties
     var managedObjectContext: NSManagedObjectContext!
     var userManager: CurrentUserManager!
+
+    // MARK: Interface
+    @IBOutlet weak var loginTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var signupButton: UIButton!
 
     // Segue
     enum SegueIdentifier: String {
@@ -28,18 +34,15 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewCont
         case showSignUp = "showSignUpController"
     }
 
-    // MARK: Interface
-    @IBOutlet weak var loginTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var loginButton: UIButton!
-    @IBOutlet weak var signupButton: UIButton!
-
     // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         /// TODO: enable signup
         signupButton.isEnabled = false
+
+        loginTextField.delegate = self
+        passwordTextField.delegate = self
 
         if let user = userManager.user {
             loginTextField.text = user.email
@@ -51,35 +54,21 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewCont
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: UITextFieldDelegate
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        // Hide the keyboard.
-        textField.resignFirstResponder()
-        return true
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        // Disable the LogIn button while editing.
-        loginButton.isEnabled = false
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        // checkValidMealName()
-    }
-
     // MARK: - User interaction
 
     @IBAction func loginButtonPressed(_ sender: AnyObject) {
+        login()
+    }
+
+    //@IBAction func signupButtonPressed(_ sender: AnyObject) {}
+
+    func login() {
         guard let email = loginTextField.text, let pass = passwordTextField.text else {
             return
         }
         HUD.show(.progress)
-
         userManager.login(email: email, password: pass, completion: completedLogin)
     }
-
-    //@IBAction func signupButtonPressed(_ sender: AnyObject) {}
 
     // MARK: - Navigation
 
@@ -105,12 +94,43 @@ class InitialLoginVC: UIViewController, UITextFieldDelegate, RootSectionViewCont
 
 }
 
+// MARK: - UITextFieldDelegate
+extension InitialLoginVC: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case loginTextField:
+            passwordTextField.becomeFirstResponder()
+        case passwordTextField:
+            /// TODO: perform validation
+
+            // Hide the keyboard.
+            textField.resignFirstResponder()
+            login()
+        default:
+            textField.resignFirstResponder()
+        }
+        return true
+    }
+    /*
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        // Disable the LogIn button while editing.
+        loginButton.isEnabled = false
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // checkValidMealName()
+        loginButton.isEnabled = true
+    }
+    */
+}
+
 // MARK: - Completion Handlers
 extension InitialLoginVC {
 
     func completedLogin(_ error: BackendError? = nil) {
         guard error == nil else {
-            log.error("Failed to login")
+            log.error("Failed to login: \(String(describing: error))")
             switch error! {
             case .authentication:
                 showError(title: "Error", subtitle: "Wrong email or password")

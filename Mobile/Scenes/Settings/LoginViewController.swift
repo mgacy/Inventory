@@ -11,7 +11,7 @@ import KeychainAccess
 import PKHUD
 //import SwiftyJSON
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController {
 
     // MARK: Properties
     var userManager: CurrentUserManager!
@@ -29,6 +29,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         /// TODO: enable signup
         signupButton.isEnabled = false
 
+        loginTextField.delegate = self
+        passwordTextField.delegate = self
+
         if let user = userManager.user {
             loginTextField.text = user.email
         }
@@ -39,26 +42,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: UITextFieldDelegate
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        // Hide the keyboard.
-        textField.resignFirstResponder()
-        return true
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        // Disable the LogIn button while editing.
-        loginButton.isEnabled = false
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        // checkValidMealName()
-    }
-
     // MARK: - User interaction
 
     @IBAction func loginButtonPressed(_ sender: AnyObject) {
+        login()
+    }
+
+    //@IBAction func signupButtonPressed(_ sender: AnyObject) {}
+
+    func login() {
         guard let email = loginTextField.text, let pass = passwordTextField.text else {
             return
         }
@@ -82,6 +74,37 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     */
 
+}
+
+// MARK: - UITextFieldDelegate
+extension LoginViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case loginTextField:
+            passwordTextField.becomeFirstResponder()
+        case passwordTextField:
+            /// TODO: perform validation
+
+            // Hide the keyboard.
+            textField.resignFirstResponder()
+            login()
+        default:
+            textField.resignFirstResponder()
+        }
+        return true
+    }
+    /*
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        // Disable the LogIn button while editing.
+        loginButton.isEnabled = false
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // checkValidMealName()
+        loginButton.isEnabled = true
+    }
+    */
 }
 
 // MARK: - Completion Handlers
