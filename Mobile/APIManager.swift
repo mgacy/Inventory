@@ -277,9 +277,9 @@ class APIManager {
         }
     }
 
-    func getNewOrderCollection(storeID: Int, typeID: Int, returnUsage: Bool, periodLength: Int?, completion:
+    func getNewOrderCollection(storeID: Int, generateFrom method: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?, completion:
         @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getNewOrder(storeID: storeID, typeID: typeID,
+        sessionManager.request(Router.getNewOrder(storeID: storeID, generationMethod: method,
                                                   returnUsage: returnUsage, periodLength: periodLength))
             .validate()
             .responseJSON { response in

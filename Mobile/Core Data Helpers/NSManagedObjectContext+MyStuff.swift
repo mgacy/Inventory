@@ -136,25 +136,6 @@ extension NSManagedObjectContext {
         }
     }
 
-    /*
-    // http://collindonnell.com/2015/07/22/swift-delete-all-objects-extension/
-    func deleteEverything() {
-        // if let entitesByName = persistentStoreCoordinator?.managedObjectModel.entitiesByName as? [String: NSEntityDescription] {
-        if let entitesByName = persistentStoreCoordinator?.managedObjectModel.entitiesByName {
-            for (name, entityDescription) in entitesByName {
-                do {
-                    //try deleteEntities(entityDescription.self)
-                    //try deleteEntities(name)
-
-                } catch {
-                    log.error("\(#function) FAILED: stuff")
-                }
-
-            }
-        }
-    }
-    */
-
 }
 
 // MARK: - Save

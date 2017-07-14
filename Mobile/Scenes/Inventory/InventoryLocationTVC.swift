@@ -1,0 +1,184 @@
+//
+//  InventoryLocationTVC.swift
+//  Playground
+//
+//  Created by Mathew Gacy on 10/6/16.
+//  Copyright © 2016 Mathew Gacy. All rights reserved.
+//
+
+import UIKit
+import CoreData
+import SwiftyJSON
+import PKHUD
+
+class InventoryLocationTVC: UITableViewController, SegueHandler {
+
+    // MARK: - Properties
+
+    /* Force unwrap (`!`) because:
+     (a) a variable must have an initial value
+     (b) while we could use `?`, we would then have to unwrap it whenever we access it
+     (c) using a forced unwrapped optional is safe since this controller won't work without a value
+     */
+    var inventory: Inventory!
+    var selectedLocation: InventoryLocation?
+
+    // FetchedResultsController
+    var managedObjectContext: NSManagedObjectContext?
+    //let filter: NSPredicate? = nil
+    //let cacheName: String? = nil // "Master"
+    //let objectsAsFaults = false
+    let fetchBatchSize = 20 // 0 = No Limit
+
+    // TableViewCell
+    let cellIdentifier = "InventoryLocationTableViewCell"
+
+    // Segues
+    enum SegueIdentifier: String {
+        case showCategory = "ShowLocationCategory"
+        case showItem = "ShowLocationItem"
+    }
+
+    // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "Locations"
+        setupTableView()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        log.warning("\(#function)")
+        // Dispose of any resources that can be recreated.
+    }
+
+    // MARK: Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let selection = selectedLocation else { fatalError("Showing detail, but no selected row?") }
+
+        switch segueIdentifier(for: segue) {
+        case .showCategory:
+            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else {
+                fatalError("Wrong view controller type")
+            }
+            destinationController.location = selection
+            destinationController.managedObjectContext = self.managedObjectContext
+
+        case .showItem:
+            guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
+                fatalError("Wrong view controller type")
+            }
+            destinationController.title = selection.name
+            destinationController.location = selection
+            destinationController.managedObjectContext = self.managedObjectContext
+        }
+    }
+
+    // MARK: - TableViewDataSource
+    fileprivate var dataSource: TableViewDataSource<InventoryLocationTVC>!
+    //fileprivate var observer: ManagedObjectObserver?
+
+    fileprivate func setupTableView() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        //tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.estimatedRowHeight = 100
+
+        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
+        let request: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+
+        let fetchPredicate = NSPredicate(format: "inventory == %@", inventory)
+        request.predicate = fetchPredicate
+
+        request.fetchBatchSize = fetchBatchSize
+        request.returnsObjectsAsFaults = false
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
+
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
+                                         fetchedResultsController: frc, delegate: self)
+    }
+
+    // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedLocation = dataSource.objectAtIndexPath(indexPath)
+        switch selectedLocation!.locationType {
+        case "category"?:
+            performSegue(withIdentifier: "ShowLocationCategory", sender: self)
+        case "item"?:
+            performSegue(withIdentifier: "ShowLocationItem", sender: self)
+        default:
+            fatalError("\(#function) FAILED : wrong locationType")
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    // MARK: - User Actions
+
+    @IBAction func uploadTapped(_ sender: AnyObject) {
+        log.info("Uploading Inventory ...")
+        HUD.show(.progress)
+
+        guard let dict = self.inventory.serialize() else {
+            log.error("\(#function) FAILED : unable to serialize Inventory")
+            /// TODO: completedUpload(false)
+            return
+        }
+        APIManager.sharedInstance.postInventory(inventory: dict, completion: self.completedUpload)
+    }
+
+}
+
+// MARK: - Completion Handlers
+extension InventoryLocationTVC {
+
+    func completedUpload(json: JSON?, error: Error?) {
+        guard error == nil else {
+            HUD.flash(.error, delay: 1.0); return
+        }
+        guard let json = json else {
+            log.error("\(#function) FAILED: unable to get JSON")
+            HUD.flash(.error, delay: 1.0); return
+        }
+        guard let remoteID = json["id"].int else {
+            log.error("\(#function) FAILED: unable to get remoteID of posted Inventory")
+            HUD.flash(.error, delay: 1.0); return
+        }
+
+        inventory.uploaded = true
+        inventory.remoteID = Int32(remoteID)
+
+        HUD.flash(.success, delay: 1.0)
+        navigationController!.popViewController(animated: true)
+    }
+
+}
+
+// MARK: - TableViewDataSourceDelegate Extension
+extension InventoryLocationTVC: TableViewDataSourceDelegate {
+
+    func configure(_ cell: UITableViewCell, for location: InventoryLocation) {
+        cell.textLabel?.text = location.name
+
+        if let status = location.status {
+            switch status {
+            case .notStarted:
+                cell.textLabel?.textColor = UIColor.lightGray
+            case .incomplete:
+                cell.textLabel?.textColor = ColorPalette.yellowColor
+            case .complete:
+                cell.textLabel?.textColor = UIColor.black
+            }
+        }
+    }
+
+}

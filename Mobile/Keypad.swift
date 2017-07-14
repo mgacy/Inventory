@@ -19,11 +19,18 @@ protocol KeypadDelegate: class {
 
 class NewKeypad {
 
+    /// TODO: rename `currentDisplay` to better differentiate purpose from currentValue?
     public var displayValue: String {
-        return currentNumber
+        guard let _currentNumber = currentNumber else {
+            return "?"
+        }
+        return _currentNumber
     }
     public var currentValue: NSNumber? {
-        if let value = numberFormatter.number(from: currentNumber) {
+        guard let _currentNumber = currentNumber else {
+            return nil
+        }
+        if let value = numberFormatter.number(from: _currentNumber) {
             return value
         } else {
             return nil
@@ -37,7 +44,7 @@ class NewKeypad {
 
     // State
     private var isEditingNumber: Bool
-    private var currentNumber: String
+    private var currentNumber: String?
 
     // MARK: - Lifecycle
 
@@ -53,35 +60,32 @@ class NewKeypad {
     // MARK: - Stack manipulation
 
     public func popItem() {
-        if !currentNumber.isEmpty {
-            currentNumber.remove(at: currentNumber.index(before: currentNumber.endIndex))
-
-            if currentNumber.isEmpty {
-                // We just consumed the currentNumber
-                isEditingNumber = false
-            } else {
-                isEditingNumber = true
-            }
+        guard var newNumber = currentNumber else {
+            return
+        }
+        newNumber.remove(at: newNumber.index(before: newNumber.endIndex))
+        if newNumber.isEmpty {
+            // We just consumed the currentNumber
+            currentNumber = nil
+            isEditingNumber = false
+        } else {
+            currentNumber = newNumber
+            isEditingNumber = true
         }
         delegate?.updateModel(currentValue)
     }
 
     public func pushDecimal() {
         if isEditingNumber {
-            if currentNumber.isEmpty {
-                // Add leading '0'
-                currentNumber = "0."
-                //delegate?.updateModel(currentValue)
-
-            } else if currentNumber.range(of: ".") == nil {
-                // We do not need to update the model b/c we are not actually changing its value
-                currentNumber += "."
+            guard let newNumber = currentNumber else {
+                fatalError("\(#function) FAILED : isEditingNumber w/ nil")
             }
-
+            if newNumber.range(of: ".") == nil {
+                currentNumber = newNumber + "."
+            }
         } else {
             isEditingNumber = true
             currentNumber = "0."
-            //delegate?.updateModel(currentValue)
         }
         /*
          Since we currently use `delegate?.updateModel(:)` to update both the model AND view model, call that method
@@ -92,20 +96,23 @@ class NewKeypad {
 
     public func pushDigit(_ value: Int) {
         if isEditingNumber {
-            if currentNumber.range(of: ".") == nil {
-                // Prevent '00'
-                if currentNumber == "0" {
+            guard let newNumber = currentNumber else {
+                fatalError("\(#function) FAILED : isEditingNumber w/ nil")
+            }
+            if newNumber.range(of: ".") == nil {
+                // Prevent '0n'
+                if newNumber == "0" {
                     currentNumber = "\(value)"
                 } else {
-                    currentNumber += "\(value)"
+                    currentNumber = newNumber + "\(value)"
                 }
             } else {
                 // Limit significant digits to maximumFractionDigits
-                guard let decimalIndex = currentNumber.range(of: ".")?.lowerBound else {
+                guard let decimalIndex = newNumber.range(of: ".")?.lowerBound else {
                     fatalError("\(#function) FAILED: problem detecting '.'")
                 }
-                if currentNumber.substring(from: decimalIndex).characters.count <= maximumFractionDigits {
-                    currentNumber += "\(value)"
+                if newNumber.substring(from: decimalIndex).characters.count <= maximumFractionDigits {
+                    currentNumber = newNumber + "\(value)"
                 }
             }
         } else {
@@ -115,20 +122,19 @@ class NewKeypad {
         delegate?.updateModel(currentValue)
     }
 
+    /// Essentially, reset currentNumber with newNumber
     public func updateNumber(_ newNumber: NSNumber?) {
+        isEditingNumber = false
         guard let _newNumber = newNumber else {
-            currentNumber = ""
+            currentNumber = nil
             return
         }
-
-        if let newString = numberFormatter.string(from: _newNumber) {
-            currentNumber = newString
-            isEditingNumber = false
-        } else {
-            // Is it possible to reach this point?
+        guard let newString = numberFormatter.string(from: _newNumber) else {
             log.error("There was a problem converting '\(_newNumber)' to a string")
             currentNumber = "Error"
+            return
         }
+        currentNumber = newString
     }
 
 }
@@ -286,7 +292,6 @@ class KeypadWithHistory: Keypad {
     }
 
     func pushOperator() {
-
         switch currentNumber {
         case "", ".", "0", "0.":
             break
@@ -379,10 +384,8 @@ class KeypadWithHistory: Keypad {
     func output() -> (history: String, total: Double?, display: String) {
         // History
         let history = self.formHistory()
-
         // Result
         let total = evaluateHistory()
-
         // Display
         var display = ""
         if total != nil {
@@ -390,7 +393,6 @@ class KeypadWithHistory: Keypad {
         } else {
             display = "0"
         }
-
         return (history: history, total: total, display: display)
     }
 
