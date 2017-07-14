@@ -8,6 +8,7 @@
 
 import UIKit
 import KeychainAccess
+import OnePasswordExtension
 import PKHUD
 //import SwiftyJSON
 
@@ -34,6 +35,10 @@ class LoginViewController: UIViewController {
 
         if let user = userManager.user {
             loginTextField.text = user.email
+        }
+
+        if OnePasswordExtension.shared().isAppExtensionAvailable() {
+            setupTextFieldFor1Password()
         }
     }
 
@@ -105,6 +110,59 @@ extension LoginViewController: UITextFieldDelegate {
         loginButton.isEnabled = true
     }
     */
+}
+
+// MARK: - 1Password Integration
+extension LoginViewController {
+
+    func setupTextFieldFor1Password() {
+        let padding = 8
+        let size = 20
+
+        let onePasswordButton = UIButton(frame: CGRect(x: 0, y: 0, width: size, height: size))
+        onePasswordButton.contentMode = UIViewContentMode.center
+        onePasswordButton.addTarget(self, action: #selector(findLoginFrom1Password(sender:)), for: .touchUpInside)
+
+        let path = Bundle(for: type(of: OnePasswordExtension.shared())).path(
+            forResource: "OnePasswordExtensionResources", ofType: "bundle") as String?
+        let onepasswordExtensionResourcesBundle = Bundle(path: path!)
+        let image = UIImage(named: "onepassword-button.png", in: onepasswordExtensionResourcesBundle,
+                            compatibleWith: nil)
+        onePasswordButton.setImage(image, for: .normal)
+
+        let outerView = UIView(frame: CGRect(x: 0, y: 0, width: size + padding, height: size) )
+        outerView.addSubview(onePasswordButton)
+
+        passwordTextField.rightViewMode = UITextFieldViewMode.always
+        passwordTextField.rightView = outerView
+    }
+
+    func findLoginFrom1Password(sender: AnyObject) {
+        OnePasswordExtension.shared().findLogin(
+            forURLString: "***REMOVED***", for: self, sender: sender,
+            completion: { (loginDictionary, error) -> Void in
+                if loginDictionary == nil {
+                    if error!._code == Int(AppExtensionErrorCodeCancelledByUser) {
+                        print("Error invoking 1Password App Extension for find login: \(String(describing: error))")
+                    }
+                    return
+                }
+                self.loginTextField.text = loginDictionary?[AppExtensionUsernameKey] as? String
+                self.passwordTextField.text = loginDictionary?[AppExtensionPasswordKey] as? String
+                /*
+                if let generatedOneTimePassword = loginDictionary?[AppExtensionTOTPKey] as? String {
+                    self.passwordTextField.text = generatedOneTimePassword
+
+                    // Important: It is recommended that you submit the OTP/TOTP to your validation server as soon as you receive it, otherwise it may expire.
+                    let dispatchTime = DispatchTime.now() + 0.5
+                    DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+                        self.performSegue(withIdentifier: "showThankYouViewController", sender: self)
+                    })
+                }
+                */
+        })
+    }
+
 }
 
 // MARK: - Completion Handlers
