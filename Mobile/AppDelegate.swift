@@ -158,16 +158,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupSwiftyBeaverLogging(defaults: UserDefaults) {
         let console = ConsoleDestination()
         //let file = FileDestination()
-        let platform = SBPlatformDestination(appID: "***REMOVED***",
-                                             appSecret: "***REMOVED***",
-                                             encryptionKey: "***REMOVED***")
-
-        // Config
-        if let userName = defaults.string(forKey: "email") {
-            platform.analyticsUserName = userName
-        }
-        /// TODO: try to get minLevel from defaults (so user can set verbose logging)
-        platform.minLevel = .warning
 
         // use custom format and set console output to short time, log level & message
         //console.format = "$DHH:mm:ss$d $L $M"
@@ -175,9 +165,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Filters
 
+        #if !(arch(i386) || arch(x86_64)) && os(iOS)
+            let platform = SBPlatformDestination(appID: "***REMOVED***",
+                                                 appSecret: "***REMOVED***",
+                                                 encryptionKey: "***REMOVED***")
+            if let userName = defaults.string(forKey: "email") {
+                platform.analyticsUserName = userName
+            }
+            /// TODO: try to get minLevel from defaults (so user can set verbose logging)
+            platform.minLevel = .warning
+            log.addDestination(platform)
+        #endif
+
         log.addDestination(console)
         //log.addDestination(file)
-        log.addDestination(platform)
     }
 
     // func prepareTabBarController(context: NSManagedObjectContext, userManager: CurrentUserManager) {}
