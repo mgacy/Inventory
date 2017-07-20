@@ -74,6 +74,12 @@
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
 		C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */; };
 		C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB7D891EE7910000515429 /* MailComposer.swift */; };
+		C9ECDB2E1F214F61002AA99E /* Inventory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ECDB281F214F61002AA99E /* Inventory+CoreDataClass.swift */; };
+		C9ECDB2F1F214F61002AA99E /* Inventory+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ECDB291F214F61002AA99E /* Inventory+CoreDataProperties.swift */; };
+		C9ECDB301F214F61002AA99E /* Invoice+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ECDB2A1F214F61002AA99E /* Invoice+CoreDataClass.swift */; };
+		C9ECDB311F214F61002AA99E /* Invoice+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ECDB2B1F214F61002AA99E /* Invoice+CoreDataProperties.swift */; };
+		C9ECDB321F214F61002AA99E /* Order+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ECDB2C1F214F61002AA99E /* Order+CoreDataClass.swift */; };
+		C9ECDB331F214F61002AA99E /* Order+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ECDB2D1F214F61002AA99E /* Order+CoreDataProperties.swift */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
 		C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E21DB7EF98004C10E6 /* ViewController.swift */; };
 		C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* Main.storyboard */; };
@@ -174,6 +180,13 @@
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
 		C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderDateViewController.swift; sourceTree = "<group>"; };
 		C9EB7D891EE7910000515429 /* MailComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
+		C9ECDB271F214DB9002AA99E /* Mobile 3a.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 3a.xcdatamodel"; sourceTree = "<group>"; };
+		C9ECDB281F214F61002AA99E /* Inventory+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Inventory+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C9ECDB291F214F61002AA99E /* Inventory+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Inventory+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C9ECDB2A1F214F61002AA99E /* Invoice+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Invoice+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C9ECDB2B1F214F61002AA99E /* Invoice+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Invoice+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C9ECDB2C1F214F61002AA99E /* Order+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Order+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C9ECDB2D1F214F61002AA99E /* Order+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Order+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9F515E21DB7EF98004C10E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -301,6 +314,12 @@
 		C940847A1EFCCC8B00638E25 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C9ECDB281F214F61002AA99E /* Inventory+CoreDataClass.swift */,
+				C9ECDB291F214F61002AA99E /* Inventory+CoreDataProperties.swift */,
+				C9ECDB2A1F214F61002AA99E /* Invoice+CoreDataClass.swift */,
+				C9ECDB2B1F214F61002AA99E /* Invoice+CoreDataProperties.swift */,
+				C9ECDB2C1F214F61002AA99E /* Order+CoreDataClass.swift */,
+				C9ECDB2D1F214F61002AA99E /* Order+CoreDataProperties.swift */,
 				C902FF4A1DBE77290063CD02 /* Inventory Models */,
 				C96870E01DDA1ED000EC06AB /* Invoice Models */,
 				C9E198D31DC566780065FB98 /* Order Models */,
@@ -814,7 +833,9 @@
 				C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */,
 				C949C20E1F160719008A5EC4 /* InvoiceItemViewModel.swift in Sources */,
 				C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */,
+				C9ECDB2F1F214F61002AA99E /* Inventory+CoreDataProperties.swift in Sources */,
 				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
+				C9ECDB311F214F61002AA99E /* Invoice+CoreDataProperties.swift in Sources */,
 				C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */,
 				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
 				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift in Sources */,
@@ -834,7 +855,9 @@
 				C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */,
 				C9C2DA081F0F3EC2007263FB /* InventoryLocationItemViewModel.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
+				C9ECDB331F214F61002AA99E /* Order+CoreDataProperties.swift in Sources */,
 				C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */,
+				C9ECDB321F214F61002AA99E /* Order+CoreDataClass.swift in Sources */,
 				C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */,
 				C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */,
 				C935E9A41E60D713003BF386 /* InitialLoginVC.swift in Sources */,
@@ -854,6 +877,7 @@
 				C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */,
 				C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */,
 				C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */,
+				C9ECDB2E1F214F61002AA99E /* Inventory+CoreDataClass.swift in Sources */,
 				C9A14ABC1DC6742700ACDE69 /* OrderVendorViewController.swift in Sources */,
 				C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */,
 				C968B85E1EF7275E005CE2FC /* OrderViewModel.swift in Sources */,
@@ -866,6 +890,7 @@
 				C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */,
 				C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */,
 				C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */,
+				C9ECDB301F214F61002AA99E /* Invoice+CoreDataClass.swift in Sources */,
 				C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */,
 				C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */,
 				C96870E61DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift in Sources */,
@@ -1116,10 +1141,11 @@
 		C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C9ECDB271F214DB9002AA99E /* Mobile 3a.xcdatamodel */,
 				C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */,
 				C9F515E81DB7EF98004C10E6 /* Mobile.xcdatamodel */,
 			);
-			currentVersion = C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */;
+			currentVersion = C9ECDB271F214DB9002AA99E /* Mobile 3a.xcdatamodel */;
 			path = Mobile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
