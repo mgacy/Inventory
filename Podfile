@@ -8,7 +8,7 @@ def basic_pods
   pod 'KeychainAccess'
   pod 'PKHUD', '~> 4.2'
   pod 'SwiftyBeaver'
-  # pod '1PasswordExtension', '~> 1.8.4'
+  pod '1PasswordExtension', :git => 'https://github.com/AgileBits/onepassword-app-extension.git', :branch => 'new/ios10'
   # A
   # pod 'DATAStack', '~> 6'
   # pod 'DATASource', '~> 6'

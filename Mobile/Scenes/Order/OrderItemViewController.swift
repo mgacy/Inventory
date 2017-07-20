@@ -115,11 +115,12 @@ class OrderItemViewController: UIViewController {
         callButton.isEnabled = false
         emailButton.isEnabled = false
 
-        /// NOTE: disable for testing
-        guard messageComposer.canSendText() else {
-            messageButton.isEnabled = false
-            return
-        }
+        #if !(arch(i386) || arch(x86_64)) && os(iOS)
+            guard messageComposer.canSendText() else {
+                messageButton.isEnabled = false
+                return
+            }
+        #endif
 
         /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
         messageButton.isEnabled = viewModel.canMessageOrder
@@ -132,18 +133,18 @@ class OrderItemViewController: UIViewController {
 
         // Simply POST the order if we already sent the message but were unable to POST it previously
 
-        guard let phoneNumber = parentObject.vendor?.rep?.phone else {
-            log.error("Unable to get phoneNumber"); return
-        }
-        //let phoneNumber = "602-980-4718"
         guard let message = viewModel.orderMessage else {
             log.error("\(#function) FAILED : unable to getOrderMessage"); return
         }
 
-        let messageComposeVC = messageComposer.configuredMessageComposeViewController(
-            phoneNumber: phoneNumber, message: message,
-            completionHandler: completedPlaceOrder)
-        present(messageComposeVC, animated: true, completion: nil)
+        #if !(arch(i386) || arch(x86_64)) && os(iOS)
+            let messageComposeVC = messageComposer.configuredMessageComposeViewController(
+                phoneNumber: viewModel.phone, message: message,
+                completionHandler: completedPlaceOrder)
+            present(messageComposeVC, animated: true, completion: nil)
+        #else
+            completedPlaceOrder(.sent)
+        #endif
     }
 
     @IBAction func tappedEmailButton(_ sender: Any) {

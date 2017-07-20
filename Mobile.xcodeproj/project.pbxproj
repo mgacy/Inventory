@@ -28,7 +28,6 @@
 		C91C92821EFCD98F00566CEB /* OrderItemViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */; };
 		C91C92841EFCDBE400566CEB /* OrderItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91C92831EFCDBE400566CEB /* OrderItemTableViewCell.swift */; };
 		C91C92861EFCDD9000566CEB /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91C92851EFCDD9000566CEB /* RoundButton.swift */; };
-		C91C92881EFCE32800566CEB /* VendorRepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91C92871EFCE32800566CEB /* VendorRepView.swift */; };
 		C91C928A1EFCE65800566CEB /* OrderKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91C92891EFCE65800566CEB /* OrderKeypadViewController.storyboard */; };
 		C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift */; };
 		C92D75BF1DC7A7E500AA1A02 /* InvoiceItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BE1DC7A7E500AA1A02 /* InvoiceItemViewController.swift */; };
@@ -46,6 +45,7 @@
 		C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */; };
 		C968B85E1EF7275E005CE2FC /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */; };
 		C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */; };
+		C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
 		C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* SyncManager.swift */; };
 		C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988CE701DF5050D00A8028B /* Array+MyStuff.swift */; };
@@ -126,7 +126,6 @@
 		C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OrderItemViewController.storyboard; sourceTree = "<group>"; };
 		C91C92831EFCDBE400566CEB /* OrderItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemTableViewCell.swift; sourceTree = "<group>"; };
 		C91C92851EFCDD9000566CEB /* RoundButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoundButton.swift; path = Common/RoundButton.swift; sourceTree = "<group>"; };
-		C91C92871EFCE32800566CEB /* VendorRepView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VendorRepView.swift; sourceTree = "<group>"; };
 		C91C92891EFCE65800566CEB /* OrderKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OrderKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InvoiceVendorViewController.swift; path = Scenes/Invoice/InvoiceVendorViewController.swift; sourceTree = "<group>"; };
 		C92D75BE1DC7A7E500AA1A02 /* InvoiceItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InvoiceItemViewController.swift; path = Scenes/Invoice/InvoiceItemViewController.swift; sourceTree = "<group>"; };
@@ -146,6 +145,7 @@
 		C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 2.xcdatamodel"; sourceTree = "<group>"; };
 		C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+Alert.swift"; path = "Extensions/UIKit/UIViewController+Alert.swift"; sourceTree = "<group>"; };
+		C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UITextField+Stuff.swift"; path = "Extensions/UIKit/UITextField+Stuff.swift"; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColorPalette.swift; path = Common/ColorPalette.swift; sourceTree = "<group>"; };
 		C982341A1DCD3B3A00E3E353 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		C988CE701DF5050D00A8028B /* Array+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+MyStuff.swift"; path = "Extensions/Foundation/Array+MyStuff.swift"; sourceTree = "<group>"; };
@@ -380,6 +380,7 @@
 			isa = PBXGroup;
 			children = (
 				C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */,
+				C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */,
 				C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */,
 				C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */,
 				C9C221181EFCD423009C7D01 /* ViewController+instance.swift */,
@@ -407,7 +408,6 @@
 				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
 				C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */,
 				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
-				C91C92871EFCE32800566CEB /* VendorRepView.swift */,
 			);
 			name = "Item List";
 			sourceTree = "<group>";
@@ -808,7 +808,6 @@
 				C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */,
 				C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */,
 				C92D75BF1DC7A7E500AA1A02 /* InvoiceItemViewController.swift in Sources */,
-				C91C92881EFCE32800566CEB /* VendorRepView.swift in Sources */,
 				C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */,
 				C9A14AC01DC6748000ACDE69 /* OrderKeypadViewController.swift in Sources */,
 				C902FF411DBE70290063CD02 /* Inventory+MyStuff.swift in Sources */,
@@ -849,6 +848,7 @@
 				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
 				C92D75C11DC7A81400AA1A02 /* InvoiceKeypadViewController.swift in Sources */,
+				C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */,
 				C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */,
 				C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */,
 				C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */,

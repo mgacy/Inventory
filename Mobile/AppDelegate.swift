@@ -53,12 +53,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if userManager.user != nil {
             prepareTabBarController()
         } else {
-            // swiftlint:disable:next line_length
-            guard let loginController = storyboard.instantiateViewController(withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
-                fatalError("Unable to instantiate view controller")
+            guard let loginController = storyboard.instantiateViewController(
+                withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
+                    fatalError("Unable to instantiate view controller")
             }
-
-            // Inject dependencies
             loginController.managedObjectContext = persistentContainer.viewContext
             loginController.userManager = userManager
             self.window?.rootViewController = loginController
@@ -160,16 +158,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupSwiftyBeaverLogging(defaults: UserDefaults) {
         let console = ConsoleDestination()
         //let file = FileDestination()
-        let platform = SBPlatformDestination(appID: "***REMOVED***",
-                                             appSecret: "***REMOVED***",
-                                             encryptionKey: "***REMOVED***")
-
-        // Config
-        if let userName = defaults.string(forKey: "email") {
-            platform.analyticsUserName = userName
-        }
-        /// TODO: try to get minLevel from defaults (so user can set verbose logging)
-        platform.minLevel = .warning
 
         // use custom format and set console output to short time, log level & message
         //console.format = "$DHH:mm:ss$d $L $M"
@@ -177,18 +165,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Filters
 
+        #if !(arch(i386) || arch(x86_64)) && os(iOS)
+            let platform = SBPlatformDestination(appID: "***REMOVED***",
+                                                 appSecret: "***REMOVED***",
+                                                 encryptionKey: "***REMOVED***")
+            if let userName = defaults.string(forKey: "email") {
+                platform.analyticsUserName = userName
+            }
+            /// TODO: try to get minLevel from defaults (so user can set verbose logging)
+            platform.minLevel = .warning
+            log.addDestination(platform)
+        #endif
+
         log.addDestination(console)
         //log.addDestination(file)
-        log.addDestination(platform)
     }
 
     // func prepareTabBarController(context: NSManagedObjectContext, userManager: CurrentUserManager) {}
 
     func prepareTabBarController() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        // swiftlint:disable:next line_length
-        guard let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController else {
-            fatalError("Unable to instantiate tab bar controller")
+        guard let tabBarController = storyboard.instantiateViewController(
+            withIdentifier: "TabBarViewController") as? UITabBarController else {
+                fatalError("Unable to instantiate tab bar controller")
         }
 
         // Fix dark shadow in nav bar on segue
@@ -201,8 +200,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 else { fatalError("wrong view controller type") }
             guard let vc = navController.topViewController as? RootSectionViewController
                 else { fatalError("wrong view controller type") }
-
-            // Inject dependencies
             vc.managedObjectContext = persistentContainer.viewContext
             vc.userManager = userManager
         }
