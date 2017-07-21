@@ -20,8 +20,8 @@ extension Inventory {
         // Set properties
         /// TODO: date and storeID are required and lack default values
         if let dateString = json["date"].string,
-           let date = NSDate().dateFromString(date: dateString, format: "yyyy-MM-dd") {
-                self.date = date
+           let date = dateString.toBasicDate() {
+            self.date = date
         }
         if let storeID = json["store_id"].int32 {
             self.storeID = storeID
@@ -61,7 +61,7 @@ extension Inventory {
 
         var myDict = [String: Any]()
 
-        myDict["date"] = self.date?.stringFromDate()
+        myDict["date"] = self.date.stringFromDate()
         myDict["store_id"] = storeID
 
         // Apple suggests using a default value of 0 over using optional attributes
@@ -137,7 +137,7 @@ extension Inventory: Syncable {
         }
 
         if let dateString = json["date"].string,
-           let date = NSDate().dateFromString(date: dateString, format: "yyyy-MM-dd") {
+           let date = dateString.toBasicDate() {
                 self.date = date
         }
         if let remoteID = json["id"].int32 {

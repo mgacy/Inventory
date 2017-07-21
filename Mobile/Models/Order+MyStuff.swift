@@ -29,8 +29,8 @@ extension Order {
         // Properties
         // if let orderCost = json["order_cost"].float {}
         // if let orderDate = json["order_date"].string {}
-        if let dateString = json["order_date"].string,
-            let date = NSDate().dateFromString(date: dateString, format: "yyyy-MM-dd") {
+        if let dateString = json["date"].string,
+           let date = dateString.toBasicDate() {
             self.date = date
         }
         if uploaded {

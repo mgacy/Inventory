@@ -35,11 +35,11 @@ extension Invoice {
             self.invoiceNo = invoiceNo
         }
         if let shipDateString = json["ship_date"].string,
-           let shipDate = NSDate().dateFromString(date: shipDateString) {
-                self.shipDate = shipDate
+           let shipDate = shipDateString.toBasicDate() {
+            self.shipDate = shipDate
         }
         if let receiveDateString = json["receive_date"].string,
-           let receiveDate = NSDate().dateFromString(date: receiveDateString) {
+           let receiveDate = receiveDateString.toBasicDate() {
             self.receiveDate = receiveDate
         }
         if let credit = json["credit"].double {
