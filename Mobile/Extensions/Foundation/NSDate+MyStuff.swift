@@ -29,7 +29,7 @@ extension Formatter {
 }
 
 // MARK: - NSDate
-
+/*
 // https://stackoverflow.com/questions/28332946/nsdateformatter-stringfromdatensdate-returns-empty-string
 extension NSDate {
 
@@ -52,7 +52,7 @@ extension NSDate {
     }
 
 }
-
+*/
 // MARK: - String
 
 extension String {
