@@ -183,12 +183,12 @@
 		C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderDateViewController.swift; sourceTree = "<group>"; };
 		C9EB7D891EE7910000515429 /* MailComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
 		C9ECDB271F214DB9002AA99E /* Mobile 3a.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 3a.xcdatamodel"; sourceTree = "<group>"; };
-		C9ECDB281F214F61002AA99E /* Inventory+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Inventory+CoreDataClass.swift"; sourceTree = "<group>"; };
-		C9ECDB291F214F61002AA99E /* Inventory+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Inventory+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		C9ECDB2A1F214F61002AA99E /* Invoice+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Invoice+CoreDataClass.swift"; sourceTree = "<group>"; };
-		C9ECDB2B1F214F61002AA99E /* Invoice+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Invoice+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		C9ECDB2C1F214F61002AA99E /* Order+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Order+CoreDataClass.swift"; sourceTree = "<group>"; };
-		C9ECDB2D1F214F61002AA99E /* Order+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Order+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C9ECDB281F214F61002AA99E /* Inventory+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Inventory+CoreDataClass.swift"; path = "Models/Inventory+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C9ECDB291F214F61002AA99E /* Inventory+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Inventory+CoreDataProperties.swift"; path = "Models/Inventory+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C9ECDB2A1F214F61002AA99E /* Invoice+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Invoice+CoreDataClass.swift"; path = "Models/Invoice+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C9ECDB2B1F214F61002AA99E /* Invoice+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Invoice+CoreDataProperties.swift"; path = "Models/Invoice+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C9ECDB2C1F214F61002AA99E /* Order+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Order+CoreDataClass.swift"; path = "Models/Order+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C9ECDB2D1F214F61002AA99E /* Order+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Order+CoreDataProperties.swift"; path = "Models/Order+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9F515E21DB7EF98004C10E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -270,6 +270,8 @@
 		C902FF4A1DBE77290063CD02 /* Inventory Models */ = {
 			isa = PBXGroup;
 			children = (
+				C9ECDB281F214F61002AA99E /* Inventory+CoreDataClass.swift */,
+				C9ECDB291F214F61002AA99E /* Inventory+CoreDataProperties.swift */,
 				C902FF401DBE70290063CD02 /* Inventory+MyStuff.swift */,
 				C902FF421DBE769C0063CD02 /* InventoryItem+MyStuff.swift */,
 				C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */,
@@ -316,12 +318,6 @@
 		C940847A1EFCCC8B00638E25 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C9ECDB281F214F61002AA99E /* Inventory+CoreDataClass.swift */,
-				C9ECDB291F214F61002AA99E /* Inventory+CoreDataProperties.swift */,
-				C9ECDB2A1F214F61002AA99E /* Invoice+CoreDataClass.swift */,
-				C9ECDB2B1F214F61002AA99E /* Invoice+CoreDataProperties.swift */,
-				C9ECDB2C1F214F61002AA99E /* Order+CoreDataClass.swift */,
-				C9ECDB2D1F214F61002AA99E /* Order+CoreDataProperties.swift */,
 				C902FF4A1DBE77290063CD02 /* Inventory Models */,
 				C96870E01DDA1ED000EC06AB /* Invoice Models */,
 				C9E198D31DC566780065FB98 /* Order Models */,
@@ -358,6 +354,8 @@
 			isa = PBXGroup;
 			children = (
 				C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */,
+				C9ECDB2A1F214F61002AA99E /* Invoice+CoreDataClass.swift */,
+				C9ECDB2B1F214F61002AA99E /* Invoice+CoreDataProperties.swift */,
 				C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */,
 				C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */,
 			);
@@ -479,6 +477,8 @@
 			isa = PBXGroup;
 			children = (
 				C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */,
+				C9ECDB2C1F214F61002AA99E /* Order+CoreDataClass.swift */,
+				C9ECDB2D1F214F61002AA99E /* Order+CoreDataProperties.swift */,
 				C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */,
 				C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */,
 			);
