@@ -47,6 +47,7 @@
 		C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */; };
 		C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
+		C976305F1F219A0900BA8E42 /* JSON+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = C976305E1F219A0900BA8E42 /* JSON+Date.swift */; };
 		C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* SyncManager.swift */; };
 		C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988CE701DF5050D00A8028B /* Array+MyStuff.swift */; };
 		C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */; };
@@ -153,6 +154,7 @@
 		C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+Alert.swift"; path = "Extensions/UIKit/UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UITextField+Stuff.swift"; path = "Extensions/UIKit/UITextField+Stuff.swift"; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColorPalette.swift; path = Common/ColorPalette.swift; sourceTree = "<group>"; };
+		C976305E1F219A0900BA8E42 /* JSON+Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "JSON+Date.swift"; path = "Extensions/JSON+Date.swift"; sourceTree = "<group>"; };
 		C982341A1DCD3B3A00E3E353 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		C988CE701DF5050D00A8028B /* Array+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+MyStuff.swift"; path = "Extensions/Foundation/Array+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+MyStuff.swift"; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 			children = (
 				C9BA91291DEB959500DA2C6C /* Foundation */,
 				C9BA91281DEB958200DA2C6C /* UIKit */,
+				C976305E1F219A0900BA8E42 /* JSON+Date.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -838,6 +841,7 @@
 				C9ECDB311F214F61002AA99E /* Invoice+CoreDataProperties.swift in Sources */,
 				C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */,
 				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
+				C976305F1F219A0900BA8E42 /* JSON+Date.swift in Sources */,
 				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift in Sources */,
 				C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */,
 				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,
