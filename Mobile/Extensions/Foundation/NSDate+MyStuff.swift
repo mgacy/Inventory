@@ -28,6 +28,8 @@ extension Formatter {
     
 }
 
+// MARK: - NSDate
+
 // https://stackoverflow.com/questions/28332946/nsdateformatter-stringfromdatensdate-returns-empty-string
 extension NSDate {
 
@@ -51,13 +53,7 @@ extension NSDate {
 
 }
 
-extension String {
-
-    func toBasicDate() -> Date? {
-        return Formatter.basicDate.date(from: self)
-    }
-
-}
+// MARK: - Date
 
 extension Date {
 
@@ -72,5 +68,16 @@ extension Date {
     func stringFromDate() -> String? {
         return Date.basicDate.string(from: self)
     }
+    
+}
+
+// MARK: - String
+
+extension String {
+
+    func toBasicDate() -> Date? {
+        return Formatter.basicDate.date(from: self)
+    }
 
 }
+
