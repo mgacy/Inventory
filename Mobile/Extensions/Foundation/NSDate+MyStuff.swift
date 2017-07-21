@@ -25,7 +25,7 @@ extension Formatter {
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter
     }()
-    
+
 }
 
 // MARK: - NSDate
@@ -53,24 +53,6 @@ extension NSDate {
 
 }
 
-// MARK: - Date
-
-extension Date {
-
-    static let basicDate: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        //formatter.timeZone = TimeZone(abbreviation: "UTC")
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter
-    }()
-
-    func stringFromDate() -> String? {
-        return Date.basicDate.string(from: self)
-    }
-    
-}
-
 // MARK: - String
 
 extension String {
@@ -80,4 +62,3 @@ extension String {
     }
 
 }
-
