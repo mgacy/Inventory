@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Order {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Order> {

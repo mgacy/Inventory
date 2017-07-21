@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Invoice {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Invoice> {

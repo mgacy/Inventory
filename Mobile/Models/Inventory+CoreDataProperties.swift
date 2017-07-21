@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Inventory {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Inventory> {
