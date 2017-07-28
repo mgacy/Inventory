@@ -42,7 +42,7 @@ class SyncManager {
         }
         guard let json = json else {
             log.error("\(#function) FAILED : unable to get Items JSON")
-            /// TODO: construct error?
+            /// TODO: return custom error
             return completionHandler(false, nil)
         }
 
@@ -106,7 +106,7 @@ class SyncManager {
         }
         guard let json = json else {
             log.error("\(#function) FAILED : unable to get Vendors JSON")
-            /// TODO: construct error?
+            /// TODO: return custom error
             return completionHandler(false, nil)
         }
 
