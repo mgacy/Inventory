@@ -295,7 +295,7 @@ class APIManager {
         }
     }
 
-    func postOrder(order: [String: Any], completion: @escaping (Bool, JSON) -> Void) {
+    func postOrder(order: [String: Any], completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.postOrder(order))
             .validate()
             .responseJSON { response in
@@ -303,11 +303,10 @@ class APIManager {
                 case .success(let value):
                     log.verbose("Success: \(value)")
                     let json = JSON(value)
-                    completion(true, json)
+                    completion(json, nil)
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    let json = JSON(error)
-                    completion(false, json)
+                    completion(nil, error)
                 }
         }
     }
