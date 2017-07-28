@@ -165,7 +165,7 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // log.verbose("Success: \(value)")
+                    log.verbose("\(#function) success : \(value)")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
@@ -232,7 +232,7 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    log.verbose("Success: \(value)")
+                    log.verbose("\(#function) success : \(value)")
                     let json = JSON(value)
                     completion(true, json)
                 case .failure(let error):
@@ -301,7 +301,7 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    log.verbose("Success: \(value)")
+                    log.verbose("\(#function) success : \(value)")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
