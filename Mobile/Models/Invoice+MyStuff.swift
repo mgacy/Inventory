@@ -29,7 +29,7 @@ import SwiftyJSON
 
 extension Invoice {
 
-    @NSManaged var ageType: InvoiceStatus
+    //@NSManaged var ageType: InvoiceStatus
 
     // MARK: - Lifecycle
 
@@ -100,7 +100,17 @@ extension Invoice {
             }
         }
     }
+    /*
+    func update(context: NSManagedObjectContext, withJSON json: JSON) {
+    
+    }
 
+    public func update(context: NSManagedObjectContext, withJSON json: Any) {
+        guard let json = json as? JSON else {
+            log.error("\(#function) FAILED : SwiftyJSON"); return
+        }
+    }
+    */
     // MARK: - Serialization
 
     func serialize() -> [String: Any]? {
@@ -126,6 +136,7 @@ extension Invoice {
             return myDict
         }
 
+        /// TODO: use map / flatmap
         var itemsArray = [[String: Any]]()
         for case let item as InvoiceItem in items {
             if let itemDict = item.serialize() {
