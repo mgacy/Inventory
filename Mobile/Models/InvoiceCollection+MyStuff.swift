@@ -26,7 +26,20 @@ extension InvoiceCollection {
         if let storeID = json["store_id"].int32 {
             self.storeID = storeID
         }
-        self.uploaded = uploaded
+        /// TODO: switch to enum
+        //self.uploaded = uploaded
+        if let statusString = json["status"].string {
+            switch statusString {
+            case "pending":
+                self.uploaded = false
+            case "complete":
+                self.uploaded = true
+            default:
+                log.error("\(#function)Invalid status")
+                self.uploaded = true
+            }
+        }
+
 
         // Add Invoices
         if let invoices = json["invoices"].array {
