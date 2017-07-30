@@ -15,7 +15,7 @@ import SwiftyJSON
     case received       = 1
     case rejected       = 2
     //case paymentIssue     = 3
-    
+
     init?(string: String) {
         switch string {
             case "pending": self = .pending

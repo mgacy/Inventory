@@ -40,7 +40,6 @@ extension InvoiceCollection {
             }
         }
 
-
         // Add Invoices
         if let invoices = json["invoices"].array {
             for invoiceJSON in invoices {
