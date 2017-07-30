@@ -172,7 +172,7 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
 
 // MARK: - TableViewDataSourceDelegate Extension
 extension InvoiceDateViewController: TableViewDataSourceDelegate {
-
+    /*
     func canEdit(_ collection: InvoiceCollection) -> Bool {
         switch collection.uploaded {
         case true:
@@ -181,10 +181,9 @@ extension InvoiceDateViewController: TableViewDataSourceDelegate {
             return true
         }
     }
-
+    */
     func configure(_ cell: UITableViewCell, for collection: InvoiceCollection) {
         cell.textLabel?.text = collection.date
-
         switch collection.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black
