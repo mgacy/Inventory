@@ -107,32 +107,25 @@ extension NSManagedObjectContext {
             }
         }
 
-        // Create Fetch Request
+        // Initialize, configure fetch request
         let fetchRequest: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-
-        // Configure Fetch Request
         if let filter = filter { fetchRequest.predicate = filter }
 
-        // Initialize Batch Delete Request
+        // Initialize, configure batch delete request
         let batchDeleteRequest = NSBatchDeleteRequest(
             fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Configure Batch Update Request
         batchDeleteRequest.resultType = .resultTypeCount
 
         do {
-            // Execute Batch Request
             let batchDeleteResult = try self.execute(batchDeleteRequest) as! NSBatchDeleteResult
-
             log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
-            // Reset Managed Object Context
             // As the request directly interacts with the persistent store, we need need to reset the context for it to be aware of the changes
             self.reset()
-
         } catch {
             let updateError = error as NSError
             log.error("\(updateError), \(updateError.userInfo)")
+            //throw updateError
         }
     }
 
