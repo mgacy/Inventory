@@ -36,19 +36,43 @@ extension Invoice {
     convenience init(context: NSManagedObjectContext, json: JSON, collection: InvoiceCollection, uploaded: Bool = false) {
         self.init(context: context)
 
-        // Properties
+        // MARK: Required
 
         if let remoteID = json["remote_id"].int32 {
             self.remoteID = remoteID
-        }
-        if let invoiceNo = json["invoice_no"].int32 {
-            self.invoiceNo = invoiceNo
         }
         if let shipDate = json["ship_date"].string {
             self.shipDate = shipDate
         }
         if let receiveDate = json["receive_date"].string {
             self.receiveDate = receiveDate
+        }
+        if let vendorID = json["vendor"]["id"].int32 {
+            self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
+        }
+
+        /*
+        if let statusString = json["status"].string,
+           let status = InvoiceStatus(string: statusString) {
+            self.status = status
+        }
+        */
+        if let statusString = json["status"].string {
+            switch statusString {
+            case "pending":
+                self.uploaded = false
+            case "complete":
+                self.uploaded = true
+            default:
+                log.error("\(#function)Invalid status")
+                self.uploaded = true
+            }
+        }
+
+        // MARK: Optional
+
+        if let invoiceNo = json["invoice_no"].int32 {
+            self.invoiceNo = invoiceNo
         }
         if let credit = json["credit"].double {
             self.credit = credit
@@ -66,12 +90,6 @@ extension Invoice {
         if let checkNo = json["check_no"].int32 {
             self.checkNo = checkNo
         }
-        self.uploaded = uploaded
-
-        /// TODO: status
-        //if let status = json["status"] {
-        //    self.status = status
-        //}
 
         // Relationships
         self.collection = collection
@@ -80,9 +98,6 @@ extension Invoice {
             for itemJSON in items {
                 _ = InvoiceItem(context: context, json: itemJSON, invoice: self, uploaded: uploaded)
             }
-        }
-        if let vendorID = json["vendor"]["id"].int32 {
-            self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
         }
     }
 
