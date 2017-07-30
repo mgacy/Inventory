@@ -11,10 +11,20 @@ import CoreData
 import SwiftyJSON
 
 @objc public enum InvoiceStatus: Int16 {
-    case notReceived    = 0
-    case outOfStock     = 1
-    case received       = 2
-    case substitute     = 3
+    case pending        = 0
+    case received       = 1
+    case rejected       = 2
+    //case paymentIssue     = 3
+    
+    init?(string: String) {
+        switch string {
+            case "pending": self = .pending
+            case "complete": self = .received
+            //case "pending": self = .rejected
+            default: return nil
+        }
+    }
+
 }
 
 extension Invoice {
