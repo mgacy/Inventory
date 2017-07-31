@@ -30,18 +30,6 @@ extension ManagedSyncable where Self: NSManagedObject {
 
     static func findOrCreate(withID id: Int32, withJSON json: Any, in context: NSManagedObjectContext) -> Self {
         let predicate = NSPredicate(format: "remoteID == \(id)")
-
-        /// TODO: improve this ugly mess
-        /*
-         if let object: Self = findOrFetch(in: context, matching: predicate) {
-         object.update(context: context, withJSON: json)
-         } else {
-         let object: Self = context.insertObject()
-         object.update(context: context, withJSON: json)
-         }
-         return object
-         */
-
         guard let obj: Self = findOrFetch(in: context, matching: predicate) else {
             //log.debug("Creating \(Self.self) \(id)")
             let newObj: Self = context.insertObject()
