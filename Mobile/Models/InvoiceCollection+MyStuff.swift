@@ -14,7 +14,7 @@ extension InvoiceCollection {
 
     // MARK: - Lifecycle
 
-    convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
+    convenience init(context: NSManagedObjectContext, json: JSON) {
         self.init(context: context)
 
         // Set properties
@@ -26,8 +26,7 @@ extension InvoiceCollection {
         if let storeID = json["store_id"].int32 {
             self.storeID = storeID
         }
-        /// TODO: switch to enum
-        //self.uploaded = uploaded
+        /// TODO: switch to `status` enum
         if let statusString = json["status"].string {
             switch statusString {
             case "pending":

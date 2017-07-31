@@ -252,7 +252,7 @@ extension InvoiceDateViewController {
 
         //log.info("Creating new InvoiceCollection(s) ...")
         for (_, collection) in json {
-            _ = InvoiceCollection(context: managedObjectContext!, json: collection, uploaded: false)
+            _ = InvoiceCollection(context: managedObjectContext!, json: collection)
         }
 
         managedObjectContext!.performSaveOrRollback()
