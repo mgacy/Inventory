@@ -100,4 +100,44 @@ extension InvoiceCollection {
 }
 
 // The extension already offers a default implementation; we will use that
-extension InvoiceCollection: SyncableCollection {}
+//extension InvoiceCollection: SyncableCollection {}
+
+// MARK: - NEW
+
+extension InvoiceCollection: ManagedSyncableCollection {
+
+    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+
+        // Set properties
+        if let date = json["date"].string {
+            self.date = date
+        } else {
+            self.date = Date().shortDate
+        }
+        if let storeID = json["store_id"].int32 {
+            self.storeID = storeID
+        }
+        /// TODO: switch to `status` enum
+        if let statusString = json["status"].string {
+            switch statusString {
+            case "pending":
+                self.uploaded = false
+            case "complete":
+                self.uploaded = true
+            default:
+                log.error("\(#function)Invalid status")
+                self.uploaded = true
+            }
+        }
+
+        // Add Invoices
+        if let invoices = json["invoices"].array {
+            for invoiceJSON in invoices {
+                _ = Invoice(context: context, json: invoiceJSON, collection: self, uploaded: uploaded)
+            }
+        }
+    }
+
+    //public func update(context: NSManagedObjectContext, withJSON: Any) {}
+
+}
