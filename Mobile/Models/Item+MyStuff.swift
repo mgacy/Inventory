@@ -38,7 +38,7 @@ extension Item: Syncable {
             self.subSize = subSize
         }
 
-        /* 
+        /*
          NOTE: not implemented:
          * active
          * shelfLife
@@ -91,7 +91,7 @@ extension Item: Syncable {
          the case of the various Units
          */
 
-        /* 
+        /*
          NOTE - not implemented:
          * parUnit
          * store
