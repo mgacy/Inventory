@@ -17,6 +17,8 @@ extension InvoiceCollection {
     convenience init(context: NSManagedObjectContext, json: JSON) {
         self.init(context: context)
 
+        /// TODO: simply call `.update()`
+
         // Set properties
         if let date = json["date"].string {
             self.date = date

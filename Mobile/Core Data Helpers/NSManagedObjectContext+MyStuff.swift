@@ -59,6 +59,7 @@ extension NSManagedObjectContext {
 
         } catch let error {
             log.error("Error with request: \(error)")
+            //throw error?
         }
         return nil
     }
@@ -104,6 +105,7 @@ extension NSManagedObjectContext {
             } catch {
                 let saveError = error as NSError
                 log.error("\(saveError), \(saveError.userInfo)")
+                //throw saveError?
             }
         }
 
@@ -125,7 +127,7 @@ extension NSManagedObjectContext {
         } catch {
             let updateError = error as NSError
             log.error("\(updateError), \(updateError.userInfo)")
-            //throw updateError
+            //throw updateError?
         }
     }
 
@@ -199,6 +201,7 @@ extension NSManagedObjectContext {
         } catch let error {
             log.error("\(#function) FAILED : error with request: \(error)")
             return nil
+            //throw error?
         }
     }
 
@@ -271,6 +274,7 @@ extension NSManagedObjectContext {
                 /// TODO: deleteEntities(_:filter) already prints the error
                 let updateError = error as NSError
                 log.error("\(updateError), \(updateError.userInfo)")
+                //throw updateError?
             }
         }
     }
@@ -297,11 +301,11 @@ extension NSManagedObjectContext {
             default:
                 log.error("\(#function) FAILED : found multiple matches: \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
-                //return searchResults[0]
             }
 
         } catch let error {
             log.error("\(#function) FAILED : error with request: \(error)")
+            //throw error?
         }
         return nil
     }
@@ -375,6 +379,7 @@ extension NSManagedObjectContext {
                 /// TODO: deleteEntities(_:filter) already prints the error
                 let updateError = error as NSError
                 log.error("\(updateError), \(updateError.userInfo)")
+                //throw updateError?
             }
         }
     }
