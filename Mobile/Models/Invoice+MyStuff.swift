@@ -38,7 +38,7 @@ extension Invoice {
 
         // MARK: Required
 
-        if let remoteID = json["remote_id"].int32 {
+        if let remoteID = json["id"].int32 {
             self.remoteID = remoteID
         }
         if let shipDate = json["ship_date"].string {
