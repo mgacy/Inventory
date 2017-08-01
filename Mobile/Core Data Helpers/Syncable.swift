@@ -89,15 +89,13 @@ protocol ManagedSyncableCollection: Managed, NewSyncableCollection {}
 
 extension ManagedSyncableCollection where Self: NSManagedObject {
 
-    static func findOrCreate(withDate id: String, withJSON json: Any, in context: NSManagedObjectContext) -> Self {
+    static func findOrCreate(withDate id: String, withJSON json: JSON, in context: NSManagedObjectContext) -> Self {
         let predicate = NSPredicate(format: "date == \(id)")
         guard let obj: Self = findOrFetch(in: context, matching: predicate) else {
-            //log.debug("Creating \(Self.self) \(id)")
             let newObj: Self = context.insertObject()
             newObj.update(context: context, withJSON: json)
             return newObj
         }
-        //log.debug("Updating \(Self.self) \(id)")
         obj.update(context: context, withJSON: json)
         return obj
     }
