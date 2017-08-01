@@ -39,12 +39,9 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Display an Edit button in the navigation bar for this view controller.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
 
         title = "Invoices"
-
-        // Add refresh control
         self.refreshControl?.addTarget(self, action: #selector(InvoiceDateViewController.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
 
