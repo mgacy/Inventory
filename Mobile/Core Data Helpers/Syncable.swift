@@ -11,7 +11,7 @@ import CoreData
 import SwiftyJSON
 
 // MARK: - Syncable
-@objc public protocol Syncable {
+public protocol Syncable {
 
     // https://gist.github.com/capttaco/adb38e0d37fbaf9c004e
     //associatedtype SyncableType: NSManagedObject = Self
@@ -20,7 +20,7 @@ import SwiftyJSON
 
     //convenience init(context: NSManagedObjectContext, representation: Any)
     //func update(with json: Any, in context: NSManagedObjectContext)
-    func update(context: NSManagedObjectContext, withJSON json: Any)
+    func update(context: NSManagedObjectContext, withJSON json: JSON)
 }
 
 // MARK: - ManagedSyncable

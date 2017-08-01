@@ -19,10 +19,10 @@ extension Item: Syncable {
         self.update(context: context, withJSON: json)
     }
 
-    public func update(context: NSManagedObjectContext, withJSON json: Any) {
-        guard let json = json as? JSON else {
-            log.error("\(#function) FAILED : SwiftyJSON"); return
-        }
+    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+        // guard let json = json as? JSON else {
+        //     log.error("\(#function) FAILED : SwiftyJSON"); return
+        // }
 
         // Properties
         if let remoteID = json["id"].int32 {
