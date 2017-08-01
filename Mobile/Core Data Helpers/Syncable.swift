@@ -28,7 +28,7 @@ protocol ManagedSyncable: Managed, Syncable {}
 
 extension ManagedSyncable where Self: NSManagedObject {
 
-    static func findOrCreate(withID id: Int32, withJSON json: Any, in context: NSManagedObjectContext) -> Self {
+    static func findOrCreate(withID id: Int32, withJSON json: JSON, in context: NSManagedObjectContext) -> Self {
         let predicate = NSPredicate(format: "remoteID == \(id)")
         guard let obj: Self = findOrFetch(in: context, matching: predicate) else {
             //log.debug("Creating \(Self.self) \(id)")
