@@ -57,6 +57,19 @@ import SwiftyJSON
         }
     }
 
+    init?(string: String) {
+        switch string {
+        case "pending": self = .pending
+        case "received": self = .received
+        case "damaged": self = .damaged
+        case "outOfStock": self = .outOfStock
+        case "promo": self = .promo
+        case "substitute": self = .substitute
+        case "wrongItem": self = .wrongItem
+        default: return nil
+        }
+    }
+
     mutating func next() {
         switch self {
         case .pending:
