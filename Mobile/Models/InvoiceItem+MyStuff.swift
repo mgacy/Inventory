@@ -108,6 +108,10 @@ extension InvoiceItem {
         if let quantity = json["quantity"].double {
             self.quantity = quantity
         }
+        if let statusString = json["status"].string,
+            let status = InvoiceItemStatus(string: statusString) {
+            self.status = status.rawValue
+        }
 
         // Optional (?)
         if let discount = json["discount"].double {
