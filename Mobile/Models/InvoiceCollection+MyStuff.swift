@@ -139,6 +139,5 @@ extension InvoiceCollection: ManagedSyncableCollection {
         }
     }
 
-    //public func update(context: NSManagedObjectContext, withJSON: Any) {}
 
 }
