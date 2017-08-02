@@ -74,14 +74,13 @@ extension SyncableCollection where Self : NSManagedObject {
 
 }
 
-// MARK: - NEW -
+// MARK: - New (1) -
 
 public protocol NewSyncableCollection {
     var date: String? { get set }
     // var date: Date { get set }
     var storeID: Int32 { get set }
     /// TODO: make context optional since we might not always need it?
-    //func update(context: NSManagedObjectContext, withJSON json: Any)
     func update(context: NSManagedObjectContext, withJSON json: JSON)
 }
 
@@ -89,8 +88,8 @@ protocol ManagedSyncableCollection: Managed, NewSyncableCollection {}
 
 extension ManagedSyncableCollection where Self: NSManagedObject {
 
-    static func findOrCreate(withDate id: String, withJSON json: JSON, in context: NSManagedObjectContext) -> Self {
-        let predicate = NSPredicate(format: "date == \(id)")
+    static func findOrCreate(withDate date: String, withJSON json: JSON, in context: NSManagedObjectContext) -> Self {
+        let predicate = NSPredicate(format: "date == \(date)")
         guard let obj: Self = findOrFetch(in: context, matching: predicate) else {
             let newObj: Self = context.insertObject()
             newObj.update(context: context, withJSON: json)
@@ -143,7 +142,7 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
     */
 }
 
-// MARK: ManagedSyncableCollection
+// MARK: NSManagedObjectContext - ManagedSyncableCollection
 extension NSManagedObjectContext {
 
     func fetchByDate<T: ManagedSyncableCollection>(_ entity: T.Type, withDate date: String) -> T? where T: NSManagedObject {

@@ -166,7 +166,8 @@ extension NSManagedObjectContext {
 
 }
 
-// MARK: - Syncable
+// MARK: - Syncable -
+
 extension NSManagedObjectContext {
 
     // MARK: Insert
@@ -281,7 +282,8 @@ extension NSManagedObjectContext {
 
 }
 
-// MARK: SyncableCollection
+// MARK: - SyncableCollection -
+
 extension NSManagedObjectContext {
 
     func fetchByDate<T: SyncableCollection>(_ entity: T.Type, withDate date: String) -> T? where T: NSManagedObject {
