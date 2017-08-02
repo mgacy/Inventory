@@ -33,11 +33,11 @@ extension Invoice {
 
     // MARK: - Lifecycle
 
-    convenience init(context: NSManagedObjectContext, json: JSON, collection: InvoiceCollection, uploaded: Bool = false) {
+    convenience init(context: NSManagedObjectContext, json: JSON, parent: InvoiceCollection) {
         self.init(context: context)
 
-        // MARK: Required
-
+        // Required
+        self.collection = parent
         if let remoteID = json["id"].int32 {
             self.remoteID = remoteID
         }
@@ -69,8 +69,7 @@ extension Invoice {
             }
         }
 
-        // MARK: Optional
-
+        // Optional
         if let invoiceNo = json["invoice_no"].int32 {
             self.invoiceNo = invoiceNo
         }
@@ -92,11 +91,12 @@ extension Invoice {
         }
 
         // Relationships
-        self.collection = collection
         /// TODO: error / log if these fail
         if let items = json["items"].array {
             for itemJSON in items {
-                _ = InvoiceItem(context: context, json: itemJSON, invoice: self, uploaded: uploaded)
+                _ = InvoiceItem(context: context, json: itemJSON, parent: self)
+                //let new = InvoiceItem(context: context, json: itemJSON)
+                //new.invoice = self
             }
         }
     }

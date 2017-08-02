@@ -19,7 +19,7 @@ extension InvoiceCollection {
 
         /// TODO: simply call `.update()`
 
-        // Set properties
+        // Required
         if let date = json["date"].string {
             self.date = date
         } else {
@@ -41,10 +41,12 @@ extension InvoiceCollection {
             }
         }
 
-        // Add Invoices
+        // Relationships
         if let invoices = json["invoices"].array {
             for invoiceJSON in invoices {
-                _ = Invoice(context: context, json: invoiceJSON, collection: self, uploaded: uploaded)
+                _ = Invoice(context: context, json: invoiceJSON, parent: self)
+                //let new = Invoice(context: context, json: invoiceJSON)
+                //new.collection = self
             }
         }
     }
@@ -109,7 +111,7 @@ extension InvoiceCollection: ManagedSyncableCollection {
 
     public func update(context: NSManagedObjectContext, withJSON json: JSON) {
 
-        // Set properties
+        // Required
         if let date = json["date"].string {
             self.date = date
         } else {
@@ -131,10 +133,12 @@ extension InvoiceCollection: ManagedSyncableCollection {
             }
         }
 
-        // Add Invoices
+        // Relationships
         if let invoices = json["invoices"].array {
             for invoiceJSON in invoices {
-                _ = Invoice(context: context, json: invoiceJSON, collection: self, uploaded: uploaded)
+                _ = Invoice(context: context, json: invoiceJSON, parent: self)
+                //let new = Invoice(context: context, json: invoiceJSON)
+                //new.collection = self
             }
         }
     }

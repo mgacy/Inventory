@@ -97,16 +97,19 @@ extension InvoiceItem {
 
     // MARK: - Lifecycle
 
-    convenience init(context: NSManagedObjectContext, json: JSON, invoice: Invoice, uploaded: Bool = false) {
+    convenience init(context: NSManagedObjectContext, json: JSON, parent: Invoice) {
         self.init(context: context)
 
-        // Properties
+        // Required
+        self.invoice = parent
         if let remoteID = json["id"].int32 {
             self.remoteID = remoteID
         }
         if let quantity = json["quantity"].double {
             self.quantity = quantity
         }
+
+        // Optional (?)
         if let discount = json["discount"].double {
             self.discount = discount
         }
@@ -114,13 +117,7 @@ extension InvoiceItem {
             self.cost = cost
         }
 
-        /// TODO: get status from JSON
-        if uploaded {
-            self.status = InvoiceItemStatus.received.rawValue
-        }
-
         // Relationships
-        self.invoice = invoice
         if let itemID = json["item"]["id"].int32 {
             self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
         }
