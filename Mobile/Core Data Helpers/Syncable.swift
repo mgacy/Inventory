@@ -24,6 +24,7 @@ public protocol Syncable {
 }
 
 // MARK: - ManagedSyncable
+
 protocol ManagedSyncable: Managed, Syncable {}
 
 extension ManagedSyncable where Self: NSManagedObject {
@@ -74,14 +75,14 @@ extension SyncableCollection where Self : NSManagedObject {
 
 }
 
-// MARK: - New (1) -
+// MARK: - New (ManagedSyncableCollection) -
 
 public protocol NewSyncableCollection {
     var date: String? { get set }
     // var date: Date { get set }
     var storeID: Int32 { get set }
     /// TODO: make context optional since we might not always need it?
-    func update(context: NSManagedObjectContext, withJSON json: JSON)
+    func update(in context: NSManagedObjectContext, with json: JSON)
 }
 
 protocol ManagedSyncableCollection: Managed, NewSyncableCollection {}
@@ -92,10 +93,10 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
         let predicate = NSPredicate(format: "date == \(date)")
         guard let obj: Self = findOrFetch(in: context, matching: predicate) else {
             let newObj: Self = context.insertObject()
-            newObj.update(context: context, withJSON: json)
+            newObj.update(in: context, with: json)
             return newObj
         }
-        obj.update(context: context, withJSON: json)
+        obj.update(in: context, with: json)
         return obj
     }
     /*
@@ -117,10 +118,10 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
 
             // Find + update / create Items
             if let existingObject = objectDict[objectDate] {
-                existingObject.update(context: context, withJSON: objectJSON)
+                existingObject.update(in: context, with: objectJSON)
             } else {
                 let newObject: Self = context.insertObject()
-                newObject.update(context: context, withJSON: objectJSON)
+                newObject.update(in: context, with: objectJSON)
             }
         }
         log.debug("\(self) - remote: \(remoteDates) - local: \(localDates)")
@@ -143,6 +144,7 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
 }
 
 // MARK: NSManagedObjectContext - ManagedSyncableCollection
+
 extension NSManagedObjectContext {
 
     func fetchByDate<T: ManagedSyncableCollection>(_ entity: T.Type, withDate date: String) -> T? where T: NSManagedObject {
@@ -219,10 +221,10 @@ extension NSManagedObjectContext {
 
             // Find + update / create Items
             if let existingObject = objectDict[objectDate] {
-                existingObject.update(context: self, withJSON: objectJSON)
+                existingObject.update(in: self, with: objectJSON)
             } else {
                 let newObject = T(context: self)
-                newObject.update(context: self, withJSON: objectJSON)
+                newObject.update(in: self, with: objectJSON)
             }
         }
         log.debug("\(T.self) - remote: \(remoteDates) - local: \(localDates)")

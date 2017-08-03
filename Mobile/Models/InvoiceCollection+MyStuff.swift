@@ -109,7 +109,7 @@ extension InvoiceCollection {
 
 extension InvoiceCollection: ManagedSyncableCollection {
 
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+    public func update(in context: NSManagedObjectContext, with json: JSON) {
 
         // Required
         if let date = json["date"].string {
