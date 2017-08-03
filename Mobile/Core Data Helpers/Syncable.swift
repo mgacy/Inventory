@@ -248,34 +248,56 @@ extension NSManagedObjectContext {
 
 // MARK: - New (SyncableParent) -
 
+/// TODO: rename to reference relationships
 protocol SyncableParent: class, NSFetchRequestResult {
     associatedtype ChildType: ManagedSyncable
 
-    //var childPredicate: NSPredicate { get }
-    //func fetchChildDict(context: NSManagedObjectContext) -> [Int32: ChildType]
     func syncChildren(in: NSManagedObjectContext, with: [JSON])
+    func fetchChildDict(in: NSManagedObjectContext) -> [Int32: ChildType]?
+    func updateChildRelation(_: ChildType)
+    //func updateOrCreateChildren(in: NSManagedObjectContext, with: [JSON], objectDict: [Int32: ChildType]) -> Set<Int32>
 }
 
 extension SyncableParent where ChildType: NSManagedObject {
-    /*
-    func fetchChildDict(context: NSManagedObjectContext) throws -> [Int32: ChildType] {
-        // swiftlint:disable:next force_cast
-        let request: NSFetchRequest<ChildType> = ChildType.fetchRequest() as! NSFetchRequest<ChildType>
-        let fetchPredicate = NSPredicate(format: "collection == %@", self)
-        //let fetchPredicate = configureSyncFetchRequest()
-        //request.predicate = fetchPredicate
 
-        do {
-            let fetchedResult = try context.fetch(request)
-            let objectDict = fetchedResult.toDictionary { $0.remoteID }
-            return objectDict
-        } catch let error {
-            log.error(error.localizedDescription)
-            throw error
+    func syncChildren(in context: NSManagedObjectContext, with json: [JSON]) {
+        guard let objectDict = fetchChildDict(in: context) else {
+            log.error("\(#function) FAILED : unable to create dictionary for \(ChildType.self)"); return
         }
+        //log.debug("objectDict: \(objectDict)")
+
+        let localObjects = Set(objectDict.keys)
+
+        // A
+        //let remoteObjects = updateOrCreateChildren(in: context, with: json, objectDict: objectDict)
+
+        // B
+        var remoteObjects = Set<Int32>()
+        for objectJSON in json {
+            guard let objectID = objectJSON["id"].int32 else {
+                log.warning("\(#function) : unable to get id from \(objectJSON)"); continue
+            }
+            remoteObjects.insert(objectID)
+
+            // Find + update / create Items
+            if let existingObject = objectDict[objectID] {
+                existingObject.update(context: context, withJSON: objectJSON)
+                //log.debug("existingObject: \(existingObject)")
+            } else {
+                let newObject = ChildType(context: context)
+                newObject.update(context: context, withJSON: objectJSON)
+                updateChildRelation(newObject)
+                //log.debug("newObject: \(newObject)")
+            }
+        }
+        log.debug("\(ChildType.self) - remote: \(remoteObjects) - local: \(localObjects)")
+
+        // Delete objects that were deleted from server.
+        let deletedObjects = localObjects.subtracting(remoteObjects)
+        deleteChildren(deletedObjects: deletedObjects, context: context)
     }
-    */
-    func deleteChildren(deletedObjects: Set<Int32>, context: NSManagedObjectContext) {
+
+    private func deleteChildren(deletedObjects: Set<Int32>, context: NSManagedObjectContext) {
         guard !deletedObjects.isEmpty else {
             return
         }
