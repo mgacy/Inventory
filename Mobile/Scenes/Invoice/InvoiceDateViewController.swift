@@ -39,8 +39,7 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
-
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem
         title = "Invoices"
         self.refreshControl?.addTarget(self, action: #selector(InvoiceDateViewController.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
