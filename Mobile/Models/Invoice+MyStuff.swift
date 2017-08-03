@@ -35,70 +35,8 @@ extension Invoice {
 
     convenience init(context: NSManagedObjectContext, json: JSON, parent: InvoiceCollection) {
         self.init(context: context)
-
-        // Required
         self.collection = parent
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let shipDate = json["ship_date"].string {
-            self.shipDate = shipDate
-        }
-        if let receiveDate = json["receive_date"].string {
-            self.receiveDate = receiveDate
-        }
-        if let vendorID = json["vendor"]["id"].int32 {
-            self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
-        }
-
-        /*
-        if let statusString = json["status"].string,
-           let status = InvoiceStatus(string: statusString) {
-            self.status = status
-        }
-        */
-        if let statusString = json["status"].string {
-            switch statusString {
-            case "pending":
-                self.uploaded = false
-            case "complete":
-                self.uploaded = true
-            default:
-                log.error("\(#function)Invalid status")
-                self.uploaded = true
-            }
-        }
-
-        // Optional
-        if let invoiceNo = json["invoice_no"].int32 {
-            self.invoiceNo = invoiceNo
-        }
-        if let credit = json["credit"].double {
-            self.credit = credit
-        }
-        if let shipping = json["shipping"].double {
-            self.shipping = shipping
-        }
-        if let taxes = json["taxes"].double {
-            self.taxes = taxes
-        }
-        /// TODO: this should be a computed property
-        if let totalCost = json["total_cost"].double {
-            self.totalCost = totalCost
-        }
-        if let checkNo = json["check_no"].int32 {
-            self.checkNo = checkNo
-        }
-
-        // Relationships
-        /// TODO: error / log if these fail
-        if let items = json["items"].array {
-            for itemJSON in items {
-                _ = InvoiceItem(context: context, json: itemJSON, parent: self)
-                //let new = InvoiceItem(context: context, json: itemJSON)
-                //new.invoice = self
-            }
-        }
+        update(context: context, withJSON: json)
     }
 
     // MARK: - Serialization
