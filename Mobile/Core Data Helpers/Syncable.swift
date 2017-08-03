@@ -202,8 +202,6 @@ extension NSManagedObjectContext {
     }
 
     func syncCollections<T: ManagedSyncableCollection>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
-        // Filter new (uploaded = false) collections
-        //let fetchPredicate = NSPredicate(format: "uploaded == %@", NSNumber(value: true))
         let fetchPredicate: NSPredicate? = nil
         guard let objectDict = try? fetchCollectionDict(T.self, matching: fetchPredicate) else {
             log.error("\(#function) FAILED : unable to create Collection dictionary"); return
