@@ -36,7 +36,7 @@ extension InvoiceCollection {
             case "complete":
                 self.uploaded = true
             default:
-                log.error("\(#function)Invalid status")
+                log.error("\(#function) - invalid status: \(statusString)")
                 self.uploaded = true
             }
         }
@@ -128,7 +128,7 @@ extension InvoiceCollection: ManagedSyncableCollection {
             case "complete":
                 self.uploaded = true
             default:
-                log.error("\(#function)Invalid status")
+                log.error("\(#function) - invalid status: \(statusString)")
                 self.uploaded = true
             }
         }
