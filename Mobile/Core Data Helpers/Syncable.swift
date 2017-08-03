@@ -245,3 +245,50 @@ extension NSManagedObjectContext {
     }
 
 }
+
+// MARK: - New (SyncableParent) -
+
+protocol SyncableParent: class, NSFetchRequestResult {
+    associatedtype ChildType: ManagedSyncable
+
+    //var childPredicate: NSPredicate { get }
+    //func fetchChildDict(context: NSManagedObjectContext) -> [Int32: ChildType]
+    //func configureSyncFetchRequest() -> NSPredicate
+    func syncChildren(in: NSManagedObjectContext, with: [JSON])
+}
+
+extension SyncableParent where ChildType: NSManagedObject {
+    /*
+    func fetchChildDict(context: NSManagedObjectContext) throws -> [Int32: ChildType] {
+        // swiftlint:disable:next force_cast
+        let request: NSFetchRequest<ChildType> = ChildType.fetchRequest() as! NSFetchRequest<ChildType>
+        let fetchPredicate = NSPredicate(format: "collection == %@", self)
+        //let fetchPredicate = configureSyncFetchRequest()
+        //request.predicate = fetchPredicate
+
+        do {
+            let fetchedResult = try context.fetch(request)
+            let objectDict = fetchedResult.toDictionary { $0.remoteID }
+            return objectDict
+        } catch let error {
+            log.error(error.localizedDescription)
+            throw error
+        }
+    }
+    */
+    func deleteChildren(deletedObjects: Set<Int32>, context: NSManagedObjectContext) {
+        guard !deletedObjects.isEmpty else {
+            return
+        }
+        log.debug("We need to delete: \(deletedObjects)")
+        let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
+        do {
+            try context.deleteEntities(ChildType.self, filter: fetchPredicate)
+        } catch let error {
+            /// TODO: deleteEntities(_:filter) already prints the error
+            let updateError = error as NSError
+            log.error("\(updateError), \(updateError.userInfo)")
+        }
+    }
+
+}

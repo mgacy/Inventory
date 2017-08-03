@@ -139,3 +139,129 @@ extension Invoice {
     }
 
 }
+
+// MARK: - ManagedSyncable
+
+extension Invoice: ManagedSyncable {
+
+    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+        log.debug("Updating with \(json)")
+
+        // Required
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
+        }
+        if let shipDate = json["ship_date"].string {
+            self.shipDate = shipDate
+        }
+        if let receiveDate = json["receive_date"].string {
+            self.receiveDate = receiveDate
+        }
+        if let vendorID = json["vendor"]["id"].int32 {
+            self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
+        }
+
+        /*
+         if let statusString = json["status"].string,
+         let status = InvoiceStatus(string: statusString) {
+         self.status = status
+         }
+         */
+        if let statusString = json["status"].string {
+            switch statusString {
+            case "pending":
+                self.uploaded = false
+            case "completed":
+                self.uploaded = true
+            default:
+                log.error("\(#function) - Invalid status: \(statusString)")
+                self.uploaded = true
+            }
+        }
+
+        // Optional
+        if let invoiceNo = json["invoice_no"].int32 {
+            self.invoiceNo = invoiceNo
+        }
+        if let credit = json["credit"].double {
+            self.credit = credit
+        }
+        if let shipping = json["shipping"].double {
+            self.shipping = shipping
+        }
+        if let taxes = json["taxes"].double {
+            self.taxes = taxes
+        }
+        /// TODO: this should be a computed property
+        if let totalCost = json["total_cost"].double {
+            self.totalCost = totalCost
+        }
+        if let checkNo = json["check_no"].int32 {
+            self.checkNo = checkNo
+        }
+
+        // Relationships
+        if let items = json["items"].array {
+            syncChildren(in: context, with: items)
+        }
+    }
+
+}
+
+// MARK: - SyncableParent
+
+extension Invoice: SyncableParent {
+    typealias ChildType = InvoiceItem
+
+    // func configureSyncFetchRequest() -> NSPredicate {
+    //     return NSPredicate(format: "collection == %@", self)
+    // }
+
+    func syncChildren(in context: NSManagedObjectContext, with json: [JSON]) {
+        let fetchPredicate = NSPredicate(format: "invoice == %@", self)
+        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+            log.error("\(#function) FAILED : unable to create dictionary for \(ChildType.self)"); return
+        }
+
+        log.debug("objectDict: \(objectDict)")
+        let localObjects = Set(objectDict.keys)
+        var remoteObjects = Set<Int32>()
+
+        for objectJSON in json {
+            guard let objectID = objectJSON["id"].int32 else {
+                log.warning("\(#function) : unable to get date from \(objectJSON)"); continue
+            }
+            remoteObjects.insert(objectID)
+
+            // Find + update / create Items
+            if let existingObject = objectDict[objectID] {
+                existingObject.update(context: context, withJSON: objectJSON)
+                log.debug("existingObject: \(existingObject)")
+            } else {
+                let newObject = ChildType(context: context)
+                newObject.invoice = self
+                newObject.update(context: context, withJSON: objectJSON)
+                log.debug("newObject: \(newObject)")
+            }
+        }
+        log.debug("\(ChildType.self) - remote: \(remoteObjects) - local: \(localObjects)")
+
+        // Delete objects that were deleted from server.
+        let deletedObjects = localObjects.subtracting(remoteObjects)
+        deleteChildren(deletedObjects: deletedObjects, context: context)
+        /*
+        if !deletedObjects.isEmpty {
+            log.debug("We need to delete: \(deletedObjects)")
+            let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
+            do {
+                try context.deleteEntities(ChildType.self, filter: fetchPredicate)
+            } catch let error {
+                /// TODO: deleteEntities(_:filter) already prints the error
+                let updateError = error as NSError
+                log.error("\(updateError), \(updateError.userInfo)")
+            }
+        }
+        */
+    }
+
+}

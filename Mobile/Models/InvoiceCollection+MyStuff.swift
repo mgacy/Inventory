@@ -135,13 +135,67 @@ extension InvoiceCollection: ManagedSyncableCollection {
 
         // Relationships
         if let invoices = json["invoices"].array {
-            for invoiceJSON in invoices {
-                _ = Invoice(context: context, json: invoiceJSON, parent: self)
-                //let new = Invoice(context: context, json: invoiceJSON)
-                //new.collection = self
-            }
+            syncChildren(in: context, with: invoices)
+            //for invoiceJSON in invoices {
+            //    _ = Invoice(context: context, json: invoiceJSON, parent: self)
+            //    //let new = Invoice(context: context, json: invoiceJSON)
+            //    //new.collection = self
+            //}
         }
     }
 
+}
+
+// MARK: - Sync Children
+
+extension InvoiceCollection: SyncableParent {
+    typealias ChildType = Invoice
+
+    func syncChildren(in context: NSManagedObjectContext, with json: [JSON]) {
+        let fetchPredicate = NSPredicate(format: "collection == %@", self)
+        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+            log.error("\(#function) FAILED : unable to create dictionary for \(ChildType.self)"); return
+        }
+
+        log.debug("objectDict: \(objectDict)")
+        let localObjects = Set(objectDict.keys)
+        var remoteObjects = Set<Int32>()
+
+        for objectJSON in json {
+            guard let objectID = objectJSON["id"].int32 else {
+                log.warning("\(#function) : unable to get date from \(objectJSON)"); continue
+            }
+            remoteObjects.insert(objectID)
+
+            // Find + update / create Items
+            if let existingObject = objectDict[objectID] {
+                existingObject.update(context: context, withJSON: objectJSON)
+                //log.debug("existingObject: \(existingObject)")
+            } else {
+                let newObject = ChildType(context: context)
+                newObject.collection = self
+                newObject.update(context: context, withJSON: objectJSON)
+                //log.debug("newObject: \(newObject)")
+            }
+        }
+        log.debug("\(ChildType.self) - remote: \(remoteObjects) - local: \(localObjects)")
+
+        // Delete objects that were deleted from server.
+        let deletedObjects = localObjects.subtracting(remoteObjects)
+        deleteChildren(deletedObjects: deletedObjects, context: context)
+        /*
+        if !deletedObjects.isEmpty {
+            log.debug("We need to delete: \(deletedObjects)")
+            let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
+            do {
+                try context.deleteEntities(ChildType.self, filter: fetchPredicate)
+            } catch let error {
+                /// TODO: deleteEntities(_:filter) already prints the error
+                let updateError = error as NSError
+                log.error("\(updateError), \(updateError.userInfo)")
+            }
+        }
+        */
+    }
 
 }
