@@ -137,16 +137,6 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
         //refreshControl.endRefreshing()
     }
 
-    @IBAction func newTapped(_ sender: AnyObject) {
-        guard let storeID = userManager.storeID else {
-            fatalError("Unable to get storeID")
-        }
-        //refreshControl?.beginRefreshing()
-        HUD.show(.progress)
-        APIManager.sharedInstance.getNewInvoiceCollection(
-            storeID: storeID, completion: completedGetNewInvoiceCollection)
-    }
-
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
@@ -221,32 +211,9 @@ extension InvoiceDateViewController {
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
-    func completedGetNewInvoiceCollection(json: JSON?, error: Error?) {
-        guard error == nil else {
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.error("\(#function) FAILED : unable to get JSON")
-            HUD.hide(); return
-        }
-
-        //log.info("Creating new InvoiceCollection(s) ...")
-        for (_, collection) in json {
-            _ = InvoiceCollection(context: managedObjectContext!, json: collection)
-        }
-
-        managedObjectContext!.performSaveOrRollback()
-        HUD.hide()
-
-        /// TODO: if we only added one collection, select it and performSegue
-        //selectedCollection = ...
-        //performSegue(withIdentifier: segueIdentifier, sender: self)
-    }
-
     func completedSync(_ succeeded: Bool, error: Error?) {
         if succeeded {
             log.verbose("Completed login / sync - succeeded: \(succeeded)")
-
             guard let storeID = userManager.storeID else {
                 log.error("\(#function) FAILED : unable to get storeID")
                 HUD.flash(.error, delay: 1.0); return
@@ -256,33 +223,10 @@ extension InvoiceDateViewController {
             // log.info("Fetching existing InvoiceCollections from server ...")
             APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
                                                                   completion: self.completedGetListOfInvoiceCollections)
-
         } else {
             // if let error = error { // present more detailed error ...
             log.error("Unable to sync ...")
             HUD.flash(.error, delay: 1.0)
-        }
-    }
-
-    // MARK: Sync
-
-    func deleteChildInvoices(parent: InvoiceCollection) {
-        let fetchPredicate = NSPredicate(format: "collection == %@", parent)
-        do {
-            try managedObjectContext.deleteEntities(Invoice.self, filter: fetchPredicate)
-
-            /// TODO: perform fetch again?
-            //let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-            //let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-            //request.sortDescriptors = [sortDescriptor]
-            //dataSource.reconfigureFetchRequest(request)
-
-            // Reload Table View
-            tableView.reloadData()
-
-        } catch {
-            let updateError = error as NSError
-            log.error("Unable to delete Invoices: \(updateError), \(updateError.userInfo)")
         }
     }
 
