@@ -151,9 +151,6 @@ extension Invoice: ManagedSyncable {
 extension Invoice: SyncableParent {
     typealias ChildType = InvoiceItem
 
-    // func configureSyncFetchRequest() -> NSPredicate {
-    //     return NSPredicate(format: "collection == %@", self)
-    // }
 
     func syncChildren(in context: NSManagedObjectContext, with json: [JSON]) {
         let fetchPredicate = NSPredicate(format: "invoice == %@", self)
@@ -187,19 +184,6 @@ extension Invoice: SyncableParent {
         // Delete objects that were deleted from server.
         let deletedObjects = localObjects.subtracting(remoteObjects)
         deleteChildren(deletedObjects: deletedObjects, context: context)
-        /*
-        if !deletedObjects.isEmpty {
-            log.debug("We need to delete: \(deletedObjects)")
-            let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
-            do {
-                try context.deleteEntities(ChildType.self, filter: fetchPredicate)
-            } catch let error {
-                /// TODO: deleteEntities(_:filter) already prints the error
-                let updateError = error as NSError
-                log.error("\(updateError), \(updateError.userInfo)")
-            }
-        }
-        */
     }
 
 }

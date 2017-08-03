@@ -126,11 +126,6 @@ extension InvoiceCollection: ManagedSyncableCollection {
         // Relationships
         if let invoices = json["invoices"].array {
             syncChildren(in: context, with: invoices)
-            //for invoiceJSON in invoices {
-            //    _ = Invoice(context: context, json: invoiceJSON, parent: self)
-            //    //let new = Invoice(context: context, json: invoiceJSON)
-            //    //new.collection = self
-            //}
         }
     }
 
@@ -173,19 +168,6 @@ extension InvoiceCollection: SyncableParent {
         // Delete objects that were deleted from server.
         let deletedObjects = localObjects.subtracting(remoteObjects)
         deleteChildren(deletedObjects: deletedObjects, context: context)
-        /*
-        if !deletedObjects.isEmpty {
-            log.debug("We need to delete: \(deletedObjects)")
-            let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
-            do {
-                try context.deleteEntities(ChildType.self, filter: fetchPredicate)
-            } catch let error {
-                /// TODO: deleteEntities(_:filter) already prints the error
-                let updateError = error as NSError
-                log.error("\(updateError), \(updateError.userInfo)")
-            }
-        }
-        */
     }
 
 }

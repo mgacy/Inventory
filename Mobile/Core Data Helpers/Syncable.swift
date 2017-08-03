@@ -253,7 +253,6 @@ protocol SyncableParent: class, NSFetchRequestResult {
 
     //var childPredicate: NSPredicate { get }
     //func fetchChildDict(context: NSManagedObjectContext) -> [Int32: ChildType]
-    //func configureSyncFetchRequest() -> NSPredicate
     func syncChildren(in: NSManagedObjectContext, with: [JSON])
 }
 
