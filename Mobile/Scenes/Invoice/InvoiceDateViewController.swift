@@ -203,8 +203,14 @@ extension InvoiceDateViewController {
             log.error("\(#function) FAILED : still unable to get selected InvoiceCollection"); return
         }
 
+        /// TODO: make this more elegant
+        var jsonArray: [JSON] = []
+        for (_, objectJSON) in json {
+            jsonArray.append(objectJSON)
+        }
+
         // Update selected Inventory with full JSON from server.
-        selection.updateExisting(context: managedObjectContext!, json: json)
+        selection.syncChildren(in: managedObjectContext!, with: jsonArray)
         managedObjectContext!.performSaveOrRollback()
 
         HUD.hide()

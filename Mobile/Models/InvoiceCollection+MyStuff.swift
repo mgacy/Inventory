@@ -63,16 +63,6 @@ extension InvoiceCollection {
         return myDict
     }
 
-    // MARK: - Update Existing
-
-    func updateExisting(context: NSManagedObjectContext, json: JSON) {
-
-        // Iterate over Invoices
-        for (_, item) in json {
-            _ = Invoice(context: context, json: item, collection: self, uploaded: true)
-        }
-    }
-
     // MARK: -
 
     static func fetchByDate(context: NSManagedObjectContext, date: String) -> InvoiceCollection? {
