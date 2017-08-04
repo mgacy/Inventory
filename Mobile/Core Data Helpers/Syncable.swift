@@ -251,11 +251,10 @@ extension NSManagedObjectContext {
 /// TODO: rename to reference relationships
 protocol SyncableParent: class, NSFetchRequestResult {
     associatedtype ChildType: ManagedSyncable
-    //var addItem: (ChildType) -> Void { get }
+
     func syncChildren(in: NSManagedObjectContext, with: [JSON])
     func fetchChildDict(in: NSManagedObjectContext) -> [Int32: ChildType]?
     func addToChildren(_: ChildType)
-    //func updateOrCreateChildren(in: NSManagedObjectContext, with: [JSON], objectDict: [Int32: ChildType]) -> Set<Int32>
 }
 
 extension SyncableParent where ChildType: NSManagedObject {
@@ -267,11 +266,6 @@ extension SyncableParent where ChildType: NSManagedObject {
         //log.debug("objectDict: \(objectDict)")
 
         let localObjects = Set(objectDict.keys)
-
-        // A
-        //let remoteObjects = updateOrCreateChildren(in: context, with: json, objectDict: objectDict)
-
-        // B
         var remoteObjects = Set<Int32>()
         for objectJSON in json {
             guard let objectID = objectJSON["id"].int32 else {
@@ -285,9 +279,8 @@ extension SyncableParent where ChildType: NSManagedObject {
                 //log.debug("existingObject: \(existingObject)")
             } else {
                 let newObject = ChildType(context: context)
-                newObject.update(context: context, withJSON: objectJSON)
                 addToChildren(newObject)
-                //addItem(newObject)
+                newObject.update(context: context, withJSON: objectJSON)
                 //log.debug("newObject: \(newObject)")
             }
         }

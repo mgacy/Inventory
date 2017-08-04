@@ -150,30 +150,7 @@ extension Invoice: ManagedSyncable {
 
 extension Invoice: SyncableParent {
     typealias ChildType = InvoiceItem
-    //var addItem: (ChildType) -> Void { return addToItems }
-    /*
-    func newFunc(in context: NSManagedObjectContext, with json: [JSON], objectDict: [Int32: ChildType]) -> Set<Int32> {
-        var remoteObjects = Set<Int32>()
-        for objectJSON in json {
-            guard let objectID = objectJSON["id"].int32 else {
-                log.warning("\(#function) : unable to get date from \(objectJSON)"); continue
-            }
-            remoteObjects.insert(objectID)
 
-            // Find + update / create Items
-            if let existingObject = objectDict[objectID] {
-                existingObject.update(context: context, withJSON: objectJSON)
-                //log.debug("existingObject: \(existingObject)")
-            } else {
-                let newObject = ChildType(context: context)
-                newObject.invoice = self
-                newObject.update(context: context, withJSON: objectJSON)
-                //log.debug("newObject: \(newObject)")
-            }
-        }
-        return remoteObjects
-    }
-     */
     func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: ChildType]? {
         let fetchPredicate = NSPredicate(format: "invoice == %@", self)
         guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
