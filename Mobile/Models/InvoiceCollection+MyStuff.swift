@@ -135,6 +135,7 @@ extension InvoiceCollection: ManagedSyncableCollection {
 
 extension InvoiceCollection: SyncableParent {
     typealias ChildType = Invoice
+    //var addItem: (ChildType) -> Void { return addToInvoices }
     /*
     func updateOrCreateChildren(in context: NSManagedObjectContext, with json: [JSON], objectDict: [Int32: ChildType]) -> Set<Int32> {
         var remoteObjects = Set<Int32>()
@@ -166,8 +167,9 @@ extension InvoiceCollection: SyncableParent {
         return objectDict
     }
 
-    func updateChildRelation(_ child: ChildType) {
-        child.collection = self
+    func addToChildren(_ entity: ChildType) {
+        entity.collection = self
+        //addToInvoices(entity)
     }
 
 }
