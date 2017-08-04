@@ -243,6 +243,40 @@ class APIManager {
         }
     }
 
+    func putInvoice(remoteID: Int, invoice: [String: Any], completion: @escaping CompletionHandlerType) {
+        sessionManager.request(Router.putInvoice(remoteID: remoteID, parameters: invoice))
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    log.verbose("\(#function) success : \(value)")
+                    let json = JSON(value)
+                    completion(json, nil)
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    //let json = JSON(error)
+                    completion(nil, error)
+                }
+        }
+    }
+
+    func putInvoiceItem(remoteID: Int, item: [String: Any], completion: @escaping CompletionHandlerType) {
+        sessionManager.request(Router.putInvoiceItem(remoteID: remoteID, parameters: item))
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    log.verbose("\(#function) success : \(value)")
+                    let json = JSON(value)
+                    completion(json, nil)
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    //let json = JSON(error)
+                    completion(nil, error)
+                }
+        }
+    }
+
     // MARK: - API Calls - Order
 
     func getListOfOrderCollections(storeID: Int, completion: @escaping CompletionHandlerType) {
