@@ -251,7 +251,6 @@ extension NSManagedObjectContext {
 /// TODO: rename to reference relationships
 protocol SyncableParent: class, NSFetchRequestResult {
     associatedtype ChildType: ManagedSyncable
-
     func syncChildren(in: NSManagedObjectContext, with: [JSON])
     func fetchChildDict(in: NSManagedObjectContext) -> [Int32: ChildType]?
     func addToChildren(_: ChildType)
@@ -292,9 +291,7 @@ extension SyncableParent where ChildType: NSManagedObject {
     }
 
     private func deleteChildren(deletedObjects: Set<Int32>, context: NSManagedObjectContext) {
-        guard !deletedObjects.isEmpty else {
-            return
-        }
+        guard !deletedObjects.isEmpty else { return }
         log.debug("We need to delete: \(deletedObjects)")
         let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
         do {
