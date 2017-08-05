@@ -16,12 +16,21 @@ import SwiftyJSON
     case rejected       = 2
     //case paymentIssue     = 3
 
+    static func asString(raw: Int16) -> String? {
+        switch raw {
+        case 0: return "pending"
+        case 1: return "received"
+        case 2: return "rejected"
+        default: return nil
+        }
+    }
+
     init?(string: String) {
         switch string {
-            case "pending": self = .pending
-            case "complete": self = .received
-            //case "pending": self = .rejected
-            default: return nil
+        case "pending": self = .pending
+        case "complete": self = .received
+        //case "pending": self = .rejected
+        default: return nil
         }
     }
 
@@ -29,7 +38,7 @@ import SwiftyJSON
 
 extension Invoice {
 
-    //@NSManaged var ageType: InvoiceStatus
+    //@NSManaged var status: InvoiceStatus
 
     // MARK: - Lifecycle
 
@@ -52,7 +61,14 @@ extension Invoice {
         myDict["taxes"] = Double(self.taxes)
         myDict["total_cost"] = Int(self.totalCost)
         myDict["check_no"] = Int(self.checkNo)
+        //myDict["status"] = InvoiceStatus.asString(raw: status) ?? ""
         myDict["store_id"] = Int((self.collection?.storeID)!)
+
+        if uploaded {
+            myDict["status"] = "received"
+        } else {
+            myDict["status"] = "pending"
+        }
 
         if let vendor = self.vendor {
             myDict["vendor_id"] = Int(vendor.remoteID)
@@ -64,7 +80,7 @@ extension Invoice {
             return myDict
         }
 
-        /// TODO: use map / flatmap
+        /// TODO: use map / flatmap / reduce
         var itemsArray = [[String: Any]]()
         for case let item as InvoiceItem in items {
             if let itemDict = item.serialize() {

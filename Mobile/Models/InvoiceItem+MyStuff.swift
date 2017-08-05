@@ -57,6 +57,19 @@ import SwiftyJSON
         }
     }
 
+    static func asString(raw: Int16) -> String? {
+        switch raw {
+        case 0: return "pending"
+        case 1: return "received"
+        case 2: return "damaged"
+        case 3: return "outOfStock"
+        case 4: return "promo"
+        case 5: return "substitute"
+        case 6: return "wrongItem"
+        default: return nil
+        }
+    }
+
     init?(string: String) {
         switch string {
         case "pending": self = .pending
@@ -114,7 +127,7 @@ extension InvoiceItem {
         myDict["discount"] = Double(self.discount)
         myDict["cost"] = Double(self.cost)
         myDict["unit_id"] = self.unit?.remoteID
-        //myDict["status"] = self.status
+        myDict["status"] = InvoiceItemStatus.asString(raw: status) ?? ""
         return myDict
     }
 
