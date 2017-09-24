@@ -165,7 +165,7 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    // log.verbose("Success: \(value)")
+                    log.verbose("\(#function) success : \(value)")
                     let json = JSON(value)
                     completion(json, nil)
                 case .failure(let error):
@@ -232,13 +232,47 @@ class APIManager {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    log.verbose("Success: \(value)")
+                    log.verbose("\(#function) success : \(value)")
                     let json = JSON(value)
                     completion(true, json)
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
                     let json = JSON(error)
                     completion(false, json)
+                }
+        }
+    }
+
+    func putInvoice(remoteID: Int, invoice: [String: Any], completion: @escaping CompletionHandlerType) {
+        sessionManager.request(Router.putInvoice(remoteID: remoteID, parameters: invoice))
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    log.verbose("\(#function) success : \(value)")
+                    let json = JSON(value)
+                    completion(json, nil)
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    //let json = JSON(error)
+                    completion(nil, error)
+                }
+        }
+    }
+
+    func putInvoiceItem(remoteID: Int, item: [String: Any], completion: @escaping CompletionHandlerType) {
+        sessionManager.request(Router.putInvoiceItem(remoteID: remoteID, parameters: item))
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    log.verbose("\(#function) success : \(value)")
+                    let json = JSON(value)
+                    completion(json, nil)
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    //let json = JSON(error)
+                    completion(nil, error)
                 }
         }
     }
@@ -295,19 +329,18 @@ class APIManager {
         }
     }
 
-    func postOrder(order: [String: Any], completion: @escaping (Bool, JSON) -> Void) {
+    func postOrder(order: [String: Any], completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.postOrder(order))
             .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    log.verbose("Success: \(value)")
+                    log.verbose("\(#function) success : \(value)")
                     let json = JSON(value)
-                    completion(true, json)
+                    completion(json, nil)
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    let json = JSON(error)
-                    completion(false, json)
+                    completion(nil, error)
                 }
         }
     }

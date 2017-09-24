@@ -36,6 +36,8 @@ public enum Router: URLRequestConvertible {
     case listInvoices(storeID: Int)
     case fetchInvoice(storeID: Int, invoiceDate: String)
     case postInvoice([String: Any])
+    case putInvoice(remoteID: Int, parameters: [String: Any])
+    case putInvoiceItem(remoteID: Int, parameters: [String: Any])
     // Order
     case getNewOrder(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?)
     case listOrders(storeID: Int)
@@ -82,6 +84,10 @@ public enum Router: URLRequestConvertible {
              return .get
          case .postInvoice:
              return .post
+        case .putInvoice:
+            return .put
+        case .putInvoiceItem:
+            return .put
         // Order
         case .getNewOrder:
             return .get
@@ -130,6 +136,10 @@ public enum Router: URLRequestConvertible {
              return "\(Router.apiPath)/invoices"
          case .postInvoice:
              return "\(Router.apiPath)/invoices"
+        case .putInvoice(let remoteID, _):
+            return "\(Router.apiPath)/invoices/\(remoteID)"
+        case .putInvoiceItem(let remoteID, _):
+            return "\(Router.apiPath)/invoice_items/\(remoteID)"
         // Order
         case .getNewOrder:
             return "\(Router.apiPath)/new_order"
@@ -176,6 +186,10 @@ public enum Router: URLRequestConvertible {
             return ["store_id": storeID, "date": invoiceDate]
         case .postInvoice(let parameters):
             return parameters
+        case .putInvoice(_, let parameters):
+            return parameters
+        case .putInvoiceItem(_, let parameters):
+            return parameters
         // Order
         // case .getNewOrder(let storeID, let typeID, let returnUsage, let periodLength):
         //     return ["store_id": storeID, "inventory_type": typeID,
@@ -196,7 +210,7 @@ public enum Router: URLRequestConvertible {
 
     // MARK: URLRequestConvertible
 
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     public func asURLRequest() throws -> URLRequest {
         // TODO: can I simply add apiURL here?
         //let urlString = Router.baseURLString + Router.apiURL
@@ -239,6 +253,10 @@ public enum Router: URLRequestConvertible {
         case .fetchInvoice:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .postInvoice:
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+        case .putInvoice:
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+        case .putInvoiceItem:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
 
         // Order

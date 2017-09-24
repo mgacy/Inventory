@@ -93,13 +93,16 @@ class InvoiceItemViewController: UITableViewController {
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
         log.info("Uploading Invoice ...")
-
         guard let dict = self.parentObject.serialize() else {
             log.error("\(#function) FAILED : unable to serialize Invoice")
             /// TODO: completedUpload(false)
             return
         }
-        APIManager.sharedInstance.postInvoice(invoice: dict, completion: completedUpload)
+        //APIManager.sharedInstance.postInvoice(invoice: dict, completion: completedUpload)
+        /// TODO: mark parentObject as having in-progress update
+        HUD.show(.progress)
+        let remoteID = Int(parentObject.remoteID)
+        APIManager.sharedInstance.putInvoice(remoteID: remoteID, invoice: dict, completion: newCompletedUpload)
     }
 
     // MARK: - UITableViewDelegate
@@ -160,6 +163,21 @@ extension InvoiceItemViewController {
 
         } else {
             log.error("\(#function) FAILED : unable to upload Invoice")
+        }
+    }
+
+    func newCompletedUpload(json: JSON?, error: Error?) {
+        guard error == nil else {
+            HUD.flash(.error, delay: 1.0); return
+        }
+        guard let json = json else {
+            log.error("\(#function) FAILED : unable to get JSON")
+            HUD.hide(); return
+        }
+        /// TODO: mark parentObject as no longer having in-progress update
+        log.debug("\(#function) RESPONSE: \(json)")
+        HUD.flash(.success, delay: 1.0) { _ in
+            self.navigationController!.popViewController(animated: true)
         }
     }
 
