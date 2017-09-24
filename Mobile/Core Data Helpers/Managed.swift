@@ -12,6 +12,7 @@ import SwiftyJSON
 // swiftlint:disable force_try
 
 protocol Managed: class, NSFetchRequestResult {
+    static var entity: NSEntityDescription { get }
     static var entityName: String { get }
     static var defaultSortDescriptors: [NSSortDescriptor] { get }
 }
@@ -35,6 +36,7 @@ extension Managed {
 
 extension Managed where Self: NSManagedObject {
 
+    static var entity: NSEntityDescription { return entity() }
     static var entityName: String { return entity().name! }
 
     static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: (Self) -> Void) -> Self {

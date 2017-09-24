@@ -75,26 +75,35 @@ class OrderViewModel {
 
     // MARK: - Completion Handlers
 
-    func postOrder(completion: @escaping (Bool, JSON) -> Void) {
+    func postOrder(completion: @escaping (Bool, Error?) -> Void) {
         order.status = OrderStatus.placed.rawValue
 
-        // Serialize and POST Order
         guard let json = order.serialize() else {
             log.error("\(#function) FAILED : unable to serialize Order")
-            return completion(false, JSON([]))
+            return completion(false, nil)
         }
         log.info("POSTing Order ...")
         log.verbose("Order: \(json)")
-        APIManager.sharedInstance.postOrder(order: json, completion: completion)
-    }
+        APIManager.sharedInstance.postOrder(order: json) { (json: JSON?, error: Error?) in
+            guard error == nil else {
+                //log.error("\(#function) FAILED : unable to POST order \(order)")
+                log.error("\(#function) FAILED : \(String(describing: error))")
+                return completion(false, error)
+            }
+            guard let json = json else {
+                log.error("\(#function) FAILED : unable to get JSON")
+                return completion(false, nil)
+            }
+            guard let remoteID = json["id"].int32 else {
+                log.error("\(#function) FAILED : unable to get remoteID")
+                return completion(false, nil)
+            }
+            self.order.remoteID = remoteID
+            self.order.status = OrderStatus.uploaded.rawValue
+            //order.collection?.updateStatus()
 
-    /// TODO: change completion handler to accept standard (JSON?, Error?)
-
-    func completedPostOrder() {
-        order.status = OrderStatus.uploaded.rawValue
-
-        // Set .uploaded of parentObject.collection if all are uploaded
-        //order.collection?.updateStatus()
+            completion(true, nil)
+        }
     }
 
 }

@@ -39,12 +39,8 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
-
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem
         title = "Invoices"
-
-        // Add refresh control
         self.refreshControl?.addTarget(self, action: #selector(InvoiceDateViewController.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
 
@@ -113,36 +109,18 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCollection = dataSource.objectAtIndexPath(indexPath)
         guard let selection = selectedCollection else { fatalError("Unable to get selection") }
-
-        switch selection.uploaded {
-        case true:
-
-            // Get date to use when getting InvoiceCollection from server
-            guard
-                let storeID = userManager.storeID,
-                let collectionDate = selection.date else {
-                    log.error("\(#function) FAILED : unable to get storeID or collection date"); return
-            }
-
-            HUD.show(.progress)
-
-            /// TODO: ideally, we would want to deleteChildOrders *after* fetching data from server
-            // Delete existing invoices of selected collection
-            log.verbose("Deleting Invoices of selected InvoiceCollection ...")
-            deleteChildInvoices(parent: selection)
-
-            // Reset selection since we reset the managedObjectContext in deleteChildOrders
-            selectedCollection = dataSource.objectAtIndexPath(indexPath)
-            log.info("GET InvoiceCollection from server ...")
-            APIManager.sharedInstance.getInvoiceCollection(
-                storeID: storeID, invoiceDate: collectionDate,
-                completion: completedGetExistingInvoiceCollection)
-
-        case false:
-            log.verbose("LOAD NEW selectedCollection from disk ...")
-            performSegue(withIdentifier: segueIdentifier, sender: self)
+        guard
+            let storeID = userManager.storeID,
+            let collectionDate = selection.date else {
+                log.error("\(#function) FAILED : unable to get storeID or collection date"); return
         }
+        HUD.show(.progress)
+        log.info("GET InvoiceCollection from server ...")
+        APIManager.sharedInstance.getInvoiceCollection(
+            storeID: storeID, invoiceDate: collectionDate,
+            completion: completedGetInvoiceCollection)
 
+        /// TODO: move before call to APIManager?
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -158,21 +136,11 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
         //refreshControl.endRefreshing()
     }
 
-    @IBAction func newTapped(_ sender: AnyObject) {
-        guard let storeID = userManager.storeID else {
-            fatalError("Unable to get storeID")
-        }
-        //refreshControl?.beginRefreshing()
-        HUD.show(.progress)
-        APIManager.sharedInstance.getNewInvoiceCollection(
-            storeID: storeID, completion: completedGetNewInvoiceCollection)
-    }
-
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
 extension InvoiceDateViewController: TableViewDataSourceDelegate {
-
+    /*
     func canEdit(_ collection: InvoiceCollection) -> Bool {
         switch collection.uploaded {
         case true:
@@ -181,10 +149,9 @@ extension InvoiceDateViewController: TableViewDataSourceDelegate {
             return true
         }
     }
-
+    */
     func configure(_ cell: UITableViewCell, for collection: InvoiceCollection) {
         cell.textLabel?.text = collection.date
-
         switch collection.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black
@@ -213,6 +180,7 @@ extension InvoiceDateViewController {
 
         do {
             try managedObjectContext.syncCollections(InvoiceCollection.self, withJSON: json)
+            //try InvoiceCollection.sync(withJSON: json, in: managedObjectContext)
         } catch {
             log.error("Unable to sync Inventories")
             HUD.flash(.error, delay: 1.0)
@@ -222,7 +190,7 @@ extension InvoiceDateViewController {
         tableView.reloadData()
     }
 
-    func completedGetExistingInvoiceCollection(json: JSON?, error: Error?) {
+    func completedGetInvoiceCollection(json: JSON?, error: Error?) {
         guard error == nil else {
             HUD.flash(.error, delay: 1.0); return
         }
@@ -234,40 +202,23 @@ extension InvoiceDateViewController {
             log.error("\(#function) FAILED : still unable to get selected InvoiceCollection"); return
         }
 
+        /// TODO: make this more elegant
+        var jsonArray: [JSON] = []
+        for (_, objectJSON) in json {
+            jsonArray.append(objectJSON)
+        }
+
         // Update selected Inventory with full JSON from server.
-        selection.updateExisting(context: managedObjectContext!, json: json)
+        selection.syncChildren(in: managedObjectContext!, with: jsonArray)
         managedObjectContext!.performSaveOrRollback()
 
         HUD.hide()
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
-    func completedGetNewInvoiceCollection(json: JSON?, error: Error?) {
-        guard error == nil else {
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.error("\(#function) FAILED : unable to get JSON")
-            HUD.hide(); return
-        }
-
-        //log.info("Creating new InvoiceCollection(s) ...")
-        for (_, collection) in json {
-            _ = InvoiceCollection(context: managedObjectContext!, json: collection, uploaded: false)
-        }
-
-        managedObjectContext!.performSaveOrRollback()
-        HUD.hide()
-
-        /// TODO: if we only added one collection, select it and performSegue
-        //selectedCollection = ...
-        //performSegue(withIdentifier: segueIdentifier, sender: self)
-    }
-
     func completedSync(_ succeeded: Bool, error: Error?) {
         if succeeded {
             log.verbose("Completed login / sync - succeeded: \(succeeded)")
-
             guard let storeID = userManager.storeID else {
                 log.error("\(#function) FAILED : unable to get storeID")
                 HUD.flash(.error, delay: 1.0); return
@@ -277,33 +228,10 @@ extension InvoiceDateViewController {
             // log.info("Fetching existing InvoiceCollections from server ...")
             APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
                                                                   completion: self.completedGetListOfInvoiceCollections)
-
         } else {
             // if let error = error { // present more detailed error ...
             log.error("Unable to sync ...")
             HUD.flash(.error, delay: 1.0)
-        }
-    }
-
-    // MARK: Sync
-
-    func deleteChildInvoices(parent: InvoiceCollection) {
-        let fetchPredicate = NSPredicate(format: "collection == %@", parent)
-        do {
-            try managedObjectContext.deleteEntities(Invoice.self, filter: fetchPredicate)
-
-            /// TODO: perform fetch again?
-            //let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-            //let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-            //request.sortDescriptors = [sortDescriptor]
-            //dataSource.reconfigureFetchRequest(request)
-
-            // Reload Table View
-            tableView.reloadData()
-
-        } catch {
-            let updateError = error as NSError
-            log.error("Unable to delete Invoices: \(updateError), \(updateError.userInfo)")
         }
     }
 

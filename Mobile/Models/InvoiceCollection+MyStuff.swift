@@ -14,10 +14,12 @@ extension InvoiceCollection {
 
     // MARK: - Lifecycle
 
-    convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
+    convenience init(context: NSManagedObjectContext, json: JSON) {
         self.init(context: context)
 
-        // Set properties
+        /// TODO: simply call `.update()`
+
+        // Required
         if let date = json["date"].string {
             self.date = date
         } else {
@@ -26,12 +28,25 @@ extension InvoiceCollection {
         if let storeID = json["store_id"].int32 {
             self.storeID = storeID
         }
-        self.uploaded = uploaded
+        /// TODO: switch to `status` enum
+        if let statusString = json["status"].string {
+            switch statusString {
+            case "pending":
+                self.uploaded = false
+            case "complete":
+                self.uploaded = true
+            default:
+                log.error("\(#function) - invalid status: \(statusString)")
+                self.uploaded = true
+            }
+        }
 
-        // Add Invoices
+        // Relationships
         if let invoices = json["invoices"].array {
             for invoiceJSON in invoices {
-                _ = Invoice(context: context, json: invoiceJSON, collection: self, uploaded: uploaded)
+                _ = Invoice(context: context, json: invoiceJSON, parent: self)
+                //let new = Invoice(context: context, json: invoiceJSON)
+                //new.collection = self
             }
         }
     }
@@ -46,16 +61,6 @@ extension InvoiceCollection {
         myDict["store_id"] = self.storeID
 
         return myDict
-    }
-
-    // MARK: - Update Existing
-
-    func updateExisting(context: NSManagedObjectContext, json: JSON) {
-
-        // Iterate over Invoices
-        for (_, item) in json {
-            _ = Invoice(context: context, json: item, collection: self, uploaded: true)
-        }
     }
 
     // MARK: -
@@ -88,4 +93,60 @@ extension InvoiceCollection {
 }
 
 // The extension already offers a default implementation; we will use that
-extension InvoiceCollection: SyncableCollection {}
+//extension InvoiceCollection: SyncableCollection {}
+
+// MARK: - NEW
+
+extension InvoiceCollection: ManagedSyncableCollection {
+
+    public func update(in context: NSManagedObjectContext, with json: JSON) {
+
+        // Required
+        if let date = json["date"].string {
+            self.date = date
+        } else {
+            self.date = Date().shortDate
+        }
+        if let storeID = json["store_id"].int32 {
+            self.storeID = storeID
+        }
+        /// TODO: switch to `status` enum
+        if let statusString = json["status"].string {
+            switch statusString {
+            case "pending":
+                self.uploaded = false
+            case "complete":
+                self.uploaded = true
+            default:
+                log.error("\(#function) - invalid status: \(statusString)")
+                self.uploaded = true
+            }
+        }
+
+        // Relationships
+        if let invoices = json["invoices"].array {
+            syncChildren(in: context, with: invoices)
+        }
+    }
+
+}
+
+// MARK: - Sync Children
+
+extension InvoiceCollection: SyncableParent {
+    typealias ChildType = Invoice
+
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : Invoice]? {
+        let fetchPredicate = NSPredicate(format: "collection == %@", self)
+        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func addToChildren(_ entity: ChildType) {
+        entity.collection = self
+        //addToInvoices(entity)
+    }
+
+}

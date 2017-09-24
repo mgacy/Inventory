@@ -171,18 +171,15 @@ extension OrderItemViewController {
         }
     }
 
-    /// TODO: change completion handler to accept standard (JSON?, Error?)
+    /// TODO: change signature to (error: Error?)
 
-    func completedPostOrder(succeeded: Bool, json: JSON) {
+    func completedPostOrder(succeeded: Bool, error: Error?) {
         if succeeded {
-            viewModel.completedPostOrder()
-
             HUD.flash(.success, delay: 0.5) { _ in
                 self.navigationController!.popViewController(animated: true)
             }
-
         } else {
-            log.error("\(#function) FAILED : unable to POST order \(json)")
+            log.error("\(#function) FAILED : \(String(describing: error))")
             HUD.flash(.error, delay: 1.0)
             //showAlert(title: "Problem", message: "Unable to upload Order")
         }

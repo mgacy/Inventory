@@ -22,18 +22,6 @@ extension NSManagedObjectContext {
 
 }
 
-// MARK: - Managed (objc.io)
-extension NSManagedObjectContext {
-
-    func insertObject<T: NSManagedObject>() -> T where T: Managed {
-        guard let obj = NSEntityDescription.insertNewObject(forEntityName: T.entityName, into: self) as? T else {
-            fatalError("Wrong object type")
-        }
-        return obj
-    }
-
-}
-
 // MARK: - Fetch
 extension NSManagedObjectContext {
 
@@ -59,6 +47,7 @@ extension NSManagedObjectContext {
 
         } catch let error {
             log.error("Error with request: \(error)")
+            //throw error?
         }
         return nil
     }
@@ -104,35 +93,29 @@ extension NSManagedObjectContext {
             } catch {
                 let saveError = error as NSError
                 log.error("\(saveError), \(saveError.userInfo)")
+                //throw saveError?
             }
         }
 
-        // Create Fetch Request
+        // Initialize, configure fetch request
         let fetchRequest: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-
-        // Configure Fetch Request
         if let filter = filter { fetchRequest.predicate = filter }
 
-        // Initialize Batch Delete Request
+        // Initialize, configure batch delete request
         let batchDeleteRequest = NSBatchDeleteRequest(
             fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-
-        // Configure Batch Update Request
         batchDeleteRequest.resultType = .resultTypeCount
 
         do {
-            // Execute Batch Request
             let batchDeleteResult = try self.execute(batchDeleteRequest) as! NSBatchDeleteResult
-
             log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
 
-            // Reset Managed Object Context
             // As the request directly interacts with the persistent store, we need need to reset the context for it to be aware of the changes
             self.reset()
-
         } catch {
             let updateError = error as NSError
             log.error("\(updateError), \(updateError.userInfo)")
+            //throw updateError?
         }
     }
 
@@ -171,7 +154,8 @@ extension NSManagedObjectContext {
 
 }
 
-// MARK: - Syncable
+// MARK: - Syncable -
+
 extension NSManagedObjectContext {
 
     // MARK: Insert
@@ -206,6 +190,7 @@ extension NSManagedObjectContext {
         } catch let error {
             log.error("\(#function) FAILED : error with request: \(error)")
             return nil
+            //throw error?
         }
     }
 
@@ -278,13 +263,15 @@ extension NSManagedObjectContext {
                 /// TODO: deleteEntities(_:filter) already prints the error
                 let updateError = error as NSError
                 log.error("\(updateError), \(updateError.userInfo)")
+                //throw updateError?
             }
         }
     }
 
 }
 
-// MARK: SyncableCollection
+// MARK: - SyncableCollection -
+
 extension NSManagedObjectContext {
 
     func fetchByDate<T: SyncableCollection>(_ entity: T.Type, withDate date: String) -> T? where T: NSManagedObject {
@@ -304,11 +291,11 @@ extension NSManagedObjectContext {
             default:
                 log.error("\(#function) FAILED : found multiple matches: \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
-                //return searchResults[0]
             }
 
         } catch let error {
             log.error("\(#function) FAILED : error with request: \(error)")
+            //throw error?
         }
         return nil
     }
@@ -382,6 +369,7 @@ extension NSManagedObjectContext {
                 /// TODO: deleteEntities(_:filter) already prints the error
                 let updateError = error as NSError
                 log.error("\(updateError), \(updateError.userInfo)")
+                //throw updateError?
             }
         }
     }

@@ -22,10 +22,10 @@ extension VendorRep {
 
 extension VendorRep: Syncable {
 
-    public func update(context: NSManagedObjectContext, withJSON json: Any) {
-        guard let json = json as? JSON else {
-            log.error("\(#function) FAILED : SwiftyJSON"); return
-        }
+    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+        // guard let json = json as? JSON else {
+        //     log.error("\(#function) FAILED : SwiftyJSON"); return
+        // }
 
         // Properties
         /// TODO: remoteID is required

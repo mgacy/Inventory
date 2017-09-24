@@ -42,7 +42,7 @@ class SyncManager {
         }
         guard let json = json else {
             log.error("\(#function) FAILED : unable to get Items JSON")
-            /// TODO: construct error?
+            /// TODO: return custom error
             return completionHandler(false, nil)
         }
 
@@ -51,12 +51,16 @@ class SyncManager {
                         "subUnit", "vendor"]
         // swiftlint:disable:next line_length
         guard let itemDict = try? managedObjectContext.fetchEntityDict(Item.self, prefetchingRelationships: prefetch) else {
-            log.error("\(#function) FAILED : unable to create Item dictionary"); return
+            log.error("\(#function) FAILED : unable to create Item dictionary")
+            /// TODO: return custom error
+            return completionHandler(false, nil)
         }
 
         // Create dict from fetch request on Units
         guard let unitDict = try? managedObjectContext.fetchEntityDict(Unit.self) else {
-            log.error("\(#function) FAILED : unable to create Unit dictionary"); return
+            log.error("\(#function) FAILED : unable to create Unit dictionary")
+            /// TODO: return custom error
+            return completionHandler(false, nil)
         }
 
         let localIDs = Set(itemDict.keys)
@@ -92,6 +96,7 @@ class SyncManager {
                 /// TODO: deleteEntities(_:filter) already prints the error
                 let updateError = error as NSError
                 log.error("\(updateError), \(updateError.userInfo)")
+                completionHandler(false, updateError)
             }
         }
 
@@ -106,7 +111,7 @@ class SyncManager {
         }
         guard let json = json else {
             log.error("\(#function) FAILED : unable to get Vendors JSON")
-            /// TODO: construct error?
+            /// TODO: return custom error
             return completionHandler(false, nil)
         }
 
@@ -114,6 +119,7 @@ class SyncManager {
             try managedObjectContext.syncEntities(Vendor.self, withJSON: json)
         } catch let error {
             log.error("\(#function) FAILED : \(error)")
+            completionHandler(false, error)
         }
         log.verbose("Finished with Vendors")
 
