@@ -270,6 +270,7 @@ extension InventoryDateTVC {
 
     func completedGetExistingInventory(json: JSON?, error: Error?) {
         guard error == nil else {
+            log.error("Unable to get Inventory: \(String(describing: error))")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -292,6 +293,7 @@ extension InventoryDateTVC {
 
     func completedGetNewInventory(json: JSON?, error: Error?) {
         guard error == nil else {
+            log.error("Unable to get Inventory: \(String(describing: error))")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -310,9 +312,9 @@ extension InventoryDateTVC {
     func completedSync(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             log.info("Completed sync - succeeded: \(succeeded)")
-
             guard let storeID = userManager.storeID else {
-                log.error("\(#function) FAILED : unable to get storeID"); return
+                log.error("\(#function) FAILED : unable to get storeID")
+                HUD.flash(.error, delay: 1.0); return
             }
 
             // Get list of Inventories from server
@@ -322,7 +324,7 @@ extension InventoryDateTVC {
 
         } else {
             // if let error = error { // present more detailed error ...
-            log.error("Unable to sync ...")
+            log.error("Unable to sync: \(String(describing: error))")
             refreshControl?.endRefreshing()
             HUD.flash(.error, delay: 1.0); return
         }

@@ -183,6 +183,7 @@ extension InvoiceDateViewController {
         refreshControl?.endRefreshing()
         guard error == nil else {
             //if error?._code == NSURLErrorTimedOut {}
+            log.error("\(#function) FAILED : \(String(describing: error))")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -193,8 +194,8 @@ extension InvoiceDateViewController {
         do {
             try managedObjectContext.syncCollections(InvoiceCollection.self, withJSON: json)
             //try InvoiceCollection.sync(withJSON: json, in: managedObjectContext)
-        } catch {
-            log.error("Unable to sync Inventories")
+        } catch let error {
+            log.error("Unable to sync Invoices: \(error)")
             HUD.flash(.error, delay: 1.0)
         }
         HUD.hide()
@@ -204,6 +205,7 @@ extension InvoiceDateViewController {
 
     func completedGetInvoiceCollection(json: JSON?, error: Error?) {
         guard error == nil else {
+            log.error("Unable to get InvoiceCollection: \(String(describing: error))")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -237,12 +239,13 @@ extension InvoiceDateViewController {
             }
 
             // Get list of Invoices from server
-            // log.info("Fetching existing InvoiceCollections from server ...")
+            log.verbose("Fetching existing InvoiceCollections from server ...")
             APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
                                                                   completion: self.completedGetListOfInvoiceCollections)
         } else {
             // if let error = error { // present more detailed error ...
-            log.error("Unable to sync ...")
+            log.error("Unable to sync: \(String(describing: error))")
+            refreshControl?.endRefreshing()
             HUD.flash(.error, delay: 1.0)
         }
     }

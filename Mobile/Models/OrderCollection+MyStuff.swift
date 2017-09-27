@@ -78,6 +78,7 @@ extension OrderCollection {
                 return searchResults[0]
             default:
                 log.warning("Found multiple matches: \(searchResults)")
+                //fatalError("Returned multiple objects, expected max 1")
                 return searchResults[0]
             }
 
