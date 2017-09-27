@@ -78,8 +78,7 @@ extension SyncableCollection where Self : NSManagedObject {
 // MARK: - New (ManagedSyncableCollection) -
 
 public protocol NewSyncableCollection {
-    var date: String? { get set }
-    // var date: Date { get set }
+    var date: Date { get set }
     var storeID: Int32 { get set }
     /// TODO: make context optional since we might not always need it?
     func update(in context: NSManagedObjectContext, with json: JSON)
@@ -147,10 +146,10 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
 
 extension NSManagedObjectContext {
 
-    func fetchByDate<T: ManagedSyncableCollection>(_ entity: T.Type, withDate date: String) -> T? where T: NSManagedObject {
+    func fetchByDate<T: ManagedSyncableCollection>(_ entity: T.Type, withDate date: Date) -> T? where T: NSManagedObject {
         // swiftlint:disable:next force_cast
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-        request.predicate = NSPredicate(format: "date == %@", date)
+        request.predicate = NSPredicate(format: "date == %@", date as NSDate)
         request.fetchLimit = 2
 
         do {
@@ -165,7 +164,6 @@ extension NSManagedObjectContext {
             default:
                 log.error("\(#function) FAILED : found multiple matches: \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
-                //return searchResults[0]
             }
 
         } catch let error {
@@ -174,7 +172,7 @@ extension NSManagedObjectContext {
         return nil
     }
 
-    func fetchCollectionDict<T: ManagedSyncableCollection>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [String: T] where T: NSManagedObject {
+    func fetchCollectionDict<T: ManagedSyncableCollection>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [Date: T] where T: NSManagedObject {
 
         let request: NSFetchRequest<T>
         if #available(iOS 10.0, *) {
@@ -195,7 +193,7 @@ extension NSManagedObjectContext {
 
         do {
             let fetchedResult = try self.fetch(request)
-            let objectDict = fetchedResult.toDictionary { $0.date! }
+            let objectDict = fetchedResult.toDictionary { $0.date }
             return objectDict
         } catch let error {
             log.error(error.localizedDescription)
@@ -210,10 +208,11 @@ extension NSManagedObjectContext {
         }
 
         let localDates = Set(objectDict.keys)
-        var remoteDates = Set<String>()
+        var remoteDates = Set<Date>()
 
         for (_, objectJSON):(String, JSON) in json {
-            guard let objectDate = objectJSON["date"].string else {
+            guard let objectDateString = objectJSON["date"].string,
+                  let objectDate = objectDateString.toBasicDate() else {
                 log.warning("\(#function) : unable to get date from \(objectJSON)")
                 continue
             }

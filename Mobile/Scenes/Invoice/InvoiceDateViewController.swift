@@ -32,6 +32,8 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
     // Segues
     let segueIdentifier = "showInvoiceVendors"
 
+    var dateFormatter: DateFormatter?
+
     /// TODO: provide interface to control these
     // let invoiceTypeID = 1
 
@@ -43,6 +45,15 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
         title = "Invoices"
         self.refreshControl?.addTarget(self, action: #selector(InvoiceDateViewController.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
+
+        // Configure date formatter
+        self.dateFormatter = DateFormatter()
+        self.dateFormatter?.locale = Locale.current
+        self.dateFormatter?.timeZone = TimeZone.current
+        //self.dateFormatter?.timeZone = TimeZone(abbreviation: "UTC")
+        self.dateFormatter?.dateFormat = "yyyy/MM/dd"
+        //self.dateFormatter?.dateStyle = .short
+        //self.dateFormatter?.dateStyle = .full
 
         setupTableView()
 
@@ -109,15 +120,14 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCollection = dataSource.objectAtIndexPath(indexPath)
         guard let selection = selectedCollection else { fatalError("Unable to get selection") }
-        guard
-            let storeID = userManager.storeID,
-            let collectionDate = selection.date else {
+        guard let storeID = userManager.storeID else {
                 log.error("\(#function) FAILED : unable to get storeID or collection date"); return
         }
+
         HUD.show(.progress)
         log.info("GET InvoiceCollection from server ...")
         APIManager.sharedInstance.getInvoiceCollection(
-            storeID: storeID, invoiceDate: collectionDate,
+            storeID: storeID, invoiceDate: selection.date.shortDate,
             completion: completedGetInvoiceCollection)
 
         /// TODO: move before call to APIManager?
@@ -151,7 +161,9 @@ extension InvoiceDateViewController: TableViewDataSourceDelegate {
     }
     */
     func configure(_ cell: UITableViewCell, for collection: InvoiceCollection) {
-        cell.textLabel?.text = collection.date
+        if let dateString = dateFormatter?.string(from: collection.date) {
+            cell.textLabel?.text = dateString
+        }
         switch collection.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black

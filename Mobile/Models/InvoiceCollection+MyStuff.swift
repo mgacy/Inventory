@@ -20,19 +20,12 @@ extension InvoiceCollection {
         /// TODO: simply call `.update()`
 
         // Required
-        if let date = json["date"].string {
+        if let dateString = json["date"].string,
+           let date = dateString.toBasicDate() {
             self.date = date
         } else {
-            self.date = Date().shortDate
+            self.date = Date()
         }
-        /*
-        if let dateString = json["date"].string,
-           let date = NSDate().dateFromString(date: dateString, format: "yyyy-MM-dd") {
-                self.date = date
-        } else {
-            self.date = Date() as NSDate
-        }
-        */
         if let storeID = json["store_id"].int32 {
             self.storeID = storeID
         }
@@ -63,23 +56,19 @@ extension InvoiceCollection {
 
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-
-        /// TODO: handle conversion from NSDate to string
-        myDict["date"] = self.date
-        //myDict["date"] = self.date?.stringFromDate()
+        myDict["date"] = self.date.shortDate
         myDict["store_id"] = self.storeID
-
         return myDict
     }
 
     // MARK: -
 
-    static func fetchByDate(context: NSManagedObjectContext, date: String) -> InvoiceCollection? {
+    static func fetchByDate(context: NSManagedObjectContext, date: Date) -> InvoiceCollection? {
         //let predicate = NSPredicate(format: "date == %@", date)
         //return context.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate)
 
         let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-        request.predicate = NSPredicate(format: "date == %@", date)
+        request.predicate = NSPredicate(format: "date == %@", date as NSDate)
 
         do {
             let searchResults = try context.fetch(request)
@@ -111,10 +100,11 @@ extension InvoiceCollection: ManagedSyncableCollection {
     public func update(in context: NSManagedObjectContext, with json: JSON) {
 
         // Required
-        if let date = json["date"].string {
+        if let dateString = json["date"].string,
+           let date = dateString.toBasicDate() {
             self.date = date
         } else {
-            self.date = Date().shortDate
+            self.date = Date()
         }
         if let storeID = json["store_id"].int32 {
             self.storeID = storeID

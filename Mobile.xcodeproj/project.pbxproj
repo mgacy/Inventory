@@ -47,6 +47,8 @@
 		C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */; };
 		C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
+		C97224DF1F7B6333004854F7 /* InvoiceCollection+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97224DD1F7B6333004854F7 /* InvoiceCollection+CoreDataClass.swift */; };
+		C97224E01F7B6333004854F7 /* InvoiceCollection+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97224DE1F7B6333004854F7 /* InvoiceCollection+CoreDataProperties.swift */; };
 		C976305F1F219A0900BA8E42 /* JSON+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = C976305E1F219A0900BA8E42 /* JSON+Date.swift */; };
 		C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* SyncManager.swift */; };
 		C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988CE701DF5050D00A8028B /* Array+MyStuff.swift */; };
@@ -155,6 +157,8 @@
 		C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+Alert.swift"; path = "Extensions/UIKit/UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UITextField+Stuff.swift"; path = "Extensions/UIKit/UITextField+Stuff.swift"; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColorPalette.swift; path = Common/ColorPalette.swift; sourceTree = "<group>"; };
+		C97224DD1F7B6333004854F7 /* InvoiceCollection+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "InvoiceCollection+CoreDataClass.swift"; path = "Models/InvoiceCollection+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C97224DE1F7B6333004854F7 /* InvoiceCollection+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "InvoiceCollection+CoreDataProperties.swift"; path = "Models/InvoiceCollection+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C976305E1F219A0900BA8E42 /* JSON+Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "JSON+Date.swift"; path = "Extensions/JSON+Date.swift"; sourceTree = "<group>"; };
 		C982341A1DCD3B3A00E3E353 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		C988CE701DF5050D00A8028B /* Array+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+MyStuff.swift"; path = "Extensions/Foundation/Array+MyStuff.swift"; sourceTree = "<group>"; };
@@ -355,6 +359,8 @@
 		C96870E01DDA1ED000EC06AB /* Invoice Models */ = {
 			isa = PBXGroup;
 			children = (
+				C97224DD1F7B6333004854F7 /* InvoiceCollection+CoreDataClass.swift */,
+				C97224DE1F7B6333004854F7 /* InvoiceCollection+CoreDataProperties.swift */,
 				C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */,
 				C9ECDB2A1F214F61002AA99E /* Invoice+CoreDataClass.swift */,
 				C9ECDB2B1F214F61002AA99E /* Invoice+CoreDataProperties.swift */,
@@ -880,6 +886,7 @@
 				C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */,
 				C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */,
 				C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */,
+				C97224DF1F7B6333004854F7 /* InvoiceCollection+CoreDataClass.swift in Sources */,
 				C9C2DA081F0F3EC2007263FB /* InventoryLocationItemViewModel.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
 				C9ECDB331F214F61002AA99E /* Order+CoreDataProperties.swift in Sources */,
@@ -916,6 +923,7 @@
 				C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */,
 				C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */,
 				C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */,
+				C97224E01F7B6333004854F7 /* InvoiceCollection+CoreDataProperties.swift in Sources */,
 				C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */,
 				C9ECDB301F214F61002AA99E /* Invoice+CoreDataClass.swift in Sources */,
 				C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */,
