@@ -87,7 +87,7 @@ public protocol NewSyncableCollection {
 protocol ManagedSyncableCollection: Managed, NewSyncableCollection {}
 
 extension ManagedSyncableCollection where Self: NSManagedObject {
-
+    /// TODO: replace with updateOrCreate(with: JSON in: NSManagedObjectContext) which would handle parsing the identifier from the response
     static func findOrCreate(withDate date: String, withJSON json: JSON, in context: NSManagedObjectContext) -> Self {
         let predicate = NSPredicate(format: "date == \(date)")
         guard let obj: Self = findOrFetch(in: context, matching: predicate) else {

@@ -121,7 +121,7 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
         selectedCollection = dataSource.objectAtIndexPath(indexPath)
         guard let selection = selectedCollection else { fatalError("Unable to get selection") }
         guard let storeID = userManager.storeID else {
-                log.error("\(#function) FAILED : unable to get storeID or collection date"); return
+                log.error("\(#function) FAILED : unable to get storeID"); return
         }
 
         HUD.show(.progress)

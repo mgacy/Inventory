@@ -125,6 +125,7 @@ extension InvoiceCollection: ManagedSyncableCollection {
 
         // Relationships
         if let invoices = json["invoices"].array {
+            /// NOTE: this relies on conformance to SyncableParent
             syncChildren(in: context, with: invoices)
         }
     }
