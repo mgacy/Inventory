@@ -39,6 +39,12 @@ extension Order {
             self.status = OrderStatus.pending.rawValue
         }
 
+        // Missing properties
+        // placed
+        // remoteID
+        // vendorID
+        // store
+
         // Relationships
         self.collection = collection
         if let vendorID = json["vendor"]["id"].int32 {
@@ -96,7 +102,7 @@ extension Order {
     }
 
     // MARK: - Order Generation
-
+    /// TODO: move into separate object
     func getOrderMessage() -> String? {
         guard let items = self.items else { return nil }
 
