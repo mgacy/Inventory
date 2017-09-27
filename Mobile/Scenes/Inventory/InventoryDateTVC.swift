@@ -249,6 +249,7 @@ extension InventoryDateTVC {
         refreshControl?.endRefreshing()
         guard error == nil else {
             //if error?._code == NSURLErrorTimedOut {}
+            log.error("\(#function) FAILED : \(String(describing: error))")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -258,8 +259,8 @@ extension InventoryDateTVC {
 
         do {
             try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
-        } catch {
-            log.error("Unable to sync Inventories")
+        } catch let error {
+            log.error("Unable to sync Inventories: \(error)")
             HUD.flash(.error, delay: 1.0)
         }
         HUD.hide()
@@ -282,7 +283,6 @@ extension InventoryDateTVC {
 
         // Update selected Inventory with full JSON from server.
         selection.updateExisting(context: managedObjectContext!, json: json)
-
         managedObjectContext!.performSaveOrRollback()
 
         //tableView.activityIndicatorView.stopAnimating()
@@ -316,13 +316,14 @@ extension InventoryDateTVC {
             }
 
             // Get list of Inventories from server
-            // log.info("Fetching existing Inventories from server ...")
+            log.verbose("Fetching existing Inventories from server ...")
             APIManager.sharedInstance.getListOfInventories(storeID: storeID,
                                                            completion: self.completedGetListOfInventories)
 
         } else {
             // if let error = error { // present more detailed error ...
             log.error("Unable to sync ...")
+            refreshControl?.endRefreshing()
             HUD.flash(.error, delay: 1.0); return
         }
     }
