@@ -192,10 +192,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
 
         //HUD.show(.progress)
         _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
-
-        /// TODO: the following should happen in completedSync / completedGetListOfInventories
-        //tableView.reloadData()
-        //refreshControl.endRefreshing()
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {

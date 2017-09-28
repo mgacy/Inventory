@@ -149,9 +149,6 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
 
         //HUD.show(.progress)
         _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
-
-        //tableView.reloadData()
-        //refreshControl.endRefreshing()
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
@@ -270,13 +267,11 @@ extension OrderDateViewController {
             HUD.flash(.error, delay: 1.0); return
         }
 
-        // Update selected Inventory with full JSON from server.
         selection.updateExisting(context: self.managedObjectContext!, json: json)
         managedObjectContext!.performSaveOrRollback()
 
         //tableView.activityIndicatorView.stopAnimating()
         HUD.hide()
-
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
@@ -288,14 +283,12 @@ extension OrderDateViewController {
             log.error("\(#function) FAILED : unable to get JSON")
             HUD.flash(.error, delay: 1.0); return
         }
-        //log.info("Creating new OrderCollection ...")
-        selectedCollection = OrderCollection(context: managedObjectContext!, json: json, uploaded: false)
 
-        // Save the context.
+        log.verbose("Creating new OrderCollection ...")
+        selectedCollection = OrderCollection(context: managedObjectContext!, json: json, uploaded: false)
         managedObjectContext!.performSaveOrRollback()
 
         HUD.hide()
-
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
@@ -307,10 +300,9 @@ extension OrderDateViewController {
                 HUD.flash(.error, delay: 1.0); return
             }
 
-            // log.info("Fetching existing OrderCollections from server ...")
+            log.verbose("Fetching existing OrderCollections from server ...")
             APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
                                                                 completion: self.completedGetListOfOrderCollections)
-
         } else {
             log.error("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...

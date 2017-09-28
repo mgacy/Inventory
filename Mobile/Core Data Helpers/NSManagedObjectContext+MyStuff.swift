@@ -108,7 +108,7 @@ extension NSManagedObjectContext {
 
         do {
             let batchDeleteResult = try self.execute(batchDeleteRequest) as! NSBatchDeleteResult
-            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            log.verbose("Batch deleted \(batchDeleteResult.result!) \(entityClass.self) records.")
 
             // As the request directly interacts with the persistent store, we need need to reset the context for it to be aware of the changes
             self.reset()

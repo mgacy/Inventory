@@ -261,7 +261,7 @@ extension SyncableParent where ChildType: NSManagedObject {
         guard let objectDict = fetchChildDict(in: context) else {
             log.error("\(#function) FAILED : unable to create dictionary for \(ChildType.self)"); return
         }
-        //log.debug("objectDict: \(objectDict)")
+        log.debug("\(ChildType.self) - objectDict: \(objectDict)")
 
         let localObjects = Set(objectDict.keys)
         var remoteObjects = Set<Int32>()
