@@ -43,7 +43,7 @@ extension ManagedSyncable where Self: NSManagedObject {
     }
 
 }
-
+/*
 // MARK: - SyncableCollection
 @objc public protocol SyncableCollection {
     var date: String? { get set }
@@ -74,7 +74,7 @@ extension SyncableCollection where Self : NSManagedObject {
     }
 
 }
-
+*/
 // MARK: - New (ManagedSyncableCollection) -
 
 public protocol NewSyncableCollection {

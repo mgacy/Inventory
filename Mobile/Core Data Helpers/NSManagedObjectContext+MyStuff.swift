@@ -271,7 +271,7 @@ extension NSManagedObjectContext {
 }
 
 // MARK: - SyncableCollection -
-
+/*
 extension NSManagedObjectContext {
 
     func fetchByDate<T: SyncableCollection>(_ entity: T.Type, withDate date: String) -> T? where T: NSManagedObject {
@@ -375,3 +375,4 @@ extension NSManagedObjectContext {
     }
 
 }
+*/
