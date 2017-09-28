@@ -76,10 +76,8 @@ extension Order {
 
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-
-        /// TODO: handle conversion from NSDate to string
-        myDict["order_date"] = self.collection?.date
-        //myDict["order_date"] = self.date.stringFromDate()
+        //myDict["order_date"] = self.collection?.date
+        myDict["order_date"] = self.date.stringFromDate()
         myDict["store_id"] = self.collection?.storeID
         myDict["vendor_id"] = self.vendor?.remoteID
 
@@ -119,7 +117,7 @@ extension Order {
 
         messageItems.sort()
         /// TODO: handle conversion from NSDate to String
-        let message = "Order for \(self.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
+        let message = "Order for \(collection?.date.altStringFromDate() ?? ""):\n\(messageItems.joined(separator: ""))"
         log.debug("Order Message: \(message)")
         return message
     }
@@ -158,6 +156,77 @@ extension Order {
             log.debug("It looks like we have an empty order.")
             status = OrderStatus.empty.rawValue
         }
+    }
+
+}
+
+// MARK: - ManagedSyncable
+
+extension Order: ManagedSyncable {
+
+    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
+        log.debug("Updating Order with: \(json)")
+        // Required
+        // date
+        // placed
+        // status
+
+        // if let orderCost = json["order_cost"].float {}
+        if let dateString = json["order_date"].string,
+            let date = dateString.toBasicDate() {
+            self.date = date
+        }
+
+        // Optional
+        // remoteID
+        // uploaded
+        // vendorID
+
+        if let remoteID = json["id"].int32 {
+            self.remoteID = remoteID
+        }
+
+        // FIXME: get status from JSON
+        self.status = OrderStatus.uploaded.rawValue
+
+        // Relationships
+        // collection?
+        // items
+        // store?
+        // vendor?
+
+        if let items = json["items"].array {
+            syncChildren(in: context, with: items)
+        }
+
+        /// TODO: do we need to handle removal of vendor from remote?
+        if let vendorID = json["vendor"]["id"].int32 {
+            if vendorID != vendor?.remoteID {
+                self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
+            }
+        }
+
+        /// TODO: update status?
+    }
+
+}
+
+// MARK: - SyncableParent
+
+extension Order: SyncableParent {
+    typealias ChildType = OrderItem
+
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: ChildType]? {
+        let fetchPredicate = NSPredicate(format: "order == %@", self)
+        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func addToChildren(_ entity: ChildType) {
+        entity.order = self
+        //addToItems(entity)
     }
 
 }

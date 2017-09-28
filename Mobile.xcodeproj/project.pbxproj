@@ -73,6 +73,8 @@
 		C9C2DA081F0F3EC2007263FB /* InventoryLocationItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA071F0F3EC2007263FB /* InventoryLocationItemViewModel.swift */; };
 		C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */; };
 		C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */; };
+		C9CB971C1F7C51E200FE7805 /* OrderCollection+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CB971A1F7C51E200FE7805 /* OrderCollection+CoreDataClass.swift */; };
+		C9CB971D1F7C51E200FE7805 /* OrderCollection+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CB971B1F7C51E200FE7805 /* OrderCollection+CoreDataProperties.swift */; };
 		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
 		C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */; };
@@ -183,6 +185,8 @@
 		C9C2DA071F0F3EC2007263FB /* InventoryLocationItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InventoryLocationItemViewModel.swift; path = Scenes/Inventory/InventoryLocationItemViewModel.swift; sourceTree = "<group>"; };
 		C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSDate+MyStuff.swift"; path = "Extensions/Foundation/NSDate+MyStuff.swift"; sourceTree = "<group>"; };
 		C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = InventoryKeypadViewController.storyboard; path = Scenes/Inventory/InventoryKeypadViewController.storyboard; sourceTree = "<group>"; };
+		C9CB971A1F7C51E200FE7805 /* OrderCollection+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OrderCollection+CoreDataClass.swift"; path = "Models/OrderCollection+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C9CB971B1F7C51E200FE7805 /* OrderCollection+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OrderCollection+CoreDataProperties.swift"; path = "Models/OrderCollection+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
 		C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSManagedObjectContext+Managed.swift"; path = "Core Data Helpers/NSManagedObjectContext+Managed.swift"; sourceTree = "<group>"; };
@@ -485,6 +489,8 @@
 		C9E198D31DC566780065FB98 /* Order Models */ = {
 			isa = PBXGroup;
 			children = (
+				C9CB971A1F7C51E200FE7805 /* OrderCollection+CoreDataClass.swift */,
+				C9CB971B1F7C51E200FE7805 /* OrderCollection+CoreDataProperties.swift */,
 				C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */,
 				C9ECDB2C1F214F61002AA99E /* Order+CoreDataClass.swift */,
 				C9ECDB2D1F214F61002AA99E /* Order+CoreDataProperties.swift */,
@@ -905,6 +911,8 @@
 				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
 				C92D75C11DC7A81400AA1A02 /* InvoiceKeypadViewController.swift in Sources */,
+				C9CB971C1F7C51E200FE7805 /* OrderCollection+CoreDataClass.swift in Sources */,
+				C9CB971D1F7C51E200FE7805 /* OrderCollection+CoreDataProperties.swift in Sources */,
 				C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */,
 				C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */,
 				C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */,

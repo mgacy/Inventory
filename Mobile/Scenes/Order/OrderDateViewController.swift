@@ -110,28 +110,18 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCollection = dataSource.objectAtIndexPath(indexPath)
         guard let selection = selectedCollection else { fatalError("Unable to get selection") }
+        guard let storeID = userManager.storeID else {
+            log.error("\(#function) FAILED : unable to get storeID"); return
+        }
 
         switch selection.uploaded {
         case true:
-            // Get date to use when getting OrderCollection from server
-            guard let storeID = userManager.storeID,
-                  let collectionDate = selection.date else {
-                log.error("\(#function) FAILED : unable to get storeID or collection date"); return
-            }
-
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
 
-            /// TODO: ideally, we would want to deleteChildOrders *after* fetching data from server
-            log.info("Deleting Orders of selected OrderCollection ...")
-            deleteChildOrders(parent: selection)
-
-            // Reset selection since we reset the managedObjectContext in deleteChildOrders
-            selectedCollection = dataSource.objectAtIndexPath(indexPath)
-
             log.info("GET OrderCollection from server ...")
             APIManager.sharedInstance.getOrderCollection(
-                storeID: storeID, orderDate: collectionDate,
+                storeID: storeID, orderDate: selection.date.shortDate,
                 completion: completedGetExistingOrderCollection)
 
         case false:
@@ -198,7 +188,7 @@ extension OrderDateViewController: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: UITableViewCell, for collection: OrderCollection) {
-        cell.textLabel?.text = collection.date
+        cell.textLabel?.text = collection.date.altStringFromDate()
 
         switch collection.uploaded {
         case true:
@@ -246,28 +236,12 @@ extension OrderDateViewController {
             HUD.flash(.error, delay: 1.0); return
         }
 
-        /// TODO: delete child orders after, rather than before fetching from server
-        /*
-        guard let selectedCollectionIndex = selectedCollectionIndex else {
-            log.error("PROBLEM - 1a"); return
-        }
-        var selection: OrderCollection
-        selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
-
-        // Delete existing orders of selected collection
-        log.info("Deleting Orders of selected OrderCollection ...")
-        deleteChildOrders(parent: selection)
-
-        // Reset selection since we reset the managedObjectContext in deleteChildOrders
-        selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
-        */
-
         guard let selection = selectedCollection else {
             log.error("\(#function) FAILED : still unable to get selected OrderCollection\n")
             HUD.flash(.error, delay: 1.0); return
         }
 
-        selection.updateExisting(context: self.managedObjectContext!, json: json)
+        selection.update(in: managedObjectContext!, with: json)
         managedObjectContext!.performSaveOrRollback()
 
         //tableView.activityIndicatorView.stopAnimating()

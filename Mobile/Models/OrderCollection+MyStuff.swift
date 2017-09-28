@@ -18,7 +18,8 @@ extension OrderCollection {
         self.init(context: context)
 
         // Set properties
-        if let date = json["date"].string {
+        if let dateString = json["date"].string,
+           let date = dateString.toBasicDate() {
             self.date = date
         }
         if let inventoryID = json["inventory_id"].int32 {
@@ -40,9 +41,7 @@ extension OrderCollection {
     // MARK: - Serialization
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-
-        /// TODO: handle conversion from NSDate to string
-        myDict["date"] = self.date
+        myDict["date"] = self.date.stringFromDate()
 
         // ...
 
@@ -90,7 +89,7 @@ extension OrderCollection {
 }
 
 // The extension already offers a default implementation; we will use that
-extension OrderCollection: SyncableCollection {}
+//extension OrderCollection: SyncableCollection {}
 
 extension OrderCollection {
 
@@ -114,6 +113,58 @@ extension OrderCollection {
 
         log.debug("It looks like all orders have been uploaded; we should change status")
         uploaded = true
+    }
+
+}
+
+// MARK: - NEW
+
+extension OrderCollection: ManagedSyncableCollection {
+
+    public func update(in context: NSManagedObjectContext, with json: JSON) {
+
+        // Set properties
+        if let dateString = json["date"].string,
+           let date = dateString.toBasicDate() {
+            self.date = date
+        }
+        if let inventoryID = json["inventory_id"].int32 {
+            self.inventoryID = inventoryID
+        }
+        if let storeID = json["store_id"].int32 {
+            self.storeID = storeID
+        }
+
+        /// TODO: handle `uploaded`
+        //self.uploaded = uploaded
+
+        // Add Orders
+        if let orders = json["orders"].array {
+            /// NOTE: this relies on conformance to SyncableParent
+            syncChildren(in: context, with: orders)
+        }
+
+        updateStatus()
+    }
+
+}
+
+// MARK: - Sync Children
+
+extension OrderCollection: SyncableParent {
+    typealias ChildType = Order
+
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : Order]? {
+        let fetchPredicate = NSPredicate(format: "collection == %@", self)
+        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func addToChildren(_ entity: ChildType) {
+        entity.collection = self
+        entity.date = self.date
     }
 
 }
