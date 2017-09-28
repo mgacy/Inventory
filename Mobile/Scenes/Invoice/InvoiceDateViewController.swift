@@ -32,8 +32,6 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
     // Segues
     let segueIdentifier = "showInvoiceVendors"
 
-    var dateFormatter: DateFormatter?
-
     /// TODO: provide interface to control these
     // let invoiceTypeID = 1
 
@@ -45,16 +43,6 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
         title = "Invoices"
         self.refreshControl?.addTarget(self, action: #selector(InvoiceDateViewController.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
-
-        // Configure date formatter
-        self.dateFormatter = DateFormatter()
-        self.dateFormatter?.locale = Locale.current
-        self.dateFormatter?.timeZone = TimeZone.current
-        //self.dateFormatter?.timeZone = TimeZone(abbreviation: "UTC")
-        self.dateFormatter?.dateFormat = "yyyy/MM/dd"
-        //self.dateFormatter?.dateStyle = .short
-        //self.dateFormatter?.dateStyle = .full
-
         setupTableView()
 
         guard let storeID = userManager.storeID else {
@@ -161,9 +149,7 @@ extension InvoiceDateViewController: TableViewDataSourceDelegate {
     }
     */
     func configure(_ cell: UITableViewCell, for collection: InvoiceCollection) {
-        if let dateString = dateFormatter?.string(from: collection.date) {
-            cell.textLabel?.text = dateString
-        }
+        cell.textLabel?.text = collection.date.altStringFromDate()
         switch collection.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black

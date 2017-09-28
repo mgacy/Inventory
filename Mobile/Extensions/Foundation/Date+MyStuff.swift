@@ -40,8 +40,20 @@ extension Date {
         return formatter
     }()
 
+    static let altDate: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "yyyy/MM/dd"
+        return formatter
+    }()
+
     func stringFromDate() -> String? {
         return Date.basicDate.string(from: self)
+    }
+
+    func altStringFromDate() -> String? {
+        return Date.altDate.string(from: self)
     }
 
 }
