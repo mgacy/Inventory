@@ -17,6 +17,11 @@ import SwiftyJSON
     // case reviewed - for empty but acceptd as such (that's right, no order this week)?
     case placed     = 3
     case uploaded   = 4
+
+    //static func asString(raw: Int16) -> String? {}
+
+    //init?(string: String) {}
+
 }
 
 extension Order {

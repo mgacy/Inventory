@@ -239,6 +239,7 @@ extension NSManagedObjectContext {
                 /// TODO: deleteEntities(_:filter) already prints the error
                 let updateError = error as NSError
                 log.error("\(updateError), \(updateError.userInfo)")
+                //throw updateError?
             }
         }
     }
