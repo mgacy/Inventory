@@ -229,7 +229,7 @@ extension Order: SyncableParent {
         return objectDict
     }
 
-    func addToChildren(_ entity: ChildType) {
+    func updateParent(of entity: ChildType) {
         entity.order = self
         //addToItems(entity)
     }

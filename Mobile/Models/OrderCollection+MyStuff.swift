@@ -162,7 +162,7 @@ extension OrderCollection: SyncableParent {
         return objectDict
     }
 
-    func addToChildren(_ entity: ChildType) {
+    func updateParent(of entity: ChildType) {
         entity.collection = self
         entity.date = self.date
     }

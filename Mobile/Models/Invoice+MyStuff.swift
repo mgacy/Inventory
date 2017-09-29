@@ -171,7 +171,7 @@ extension Invoice: SyncableParent {
         return objectDict
     }
 
-    func addToChildren(_ entity: ChildType) {
+    func updateParent(of entity: ChildType) {
         entity.invoice = self
         //addToItems(entity)
     }
