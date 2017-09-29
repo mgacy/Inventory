@@ -68,6 +68,32 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
         return obj
     }
     /*
+    static func fetchByDate(date: Date, in context: NSManagedObjectContext) -> Self? {
+        //let request: NSFetchRequest<Self> = Self.fetchRequest() as! NSFetchRequest<Self>
+        let request = NSFetchRequest<Self>(entityName: Self.entityName)
+        request.predicate = NSPredicate(format: "date == %@", date as NSDate)
+        request.fetchLimit = 2
+
+        do {
+            let searchResults = try context.fetch(request)
+
+            switch searchResults.count {
+            case 0:
+                return nil
+            case 1:
+                return searchResults[0]
+            default:
+                log.warning("Found multiple matches: \(searchResults)")
+                fatalError("Returned multiple objects, expected max 1")
+                //return searchResults[0]
+            }
+
+        } catch {
+            log.error("Error with request: \(error)")
+        }
+        return nil
+    }
+
     static func sync(withJSON json: JSON, in context: NSManagedObjectContext) throws {
         let fetchPredicate: NSPredicate? = nil
         guard let objectDict = try? context.fetchCollectionDict(self, matching: fetchPredicate) else {
@@ -114,32 +140,6 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
 // MARK: NSManagedObjectContext - ManagedSyncableCollection
 
 extension NSManagedObjectContext {
-
-    func fetchByDate<T: ManagedSyncableCollection>(_ entity: T.Type, withDate date: Date) -> T? where T: NSManagedObject {
-        // swiftlint:disable:next force_cast
-        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-        request.predicate = NSPredicate(format: "date == %@", date as NSDate)
-        request.fetchLimit = 2
-
-        do {
-            let fetchResults = try self.fetch(request)
-
-            switch fetchResults.count {
-            case 0:
-                log.debug("\(#function) : found 0 matches for date: \(date)")
-                return nil
-            case 1:
-                return fetchResults[0]
-            default:
-                log.error("\(#function) FAILED : found multiple matches: \(fetchResults)")
-                fatalError("Returned multiple objects, expected max 1")
-            }
-
-        } catch let error {
-            log.error("\(#function) FAILED : error with request: \(error)")
-        }
-        return nil
-    }
 
     func fetchCollectionDict<T: ManagedSyncableCollection>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [Date: T] where T: NSManagedObject {
 

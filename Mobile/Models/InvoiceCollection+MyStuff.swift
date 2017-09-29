@@ -61,34 +61,6 @@ extension InvoiceCollection {
         return myDict
     }
 
-    // MARK: -
-
-    static func fetchByDate(context: NSManagedObjectContext, date: Date) -> InvoiceCollection? {
-        //let predicate = NSPredicate(format: "date == %@", date)
-        //return context.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate)
-
-        let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-        request.predicate = NSPredicate(format: "date == %@", date as NSDate)
-
-        do {
-            let searchResults = try context.fetch(request)
-
-            switch searchResults.count {
-            case 0:
-                return nil
-            case 1:
-                return searchResults[0]
-            default:
-                log.warning("Found multiple matches: \(searchResults)")
-                //fatalError("Returned multiple objects, expected max 1")
-                return searchResults[0]
-            }
-
-        } catch {
-            log.error("Error with request: \(error)")
-        }
-        return nil
-    }
 }
 
 // MARK: - ManagedSyncableCollection

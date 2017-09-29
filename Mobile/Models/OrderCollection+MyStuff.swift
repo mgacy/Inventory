@@ -48,44 +48,6 @@ extension OrderCollection {
         return myDict
     }
 
-    // MARK: - Update Existing
-
-//    func updateExisting(context: NSManagedObjectContext, json: JSON) {
-//        guard let orders = json["orders"].array else {
-//            log.error("\(#function) FAILED : unable to get orders from JSON"); return
-//        }
-//
-//        // Iterate over Orders
-//        for orderJSON in orders {
-//            _ = Order(context: context, json: orderJSON, collection: self, uploaded: true)
-//        }
-//    }
-
-    // MARK: -
-
-//    static func fetchByDate(context: NSManagedObjectContext, date: String) -> OrderCollection? {
-//        let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
-//        request.predicate = NSPredicate(format: "date == %@", date)
-//
-//        do {
-//            let searchResults = try context.fetch(request)
-//
-//            switch searchResults.count {
-//            case 0:
-//                return nil
-//            case 1:
-//                return searchResults[0]
-//            default:
-//                log.warning("Found multiple matches: \(searchResults)")
-//                //fatalError("Returned multiple objects, expected max 1")
-//                return searchResults[0]
-//            }
-//
-//        } catch {
-//            log.error("Error with request: \(error)")
-//        }
-//        return nil
-//    }
 }
 
 extension OrderCollection {
