@@ -91,10 +91,7 @@ extension InvoiceCollection {
     }
 }
 
-// The extension already offers a default implementation; we will use that
-//extension InvoiceCollection: SyncableCollection {}
-
-// MARK: - NEW
+// MARK: - ManagedSyncableCollection
 
 extension InvoiceCollection: ManagedSyncableCollection {
 

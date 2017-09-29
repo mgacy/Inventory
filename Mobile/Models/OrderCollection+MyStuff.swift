@@ -88,9 +88,6 @@ extension OrderCollection {
 //    }
 }
 
-// The extension already offers a default implementation; we will use that
-//extension OrderCollection: SyncableCollection {}
-
 extension OrderCollection {
 
     func updateStatus() {
@@ -117,7 +114,7 @@ extension OrderCollection {
 
 }
 
-// MARK: - NEW
+// MARK: - ManagedSyncableCollection
 
 extension OrderCollection: ManagedSyncableCollection {
 
