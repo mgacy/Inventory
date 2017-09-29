@@ -46,14 +46,12 @@ extension ManagedSyncable where Self: NSManagedObject {
 
 // MARK: - ManagedSyncableCollection
 
-public protocol NewSyncableCollection {
+protocol ManagedSyncableCollection: Managed {
     var date: Date { get set }
     var storeID: Int32 { get set }
     /// TODO: make context optional since we might not always need it?
     func update(in context: NSManagedObjectContext, with json: JSON)
 }
-
-protocol ManagedSyncableCollection: Managed, NewSyncableCollection {}
 
 extension ManagedSyncableCollection where Self: NSManagedObject {
     /// TODO: replace with updateOrCreate(with: JSON in: NSManagedObjectContext) which would handle parsing the identifier from the response
