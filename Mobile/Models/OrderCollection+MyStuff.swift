@@ -121,11 +121,21 @@ extension OrderCollection {
 
 extension OrderCollection: ManagedSyncableCollection {
 
+    public var date: Date {
+        get {
+            return Date(timeIntervalSince1970: dateA)
+        }
+        set {
+            dateA = newValue.timeIntervalSince1970
+        }
+    }
+
     public func update(in context: NSManagedObjectContext, with json: JSON) {
 
         // Set properties
         if let dateString = json["date"].string,
            let date = dateString.toBasicDate() {
+            //dateA = date.timeIntervalSince1970
             self.date = date
         }
         if let inventoryID = json["inventory_id"].int32 {

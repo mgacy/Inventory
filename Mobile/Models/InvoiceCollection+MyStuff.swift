@@ -98,11 +98,21 @@ extension InvoiceCollection {
 
 extension InvoiceCollection: ManagedSyncableCollection {
 
+    public var date: Date {
+        get {
+            return Date(timeIntervalSince1970: dateA)
+        }
+        set {
+            dateA = newValue.timeIntervalSince1970
+        }
+    }
+
     public func update(in context: NSManagedObjectContext, with json: JSON) {
 
         // Required
         if let dateString = json["date"].string,
            let date = dateString.toBasicDate() {
+            //self.dateA = date.timeIntervalSince1970
             self.date = date
         } else {
             self.date = Date()
