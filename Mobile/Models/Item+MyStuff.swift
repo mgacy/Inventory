@@ -56,7 +56,7 @@ extension Item: Syncable {
                 self.category = existingCategory
             } else {
                 /// TODO: should we really create a new ItemCategory if we don't have all its attributes?
-                let newCategory = context.insertObject(ItemCategory.self)
+                let newCategory: ItemCategory = context.insertObject()
                 newCategory.remoteID = categoryID
                 if let categoryName = json["category"]["name"].string {
                     newCategory.name = categoryName
@@ -74,7 +74,7 @@ extension Item: Syncable {
                 self.vendor = vendor
             } else {
                 /// TODO: should we really create a new Vendor if we don't have all its attributes?
-                let newVendor = context.insertObject(Vendor.self)
+                let newVendor: Vendor = context.insertObject()
                 newVendor.remoteID = vendorID
                 if let vendorName = json["vendor"]["name"].string {
                     newVendor.name = vendorName

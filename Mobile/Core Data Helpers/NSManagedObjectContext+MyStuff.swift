@@ -12,16 +12,6 @@ import SwiftyJSON
 
 // swiftlint:disable force_cast
 
-// MARK: - Insert
-extension NSManagedObjectContext {
-
-    public func insertObject<T: NSManagedObject>(_ entity: T.Type) -> T {
-        let newItem = T(context: self)
-        return newItem
-    }
-
-}
-
 // MARK: - Fetch
 extension NSManagedObjectContext {
 
