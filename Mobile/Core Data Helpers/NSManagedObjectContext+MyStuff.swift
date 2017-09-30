@@ -324,7 +324,7 @@ extension NSManagedObjectContext {
         let deletedObjects = localDates.subtracting(remoteDates)
         if !deletedObjects.isEmpty {
             log.debug("We need to delete: \(deletedObjects)")
-            let fetchPredicate = NSPredicate(format: "date IN %@", deletedObjects)
+            let fetchPredicate = NSPredicate(format: "dateTimeInterval IN %@", deletedObjects)
             do {
                 try self.deleteEntities(T.self, filter: fetchPredicate)
             } catch {

@@ -88,7 +88,7 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
 
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "dateA", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "dateTimeInterval", ascending: false)
         request.sortDescriptors = [sortDescriptor]
 
         //let fetchPredicate = NSPredicate(format: "inventory == %@", inventory)

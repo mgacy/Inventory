@@ -93,7 +93,7 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
 
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "dateA", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "dateTimeInterval", ascending: false)
         request.sortDescriptors = [sortDescriptor]
 
         request.fetchBatchSize = fetchBatchSize

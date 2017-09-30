@@ -69,10 +69,10 @@ extension InvoiceCollection: ManagedSyncableCollection {
 
     public var date: Date {
         get {
-            return Date(timeIntervalSince1970: dateA)
+            return Date(timeIntervalSince1970: dateTimeInterval)
         }
         set {
-            dateA = newValue.timeIntervalSince1970
+            dateTimeInterval = newValue.timeIntervalSince1970
         }
     }
 
@@ -81,7 +81,7 @@ extension InvoiceCollection: ManagedSyncableCollection {
         // Required
         if let dateString = json["date"].string,
            let date = dateString.toBasicDate() {
-            //self.dateA = date.timeIntervalSince1970
+            //dateTimeInterval = date.timeIntervalSince1970
             self.date = date
         } else {
             self.date = Date()

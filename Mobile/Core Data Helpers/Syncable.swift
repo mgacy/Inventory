@@ -47,6 +47,7 @@ extension ManagedSyncable where Self: NSManagedObject {
 // MARK: - ManagedSyncableCollection
 
 protocol ManagedSyncableCollection: Managed {
+    var dateTimeInterval: TimeInterval { get set }
     var date: Date { get set }
     var storeID: Int32 { get set }
     /// TODO: make context optional since we might not always need it?
@@ -56,7 +57,7 @@ protocol ManagedSyncableCollection: Managed {
 extension ManagedSyncableCollection where Self: NSManagedObject {
     /// TODO: replace with updateOrCreate(with: JSON in: NSManagedObjectContext) which would handle parsing the identifier from the response
     static func findOrCreate(withDate date: Date, withJSON json: JSON, in context: NSManagedObjectContext) -> Self {
-        let predicate = NSPredicate(format: "dateA == %@", date as NSDate)
+        let predicate = NSPredicate(format: "dateTimeInterval == %@", date as NSDate)
         guard let obj: Self = findOrFetch(in: context, matching: predicate) else {
             let newObj: Self = context.insertObject()
             newObj.update(in: context, with: json)
@@ -69,7 +70,7 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
     static func fetchByDate(date: Date, in context: NSManagedObjectContext) -> Self? {
         //let request: NSFetchRequest<Self> = Self.fetchRequest() as! NSFetchRequest<Self>
         let request = NSFetchRequest<Self>(entityName: Self.entityName)
-        request.predicate = NSPredicate(format: "dateA == %@", date as NSDate)
+        request.predicate = NSPredicate(format: "dateTimeInterval == %@", date as NSDate)
         request.fetchLimit = 2
 
         do {
@@ -122,7 +123,7 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
         let deletedObjects = localDates.subtracting(remoteDates)
         if !deletedObjects.isEmpty {
             log.debug("We need to delete: \(deletedObjects)")
-            let fetchPredicate = NSPredicate(format: "dateA IN %@", deletedObjects)
+            let fetchPredicate = NSPredicate(format: "dateTimeInterval IN %@", deletedObjects)
             do {
                 try context.deleteEntities(self, filter: fetchPredicate)
             } catch {
