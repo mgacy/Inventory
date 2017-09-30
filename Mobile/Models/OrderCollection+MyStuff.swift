@@ -126,7 +126,7 @@ extension OrderCollection: SyncableParent {
 
     func updateParent(of entity: ChildType) {
         entity.collection = self
-        entity.date = self.date
+        entity.date = self.dateTimeInterval
     }
 
 }

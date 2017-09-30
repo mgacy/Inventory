@@ -54,8 +54,8 @@ extension Invoice {
         var myDict = [String: Any]()
         myDict["id"] = Int(self.remoteID)
         myDict["invoice_no"] = Int(self.invoiceNo)
-        myDict["ship_date"] = self.shipDate?.stringFromDate()
-        myDict["receive_date"] = self.receiveDate?.stringFromDate()
+        myDict["ship_date"] = Date(timeIntervalSinceReferenceDate: shipDate).stringFromDate()
+        myDict["receive_date"] = Date(timeIntervalSinceReferenceDate: receiveDate).stringFromDate()
         myDict["credit"] = Double(self.credit)
         myDict["shipping"] = Double(self.shipping)
         myDict["taxes"] = Double(self.taxes)
@@ -108,11 +108,11 @@ extension Invoice: ManagedSyncable {
         }
         if let shipDateString = json["ship_date"].string,
            let shipDate = shipDateString.toBasicDate() {
-            self.shipDate = shipDate
+            self.shipDate = shipDate.timeIntervalSinceReferenceDate
         }
         if let receiveDateString = json["receive_date"].string,
            let receiveDate = receiveDateString.toBasicDate() {
-            self.receiveDate = receiveDate
+            self.receiveDate = receiveDate.timeIntervalSinceReferenceDate
         }
         if let vendorID = json["vendor"]["id"].int32 {
             self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)

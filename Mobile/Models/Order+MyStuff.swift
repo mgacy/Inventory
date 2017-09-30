@@ -35,7 +35,7 @@ extension Order {
         // if let orderCost = json["order_cost"].float {}
         if let dateString = json["order_date"].string,
            let date = dateString.toBasicDate() {
-            self.date = date
+            self.date = date.timeIntervalSinceReferenceDate
         }
         if uploaded {
             self.status = OrderStatus.uploaded.rawValue
@@ -82,7 +82,7 @@ extension Order {
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
         //myDict["order_date"] = self.collection?.date
-        myDict["order_date"] = self.date.stringFromDate()
+        myDict["order_date"] = Date(timeIntervalSinceReferenceDate: date).stringFromDate()
         myDict["store_id"] = self.collection?.storeID
         myDict["vendor_id"] = self.vendor?.remoteID
 
@@ -179,7 +179,7 @@ extension Order: ManagedSyncable {
         // if let orderCost = json["order_cost"].float {}
         if let dateString = json["order_date"].string,
             let date = dateString.toBasicDate() {
-            self.date = date
+            self.date = date.timeIntervalSinceReferenceDate
         }
 
         // Optional
