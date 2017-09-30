@@ -10,6 +10,8 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+//extension Inventory: DateFacade {}
+
 extension Inventory {
 
     // MARK: - Lifecycle

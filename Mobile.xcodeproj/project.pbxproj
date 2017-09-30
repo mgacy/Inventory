@@ -73,6 +73,7 @@
 		C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */; };
 		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
+		C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DEC1051F805CF6004602EB /* DateFacade.swift */; };
 		C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */; };
 		C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */; };
 		C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB7D891EE7910000515429 /* MailComposer.swift */; };
@@ -179,6 +180,7 @@
 		C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = InventoryKeypadViewController.storyboard; path = Scenes/Inventory/InventoryKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
+		C9DEC1051F805CF6004602EB /* DateFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DateFacade.swift; path = Protocols/DateFacade.swift; sourceTree = "<group>"; };
 		C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSManagedObjectContext+Managed.swift"; path = "Core Data Helpers/NSManagedObjectContext+Managed.swift"; sourceTree = "<group>"; };
 		C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderDateViewController.swift; sourceTree = "<group>"; };
 		C9EB7D891EE7910000515429 /* MailComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 		C904771F1EEE30770082D894 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				C9DEC1051F805CF6004602EB /* DateFacade.swift */,
 				C90477201EEE30D60082D894 /* KeypadViewModel.swift */,
 				C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */,
 			);
@@ -880,6 +883,7 @@
 				C9ECDB321F214F61002AA99E /* Order+CoreDataClass.swift in Sources */,
 				C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */,
 				C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */,
+				C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */,
 				C935E9A41E60D713003BF386 /* InitialLoginVC.swift in Sources */,
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
 				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,

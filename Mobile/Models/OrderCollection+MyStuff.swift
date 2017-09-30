@@ -76,18 +76,11 @@ extension OrderCollection {
 
 }
 
+extension OrderCollection: DateFacade {}
+
 // MARK: - ManagedSyncableCollection
 
 extension OrderCollection: ManagedSyncableCollection {
-
-    public var date: Date {
-        get {
-            return Date(timeIntervalSince1970: dateTimeInterval)
-        }
-        set {
-            dateTimeInterval = newValue.timeIntervalSince1970
-        }
-    }
 
     public func update(in context: NSManagedObjectContext, with json: JSON) {
 

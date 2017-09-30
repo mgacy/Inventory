@@ -63,18 +63,11 @@ extension InvoiceCollection {
 
 }
 
+extension InvoiceCollection: DateFacade {}
+
 // MARK: - ManagedSyncableCollection
 
 extension InvoiceCollection: ManagedSyncableCollection {
-
-    public var date: Date {
-        get {
-            return Date(timeIntervalSince1970: dateTimeInterval)
-        }
-        set {
-            dateTimeInterval = newValue.timeIntervalSince1970
-        }
-    }
 
     public func update(in context: NSManagedObjectContext, with json: JSON) {
 
