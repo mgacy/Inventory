@@ -55,6 +55,11 @@ protocol ManagedSyncableCollection: Managed {
 }
 
 extension ManagedSyncableCollection where Self: NSManagedObject {
+
+    static var defaultSortDescriptors: [NSSortDescriptor] {
+        return [NSSortDescriptor(key: "dateTimeInterval", ascending: false)]
+    }
+    /*
     /// TODO: replace with updateOrCreate(with: JSON in: NSManagedObjectContext) which would handle parsing the identifier from the response
     static func findOrCreate(withDate date: Date, withJSON json: JSON, in context: NSManagedObjectContext) -> Self {
         let predicate = NSPredicate(format: "dateTimeInterval == %@", date as NSDate)
@@ -66,6 +71,7 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
         obj.update(in: context, with: json)
         return obj
     }
+     */
     /*
     static func fetchByDate(date: Date, in context: NSManagedObjectContext) -> Self? {
         //let request: NSFetchRequest<Self> = Self.fetchRequest() as! NSFetchRequest<Self>
