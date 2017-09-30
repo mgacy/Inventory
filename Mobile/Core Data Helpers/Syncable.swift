@@ -55,8 +55,8 @@ protocol ManagedSyncableCollection: Managed {
 
 extension ManagedSyncableCollection where Self: NSManagedObject {
     /// TODO: replace with updateOrCreate(with: JSON in: NSManagedObjectContext) which would handle parsing the identifier from the response
-    static func findOrCreate(withDate date: String, withJSON json: JSON, in context: NSManagedObjectContext) -> Self {
-        let predicate = NSPredicate(format: "date == \(date)")
+    static func findOrCreate(withDate date: Date, withJSON json: JSON, in context: NSManagedObjectContext) -> Self {
+        let predicate = NSPredicate(format: "dateA == %@", date as NSDate)
         guard let obj: Self = findOrFetch(in: context, matching: predicate) else {
             let newObj: Self = context.insertObject()
             newObj.update(in: context, with: json)
@@ -69,7 +69,7 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
     static func fetchByDate(date: Date, in context: NSManagedObjectContext) -> Self? {
         //let request: NSFetchRequest<Self> = Self.fetchRequest() as! NSFetchRequest<Self>
         let request = NSFetchRequest<Self>(entityName: Self.entityName)
-        request.predicate = NSPredicate(format: "date == %@", date as NSDate)
+        request.predicate = NSPredicate(format: "dateA == %@", date as NSDate)
         request.fetchLimit = 2
 
         do {
@@ -122,7 +122,7 @@ extension ManagedSyncableCollection where Self: NSManagedObject {
         let deletedObjects = localDates.subtracting(remoteDates)
         if !deletedObjects.isEmpty {
             log.debug("We need to delete: \(deletedObjects)")
-            let fetchPredicate = NSPredicate(format: "date IN %@", deletedObjects)
+            let fetchPredicate = NSPredicate(format: "dateA IN %@", deletedObjects)
             do {
                 try context.deleteEntities(self, filter: fetchPredicate)
             } catch {
