@@ -63,9 +63,7 @@ extension Inventory {
         }
 
         var myDict = [String: Any]()
-
-        //myDict["date"] = Date(timeIntervalSince1970: date).altStringFromDate()
-        myDict["date"] = Date(timeIntervalSinceReferenceDate: date).altStringFromDate()
+        myDict["date"] = date.toPythonDateString()
         myDict["store_id"] = storeID
 
         // Apple suggests using a default value of 0 over using optional attributes

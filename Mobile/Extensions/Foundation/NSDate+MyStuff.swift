@@ -16,9 +16,11 @@ import Foundation
 
 extension Formatter {
 
+    //static let display: DateFormatter = {}()
+
     // Inspired by: https://stackoverflow.com/a/43658213/4472195
     // See also:    https://stackoverflow.com/a/42370648/4472195
-    static let basicDate: DateFormatter = {
+    static let pythonDate: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         //formatter.timeZone = TimeZone(abbreviation: "UTC")
@@ -57,8 +59,11 @@ extension NSDate {
 
 extension String {
 
+    /// TODO: add method to convert string to TimeInterval?
+    //func toTimeInterval() -> TimeInterval? {}
+
     func toBasicDate() -> Date? {
-        return Formatter.basicDate.date(from: self)
+        return Formatter.pythonDate.date(from: self)
     }
 
 }

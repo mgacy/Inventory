@@ -81,8 +81,8 @@ extension Order {
 
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-        //myDict["order_date"] = self.collection?.date
-        myDict["order_date"] = Date(timeIntervalSinceReferenceDate: date).stringFromDate()
+        //myDict["order_date"] = self.collection?.dateTimeInterval.toPythonDateString()
+        myDict["order_date"] = date.toPythonDateString()
         myDict["store_id"] = self.collection?.storeID
         myDict["vendor_id"] = self.vendor?.remoteID
 

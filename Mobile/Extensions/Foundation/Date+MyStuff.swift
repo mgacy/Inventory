@@ -32,6 +32,7 @@ extension Date {
 
 extension Date {
 
+    /// Formatter for Python date
     static let basicDate: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")

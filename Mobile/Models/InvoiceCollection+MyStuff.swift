@@ -56,8 +56,8 @@ extension InvoiceCollection {
 
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-        myDict["date"] = self.date.shortDate
-        myDict["store_id"] = self.storeID
+        myDict["date"] = dateTimeInterval.toPythonDateString()
+        myDict["store_id"] = storeID
         return myDict
     }
 

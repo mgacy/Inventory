@@ -39,6 +39,7 @@
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
 		C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */; };
 		C949C20E1F160719008A5EC4 /* InvoiceItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949C20D1F160719008A5EC4 /* InvoiceItemViewModel.swift */; };
+		C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */; };
 		C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */; };
 		C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */; };
 		C96870E61DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */; };
@@ -141,6 +142,7 @@
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = InvoiceKeypadViewController.storyboard; path = Scenes/Invoice/InvoiceKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C949C20D1F160719008A5EC4 /* InvoiceItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InvoiceItemViewModel.swift; path = Scenes/Invoice/InvoiceItemViewModel.swift; sourceTree = "<group>"; };
+		C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TimeInterval+MyStuff.swift"; path = "Extensions/Foundation/TimeInterval+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InvoiceCollection+MyStuff.swift"; path = "Models/InvoiceCollection+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Invoice+MyStuff.swift"; path = "Models/Invoice+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InvoiceItem+MyStuff.swift"; path = "Models/InvoiceItem+MyStuff.swift"; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 				C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */,
 				C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */,
 				C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */,
+				C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */,
 			);
 			name = Foundation;
 			sourceTree = "<group>";
@@ -849,6 +852,7 @@
 				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
 				C976305F1F219A0900BA8E42 /* JSON+Date.swift in Sources */,
 				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift in Sources */,
+				C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */,
 				C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */,
 				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,
 				C98A4FB51DCB0329002BB076 /* Vendor+MyStuff.swift in Sources */,

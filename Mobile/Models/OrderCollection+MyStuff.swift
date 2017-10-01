@@ -41,7 +41,7 @@ extension OrderCollection {
     // MARK: - Serialization
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-        myDict["date"] = self.date.stringFromDate()
+        myDict["date"] = dateTimeInterval.toPythonDateString()
 
         // ...
 
