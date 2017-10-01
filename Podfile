@@ -3,18 +3,18 @@ platform :ios, '10.0'
 
 # Basic
 def basic_pods
-  pod 'Alamofire', '~> 4.4'
+  pod 'Alamofire',          '~> 4.4'
   pod 'SwiftyJSON'
   pod 'KeychainAccess'
-  pod 'PKHUD', '~> 4.2'
+  pod 'PKHUD',              '~> 4.2'
   pod 'SwiftyBeaver'
   pod '1PasswordExtension', :git => 'https://github.com/AgileBits/onepassword-app-extension.git', :branch => 'new/ios10'
   # A
-  # pod 'DATAStack', '~> 6'
-  # pod 'DATASource', '~> 6'
-  # pod 'Sync', '~> 2'
+  # pod 'DATAStack',        '~> 6'
+  # pod 'DATASource',       '~> 6'
+  # pod 'Sync',             '~> 2'
   # B
-  # pod 'ObjectMapper', '~> 2.2'
+  # pod 'ObjectMapper',     '~> 2.2'
   # pod 'AlamofireObjectMapper', '~> 4.0'
   #
   # pod 'ChameleonFramework/Swift3'
