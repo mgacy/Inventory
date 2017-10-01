@@ -134,7 +134,7 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
 
     // MARK: - User Actions
 
-    func refreshTable(_ refreshControl: UIRefreshControl) {
+    @objc func refreshTable(_ refreshControl: UIRefreshControl) {
         guard let storeID = userManager.storeID else { return }
 
         //HUD.show(.progress)

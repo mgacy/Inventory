@@ -124,7 +124,7 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
 
     // MARK: - User interaction
 
-    func refreshTable(_ refreshControl: UIRefreshControl) {
+    @objc func refreshTable(_ refreshControl: UIRefreshControl) {
         guard let storeID = userManager.storeID else { return }
 
         //HUD.show(.progress)
