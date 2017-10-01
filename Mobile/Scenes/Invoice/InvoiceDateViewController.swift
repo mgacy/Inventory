@@ -43,7 +43,6 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
         title = "Invoices"
         self.refreshControl?.addTarget(self, action: #selector(InvoiceDateViewController.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
-
         setupTableView()
 
         guard let storeID = userManager.storeID else {
@@ -89,7 +88,7 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
 
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "dateTimeInterval", ascending: false)
         request.sortDescriptors = [sortDescriptor]
 
         //let fetchPredicate = NSPredicate(format: "inventory == %@", inventory)
@@ -109,15 +108,14 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCollection = dataSource.objectAtIndexPath(indexPath)
         guard let selection = selectedCollection else { fatalError("Unable to get selection") }
-        guard
-            let storeID = userManager.storeID,
-            let collectionDate = selection.date else {
-                log.error("\(#function) FAILED : unable to get storeID or collection date"); return
+        guard let storeID = userManager.storeID else {
+                log.error("\(#function) FAILED : unable to get storeID"); return
         }
+
         HUD.show(.progress)
         log.info("GET InvoiceCollection from server ...")
         APIManager.sharedInstance.getInvoiceCollection(
-            storeID: storeID, invoiceDate: collectionDate,
+            storeID: storeID, invoiceDate: selection.date.shortDate,
             completion: completedGetInvoiceCollection)
 
         /// TODO: move before call to APIManager?
@@ -151,7 +149,7 @@ extension InvoiceDateViewController: TableViewDataSourceDelegate {
     }
     */
     func configure(_ cell: UITableViewCell, for collection: InvoiceCollection) {
-        cell.textLabel?.text = collection.date
+        cell.textLabel?.text = collection.date.altStringFromDate()
         switch collection.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black
@@ -171,6 +169,7 @@ extension InvoiceDateViewController {
         refreshControl?.endRefreshing()
         guard error == nil else {
             //if error?._code == NSURLErrorTimedOut {}
+            log.error("\(#function) FAILED : \(String(describing: error))")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -181,8 +180,8 @@ extension InvoiceDateViewController {
         do {
             try managedObjectContext.syncCollections(InvoiceCollection.self, withJSON: json)
             //try InvoiceCollection.sync(withJSON: json, in: managedObjectContext)
-        } catch {
-            log.error("Unable to sync Inventories")
+        } catch let error {
+            log.error("Unable to sync Invoices: \(error)")
             HUD.flash(.error, delay: 1.0)
         }
         HUD.hide()
@@ -192,6 +191,7 @@ extension InvoiceDateViewController {
 
     func completedGetInvoiceCollection(json: JSON?, error: Error?) {
         guard error == nil else {
+            log.error("Unable to get InvoiceCollection: \(String(describing: error))")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -225,12 +225,13 @@ extension InvoiceDateViewController {
             }
 
             // Get list of Invoices from server
-            // log.info("Fetching existing InvoiceCollections from server ...")
+            log.verbose("Fetching existing InvoiceCollections from server ...")
             APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
                                                                   completion: self.completedGetListOfInvoiceCollections)
         } else {
             // if let error = error { // present more detailed error ...
-            log.error("Unable to sync ...")
+            log.error("Unable to sync: \(String(describing: error))")
+            refreshControl?.endRefreshing()
             HUD.flash(.error, delay: 1.0)
         }
     }

@@ -93,7 +93,7 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
 
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "dateTimeInterval", ascending: false)
         request.sortDescriptors = [sortDescriptor]
 
         request.fetchBatchSize = fetchBatchSize
@@ -110,28 +110,18 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCollection = dataSource.objectAtIndexPath(indexPath)
         guard let selection = selectedCollection else { fatalError("Unable to get selection") }
+        guard let storeID = userManager.storeID else {
+            log.error("\(#function) FAILED : unable to get storeID"); return
+        }
 
         switch selection.uploaded {
         case true:
-            // Get date to use when getting OrderCollection from server
-            guard let storeID = userManager.storeID,
-                  let collectionDate = selection.date else {
-                log.error("\(#function) FAILED : unable to get storeID or collection date"); return
-            }
-
             //tableView.activityIndicatorView.startAnimating()
             HUD.show(.progress)
 
-            /// TODO: ideally, we would want to deleteChildOrders *after* fetching data from server
-            log.info("Deleting Orders of selected OrderCollection ...")
-            deleteChildOrders(parent: selection)
-
-            // Reset selection since we reset the managedObjectContext in deleteChildOrders
-            selectedCollection = dataSource.objectAtIndexPath(indexPath)
-
             log.info("GET OrderCollection from server ...")
             APIManager.sharedInstance.getOrderCollection(
-                storeID: storeID, orderDate: collectionDate,
+                storeID: storeID, orderDate: selection.date.shortDate,
                 completion: completedGetExistingOrderCollection)
 
         case false:
@@ -149,9 +139,6 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
 
         //HUD.show(.progress)
         _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
-
-        //tableView.reloadData()
-        //refreshControl.endRefreshing()
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
@@ -161,6 +148,7 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
         }
 
         /// TODO: should we first check if there are any valid Inventories to use for generating the Orders?
+        /// TODO: break out into `createAlertController() -> UIAlertController`
         let alertController = UIAlertController(
             title: "Create Order", message: "Set order quantities from the most recent inventory or simply use pars?",
             preferredStyle: .actionSheet)
@@ -200,7 +188,7 @@ extension OrderDateViewController: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: UITableViewCell, for collection: OrderCollection) {
-        cell.textLabel?.text = collection.date
+        cell.textLabel?.text = collection.date.altStringFromDate()
 
         switch collection.uploaded {
         case true:
@@ -248,34 +236,16 @@ extension OrderDateViewController {
             HUD.flash(.error, delay: 1.0); return
         }
 
-        /// TODO: delete child orders after, rather than before fetching from server
-        /*
-        guard let selectedCollectionIndex = selectedCollectionIndex else {
-            log.error("PROBLEM - 1a"); return
-        }
-        var selection: OrderCollection
-        selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
-
-        // Delete existing orders of selected collection
-        log.info("Deleting Orders of selected OrderCollection ...")
-        deleteChildOrders(parent: selection)
-
-        // Reset selection since we reset the managedObjectContext in deleteChildOrders
-        selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
-        */
-
         guard let selection = selectedCollection else {
             log.error("\(#function) FAILED : still unable to get selected OrderCollection\n")
             HUD.flash(.error, delay: 1.0); return
         }
 
-        // Update selected Inventory with full JSON from server.
-        selection.updateExisting(context: self.managedObjectContext!, json: json)
+        selection.update(in: managedObjectContext!, with: json)
         managedObjectContext!.performSaveOrRollback()
 
         //tableView.activityIndicatorView.stopAnimating()
         HUD.hide()
-
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
@@ -287,14 +257,12 @@ extension OrderDateViewController {
             log.error("\(#function) FAILED : unable to get JSON")
             HUD.flash(.error, delay: 1.0); return
         }
-        //log.info("Creating new OrderCollection ...")
-        selectedCollection = OrderCollection(context: managedObjectContext!, json: json, uploaded: false)
 
-        // Save the context.
+        log.verbose("Creating new OrderCollection ...")
+        selectedCollection = OrderCollection(context: managedObjectContext!, json: json, uploaded: false)
         managedObjectContext!.performSaveOrRollback()
 
         HUD.hide()
-
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
 
@@ -306,10 +274,9 @@ extension OrderDateViewController {
                 HUD.flash(.error, delay: 1.0); return
             }
 
-            // log.info("Fetching existing OrderCollections from server ...")
+            log.verbose("Fetching existing OrderCollections from server ...")
             APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
                                                                 completion: self.completedGetListOfOrderCollections)
-
         } else {
             log.error("Unable to login / sync ...")
             // if let error = error { // present more detailed error ...

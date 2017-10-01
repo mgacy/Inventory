@@ -41,3 +41,5 @@ extension Vendor: Syncable {
     }
 
 }
+
+extension Vendor: Managed {}

@@ -12,16 +12,6 @@ import SwiftyJSON
 
 // swiftlint:disable force_cast
 
-// MARK: - Insert
-extension NSManagedObjectContext {
-
-    public func insertObject<T: NSManagedObject>(_ entity: T.Type) -> T {
-        let newItem = T(context: self)
-        return newItem
-    }
-
-}
-
 // MARK: - Fetch
 extension NSManagedObjectContext {
 
@@ -108,7 +98,7 @@ extension NSManagedObjectContext {
 
         do {
             let batchDeleteResult = try self.execute(batchDeleteRequest) as! NSBatchDeleteResult
-            log.verbose("The batch delete request has deleted \(batchDeleteResult.result!) records.")
+            log.verbose("Batch deleted \(batchDeleteResult.result!) \(entityClass.self) records.")
 
             // As the request directly interacts with the persistent store, we need need to reset the context for it to be aware of the changes
             self.reset()
@@ -270,40 +260,15 @@ extension NSManagedObjectContext {
 
 }
 
-// MARK: - SyncableCollection -
+// MARK: - ManagedSyncableCollection -
 
 extension NSManagedObjectContext {
 
-    func fetchByDate<T: SyncableCollection>(_ entity: T.Type, withDate date: String) -> T? where T: NSManagedObject {
-        let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-        request.predicate = NSPredicate(format: "date == %@", date)
-        request.fetchLimit = 2
-
-        do {
-            let fetchResults = try self.fetch(request)
-
-            switch fetchResults.count {
-            case 0:
-                log.debug("\(#function) : found 0 matches for date: \(date)")
-                return nil
-            case 1:
-                return fetchResults[0]
-            default:
-                log.error("\(#function) FAILED : found multiple matches: \(fetchResults)")
-                fatalError("Returned multiple objects, expected max 1")
-            }
-
-        } catch let error {
-            log.error("\(#function) FAILED : error with request: \(error)")
-            //throw error?
-        }
-        return nil
-    }
-
-    func fetchCollectionDict<T: SyncableCollection>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [String: T] where T: NSManagedObject {
+    func fetchCollectionDict<T: ManagedSyncableCollection>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [Date: T] where T: NSManagedObject {
 
         let request: NSFetchRequest<T>
         if #available(iOS 10.0, *) {
+            // swiftlint:disable:next force_cast
             request = entityClass.fetchRequest() as! NSFetchRequest<T>
         } else {
             let entityName = String(describing: entityClass)
@@ -320,7 +285,7 @@ extension NSManagedObjectContext {
 
         do {
             let fetchedResult = try self.fetch(request)
-            let objectDict = fetchedResult.toDictionary { $0.date! }
+            let objectDict = fetchedResult.toDictionary { $0.date }
             return objectDict
         } catch let error {
             log.error(error.localizedDescription)
@@ -328,32 +293,29 @@ extension NSManagedObjectContext {
         }
     }
 
-    /// TODO: add `uploaded: Bool = true`?
-
-    public func syncCollections<T: SyncableCollection>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
-        // Filter new (uploaded = false) collections
-        let fetchPredicate = NSPredicate(format: "uploaded == %@", NSNumber(value: true))
+    func syncCollections<T: ManagedSyncableCollection>(_ entity: T.Type, withJSON json: JSON) throws where T: NSManagedObject {
+        let fetchPredicate: NSPredicate? = nil
         guard let objectDict = try? fetchCollectionDict(T.self, matching: fetchPredicate) else {
             log.error("\(#function) FAILED : unable to create Collection dictionary"); return
         }
 
         let localDates = Set(objectDict.keys)
-        var remoteDates = Set<String>()
+        var remoteDates = Set<Date>()
 
         for (_, objectJSON):(String, JSON) in json {
-            guard let objectDate = objectJSON["date"].string else {
-                log.warning("\(#function) : unable to get date from \(objectJSON)")
-                continue
+            guard let objectDateString = objectJSON["date"].string,
+                let objectDate = objectDateString.toBasicDate() else {
+                    log.warning("\(#function) : unable to get date from \(objectJSON)")
+                    continue
             }
             remoteDates.insert(objectDate)
 
             // Find + update / create Items
             if let existingObject = objectDict[objectDate] {
-                existingObject.update(context: self, withJSON: objectJSON)
+                existingObject.update(in: self, with: objectJSON)
             } else {
-                //_ = T(context: self, json: objectJSON)
                 let newObject = T(context: self)
-                newObject.update(context: self, withJSON: objectJSON, uploaded: true)
+                newObject.update(in: self, with: objectJSON)
             }
         }
         log.debug("\(T.self) - remote: \(remoteDates) - local: \(localDates)")
@@ -362,7 +324,7 @@ extension NSManagedObjectContext {
         let deletedObjects = localDates.subtracting(remoteDates)
         if !deletedObjects.isEmpty {
             log.debug("We need to delete: \(deletedObjects)")
-            let fetchPredicate = NSPredicate(format: "date IN %@", deletedObjects)
+            let fetchPredicate = NSPredicate(format: "dateTimeInterval IN %@", deletedObjects)
             do {
                 try self.deleteEntities(T.self, filter: fetchPredicate)
             } catch {

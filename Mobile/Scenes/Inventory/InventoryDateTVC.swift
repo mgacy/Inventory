@@ -51,7 +51,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.refreshControl?.addTarget(self, action: #selector(InventoryDateTVC.refreshTable(_:)),
                                        for: UIControlEvents.valueChanged)
-
         setupTableView()
     }
 
@@ -181,10 +180,6 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
 
         //HUD.show(.progress)
         _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
-
-        /// TODO: the following should happen in completedSync / completedGetListOfInventories
-        //tableView.reloadData()
-        //refreshControl.endRefreshing()
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
@@ -214,8 +209,7 @@ extension InventoryDateTVC: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: UITableViewCell, for inventory: Inventory) {
-        cell.textLabel?.text = inventory.date
-
+        cell.textLabel?.text = Date(timeIntervalSinceReferenceDate: inventory.date).altStringFromDate()
         switch inventory.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black
@@ -235,6 +229,7 @@ extension InventoryDateTVC {
         refreshControl?.endRefreshing()
         guard error == nil else {
             //if error?._code == NSURLErrorTimedOut {}
+            log.error("\(#function) FAILED : \(String(describing: error))")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -244,8 +239,8 @@ extension InventoryDateTVC {
 
         do {
             try managedObjectContext.syncEntities(Inventory.self, withJSON: json)
-        } catch {
-            log.error("Unable to sync Inventories")
+        } catch let error {
+            log.error("Unable to sync Inventories: \(error)")
             HUD.flash(.error, delay: 1.0)
         }
         HUD.hide()
@@ -255,6 +250,7 @@ extension InventoryDateTVC {
 
     func completedGetExistingInventory(json: JSON?, error: Error?) {
         guard error == nil else {
+            log.error("Unable to get Inventory: \(String(describing: error))")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -268,7 +264,6 @@ extension InventoryDateTVC {
 
         // Update selected Inventory with full JSON from server.
         selection.updateExisting(context: managedObjectContext!, json: json)
-
         managedObjectContext!.performSaveOrRollback()
 
         //tableView.activityIndicatorView.stopAnimating()
@@ -278,6 +273,7 @@ extension InventoryDateTVC {
 
     func completedGetNewInventory(json: JSON?, error: Error?) {
         guard error == nil else {
+            log.error("Unable to get Inventory: \(String(describing: error))")
             HUD.flash(.error, delay: 1.0); return
         }
         guard let json = json else {
@@ -296,19 +292,20 @@ extension InventoryDateTVC {
     func completedSync(_ succeeded: Bool, _ error: Error?) {
         if succeeded {
             log.info("Completed sync - succeeded: \(succeeded)")
-
             guard let storeID = userManager.storeID else {
-                log.error("\(#function) FAILED : unable to get storeID"); return
+                log.error("\(#function) FAILED : unable to get storeID")
+                HUD.flash(.error, delay: 1.0); return
             }
 
             // Get list of Inventories from server
-            // log.info("Fetching existing Inventories from server ...")
+            log.verbose("Fetching existing Inventories from server ...")
             APIManager.sharedInstance.getListOfInventories(storeID: storeID,
                                                            completion: self.completedGetListOfInventories)
 
         } else {
             // if let error = error { // present more detailed error ...
-            log.error("Unable to sync ...")
+            log.error("Unable to sync: \(String(describing: error))")
+            refreshControl?.endRefreshing()
             HUD.flash(.error, delay: 1.0); return
         }
     }

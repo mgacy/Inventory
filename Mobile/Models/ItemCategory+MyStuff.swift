@@ -32,3 +32,5 @@ extension ItemCategory: Syncable {
     }
 
 }
+
+extension ItemCategory: Managed {}

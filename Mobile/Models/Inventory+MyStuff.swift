@@ -10,6 +10,8 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+//extension Inventory: DateFacade {}
+
 extension Inventory {
 
     // MARK: - Lifecycle
@@ -19,8 +21,10 @@ extension Inventory {
 
         // Set properties
         /// TODO: date and storeID are required and lack default values
-        if let date = json["date"].string {
-            self.date = date
+        if let dateString = json["date"].string,
+           let date = dateString.toBasicDate() {
+            //self.date = date.timeIntervalSince1970
+            self.date = date.timeIntervalSinceReferenceDate
         }
         if let storeID = json["store_id"].int32 {
             self.storeID = storeID
@@ -59,9 +63,7 @@ extension Inventory {
         }
 
         var myDict = [String: Any]()
-
-        /// TODO: handle conversion from NSDate to string
-        myDict["date"] = self.date
+        myDict["date"] = date.toPythonDateString()
         myDict["store_id"] = storeID
 
         // Apple suggests using a default value of 0 over using optional attributes
@@ -136,8 +138,10 @@ extension Inventory: Syncable {
         //     log.error("\(#function) FAILED : SwiftyJSON"); return
         // }
 
-        if let date = json["date"].string {
-            self.date = date
+        if let dateString = json["date"].string,
+           let date = dateString.toBasicDate() {
+                //self.date = date.timeIntervalSince1970
+                self.date = date.timeIntervalSinceReferenceDate
         }
         if let remoteID = json["id"].int32 {
             self.remoteID = remoteID

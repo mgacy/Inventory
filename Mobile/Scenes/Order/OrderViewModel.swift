@@ -36,7 +36,7 @@ class OrderViewModel {
     }
 
     /// TODO: make optional?
-    var orderSubject: String { return "Order for \(order.collection?.date ?? "")" }
+    var orderSubject: String { return "Order for \(order.collection?.date.stringFromDate() ?? "")" }
 
     var orderMessage: String? {
         guard let items = order.items else { return nil }
@@ -54,7 +54,7 @@ class OrderViewModel {
         if messageItems.count == 0 { return nil }
 
         messageItems.sort()
-        let message = "Order for \(order.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
+        let message = "Order for \(order.collection?.date.stringFromDate() ?? ""):\n\(messageItems.joined(separator: ""))"
         log.debug("Order Message: \(message)")
         return message
     }

@@ -38,7 +38,7 @@ import SwiftyJSON
 
 extension Invoice {
 
-    //@NSManaged var status: InvoiceStatus
+    //@NSManaged var ageType: InvoiceStatus
 
     // MARK: - Lifecycle
 
@@ -54,11 +54,12 @@ extension Invoice {
         var myDict = [String: Any]()
         myDict["id"] = Int(self.remoteID)
         myDict["invoice_no"] = Int(self.invoiceNo)
-        myDict["ship_date"] = self.shipDate
-        myDict["receive_date"] = self.receiveDate
+        myDict["ship_date"] = shipDate.toPythonDateString()
+        myDict["receive_date"] = receiveDate.toPythonDateString()
         myDict["credit"] = Double(self.credit)
         myDict["shipping"] = Double(self.shipping)
         myDict["taxes"] = Double(self.taxes)
+        /// FIXME: why is total_cost not Double?
         myDict["total_cost"] = Int(self.totalCost)
         myDict["check_no"] = Int(self.checkNo)
         //myDict["status"] = InvoiceStatus.asString(raw: status) ?? ""
@@ -105,22 +106,17 @@ extension Invoice: ManagedSyncable {
         if let remoteID = json["id"].int32 {
             self.remoteID = remoteID
         }
-        if let shipDate = json["ship_date"].string {
-            self.shipDate = shipDate
+        if let shipDateString = json["ship_date"].string,
+           let shipDate = shipDateString.toBasicDate() {
+            self.shipDate = shipDate.timeIntervalSinceReferenceDate
         }
-        if let receiveDate = json["receive_date"].string {
-            self.receiveDate = receiveDate
+        if let receiveDateString = json["receive_date"].string,
+           let receiveDate = receiveDateString.toBasicDate() {
+            self.receiveDate = receiveDate.timeIntervalSinceReferenceDate
         }
         if let vendorID = json["vendor"]["id"].int32 {
             self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
         }
-
-        /*
-         if let statusString = json["status"].string,
-         let status = InvoiceStatus(string: statusString) {
-         self.status = status
-         }
-         */
         if let statusString = json["status"].string {
             switch statusString {
             case "pending":
@@ -175,7 +171,7 @@ extension Invoice: SyncableParent {
         return objectDict
     }
 
-    func addToChildren(_ entity: ChildType) {
+    func updateParent(of entity: ChildType) {
         entity.invoice = self
         //addToItems(entity)
     }
