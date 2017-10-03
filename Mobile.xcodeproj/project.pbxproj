@@ -67,6 +67,10 @@
 		C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */; };
 		C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */; };
 		C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */; };
+		C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB057F1F8315B000A07529 /* RemoteItem.swift */; };
+		C9BB05831F83162500A07529 /* DataRequest+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05821F83162500A07529 /* DataRequest+Decodable.swift */; };
+		C9BB05851F83164400A07529 /* AlamofireDecodableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05841F83164400A07529 /* AlamofireDecodableError.swift */; };
+		C9BB05891F83171000A07529 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05881F83171000A07529 /* ActivityIndicator.swift */; };
 		C9C221191EFCD424009C7D01 /* ViewController+instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C221181EFCD423009C7D01 /* ViewController+instance.swift */; };
 		C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */; };
 		C9C2DA081F0F3EC2007263FB /* InventoryLocationItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA071F0F3EC2007263FB /* InventoryLocationItemViewModel.swift */; };
@@ -171,6 +175,10 @@
 		C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegueHandler.swift; path = Protocols/SegueHandler.swift; sourceTree = "<group>"; };
 		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSObject+Magic.swift"; path = "Extensions/Foundation/NSObject+Magic.swift"; sourceTree = "<group>"; };
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Magic.swift"; path = "Extensions/UIKit/UIView+Magic.swift"; sourceTree = "<group>"; };
+		C9BB057F1F8315B000A07529 /* RemoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteItem.swift; sourceTree = "<group>"; };
+		C9BB05821F83162500A07529 /* DataRequest+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DataRequest+Decodable.swift"; path = "Extensions/Alamofire/DataRequest+Decodable.swift"; sourceTree = "<group>"; };
+		C9BB05841F83164400A07529 /* AlamofireDecodableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlamofireDecodableError.swift; path = Extensions/Alamofire/AlamofireDecodableError.swift; sourceTree = "<group>"; };
+		C9BB05881F83171000A07529 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		C9C221181EFCD423009C7D01 /* ViewController+instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ViewController+instance.swift"; path = "Extensions/UIKit/ViewController+instance.swift"; sourceTree = "<group>"; };
 		C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubItemTableViewCell.swift; path = Common/SubItemTableViewCell.swift; sourceTree = "<group>"; };
 		C9C2DA071F0F3EC2007263FB /* InventoryLocationItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InventoryLocationItemViewModel.swift; path = Scenes/Inventory/InventoryLocationItemViewModel.swift; sourceTree = "<group>"; };
@@ -320,6 +328,7 @@
 				C91B4EDB1E5C2863002DA2A5 /* User.swift */,
 				C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */,
 				C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */,
+				C9BB057F1F8315B000A07529 /* RemoteItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -381,6 +390,7 @@
 		C9BA91271DEB957400DA2C6C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C9BB05811F8315F700A07529 /* Alamofire */,
 				C9BA91291DEB959500DA2C6C /* Foundation */,
 				C9BA91281DEB958200DA2C6C /* UIKit */,
 				C976305E1F219A0900BA8E42 /* JSON+Date.swift */,
@@ -410,6 +420,15 @@
 				C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */,
 			);
 			name = Foundation;
+			sourceTree = "<group>";
+		};
+		C9BB05811F8315F700A07529 /* Alamofire */ = {
+			isa = PBXGroup;
+			children = (
+				C9BB05841F83164400A07529 /* AlamofireDecodableError.swift */,
+				C9BB05821F83162500A07529 /* DataRequest+Decodable.swift */,
+			);
+			name = Alamofire;
 			sourceTree = "<group>";
 		};
 		C9C221151EFCCE4A009C7D01 /* Item List */ = {
@@ -504,6 +523,7 @@
 				C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */,
 				C902FF2D1DB816EB0063CD02 /* Keypad.swift */,
 				C9F515E21DB7EF98004C10E6 /* ViewController.swift */,
+				C9BB05881F83171000A07529 /* ActivityIndicator.swift */,
 				C9B825E61EB9A0A4009B92F0 /* Core Data Helpers */,
 				C9BA91271DEB957400DA2C6C /* Extensions */,
 				C940847A1EFCCC8B00638E25 /* Models */,
@@ -846,6 +866,7 @@
 			files = (
 				C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */,
 				C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */,
+				C9BB05851F83164400A07529 /* AlamofireDecodableError.swift in Sources */,
 				C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */,
 				C92D75BF1DC7A7E500AA1A02 /* InvoiceItemViewController.swift in Sources */,
 				C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */,
@@ -860,6 +881,7 @@
 				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
 				C976305F1F219A0900BA8E42 /* JSON+Date.swift in Sources */,
 				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift in Sources */,
+				C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */,
 				C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */,
 				C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */,
 				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,
@@ -882,6 +904,7 @@
 				C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */,
 				C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */,
 				C935E9A41E60D713003BF386 /* InitialLoginVC.swift in Sources */,
+				C9BB05831F83162500A07529 /* DataRequest+Decodable.swift in Sources */,
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
 				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,
 				C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */,
@@ -897,6 +920,7 @@
 				C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */,
 				C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */,
 				C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */,
+				C9BB05891F83171000A07529 /* ActivityIndicator.swift in Sources */,
 				C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */,
 				C9A14ABC1DC6742700ACDE69 /* OrderVendorViewController.swift in Sources */,
 				C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */,
