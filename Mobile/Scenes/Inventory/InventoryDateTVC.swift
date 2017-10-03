@@ -130,6 +130,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedInventory = dataSource.objectAtIndexPath(indexPath)
 
+        /*
         guard let selection = selectedInventory else { fatalError("Unable to get selection") }
 
         switch selection.uploaded {
@@ -169,21 +170,24 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
             log.info("LOAD NEW selectedInventory from disk ...")
             performSegue(withIdentifier: .showNewItem)
         }
-
+         */
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
     // MARK: - User Actions
 
     @objc func refreshTable(_ refreshControl: UIRefreshControl) {
+        /*
         guard let storeID = userManager.storeID else { return }
 
         //HUD.show(.progress)
         _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
+         */
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {
         /// TODO: check if there is already an Inventory for the current date and of the current type
+        /*
         guard let storeID = userManager.storeID else {
             fatalError("Unable to get storeID")
         }
@@ -192,6 +196,7 @@ class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueH
         HUD.show(.progress)
         APIManager.sharedInstance.getNewInventory(
             isActive: true, typeID: 1, storeID: storeID, completion: completedGetNewInventory)
+         */
     }
 
 }
@@ -219,7 +224,7 @@ extension InventoryDateTVC: TableViewDataSourceDelegate {
     }
 
 }
-
+/*
 // MARK: - Completion Handlers + Sync
 extension InventoryDateTVC {
 
@@ -332,7 +337,7 @@ extension InventoryDateTVC {
     }
 
 }
-
+*/
 // MARK: - For Demo
 extension InventoryDateTVC {
 

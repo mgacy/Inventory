@@ -138,7 +138,7 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
         guard let storeID = userManager.storeID else { return }
 
         //HUD.show(.progress)
-        _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
+        //_ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
     }
 
     @IBAction func newTapped(_ sender: AnyObject) {

@@ -207,6 +207,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
 
         // Sync
+        /*
         guard
             let inventoryNavController = tabBarController.viewControllers?[0] as? UINavigationController,
             let controller = inventoryNavController.topViewController as? InventoryDateTVC else {
@@ -215,6 +216,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         HUD.show(.progress)
         _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!,
                         completionHandler: controller.completedSync)
+         */
     }
 
 }

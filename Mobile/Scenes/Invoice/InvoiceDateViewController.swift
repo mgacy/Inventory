@@ -128,7 +128,7 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
         guard let storeID = userManager.storeID else { return }
 
         //HUD.show(.progress)
-        _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
+        //_ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
 
         //self.tableView.reloadData()
         //refreshControl.endRefreshing()

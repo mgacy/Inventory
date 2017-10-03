@@ -95,8 +95,8 @@ class InitialSignUpViewController: UIViewController, UITextFieldDelegate, SegueH
             controller.userManager = userManager
 
             // Sync with completion handler from the new view controller.
-            _ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!,
-                            completionHandler: controller.completedSync)
+            //_ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!,
+            //                completionHandler: controller.completedSync)
         case .showSignUp:
             log.verbose("SignUpSegue")
 
