@@ -41,6 +41,7 @@
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
 		C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */; };
 		C949C20E1F160719008A5EC4 /* InvoiceItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949C20D1F160719008A5EC4 /* InvoiceItemViewModel.swift */; };
+		C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9564F311F840276007D84F6 /* RemoteInventory.swift */; };
 		C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */; };
 		C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */; };
 		C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */; };
@@ -151,6 +152,7 @@
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = InvoiceKeypadViewController.storyboard; path = Scenes/Invoice/InvoiceKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C949C20D1F160719008A5EC4 /* InvoiceItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InvoiceItemViewModel.swift; path = Scenes/Invoice/InvoiceItemViewModel.swift; sourceTree = "<group>"; };
+		C9564F311F840276007D84F6 /* RemoteInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteInventory.swift; sourceTree = "<group>"; };
 		C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TimeInterval+MyStuff.swift"; path = "Extensions/Foundation/TimeInterval+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InvoiceCollection+MyStuff.swift"; path = "Models/InvoiceCollection+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Invoice+MyStuff.swift"; path = "Models/Invoice+MyStuff.swift"; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 				C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */,
 				C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */,
 				C9BB057F1F8315B000A07529 /* RemoteItem.swift */,
+				C9564F311F840276007D84F6 /* RemoteInventory.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -895,6 +898,7 @@
 				C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */,
 				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,
 				C98A4FB51DCB0329002BB076 /* Vendor+MyStuff.swift in Sources */,
+				C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */,
 				C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */,
 				C902FF431DBE769C0063CD02 /* InventoryItem+MyStuff.swift in Sources */,
 				C9F645591EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift in Sources */,
