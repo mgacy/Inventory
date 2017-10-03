@@ -59,7 +59,10 @@ class APIManager {
         }
     }
 
-    // MARK: - API Calls - General
+}
+
+// MARK: - General
+extension APIManager {
 
     func getItems(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.getItems(storeID: storeID))
@@ -109,7 +112,10 @@ class APIManager {
         }
     }
 
-    // MARK: - API Calls - Inventory
+}
+
+// MARK: - Inventory
+extension APIManager {
 
     func getListOfInventories(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.listInventories(storeID: storeID))
@@ -176,7 +182,10 @@ class APIManager {
         }
     }
 
-    // MARK: - API Calls - Invoice
+}
+
+// MARK: - Invoice
+extension APIManager {
 
     func getListOfInvoiceCollections(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.listInvoices(storeID: storeID))
@@ -277,7 +286,10 @@ class APIManager {
         }
     }
 
-    // MARK: - API Calls - Order
+}
+
+// MARK: - Order
+extension APIManager {
 
     func getListOfOrderCollections(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.listOrders(storeID: storeID))
@@ -344,4 +356,5 @@ class APIManager {
                 }
         }
     }
+
 }
