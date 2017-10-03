@@ -9,6 +9,13 @@
 import RxSwift
 import RxCocoa
 
+// swiftlint:disable colon
+// swiftlint:disable identifier_name
+// swiftlint:disable multiple_closures_with_trailing_closure
+// swiftlint:disable shorthand_operator
+// swiftlint:disable type_name
+// swiftlint:disable void_return
+
 private struct ActivityToken<E> : ObservableConvertibleType, Disposable {
     private let _source: Observable<E>
     private let _dispose: Cancelable

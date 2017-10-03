@@ -9,6 +9,12 @@
 import Foundation
 import Alamofire
 
+// swiftlint:disable identifier_name
+// swiftlint:disable line_length
+// swiftlint:disable statement_position
+// swiftlint:disable trailing_newline
+// swiftlint:disable vertical_whitespace
+
 extension DataRequest {
 
     private static func DecodableObjectSerializer<T: Decodable>(_ keyPath: String?, _ decoder: JSONDecoder) -> DataResponseSerializer<T> {
