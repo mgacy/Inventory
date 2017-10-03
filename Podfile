@@ -9,6 +9,11 @@ def basic_pods
   pod 'PKHUD',              '~> 4.2'
   pod 'SwiftyBeaver'
   pod '1PasswordExtension', :git => 'https://github.com/AgileBits/onepassword-app-extension.git', :branch => 'new/ios10'
+  pod 'RxSwift',            '~> 3.0'
+  pod 'RxCocoa',            '~> 3.0'
+  pod 'RxAlamofire'
+  # pod 'RxDataSources',      '~> 1.0'
+  # pod "RxCoreData",         '~> 0.3.1'
   # A
   # pod 'DATAStack',        '~> 6'
   # pod 'DATASource',       '~> 6'
