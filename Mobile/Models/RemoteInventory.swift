@@ -13,10 +13,12 @@ import Foundation
 struct RemoteInventory: Codable {
 
     struct Category: Codable {
+
         struct CategoryItem: Codable {
             let id: Int
             let name: String
         }
+
         let id: Int
         let name: String
         let items: [CategoryItem]
@@ -34,7 +36,7 @@ struct RemoteInventory: Codable {
             }
         }
 
-        let id: Int
+        let remoteID: Int
         let name: String
         let categoryID: Int
         let packSize: Int
@@ -46,7 +48,7 @@ struct RemoteInventory: Codable {
         let purchaseSubUnitID: Int
 
         private enum CodingKeys: String, CodingKey {
-            case id
+            case remoteID = "id"
             case name
             case categoryID = "category_id"
             case packSize = "pack_size"
@@ -59,28 +61,6 @@ struct RemoteInventory: Codable {
         }
     }
 
-    struct Location: Codable {
-        struct LocationCategory: Codable {
-            let id: Int
-            let name: String
-            let items: [Int]
-        }
-
-        let id: Int
-        let name: String
-        let locType: String
-        let categories: [LocationCategory]?
-        let items: [Int]?
-
-        private enum CodingKeys: String, CodingKey {
-            case id
-            case name
-            case locType = "loc_type"
-            case categories
-            case items
-        }
-    }
-
     let remoteID: Int
     //let date: Date
     let date: String
@@ -88,7 +68,7 @@ struct RemoteInventory: Codable {
     let storeID: Int
     let items: [Item]?
     let categories: [Category]?
-    let locations: [Location]?
+    let locations: [RemoteInventoryLocation]?
 
     private enum CodingKeys: String, CodingKey {
         case remoteID = "id"
@@ -102,6 +82,38 @@ struct RemoteInventory: Codable {
 }
 
 extension RemoteInventory: RemoteRecord {
+    typealias SyncIdentifierType = Int32
+    var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
+}
+
+// MARK: - InventoryLocation
+
+struct RemoteInventoryLocation: Codable {
+
+    // Nested
+
+    struct LocationCategory: Codable {
+        let id: Int
+        let name: String
+        let items: [Int]
+    }
+
+    let remoteID: Int
+    let name: String
+    let locType: String
+    let categories: [LocationCategory]?
+    let items: [Int]?
+
+    private enum CodingKeys: String, CodingKey {
+        case remoteID = "id"
+        case name
+        case locType = "loc_type"
+        case categories
+        case items
+    }
+}
+
+extension RemoteInventoryLocation: RemoteRecord {
     typealias SyncIdentifierType = Int32
     var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
 }
