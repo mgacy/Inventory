@@ -8,6 +8,8 @@
 
 import Foundation
 
+// swiftlint:disable nesting
+
 protocol RemoteRecord: Codable {
     associatedtype SyncIdentifierType: Hashable
     var syncIdentifier: SyncIdentifierType { get }
@@ -229,29 +231,9 @@ extension RemoteUnit: RemoteRecord {
 // MARK: - Vendor
 
 struct RemoteVendor: Codable {
-
-    // Nested
-
-    struct Representative: Codable {
-        let email: String?
-        let firstName: String?
-        let remoteID: Int
-        let lastName: String?
-        let phone: String?
-        private enum CodingKeys: String, CodingKey {
-            case email
-            case firstName = "first_name"
-            case remoteID = "id"
-            case lastName = "last_name"
-            case phone
-        }
-    }
-
-    // Properties
-
     let remoteID: Int
     let name: String
-    let rep: Representative?
+    let rep: RemoteRepresentative?
 
     private enum CodingKeys: String, CodingKey {
         case remoteID = "id"
@@ -261,6 +243,28 @@ struct RemoteVendor: Codable {
 }
 
 extension RemoteVendor: RemoteRecord {
+    typealias SyncIdentifierType = Int32
+    var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
+}
+
+// MARK: - VendorRep
+
+struct RemoteRepresentative: Codable {
+    let email: String?
+    let firstName: String?
+    let remoteID: Int
+    let lastName: String?
+    let phone: String?
+    private enum CodingKeys: String, CodingKey {
+        case email
+        case firstName = "first_name"
+        case remoteID = "id"
+        case lastName = "last_name"
+        case phone
+    }
+}
+
+extension RemoteRepresentative: RemoteRecord {
     typealias SyncIdentifierType = Int32
     var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
 }
