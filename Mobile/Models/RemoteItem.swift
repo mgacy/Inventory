@@ -8,8 +8,6 @@
 
 import Foundation
 
-// swiftlint:disable nesting
-
 protocol RemoteRecord: Codable {
     associatedtype SyncIdentifierType: Hashable
     var syncIdentifier: SyncIdentifierType { get }
@@ -21,7 +19,6 @@ struct RemoteItem: Codable {
 
     // Properties
 
-    let active: Bool
     let remoteID: Int
     let name: String
     let packSize: Int?
@@ -29,7 +26,8 @@ struct RemoteItem: Codable {
     let sku: Int?
     let subSize: Double?
     let unitPrice: Double?
-    let vendorItemId: Int?
+    let vendorItemID: Int?
+    let active: Bool
 
     let category: RemoteItemCategory?
     let inventoryUnit: RemoteUnit?
@@ -39,11 +37,11 @@ struct RemoteItem: Codable {
     let vendor: RemoteVendor?
 
     private enum CodingKeys: String, CodingKey {
+        case remoteID = "id"
+        case name
         case active
         case category
-        case remoteID = "id"
         case inventoryUnit = "inventory_unit"
-        case name
         case packSize = "pack_size"
         case purchaseSubUnit = "purchase_sub_unit"
         case purchaseUnit = "purchase_unit"
@@ -53,7 +51,7 @@ struct RemoteItem: Codable {
         case subUnit = "sub_unit"
         case unitPrice = "unit_price"
         case vendor
-        case vendorItemId = "vendor_item_id"
+        case vendorItemID = "vendor_item_id"
     }
 }
 
@@ -79,115 +77,6 @@ extension RemoteItemCategory: RemoteRecord {
     var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
 }
 
-// MARK: - MenuItem
-
-struct RemoteMenuItem: Codable {
-
-    // Nested
-
-    struct RemoteItem: Codable {
-        let name: String
-        let remoteID: Int
-        private enum CodingKeys: String, CodingKey {
-            case name
-            case remoteID = "id"
-        }
-    }
-
-    // Properties
-
-    let categoryId: Int?
-    let name: String
-    let price: Double?
-    let remoteID: Int
-    let recipeItems: [RemoteRecipeItem]
-
-    private enum CodingKeys: String, CodingKey {
-        case categoryId = "category_id"
-        case name
-        case price
-        case remoteID = "id"
-        case recipeItems = "recipe_items"
-    }
-}
-
-extension RemoteMenuItem: RemoteRecord {
-    typealias SyncIdentifierType = Int32
-    var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
-}
-
-// MARK: - MenuItemCategory
-
-struct RemoteMenuItemCategory: Codable {
-    let remoteID: Int
-    let name: String
-
-    private enum CodingKeys: String, CodingKey {
-        case remoteID = "id"
-        case name
-    }
-}
-
-extension RemoteMenuItemCategory: RemoteRecord {
-    typealias SyncIdentifierType = Int32
-    var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
-}
-
-// MARK: - RecipeItem
-
-struct RemoteRecipeItem: Codable {
-
-    // Nested
-
-    struct Item: Codable {
-        let name: String
-        let remoteID: Int
-        private enum CodingKeys: String, CodingKey {
-            case name
-            case remoteID = "id"
-        }
-    }
-
-    struct MenuItem: Codable {
-        let name: String
-        let remoteID: Int
-        private enum CodingKeys: String, CodingKey {
-            case name
-            case remoteID = "id"
-        }
-    }
-
-    struct Unit: Codable {
-        let abbreviation: String
-        let remoteID: Int
-        let name: String
-        private enum CodingKeys: String, CodingKey {
-            case abbreviation
-            case remoteID = "id"
-            case name
-        }
-    }
-
-    //let remoteID: Int?
-    let item: Item?
-    let quantity: Double
-    let menuItem: MenuItem?
-    let unit: Unit
-
-    private enum CodingKeys: String, CodingKey {
-        //case remoteID
-        case item
-        case quantity
-        case menuItem = "menu_item"
-        case unit
-    }
-}
-
-extension RemoteRecipeItem: RemoteRecord {
-    typealias SyncIdentifierType = Int32
-    var syncIdentifier: SyncIdentifierType { return Int32(self.item?.remoteID ?? 0) }
-}
-
 // MARK: - Store
 
 struct RemoteStore: Codable {
@@ -211,19 +100,40 @@ struct RemoteUnit: Codable {
 
     // enum UnitType {}
 
-    let abbreviation: String
     let remoteID: Int
     let name: String
+    let abbreviation: String
     //let unitType: UnitType?
 
     private enum CodingKeys: String, CodingKey {
-        case abbreviation
         case remoteID = "id"
         case name
+        case abbreviation
     }
 }
 
 extension RemoteUnit: RemoteRecord {
+    typealias SyncIdentifierType = Int32
+    var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
+}
+
+// MARK: - User
+
+struct RemoteUser: Codable {
+    let remoteID: Int
+    let username: String
+    let defaultStore: RemoteStore
+    let stores: [RemoteStore]
+
+    private enum CodingKeys: String, CodingKey {
+        case remoteID = "id"
+        case username
+        case defaultStore = "default_store"
+        case stores
+    }
+}
+
+extension RemoteUser: RemoteRecord {
     typealias SyncIdentifierType = Int32
     var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
 }
@@ -250,16 +160,17 @@ extension RemoteVendor: RemoteRecord {
 // MARK: - VendorRep
 
 struct RemoteRepresentative: Codable {
-    let email: String?
-    let firstName: String?
     let remoteID: Int
+    let firstName: String?
     let lastName: String?
+    let email: String?
     let phone: String?
+
     private enum CodingKeys: String, CodingKey {
-        case email
-        case firstName = "first_name"
         case remoteID = "id"
+        case firstName = "first_name"
         case lastName = "last_name"
+        case email
         case phone
     }
 }
