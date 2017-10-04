@@ -10,6 +10,90 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+// MARK: - NEW
+
+protocol NewSyncable: Managed {
+    /// TODO: rename `RemoteType` as `RemoteRecordType`?
+    associatedtype RemoteType: RemoteRecord
+    associatedtype RemoteIdentifierType: Hashable
+
+    static var remoteIdentifierName: String { get }
+    var remoteIdentifier: RemoteIdentifierType { get }
+
+    static func sync(with: [RemoteType], in: NSManagedObjectContext)
+    func update(with: RemoteType, in: NSManagedObjectContext)
+}
+
+extension NewSyncable where Self: NSManagedObject {
+
+    static var remoteIdentifierName: String { return "remoteID" }
+
+    @discardableResult
+    static func updateOrCreate<R>(with record: RemoteType, in context: NSManagedObjectContext) -> Self where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
+        /// TODO: mark as discardable and return the record (perhaps as an Observable)?
+        let remoteIdentifier = record.syncIdentifier
+        let predicate = NSPredicate(format: "\(remoteIdentifierName) == \(remoteIdentifier)")
+        if let existingObject = findOrFetch(in: context, matching: predicate) {
+            existingObject.update(with: record, in: context)
+            return existingObject
+        } else {
+            let newObject: Self = context.insertObject()
+            //newObject.remoteIdentifier = record.syncIdentifier
+            newObject.setValue(record.syncIdentifier, forKey: remoteIdentifierName)
+            newObject.update(with: record, in: context)
+            return newObject
+        }
+    }
+
+    static func sync<R>(with records: [RemoteType], in managedObjectContext: NSManagedObjectContext) where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
+        guard let objectDict: [R: Self] = try? managedObjectContext.fetchEntityDict(self.self) else {
+            log.error("\(#function) FAILED : unable to create dictionary for \(self)"); return
+        }
+
+        let localIDs: Set<R> = Set(objectDict.keys)
+        var remoteIDs = Set<R>()
+
+        for record in records {
+            let objectID = record.syncIdentifier
+            remoteIDs.insert(objectID)
+
+            // Find + update / create Items
+            let object = objectDict[objectID] ?? Self.init(context: managedObjectContext)
+            object.update(with: record, in: managedObjectContext)
+        }
+
+        log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
+
+        // Delete objects that were deleted from server. We filter remoteID 0
+        // since that is the default value for new objects
+        let deletedObjects: Set<R>
+        switch R.self {
+        case is Int32.Type:
+            deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 as? Int32 != 0 }
+        case is Int.Type:
+            deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 as? Int != 0 }
+        default:
+            deletedObjects = localIDs.subtracting(remoteIDs)
+        }
+
+        if !deletedObjects.isEmpty {
+            log.debug("We need to delete: \(deletedObjects)")
+            let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
+            do {
+                try managedObjectContext.deleteEntities(self, filter: fetchPredicate)
+            } catch {
+                /// TODO: deleteEntities(_:filter) already prints the error
+                let updateError = error as NSError
+                log.error("\(updateError), \(updateError.userInfo)")
+                //throw updateError?
+            }
+        }
+    }
+
+}
+
+// MARK: - / NEW
+
 // MARK: - Syncable
 public protocol Syncable {
 

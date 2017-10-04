@@ -34,7 +34,8 @@ extension InventoryItem {
 
         if let itemID = json["id"].int32 {
             self.itemID = itemID
-            if let item = context.fetchWithRemoteID(Item.self, withID: itemID) {
+            //if let item = context.fetchWithRemoteID(Item.self, withID: itemID) {
+            if let item = context.fetchWithRemoteIdentifier(Item.self, identifier: itemID) {
                 self.item = item
             } else {
                 log.warning("\(#function) : unable to fetch Item with remoteID \(itemID) for \(self)")
@@ -58,7 +59,8 @@ extension InventoryItem {
         }
         if let itemID = json["item"]["id"].int32 {
             self.itemID = itemID
-            self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
+            //self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
+            self.item = context.fetchWithRemoteIdentifier(Item.self, identifier: itemID)
         }
         if let categoryID = json["item"]["category"]["id"].int32 {
             self.categoryID = categoryID

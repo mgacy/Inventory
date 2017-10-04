@@ -115,7 +115,8 @@ extension Invoice: ManagedSyncable {
             self.receiveDate = receiveDate.timeIntervalSinceReferenceDate
         }
         if let vendorID = json["vendor"]["id"].int32 {
-            self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
+            //self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
+            self.vendor = context.fetchWithRemoteIdentifier(Vendor.self, identifier: vendorID)
         }
         if let statusString = json["status"].string {
             switch statusString {

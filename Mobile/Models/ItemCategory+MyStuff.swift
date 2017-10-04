@@ -10,27 +10,17 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-extension ItemCategory: Syncable {
+// MARK: - NEW
 
-    convenience init(context: NSManagedObjectContext, json: JSON) {
-        self.init(context: context)
-        self.update(context: context, withJSON: json)
-    }
+extension ItemCategory: NewSyncable {
+    typealias RemoteType = RemoteItemCategory
+    typealias RemoteIdentifierType = Int32
 
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
-        // guard let json = json as? JSON else {
-        //     log.error("\(#function) FAILED : SwiftyJSON"); return
-        // }
+    var remoteIdentifier: RemoteIdentifierType { return remoteID }
 
-        // Properties
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let name = json["name"].string {
-            self.name = name
-        }
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        //remoteID = Int32(record.remoteID)
+        name = record.name
     }
 
 }
-
-extension ItemCategory: Managed {}

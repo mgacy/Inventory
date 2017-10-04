@@ -159,7 +159,8 @@ extension InvoiceItem: ManagedSyncable {
 
         // Relationships
         if let itemID = json["item"]["id"].int32 {
-            self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
+            //self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
+            self.item = context.fetchWithRemoteIdentifier(Item.self, identifier: itemID)
         }
         if let unitID = json["unit"]["id"].int32 {
             self.unit = context.fetchWithRemoteID(Unit.self, withID: unitID)

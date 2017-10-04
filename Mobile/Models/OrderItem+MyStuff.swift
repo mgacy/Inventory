@@ -58,7 +58,7 @@ extension OrderItem {
         // Relationships
 
         if let itemID = json["item"]["id"].int32 {
-            if let item = context.fetchWithRemoteID(Item.self, withID: itemID) {
+            if let item = context.fetchWithRemoteIdentifier(Item.self, identifier: itemID) {
                 self.item = item
             }
         }
@@ -116,7 +116,7 @@ extension OrderItem: ManagedSyncable {
         // parUnit
 
         if let itemID = json["item"]["id"].int32 {
-            if let item = context.fetchWithRemoteID(Item.self, withID: itemID) {
+            if let item = context.fetchWithRemoteIdentifier(Item.self, identifier: itemID) {
                 self.item = item
             } else {
                 log.error("Unable to find Item for remoteID \(itemID)")

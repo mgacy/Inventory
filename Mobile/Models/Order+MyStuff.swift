@@ -52,7 +52,8 @@ extension Order {
         // Relationships
         self.collection = collection
         if let vendorID = json["vendor"]["id"].int32 {
-            self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
+            //self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
+            self.vendor = context.fetchWithRemoteIdentifier(Vendor.self, identifier: vendorID)
         }
 
         /*
@@ -207,7 +208,8 @@ extension Order: ManagedSyncable {
         /// TODO: do we need to handle removal of vendor from remote?
         if let vendorID = json["vendor"]["id"].int32 {
             if vendorID != vendor?.remoteID {
-                self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
+                //self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
+                self.vendor = context.fetchWithRemoteIdentifier(Vendor.self, identifier: vendorID)
             }
         }
 

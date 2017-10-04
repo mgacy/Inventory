@@ -10,42 +10,19 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-extension VendorRep {
+extension VendorRep: NewSyncable {
+    typealias RemoteType = RemoteRepresentative
+    typealias RemoteIdentifierType = Int32
 
-    // MARK: - Lifecycle
+    var remoteIdentifier: RemoteIdentifierType { return remoteID }
 
-    convenience init(context: NSManagedObjectContext, json: JSON) {
-        self.init(context: context)
-        self.update(context: context, withJSON: json)
-    }
-}
-
-extension VendorRep: Syncable {
-
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
-        // guard let json = json as? JSON else {
-        //     log.error("\(#function) FAILED : SwiftyJSON"); return
-        // }
-
-        // Properties
-        /// TODO: remoteID is required
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let firstName = json["first_name"].string {
-            self.firstName = firstName
-        }
-        if let lastName = json["last_name"].string {
-            self.lastName = lastName
-        }
-        if let email = json["email"].string {
-            self.email = email
-        }
-        if let phone = json["phone"].string {
-            self.phone = phone
-        }
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        //remoteID
+        firstName = record.firstName
+        lastName = record.lastName
+        email = record.email
+        phone = record.phone
+        // vendor relationship
     }
 
 }
-
-extension VendorRep: ManagedSyncable {}
