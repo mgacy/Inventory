@@ -18,7 +18,7 @@ struct RemoteInvoiceCollection: Codable {
     let date: String
     let status: String
     let storeID: Int
-    let invoices: [RemoteInvoice]
+    let invoices: [RemoteInvoice]?
 
     private enum CodingKeys: String, CodingKey {
         case date
@@ -85,31 +85,25 @@ struct RemoteInvoiceItem: Codable {
 
     // enum InvoiceItemStatus {}
 
-    struct Item: Codable {
-        let remoteID: Int
-        let name: String
-        private enum CodingKeys: String, CodingKey {
-            case remoteID = "id"
-            case name
-        }
-    }
-
     let remoteID: Int
-    let item: Item
-    let quantity: Int
-    let unit: RemoteUnit
+    /// TODO: should quantity be an Int or Double?
+    let quantity: Double
+    let status: String
+    // Optional
     let cost: Double?
     let discount: Double?
-    let status: String
+    // Relationships
+    let item: RemoteNestedItem
+    let unit: RemoteUnit
 
     private enum CodingKeys: String, CodingKey {
         case remoteID = "id"
-        case item
         case quantity
-        case unit
+        case status
         case cost
         case discount
-        case status
+        case item
+        case unit
     }
 }
 

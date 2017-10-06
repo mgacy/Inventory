@@ -60,6 +60,23 @@ extension RemoteItem: RemoteRecord {
     var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
 }
 
+// MARK: - Nested Item
+
+struct RemoteNestedItem: Codable {
+    let remoteID: Int
+    let name: String
+
+    private enum CodingKeys: String, CodingKey {
+        case remoteID = "id"
+        case name
+    }
+}
+
+extension RemoteNestedItem: RemoteRecord {
+    typealias SyncIdentifierType = Int32
+    var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
+}
+
 // MARK: - ItemCategory
 
 struct RemoteItemCategory: Codable {
