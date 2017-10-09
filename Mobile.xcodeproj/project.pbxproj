@@ -74,6 +74,7 @@
 		C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB057F1F8315B000A07529 /* RemoteItem.swift */; };
 		C9BB05831F83162500A07529 /* DataRequest+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05821F83162500A07529 /* DataRequest+Decodable.swift */; };
 		C9BB05851F83164400A07529 /* AlamofireDecodableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05841F83164400A07529 /* AlamofireDecodableError.swift */; };
+		C9BB05871F83169800A07529 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05861F83169800A07529 /* DataManager.swift */; };
 		C9BB05891F83171000A07529 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05881F83171000A07529 /* ActivityIndicator.swift */; };
 		C9C221191EFCD424009C7D01 /* UIViewController+Instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C221181EFCD423009C7D01 /* UIViewController+Instance.swift */; };
 		C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */; };
@@ -188,6 +189,7 @@
 		C9BB057F1F8315B000A07529 /* RemoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteItem.swift; sourceTree = "<group>"; };
 		C9BB05821F83162500A07529 /* DataRequest+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DataRequest+Decodable.swift"; path = "Extensions/Alamofire/DataRequest+Decodable.swift"; sourceTree = "<group>"; };
 		C9BB05841F83164400A07529 /* AlamofireDecodableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlamofireDecodableError.swift; path = Extensions/Alamofire/AlamofireDecodableError.swift; sourceTree = "<group>"; };
+		C9BB05861F83169800A07529 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		C9BB05881F83171000A07529 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		C9C221181EFCD423009C7D01 /* UIViewController+Instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIViewController+Instance.swift"; path = "Extensions/UIKit/UIViewController+Instance.swift"; sourceTree = "<group>"; };
 		C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubItemTableViewCell.swift; path = Common/SubItemTableViewCell.swift; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 				C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */,
 				C902FF2D1DB816EB0063CD02 /* Keypad.swift */,
 				C9F515E21DB7EF98004C10E6 /* ViewController.swift */,
+				C9BB05861F83169800A07529 /* DataManager.swift */,
 				C9BB05881F83171000A07529 /* ActivityIndicator.swift */,
 				C9B825E61EB9A0A4009B92F0 /* Core Data Helpers */,
 				C9BA91271DEB957400DA2C6C /* Extensions */,
@@ -933,6 +936,7 @@
 				C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */,
 				C9A14AC21DC67A0F00ACDE69 /* InvoiceDateViewController.swift in Sources */,
 				C9428EE71E032FCC002771EA /* Syncable.swift in Sources */,
+				C9BB05871F83169800A07529 /* DataManager.swift in Sources */,
 				C91C92841EFCDBE400566CEB /* OrderItemTableViewCell.swift in Sources */,
 				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
