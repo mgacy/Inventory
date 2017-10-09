@@ -62,7 +62,7 @@ extension NSManagedObjectContext {
             throw error
         }
     }
-
+    /*
     func syncEntities<T: NewSyncable, R, I>(_ entity: T.Type, with records: [R]) throws where T: NSManagedObject, R == T.RemoteType, I == T.RemoteIdentifierType, I == R.SyncIdentifierType {
         guard let objectDict = try? fetchEntityDict(T.self) else {
             log.error("\(#function) FAILED : unable to create dictionary for \(T.self)"); return
@@ -108,7 +108,7 @@ extension NSManagedObjectContext {
             }
         }
     }
-
+     */
 }
 
 // MARK: - / NEW
