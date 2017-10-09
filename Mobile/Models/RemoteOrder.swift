@@ -37,8 +37,8 @@ extension RemoteOrderCollection: RemoteRecord {
 struct RemoteOrder: Codable {
     let remoteID: Int?
     let date: String
-    let cost: Double
     //let status: String
+    let cost: Double?
     // Relationships
     let vendor: RemoteVendor
     let items: [RemoteOrderItem]
@@ -46,8 +46,8 @@ struct RemoteOrder: Codable {
     private enum CodingKeys: String, CodingKey {
         case remoteID = "id"
         case date
-        case cost
         //case status
+        case cost
         case items
         case vendor
     }
@@ -87,7 +87,7 @@ struct RemoteOrderItem: Codable {
     let minOrderUnitId: Int?
     let par: Double?
     let parUnitId: Int?
-    let quantity: Int?
+    let quantity: Double?
     //let unitId: Int
     //let usageHistory: Any?
     // Relationships
