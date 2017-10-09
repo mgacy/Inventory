@@ -23,6 +23,7 @@ extension StoryboardInitializable where Self: UIViewController {
 
     static func initFromStoryboard(name: String = "Main") -> Self {
         let storyboard = UIStoryboard(name: name, bundle: Bundle.main)
+        //swiftlint:disable:next force_cast
         return storyboard.instantiateViewController(withIdentifier: storyboardIdentifier) as! Self
     }
 }
