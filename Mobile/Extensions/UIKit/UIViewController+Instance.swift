@@ -1,5 +1,5 @@
 //
-//  ViewController+instance.swift
+//  UIViewController+Instance.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 6/22/17.

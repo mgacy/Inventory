@@ -75,7 +75,7 @@
 		C9BB05831F83162500A07529 /* DataRequest+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05821F83162500A07529 /* DataRequest+Decodable.swift */; };
 		C9BB05851F83164400A07529 /* AlamofireDecodableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05841F83164400A07529 /* AlamofireDecodableError.swift */; };
 		C9BB05891F83171000A07529 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05881F83171000A07529 /* ActivityIndicator.swift */; };
-		C9C221191EFCD424009C7D01 /* ViewController+instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C221181EFCD423009C7D01 /* ViewController+instance.swift */; };
+		C9C221191EFCD424009C7D01 /* UIViewController+Instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C221181EFCD423009C7D01 /* UIViewController+Instance.swift */; };
 		C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */; };
 		C9C2DA081F0F3EC2007263FB /* InventoryLocationItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA071F0F3EC2007263FB /* InventoryLocationItemViewModel.swift */; };
 		C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */; };
@@ -189,7 +189,7 @@
 		C9BB05821F83162500A07529 /* DataRequest+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DataRequest+Decodable.swift"; path = "Extensions/Alamofire/DataRequest+Decodable.swift"; sourceTree = "<group>"; };
 		C9BB05841F83164400A07529 /* AlamofireDecodableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlamofireDecodableError.swift; path = Extensions/Alamofire/AlamofireDecodableError.swift; sourceTree = "<group>"; };
 		C9BB05881F83171000A07529 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
-		C9C221181EFCD423009C7D01 /* ViewController+instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ViewController+instance.swift"; path = "Extensions/UIKit/ViewController+instance.swift"; sourceTree = "<group>"; };
+		C9C221181EFCD423009C7D01 /* UIViewController+Instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIViewController+Instance.swift"; path = "Extensions/UIKit/UIViewController+Instance.swift"; sourceTree = "<group>"; };
 		C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubItemTableViewCell.swift; path = Common/SubItemTableViewCell.swift; sourceTree = "<group>"; };
 		C9C2DA071F0F3EC2007263FB /* InventoryLocationItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InventoryLocationItemViewModel.swift; path = Scenes/Inventory/InventoryLocationItemViewModel.swift; sourceTree = "<group>"; };
 		C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSDate+MyStuff.swift"; path = "Extensions/Foundation/NSDate+MyStuff.swift"; sourceTree = "<group>"; };
@@ -423,7 +423,7 @@
 				C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */,
 				C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */,
 				C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */,
-				C9C221181EFCD423009C7D01 /* ViewController+instance.swift */,
+				C9C221181EFCD423009C7D01 /* UIViewController+Instance.swift */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -911,7 +911,7 @@
 				C9F645591EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift in Sources */,
 				C92D75C31DC7A93100AA1A02 /* LoginViewController.swift in Sources */,
 				C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */,
-				C9C221191EFCD424009C7D01 /* ViewController+instance.swift in Sources */,
+				C9C221191EFCD424009C7D01 /* UIViewController+Instance.swift in Sources */,
 				C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */,
 				C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */,
 				C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */,
