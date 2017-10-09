@@ -7,8 +7,11 @@
 //
 
 import Foundation
+import CoreData
 import Alamofire
 import SwiftyJSON
+import RxCocoa
+import RxSwift
 
 /*
 NOTE - BackendError already declared in AlamofireRequest+JSONSerializable.swift
@@ -25,6 +28,7 @@ class APIManager {
 
     static let sharedInstance = APIManager()
     private let sessionManager: SessionManager
+    private let decoder: JSONDecoder
 
     typealias CompletionHandlerType = (JSON?, Error?) -> Void
 
@@ -35,6 +39,7 @@ class APIManager {
         configuration.timeoutIntervalForRequest = 8 // seconds
         configuration.timeoutIntervalForResource = 8
         sessionManager = Alamofire.SessionManager(configuration: configuration)
+        decoder = JSONDecoder()
     }
 
     func configSession(_ authHandler: AuthenticationHandler?) {
@@ -43,6 +48,8 @@ class APIManager {
     }
 
     // MARK: - Authentication
+
+    //func logout() -> Observable<DataResonse> {}
 
     func logout(completion: @escaping (Bool) -> Void) {
         sessionManager.request(Router.logout)
@@ -59,62 +66,90 @@ class APIManager {
         }
     }
 
+    // MARK: Private
+    /// TODO: pass `sessionManager: SessionManager, decoder: JSONDecoder`?
+
+    private func postOne<M: Codable>(_ endpoint: Router) -> Observable<DataResponse<M>> {
+        /// TODO: include where validating endpoint.method == HTTPMethod.post
+        return Observable<DataResponse<M>>.create { observer in
+            let request = self.sessionManager.request(endpoint)
+            request
+                .validate()
+                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<M>) in
+                    observer.onNext(response)
+                    observer.onCompleted()
+            }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
+
+    private func requestOne<M: Codable>(_ endpoint: Router) -> Observable<DataResponse<M>> {
+        return Observable<DataResponse<M>>.create { observer in
+            //let decoder = JSONDecoder()
+            let request = self.sessionManager.request(endpoint)
+            request
+                .validate()
+                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<M>) in
+                    observer.onNext(response)
+                    observer.onCompleted()
+            }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
+
+    private func requestList<M: Codable>(_ route: Router) -> Observable<DataResponse<[M]>> {
+        return Observable<DataResponse<[M]>>.create { observer in
+            //let decoder = JSONDecoder()
+            let request = self.sessionManager.request(route)
+            request
+                .validate()
+                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<[M]>) in
+                    observer.onNext(response)
+                    observer.onCompleted()
+            }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
+
 }
 
 // MARK: - General
 extension APIManager {
 
-    func getItems(storeID: Int, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getItems(storeID: storeID))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
+    func getItems(storeID: Int) -> Observable<DataResponse<[RemoteItem]>> {
+        return requestList(Router.getItems(storeID: storeID))
     }
-
-    func getUnits(completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getUnits)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
-    func getVendors(storeID: Int, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getVendors(storeID: storeID))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
+    /*
+     func getItemCategories(storeID: Int) -> Observable<DataResponse<[RemoteItemCategory]>> {
+     return requestList(Router.getItemCategories(storeID: storeID))
+     }
+     */
+    func getVendors(storeID: Int) -> Observable<DataResponse<[RemoteVendor]>> {
+        return requestList(Router.getVendors(storeID: storeID))
     }
 
 }
 
-// MARK: - Inventory
+// MARK: - Inventory - NEW
+extension APIManager {
+
+    // func createInventory() -> Observable<DataResponse<RemoteInventory>> {}
+
+    // func updateInventory() -> Observable<DataResponse<RemoteInventory>> {}
+
+    func getInventories(storeID: Int) -> Observable<DataResponse<[RemoteInventory]>> {
+        return requestList(Router.listInventories(storeID: storeID))
+    }
+
+}
+
+// MARK: - Inventory - OLD
 extension APIManager {
 
     func getListOfInventories(storeID: Int, completion: @escaping CompletionHandlerType) {
@@ -184,6 +219,19 @@ extension APIManager {
 
 }
 
+// MARK: - Invoice - NEW
+extension APIManager {
+
+    func getInvoiceCollections(storeID: Int) -> Observable<DataResponse<[RemoteInvoiceCollection]>> {
+        return requestList(Router.getInvoiceCollections(storeID: storeID))
+    }
+
+    func getInvoiceCollection(storeID: Int, invoiceDate: String) -> Observable<DataResponse<RemoteInvoiceCollection>> {
+        return requestOne(Router.getInvoiceCollection(storeID: storeID, forDate: invoiceDate))
+    }
+
+}
+
 // MARK: - Invoice
 extension APIManager {
 
@@ -202,7 +250,7 @@ extension APIManager {
                 }
         }
     }
-
+    /*
     func getInvoiceCollection(storeID: Int, invoiceDate: String, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.fetchInvoice(storeID: storeID, invoiceDate: invoiceDate))
             .validate()
@@ -218,7 +266,7 @@ extension APIManager {
                 }
         }
     }
-
+     */
     func getNewInvoiceCollection(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.getNewInvoice(storeID: storeID))
             .validate()
@@ -284,6 +332,32 @@ extension APIManager {
                     completion(nil, error)
                 }
         }
+    }
+
+}
+
+// MARK: - Order - NEW
+extension APIManager {
+
+    func getOrderCollections(storeID: Int) -> Observable<DataResponse<[RemoteOrderCollection]>> {
+        return requestList(Router.getOrderCollections(storeID: storeID))
+    }
+
+    func getOrderCollection(storeID: Int, orderDate: String) -> Observable<DataResponse<RemoteOrderCollection>> {
+        return requestOne(Router.getOrderCollection(storeID: storeID, forDate: orderDate))
+    }
+
+    func postOrderCollection(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?) -> Observable<DataResponse<RemoteOrderCollection>> {
+
+        var parameters = [String: Any]()
+        parameters["store_id"] = storeID
+        parameters["generation_method"] = generationMethod.rawValue
+        //parameters["return_usage"] = returnUsage
+        parameters["period_length"] = periodLength ?? 28
+
+        return postOne(Router.postOrderCollection(parameters))
+        //return postOne(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
+        //                                          returnUsage: returnUsage, periodLength: periodLength))
     }
 
 }
