@@ -41,13 +41,13 @@ extension Invoice {
     //@NSManaged var ageType: InvoiceStatus
 
     // MARK: - Lifecycle
-
+    /*
     convenience init(context: NSManagedObjectContext, json: JSON, parent: InvoiceCollection) {
         self.init(context: context)
         self.collection = parent
         update(context: context, withJSON: json)
     }
-
+     */
     // MARK: - Serialization
 
     func serialize() -> [String: Any]? {
@@ -95,6 +95,93 @@ extension Invoice {
 
 }
 
+// MARK: - NewSyncable
+
+extension Invoice: NewSyncable {
+    typealias RemoteType = RemoteInvoice
+    typealias RemoteIdentifierType = Int32
+
+    var remoteIdentifier: RemoteIdentifierType { return self.remoteID }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        // Required
+        //remoteID = record.remoteID
+        guard let shipDate = record.shipDate.toBasicDate(), let receiveDate = record.receiveDate.toBasicDate() else {
+            fatalError("\(#function) FAILED : unable to parse shipDate or receiveDate from \(record)")
+        }
+        self.shipDate = shipDate.timeIntervalSinceReferenceDate
+        self.receiveDate = receiveDate.timeIntervalSinceReferenceDate
+        /*
+        if let shipDate = record.shipDate.toBasicDate() {
+            self.shipDate = shipDate.timeIntervalSinceReferenceDate
+        }
+        if let receiveDate = record.receiveDate.toBasicDate() {
+            self.receiveDate = receiveDate.timeIntervalSinceReferenceDate
+        }
+         */
+        if record.vendor.syncIdentifier != vendor?.remoteIdentifier {
+            vendor = Vendor.updateOrCreate(with: record.vendor, in: context)
+        }
+        /// TODO: switch to method on `InvoiceStatus`
+        switch record.status {
+        case "pending":
+            self.uploaded = false
+        case "completed":
+            self.uploaded = true
+        default:
+            log.error("\(#function) - Invalid status: \(record.status)")
+            self.uploaded = true
+        }
+
+        // Optional
+        if let invoiceNo = record.invoiceNo {
+            self.invoiceNo = Int32(invoiceNo)
+        }
+        if let credit = record.credit {
+            self.credit = credit
+        }
+        if let shipping = record.shipping {
+            self.shipping = shipping
+        }
+        if let taxes = record.taxes {
+            self.taxes = taxes
+        }
+        /// TODO: this should be a computed property
+        if let totalCost = record.totalCost {
+            self.totalCost = totalCost
+        }
+        if let checkNo = record.checkNo {
+            self.checkNo = Int32(checkNo)
+        }
+
+        // Relationships
+        //if let items = record.items {
+        syncChildren(with: record.items, in: context)
+        //}
+    }
+
+}
+
+// MARK: - NewSyncableParent
+
+extension Invoice: NewSyncableParent {
+    typealias ChildType = InvoiceItem
+
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : InvoiceItem]? {
+        let fetchPredicate = NSPredicate(format: "invoice == %@", self)
+        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func updateParent(of entity: InvoiceItem) {
+        entity.invoice = self
+    }
+
+}
+
+/*
 // MARK: - ManagedSyncable
 
 extension Invoice: ManagedSyncable {
@@ -178,3 +265,4 @@ extension Invoice: SyncableParent {
     }
 
 }
+*/

@@ -106,16 +106,14 @@ import SwiftyJSON
 
 extension InvoiceItem {
 
-    //@NSManaged var status: InvoiceItemStatus
-
     // MARK: - Lifecycle
-
+    /*
     convenience init(context: NSManagedObjectContext, json: JSON, parent: Invoice) {
         self.init(context: context)
         self.invoice = parent
         update(context: context, withJSON: json)
     }
-
+     */
     // MARK: - Serialization
 
     func serialize() -> [String: Any]? {
@@ -133,6 +131,46 @@ extension InvoiceItem {
 
 }
 
+// MARK: - NewSyncable
+
+extension InvoiceItem: NewSyncable {
+    typealias RemoteType = RemoteInvoiceItem
+    typealias RemoteIdentifierType = Int32
+
+    var remoteIdentifier: RemoteIdentifierType { return self.remoteID }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.quantity = record.quantity
+        /// TODO: handle failure below
+        if let status = InvoiceItemStatus(string: record.status) {
+            self.status = status.rawValue
+        }
+
+        // Optional
+        self.discount = record.discount ?? 0.0
+        self.cost = record.cost ?? 0.0
+
+        // Relationships
+        if record.item.syncIdentifier != self.item?.remoteID {
+            let predicate = NSPredicate(format: "remoteID == \(record.item.syncIdentifier)")
+            if let existingObject = Item.findOrFetch(in: context, matching: predicate) {
+                self.item = existingObject
+            } else {
+                log.error("\(#function) FAILED : unable to fetch Item \(record.item)")
+            }
+        }
+
+        if record.unit.syncIdentifier != self.unit?.remoteID {
+            guard let newUnit = Unit.fetchWithRemoteIdentifier(record.unit.syncIdentifier, in: context) else {
+                log.error("\(#function) FAILED : unable to fetch Item \(record.unit)"); return
+            }
+            self.unit = newUnit
+        }
+
+    }
+}
+
+/*
 extension InvoiceItem: ManagedSyncable {
 
     public func update(context: NSManagedObjectContext, withJSON json: JSON) {
@@ -168,3 +206,4 @@ extension InvoiceItem: ManagedSyncable {
     }
 
 }
+*/

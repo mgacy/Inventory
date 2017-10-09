@@ -19,7 +19,7 @@ extension Item: NewSyncable {
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
 
         // Required
-        remoteID = Int32(record.remoteID)
+        //remoteID = Int32(record.remoteID)
         name = record.name
         //active = remote.active
 
@@ -95,23 +95,28 @@ extension Item: NewSyncable {
     }
 
     /// TODO: should this be marked as `throws`?
-    static func sync(with records: [RemoteType], in managedObjectContext: NSManagedObjectContext) {
+    static func sync(with records: [RemoteType], in context: NSManagedObjectContext) {
         // Create dict from fetch request on Items
         let prefetch = ["inventoryUnit", "purchaseSubUnit", "purchaseUnit",
                         "subUnit", "vendor"]
-        guard let itemDict = try? managedObjectContext.fetchEntityDict(self, prefetchingRelationships: prefetch) else {
+        /*
+        guard let itemDict = try? context.fetchEntityDict(self, prefetchingRelationships: prefetch) else {
             log.error("\(#function) FAILED : unable to create Item dictionary")
-            /// TODO: return custom error
-            //return completionHandler(false, nil)
             return
         }
 
         // Create dict from fetch request on Units
-        guard let unitDict = try? managedObjectContext.fetchEntityDict(Unit.self) else {
+        guard let unitDict = try? context.fetchEntityDict(Unit.self) else {
             log.error("\(#function) FAILED : unable to create Unit dictionary")
-            /// TODO: return custom error
-            //return completionHandler(false, nil)
             return
+        }
+         */
+        guard let itemDict = try? Item.fetchEntityDict(in: context, prefetchingRelationships: prefetch) else {
+            log.error("\(#function) FAILED : unable to create Item dictionary"); return
+        }
+
+        guard let unitDict = try? Unit.fetchEntityDict(in: context) else {
+            log.error("\(#function) FAILED : unable to create Unit dictionary"); return
         }
 
         let localIDs = Set(itemDict.keys)
@@ -124,14 +129,15 @@ extension Item: NewSyncable {
             // Find + update / create Items
             if let existingItem = itemDict[itemID] {
                 //log.verbose("UPDATE existing Item: \(existingItem)")
-                existingItem.update(with: record, in: managedObjectContext)
+                existingItem.update(with: record, in: context)
                 existingItem.updateUnits(with: record, unitDict: unitDict)
 
             } else {
                 //log.verbose("CREATE new Item: \(record)")
                 //let newObject = self.init(context: managedObjectContext)
-                let newObject: Item = managedObjectContext.insertObject()
-                newObject.update(with: record, in: managedObjectContext)
+                let newObject: Item = context.insertObject()
+                newObject.remoteID = record.syncIdentifier
+                newObject.update(with: record, in: context)
                 newObject.updateUnits(with: record, unitDict: unitDict)
             }
         }
@@ -144,7 +150,7 @@ extension Item: NewSyncable {
             /// TODO: Do we really need to create a new fetch request or can we just get from itemDict?
             let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedItems)
             do {
-                try managedObjectContext.deleteEntities(Item.self, filter: fetchPredicate)
+                try context.deleteEntities(Item.self, filter: fetchPredicate)
             } catch {
                 /// TODO: deleteEntities(_:filter) already prints the error
                 let updateError = error as NSError

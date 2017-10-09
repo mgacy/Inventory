@@ -27,7 +27,7 @@ import SwiftyJSON
 extension Order {
 
     // MARK: - Lifecycle
-
+    /*
     convenience init(context: NSManagedObjectContext, json: JSON, collection: OrderCollection, uploaded: Bool = false) {
         self.init(context: context)
 
@@ -77,7 +77,7 @@ extension Order {
             updateStatus()
         }
     }
-
+     */
     // MARK: - Serialization
 
     func serialize() -> [String: Any]? {
@@ -165,7 +165,7 @@ extension Order {
     }
 
 }
-
+/*
 // MARK: - ManagedSyncable
 
 extension Order: ManagedSyncable {
@@ -234,6 +234,55 @@ extension Order: SyncableParent {
     func updateParent(of entity: ChildType) {
         entity.order = self
         //addToItems(entity)
+    }
+
+}
+*/
+// MARK: - NewSyncable
+
+extension Order: NewSyncable {
+    typealias RemoteType = RemoteOrder
+    typealias RemoteIdentifierType = Int32
+
+    var remoteIdentifier: RemoteIdentifierType { return self.remoteID }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        // Required
+
+        // Optional
+
+        // Missing properties
+        // placed
+        // remoteID
+        // vendorID
+        // store
+
+        // Relationships
+        if record.vendor.syncIdentifier != vendor?.remoteIdentifier {
+            vendor = Vendor.updateOrCreate(with: record.vendor, in: context)
+        }
+        syncChildren(with: record.items, in: context)
+
+        /// TODO: handle status
+    }
+
+}
+
+// MARK: - NewSyncableParent
+
+extension Order: NewSyncableParent {
+    typealias ChildType = OrderItem
+
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : OrderItem]? {
+        let fetchPredicate = NSPredicate(format: "order == %@", self)
+        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func updateParent(of entity: OrderItem) {
+        entity.order = self
     }
 
 }

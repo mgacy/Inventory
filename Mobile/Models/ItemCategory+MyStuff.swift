@@ -10,16 +10,20 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-// MARK: - NEW
-
 extension ItemCategory: NewSyncable {
     typealias RemoteType = RemoteItemCategory
     typealias RemoteIdentifierType = Int32
 
     var remoteIdentifier: RemoteIdentifierType { return remoteID }
-
+    /*
+    init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.setValue(record.syncIdentifier, forKey: self.remoteIdentifierName)
+        self.update(with: record, in: context)
+    }
+     */
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
-        //remoteID = Int32(record.remoteID)
+        //remoteID = record.syncIdentifier
         name = record.name
     }
 

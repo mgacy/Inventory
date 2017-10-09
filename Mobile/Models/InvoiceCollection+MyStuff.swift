@@ -13,7 +13,7 @@ import SwiftyJSON
 extension InvoiceCollection {
 
     // MARK: - Lifecycle
-
+    /*
     convenience init(context: NSManagedObjectContext, json: JSON) {
         self.init(context: context)
 
@@ -51,7 +51,7 @@ extension InvoiceCollection {
             }
         }
     }
-
+     */
     // MARK: - Serialization
 
     func serialize() -> [String: Any]? {
@@ -66,7 +66,7 @@ extension InvoiceCollection {
 extension InvoiceCollection: DateFacade {}
 
 // MARK: - ManagedSyncableCollection
-
+/*
 extension InvoiceCollection: ManagedSyncableCollection {
 
     public func update(in context: NSManagedObjectContext, with json: JSON) {
@@ -107,6 +107,62 @@ extension InvoiceCollection: ManagedSyncableCollection {
 // MARK: - Sync Children
 
 extension InvoiceCollection: SyncableParent {
+    typealias ChildType = Invoice
+
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : Invoice]? {
+        let fetchPredicate = NSPredicate(format: "collection == %@", self)
+        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func updateParent(of entity: ChildType) {
+        entity.collection = self
+        //addToInvoices(entity)
+    }
+
+}
+*/
+// MARK: - NewSyncable
+
+extension InvoiceCollection: NewSyncable {
+    typealias RemoteType = RemoteInvoiceCollection
+    typealias RemoteIdentifierType = Date
+
+    var remoteIdentifier: RemoteIdentifierType { return Date(timeIntervalSinceReferenceDate: dateTimeInterval) }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        /// TODO: since this is the remoteIdentifier, should we remove this from `update()`?
+        /// TODO: is there an actual case where this would fail? Swtich to using `guard` or set to `Date()` on failure?
+        if let date = record.date.toBasicDate() {
+            //self.date = date  // we are using DateFacade here
+            self.dateTimeInterval = date.timeIntervalSinceReferenceDate
+        }
+        storeID = Int32(record.storeID)
+
+        /// TODO: switch to `status` enum
+        switch record.status {
+        case "pending":
+            self.uploaded = false
+        case "complete":
+            self.uploaded = true
+        default:
+            log.error("\(#function) - invalid status: \(record.status)")
+            self.uploaded = true
+        }
+
+        // Relationships
+        if let invoices = record.invoices {
+            syncChildren(with: invoices, in: context)
+        }
+    }
+
+}
+
+// MARK: - NewSyncableParent
+
+extension InvoiceCollection: NewSyncableParent {
     typealias ChildType = Invoice
 
     func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : Invoice]? {

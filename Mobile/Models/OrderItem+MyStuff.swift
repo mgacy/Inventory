@@ -13,7 +13,7 @@ import SwiftyJSON
 extension OrderItem {
 
     // MARK: - Lifecycle
-
+    /*
     convenience init(context: NSManagedObjectContext, json: JSON, order: Order) {
         self.init(context: context)
 
@@ -65,7 +65,7 @@ extension OrderItem {
 
         self.order = order
     }
-
+     */
     // MARK: - Serialization
 
     func serialize() -> [String: Any]? {
@@ -85,7 +85,7 @@ extension OrderItem {
 }
 
 // MARK: - ManagedSyncable
-
+/*
 extension OrderItem: ManagedSyncable {
 
     public func update(context: NSManagedObjectContext, withJSON json: JSON) {
@@ -145,4 +145,73 @@ extension OrderItem: ManagedSyncable {
             }
         }
     }
+}
+*/
+// MARK: - NewSyncable
+
+extension OrderItem: NewSyncable {
+    typealias RemoteType = RemoteOrderItem
+    typealias RemoteIdentifierType = Int32
+
+    var remoteIdentifier: RemoteIdentifierType { return self.remoteID }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+
+        // Required
+
+        // Optional
+        // itemID
+        // minOrder
+        // onHand
+        // par
+        // quantity
+        // remoteID
+
+        minOrder = record.minOrder ?? -1
+        onHand = record.inventory ?? -1
+        par = record.par ?? -1
+        if let quantity = record.quantity {
+            self.quantity = quantity as NSNumber
+        }
+
+        // Relationships
+        // item
+        // minOrderUnit
+        // order
+        // orderUnit
+        // parUnit
+
+        if Int32(record.item.remoteID) != self.item?.remoteID {
+            let predicate = NSPredicate(format: "remoteID == \(Int32(record.item.remoteID))")
+            if let existingObject = Item.findOrFetch(in: context, matching: predicate) {
+                self.item = existingObject
+            } else {
+                log.error("\(#function) FAILED : unable to fetch Item \(record.item)")
+            }
+        }
+
+        if record.unit.syncIdentifier != self.orderUnit?.remoteID {
+            guard let newUnit = Unit.fetchWithRemoteIdentifier(record.unit.syncIdentifier, in: context) else {
+                log.error("\(#function) FAILED : unable to fetch Item \(record.unit)"); return
+            }
+            self.orderUnit = newUnit
+        }
+
+        if let minOrderUnitId = record.minOrderUnitId {
+            if Int32(minOrderUnitId) != self.minOrderUnit?.remoteID {
+                self.minOrderUnit = Unit.fetchWithRemoteIdentifier(Int32(minOrderUnitId), in: context)
+            }
+        }
+
+        if let parUnitId = record.parUnitId {
+            if Int32(parUnitId) != self.parUnit?.remoteID {
+                self.parUnit = Unit.fetchWithRemoteIdentifier(Int32(parUnitId), in: context)
+            }
+        }
+
+        //if Int32(record.minOrderUnitId != self.parUnit?.remoteID
+        //if record.parUnitId
+
+    }
+
 }

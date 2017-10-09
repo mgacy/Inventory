@@ -10,6 +10,27 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+extension Inventory: NewSyncable {
+    typealias RemoteType = RemoteInventory
+    typealias RemoteIdentifierType = Int32
+
+    var remoteIdentifier: RemoteIdentifierType { return remoteID }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        //remoteID
+        if let date = record.date.toBasicDate() {
+            self.date = date.timeIntervalSinceReferenceDate
+        }
+        storeID = Int32(record.storeID)
+        //typeID = Int32(record.inventoryTypeID)
+        //uploaded
+
+        //items: [InventoryItem]
+        //locations: [InventoryLocation]
+    }
+
+}
+
 //extension Inventory: DateFacade {}
 
 extension Inventory {

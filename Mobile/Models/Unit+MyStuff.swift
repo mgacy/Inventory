@@ -36,3 +36,17 @@ extension Unit: Syncable {
     }
 
 }
+
+extension Unit: NewSyncable {
+    typealias RemoteType = RemoteUnit
+    typealias RemoteIdentifierType = Int32
+
+    var remoteIdentifier: RemoteIdentifierType { return remoteID }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        //remoteID = record.syncIdentifier
+        name = record.name
+        abbreviation = record.abbreviation
+    }
+
+}

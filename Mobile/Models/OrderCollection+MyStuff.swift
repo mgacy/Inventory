@@ -13,7 +13,7 @@ import SwiftyJSON
 extension OrderCollection {
 
     // MARK: - Lifecycle
-
+    /*
     convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
         self.init(context: context)
 
@@ -37,7 +37,7 @@ extension OrderCollection {
             }
         }
     }
-
+     */
     // MARK: - Serialization
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
@@ -79,7 +79,7 @@ extension OrderCollection {
 extension OrderCollection: DateFacade {}
 
 // MARK: - ManagedSyncableCollection
-
+/*
 extension OrderCollection: ManagedSyncableCollection {
 
     public func update(in context: NSManagedObjectContext, with json: JSON) {
@@ -127,6 +127,52 @@ extension OrderCollection: SyncableParent {
     func updateParent(of entity: ChildType) {
         entity.collection = self
         entity.date = self.dateTimeInterval
+    }
+
+}
+*/
+// MARK: - NewSyncable
+
+extension OrderCollection: NewSyncable {
+    typealias RemoteType = RemoteOrderCollection
+    typealias RemoteIdentifierType = Date
+
+    var remoteIdentifier: RemoteIdentifierType { return Date(timeIntervalSinceReferenceDate: dateTimeInterval) }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        /// TODO: since this is the remoteIdentifier, should we remove this from `update()`?
+        /// TODO: is there an actual case where this would fail? Swtich to using `guard` or set to `Date()` on failure?
+        if let date = record.date.toBasicDate() {
+            //self.date = date  // we are using DateFacade here
+            self.dateTimeInterval = date.timeIntervalSinceReferenceDate
+        }
+        self.storeID = Int32(record.storeID)
+        if let inventoryID = record.inventoryId { self.inventoryID = Int32(inventoryID) }
+
+        // Relationships
+        if let orders = record.orders {
+            syncChildren(with: orders, in: context)
+        }
+    }
+
+}
+
+// MARK: - NewSyncableParent
+extension OrderCollection: NewSyncableParent {
+    typealias ChildType = Order
+
+    /// TODO: handle remoteID == 0 on new Orders
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : Order]? {
+        let fetchPredicate = NSPredicate(format: "collection == %@", self)
+        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func updateParent(of entity: ChildType) {
+        entity.collection = self
+        //addToInvoices(entity)
     }
 
 }
