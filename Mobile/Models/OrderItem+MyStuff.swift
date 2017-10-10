@@ -161,12 +161,7 @@ extension OrderItem: NewSyncable {
 
         // Optional
         // itemID
-        // minOrder
-        // onHand
-        // par
-        // quantity
         // remoteID
-
         minOrder = record.minOrder ?? -1
         onHand = record.inventory ?? -1
         par = record.par ?? -1
@@ -175,12 +170,8 @@ extension OrderItem: NewSyncable {
         }
 
         // Relationships
-        // item
-        // minOrderUnit
         // order
-        // orderUnit
-        // parUnit
-
+        // item
         if Int32(record.item.remoteID) != self.item?.remoteID {
             let predicate = NSPredicate(format: "remoteID == \(Int32(record.item.remoteID))")
             if let existingObject = Item.findOrFetch(in: context, matching: predicate) {
@@ -189,29 +180,25 @@ extension OrderItem: NewSyncable {
                 log.error("\(#function) FAILED : unable to fetch Item \(record.item)")
             }
         }
-
+        // orderUnit
         if record.unit.syncIdentifier != self.orderUnit?.remoteID {
             guard let newUnit = Unit.fetchWithRemoteIdentifier(record.unit.syncIdentifier, in: context) else {
                 log.error("\(#function) FAILED : unable to fetch Item \(record.unit)"); return
             }
             self.orderUnit = newUnit
         }
-
+        // minOrderUnit
         if let minOrderUnitId = record.minOrderUnitId {
             if Int32(minOrderUnitId) != self.minOrderUnit?.remoteID {
                 self.minOrderUnit = Unit.fetchWithRemoteIdentifier(Int32(minOrderUnitId), in: context)
             }
         }
-
+        // parUnit
         if let parUnitId = record.parUnitId {
             if Int32(parUnitId) != self.parUnit?.remoteID {
                 self.parUnit = Unit.fetchWithRemoteIdentifier(Int32(parUnitId), in: context)
             }
         }
-
-        //if Int32(record.minOrderUnitId != self.parUnit?.remoteID
-        //if record.parUnitId
-
     }
 
 }
