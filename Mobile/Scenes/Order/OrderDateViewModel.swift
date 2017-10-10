@@ -12,7 +12,7 @@ import RxSwift
 
 struct OrderDateViewModel {
 
-    // MARK: Properties
+    // MARK: - Properties
 
     private let dataManager: DataManager
 
@@ -34,12 +34,11 @@ struct OrderDateViewModel {
     let isRefreshing: Driver<Bool>
     let hasRefreshed: Driver<Bool>
     //let errorMessages: Driver<String>
-    //let showSelection: Observable<OrderCollection>
-    //let showNew: Observable<OrderCollection>
     let showCollection: Observable<OrderCollection>
 
     // MARK: - Lifecycle
 
+    //swiftlint:disable:next function_body_length
     init(dataManager: DataManager, rowTaps: Observable<OrderCollection>) {
         self.dataManager = dataManager
 
@@ -73,17 +72,6 @@ struct OrderDateViewModel {
             }
 
         // Selection
-        /*
-        let _selectedObjects = PublishSubject<InvoiceCollection>()
-        self.rowTaps = _selectedObjects.asObserver()
-        self.showSelection = _selectedObjects.asObservable()
-            .flatMap { selection -> Observable<InvoiceCollection> in
-                log.debug("Tapped: \(selection)")
-                return dataManager.refreshInvoiceCollection(selection)
-            }
-            .shareReplay(1)
-        //.asDriver(onErrorJustReturn: InvoiceCollection())
-         */
         let showSelection = rowTaps
             //.throttle(0.5, scheduler: MainScheduler.instance)
             .flatMap { selection -> Observable<OrderCollection> in
@@ -93,6 +81,7 @@ struct OrderDateViewModel {
             }
             .shareReplay(1)
 
+        // Navigation
         //self.showCollection = Observable.from([showNew, showSelection]).merge()
         self.showCollection = Observable.of(showNew, showSelection)
             .merge()
@@ -111,4 +100,3 @@ struct OrderDateViewModel {
 
 }
 
-//extension OrderDateViewModel: RootSectionViewModel {}

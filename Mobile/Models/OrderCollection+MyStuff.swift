@@ -149,6 +149,8 @@ extension OrderCollection: NewSyncable {
         self.storeID = Int32(record.storeID)
         if let inventoryID = record.inventoryId { self.inventoryID = Int32(inventoryID) }
 
+        /// TODO: handle `uploaded`
+
         // Relationships
         if let orders = record.orders {
             syncChildren(with: orders, in: context)

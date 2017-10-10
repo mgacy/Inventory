@@ -132,7 +132,7 @@ class InventoryDateViewController: UIViewController, RootSectionViewController {
             })
             .disposed(by: disposeBag)
 
-        /// TEST:
+        // Navigation
         viewModel.showInventory
             .subscribe(onNext: { [weak self] inventory in
                 log.debug("\(#function) SELECTED: \(inventory)")
