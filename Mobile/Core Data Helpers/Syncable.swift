@@ -67,18 +67,18 @@ extension NewSyncable where Self: NSManagedObject {
         }
     }
 
-    static func fetchWithRemoteIdentifier<T>(_ id: T, in context: NSManagedObjectContext) -> Self?
+    static func fetchWithRemoteIdentifier<T>(_ identifier: T, in context: NSManagedObjectContext) -> Self?
         where T == Self.RemoteIdentifierType {
-            let predicate = NSPredicate(format: "\(Self.remoteIdentifierName) == \(id)")
+            let predicate = NSPredicate(format: "\(Self.remoteIdentifierName) == \(identifier)")
             // NOTE: this doesn't produce an error for multiple matches
             return findOrFetch(in: context, matching: predicate)
     }
 
     /// TODO: add `throws`?
-    static func sync<R>(with records: [RemoteType], in managedObjectContext: NSManagedObjectContext)
+    static func sync<R>(with records: [RemoteType], in context: NSManagedObjectContext)
         where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
             /// TODO: replace with Self.fetchEntityDict(in: managedObjectContext)
-            guard let objectDict: [R: Self] = try? managedObjectContext.fetchEntityDict(self.self) else {
+            guard let objectDict: [R: Self] = try? context.fetchEntityDict(self.self) else {
                 log.error("\(#function) FAILED : unable to create dictionary for \(self)"); return
             }
 
@@ -90,7 +90,7 @@ extension NewSyncable where Self: NSManagedObject {
                 remoteIDs.insert(objectID)
 
                 // Find + update / create Items
-                let object = objectDict[objectID] ?? Self.init(context: managedObjectContext)
+                let object = objectDict[objectID] ?? Self.init(context: context)
                 object.update(with: record, in: managedObjectContext)
             }
 
@@ -113,7 +113,7 @@ extension NewSyncable where Self: NSManagedObject {
                 log.debug("We need to delete: \(deletedObjects)")
                 let fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", deletedObjects)
                 do {
-                    try managedObjectContext.deleteEntities(self, filter: fetchPredicate)
+                    try context.deleteEntities(self, filter: fetchPredicate)
                 } catch {
                     /// TODO: deleteEntities(_:filter) already prints the error
                     let updateError = error as NSError
