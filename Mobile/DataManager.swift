@@ -34,6 +34,7 @@ class DataManager {
 
     // MARK: General
 
+    /// TODO: rename
     func refreshStuff() -> Observable<Bool> {
         return refreshVendors()
             // Items
@@ -59,7 +60,7 @@ class DataManager {
     //func refreshItems() -> Observable<Event<[Items]>> {
     func refreshItems() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: no storeID")
+            log.error("\(#function) FAILED : no storeID")
             return Observable.just(false)
             //.materialize()
         }
@@ -91,7 +92,7 @@ class DataManager {
     /*
     func refreshItemCategories() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: no storeID")
+            log.error("\(#function) FAILED : no storeID")
             return Observable.just(false)
         }
 
@@ -119,7 +120,7 @@ class DataManager {
 
     func refreshVendors() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: no storeID")
+            log.error("\(#function) FAILED : no storeID")
             return Observable.just(false)
         }
         return client.getVendors(storeID: storeID)
@@ -158,7 +159,7 @@ extension DataManager {
     //func refreshInventories() -> Observable<Event<[Inventory]>> {
     func refreshInventories() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: no storeID")
+            log.error("\(#function) FAILED : no storeID")
             return Observable.just(false)
             //.materialize()
         }
@@ -193,12 +194,11 @@ extension DataManager {
 
     func createOrderCollection(generationMethod method: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?) -> Observable<Event<OrderCollection>> {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: no storeID")
+            log.error("\(#function) FAILED : no storeID")
             return Observable.error(BackendError.myError(error: "Missing storeID"))
             .materialize()
         }
 
-        //let storeID = 5
         return client.postOrderCollection(storeID: storeID, generationMethod: method, returnUsage: returnUsage,
                                           periodLength: periodLength)
             .flatMap { [weak self] response -> Observable<OrderCollection> in
@@ -226,12 +226,12 @@ extension DataManager {
 
     func refreshOrderCollection(_ collection: OrderCollection) -> Observable<OrderCollection> {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: no storeID")
+            log.error("\(#function) FAILED : no storeID")
             return Observable.just(collection)
             //.materialize()
         }
         guard let dateString = collection.date.stringFromDate() else {
-            log.error("\(#function) FAILED: unable to get dateString")
+            log.error("\(#function) FAILED : unable to get dateString")
             return Observable.just(collection)
             //.materialize()
         }
@@ -252,7 +252,7 @@ extension DataManager {
 
     func refreshOrderCollections() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: no storeID")
+            log.error("\(#function) FAILED : no storeID")
             return Observable.just(false)
             //return Observable.error(BackendError.myError(error: "Missing storeID"))
             //.materialize()
@@ -282,14 +282,15 @@ extension DataManager {
 
     func refreshInvoiceCollection(_ collection: InvoiceCollection) -> Observable<InvoiceCollection> {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: no storeID")
+            log.error("\(#function) FAILED : no storeID")
             return Observable.just(collection)
             //.materialize()
         }
 
         //let date = collection.date
+        //let dateString = collection.date.shortDate
         guard let dateString = collection.date.stringFromDate() else {
-            log.error("\(#function) FAILED: unable to get dateString")
+            log.error("\(#function) FAILED : unable to get dateString")
             return Observable.just(collection)
             //.materialize()
         }
@@ -310,7 +311,7 @@ extension DataManager {
 
     func refreshInvoiceCollections() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: no storeID")
+            log.error("\(#function) FAILED : no storeID")
             return Observable.just(false)
             //.materialize()
         }
@@ -343,7 +344,7 @@ extension DataManager {
 
     func refreshItemsAlt() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: no storeID")
+            log.error("\(#function) FAILED : no storeID")
             return Observable.just(false)
         }
         return client.getItems(storeID: storeID)
@@ -458,19 +459,19 @@ extension DataManager {
         do {
             try managedObjectContext.deleteEntities(Item.self)
         } catch {
-            log.error("\(#function) FAILED: unable to delete Items")
+            log.error("\(#function) FAILED : unable to delete Items")
         }
         // ItemCategory
         do {
             try managedObjectContext.deleteEntities(ItemCategory.self)
         } catch {
-            log.error("\(#function) FAILED: unable to delete ItemCategories")
+            log.error("\(#function) FAILED : unable to delete ItemCategories")
         }
         // Vendor
         do {
             try managedObjectContext.deleteEntities(Vendor.self)
         } catch {
-            log.error("\(#function) FAILED: unable to delete Vendors")
+            log.error("\(#function) FAILED : unable to delete Vendors")
         }
 
         let result = managedObjectContext.saveOrRollback()
