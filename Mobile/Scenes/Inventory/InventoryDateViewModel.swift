@@ -38,10 +38,9 @@ struct InventoryDateViewModel {
     let frc: NSFetchedResultsController<Inventory>
     let isRefreshing: Driver<Bool>
     let hasRefreshed: Driver<Bool>
-    //let showInventory: Observable<Inventory>
+    let showInventory: Observable<Inventory>
     //let showLocationCategory: Observable<Inventory>
     //let showSettings: Observable<Void>
-    let test: Observable<Inventory>
 
     // MARK: - Lifecycle
 
@@ -81,7 +80,7 @@ struct InventoryDateViewModel {
         let _selectedObjects = PublishSubject<Inventory>()
         self.rowTaps = _selectedObjects.asObserver()
         //self.showDetail = _selectedObjects.asObservable()
-        self.test = _selectedObjects.asObservable()
+        self.showInventory = _selectedObjects.asObservable()
             .map { selection in
                 log.debug("Tapped: \(selection)")
                 return selection

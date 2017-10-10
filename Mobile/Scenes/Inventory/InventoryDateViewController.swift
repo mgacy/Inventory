@@ -133,10 +133,9 @@ class InventoryDateViewController: UIViewController, RootSectionViewController {
             .disposed(by: disposeBag)
 
         /// TEST:
-        viewModel.test
+        viewModel.showInventory
             .subscribe(onNext: { [weak self] inventory in
                 log.debug("\(#function) SELECTED: \(inventory)")
-                // FIXME: add weak self
                 switch inventory.uploaded {
                 case true:
                     log.info("GET selectedInventory from server - \(inventory.remoteID) ...")
