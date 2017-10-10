@@ -137,6 +137,8 @@ extension OrderCollection: NewSyncable {
     typealias RemoteType = RemoteOrderCollection
     typealias RemoteIdentifierType = Date
 
+    static var remoteIdentifierName: String { return "dateTimeInterval" }
+
     var remoteIdentifier: RemoteIdentifierType { return Date(timeIntervalSinceReferenceDate: dateTimeInterval) }
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {

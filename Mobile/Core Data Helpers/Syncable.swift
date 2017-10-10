@@ -74,8 +74,10 @@ extension NewSyncable where Self: NSManagedObject {
             return findOrFetch(in: context, matching: predicate)
     }
 
+    /// TODO: add `throws`?
     static func sync<R>(with records: [RemoteType], in managedObjectContext: NSManagedObjectContext)
         where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
+            /// TODO: replace with Self.fetchEntityDict(in: managedObjectContext)
             guard let objectDict: [R: Self] = try? managedObjectContext.fetchEntityDict(self.self) else {
                 log.error("\(#function) FAILED : unable to create dictionary for \(self)"); return
             }
@@ -96,6 +98,7 @@ extension NewSyncable where Self: NSManagedObject {
 
             // Delete objects that were deleted from server. We filter remoteID 0
             // since that is the default value for new objects
+            /// TODO: switch based on remoteIdentifierName instead?
             let deletedObjects: Set<R>
             switch R.self {
             case is Int32.Type:
@@ -108,7 +111,7 @@ extension NewSyncable where Self: NSManagedObject {
 
             if !deletedObjects.isEmpty {
                 log.debug("We need to delete: \(deletedObjects)")
-                let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedObjects)
+                let fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", deletedObjects)
                 do {
                     try managedObjectContext.deleteEntities(self, filter: fetchPredicate)
                 } catch {
