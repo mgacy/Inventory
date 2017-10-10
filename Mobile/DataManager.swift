@@ -12,6 +12,13 @@ import Alamofire
 //import RxCocoa
 import RxSwift
 
+public enum DataManagerError: Error {
+    //case dateParsing
+    case missingMOC
+    case missingStoreID
+    case otherError(error: String)
+}
+
 class DataManager {
 
     // MARK: - Properties
@@ -195,8 +202,7 @@ extension DataManager {
     func createOrderCollection(generationMethod method: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?) -> Observable<Event<OrderCollection>> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
-            return Observable.error(BackendError.myError(error: "Missing storeID"))
-            .materialize()
+            return Observable.error(DataManagerError.missingStoreID).materialize()
         }
 
         return client.postOrderCollection(storeID: storeID, generationMethod: method, returnUsage: returnUsage,
@@ -205,11 +211,11 @@ extension DataManager {
                 switch response.result {
                 case .success(let record):
                     guard let context = self?.managedObjectContext else {
-                        throw BackendError.myError(error: "Missing MOC")
+                        throw DataManagerError.missingMOC
                     }
                     guard let date = record.date.toBasicDate() else {
                         log.error("\(#function) FAILED : unable to parse date")
-                        throw BackendError.myError(error: "Unable to parse date")
+                        throw DataManagerError.otherError(error: "Unable to parse date")
                     }
 
                     let newCollection: OrderCollection = context.insertObject()
@@ -224,16 +230,14 @@ extension DataManager {
             .materialize()
     }
 
-    func refreshOrderCollection(_ collection: OrderCollection) -> Observable<OrderCollection> {
+    func refreshOrderCollection(_ collection: OrderCollection) -> Observable<Event<OrderCollection>> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
-            return Observable.just(collection)
-            //.materialize()
+            return Observable.error(DataManagerError.missingStoreID).materialize()
         }
         guard let dateString = collection.date.stringFromDate() else {
             log.error("\(#function) FAILED : unable to get dateString")
-            return Observable.just(collection)
-            //.materialize()
+            return Observable.error(DataManagerError.otherError(error: "Unable to parse date")).materialize()
         }
         return client.getOrderCollection(storeID: storeID, orderDate: dateString)
             .map { [weak self] response in
@@ -244,34 +248,33 @@ extension DataManager {
                     return collection
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    return collection
+                    throw error
                 }
-                //return collection
-        }
+            }
+            .materialize()
     }
 
-    func refreshOrderCollections() -> Observable<Bool> {
+    func refreshOrderCollections() -> Observable<Event<Bool>> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
-            return Observable.just(false)
-            //return Observable.error(BackendError.myError(error: "Missing storeID"))
-            //.materialize()
+            return Observable.error(DataManagerError.missingStoreID).materialize()
         }
 
         return client.getOrderCollections(storeID: storeID)
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
-                    guard let context = self?.managedObjectContext else { return false }
+                    guard let context = self?.managedObjectContext else {
+                        throw DataManagerError.missingMOC
+                    }
                     OrderCollection.sync(with: records, in: context)
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    //throw error
-                    return false
+                    throw error
                 }
-        }
-        //.materialize()
+            }
+            .materialize()
     }
 
 }

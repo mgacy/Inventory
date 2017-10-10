@@ -33,8 +33,8 @@ struct OrderDateViewModel {
     let frc: NSFetchedResultsController<OrderCollection>
     let isRefreshing: Driver<Bool>
     let hasRefreshed: Driver<Bool>
-    //let errorMessages: Driver<String>
     let showCollection: Observable<OrderCollection>
+    let errorMessages: Driver<String>
 
     // MARK: - Lifecycle
 
@@ -57,6 +57,7 @@ struct OrderDateViewModel {
             .flatMapLatest { _ -> Observable<Bool> in
                 log.debug("\(#function) : Refreshing (2) ...")
                 return dataManager.refreshOrderCollections()
+                    .dematerialize()
                     .trackActivity(isRefreshing)
             }
             .asDriver(onErrorJustReturn: false)
@@ -64,27 +65,43 @@ struct OrderDateViewModel {
         // Add
         let _add = PublishSubject<NewOrderGenerationMethod>()
         self.addTaps = _add.asObserver()
-
-        let showNew = _add.asObservable()
-            .flatMap { method -> Observable<OrderCollection> in
+        let showNewResults = _add.asObservable()
+            .flatMap { method -> Observable<Event<OrderCollection>> in
                 return dataManager.createOrderCollection(generationMethod: method, returnUsage: false,
-                                                         periodLength: nil).dematerialize()
+                                                         periodLength: nil)
             }
+            .share()
 
         // Selection
-        let showSelection = rowTaps
+        let showSelectionResults = rowTaps
             //.throttle(0.5, scheduler: MainScheduler.instance)
-            .flatMap { selection -> Observable<OrderCollection> in
+            .flatMap { selection -> Observable<Event<OrderCollection>> in
                 log.debug("Tapped: \(selection)")
                 return dataManager.refreshOrderCollection(selection)
 
             }
-            .shareReplay(1)
+            .share()
+            //.shareReplay(1)
 
         // Navigation
         //self.showCollection = Observable.from([showNew, showSelection]).merge()
-        self.showCollection = Observable.of(showNew, showSelection)
+        self.showCollection = Observable.of(showNewResults.elements(), showSelectionResults.elements())
             .merge()
+
+        // Errors
+        //self.errorMessages = showNewResults
+        //    .errors()
+        self.errorMessages = Observable.of(showNewResults.errors(), showSelectionResults.errors())
+            .merge()
+            .map { error in
+                log.debug("\(#function) ERROR : \(error)")
+                switch error {
+                default:
+                    return "There was a problem"
+                }
+            }
+            .asDriver(onErrorJustReturn: "Other Error")
+            //.asDriver(onErrorDriveWith: .never())
 
         // FetchRequest
         let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
