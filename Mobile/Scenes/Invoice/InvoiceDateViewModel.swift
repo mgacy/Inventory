@@ -28,7 +28,6 @@ struct InvoiceDateViewModel {
 
     // MARK: - Input
     let refresh: AnyObserver<Void>
-    //let addTaps: AnyObserver<Void>
     //let editTaps: AnyObserver<Void>
     //let rowTaps: AnyObserver<InvoiceCollection>
 
@@ -36,8 +35,8 @@ struct InvoiceDateViewModel {
     let frc: NSFetchedResultsController<InvoiceCollection>
     let isRefreshing: Driver<Bool>
     let hasRefreshed: Driver<Bool>
-    let showSelection: Observable<InvoiceCollection>
-    //let showSelection: Driver<InvoiceCollection>
+    //let errorMessages: Driver<String>
+    let showCollection: Observable<InvoiceCollection>
 
     // MARK: - Lifecycle
 
@@ -63,16 +62,6 @@ struct InvoiceDateViewModel {
             }
             .asDriver(onErrorJustReturn: false)
 
-        // ...
-
-        // Add
-        //let _add = PublishSubject<Void>()
-        //self.addTaps = _add.asObserver()
-        //_ = _add.asObservable()
-        //    .map { _ in
-        //        log.debug("Tapped ADD")
-        //}
-
         // Selection
         /*
         let _selectedObjects = PublishSubject<InvoiceCollection>()
@@ -85,12 +74,15 @@ struct InvoiceDateViewModel {
             .shareReplay(1)
             //.asDriver(onErrorJustReturn: InvoiceCollection())
          */
-        self.showSelection = rowTaps
+        self.showCollection = rowTaps
             .flatMap { selection -> Observable<InvoiceCollection> in
                 log.debug("Tapped: \(selection)")
                 return dataManager.refreshInvoiceCollection(selection)
             }
             //.shareReplay(1)
+
+        // Errors
+        //self.errorMessages = 
 
         // FetchRequest
         let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
@@ -105,6 +97,3 @@ struct InvoiceDateViewModel {
     }
 
 }
-
-//extension InvoiceDateViewModel: RootSectionViewModel {}
-//extension InvoiceDateViewModel: InvoiceDateViewModelType {}

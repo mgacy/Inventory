@@ -38,9 +38,9 @@ struct InventoryDateViewModel {
     let frc: NSFetchedResultsController<Inventory>
     let isRefreshing: Driver<Bool>
     let hasRefreshed: Driver<Bool>
+    //let errorMessages: Driver<String>
     let showInventory: Observable<Inventory>
     //let showLocationCategory: Observable<Inventory>
-    //let showSettings: Observable<Void>
 
     // MARK: - Lifecycle
 
@@ -85,6 +85,8 @@ struct InventoryDateViewModel {
                 log.debug("Tapped: \(selection)")
                 return selection
             }
+
+        // Errors
 
         // FetchRequest
         let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
