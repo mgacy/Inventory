@@ -28,8 +28,7 @@ struct RemoteInventory: Codable {
 
     struct Item: Codable {
 
-        // swiftlint:disable:next type_name
-        struct Par: Codable {
+        struct RemoteItemPar: Codable {
             let par: Double
             let unitID: Int
 
@@ -50,7 +49,7 @@ struct RemoteInventory: Codable {
         let purchaseUnitID: Int?
         let subUnitID: Int?
         // Relationships
-        let par: Par?
+        let par: RemoteItemPar?
 
         private enum CodingKeys: String, CodingKey {
             case remoteID = "id"
