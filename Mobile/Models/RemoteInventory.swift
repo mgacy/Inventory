@@ -97,7 +97,8 @@ extension RemoteInventory: RemoteRecord {
 struct RemoteInventoryLocation: Codable {
     let remoteID: Int
     let name: String
-    let locType: String
+    let locationType: String
+    //status
     // Relationships
     let categories: [RemoteLocationCategory]?
     let items: [Int]?
@@ -105,7 +106,8 @@ struct RemoteInventoryLocation: Codable {
     private enum CodingKeys: String, CodingKey {
         case remoteID = "id"
         case name
-        case locType = "loc_type"
+        case locationType = "loc_type"
+        //status
         case categories
         case items
     }
