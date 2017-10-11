@@ -92,6 +92,30 @@ extension RemoteInventory: RemoteRecord {
     var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID ?? 0) }
 }
 
+// MARK: - Inventory (New)
+
+struct RemoteNewInventory: Codable {
+    //let remoteID: Int?
+    //let date: Date
+    let date: String
+    let inventoryTypeID: Int?
+    let storeID: Int
+    // Relationships
+    let categories: [RemoteItemCategory]
+    let items: [RemoteNestedItem]
+    let locations: [RemoteInventoryLocation]
+
+    private enum CodingKeys: String, CodingKey {
+        //case remoteID = "id"
+        case date
+        case inventoryTypeID = "inventory_type_id"
+        case storeID = "store_id"
+        case categories
+        case items
+        case locations
+    }
+}
+
 // MARK: - Inventory (Existing)
 
 struct RemoteExistingInventory: Codable {

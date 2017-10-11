@@ -153,7 +153,7 @@ extension APIManager {
     }
 
     /// NOTE: I am designing this in accordance with how things should work, not how they currently do
-    func postInventory(storeID: Int) -> Observable<DataResponse<RemoteInventory>> {
+    func postInventory(storeID: Int) -> Observable<DataResponse<RemoteNewInventory>> {
         /// TODO: update to actually use POST
         //return postOne(Router.postInventory)
         let isActive = true
