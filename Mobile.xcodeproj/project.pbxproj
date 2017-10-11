@@ -26,6 +26,7 @@
 		C9174D431F83232C008639CC /* SyncableParent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9174D421F83232C008639CC /* SyncableParent.swift */; };
 		C9174D451F832393008639CC /* NSManagedObjectContext+Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9174D441F832393008639CC /* NSManagedObjectContext+Syncable.swift */; };
 		C9174D471F833265008639CC /* InitialLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9174D461F833265008639CC /* InitialLoginViewModel.swift */; };
+		C91856951F8D881D001B08A0 /* InventoriesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91856941F8D881D001B08A0 /* InventoriesFactory.swift */; };
 		C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B4EDB1E5C2863002DA2A5 /* User.swift */; };
 		C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */; };
 		C91C92821EFCD98F00566CEB /* OrderItemViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */; };
@@ -146,6 +147,7 @@
 		C9174D421F83232C008639CC /* SyncableParent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SyncableParent.swift; path = "Core Data Helpers/SyncableParent.swift"; sourceTree = "<group>"; };
 		C9174D441F832393008639CC /* NSManagedObjectContext+Syncable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSManagedObjectContext+Syncable.swift"; path = "Core Data Helpers/NSManagedObjectContext+Syncable.swift"; sourceTree = "<group>"; };
 		C9174D461F833265008639CC /* InitialLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialLoginViewModel.swift; path = Scenes/Initial/InitialLoginViewModel.swift; sourceTree = "<group>"; };
+		C91856941F8D881D001B08A0 /* InventoriesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InventoriesFactory.swift; path = Models/InventoriesFactory.swift; sourceTree = "<group>"; };
 		C91B4EDB1E5C2863002DA2A5 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUserManager.swift; sourceTree = "<group>"; };
 		C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OrderItemViewController.storyboard; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */,
 				C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */,
 				C9564F311F840276007D84F6 /* RemoteInventory.swift */,
+				C91856941F8D881D001B08A0 /* InventoriesFactory.swift */,
 			);
 			name = "Inventory Models";
 			path = ..;
@@ -907,6 +910,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */,
+				C91856951F8D881D001B08A0 /* InventoriesFactory.swift in Sources */,
 				C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */,
 				C9BB05851F83164400A07529 /* AlamofireDecodableError.swift in Sources */,
 				C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */,
