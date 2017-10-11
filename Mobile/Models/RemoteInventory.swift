@@ -21,9 +21,15 @@ struct RemoteInventory: Codable {
             let name: String
         }
 
-        let id: Int
+        let remoteID: Int
         let name: String
         let items: [CategoryItem]
+
+        private enum CodingKeys: String, CodingKey {
+            case remoteID = "id"
+            case name
+            case items
+        }
     }
 
     struct Item: Codable {
