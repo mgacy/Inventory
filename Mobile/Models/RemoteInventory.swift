@@ -25,7 +25,7 @@ struct RemoteInventory: Codable {
             case items
         }
     }
-
+    /*
     struct Item: Codable {
 
         struct RemoteItemPar: Codable {
@@ -64,7 +64,7 @@ struct RemoteInventory: Codable {
             case par
         }
     }
-
+     */
     let remoteID: Int?
     //let date: Date
     let date: String
@@ -72,7 +72,8 @@ struct RemoteInventory: Codable {
     let storeID: Int
     // Relationships
     let categories: [Category]?
-    let items: [Item]?
+    //let items: [Item]?
+    let items: [RemoteNestedItem]?
     let locations: [RemoteInventoryLocation]?
 
     private enum CodingKeys: String, CodingKey {
@@ -190,6 +191,7 @@ struct RemoteLocationCategory: Codable {
     let items: [Int]
 
     private enum CodingKeys: String, CodingKey {
+        // NOTE: remoteID refers to categoryID
         case remoteID = "id"
         case name
         case items
