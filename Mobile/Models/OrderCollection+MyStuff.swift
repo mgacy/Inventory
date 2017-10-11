@@ -167,7 +167,7 @@ extension OrderCollection: NewSyncableParent {
     /// TODO: handle remoteID == 0 on new Orders
     func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : Order]? {
         let fetchPredicate = NSPredicate(format: "collection == %@", self)
-        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+        guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
             return nil
         }
         return objectDict

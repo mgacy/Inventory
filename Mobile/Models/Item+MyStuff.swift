@@ -99,18 +99,6 @@ extension Item: NewSyncable {
         // Create dict from fetch request on Items
         let prefetch = ["inventoryUnit", "purchaseSubUnit", "purchaseUnit",
                         "subUnit", "vendor"]
-        /*
-        guard let itemDict = try? context.fetchEntityDict(self, prefetchingRelationships: prefetch) else {
-            log.error("\(#function) FAILED : unable to create Item dictionary")
-            return
-        }
-
-        // Create dict from fetch request on Units
-        guard let unitDict = try? context.fetchEntityDict(Unit.self) else {
-            log.error("\(#function) FAILED : unable to create Unit dictionary")
-            return
-        }
-         */
         guard let itemDict = try? Item.fetchEntityDict(in: context, prefetchingRelationships: prefetch) else {
             log.error("\(#function) FAILED : unable to create Item dictionary"); return
         }

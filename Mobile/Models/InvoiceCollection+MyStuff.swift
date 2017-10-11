@@ -166,7 +166,7 @@ extension InvoiceCollection: NewSyncableParent {
 
     func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : Invoice]? {
         let fetchPredicate = NSPredicate(format: "collection == %@", self)
-        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+        guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
             return nil
         }
         return objectDict

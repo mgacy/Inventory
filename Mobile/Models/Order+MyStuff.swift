@@ -275,7 +275,7 @@ extension Order: NewSyncableParent {
 
     func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : OrderItem]? {
         let fetchPredicate = NSPredicate(format: "order == %@", self)
-        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+        guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
             return nil
         }
         return objectDict

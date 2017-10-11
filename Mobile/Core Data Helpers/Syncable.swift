@@ -77,8 +77,7 @@ extension NewSyncable where Self: NSManagedObject {
     /// TODO: add `throws`?
     static func sync<R>(with records: [RemoteType], in context: NSManagedObjectContext)
         where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
-            /// TODO: replace with Self.fetchEntityDict(in: managedObjectContext)
-            guard let objectDict: [R: Self] = try? context.fetchEntityDict(self.self) else {
+            guard let objectDict: [R: Self] = try? fetchEntityDict(in: context) else {
                 log.error("\(#function) FAILED : unable to create dictionary for \(self)"); return
             }
 
