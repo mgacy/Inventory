@@ -104,17 +104,9 @@ import SwiftyJSON
 
 }
 
-extension InvoiceItem {
+// MARK: - Serialization
 
-    // MARK: - Lifecycle
-    /*
-    convenience init(context: NSManagedObjectContext, json: JSON, parent: Invoice) {
-        self.init(context: context)
-        self.invoice = parent
-        update(context: context, withJSON: json)
-    }
-     */
-    // MARK: - Serialization
+extension InvoiceItem {
 
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
@@ -177,41 +169,3 @@ extension InvoiceItem: NewSyncable {
     }
 
 }
-
-/*
-extension InvoiceItem: ManagedSyncable {
-
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
-
-        // Required
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let quantity = json["quantity"].double {
-            self.quantity = quantity
-        }
-        if let statusString = json["status"].string,
-            let status = InvoiceItemStatus(string: statusString) {
-            self.status = status.rawValue
-        }
-
-        // Optional (?)
-        if let discount = json["discount"].double {
-            self.discount = discount
-        }
-        if let cost = json["cost"].double {
-            self.cost = cost
-        }
-
-        // Relationships
-        if let itemID = json["item"]["id"].int32 {
-            //self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
-            self.item = context.fetchWithRemoteIdentifier(Item.self, identifier: itemID)
-        }
-        if let unitID = json["unit"]["id"].int32 {
-            self.unit = context.fetchWithRemoteID(Unit.self, withID: unitID)
-        }
-    }
-
-}
-*/

@@ -26,58 +26,6 @@ import SwiftyJSON
 
 extension Order {
 
-    // MARK: - Lifecycle
-    /*
-    convenience init(context: NSManagedObjectContext, json: JSON, collection: OrderCollection, uploaded: Bool = false) {
-        self.init(context: context)
-
-        // Properties
-        // if let orderCost = json["order_cost"].float {}
-        if let dateString = json["order_date"].string,
-           let date = dateString.toBasicDate() {
-            self.date = date.timeIntervalSinceReferenceDate
-        }
-        if uploaded {
-            self.status = OrderStatus.uploaded.rawValue
-        } else {
-            self.status = OrderStatus.pending.rawValue
-        }
-
-        // Missing properties
-        // placed
-        // remoteID
-        // vendorID
-        // store
-
-        // Relationships
-        self.collection = collection
-        if let vendorID = json["vendor"]["id"].int32 {
-            //self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
-            self.vendor = context.fetchWithRemoteIdentifier(Vendor.self, identifier: vendorID)
-        }
-
-        /*
-        // Rep
-        if json["vendor"]["rep"].array != nil {
-            // rep = json["vendor"]["rep"]["name"].string {}
-            // repEmail = json["vendor"]["rep"]["email"].string {}
-            // repPhone = json["vendor"]["rep"]["phone"].int {}
-        }
-        */
-
-        // OrderItems
-        if let items = json["items"].array {
-            log.info("Creating OrderItems ...")
-            for itemJSON in items {
-                _ = OrderItem(context: context, json: itemJSON, order: self)
-            }
-        }
-
-        if !uploaded {
-            updateStatus()
-        }
-    }
-     */
     // MARK: - Serialization
 
     func serialize() -> [String: Any]? {
@@ -165,79 +113,7 @@ extension Order {
     }
 
 }
-/*
-// MARK: - ManagedSyncable
 
-extension Order: ManagedSyncable {
-
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
-        log.debug("Updating Order with: \(json)")
-        // Required
-        // date
-        // placed
-        // status
-
-        // if let orderCost = json["order_cost"].float {}
-        if let dateString = json["order_date"].string,
-            let date = dateString.toBasicDate() {
-            self.date = date.timeIntervalSinceReferenceDate
-        }
-
-        // Optional
-        // remoteID
-        // uploaded
-        // vendorID
-
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-
-        // FIXME: get status from JSON
-        self.status = OrderStatus.uploaded.rawValue
-
-        // Relationships
-        // collection?
-        // items
-        // store?
-        // vendor?
-
-        if let items = json["items"].array {
-            syncChildren(in: context, with: items)
-        }
-
-        /// TODO: do we need to handle removal of vendor from remote?
-        if let vendorID = json["vendor"]["id"].int32 {
-            if vendorID != vendor?.remoteID {
-                //self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
-                self.vendor = context.fetchWithRemoteIdentifier(Vendor.self, identifier: vendorID)
-            }
-        }
-
-        /// TODO: update status?
-    }
-
-}
-
-// MARK: - SyncableParent
-
-extension Order: SyncableParent {
-    typealias ChildType = OrderItem
-
-    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: ChildType]? {
-        let fetchPredicate = NSPredicate(format: "order == %@", self)
-        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
-            return nil
-        }
-        return objectDict
-    }
-
-    func updateParent(of entity: ChildType) {
-        entity.order = self
-        //addToItems(entity)
-    }
-
-}
-*/
 // MARK: - NewSyncable
 
 extension Order: NewSyncable {

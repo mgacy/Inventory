@@ -36,19 +36,9 @@ import SwiftyJSON
 
 }
 
+// MARK: - Serialization
+
 extension Invoice {
-
-    //@NSManaged var ageType: InvoiceStatus
-
-    // MARK: - Lifecycle
-    /*
-    convenience init(context: NSManagedObjectContext, json: JSON, parent: InvoiceCollection) {
-        self.init(context: context)
-        self.collection = parent
-        update(context: context, withJSON: json)
-    }
-     */
-    // MARK: - Serialization
 
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
@@ -117,14 +107,7 @@ extension Invoice: NewSyncable {
         }
         self.shipDate = shipDate.timeIntervalSinceReferenceDate
         self.receiveDate = receiveDate.timeIntervalSinceReferenceDate
-        /*
-        if let shipDate = record.shipDate.toBasicDate() {
-            self.shipDate = shipDate.timeIntervalSinceReferenceDate
-        }
-        if let receiveDate = record.receiveDate.toBasicDate() {
-            self.receiveDate = receiveDate.timeIntervalSinceReferenceDate
-        }
-         */
+
         if record.vendor.syncIdentifier != vendor?.remoteIdentifier {
             vendor = Vendor.updateOrCreate(with: record.vendor, in: context)
         }
@@ -184,89 +167,3 @@ extension Invoice: NewSyncableParent {
     }
 
 }
-
-/*
-// MARK: - ManagedSyncable
-
-extension Invoice: ManagedSyncable {
-
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
-        log.debug("Updating with \(json)")
-
-        // Required
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let shipDateString = json["ship_date"].string,
-           let shipDate = shipDateString.toBasicDate() {
-            self.shipDate = shipDate.timeIntervalSinceReferenceDate
-        }
-        if let receiveDateString = json["receive_date"].string,
-           let receiveDate = receiveDateString.toBasicDate() {
-            self.receiveDate = receiveDate.timeIntervalSinceReferenceDate
-        }
-        if let vendorID = json["vendor"]["id"].int32 {
-            //self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
-            self.vendor = context.fetchWithRemoteIdentifier(Vendor.self, identifier: vendorID)
-        }
-        if let statusString = json["status"].string {
-            switch statusString {
-            case "pending":
-                self.uploaded = false
-            case "completed":
-                self.uploaded = true
-            default:
-                log.error("\(#function) - Invalid status: \(statusString)")
-                self.uploaded = true
-            }
-        }
-
-        // Optional
-        if let invoiceNo = json["invoice_no"].int32 {
-            self.invoiceNo = invoiceNo
-        }
-        if let credit = json["credit"].double {
-            self.credit = credit
-        }
-        if let shipping = json["shipping"].double {
-            self.shipping = shipping
-        }
-        if let taxes = json["taxes"].double {
-            self.taxes = taxes
-        }
-        /// TODO: this should be a computed property
-        if let totalCost = json["total_cost"].double {
-            self.totalCost = totalCost
-        }
-        if let checkNo = json["check_no"].int32 {
-            self.checkNo = checkNo
-        }
-
-        // Relationships
-        if let items = json["items"].array {
-            syncChildren(in: context, with: items)
-        }
-    }
-
-}
-
-// MARK: - SyncableParent
-
-extension Invoice: SyncableParent {
-    typealias ChildType = InvoiceItem
-
-    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: ChildType]? {
-        let fetchPredicate = NSPredicate(format: "invoice == %@", self)
-        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
-            return nil
-        }
-        return objectDict
-    }
-
-    func updateParent(of entity: ChildType) {
-        entity.invoice = self
-        //addToItems(entity)
-    }
-
-}
-*/
