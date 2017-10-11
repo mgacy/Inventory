@@ -64,19 +64,21 @@ class DataManager {
 
     //func updateItem(_ item: Item) -> Observable<Bool> { return Observable.just(true) }
 
-    //func refreshItems() -> Observable<Event<[Items]>> {
     func refreshItems() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
             return Observable.just(false)
-            //.materialize()
+            //return Observable.error(DataManagerError.missingStoreID).materialize()
         }
 
         return client.getItems(storeID: storeID)
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
-                    guard let context = self?.managedObjectContext else { return false }
+                    guard let context = self?.managedObjectContext else {
+                        return false
+                        //throw DataManagerError.missingMOC
+                    }
                     Item.sync(with: records, in: context)
                     /*
                     do {
@@ -90,6 +92,7 @@ class DataManager {
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
                     return false
+                    //throw error
                 }
         }
         //.materialize()
@@ -129,12 +132,16 @@ class DataManager {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
             return Observable.just(false)
+            //return Observable.error(DataManagerError.missingStoreID).materialize()
         }
         return client.getVendors(storeID: storeID)
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
-                    guard let context = self?.managedObjectContext else { return false }
+                    guard let context = self?.managedObjectContext else {
+                        return false
+                        //throw DataManagerError.missingMOC
+                    }
                     Vendor.sync(with: records, in: context)
                     /*
                     do {
@@ -148,6 +155,7 @@ class DataManager {
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
                     return false
+                    //throw error
                 }
         }
     }
