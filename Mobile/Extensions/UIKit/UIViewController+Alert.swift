@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import PKHUD
 
 extension UIViewController {
 
@@ -67,6 +68,18 @@ extension UIViewController {
         alert.addAction(cancelAction)
 
         present(alert, animated: true, completion: nil)
+    }
+
+}
+
+// MARK: - PKHUD
+
+extension UIViewController {
+
+    func showError(title: String, subtitle: String?, delay: Double = 2.0) {
+        PKHUD.sharedHUD.show()
+        PKHUD.sharedHUD.contentView = PKHUDErrorView(title: title, subtitle: subtitle)
+        PKHUD.sharedHUD.hide(afterDelay: delay)
     }
 
 }

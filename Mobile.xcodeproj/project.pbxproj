@@ -90,6 +90,7 @@
 		C9CC04DF1F84C13C00180120 /* RemoteInvoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CC04DE1F84C13C00180120 /* RemoteInvoice.swift */; };
 		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
+		C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */; };
 		C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DEC1051F805CF6004602EB /* DateFacade.swift */; };
 		C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */; };
 		C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */; };
@@ -211,6 +212,7 @@
 		C9CC04DE1F84C13C00180120 /* RemoteInvoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInvoice.swift; path = Models/RemoteInvoice.swift; sourceTree = "<group>"; };
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
+		C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "String+MyStuff.swift"; path = "Extensions/Foundation/String+MyStuff.swift"; sourceTree = "<group>"; };
 		C9DEC1051F805CF6004602EB /* DateFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DateFacade.swift; path = Protocols/DateFacade.swift; sourceTree = "<group>"; };
 		C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSManagedObjectContext+Managed.swift"; path = "Core Data Helpers/NSManagedObjectContext+Managed.swift"; sourceTree = "<group>"; };
 		C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderDateViewController.swift; sourceTree = "<group>"; };
@@ -452,6 +454,7 @@
 				C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */,
 				C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */,
 				C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */,
+				C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */,
 				C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */,
 			);
 			name = Foundation;
@@ -946,6 +949,7 @@
 				C9BB058F1F831B2200A07529 /* OrderDateViewModel.swift in Sources */,
 				C9C2DA081F0F3EC2007263FB /* InventoryLocationItemViewModel.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
+				C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */,
 				C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */,
 				C9174D471F833265008639CC /* InitialLoginViewModel.swift in Sources */,
 				C9174D451F832393008639CC /* NSManagedObjectContext+Syncable.swift in Sources */,

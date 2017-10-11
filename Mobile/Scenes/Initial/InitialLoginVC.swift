@@ -191,17 +191,6 @@ extension InitialLoginVC {
 
 }
 
-/// TODO: make extension of PKHUD
-extension InitialLoginVC {
-
-    func showError(title: String, subtitle: String?, delay: Double = 2.0) {
-        PKHUD.sharedHUD.show()
-        PKHUD.sharedHUD.contentView = PKHUDErrorView(title: title, subtitle: subtitle)
-        PKHUD.sharedHUD.hide(afterDelay: delay)
-    }
-
-}
-
 // MARK: - 1Password Extension
 
 extension OnePasswordExtension {
