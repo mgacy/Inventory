@@ -151,9 +151,17 @@ extension RemoteExistingInventory: RemoteRecord {
 // MARK: - InventoryLocation
 
 struct RemoteInventoryLocation: Codable {
+
+    // Nested
+
+    enum LocationType: String, Codable {
+        case category
+        case item
+    }
+
     let remoteID: Int
     let name: String
-    let locationType: String
+    let locationType: LocationType
     //status
     // Relationships
     let categories: [RemoteLocationCategory]?
