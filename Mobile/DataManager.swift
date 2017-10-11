@@ -293,7 +293,9 @@ extension DataManager {
             .map { [weak self] response in
                 switch response.result {
                 case .success(let record):
-                    guard let context = self?.managedObjectContext else { return collection }
+                    guard let context = self?.managedObjectContext else {
+                        throw DataManagerError.missingMOC
+                    }
                     collection.update(with: record, in: context)
                     return collection
                 case .failure(let error):
@@ -333,55 +335,56 @@ extension DataManager {
 
 extension DataManager {
 
-    func refreshInvoiceCollection(_ collection: InvoiceCollection) -> Observable<InvoiceCollection> {
+    func refreshInvoiceCollection(_ collection: InvoiceCollection) -> Observable<Event<InvoiceCollection>> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
-            return Observable.just(collection)
-            //.materialize()
+            return Observable.error(DataManagerError.missingStoreID).materialize()
         }
 
         //let date = collection.date
         //let dateString = collection.date.shortDate
         guard let dateString = collection.date.stringFromDate() else {
             log.error("\(#function) FAILED : unable to get dateString")
-            return Observable.just(collection)
-            //.materialize()
+            return Observable.error(DataManagerError.otherError(error: "Unable to parse date")).materialize()
         }
         return client.getInvoiceCollection(storeID: storeID, invoiceDate: dateString)
             .map { [weak self] response in
                 switch response.result {
                 case .success(let record):
-                    guard let context = self?.managedObjectContext else { return collection }
+                    guard let context = self?.managedObjectContext else {
+                        throw DataManagerError.missingMOC
+                    }
                     collection.update(with: record, in: context)
                     return collection
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    return collection
+                    throw error
                 }
-                //return collection
             }
+            .materialize()
     }
 
-    func refreshInvoiceCollections() -> Observable<Bool> {
+    func refreshInvoiceCollections() -> Observable<Event<Bool>> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
-            return Observable.just(false)
-            //.materialize()
+            return Observable.error(DataManagerError.missingStoreID).materialize()
         }
 
         return client.getInvoiceCollections(storeID: storeID)
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
-                    guard let context = self?.managedObjectContext else { return false }
+                    guard let context = self?.managedObjectContext else {
+                        throw DataManagerError.missingMOC
+                    }
                     InvoiceCollection.sync(with: records, in: context)
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    return false
+                    throw error
                 }
-        }
-        //.materialize()
+            }
+            .materialize()
     }
 
 }

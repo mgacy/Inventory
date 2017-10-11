@@ -58,6 +58,7 @@ struct InvoiceDateViewModel {
             .flatMapLatest { _ -> Observable<Bool> in
                 log.debug("\(#function) : Refreshing (2) ...")
                 return dataManager.refreshInvoiceCollections()
+                    .dematerialize()
                     .trackActivity(isRefreshing)
             }
             .asDriver(onErrorJustReturn: false)
@@ -78,6 +79,7 @@ struct InvoiceDateViewModel {
             .flatMap { selection -> Observable<InvoiceCollection> in
                 log.debug("Tapped: \(selection)")
                 return dataManager.refreshInvoiceCollection(selection)
+                    .elements()
             }
             //.shareReplay(1)
 
