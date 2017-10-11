@@ -43,6 +43,12 @@ extension Unit: NewSyncable {
 
     var remoteIdentifier: RemoteIdentifierType { return remoteID }
 
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        remoteID = record.syncIdentifier
+        update(with: record, in: context)
+    }
+
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
         //remoteID = record.syncIdentifier
         name = record.name

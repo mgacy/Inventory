@@ -30,6 +30,12 @@ extension NewSyncable where Self: NSManagedObject {
 
     static var remoteIdentifierName: String { return "remoteID" }
 
+    init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.setValue(record.syncIdentifier, forKey: Self.remoteIdentifierName)
+        self.update(with: record, in: context)
+    }
+
     static func updateOrCreate<R>(with record: RemoteType, in context: NSManagedObjectContext) -> Self
         where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
 
@@ -39,9 +45,12 @@ extension NewSyncable where Self: NSManagedObject {
                 existingObject.update(with: record, in: context)
                 return existingObject
             } else {
+                let newObject = Self(with: record, in: context)
+                /*
                 let newObject: Self = context.insertObject()
                 newObject.setValue(record.syncIdentifier, forKey: remoteIdentifierName)
                 newObject.update(with: record, in: context)
+                 */
                 return newObject
             }
     }
@@ -89,8 +98,18 @@ extension NewSyncable where Self: NSManagedObject {
                 remoteIDs.insert(objectID)
 
                 // Find + update / create Items
+                if let existingObject = objectDict[objectID] {
+                    existingObject.update(with: record, in: context)
+                    //log.debug("existingObject: \(existingObject)")
+                } else {
+                    let newObject = Self(with: record, in: context)
+                    /// TODO: add newObject to localIDs?
+                    log.debug("newObject: \(newObject)")
+                }
+                /*
                 let object = objectDict[objectID] ?? Self.init(context: context)
                 object.update(with: record, in: managedObjectContext)
+                 */
             }
 
             log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")

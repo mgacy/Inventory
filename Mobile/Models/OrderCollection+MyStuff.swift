@@ -141,12 +141,22 @@ extension OrderCollection: NewSyncable {
 
     var remoteIdentifier: RemoteIdentifierType { return Date(timeIntervalSinceReferenceDate: dateTimeInterval) }
 
-    func update(with record: RemoteType, in context: NSManagedObjectContext) {
-        /// TODO: since this is the remoteIdentifier, should we remove this from `update()`?
-        /// TODO: is there an actual case where this would fail? Swtich to using `guard` or set to `Date()` on failure?
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
         if let date = record.date.toBasicDate() {
             self.dateTimeInterval = date.timeIntervalSinceReferenceDate
+        } else {
+            /// TODO:find better way of handling error
+            fatalError("Unable to parse date from: \(record)")
         }
+        self.uploaded = true
+        update(with: record, in: context)
+    }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        //if let date = record.date.toBasicDate() {
+        //    self.dateTimeInterval = date.timeIntervalSinceReferenceDate
+        //}
         self.storeID = Int32(record.storeID)
         if let inventoryID = record.inventoryId { self.inventoryID = Int32(inventoryID) }
 

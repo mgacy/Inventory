@@ -16,6 +16,13 @@ extension Inventory: NewSyncable {
 
     var remoteIdentifier: RemoteIdentifierType { return remoteID }
 
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        remoteID = record.syncIdentifier
+        self.uploaded = true
+        update(with: record, in: context)
+    }
+
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
         //remoteID
         if let date = record.date.toBasicDate() {

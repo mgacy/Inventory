@@ -6,15 +6,21 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 import CoreData
-import SwiftyJSON
+//import SwiftyJSON
 
 extension Item: NewSyncable {
     typealias RemoteType = RemoteItem
     typealias RemoteIdentifierType = Int32
 
     var remoteIdentifier: RemoteIdentifierType { return self.remoteID }
+
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.remoteID = record.syncIdentifier
+        update(with: record, in: context)
+    }
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
 
@@ -122,7 +128,7 @@ extension Item: NewSyncable {
 
             } else {
                 //log.verbose("CREATE new Item: \(record)")
-                //let newObject = self.init(context: managedObjectContext)
+                //let newObject = self.init(with: record, in: managedObjectContext)
                 let newObject: Item = context.insertObject()
                 newObject.remoteID = record.syncIdentifier
                 newObject.update(with: record, in: context)

@@ -271,14 +271,19 @@ extension DataManager {
                     guard let context = self?.managedObjectContext else {
                         throw DataManagerError.missingMOC
                     }
+                    /*
                     guard let date = record.date.toBasicDate() else {
                         log.error("\(#function) FAILED : unable to parse date")
                         throw DataManagerError.otherError(error: "Unable to parse date")
                     }
 
                     let newCollection: OrderCollection = context.insertObject()
+                    /// TODO: should these be part of an `.init(with:in:)` method?
                     newCollection.dateTimeInterval = date.timeIntervalSinceReferenceDate
                     newCollection.update(with: record, in: context)
+                     */
+                    let newCollection = OrderCollection(with: record, in: context)
+                    newCollection.uploaded = false
                     return Observable.just(newCollection)
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")

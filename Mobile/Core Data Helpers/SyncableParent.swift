@@ -50,10 +50,11 @@ extension NewSyncableParent where ChildType: NSManagedObject {
                     existingObject.update(with: record, in: context)
                     //log.debug("existingObject: \(existingObject)")
                 } else {
-                    let newObject = ChildType(context: context)
+                    let newObject = ChildType(with: record, in: context)
+                    //let newObject = ChildType(context: context)
                     //let newObject: ChildType = context.insertObject()
+                    //newObject.update(with: record, in: context)
                     updateParent(of: newObject)
-                    newObject.update(with: record, in: context)
                     //log.debug("newObject: \(newObject)")
                 }
 
