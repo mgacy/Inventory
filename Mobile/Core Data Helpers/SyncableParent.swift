@@ -23,6 +23,7 @@ protocol NewSyncableParent: class, NSFetchRequestResult {
 
 extension NewSyncableParent where ChildType: NSManagedObject {
 
+    /// TODO: pass closure `configure: (ChildType) -> Void` to allow configuring relationships
     func syncChildren<R, I>(with records: [R], in context: NSManagedObjectContext) where R == ChildType.RemoteType,
         I == ChildType.RemoteIdentifierType, I == ChildType.RemoteType.SyncIdentifierType {
             guard let objectDict: [I: ChildType] = fetchChildDict(in: context) else {

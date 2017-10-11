@@ -161,7 +161,7 @@ extension OrderItem: NewSyncable {
 
         // Optional
         // itemID
-        // remoteID
+        // remoteID = record.syncIdentifier
         minOrder = record.minOrder ?? -1
         onHand = record.inventory ?? -1
         par = record.par ?? -1

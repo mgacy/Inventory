@@ -39,7 +39,11 @@ class APIManager {
         configuration.timeoutIntervalForRequest = 8 // seconds
         configuration.timeoutIntervalForResource = 8
         sessionManager = Alamofire.SessionManager(configuration: configuration)
+
+        // JSON Decoding
         decoder = JSONDecoder()
+        //decoder.dateDecodingStrategy = .formatted(Date.basicDate)
+        //decoder.dateDecodingStrategy = .iso8601
     }
 
     func configSession(_ authHandler: AuthenticationHandler?) {
@@ -361,6 +365,7 @@ extension APIManager {
 
     func postOrderCollection(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?) -> Observable<DataResponse<RemoteOrderCollection>> {
 
+        /// TODO: relocate / rework
         var parameters = [String: Any]()
         parameters["store_id"] = storeID
         parameters["generation_method"] = generationMethod.rawValue

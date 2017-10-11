@@ -105,7 +105,7 @@ extension Invoice: NewSyncable {
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
         // Required
-        //remoteID = record.remoteID
+        //remoteID = record.syncIdentifier
         guard let shipDate = record.shipDate.toBasicDate(), let receiveDate = record.receiveDate.toBasicDate() else {
             fatalError("\(#function) FAILED : unable to parse shipDate or receiveDate from \(record)")
         }
@@ -155,9 +155,7 @@ extension Invoice: NewSyncable {
         }
 
         // Relationships
-        //if let items = record.items {
         syncChildren(with: record.items, in: context)
-        //}
     }
 
 }

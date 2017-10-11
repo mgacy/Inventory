@@ -140,7 +140,9 @@ extension InvoiceItem: NewSyncable {
     var remoteIdentifier: RemoteIdentifierType { return self.remoteID }
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
-        self.quantity = record.quantity
+        // Required
+        //remoteID = record.syncIdentifier
+        quantity = record.quantity
         /// TODO: handle failure below
         if let status = InvoiceItemStatus(string: record.status) {
             self.status = status.rawValue

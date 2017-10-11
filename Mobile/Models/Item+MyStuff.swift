@@ -19,7 +19,7 @@ extension Item: NewSyncable {
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
 
         // Required
-        //remoteID = Int32(record.remoteID)
+        //remoteID = record.syncIdentifier
         name = record.name
         //active = remote.active
 

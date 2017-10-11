@@ -22,7 +22,7 @@ extension Inventory: NewSyncable {
             self.date = date.timeIntervalSinceReferenceDate
         }
         storeID = Int32(record.storeID)
-        //typeID = Int32(record.inventoryTypeID)
+        typeID = Int32(record.inventoryTypeID ?? 0)
         //uploaded
 
         //items: [InventoryItem]
