@@ -126,6 +126,7 @@ extension Order: NewSyncable {
         self.init(context: context)
         remoteID = record.syncIdentifier
         update(with: record, in: context)
+        // NOTE: old .init had `if !uploaded { updateStatus() }`
     }
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
@@ -133,14 +134,20 @@ extension Order: NewSyncable {
         if let date = record.date.toBasicDate() {
             self.date = date.timeIntervalSinceReferenceDate
         }
+        // FIXME: get status from record
+        status = OrderStatus.uploaded.rawValue
+        // placed
 
         // Optional
-        // placed
         // remoteID = record.syncIdentifier
-        // vendorID
-        // store
+        // uploaded
+
+        // Unimplemented
+        // cost = record.cost
 
         // Relationships
+        // collection
+        // store
         if record.vendor.syncIdentifier != vendor?.remoteIdentifier {
             vendor = Vendor.updateOrCreate(with: record.vendor, in: context)
         }

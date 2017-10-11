@@ -86,6 +86,8 @@ extension OrderCollection: NewSyncable {
         if let orders = record.orders {
             syncChildren(with: orders, in: context)
         }
+
+        updateStatus()
     }
 
 }
@@ -105,6 +107,7 @@ extension OrderCollection: NewSyncableParent {
 
     func updateParent(of entity: ChildType) {
         entity.collection = self
+        entity.date = self.dateTimeInterval
     }
 
 }

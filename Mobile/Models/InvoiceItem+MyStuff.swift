@@ -147,8 +147,8 @@ extension InvoiceItem: NewSyncable {
         }
 
         // Optional
-        self.discount = record.discount ?? 0.0
-        self.cost = record.cost ?? 0.0
+        discount = record.discount ?? 0.0
+        cost = record.cost ?? 0.0
 
         // Relationships
         if record.item.syncIdentifier != self.item?.remoteID {

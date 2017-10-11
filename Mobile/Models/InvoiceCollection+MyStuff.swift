@@ -31,6 +31,8 @@ extension InvoiceCollection: NewSyncable {
     typealias RemoteType = RemoteInvoiceCollection
     typealias RemoteIdentifierType = Date
 
+    static var remoteIdentifierName: String { return "dateTimeInterval" }
+
     var remoteIdentifier: RemoteIdentifierType { return Date(timeIntervalSinceReferenceDate: dateTimeInterval) }
 
     convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
