@@ -15,15 +15,9 @@ import Foundation
 struct RemoteInventory: Codable {
 
     struct Category: Codable {
-
-        struct CategoryItem: Codable {
-            let id: Int
-            let name: String
-        }
-
         let remoteID: Int
         let name: String
-        let items: [CategoryItem]
+        let items: [RemoteNestedItem]
 
         private enum CodingKeys: String, CodingKey {
             case remoteID = "id"
