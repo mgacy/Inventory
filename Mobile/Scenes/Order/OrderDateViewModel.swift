@@ -77,8 +77,12 @@ struct OrderDateViewModel {
             //.throttle(0.5, scheduler: MainScheduler.instance)
             .flatMap { selection -> Observable<Event<OrderCollection>> in
                 log.debug("Tapped: \(selection)")
-                return dataManager.refreshOrderCollection(selection)
-
+                switch selection.uploaded {
+                case true:
+                    return dataManager.refreshOrderCollection(selection)
+                case false:
+                    return Observable.just(selection).materialize()
+                }
             }
             .share()
             //.shareReplay(1)
