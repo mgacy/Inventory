@@ -38,7 +38,7 @@ struct OrderDateViewModel {
 
     // MARK: - Lifecycle
 
-    //swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length
     init(dataManager: DataManager, rowTaps: Observable<OrderCollection>) {
         self.dataManager = dataManager
 

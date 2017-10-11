@@ -70,7 +70,7 @@ struct RemoteOrderItem: Codable {
         let category: RemoteItemCategory?
         let purchaseUnit: RemoteUnit?
         let purchaseSubUnit: RemoteUnit?
-        //swiftlint:disable:next nesting
+        // swiftlint:disable:next nesting
         private enum CodingKeys: String, CodingKey {
             case remoteID = "id"
             case name
