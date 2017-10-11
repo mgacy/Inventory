@@ -95,19 +95,11 @@ extension RemoteInventory: RemoteRecord {
 // MARK: - InventoryLocation
 
 struct RemoteInventoryLocation: Codable {
-
-    // Nested
-
-    struct LocationCategory: Codable {
-        let id: Int
-        let name: String
-        let items: [Int]
-    }
-
     let remoteID: Int
     let name: String
     let locType: String
-    let categories: [LocationCategory]?
+    // Relationships
+    let categories: [RemoteLocationCategory]?
     let items: [Int]?
 
     private enum CodingKeys: String, CodingKey {
@@ -120,6 +112,26 @@ struct RemoteInventoryLocation: Codable {
 }
 
 extension RemoteInventoryLocation: RemoteRecord {
+    typealias SyncIdentifierType = Int32
+    var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
+}
+
+// MARK: - InventoryLocationCategory
+
+/// TODO: should we simply include `categoryID` to generate `items`?
+struct RemoteLocationCategory: Codable {
+    let remoteID: Int
+    let name: String
+    let items: [Int]
+
+    private enum CodingKeys: String, CodingKey {
+        case remoteID = "id"
+        case name
+        case items
+    }
+}
+
+extension RemoteLocationCategory: RemoteRecord {
     typealias SyncIdentifierType = Int32
     var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
 }
