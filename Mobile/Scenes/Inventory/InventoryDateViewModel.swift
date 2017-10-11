@@ -32,19 +32,20 @@ struct InventoryDateViewModel {
     let refresh: AnyObserver<Void>
     let addTaps: AnyObserver<Void>
     //let editTaps: AnyObserver<Void>
-    let rowTaps: AnyObserver<Inventory>
+    //let rowTaps: AnyObserver<Inventory>
 
     // MARK: - Output
     let frc: NSFetchedResultsController<Inventory>
     let isRefreshing: Driver<Bool>
     let hasRefreshed: Driver<Bool>
-    //let errorMessages: Driver<String>
+    let errorMessages: Driver<String>
     let showInventory: Observable<Inventory>
     //let showLocationCategory: Observable<Inventory>
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager) {
+    // swiftlint:disable:next function_body_length
+    init(dataManager: DataManager, rowTaps: Observable<Inventory>) {
         self.dataManager = dataManager
 
         // Refresh
@@ -62,31 +63,51 @@ struct InventoryDateViewModel {
             .flatMapLatest { _ -> Observable<Bool> in
                 log.debug("\(#function) : Refreshing (2) ...")
                 return dataManager.refreshInventories()
+                    .dematerialize()
                     .trackActivity(isRefreshing)
             }
             .asDriver(onErrorJustReturn: false)
 
-        // ...
-
         // Add
         let _add = PublishSubject<Void>()
         self.addTaps = _add.asObserver()
-        _ = _add.asObservable()
-            .map { _ in
+        let showNewResults = _add.asObservable()
+            .flatMap { _ -> Observable<Event<Inventory>> in
                 log.debug("Tapped ADD")
+                return dataManager.createInventory()
             }
+            .share()
 
         // Selection
-        let _selectedObjects = PublishSubject<Inventory>()
-        self.rowTaps = _selectedObjects.asObserver()
-        //self.showDetail = _selectedObjects.asObservable()
-        self.showInventory = _selectedObjects.asObservable()
-            .map { selection in
+        //let _selectedObjects = PublishSubject<Inventory>()
+        //self.rowTaps = _selectedObjects.asObserver()
+        //let showSelectionResults = _selectedObjects.asObservable()
+        let showSelectionResults = rowTaps
+            .flatMap { selection -> Observable<Event<Inventory>> in
                 log.debug("Tapped: \(selection)")
-                return selection
+                //return Observable.just(selection).materialize()
+                switch selection.uploaded {
+                case true:
+                    return dataManager.refreshInventory(selection)
+                case false:
+                    return Observable.just(selection).materialize()
+                }
             }
+            .share()
+
+        // Navigation
+        self.showInventory = Observable.of(showNewResults.elements(), showSelectionResults.elements())
+            .merge()
 
         // Errors
+        self.errorMessages = Observable.of(showNewResults.errors(), showSelectionResults.errors())
+            .merge()
+            .map { error in
+                log.debug("\(#function) ERROR : \(error)")
+                return "There was an error"
+            }
+            .asDriver(onErrorJustReturn: "Other Error")
+            //.asDriver(onErrorDriveWith: .never())
 
         // FetchRequest
         let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
@@ -101,5 +122,3 @@ struct InventoryDateViewModel {
     }
 
 }
-
-//extension InventoryDateViewModel: RootSectionViewModel {}

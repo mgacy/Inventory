@@ -139,13 +139,25 @@ extension APIManager {
 // MARK: - Inventory - NEW
 extension APIManager {
 
-    // func createInventory() -> Observable<DataResponse<RemoteInventory>> {}
-
-    // func updateInventory() -> Observable<DataResponse<RemoteInventory>> {}
-
     func getInventories(storeID: Int) -> Observable<DataResponse<[RemoteInventory]>> {
         return requestList(Router.listInventories(storeID: storeID))
     }
+
+    func getInventory(remoteID: Int) -> Observable<DataResponse<RemoteInventory>> {
+        /// TODO: just accept `Inventory` so DataManager doesn't need to know anything about endpoint params?
+        return requestOne(Router.fetchInventory(remoteID: remoteID))
+    }
+
+    /// NOTE: I am designing this in accordance with how things should work, not how they currently do
+    func postInventory(storeID: Int) -> Observable<DataResponse<RemoteInventory>> {
+        /// TODO: update to actually use POST
+        //return postOne(Router.postInventory)
+        let isActive = true
+        let typeID = 1
+        return requestOne(Router.getNewInventory(isActive: isActive, typeID: typeID, storeID: storeID))
+    }
+
+    // func putInventory(_ inventory: RemoteInventory) -> Observable<DataResponse<RemoteInventory>> {}
 
 }
 

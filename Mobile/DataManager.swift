@@ -157,25 +157,75 @@ class DataManager {
 // MARK: - Inventory
 extension DataManager {
 
-    //func createInventory() -> Observable<> {}
+    func createInventory() -> Observable<Event<Inventory>> {
+        guard let storeID = userManager.storeID else {
+            log.error("\(#function) FAILED : no storeID")
+            return Observable.error(DataManagerError.missingStoreID).materialize()
+        }
+
+        return client.postInventory(storeID: storeID)
+            //.flatMap { [weak self] response -> Observable<Inventory> in
+            .map { [weak self] response -> Inventory in
+                switch response.result {
+                case .success(let record):
+                    guard let context = self?.managedObjectContext else {
+                        throw DataManagerError.missingMOC
+                    }
+                    let newInventory = Inventory(with: record, in: context)
+                    newInventory.uploaded = false
+                    //return Observable.just(newInventory)
+                    return newInventory
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    throw error
+                }
+            }
+            .materialize()
+    }
 
     //func deleteInventory(_ inventory: Inventory) -> Observable<> {}
 
     //func updateInventory(_ inventory: Inventory) -> Observable<Bool> { return Observable.just(true) }
 
+    func refreshInventory(_ inventory: Inventory) -> Observable<Event<Inventory>> {
+        //return Observable.just(inventory).materialize()
+        let remoteID = Int(inventory.remoteID)
+        guard remoteID != 0 else {
+            log.error("\(#function) FAILED : unable to refresh Inventory that hasn't been uploaded: \(inventory)")
+            return Observable.error(DataManagerError.otherError(error: "Inventory not uploaded")).materialize()
+        }
+
+        return client.getInventory(remoteID: remoteID)
+            .map { [weak self] response in
+                switch response.result {
+                 case .success(let record):
+                    guard let context = self?.managedObjectContext else {
+                        throw DataManagerError.missingMOC
+                    }
+                    inventory.update(with: record, in: context)
+                    return inventory
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    throw error
+                }
+            }
+            .materialize()
+    }
+
     //func refreshInventories() -> Observable<Event<[Inventory]>> {
-    func refreshInventories() -> Observable<Bool> {
+    func refreshInventories() -> Observable<Event<Bool>> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
-            return Observable.just(false)
-            //.materialize()
+            return Observable.error(DataManagerError.missingStoreID).materialize()
         }
 
         return client.getInventories(storeID: storeID)
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
-                    guard let context = self?.managedObjectContext else { return false }
+                    guard let context = self?.managedObjectContext else {
+                        throw DataManagerError.missingMOC
+                    }
                     Inventory.sync(with: records, in: context)
                     /*
                     do {
@@ -188,10 +238,10 @@ extension DataManager {
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    return false
+                    throw error
                 }
-        }
-        //.materialize()
+            }
+            .materialize()
     }
 }
 
