@@ -163,7 +163,7 @@ extension Order: NewSyncable {
 extension Order: NewSyncableParent {
     typealias ChildType = OrderItem
 
-    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : OrderItem]? {
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: OrderItem]? {
         let fetchPredicate = NSPredicate(format: "order == %@", self)
         guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
             return nil

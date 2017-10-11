@@ -76,7 +76,7 @@ extension InvoiceCollection: NewSyncable {
 extension InvoiceCollection: NewSyncableParent {
     typealias ChildType = Invoice
 
-    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : Invoice]? {
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: Invoice]? {
         let fetchPredicate = NSPredicate(format: "collection == %@", self)
         guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
             return nil

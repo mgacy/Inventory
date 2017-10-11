@@ -212,7 +212,7 @@ extension DataManager {
         return client.getInventory(remoteID: remoteID)
             .map { [weak self] response in
                 switch response.result {
-                 case .success(let record):
+                case .success(let record):
                     guard let context = self?.managedObjectContext else {
                         throw DataManagerError.missingMOC
                     }

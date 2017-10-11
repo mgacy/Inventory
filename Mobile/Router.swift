@@ -91,13 +91,13 @@ public enum Router: URLRequestConvertible {
             return .get
         // OLD
         case .getNewInvoice:
-             return .get
-         case .listInvoices:
-             return .get
-         case .fetchInvoice:
-             return .get
-         case .postInvoice:
-             return .post
+            return .get
+        case .listInvoices:
+            return .get
+        case .fetchInvoice:
+            return .get
+        case .postInvoice:
+            return .post
         case .putInvoice:
             return .put
         case .putInvoiceItem:
