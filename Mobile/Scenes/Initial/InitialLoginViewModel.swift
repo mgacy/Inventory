@@ -12,7 +12,7 @@ import RxSwift
 
 struct InitialLoginViewModel: RootSectionViewModel {
 
-    // MARK: Properties
+    // MARK: - Properties
 
     private let dataManager: DataManager
 
@@ -33,5 +33,3 @@ struct InitialLoginViewModel: RootSectionViewModel {
     }
 
 }
-
-//extension InitialLoginViewModel: RootSectionViewModel {}

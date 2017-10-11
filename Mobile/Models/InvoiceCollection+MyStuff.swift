@@ -136,7 +136,6 @@ extension InvoiceCollection: NewSyncable {
         /// TODO: since this is the remoteIdentifier, should we remove this from `update()`?
         /// TODO: is there an actual case where this would fail? Swtich to using `guard` or set to `Date()` on failure?
         if let date = record.date.toBasicDate() {
-            //self.date = date  // we are using DateFacade here
             self.dateTimeInterval = date.timeIntervalSinceReferenceDate
         }
         storeID = Int32(record.storeID)

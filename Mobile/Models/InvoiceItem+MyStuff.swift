@@ -166,8 +166,8 @@ extension InvoiceItem: NewSyncable {
             }
             self.unit = newUnit
         }
-
     }
+
 }
 
 /*

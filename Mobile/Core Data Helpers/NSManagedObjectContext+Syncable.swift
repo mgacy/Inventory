@@ -25,12 +25,12 @@ extension NSManagedObjectContext {
 
             switch fetchResults.count {
             case 0:
-                log.debug("\(#function) : found 0 matches for remoteID \(id)")
+                log.debug("\(#function) : found 0 matches for remoteIdentifier \(id)")
                 return nil
             case 1:
                 return fetchResults[0]
             default:
-                log.error("\(#function) FAILED: found multiple matches for remoteID \(id): \(fetchResults)")
+                log.error("\(#function) FAILED: found multiple matches for remoteIdentifier \(id): \(fetchResults)")
                 fatalError("Returned multiple objects, expected max 1")
             }
 

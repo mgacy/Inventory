@@ -115,7 +115,7 @@ extension NewSyncable where Self: NSManagedObject {
                 do {
                     try context.deleteEntities(self, filter: fetchPredicate)
                 } catch {
-                    /// TODO: deleteEntities(_:filter) already prints the error
+                    /// TODO: deleteEntities(_:filter) already logs the error
                     let updateError = error as NSError
                     log.error("\(updateError), \(updateError.userInfo)")
                     //throw updateError?

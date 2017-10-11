@@ -244,7 +244,7 @@ extension APIManager {
 
 }
 
-// MARK: - Invoice
+// MARK: - Invoice - OLD
 extension APIManager {
 
     func getListOfInvoiceCollections(storeID: Int, completion: @escaping CompletionHandlerType) {
@@ -374,7 +374,7 @@ extension APIManager {
 
 }
 
-// MARK: - Order
+// MARK: - Order - OLD
 extension APIManager {
 
     func getListOfOrderCollections(storeID: Int, completion: @escaping CompletionHandlerType) {
