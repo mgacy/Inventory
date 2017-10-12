@@ -75,7 +75,7 @@ extension NewSyncableParent where ChildType: NSManagedObject {
 
         guard !deletedIDs.isEmpty else { return }
         log.debug("We need to delete: \(deletedIDs)")
-        let fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", deletedIDs)
+        let fetchPredicate = NSPredicate(format: "\(ChildType.remoteIdentifierName) IN %@", deletedIDs)
         do {
             try context.deleteEntities(ChildType.self, filter: fetchPredicate)
         } catch let error {
@@ -88,7 +88,7 @@ extension NewSyncableParent where ChildType: NSManagedObject {
     func deleteChildren(deletedIDs: Set<ChildType.RemoteIdentifierType>, in context: NSManagedObjectContext) {
         guard !deletedIDs.isEmpty else { return }
         log.debug("We need to delete: \(deletedIDs)")
-        let fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", deletedIDs)
+        let fetchPredicate = NSPredicate(format: "\(ChildType.remoteIdentifierName) IN %@", deletedIDs)
         do {
             try context.deleteEntities(ChildType.self, filter: fetchPredicate)
         } catch let error {
