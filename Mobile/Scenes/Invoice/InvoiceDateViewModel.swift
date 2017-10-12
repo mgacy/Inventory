@@ -10,8 +10,6 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-protocol InvoiceDateViewModelType: RootSectionViewModel {}
-
 struct InvoiceDateViewModel {
 
     // MARK: Properties
