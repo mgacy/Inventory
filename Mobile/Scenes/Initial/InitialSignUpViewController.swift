@@ -6,16 +6,20 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-import UIKit
 import CoreData
+import UIKit
 import KeychainAccess
 import PKHUD
+//import RxCocoa
+//import RxSwift
 import SwiftyJSON
 
-class InitialSignUpViewController: UIViewController, UITextFieldDelegate, SegueHandler {
+class InitialSignUpViewController: UIViewController, SegueHandler {
+
     // NEW
     /// TODO: move this to view model
     var dataManager: DataManager!
+    //var viewModel: InitialSignupViewModel!
 
     // MARK: Properties
     var managedObjectContext: NSManagedObjectContext!
@@ -42,27 +46,7 @@ class InitialSignUpViewController: UIViewController, UITextFieldDelegate, SegueH
         // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: UITextFieldDelegate
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        // Hide the keyboard.
-        textField.resignFirstResponder()
-        return true
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        // Disable the LogIn button while editing.
-        loginButton.isEnabled = false
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        // checkValidMealName()
-    }
+    // override func didReceiveMemoryWarning() {}
 
     // MARK: - User interaction
 
@@ -111,6 +95,26 @@ class InitialSignUpViewController: UIViewController, UITextFieldDelegate, SegueH
             //controller.managedObjectContext = managedObjectContext
             //controller.userManager = userManager
         }
+    }
+
+}
+
+// MARK: - UITextFieldDelegate
+extension InitialSignUpViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // Hide the keyboard.
+        textField.resignFirstResponder()
+        return true
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        // Disable the LogIn button while editing.
+        loginButton.isEnabled = false
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // checkValidMealName()
     }
 
 }

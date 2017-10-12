@@ -61,10 +61,7 @@ class InitialLoginVC: UIViewController, SegueHandler {
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    // override func didReceiveMemoryWarning() {}
 
     // MARK: - User interaction
 
@@ -99,6 +96,8 @@ class InitialLoginVC: UIViewController, SegueHandler {
                 else {
                     fatalError("\(#function) FAILED : unable to get destination")
             }
+            //let destinationViewModel = InitialSignupViewModel(dataManager: viewModel.dataManager)
+            //destinationController.viewModel = destinationViewModel
             destinationController.dataManager = viewModel.dataManager
             destinationController.managedObjectContext = managedObjectContext
             destinationController.userManager = userManager
