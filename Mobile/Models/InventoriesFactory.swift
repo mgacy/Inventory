@@ -28,7 +28,7 @@ class InventoriesFactory {
         self.context = context
     }
 
-    // MARK: - A
+    // MARK: - Create / Update Inventory
 
     func createNewInventory(from record: RemoteNewInventory, in context: NSManagedObjectContext) -> Inventory? {
         guard let itemDict = try? Item.fetchEntityDict(in: context) else { return nil }
@@ -63,6 +63,38 @@ class InventoriesFactory {
         }
         return inventory
     }
+
+    public func updateInventory(_ inventory: Inventory, with record: RemoteExistingInventory, in context: NSManagedObjectContext) -> Inventory? {
+        log.debug("Updating Inventory: \(inventory) with: \(record)")
+
+        guard let itemDict = try? Item.fetchEntityDict(in: context) else { return nil }
+        //guard let unitDict = try? Unit.fetchEntityDict(in: context) else { return nil }
+
+        /// TODO: create default location?
+        //let location = InventoryLocation(context: context)
+
+        let predicate = NSPredicate(format: "inventory == %@", inventory)
+        // swiftlint:disable:next line_length
+        InventoryItem.configurableSync(with: record.items, in: context, matching: predicate) { inventoryItem, remoteRecord in
+            //log.debug("Configuring: \(inventoryItem) with: \(remoteRecord)")
+            inventoryItem.inventory = inventory
+            //inventoryItem.item = itemDict[remoteRecord.item.syncIdentifier]
+            let item = itemDict[remoteRecord.item.syncIdentifier]
+            inventoryItem.item = item
+            inventoryItem.name = item?.name ?? "Error"
+            //log.debug("Configured: \(inventoryItem)\n")
+
+            /// TODO: create corresponding InventoryLocationItem and attach to Item, location
+            //let locationItem = createLocationItem(itemID: remoteRecord.item.remoteID, position: 0, in: context) { locationItem, itemID in }
+            //let locationItem = InventoryLocationItem(context: context)
+            //locationItem.item = inventoryItem
+            //locationItem.location = location
+        }
+
+        return inventory
+    }
+
+    // MARK: - Private -
 
     // MARK: Inventory
 
