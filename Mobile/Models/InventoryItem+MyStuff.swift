@@ -72,6 +72,12 @@ extension InventoryItem {
         // if let unitID = json["unit_id"].int {
     }
 
+}
+
+// MARK: - Serialization
+
+extension InventoryItem {
+
     public func serialize() -> [String: Any] {
         var itemDict: [String: Any] = [
             "item_id": Int(self.itemID),

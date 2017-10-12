@@ -36,55 +36,6 @@ import SwiftyJSON
 
 }
 
-// MARK: - Serialization
-
-extension Invoice {
-
-    func serialize() -> [String: Any]? {
-        var myDict = [String: Any]()
-        myDict["id"] = Int(self.remoteID)
-        myDict["invoice_no"] = Int(self.invoiceNo)
-        myDict["ship_date"] = shipDate.toPythonDateString()
-        myDict["receive_date"] = receiveDate.toPythonDateString()
-        myDict["credit"] = Double(self.credit)
-        myDict["shipping"] = Double(self.shipping)
-        myDict["taxes"] = Double(self.taxes)
-        /// FIXME: why is total_cost not Double?
-        myDict["total_cost"] = Int(self.totalCost)
-        myDict["check_no"] = Int(self.checkNo)
-        //myDict["status"] = InvoiceStatus.asString(raw: status) ?? ""
-        myDict["store_id"] = Int((self.collection?.storeID)!)
-
-        if uploaded {
-            myDict["status"] = "received"
-        } else {
-            myDict["status"] = "pending"
-        }
-
-        if let vendor = self.vendor {
-            myDict["vendor_id"] = Int(vendor.remoteID)
-        }
-
-        // Generate array of dictionaries for InventoryItems
-        guard let items = self.items else {
-            log.error("\(#function) FAILED : unable to serialize without any InvoiceItems")
-            return myDict
-        }
-
-        /// TODO: use map / flatmap / reduce
-        var itemsArray = [[String: Any]]()
-        for case let item as InvoiceItem in items {
-            if let itemDict = item.serialize() {
-                itemsArray.append(itemDict)
-            }
-        }
-        myDict["items"] = itemsArray
-
-        return myDict
-    }
-
-}
-
 // MARK: - NewSyncable
 
 extension Invoice: NewSyncable {
@@ -164,6 +115,55 @@ extension Invoice: NewSyncableParent {
 
     func updateParent(of entity: InvoiceItem) {
         entity.invoice = self
+    }
+
+}
+
+// MARK: - Serialization
+
+extension Invoice {
+
+    func serialize() -> [String: Any]? {
+        var myDict = [String: Any]()
+        myDict["id"] = Int(self.remoteID)
+        myDict["invoice_no"] = Int(self.invoiceNo)
+        myDict["ship_date"] = shipDate.toPythonDateString()
+        myDict["receive_date"] = receiveDate.toPythonDateString()
+        myDict["credit"] = Double(self.credit)
+        myDict["shipping"] = Double(self.shipping)
+        myDict["taxes"] = Double(self.taxes)
+        /// FIXME: why is total_cost not Double?
+        myDict["total_cost"] = Int(self.totalCost)
+        myDict["check_no"] = Int(self.checkNo)
+        //myDict["status"] = InvoiceStatus.asString(raw: status) ?? ""
+        myDict["store_id"] = Int((self.collection?.storeID)!)
+
+        if uploaded {
+            myDict["status"] = "received"
+        } else {
+            myDict["status"] = "pending"
+        }
+
+        if let vendor = self.vendor {
+            myDict["vendor_id"] = Int(vendor.remoteID)
+        }
+
+        // Generate array of dictionaries for InventoryItems
+        guard let items = self.items else {
+            log.error("\(#function) FAILED : unable to serialize without any InvoiceItems")
+            return myDict
+        }
+
+        /// TODO: use map / flatmap / reduce
+        var itemsArray = [[String: Any]]()
+        for case let item as InvoiceItem in items {
+            if let itemDict = item.serialize() {
+                itemsArray.append(itemDict)
+            }
+        }
+        myDict["items"] = itemsArray
+
+        return myDict
     }
 
 }

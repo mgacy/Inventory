@@ -10,26 +10,6 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-extension OrderItem {
-
-    // MARK: - Serialization
-
-    func serialize() -> [String: Any]? {
-        if self.quantity == 0 {
-            return nil
-        }
-
-        var myDict = [String: Any]()
-
-        myDict["item_id"] = self.item?.remoteID
-        myDict["order_quant"] = self.quantity
-        myDict["order_unit_id"] = self.orderUnit?.remoteID
-
-        return myDict
-    }
-
-}
-
 // MARK: - NewSyncable
 
 extension OrderItem: NewSyncable {
@@ -89,6 +69,26 @@ extension OrderItem: NewSyncable {
                 self.parUnit = Unit.fetchWithRemoteIdentifier(Int32(parUnitId), in: context)
             }
         }
+    }
+
+}
+
+// MARK: - Serialization
+
+extension OrderItem {
+
+    func serialize() -> [String: Any]? {
+        if self.quantity == 0 {
+            return nil
+        }
+
+        var myDict = [String: Any]()
+
+        myDict["item_id"] = self.item?.remoteID
+        myDict["order_quant"] = self.quantity
+        myDict["order_unit_id"] = self.orderUnit?.remoteID
+
+        return myDict
     }
 
 }

@@ -82,33 +82,6 @@ extension Inventory {
         }
     }
 
-    // MARK: - Serialization
-
-    func serialize() -> [String: Any]? {
-        guard let items = self.items else {
-            log.error("\(#function) FAILED : unable to serialize without any InventoryItems")
-            return nil
-        }
-
-        var myDict = [String: Any]()
-        myDict["date"] = date.toPythonDateString()
-        myDict["store_id"] = storeID
-
-        // Apple suggests using a default value of 0 over using optional attributes
-        if typeID != 0 {
-            myDict["inventory_type_id"] = typeID
-        }
-
-        // Generate array of dictionaries for InventoryItems
-        var itemsArray = [[String: Any]]()
-        for case let item as InventoryItem in items {
-            itemsArray.append(item.serialize())
-        }
-        myDict["items"] = itemsArray
-
-        return myDict
-    }
-
     // MARK: - Update Existing
 
     /// TODO: should this simply be part of .update()?
@@ -180,6 +153,37 @@ extension Inventory: Syncable {
         if let typeID = json["inventory_type_id"].int32 {
             self.typeID = typeID
         }
+    }
+
+}
+
+// MARK: - Serialization
+
+extension Inventory {
+
+    func serialize() -> [String: Any]? {
+        guard let items = self.items else {
+            log.error("\(#function) FAILED : unable to serialize without any InventoryItems")
+            return nil
+        }
+
+        var myDict = [String: Any]()
+        myDict["date"] = date.toPythonDateString()
+        myDict["store_id"] = storeID
+
+        // Apple suggests using a default value of 0 over using optional attributes
+        if typeID != 0 {
+            myDict["inventory_type_id"] = typeID
+        }
+
+        // Generate array of dictionaries for InventoryItems
+        var itemsArray = [[String: Any]]()
+        for case let item as InventoryItem in items {
+            itemsArray.append(item.serialize())
+        }
+        myDict["items"] = itemsArray
+
+        return myDict
     }
 
 }

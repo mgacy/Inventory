@@ -10,19 +10,6 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-// MARK: - Serialization
-
-extension InvoiceCollection {
-
-    func serialize() -> [String: Any]? {
-        var myDict = [String: Any]()
-        myDict["date"] = dateTimeInterval.toPythonDateString()
-        myDict["store_id"] = storeID
-        return myDict
-    }
-
-}
-
 extension InvoiceCollection: DateFacade {}
 
 // MARK: - NewSyncable
@@ -87,6 +74,19 @@ extension InvoiceCollection: NewSyncableParent {
     func updateParent(of entity: ChildType) {
         entity.collection = self
         //addToInvoices(entity)
+    }
+
+}
+
+// MARK: - Serialization
+
+extension InvoiceCollection {
+
+    func serialize() -> [String: Any]? {
+        var myDict = [String: Any]()
+        myDict["date"] = dateTimeInterval.toPythonDateString()
+        myDict["store_id"] = storeID
+        return myDict
     }
 
 }

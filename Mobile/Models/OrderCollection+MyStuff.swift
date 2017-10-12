@@ -11,20 +11,6 @@ import CoreData
 
 extension OrderCollection {
 
-    // MARK: - Serialization
-    func serialize() -> [String: Any]? {
-        var myDict = [String: Any]()
-        myDict["date"] = dateTimeInterval.toPythonDateString()
-
-        // ...
-
-        return myDict
-    }
-
-}
-
-extension OrderCollection {
-
     func updateStatus() {
         //log.debug("\(#function) starting ...")
         guard uploaded == false else {
@@ -108,6 +94,21 @@ extension OrderCollection: NewSyncableParent {
     func updateParent(of entity: ChildType) {
         entity.collection = self
         entity.date = self.dateTimeInterval
+    }
+
+}
+
+// MARK: - Serialization
+
+extension OrderCollection {
+
+    func serialize() -> [String: Any]? {
+        var myDict = [String: Any]()
+        myDict["date"] = dateTimeInterval.toPythonDateString()
+
+        // ...
+
+        return myDict
     }
 
 }

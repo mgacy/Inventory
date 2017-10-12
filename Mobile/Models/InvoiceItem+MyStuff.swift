@@ -104,25 +104,6 @@ import SwiftyJSON
 
 }
 
-// MARK: - Serialization
-
-extension InvoiceItem {
-
-    func serialize() -> [String: Any]? {
-        var myDict = [String: Any]()
-        /// TODO: remove the init of the different types?
-        myDict["id"] = Int(self.remoteID)
-        myDict["item_id"] = self.item?.remoteID
-        myDict["quantity"] = Double(self.quantity)
-        myDict["discount"] = Double(self.discount)
-        myDict["cost"] = Double(self.cost)
-        myDict["unit_id"] = self.unit?.remoteID
-        myDict["status"] = InvoiceItemStatus.asString(raw: status) ?? ""
-        return myDict
-    }
-
-}
-
 // MARK: - NewSyncable
 
 extension InvoiceItem: NewSyncable {
@@ -166,6 +147,25 @@ extension InvoiceItem: NewSyncable {
             }
             self.unit = newUnit
         }
+    }
+
+}
+
+// MARK: - Serialization
+
+extension InvoiceItem {
+
+    func serialize() -> [String: Any]? {
+        var myDict = [String: Any]()
+        /// TODO: remove the init of the different types?
+        myDict["id"] = Int(self.remoteID)
+        myDict["item_id"] = self.item?.remoteID
+        myDict["quantity"] = Double(self.quantity)
+        myDict["discount"] = Double(self.discount)
+        myDict["cost"] = Double(self.cost)
+        myDict["unit_id"] = self.unit?.remoteID
+        myDict["status"] = InvoiceItemStatus.asString(raw: status) ?? ""
+        return myDict
     }
 
 }

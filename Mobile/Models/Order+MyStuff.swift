@@ -26,32 +26,6 @@ import SwiftyJSON
 
 extension Order {
 
-    // MARK: - Serialization
-
-    func serialize() -> [String: Any]? {
-        var myDict = [String: Any]()
-        //myDict["order_date"] = self.collection?.dateTimeInterval.toPythonDateString()
-        myDict["order_date"] = date.toPythonDateString()
-        myDict["store_id"] = self.collection?.storeID
-        myDict["vendor_id"] = self.vendor?.remoteID
-
-        // Generate array of dictionaries for InventoryItems
-        guard let items = self.items else {
-            log.warning("\(#function) FAILED : unable to serialize without any OrderItems")
-            return myDict
-        }
-
-        var itemsArray = [[String: Any]]()
-        for case let item as OrderItem in items {
-            if let itemDict = item.serialize() {
-                itemsArray.append(itemDict)
-            }
-        }
-        myDict["items"] = itemsArray
-
-        return myDict
-    }
-
     // MARK: - Order Generation
     /// TODO: move into separate object
     func getOrderMessage() -> String? {
@@ -173,6 +147,36 @@ extension Order: NewSyncableParent {
 
     func updateParent(of entity: OrderItem) {
         entity.order = self
+    }
+
+}
+
+// MARK: - Serialization
+
+extension Order {
+
+    func serialize() -> [String: Any]? {
+        var myDict = [String: Any]()
+        //myDict["order_date"] = self.collection?.dateTimeInterval.toPythonDateString()
+        myDict["order_date"] = date.toPythonDateString()
+        myDict["store_id"] = self.collection?.storeID
+        myDict["vendor_id"] = self.vendor?.remoteID
+
+        // Generate array of dictionaries for InventoryItems
+        guard let items = self.items else {
+            log.warning("\(#function) FAILED : unable to serialize without any OrderItems")
+            return myDict
+        }
+
+        var itemsArray = [[String: Any]]()
+        for case let item as OrderItem in items {
+            if let itemDict = item.serialize() {
+                itemsArray.append(itemDict)
+            }
+        }
+        myDict["items"] = itemsArray
+
+        return myDict
     }
 
 }
