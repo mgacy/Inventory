@@ -44,6 +44,7 @@
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
 		C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */; };
 		C949C20E1F160719008A5EC4 /* InvoiceItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949C20D1F160719008A5EC4 /* InvoiceItemViewModel.swift */; };
+		C9534D371F90042B00DA4A78 /* materialized+elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9534D361F90042B00DA4A78 /* materialized+elements.swift */; };
 		C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9564F311F840276007D84F6 /* RemoteInventory.swift */; };
 		C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */; };
 		C95F52F01F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */; };
@@ -173,6 +174,7 @@
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = InvoiceKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C949C20D1F160719008A5EC4 /* InvoiceItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemViewModel.swift; sourceTree = "<group>"; };
+		C9534D361F90042B00DA4A78 /* materialized+elements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "materialized+elements.swift"; sourceTree = "<group>"; };
 		C9564F311F840276007D84F6 /* RemoteInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInventory.swift; path = Models/RemoteInventory.swift; sourceTree = "<group>"; };
 		C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+MyStuff.swift"; sourceTree = "<group>"; };
 		C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertControllerStyle+Adaptive.swift"; sourceTree = "<group>"; };
@@ -397,6 +399,14 @@
 			name = "Item List";
 			sourceTree = "<group>";
 		};
+		C9534D351F9003C000DA4A78 /* RxSwift */ = {
+			isa = PBXGroup;
+			children = (
+				C9534D361F90042B00DA4A78 /* materialized+elements.swift */,
+			);
+			path = RxSwift;
+			sourceTree = "<group>";
+		};
 		C96870E01DDA1ED000EC06AB /* Invoice Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -514,6 +524,7 @@
 			children = (
 				C9BB05811F8315F700A07529 /* Alamofire */,
 				C9BA91291DEB959500DA2C6C /* Foundation */,
+				C9534D351F9003C000DA4A78 /* RxSwift */,
 				C9BA91281DEB958200DA2C6C /* UIKit */,
 				C976305E1F219A0900BA8E42 /* JSON+Date.swift */,
 			);
@@ -1008,6 +1019,7 @@
 				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
 				C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */,
 				C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */,
+				C9534D371F90042B00DA4A78 /* materialized+elements.swift in Sources */,
 				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
 				C976305F1F219A0900BA8E42 /* JSON+Date.swift in Sources */,
 				C9BB05911F831D6600A07529 /* InventoryDateViewController.swift in Sources */,
