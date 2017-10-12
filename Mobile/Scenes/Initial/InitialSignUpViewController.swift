@@ -13,6 +13,9 @@ import PKHUD
 import SwiftyJSON
 
 class InitialSignUpViewController: UIViewController, UITextFieldDelegate, SegueHandler {
+    // NEW
+    /// TODO: move this to view model
+    var dataManager: DataManager!
 
     // MARK: Properties
     var managedObjectContext: NSManagedObjectContext!
@@ -87,12 +90,15 @@ class InitialSignUpViewController: UIViewController, UITextFieldDelegate, SegueH
             guard
                 let tabBarController = segue.destination as? UITabBarController,
                 let inventoryNavController = tabBarController.viewControllers![0] as? UINavigationController,
-                let controller = inventoryNavController.topViewController as? InventoryDateTVC
+                let controller = inventoryNavController.topViewController as? InventoryDateViewController
             else {
                 fatalError("Wrong view controller type")
             }
+            let viewModel = InventoryDateViewModel(dataManager: dataManager,
+                                                   rowTaps: controller.selectedObjects.asObservable())
+
+            controller.viewModel = viewModel
             controller.managedObjectContext = managedObjectContext
-            controller.userManager = userManager
 
             // Sync with completion handler from the new view controller.
             //_ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!,

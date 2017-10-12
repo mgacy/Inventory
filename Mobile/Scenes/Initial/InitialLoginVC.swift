@@ -99,6 +99,7 @@ class InitialLoginVC: UIViewController, SegueHandler {
                 else {
                     fatalError("\(#function) FAILED : unable to get destination")
             }
+            destinationController.dataManager = viewModel.dataManager
             destinationController.managedObjectContext = managedObjectContext
             destinationController.userManager = userManager
         }
