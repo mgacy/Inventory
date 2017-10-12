@@ -12,11 +12,11 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-class InventoryDateViewController: UIViewController, RootSectionViewController {
+class InventoryDateViewController: UIViewController {
 
     // OLD
     var managedObjectContext: NSManagedObjectContext!
-    var userManager: CurrentUserManager!
+    //var userManager: CurrentUserManager!
 
     // MARK: - Properties
 
@@ -96,6 +96,7 @@ class InventoryDateViewController: UIViewController, RootSectionViewController {
 
         // MessageLabel
         messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+        //messageLabel.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
     }
 
     private func setupBindings() {
@@ -110,9 +111,9 @@ class InventoryDateViewController: UIViewController, RootSectionViewController {
         //    .disposed(by: disposeBag)
 
         // Row selection
-        selectedObjects.asObservable()
-            .bind(to: viewModel.rowTaps)
-            .disposed(by: disposeBag)
+        //selectedObjects.asObservable()
+        //    .bind(to: viewModel.rowTaps)
+        //    .disposed(by: disposeBag)
 
         // Refresh
         refreshControl.rx.controlEvent(.valueChanged)
@@ -136,34 +137,22 @@ class InventoryDateViewController: UIViewController, RootSectionViewController {
         viewModel.showInventory
             .subscribe(onNext: { [weak self] inventory in
                 log.debug("\(#function) SELECTED: \(inventory)")
+                guard let strongSelf = self else { fatalError("Unable to get self") }
                 switch inventory.uploaded {
                 case true:
-                    log.info("GET selectedInventory from server - \(inventory.remoteID) ...")
-                    //let viewModel = InventoryLocationCategoryViewModel(dataManager: dataManager)
-                    let viewController = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
-                    //viewController.viewModel = viewModel
-
-                    // OLD
-                    viewController.managedObjectContext = self?.managedObjectContext
-                    guard let locations = inventory.locations?.allObjects else {
-                        fatalError("Unable to get selection")
-                    }
-
-                    // Exisitng Inventories should have 1 Location - "Default"
-                    guard let defaultLocation = locations[0] as? InventoryLocation else {
-                        fatalError("Unable to get Default Location")
-                    }
-                    if defaultLocation.name != "Default" {
-                        fatalError("Unable to get Default Location")
-                    }
-                    viewController.location = defaultLocation
-                    viewController.managedObjectContext = self?.managedObjectContext
-                    self?.navigationController?.pushViewController(viewController, animated: true)
+                    log.verbose("GET selectedInventory from server - \(inventory.remoteID) ...")
+                    let vc = InventoryReviewViewController.initFromStoryboard(name: "InventoryReviewViewController")
+                    let vm = InventoryReviewViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                      parentObject: inventory, rowTaps: vc.selectedObjects)
+                    vc.viewModel = vm
+                    strongSelf.navigationController?.pushViewController(vc, animated: true)
 
                 case false:
-                    log.info("LOAD NEW selectedInventory from disk ...")
-                    //let viewModel = InventoryLocationViewModel(dataManager: dataManager)
+                    log.verbose("LOAD NEW selectedInventory from disk ...")
                     let viewController = InventoryLocationTVC.initFromStoryboard(name: "Main")
+
+                    // NEW
+                    //let viewModel = InventoryLocationViewModel(dataManager: dataManager)
                     //viewController.viewModel = viewModel
 
                     // OLD

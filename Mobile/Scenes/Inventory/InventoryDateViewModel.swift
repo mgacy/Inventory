@@ -19,7 +19,8 @@ struct InventoryDateViewModel {
 
     // MARK: Properties
 
-    private let dataManager: DataManager
+    //private let dataManager: DataManager
+    let dataManager: DataManager
 
     // CoreData
     private let filter: NSPredicate? = nil
@@ -88,7 +89,8 @@ struct InventoryDateViewModel {
                 //return Observable.just(selection).materialize()
                 switch selection.uploaded {
                 case true:
-                    return dataManager.refreshInventory(selection)
+                    //return dataManager.refreshInventory(selection)
+                    return Observable.just(selection).materialize()
                 case false:
                     return Observable.just(selection).materialize()
                 }

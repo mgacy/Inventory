@@ -205,7 +205,6 @@ extension DataManager {
     //func updateInventory(_ inventory: Inventory) -> Observable<Bool> { return Observable.just(true) }
 
     func refreshInventory(_ inventory: Inventory) -> Observable<Event<Inventory>> {
-        //return Observable.just(inventory).materialize()
         let remoteID = Int(inventory.remoteID)
         guard remoteID != 0 else {
             log.error("\(#function) FAILED : unable to refresh Inventory that hasn't been uploaded: \(inventory)")
@@ -220,8 +219,13 @@ extension DataManager {
                         throw DataManagerError.missingMOC
                     }
                     /// TODO: use InventoriesFactory
-                    inventory.update(with: record, in: context)
-                    return inventory
+                    let factory = InventoriesFactory(context: context)
+                    guard let updatedInventory = factory.updateInventory(inventory, with: record, in: context) else {
+                        throw DataManagerError.otherError(error: "Error syncing")
+                    }
+
+                    //inventory.update(with: record, in: context)
+                    return updatedInventory
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
                     throw error

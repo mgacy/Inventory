@@ -60,6 +60,9 @@
 		C97A71321F8EC83700F2F1CD /* InvoiceVendorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71311F8EC83700F2F1CD /* InvoiceVendorViewModel.swift */; };
 		C97A71341F8EC94A00F2F1CD /* InventoryLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71331F8EC94A00F2F1CD /* InventoryLocationViewModel.swift */; };
 		C97A71361F8EC96100F2F1CD /* InventoryLocationCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71351F8EC96100F2F1CD /* InventoryLocationCategoryViewModel.swift */; };
+		C97A71381F8ECACE00F2F1CD /* InventoryReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71371F8ECACE00F2F1CD /* InventoryReviewViewController.swift */; };
+		C97A713A1F8ECADD00F2F1CD /* InventoryReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71391F8ECADD00F2F1CD /* InventoryReviewViewModel.swift */; };
+		C97A713D1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */; };
 		C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* SyncManager.swift */; };
 		C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988CE701DF5050D00A8028B /* Array+MyStuff.swift */; };
 		C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */; };
@@ -187,6 +190,9 @@
 		C97A71311F8EC83700F2F1CD /* InvoiceVendorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceVendorViewModel.swift; sourceTree = "<group>"; };
 		C97A71331F8EC94A00F2F1CD /* InventoryLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryLocationViewModel.swift; sourceTree = "<group>"; };
 		C97A71351F8EC96100F2F1CD /* InventoryLocationCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryLocationCategoryViewModel.swift; sourceTree = "<group>"; };
+		C97A71371F8ECACE00F2F1CD /* InventoryReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryReviewViewController.swift; sourceTree = "<group>"; };
+		C97A71391F8ECADD00F2F1CD /* InventoryReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryReviewViewModel.swift; sourceTree = "<group>"; };
+		C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryReviewViewController.storyboard; sourceTree = "<group>"; };
 		C982341A1DCD3B3A00E3E353 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		C988CE701DF5050D00A8028B /* Array+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+MyStuff.swift"; path = "Extensions/Foundation/Array+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+MyStuff.swift"; sourceTree = "<group>"; };
@@ -467,6 +473,16 @@
 			name = "Category List";
 			sourceTree = "<group>";
 		};
+		C97A713B1F8ECAEC00F2F1CD /* Review List */ = {
+			isa = PBXGroup;
+			children = (
+				C97A71371F8ECACE00F2F1CD /* InventoryReviewViewController.swift */,
+				C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */,
+				C97A71391F8ECADD00F2F1CD /* InventoryReviewViewModel.swift */,
+			);
+			name = "Review List";
+			sourceTree = "<group>";
+		};
 		C9B825E61EB9A0A4009B92F0 /* Core Data Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -675,6 +691,7 @@
 				C97A712E1F8EC0BA00F2F1CD /* Category List */,
 				C9C2DA091F0F3F56007263FB /* LocationItem List */,
 				C9CB6FC71F01D28F0094ED07 /* Keypad */,
+				C97A713B1F8ECAEC00F2F1CD /* Review List */,
 			);
 			path = Inventory;
 			sourceTree = "<group>";
@@ -811,6 +828,7 @@
 				C91C928A1EFCE65800566CEB /* OrderKeypadViewController.storyboard in Resources */,
 				C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */,
 				C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */,
+				C97A713D1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard in Resources */,
 				C91C92821EFCD98F00566CEB /* OrderItemViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1009,6 +1027,7 @@
 				C9C221191EFCD424009C7D01 /* UIViewController+Instance.swift in Sources */,
 				C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */,
 				C9BB058D1F831B0F00A07529 /* InvoiceDateViewModel.swift in Sources */,
+				C97A713A1F8ECADD00F2F1CD /* InventoryReviewViewModel.swift in Sources */,
 				C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */,
 				C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */,
 				C9174D431F83232C008639CC /* SyncableParent.swift in Sources */,
@@ -1040,6 +1059,7 @@
 				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,
 				C9F5160B1DB7F133004C10E6 /* InventoryDateTVC.swift in Sources */,
 				C92D75C11DC7A81400AA1A02 /* InvoiceKeypadViewController.swift in Sources */,
+				C97A71381F8ECACE00F2F1CD /* InventoryReviewViewController.swift in Sources */,
 				C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */,
 				C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */,
 				C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */,
