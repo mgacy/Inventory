@@ -82,6 +82,7 @@ extension NewSyncable where Self: NSManagedObject {
     }
 
     /// TODO: add `throws`?
+    /// TODO: add predicate and configuration block `configure: () -> Void = { _ in }`; this could cover most of NewSyncableParent
     static func sync<R>(with records: [RemoteType], in context: NSManagedObjectContext)
         where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
             guard let objectDict: [R: Self] = try? fetchEntityDict(in: context) else {
