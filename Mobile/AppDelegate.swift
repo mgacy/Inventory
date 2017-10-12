@@ -17,6 +17,7 @@ let log = SwiftyBeaver.self
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var dataManager: DataManager?
     let userManager: CurrentUserManager = CurrentUserManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -49,9 +50,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         /// TODO: Should we use a failable initializier with CurrentUserManager?
         //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
+        dataManager = DataManager(context: persistentContainer.viewContext, userManager: userManager)
+
         // Check if we already have user + credentials
         if userManager.user != nil {
-            prepareTabBarController()
+            prepareTabBarController(dataManager: dataManager!)
         } else {
             guard let loginController = storyboard.instantiateViewController(
                 withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
@@ -183,7 +186,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // func prepareTabBarController(context: NSManagedObjectContext, userManager: CurrentUserManager) {}
 
-    func prepareTabBarController() {
+    func prepareTabBarController(dataManager: DataManager) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let tabBarController = storyboard.instantiateViewController(
             withIdentifier: "TabBarViewController") as? UITabBarController else {
@@ -198,10 +201,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         for child in tabBarController.viewControllers ?? [] {
             guard let navController = child as? UINavigationController
                 else { fatalError("wrong view controller type") }
+            /*
             guard let vc = navController.topViewController as? RootSectionViewController
                 else { fatalError("wrong view controller type") }
             vc.managedObjectContext = persistentContainer.viewContext
             vc.userManager = userManager
+             */
+            // TEMP:
+            guard let topVC = navController.topViewController else { fatalError("wrong view controller type") }
+            switch topVC {
+            case is InventoryDateViewController:
+                guard let vc = topVC as? InventoryDateViewController else { fatalError("wrong view controller type") }
+                vc.viewModel = InventoryDateViewModel(dataManager: dataManager,
+                                                      rowTaps: vc.selectedObjects.asObservable())
+                vc.managedObjectContext = persistentContainer.viewContext
+                //vc.userManager = userManager
+
+            case is OrderDateViewController:
+                guard let vc = topVC as? OrderDateViewController else { fatalError("wrong view controller type") }
+                vc.viewModel = OrderDateViewModel(dataManager: dataManager, rowTaps: vc.selectedObjects.asObservable())
+                vc.managedObjectContext = persistentContainer.viewContext
+                //vc.userManager = userManager
+
+            case is InvoiceDateViewController:
+                guard let vc = topVC as? InvoiceDateViewController else { fatalError("wrong view controller type") }
+                vc.viewModel = InvoiceDateViewModel(dataManager: dataManager,
+                                                    rowTaps: vc.selectedObjects.asObservable())
+                vc.managedObjectContext = persistentContainer.viewContext
+                //vc.userManager = userManager
+
+            case is InitialLoginVC:
+                guard let vc = topVC as? InitialLoginVC else { fatalError("wrong view controller type") }
+                vc.viewModel = InitialLoginViewModel(dataManager: dataManager)
+                vc.managedObjectContext = persistentContainer.viewContext
+                //vc.userManager = userManager
+
+            case is SettingsViewController:
+                guard let vc = topVC as? SettingsViewController else { fatalError("wrong view controller type") }
+                vc.managedObjectContext = persistentContainer.viewContext
+                //vc.userManager = userManager
+
+            default:
+                fatalError("wrong view controller type")
+            }
         }
         self.window?.rootViewController = tabBarController
         self.window?.makeKeyAndVisible()

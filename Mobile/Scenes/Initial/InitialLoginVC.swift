@@ -8,12 +8,19 @@
 
 import CoreData
 import UIKit
+import RxCocoa
+import RxSwift
 import KeychainAccess
 import OnePasswordExtension
 import PKHUD
 //import SwiftyJSON
 
-class InitialLoginVC: UIViewController, RootSectionViewController, SegueHandler {
+class InitialLoginVC: UIViewController, SegueHandler {
+
+    // MARK: New
+
+    var viewModel: InitialLoginViewModel!
+    let disposeBag = DisposeBag()
 
     // MARK: Properties
     var managedObjectContext: NSManagedObjectContext!
@@ -83,7 +90,7 @@ class InitialLoginVC: UIViewController, RootSectionViewController, SegueHandler 
 
             // swiftlint:disable:next force_cast
             let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-            appDelegate.prepareTabBarController()
+            appDelegate.prepareTabBarController(dataManager: appDelegate.dataManager!)
 
         case .showSignUp:
             guard

@@ -10,7 +10,7 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-struct InitialLoginViewModel: RootSectionViewModel {
+struct InitialLoginViewModel {
 
     // MARK: - Properties
 

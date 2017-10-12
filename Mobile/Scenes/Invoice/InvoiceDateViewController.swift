@@ -8,43 +8,56 @@
 
 import UIKit
 import CoreData
-import Alamofire
-import SwiftyJSON
 import PKHUD
+import RxCocoa
+import RxSwift
 
-class InvoiceDateViewController: UITableViewController, RootSectionViewController {
+class InvoiceDateViewController: UIViewController {
+
+    // OLD
+    var managedObjectContext: NSManagedObjectContext!
+    //var userManager: CurrentUserManager!
+    //var selectedCollection: InvoiceCollection?
 
     // MARK: - Properties
 
-    var userManager: CurrentUserManager!
-    var selectedCollection: InvoiceCollection?
+    //var viewModel: InvoiceDateViewModelType!
+    var viewModel: InvoiceDateViewModel!
+    let disposeBag = DisposeBag()
 
-    // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext!
-    //var filter: NSPredicate? = nil
-    //var cacheName: String? = "Master"
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    let selectedObjects = PublishSubject<InvoiceCollection>()
 
     // TableViewCell
     let cellIdentifier = "Cell"
 
-    // Segues
-    let segueIdentifier = "showInvoiceVendors"
+    // MARK: - Interface
+    private let refreshControl = UIRefreshControl()
+    //let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+    let activityIndicatorView = UIActivityIndicatorView()
+    let messageLabel = UILabel()
+    //lazy var messageLabel: UILabel = {
+    //    let view = UILabel()
+    //    view.translatesAutoresizingMaskIntoConstraints = false
+    //    return view
+    //}()
 
-    /// TODO: provide interface to control these
-    // let invoiceTypeID = 1
+    lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = .white
+        tv.delegate = self
+        return tv
+    }()
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //self.navigationItem.leftBarButtonItem = self.editButtonItem
-        title = "Invoices"
-        self.refreshControl?.addTarget(self, action: #selector(InvoiceDateViewController.refreshTable(_:)),
-                                       for: UIControlEvents.valueChanged)
+        setupView()
+        setupConstraints()
+        setupBindings()
         setupTableView()
-
+        /*
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED: unable to get storeID"); return
         }
@@ -52,6 +65,7 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
         HUD.show(.progress)
         APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
                                                               completion: self.completedGetListOfInvoiceCollections)
+         */
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -59,50 +73,100 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
         self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    //override func didReceiveMemoryWarning() {}
+
+    // MARK: - View Methods
+
+    private func setupView() {
+        title = "Invoices"
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem
+        //self.navigationItem.rightBarButtonItem = addButtonItem
+
+        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        //messageLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        self.view.addSubview(tableView)
+        self.view.addSubview(activityIndicatorView)
+        self.view.addSubview(messageLabel)
     }
 
-    // MARK: - Navigation
+    private func setupConstraints() {
+        // TableView
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let controller = segue.destination as? InvoiceVendorViewController else {
-            fatalError("Wrong view controller type")
-        }
-        guard let selection = selectedCollection else {
-            fatalError("Showing detail, but no selected row?")
-        }
-        controller.parentObject = selection
-        controller.managedObjectContext = managedObjectContext
+        // ActivityIndicator
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+        activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
+
+        // MessageLabel
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+    }
+
+    private func setupBindings() {
+
+        // Edit Button
+        //editButtonItem.rx.tap
+        //    .bind(to: viewModel.editTaps)
+        //    .disposed(by: disposeBag)
+
+        // Row selection
+        //selectedObjects.asObservable()
+        //    .bind(to: viewModel.rowTaps)
+        //    .disposed(by: disposeBag)
+
+        // Refresh
+        refreshControl.rx.controlEvent(.valueChanged)
+            .bind(to: viewModel.refresh)
+            .disposed(by: disposeBag)
+
+        // Activity Indicator
+        viewModel.isRefreshing
+            .drive(refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
+
+        viewModel.hasRefreshed
+            /// TODO: use weak or unowned self?
+            .drive(onNext: { [weak self] _ in
+                self?.tableView.reloadData()
+            })
+            .disposed(by: disposeBag)
+
+        // Selection
+        viewModel.showCollection
+            .subscribe(onNext: { [weak self] selection in
+                guard let strongSelf = self else {
+                    log.error("\(#function) FAILED : unable to get reference to self"); return
+                }
+                log.debug("\(#function) SELECTED: \(selection)")
+
+                let viewController = InvoiceVendorViewController.initFromStoryboard(name: "Main")
+                //let viewModel = InvoiceVendorViewModel(dataManager: viewModel.dataManager)
+                //viewController = viewModel = viewModel
+                // OLD
+                viewController.managedObjectContext = strongSelf.managedObjectContext
+                viewController.parentObject = selection
+                strongSelf.navigationController?.pushViewController(viewController, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceDateViewController>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
+        tableView.refreshControl = refreshControl
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "dateTimeInterval", ascending: false)
-        request.sortDescriptors = [sortDescriptor]
-
-        //let fetchPredicate = NSPredicate(format: "inventory == %@", inventory)
-        //request.predicate = fetchPredicate
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
     }
-
+    /*
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -111,27 +175,25 @@ class InvoiceDateViewController: UITableViewController, RootSectionViewControlle
         guard let storeID = userManager.storeID else {
                 log.error("\(#function) FAILED : unable to get storeID"); return
         }
-
+        /*
         HUD.show(.progress)
         log.info("GET InvoiceCollection from server ...")
         APIManager.sharedInstance.getInvoiceCollection(
             storeID: storeID, invoiceDate: selection.date.shortDate,
             completion: completedGetInvoiceCollection)
-
+         */
         /// TODO: move before call to APIManager?
         tableView.deselectRow(at: indexPath, animated: true)
     }
+     */
+}
 
-    // MARK: - User interaction
+// MARK: - TableViewDelegate
+extension InvoiceDateViewController: UITableViewDelegate {
 
-    @objc func refreshTable(_ refreshControl: UIRefreshControl) {
-        guard let storeID = userManager.storeID else { return }
-
-        //HUD.show(.progress)
-        //_ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
-
-        //self.tableView.reloadData()
-        //refreshControl.endRefreshing()
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
@@ -159,7 +221,7 @@ extension InvoiceDateViewController: TableViewDataSourceDelegate {
     }
 
 }
-
+/*
 // MARK: - Completion Handlers + Sync
 extension InvoiceDateViewController {
 
@@ -237,3 +299,4 @@ extension InvoiceDateViewController {
     }
 
 }
+*/

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Lwb-b5-sIi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Lwb-b5-sIi">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -7,122 +7,10 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--InventoryDate-->
-        <scene sceneID="lrs-35-hw4">
-            <objects>
-                <tableViewController storyboardIdentifier="InventoryDateTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YU6-fn-vVE" userLabel="InventoryDate" customClass="InventoryDateTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xZo-sB-tyJ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="YU6-fn-vVE" id="vRD-KN-xDs"/>
-                            <outlet property="delegate" destination="YU6-fn-vVE" id="yOe-T2-PwX"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="B3t-Y5-I1M">
-                        <barButtonItem key="leftBarButtonItem" image="reset" id="rbc-tm-kyC" userLabel="Reset">
-                            <connections>
-                                <action selector="resetTapped:" destination="YU6-fn-vVE" id="CjF-ov-Uxg"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="7uD-1T-PFp">
-                            <connections>
-                                <action selector="newTapped:" destination="YU6-fn-vVE" id="84G-da-Tix"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="jJe-ag-Ho3">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <attributedString key="attributedTitle"/>
-                    </refreshControl>
-                    <connections>
-                        <segue destination="H3s-md-9Gz" kind="show" identifier="FetchExistingInventory" id="MoE-UE-r5u"/>
-                        <segue destination="EVU-Sa-EdD" kind="show" identifier="ShowLocationCategory" id="bQV-xM-Zpe"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vZd-Y0-W5a" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3028" y="138.98050974512745"/>
-        </scene>
-        <!--OrderDate-->
-        <scene sceneID="56f-6e-YPo">
-            <objects>
-                <tableViewController storyboardIdentifier="OrderDateViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SjL-9C-Vrt" userLabel="OrderDate" customClass="OrderDateViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="dA3-eM-KQG">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="SjL-9C-Vrt" id="Dqo-q8-LPY"/>
-                            <outlet property="delegate" destination="SjL-9C-Vrt" id="Z7C-pw-DIl"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="UdO-o2-hmD">
-                        <barButtonItem key="leftBarButtonItem" image="reset" id="3Ar-bP-uBa" userLabel="Reset">
-                            <connections>
-                                <action selector="resetTapped:" destination="SjL-9C-Vrt" id="hYu-8h-sSW"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="mKD-iL-I2s">
-                            <connections>
-                                <action selector="newTapped:" destination="SjL-9C-Vrt" id="oG1-s1-NNa"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="owl-sb-hEH">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </refreshControl>
-                    <connections>
-                        <segue destination="Zlj-V1-U9C" kind="show" identifier="showOrderVendors" id="27f-pp-j93"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fqm-r7-XXD" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2089" y="1200"/>
-        </scene>
-        <!--InvoiceDate-->
-        <scene sceneID="qvx-H1-EZt">
-            <objects>
-                <tableViewController storyboardIdentifier="InvoiceDateViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="JEB-WY-LZ0" userLabel="InvoiceDate" customClass="InvoiceDateViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="YmK-sc-PDB">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="JEB-WY-LZ0" id="z1s-Bb-ly4"/>
-                            <outlet property="delegate" destination="JEB-WY-LZ0" id="Cw7-kP-OXc"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="b9F-TQ-nk6">
-                        <barButtonItem key="leftBarButtonItem" image="reset" id="m6G-Jr-szo" userLabel="Reset">
-                            <connections>
-                                <action selector="resetTapped:" destination="JEB-WY-LZ0" id="pSz-DQ-Z1W"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="XVa-ul-dwF">
-                            <connections>
-                                <action selector="newTapped:" destination="JEB-WY-LZ0" id="rum-MC-h6T"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="sgu-CH-NsA">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </refreshControl>
-                    <connections>
-                        <segue destination="VhV-VD-YI0" kind="show" identifier="showInvoiceVendors" id="wCl-Z0-XJs"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TvV-Mf-QZ0" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2089" y="2016"/>
-        </scene>
         <!--InvoiceVendor-->
         <scene sceneID="YZi-Qr-cTX">
             <objects>
@@ -136,6 +24,7 @@
                             <outlet property="delegate" destination="VhV-VD-YI0" id="dh5-8u-IFU"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="bKn-nO-xyi"/>
                     <connections>
                         <segue destination="l7g-UY-PfL" kind="show" identifier="showInvoiceItems" id="KBh-Of-pbq"/>
                     </connections>
@@ -157,7 +46,7 @@
                             <outlet property="delegate" destination="l7g-UY-PfL" id="xMy-yH-tNB"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Gpo-9C-2bo">
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="Gpo-9C-2bo">
                         <barButtonItem key="rightBarButtonItem" image="Upload" id="3tn-IB-IGT" userLabel="Upload">
                             <connections>
                                 <action selector="uploadTapped:" destination="l7g-UY-PfL" id="EZv-H3-DjC"/>
@@ -168,6 +57,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WNf-PQ-5Fe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3902" y="2015"/>
+        </scene>
+        <!--OrderDate-->
+        <scene sceneID="VeK-7b-fRP">
+            <objects>
+                <viewController storyboardIdentifier="OrderDateViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="zbp-VJ-XiN" userLabel="OrderDate" customClass="OrderDateViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gVc-3S-PWz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="29w-j1-IqR"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="A0D-tS-H7s"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fRi-8h-1eh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2089" y="1200"/>
         </scene>
         <!--OrderVendor-->
         <scene sceneID="Sdp-Sd-Wvi">
@@ -182,10 +87,43 @@
                             <outlet property="delegate" destination="Zlj-V1-U9C" id="JhV-rm-EhU"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="X5z-Yn-lep"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d7d-b3-GeE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2985" y="1199"/>
+        </scene>
+        <!--InvoiceDate-->
+        <scene sceneID="bFo-UK-Oiq">
+            <objects>
+                <viewController storyboardIdentifier="InvoiceDateViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="JML-E4-YK4" userLabel="InvoiceDate" customClass="InvoiceDateViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nDb-BX-txs">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="DQS-dY-CsH"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="GDC-i0-1Eq"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hvA-Wj-GOg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2089" y="2015"/>
+        </scene>
+        <!--InventoryDate-->
+        <scene sceneID="wEc-Bj-ms2">
+            <objects>
+                <viewController storyboardIdentifier="InventoryDateViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="P6t-rv-wDB" userLabel="InventoryDate" customClass="InventoryDateViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3ix-2f-Z3P">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="5De-Ig-SUr"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="vbp-N9-Hgv"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oCf-Qt-MXe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2089" y="361"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="hQS-dZ-Fpm">
@@ -213,18 +151,18 @@
                 <navigationController storyboardIdentifier="InventoriesNavController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Dd5-Cp-qL8" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Inventories" image="inventoryTab" id="gAl-q1-bWL"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="vZw-en-3u3">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="vZw-en-3u3">
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="YU6-fn-vVE" kind="relationship" relationship="rootViewController" id="gFo-cG-Pea"/>
+                        <segue destination="P6t-rv-wDB" kind="relationship" relationship="rootViewController" id="RnJ-bY-vLz"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gGL-zY-1zr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2088.8000000000002" y="138.98050974512745"/>
+            <point key="canvasLocation" x="1150" y="362"/>
         </scene>
         <!--InventoryLocation-->
         <scene sceneID="FUc-Sc-EDt">
@@ -240,7 +178,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="H8h-2x-fWf">
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="H8h-2x-fWf">
                         <barButtonItem key="rightBarButtonItem" image="Upload" id="Thp-L9-W6m" userLabel="Upload">
                             <connections>
                                 <action selector="uploadTapped:" destination="H3s-md-9Gz" id="Yqv-gJ-hgb"/>
@@ -254,7 +192,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Ju-OH-epj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3924" y="138.98050974512745"/>
+            <point key="canvasLocation" x="2985" y="360"/>
         </scene>
         <!--InventoryLocationCategory-->
         <scene sceneID="TtP-wW-j50">
@@ -277,7 +215,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g7T-hd-scX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4840.8000000000002" y="-234.33283358320841"/>
+            <point key="canvasLocation" x="4170" y="-219"/>
         </scene>
         <!--InventoryLocationItem-->
         <scene sceneID="kiM-cd-BbP">
@@ -296,7 +234,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m0u-Gl-dub" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5712.8000000000002" y="500.59970014992507"/>
+            <point key="canvasLocation" x="4831" y="553"/>
         </scene>
         <!--Orders-->
         <scene sceneID="OAI-fc-KIl">
@@ -304,13 +242,13 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="3mJ-GK-6Cy" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Orders" image="orderTab" id="Xt8-ZN-Tau"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="hT8-Lv-2Yw">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="hT8-Lv-2Yw">
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="SjL-9C-Vrt" kind="relationship" relationship="rootViewController" id="VUg-g6-n4G"/>
+                        <segue destination="zbp-VJ-XiN" kind="relationship" relationship="rootViewController" id="VQg-Bv-N0B"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rBz-qg-8j6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -323,13 +261,13 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="K5S-ve-cqB" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Invoices" image="invoiceTab" id="o2w-SL-cJP"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="PnI-vi-oDn">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="PnI-vi-oDn">
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="JEB-WY-LZ0" kind="relationship" relationship="rootViewController" id="VaK-EP-riy"/>
+                        <segue destination="JML-E4-YK4" kind="relationship" relationship="rootViewController" id="PQF-Oj-Fwz"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rYt-es-lGS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -417,8 +355,8 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Vhi-Oi-4LA" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Settings" image="settingsTab" id="7Iz-oB-X3q"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yGu-DN-Q14">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="yGu-DN-Q14">
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -434,10 +372,6 @@
         <scene sceneID="kaD-K1-Urv">
             <objects>
                 <viewController storyboardIdentifier="LoginViewController" id="zZf-3R-7Kl" userLabel="Login" customClass="LoginViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Lzy-hW-dcW"/>
-                        <viewControllerLayoutGuide type="bottom" id="rBi-jN-EQU"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Jvp-Zu-1iG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -476,9 +410,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="s07-Y4-9Gd" firstAttribute="leading" secondItem="Jvp-Zu-1iG" secondAttribute="leadingMargin" id="Dr0-nJ-77V"/>
-                            <constraint firstItem="s07-Y4-9Gd" firstAttribute="top" secondItem="Lzy-hW-dcW" secondAttribute="bottom" constant="60" id="tlH-fj-ClF"/>
+                            <constraint firstItem="s07-Y4-9Gd" firstAttribute="top" secondItem="1Y6-Cm-115" secondAttribute="top" constant="60" id="tlH-fj-ClF"/>
                             <constraint firstItem="s07-Y4-9Gd" firstAttribute="trailing" secondItem="Jvp-Zu-1iG" secondAttribute="trailingMargin" id="wNX-IR-rMM"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="1Y6-Cm-115"/>
                     </view>
                     <navigationItem key="navigationItem" id="hsJ-8r-gWe">
                         <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="dyI-i4-V2I">
@@ -520,10 +455,6 @@
         <scene sceneID="koq-0d-6Dk">
             <objects>
                 <viewController storyboardIdentifier="InitialLoginViewController" id="37G-Gi-gMX" userLabel="InitialLogin" customClass="InitialLoginVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="cZQ-mb-mEt"/>
-                        <viewControllerLayoutGuide type="bottom" id="Cn3-5c-tsR"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Xkz-o5-nv8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -565,9 +496,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="lQ2-pa-8s7" firstAttribute="trailing" secondItem="Xkz-o5-nv8" secondAttribute="trailingMargin" id="5hf-lA-yEe"/>
-                            <constraint firstItem="lQ2-pa-8s7" firstAttribute="top" secondItem="cZQ-mb-mEt" secondAttribute="bottom" constant="100" id="iLQ-FR-u98"/>
+                            <constraint firstItem="lQ2-pa-8s7" firstAttribute="top" secondItem="FUi-5r-TRR" secondAttribute="top" constant="100" id="iLQ-FR-u98"/>
                             <constraint firstItem="lQ2-pa-8s7" firstAttribute="leading" secondItem="Xkz-o5-nv8" secondAttribute="leadingMargin" id="leR-8X-rLf"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="FUi-5r-TRR"/>
                     </view>
                     <navigationItem key="navigationItem" id="TaB-cC-MgH">
                         <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="0JG-qN-Ar8">
@@ -592,10 +524,6 @@
         <scene sceneID="lZ4-in-Zpe">
             <objects>
                 <viewController storyboardIdentifier="InitialSignUpViewController" id="Sgv-j7-TMT" userLabel="InitialSignUp" customClass="InitialSignUpViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="QkT-Ne-izo"/>
-                        <viewControllerLayoutGuide type="bottom" id="tsB-vK-iMe"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kl8-31-nOL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -633,10 +561,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ou6-ao-5A9" firstAttribute="top" secondItem="QkT-Ne-izo" secondAttribute="bottom" constant="56" id="KT2-1n-HE0"/>
+                            <constraint firstItem="ou6-ao-5A9" firstAttribute="top" secondItem="hh6-DN-KM8" secondAttribute="top" constant="56" id="KT2-1n-HE0"/>
                             <constraint firstItem="ou6-ao-5A9" firstAttribute="leading" secondItem="kl8-31-nOL" secondAttribute="leadingMargin" id="T5N-PV-IE5"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ou6-ao-5A9" secondAttribute="trailing" id="hmG-53-2zJ"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="hh6-DN-KM8"/>
                     </view>
                     <navigationItem key="navigationItem" id="yXo-CZ-HGq">
                         <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="9fB-pd-GJO">
@@ -680,12 +609,10 @@
         <image name="inventoryTab" width="25" height="25"/>
         <image name="invoiceTab" width="25" height="25"/>
         <image name="orderTab" width="25" height="25"/>
-        <image name="reset" width="22" height="22"/>
         <image name="settingsTab" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="4yW-DD-bsH"/>
-        <segue reference="iyW-Ae-r5B"/>
         <segue reference="fev-ZI-ohI"/>
     </inferredMetricsTieBreakers>
 </document>
