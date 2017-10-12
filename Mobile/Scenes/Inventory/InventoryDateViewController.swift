@@ -16,7 +16,6 @@ class InventoryDateViewController: UIViewController {
 
     // OLD
     var managedObjectContext: NSManagedObjectContext!
-    //var userManager: CurrentUserManager!
 
     // MARK: - Properties
 

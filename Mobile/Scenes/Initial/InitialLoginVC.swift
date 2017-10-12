@@ -8,8 +8,8 @@
 
 import CoreData
 import UIKit
-import RxCocoa
-import RxSwift
+//import RxCocoa
+//import RxSwift
 import KeychainAccess
 import OnePasswordExtension
 import PKHUD
@@ -20,7 +20,7 @@ class InitialLoginVC: UIViewController, SegueHandler {
     // MARK: New
 
     var viewModel: InitialLoginViewModel!
-    let disposeBag = DisposeBag()
+    //let disposeBag = DisposeBag()
 
     // MARK: Properties
     var managedObjectContext: NSManagedObjectContext!
