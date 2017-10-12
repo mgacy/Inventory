@@ -12,6 +12,9 @@ import Alamofire
 //import RxCocoa
 import RxSwift
 
+// swiftlint:disable file_length
+// swiftlint:disable unused_closure_parameter
+
 public enum DataManagerError: Error {
     //case dateParsing
     case missingMOC

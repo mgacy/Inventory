@@ -12,6 +12,8 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
+// swiftlint:disable file_length
+
 class InventoryDateTVC: UITableViewController, RootSectionViewController, SegueHandler {
 
     // MARK: Properties

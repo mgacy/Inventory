@@ -54,6 +54,7 @@ class OrderViewModel {
         if messageItems.count == 0 { return nil }
 
         messageItems.sort()
+        // swiftlint:disable:next line_length
         let message = "Order for \(order.collection?.date.stringFromDate() ?? ""):\n\(messageItems.joined(separator: ""))"
         log.debug("Order Message: \(message)")
         return message
