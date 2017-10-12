@@ -83,3 +83,45 @@ extension UIViewController {
     }
 
 }
+
+// MARK: - Action Prompt from RxSwift / RxExample
+
+//
+//  Wireframe.swift
+//  RxExample
+//
+//  Created by Krunoslav Zaher on 4/3/15.
+//  Copyright © 2015 Krunoslav Zaher. All rights reserved.
+//
+
+extension UIViewController {
+
+    func promptFor<Action: CustomStringConvertible>(title: String, message: String, cancelAction: Action, actions: [Action]) -> Observable<Action> {
+
+        return Observable.create { [weak self] observer in
+            guard let `self` = self else {
+                observer.onCompleted()
+                return Disposables.create()
+            }
+
+            let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            /// TODO: can we simply set the cancelAction handler to nil / dismiss alertView / observer.onCompleted()?
+            alertView.addAction(UIAlertAction(title: cancelAction.description, style: .cancel) { _ in
+                observer.on(.next(cancelAction))
+            })
+
+            for action in actions {
+                alertView.addAction(UIAlertAction(title: action.description, style: .default) { _ in
+                    observer.on(.next(action))
+                })
+            }
+
+            self.present(alertView, animated: true, completion: nil)
+
+            return Disposables.create {
+                alertView.dismiss(animated: false, completion: nil)
+            }
+        }
+    }
+
+}
