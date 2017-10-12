@@ -324,6 +324,8 @@ extension DataManager {
                         throw DataManagerError.missingMOC
                     }
                     collection.update(with: record, in: context)
+                    /// TODO: handle this elsewhere?
+                    collection.uploaded = true
                     return collection
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
