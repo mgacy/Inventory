@@ -19,7 +19,7 @@ extension UIViewController {
     func createAlert(title: String, message: String, handler: (() -> Void)? = nil) -> UIAlertController {
 
         // Create alert controller
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelTitle: String
         switch handler != nil {
         case true:
@@ -30,7 +30,7 @@ extension UIViewController {
                 // Do some stuff
                 handler!()
             }
-            alert.addAction(okAction)
+            alertController.addAction(okAction)
 
         case false:
             cancelTitle = "OK"
@@ -38,15 +38,15 @@ extension UIViewController {
 
         // Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
-        alert.addAction(cancelAction)
+        alertController.addAction(cancelAction)
 
-        return alert
+        return alertController
     }
 
     func showAlert(title: String, message: String, handler: (() -> Void)? = nil) {
 
         // Create alert controller
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelTitle: String
         switch handler != nil {
         case true:
@@ -57,7 +57,7 @@ extension UIViewController {
                 // Do some stuff
                 handler!()
             }
-            alert.addAction(okAction)
+            alertController.addAction(okAction)
 
         case false:
             cancelTitle = "OK"
@@ -65,9 +65,9 @@ extension UIViewController {
 
         // Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
-        alert.addAction(cancelAction)
+        alertController.addAction(cancelAction)
 
-        present(alert, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
 
 }
