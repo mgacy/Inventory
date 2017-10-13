@@ -9,7 +9,7 @@
 import UIKit
 //import Foundation
 
-struct InventoryLocationItemViewModel: SubItemCellViewModel {
+struct InventoryLocationItemViewModel: SubItemCellViewModelType {
     private var locationItem: InventoryLocationItem
     private var item: Item
     private var status: ItemStatus {
