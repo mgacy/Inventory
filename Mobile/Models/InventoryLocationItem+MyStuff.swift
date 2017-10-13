@@ -68,3 +68,5 @@ extension InventoryLocationItem {
     }
 
 }
+
+extension InventoryLocationItem: Managed {}

@@ -67,30 +67,47 @@ class InventoriesFactory {
     public func updateInventory(_ inventory: Inventory, with record: RemoteExistingInventory, in context: NSManagedObjectContext) -> Inventory? {
         log.debug("Updating Inventory: \(inventory) with: \(record)")
 
-        guard let itemDict = try? Item.fetchEntityDict(in: context) else { return nil }
-        //guard let unitDict = try? Unit.fetchEntityDict(in: context) else { return nil }
+        // Get / create default location
+        //let defaultLocation = InventoryLocation(context: context)
+        let locationPredicate = NSPredicate(format: "inventory == %@", inventory)
+        let defaultLocation = InventoryLocation.findOrCreate(in: context, matching: locationPredicate) { location in
+            location.locationType = InventoryLocationType.item.rawValue
+            location.inventory = inventory
+            location.name = "Default"
+        }
 
-        /// TODO: create default location?
-        //let location = InventoryLocation(context: context)
+        guard let itemDict = try? Item.fetchEntityDict(in: context) else { return nil }
+        guard let unitDict = try? Unit.fetchEntityDict(in: context) else { return nil }
+        let locationItemDict = InventoryLocationItem.fetch(in: context) { request in
+            request.predicate = NSPredicate(format: "location == %@", defaultLocation)
+        }.toDictionary { $0.itemID }
 
         let predicate = NSPredicate(format: "inventory == %@", inventory)
         // swiftlint:disable:next line_length
         InventoryItem.configurableSync(with: record.items, in: context, matching: predicate) { inventoryItem, remoteRecord in
             //log.debug("Configuring: \(inventoryItem) with: \(remoteRecord)")
+            let itemID = remoteRecord.item.syncIdentifier
+            let item = itemDict[itemID]
+
             inventoryItem.inventory = inventory
-            //inventoryItem.item = itemDict[remoteRecord.item.syncIdentifier]
-            let item = itemDict[remoteRecord.item.syncIdentifier]
             inventoryItem.item = item
             inventoryItem.name = item?.name ?? "Error"
+
+            /**
+             There will only be one `InventoryLocationItem` for each `InventoryItem` and we won't display them so their
+             `.position` doesn't matter
+
+             NOTE: `createLocationItem` also offers a closure `(InventoryLocationItem, Int32) -> Void`
+             */
+            let locationItem = locationItemDict[itemID] ?? createLocationItem(itemID: remoteRecord.item.remoteID,
+                                                                              position: 1, in: context)
+            locationItem.location = defaultLocation
+            locationItem.item = inventoryItem
+            locationItem.quantity = remoteRecord.quantity as NSNumber
+            locationItem.unit = unitDict[Int32(remoteRecord.unitId)]
+
             //log.debug("Configured: \(inventoryItem)\n")
-
-            /// TODO: create / update corresponding InventoryLocationItem and attach to Item, location
-            //let locationItem = createLocationItem(itemID: remoteRecord.item.remoteID, position: 0, in: context) { locationItem, itemID in }
-            //let locationItem = InventoryLocationItem(context: context)
-            //locationItem.item = inventoryItem
-            //locationItem.location = location
         }
-
         return inventory
     }
 
