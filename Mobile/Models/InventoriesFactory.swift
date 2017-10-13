@@ -84,7 +84,7 @@ class InventoriesFactory {
             inventoryItem.name = item?.name ?? "Error"
             //log.debug("Configured: \(inventoryItem)\n")
 
-            /// TODO: create corresponding InventoryLocationItem and attach to Item, location
+            /// TODO: create / update corresponding InventoryLocationItem and attach to Item, location
             //let locationItem = createLocationItem(itemID: remoteRecord.item.remoteID, position: 0, in: context) { locationItem, itemID in }
             //let locationItem = InventoryLocationItem(context: context)
             //locationItem.item = inventoryItem
