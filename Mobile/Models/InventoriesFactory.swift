@@ -175,7 +175,7 @@ class InventoriesFactory {
 
     // MARK: InventoryLocationItem
 
-    private func createLocationItem(itemID: Int, position: Int, in context: NSManagedObjectContext, configure: LocationItemConfig) -> InventoryLocationItem {
+    private func createLocationItem(itemID: Int, position: Int, in context: NSManagedObjectContext, configure: LocationItemConfig = { _, _ in }) -> InventoryLocationItem {
         let locationItem = InventoryLocationItem(context: context)
         locationItem.itemID = Int32(itemID)
         locationItem.position = Int16(position + 1)
