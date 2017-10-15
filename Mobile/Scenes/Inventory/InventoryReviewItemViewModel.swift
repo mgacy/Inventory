@@ -7,9 +7,6 @@
 //
 
 import UIKit
-//import Foundation
-
-// MARK: - A
 
 struct InventoryReviewItemViewModel: SubItemCellViewModelType {
     private var inventoryItem: InventoryItem
@@ -46,11 +43,11 @@ struct InventoryReviewItemViewModel: SubItemCellViewModelType {
     var unitText: String {
         return item.inventoryUnit?.abbreviation ?? ""
         /*
-         if Double(quantity) > 0.0 {
-         return item.inventoryUnit?.abbreviation ?? ""
-         } else {
-         return ""
-         }
+        if Double(quantity) > 0.0 {
+            return item.inventoryUnit?.abbreviation ?? ""
+        } else {
+            return ""
+        }
          */
     }
 
