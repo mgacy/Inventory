@@ -35,7 +35,7 @@ extension Order {
         for case let item as OrderItem in items {
             guard let quantity = item.quantity else { continue }
 
-            if Int(quantity) > 0 {
+            if quantity.doubleValue > 0.0 {
                 guard let name = item.item?.name else { continue }
                 messageItems.append("\n\(name) \(quantity) \(item.orderUnit?.abbreviation ?? "")")
             }

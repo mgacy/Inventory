@@ -258,14 +258,16 @@ extension InvoiceKeypadViewModel: KeypadDelegate {
         switch currentMode {
         case .cost:
             if let newValue = newValue {
-                currentItem.cost = Double(newValue)
+                currentItem.cost = newValue.doubleValue
+                //currentItem.cost = Double(truncating: newValue)
             } else {
                 currentItem.cost = 0
             }
             displayQuantity = "$\(keypad.displayValue)"
         case .quantity:
             if let newValue = newValue {
-                currentItem.quantity = Double(newValue)
+                currentItem.quantity = newValue.doubleValue
+                //currentItem.quantity = Double(truncating: newValue)
             } else {
                 currentItem.quantity = 0
             }

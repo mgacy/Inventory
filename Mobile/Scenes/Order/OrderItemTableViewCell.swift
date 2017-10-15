@@ -34,7 +34,7 @@ extension OrderItemTableViewCell {
             unitTextLabel.textColor = ColorPalette.redColor
             return
         }
-        if Double(quantity) > 0.0 {
+        if quantity.doubleValue > 0.0 {
             nameTextLabel.textColor = UIColor.black
             quantityTextLabel.text = "\(quantity)"
             quantityTextLabel.textColor =  UIColor.black
