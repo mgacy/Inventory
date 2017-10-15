@@ -33,7 +33,7 @@ struct InvoiceDateViewModel {
     let frc: NSFetchedResultsController<InvoiceCollection>
     let isRefreshing: Driver<Bool>
     let hasRefreshed: Driver<Bool>
-    //let errorMessages: Driver<String>
+    let errorMessages: Driver<String>
     let showCollection: Observable<InvoiceCollection>
 
     // MARK: - Lifecycle
@@ -73,16 +73,27 @@ struct InvoiceDateViewModel {
             .shareReplay(1)
             //.asDriver(onErrorJustReturn: InvoiceCollection())
          */
-        self.showCollection = rowTaps
-            .flatMap { selection -> Observable<InvoiceCollection> in
+        let showSelectionResults = rowTaps
+            .flatMap { selection -> Observable<Event<InvoiceCollection>> in
                 log.debug("Tapped: \(selection)")
                 return dataManager.refreshInvoiceCollection(selection)
-                    .elements()
+                    //.elements()
             }
-            //.shareReplay(1)
+            .shareReplay(1)
 
         // Errors
-        //self.errorMessages = 
+        self.errorMessages = showSelectionResults
+            .errors()
+            .map { error in
+                log.debug("\(#function) ERROR : \(error)")
+                /// TEMP:
+                return "There was an error"
+            }
+            .asDriver(onErrorJustReturn: "Other Error")
+            //.asDriver(onErrorDriveWith: .never())
+
+        // Navigation
+        self.showCollection = showSelectionResults.elements()
 
         // FetchRequest
         let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()

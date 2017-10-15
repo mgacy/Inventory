@@ -141,6 +141,13 @@ class InvoiceDateViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
+        // Errors
+        viewModel.errorMessages
+            .drive(onNext: { [weak self] message in
+                self?.showAlert(title: Strings.errorAlertTitle, message: message)
+            })
+            .disposed(by: disposeBag)
+
         // Navigation
         viewModel.showCollection
             .subscribe(onNext: { [weak self] selection in

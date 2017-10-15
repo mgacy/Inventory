@@ -137,6 +137,13 @@ class InventoryDateViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
+        // Errors
+        viewModel.errorMessages
+            .drive(onNext: { [weak self] message in
+                self?.showAlert(title: Strings.errorAlertTitle, message: message)
+            })
+            .disposed(by: disposeBag)
+
         // Navigation
         viewModel.showInventory
             .subscribe(onNext: { [weak self] inventory in
