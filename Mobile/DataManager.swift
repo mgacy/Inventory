@@ -188,9 +188,6 @@ extension DataManager {
                         log.error("Unable to create Inventory")
                         throw DataManagerError.otherError(error: "Unable to create Inventory")
                     }
-                    //let newInventory = Inventory(with: record, in: context)
-                    //newInventory.uploaded = false
-                    //return Observable.just(newInventory)
                     return newInventory
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
@@ -218,13 +215,10 @@ extension DataManager {
                     guard let context = self?.managedObjectContext else {
                         throw DataManagerError.missingMOC
                     }
-                    /// TODO: use InventoriesFactory
                     let factory = InventoriesFactory(context: context)
                     guard let updatedInventory = factory.updateInventory(inventory, with: record, in: context) else {
                         throw DataManagerError.otherError(error: "Error syncing")
                     }
-
-                    //inventory.update(with: record, in: context)
                     return updatedInventory
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")

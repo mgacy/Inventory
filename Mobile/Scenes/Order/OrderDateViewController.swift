@@ -22,6 +22,8 @@ class OrderDateViewController: UIViewController {
     //var selectedCollection: OrderCollection?
 
     private enum Strings {
+        static let navTitle = "Orders"
+        static let errorAlertTitle = "Error"
         static let newOrderTitle = "Create Order"
         static let newOrderMessage = "Set order quantities from the most recent inventory or simply use pars?"
     }
@@ -89,8 +91,8 @@ class OrderDateViewController: UIViewController {
     // MARK: - View Methods
 
     private func setupView() {
-        title = "Orders"
         self.navigationItem.leftBarButtonItem = self.editButtonItem
+        title = Strings.navTitle
         self.navigationItem.rightBarButtonItem = addButtonItem
 
         self.view.addSubview(tableView)
@@ -167,7 +169,14 @@ class OrderDateViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        // Selection
+        // Errors
+        viewModel.errorMessages
+            .drive(onNext: { [weak self] message in
+                self?.showAlert(title: Strings.errorAlertTitle, message: message)
+            })
+            .disposed(by: disposeBag)
+
+        // Navigation
         viewModel.showCollection
             .subscribe(onNext: { [weak self] selection in
                 guard let strongSelf = self else {
@@ -183,14 +192,6 @@ class OrderDateViewController: UIViewController {
                 viewController.managedObjectContext = strongSelf.managedObjectContext
                 viewController.parentObject = selection
                 strongSelf.navigationController?.pushViewController(viewController, animated: true)
-            })
-            .disposed(by: disposeBag)
-
-        // Errors
-        viewModel.errorMessages
-            .drive(onNext: { [weak self] message in
-                //self?.showError(with: message)
-                self?.showAlert(title: "Error", message: message)
             })
             .disposed(by: disposeBag)
     }

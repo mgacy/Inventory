@@ -136,7 +136,7 @@ class InvoiceDateViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        // Selection
+        // Navigation
         viewModel.showCollection
             .subscribe(onNext: { [weak self] selection in
                 guard let strongSelf = self else {

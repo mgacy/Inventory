@@ -33,8 +33,8 @@ struct OrderDateViewModel {
     let frc: NSFetchedResultsController<OrderCollection>
     let isRefreshing: Driver<Bool>
     let hasRefreshed: Driver<Bool>
-    let showCollection: Observable<OrderCollection>
     let errorMessages: Driver<String>
+    let showCollection: Observable<OrderCollection>
 
     // MARK: - Lifecycle
 
@@ -88,13 +88,10 @@ struct OrderDateViewModel {
             //.shareReplay(1)
 
         // Navigation
-        //self.showCollection = Observable.from([showNew, showSelection]).merge()
         self.showCollection = Observable.of(showNewResults.elements(), showSelectionResults.elements())
             .merge()
 
         // Errors
-        //self.errorMessages = showNewResults
-        //    .errors()
         self.errorMessages = Observable.of(showNewResults.errors(), showSelectionResults.errors())
             .merge()
             .map { error in

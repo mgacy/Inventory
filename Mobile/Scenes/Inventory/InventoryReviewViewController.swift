@@ -143,7 +143,8 @@ class InventoryReviewViewController: UIViewController {
 
         // Selection
         viewModel.showSelection
-            .subscribe(onNext: { [weak self] selection in
+            //.subscribe(onNext: { [weak self] selection in
+            .subscribe(onNext: { selection in
                 log.debug("\(#function) SELECTED: \(selection)")
                 /*
                 guard let strongSelf = self else {
