@@ -17,6 +17,11 @@ class InventoryDateViewController: UIViewController {
     // OLD
     var managedObjectContext: NSManagedObjectContext!
 
+    private enum Strings {
+        static let navTitle = "Inventories"
+        static let errorAlertTitle = "Error"
+    }
+
     // MARK: - Properties
 
     var viewModel: InventoryDateViewModel!
@@ -68,7 +73,7 @@ class InventoryDateViewController: UIViewController {
     // MARK: - View Methods
 
     private func setupView() {
-        title = "Inventories"
+        title = Strings.navTitle
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButtonItem
 

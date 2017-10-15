@@ -19,6 +19,11 @@ class InvoiceDateViewController: UIViewController {
     //var userManager: CurrentUserManager!
     //var selectedCollection: InvoiceCollection?
 
+    private enum Strings {
+        static let navTitle = "Invoices"
+        static let errorAlertTitle = "Error"
+    }
+
     // MARK: - Properties
 
     //var viewModel: InvoiceDateViewModelType!
@@ -78,7 +83,7 @@ class InvoiceDateViewController: UIViewController {
     // MARK: - View Methods
 
     private func setupView() {
-        title = "Invoices"
+        title = Strings.navTitle
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         //self.navigationItem.rightBarButtonItem = addButtonItem
 

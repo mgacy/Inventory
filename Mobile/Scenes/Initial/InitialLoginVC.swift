@@ -17,14 +17,19 @@ import PKHUD
 
 class InitialLoginVC: UIViewController, SegueHandler {
 
-    // MARK: New
+    // OLD
+    var managedObjectContext: NSManagedObjectContext!
+    var userManager: CurrentUserManager!
+
+    private enum Strings {
+        static let errorAlertTitle = "Error"
+        static let loginErrorMessage = "Wrong email or password"
+    }
+
+    // MARK: Properties
 
     var viewModel: InitialLoginViewModel!
     //let disposeBag = DisposeBag()
-
-    // MARK: Properties
-    var managedObjectContext: NSManagedObjectContext!
-    var userManager: CurrentUserManager!
 
     // MARK: Interface
     @IBOutlet weak var loginTextField: UITextField!
@@ -185,7 +190,7 @@ extension InitialLoginVC {
             log.error("Failed to login: \(String(describing: error))")
             switch error! {
             case .authentication:
-                showError(title: "Error", subtitle: "Wrong email or password")
+                showError(title: Strings.errorAlertTitle, subtitle: Strings.loginErrorMessage)
             default:
                 HUD.flash(.error, delay: 1.0)
             }
