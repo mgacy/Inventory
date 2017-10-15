@@ -77,6 +77,7 @@ struct InventoryDateViewModel {
                 log.debug("Tapped ADD")
                 return dataManager.createInventory()
             }
+            /// TODO: .map { InventorySelection.new($0) }
             .share()
 
         // Selection
@@ -84,9 +85,13 @@ struct InventoryDateViewModel {
         //self.rowTaps = _selectedObjects.asObserver()
         //let showSelectionResults = _selectedObjects.asObservable()
         let showSelectionResults = rowTaps
+            // Currently, new Inventories only exist locally while updating of existing Inventories is handled in the
+            // next scene
+            /// TODO: .map { InventorySelection.existing($0) }
             .flatMap { selection -> Observable<Event<Inventory>> in
                 log.debug("Tapped: \(selection)")
-                //return Observable.just(selection).materialize()
+                return Observable.just(selection).materialize()
+                /*
                 switch selection.uploaded {
                 case true:
                     //return dataManager.refreshInventory(selection)
@@ -94,6 +99,7 @@ struct InventoryDateViewModel {
                 case false:
                     return Observable.just(selection).materialize()
                 }
+                 */
             }
             .share()
 
