@@ -69,7 +69,7 @@ class InventoryDateViewController: UIViewController {
 
     private func setupView() {
         title = "Inventories"
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButtonItem
 
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false

@@ -91,8 +91,8 @@ class OrderDateViewController: UIViewController {
     // MARK: - View Methods
 
     private func setupView() {
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
         title = Strings.navTitle
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButtonItem
 
         self.view.addSubview(tableView)
