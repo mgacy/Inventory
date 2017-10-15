@@ -19,6 +19,7 @@ class InventoryReviewViewController: UIViewController {
     var viewModel: InventoryReviewViewModel!
     let disposeBag = DisposeBag()
 
+    // TODO: could we use a lazy var returning selectedObjects.asObservable()?
     let selectedObjects = PublishSubject<InventoryItem>()
 
     // TableViewCell
@@ -66,6 +67,7 @@ class InventoryReviewViewController: UIViewController {
 
     private func setupView() {
         title = "Items"
+        /// TODO: add `messageLabel` output to viewModel?
         messageLabel.text = "You do not have any Items yet."
 
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
@@ -161,7 +163,7 @@ class InventoryReviewViewController: UIViewController {
 
     fileprivate func setupTableView() {
         //tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
@@ -192,8 +194,9 @@ extension InventoryReviewViewController: TableViewDataSourceDelegate {
         }
     }
      */
-    func configure(_ cell: UITableViewCell, for inventoryItem: InventoryItem) {
-        cell.textLabel?.text = inventoryItem.item?.name ?? "Error"
+    func configure(_ cell: SubItemTableViewCell, for inventoryItem: InventoryItem) {
+        let viewModel = InventoryReviewItemViewModel(forInventoryItem: inventoryItem)
+        cell.configure(withViewModel: viewModel)
     }
 
 }
