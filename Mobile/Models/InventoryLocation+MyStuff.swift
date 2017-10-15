@@ -210,7 +210,12 @@ extension InventoryLocation {
                 status = InventoryStatus.complete
             }
         case false:
-            status = InventoryStatus.notStarted
+            switch hasIncompleted {
+            case true:
+                status = .incomplete
+            case false:
+                status = .notStarted
+            }
         }
 
         return status
