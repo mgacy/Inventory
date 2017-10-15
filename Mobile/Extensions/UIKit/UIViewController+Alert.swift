@@ -77,7 +77,7 @@ extension UIViewController {
 
 extension UIViewController {
 
-    func showError(title: String, subtitle: String?, delay: Double = 2.0) {
+    func showErrorInHUD(title: String, subtitle: String?, delay: Double = 2.0) {
         PKHUD.sharedHUD.show()
         PKHUD.sharedHUD.contentView = PKHUDErrorView(title: title, subtitle: subtitle)
         PKHUD.sharedHUD.hide(afterDelay: delay)
