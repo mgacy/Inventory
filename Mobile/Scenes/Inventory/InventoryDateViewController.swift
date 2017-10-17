@@ -146,11 +146,11 @@ class InventoryDateViewController: UIViewController {
 
         // Navigation
         viewModel.showInventory
-            .subscribe(onNext: { [weak self] inventory in
-                log.debug("\(#function) SELECTED: \(inventory)")
+            .subscribe(onNext: { [weak self] transition in
+                log.debug("\(#function) SELECTED: \(transition)")
                 guard let strongSelf = self else { fatalError("Unable to get self") }
-                switch inventory.uploaded {
-                case true:
+                switch transition {
+                case .existing(let inventory):
                     log.verbose("GET selectedInventory from server - \(inventory.remoteID) ...")
                     let vc = InventoryReviewViewController.initFromStoryboard(name: "InventoryReviewViewController")
                     let vm = InventoryReviewViewModel(dataManager: strongSelf.viewModel.dataManager,
@@ -158,7 +158,7 @@ class InventoryDateViewController: UIViewController {
                     vc.viewModel = vm
                     strongSelf.navigationController?.pushViewController(vc, animated: true)
 
-                case false:
+                case .new(let inventory):
                     log.verbose("LOAD NEW selectedInventory from disk ...")
                     let viewController = InventoryLocationTVC.initFromStoryboard(name: "Main")
 

@@ -10,10 +10,10 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-//enum InventorySelection {
-//    case new(inventory: Inventory)
-//    case existing(inventory: Inventory)
-//}
+enum InventorySelection {
+    case new(Inventory)
+    case existing(Inventory)
+}
 
 struct InventoryDateViewModel {
 
@@ -40,8 +40,7 @@ struct InventoryDateViewModel {
     let isRefreshing: Driver<Bool>
     let hasRefreshed: Driver<Bool>
     let errorMessages: Driver<String>
-    let showInventory: Observable<Inventory>
-    //let showLocationCategory: Observable<Inventory>
+    let showInventory: Observable<InventorySelection>
 
     // MARK: - Lifecycle
 
@@ -106,6 +105,14 @@ struct InventoryDateViewModel {
         // Navigation
         self.showInventory = Observable.of(showNewResults.elements(), showSelectionResults.elements())
             .merge()
+            .map { inventory in
+                switch inventory.uploaded {
+                case true:
+                    return InventorySelection.existing(inventory)
+                case false:
+                    return InventorySelection.new(inventory)
+                }
+            }
 
         // Errors
         self.errorMessages = Observable.of(showNewResults.errors(), showSelectionResults.errors())
