@@ -7,8 +7,6 @@
 //
 
 import UIKit
-//import CoreData
-//import SwiftyJSON
 import PKHUD
 import RxCocoa
 import RxSwift
@@ -96,17 +94,8 @@ class InventoryLocationViewController: UIViewController, SegueHandler {
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        /*
-         // ActivityIndicator
-         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-         activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-         activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-
-         // MessageLabel
-         //messageLabel.translatesAutoresizingMaskIntoConstraints = false
-         messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-         messageLabel.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-         */
+        // ActivityIndicator
+        // MessageLabel
     }
 
     private func setupBindings() {
@@ -169,70 +158,16 @@ class InventoryLocationViewController: UIViewController, SegueHandler {
             .disposed(by: disposeBag)
     }
 
-    // MARK: Navigation
-    /*
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let selection = selectedLocation else { fatalError("Showing detail, but no selected row?") }
-
-        switch segueIdentifier(for: segue) {
-        case .showCategory:
-            guard let destinationController = segue.destination as? InventoryLocationCategoryTVC else {
-                fatalError("Wrong view controller type")
-            }
-            destinationController.location = selection
-            destinationController.managedObjectContext = self.managedObjectContext
-
-        case .showItem:
-            guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
-                fatalError("Wrong view controller type")
-            }
-            destinationController.title = selection.name
-            destinationController.location = selection
-            destinationController.managedObjectContext = self.managedObjectContext
-        }
-    }
-     */
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocationViewController>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
         //tableView.refreshControl = refreshControl
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-        /*
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        let fetchPredicate = NSPredicate(format: "inventory == %@", inventory)
-        request.predicate = fetchPredicate
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-         */
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
                                          fetchedResultsController: viewModel.frc, delegate: self)
-    }
-
-    // MARK: - User Actions
-
-    @IBAction func uploadTapped(_ sender: AnyObject) {
-        log.info("Uploading Inventory ...")
-        /*
-        HUD.show(.progress)
-
-        guard let dict = self.inventory.serialize() else {
-            log.error("\(#function) FAILED : unable to serialize Inventory")
-            /// TODO: completedUpload(false)
-            return
-        }
-        APIManager.sharedInstance.postInventory(inventory: dict, completion: self.completedUpload)
-         */
     }
 
 }
@@ -246,33 +181,8 @@ extension InventoryLocationViewController: UITableViewDelegate {
     }
 
 }
-/*
-// MARK: - Completion Handlers
-extension InventoryLocationViewController {
 
-    func completedUpload(json: JSON?, error: Error?) {
-        guard error == nil else {
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.error("\(#function) FAILED: unable to get JSON")
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let remoteID = json["id"].int else {
-            log.error("\(#function) FAILED: unable to get remoteID of posted Inventory")
-            HUD.flash(.error, delay: 1.0); return
-        }
-
-        inventory.uploaded = true
-        inventory.remoteID = Int32(remoteID)
-
-        HUD.flash(.success, delay: 1.0)
-        navigationController!.popViewController(animated: true)
-    }
-
-}
-*/
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension InventoryLocationViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for location: InventoryLocation) {
@@ -291,4 +201,3 @@ extension InventoryLocationViewController: TableViewDataSourceDelegate {
     }
 
 }
-
