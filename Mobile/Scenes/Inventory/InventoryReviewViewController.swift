@@ -183,7 +183,7 @@ extension InventoryReviewViewController: UITableViewDelegate {
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension InventoryReviewViewController: TableViewDataSourceDelegate {
     /*
     func canEdit(_ collection: InvoiceCollection) -> Bool {

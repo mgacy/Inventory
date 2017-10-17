@@ -34,8 +34,8 @@ struct InventoryReviewViewModel {
     let isRefreshing: Driver<Bool>
     //let hasRefreshed: Driver<Bool>
     let showTable: Driver<Bool>
-    let showSelection: Observable<InventoryItem>
     //let errorMessages: Driver<String>
+    let showSelection: Observable<InventoryItem>
 
     init(dataManager: DataManager, parentObject: Inventory, rowTaps: Observable<InventoryItem>) {
         self.dataManager = dataManager
