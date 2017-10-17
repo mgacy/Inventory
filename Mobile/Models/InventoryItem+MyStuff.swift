@@ -10,6 +10,88 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+extension InventoryItem: NewSyncable {
+    typealias RemoteType = RemoteInventoryItem
+    typealias RemoteIdentifierType = Int32
+
+    var remoteIdentifier: RemoteIdentifierType { return self.remoteID }
+
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.remoteID = record.syncIdentifier
+        update(with: record, in: context)
+    }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        // categoryID:  ?
+        // itemID:      ?
+        // name:        ?
+        // remoteID:    ?
+
+        // Relationships
+        // inventory:   Inventory
+        // item:        Item
+        // items:       InventoryLocationItem
+
+        self.itemID = record.item.syncIdentifier
+    }
+
+}
+
+// MARK: - Configurable Sync
+
+extension InventoryItem {
+
+    static func configurableSync(with records: [RemoteType], in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil, configure: (InventoryItem, RemoteType) -> Void = { _, _ in }) {
+
+        guard let objectDict: [Int32: InventoryItem] = try? fetchEntityDict(in: context, matching: predicate) else {
+            log.error("\(#function) FAILED : unable to create dictionary for \(self)"); return
+        }
+
+        let localIDs: Set<Int32> = Set(objectDict.keys)
+        var remoteIDs = Set<Int32>()
+
+        for record in records {
+            let objectID = record.syncIdentifier
+            remoteIDs.insert(objectID)
+
+            // Find + update / create Items
+            if let existingObject = objectDict[objectID] {
+                existingObject.update(with: record, in: context)
+                configure(existingObject, record)
+                //log.debug("existingObject: \(existingObject)")
+            } else {
+                let newObject = InventoryItem(with: record, in: context)
+                configure(newObject, record)
+                /// TODO: add newObject to localIDs?
+                log.debug("newObject: \(newObject)")
+            }
+
+        }
+
+        log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
+        let deletedIDs = localIDs.subtracting(remoteIDs)
+        deleteItems(withIDs: deletedIDs, in: context)
+    }
+
+    static func deleteItems(withIDs deletionIDs: Set<Int32>, in context: NSManagedObjectContext) {
+        guard !deletionIDs.isEmpty else { return }
+        log.debug("We need to delete: \(deletionIDs)")
+        /// TODO: remove hard-coded predicate string
+        let fetchPredicate = NSPredicate(format: "\(self.remoteIdentifierName) IN %@", deletionIDs)
+        do {
+            try context.deleteEntities(self, filter: fetchPredicate)
+        } catch let error {
+            /// TODO: deleteEntities(_:filter) already prints the error
+            let updateError = error as NSError
+            log.error("\(updateError), \(updateError.userInfo)")
+        }
+    }
+
+}
+
+// MARK: - OLD
+
 extension InventoryItem {
 
     // MARK: - Lifecycle
@@ -34,7 +116,8 @@ extension InventoryItem {
 
         if let itemID = json["id"].int32 {
             self.itemID = itemID
-            if let item = context.fetchWithRemoteID(Item.self, withID: itemID) {
+            //if let item = context.fetchWithRemoteID(Item.self, withID: itemID) {
+            if let item = context.fetchWithRemoteIdentifier(Item.self, identifier: itemID) {
                 self.item = item
             } else {
                 log.warning("\(#function) : unable to fetch Item with remoteID \(itemID) for \(self)")
@@ -58,7 +141,8 @@ extension InventoryItem {
         }
         if let itemID = json["item"]["id"].int32 {
             self.itemID = itemID
-            self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
+            //self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
+            self.item = context.fetchWithRemoteIdentifier(Item.self, identifier: itemID)
         }
         if let categoryID = json["item"]["category"]["id"].int32 {
             self.categoryID = categoryID
@@ -69,6 +153,12 @@ extension InventoryItem {
         //}
         // if let unitID = json["unit_id"].int {
     }
+
+}
+
+// MARK: - Serialization
+
+extension InventoryItem {
 
     public func serialize() -> [String: Any] {
         var itemDict: [String: Any] = [
@@ -82,7 +172,7 @@ extension InventoryItem {
 
         var subTotal = 0.0
         for case let item as InventoryLocationItem in items where item.quantity != nil {
-            subTotal += Double(item.quantity!)
+            subTotal += Double(truncating: item.quantity!)
         }
         itemDict["quantity"] = subTotal
 

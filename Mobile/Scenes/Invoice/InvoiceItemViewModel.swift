@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct InvoiceItemViewModel: SubItemCellViewModel {
+struct InvoiceItemViewModel: SubItemCellViewModelType {
     private var invoiceItem: InvoiceItem
     private var item: Item
     private var status: ItemStatus {

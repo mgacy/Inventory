@@ -8,16 +8,28 @@
 
 import CoreData
 import UIKit
+//import RxCocoa
+//import RxSwift
 import KeychainAccess
 import OnePasswordExtension
 import PKHUD
 //import SwiftyJSON
 
-class InitialLoginVC: UIViewController, RootSectionViewController, SegueHandler {
+class InitialLoginVC: UIViewController, SegueHandler {
 
-    // MARK: Properties
+    // OLD
     var managedObjectContext: NSManagedObjectContext!
     var userManager: CurrentUserManager!
+
+    private enum Strings {
+        static let errorAlertTitle = "Error"
+        static let loginErrorMessage = "Wrong email or password"
+    }
+
+    // MARK: Properties
+
+    var viewModel: InitialLoginViewModel!
+    //let disposeBag = DisposeBag()
 
     // MARK: Interface
     @IBOutlet weak var loginTextField: UITextField!
@@ -54,10 +66,7 @@ class InitialLoginVC: UIViewController, RootSectionViewController, SegueHandler 
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    // override func didReceiveMemoryWarning() {}
 
     // MARK: - User interaction
 
@@ -83,7 +92,7 @@ class InitialLoginVC: UIViewController, RootSectionViewController, SegueHandler 
 
             // swiftlint:disable:next force_cast
             let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-            appDelegate.prepareTabBarController()
+            appDelegate.prepareTabBarController(dataManager: appDelegate.dataManager!)
 
         case .showSignUp:
             guard
@@ -92,6 +101,9 @@ class InitialLoginVC: UIViewController, RootSectionViewController, SegueHandler 
                 else {
                     fatalError("\(#function) FAILED : unable to get destination")
             }
+            //let destinationViewModel = InitialSignupViewModel(dataManager: viewModel.dataManager)
+            //destinationController.viewModel = destinationViewModel
+            destinationController.dataManager = viewModel.dataManager
             destinationController.managedObjectContext = managedObjectContext
             destinationController.userManager = userManager
         }
@@ -142,7 +154,7 @@ extension InitialLoginVC {
         passwordTextField.addButton(button: onePasswordButton, direction: .right)
     }
 
-    func findLoginFrom1Password(sender: AnyObject) {
+    @objc func findLoginFrom1Password(sender: AnyObject) {
         OnePasswordExtension.shared().findLogin(
             forURLString: "***REMOVED***", for: self, sender: sender,
             completion: { (loginDictionary, error) -> Void in
@@ -178,7 +190,7 @@ extension InitialLoginVC {
             log.error("Failed to login: \(String(describing: error))")
             switch error! {
             case .authentication:
-                showError(title: "Error", subtitle: "Wrong email or password")
+                showErrorInHUD(title: Strings.errorAlertTitle, subtitle: Strings.loginErrorMessage)
             default:
                 HUD.flash(.error, delay: 1.0)
             }
@@ -187,17 +199,6 @@ extension InitialLoginVC {
         log.verbose("Logged in")
         // TODO: change so we only createUser() on success
         performSegue(withIdentifier: .showMain)
-    }
-
-}
-
-/// TODO: make extension of PKHUD
-extension InitialLoginVC {
-
-    func showError(title: String, subtitle: String?, delay: Double = 2.0) {
-        PKHUD.sharedHUD.show()
-        PKHUD.sharedHUD.contentView = PKHUDErrorView(title: title, subtitle: subtitle)
-        PKHUD.sharedHUD.hide(afterDelay: delay)
     }
 
 }

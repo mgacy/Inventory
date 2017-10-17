@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import Alamofire
 import SwiftyJSON
-
+/*
 class SyncManager {
 
     // MARK: - Properties
@@ -49,7 +49,7 @@ class SyncManager {
         // Create dict from fetch request on Items
         let prefetch = ["inventoryUnit", "purchaseSubUnit", "purchaseUnit",
                         "subUnit", "vendor"]
-        // swiftlint:disable:next line_length
+
         guard let itemDict = try? managedObjectContext.fetchEntityDict(Item.self, prefetchingRelationships: prefetch) else {
             log.error("\(#function) FAILED : unable to create Item dictionary")
             /// TODO: return custom error
@@ -137,3 +137,4 @@ class SyncManager {
     }
 
 }
+*/

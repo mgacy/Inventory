@@ -45,7 +45,7 @@ class OrderViewModel {
         for case let item as OrderItem in items {
             guard let quantity = item.quantity else { continue }
 
-            if Int(quantity) > 0 {
+            if quantity.doubleValue > 0.0 {
                 guard let name = item.item?.name else { continue }
                 messageItems.append("\n\(name) \(quantity) \(item.orderUnit?.abbreviation ?? "")")
             }
@@ -54,6 +54,7 @@ class OrderViewModel {
         if messageItems.count == 0 { return nil }
 
         messageItems.sort()
+        // swiftlint:disable:next line_length
         let message = "Order for \(order.collection?.date.stringFromDate() ?? ""):\n\(messageItems.joined(separator: ""))"
         log.debug("Order Message: \(message)")
         return message
@@ -160,21 +161,4 @@ func format(phoneNumber sourcePhoneNumber: String) -> String? {
     }
 
     return leadingOne + areaCode + prefix + "-" + suffix
-}
-
-// Mobile Dan
-// https://stackoverflow.com/a/41668104
-extension String.CharacterView {
-    /// This method makes it easier extract a substring by character index where a character is viewed as a human-readable character (grapheme cluster).
-    internal func substring(start: Int, offsetBy: Int) -> String? {
-        guard let substringStartIndex = self.index(startIndex, offsetBy: start, limitedBy: endIndex) else {
-            return nil
-        }
-
-        guard let substringEndIndex = self.index(startIndex, offsetBy: start + offsetBy, limitedBy: endIndex) else {
-            return nil
-        }
-
-        return String(self[substringStartIndex ..< substringEndIndex])
-    }
 }

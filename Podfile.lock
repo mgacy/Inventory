@@ -3,6 +3,14 @@ PODS:
   - Alamofire (4.5.0)
   - KeychainAccess (3.0.2)
   - PKHUD (4.2.3)
+  - RxAlamofire (3.0.3):
+    - RxAlamofire/Core (= 3.0.3)
+  - RxAlamofire/Core (3.0.3):
+    - Alamofire (~> 4.0)
+    - RxSwift (~> 3.0)
+  - RxCocoa (3.6.1):
+    - RxSwift (~> 3.6)
+  - RxSwift (3.6.1)
   - SwiftyBeaver (1.4.0)
   - SwiftyJSON (3.1.4)
 
@@ -11,6 +19,9 @@ DEPENDENCIES:
   - Alamofire (~> 4.4)
   - KeychainAccess
   - PKHUD (~> 4.2)
+  - RxAlamofire
+  - RxCocoa (~> 3.0)
+  - RxSwift (~> 3.0)
   - SwiftyBeaver
   - SwiftyJSON
 
@@ -29,9 +40,12 @@ SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
   KeychainAccess: a986406022dfc7c634c691ad3bec670cc6a32002
   PKHUD: c7692163a09875cbf15827dc581df3c5cf7f1015
+  RxAlamofire: 5eb39188c4917ad98127c0ecb4878a61b7517003
+  RxCocoa: 84a08739ab186248c7f31ce4ee92d6f8a947d690
+  RxSwift: f9de85ea20cd2f7716ee5409fc13523dc638e4e4
   SwiftyBeaver: 78d9186ce7595b4400ce01e5fd750d263e72dd7b
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: bcd47642376676c96d910b5e67337e25a3bb37d1
+PODFILE CHECKSUM: 6bde5f86604187877eb7bff319b9bb9d9c08fef3
 
 COCOAPODS: 1.3.1

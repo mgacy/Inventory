@@ -230,7 +230,7 @@ extension OrderItemViewController: TableViewDataSourceDelegate {
         guard let quantity = item.quantity else {
             return false
         }
-        if Double(quantity) > 0.0 {
+        if quantity.doubleValue > 0.0 {
             return true
         } else {
             return false

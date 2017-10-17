@@ -8,6 +8,28 @@
 
 import UIKit
 
+// This is used in view models
+
+enum ItemStatus: String {
+    case inactive
+    case pending
+    case normal
+    case warning
+
+    var associatedColor: UIColor {
+        switch self {
+        case .inactive:
+            return .lightGray
+        case .pending:
+            return ColorPalette.yellowColor
+        case .normal:
+            return .black
+        case .warning:
+            return ColorPalette.redColor
+        }
+    }
+}
+
 class SubItemTableViewCell: UITableViewCell {
 
     let nameTextLabel = UILabel()
@@ -89,7 +111,7 @@ class SubItemTableViewCell: UITableViewCell {
 
 extension SubItemTableViewCell {
 
-    func configure(withViewModel viewModel: SubItemCellViewModel) {
+    func configure(withViewModel viewModel: SubItemCellViewModelType) {
         nameTextLabel.text = viewModel.nameText
         nameTextLabel.textColor = viewModel.nameColor
         packTextLabel.text = viewModel.packText
@@ -100,46 +122,4 @@ extension SubItemTableViewCell {
         unitTextLabel.textColor = viewModel.unitColor
     }
 
-}
-
-// MARK: - ViewModel
-
-enum ItemStatus: String {
-    case inactive
-    case pending
-    case normal
-    case warning
-
-    var associatedColor: UIColor {
-        switch self {
-        case .inactive:
-            return .lightGray
-        case .pending:
-            return ColorPalette.yellowColor
-        case .normal:
-            return .black
-        case .warning:
-            return ColorPalette.redColor
-        }
-    }
-}
-
-protocol SubItemCellViewModel {
-    //associatedtype Object: NSManagedObject
-    var nameText: String { get }
-    var nameColor: UIColor { get }
-    var packText: String { get }
-    var packColor: UIColor { get }
-    var quantityText: String { get }
-    var quantityColor: UIColor { get }
-    var unitText: String { get }
-    var unitColor: UIColor { get }
-
-    //init(for: Object)
-}
-
-// MARK: Default Implementations
-
-extension SubItemCellViewModel {
-    var packColor: UIColor { return UIColor.lightGray }
 }

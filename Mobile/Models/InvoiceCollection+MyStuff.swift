@@ -10,108 +10,62 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
-extension InvoiceCollection {
-
-    // MARK: - Lifecycle
-
-    convenience init(context: NSManagedObjectContext, json: JSON) {
-        self.init(context: context)
-
-        /// TODO: simply call `.update()`
-
-        // Required
-        if let dateString = json["date"].string,
-           let date = dateString.toBasicDate() {
-            self.date = date
-        } else {
-            self.date = Date()
-        }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
-        /// TODO: switch to `status` enum
-        if let statusString = json["status"].string {
-            switch statusString {
-            case "pending":
-                self.uploaded = false
-            case "complete":
-                self.uploaded = true
-            default:
-                log.error("\(#function) - invalid status: \(statusString)")
-                self.uploaded = true
-            }
-        }
-
-        // Relationships
-        if let invoices = json["invoices"].array {
-            for invoiceJSON in invoices {
-                _ = Invoice(context: context, json: invoiceJSON, parent: self)
-                //let new = Invoice(context: context, json: invoiceJSON)
-                //new.collection = self
-            }
-        }
-    }
-
-    // MARK: - Serialization
-
-    func serialize() -> [String: Any]? {
-        var myDict = [String: Any]()
-        myDict["date"] = dateTimeInterval.toPythonDateString()
-        myDict["store_id"] = storeID
-        return myDict
-    }
-
-}
-
 extension InvoiceCollection: DateFacade {}
 
-// MARK: - ManagedSyncableCollection
+// MARK: - NewSyncable
 
-extension InvoiceCollection: ManagedSyncableCollection {
+extension InvoiceCollection: NewSyncable {
+    typealias RemoteType = RemoteInvoiceCollection
+    typealias RemoteIdentifierType = Date
 
-    public func update(in context: NSManagedObjectContext, with json: JSON) {
+    static var remoteIdentifierName: String { return "dateTimeInterval" }
 
-        // Required
-        if let dateString = json["date"].string,
-           let date = dateString.toBasicDate() {
-            //dateTimeInterval = date.timeIntervalSince1970
-            self.date = date
+    var remoteIdentifier: RemoteIdentifierType { return Date(timeIntervalSinceReferenceDate: dateTimeInterval) }
+
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        if let date = record.date.toBasicDate() {
+            self.dateTimeInterval = date.timeIntervalSinceReferenceDate
         } else {
-            self.date = Date()
+            /// TODO: find better way of handling error
+            fatalError("Unable to parse date from: \(record)")
         }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
+        update(with: record, in: context)
+    }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        //if let date = record.date.toBasicDate() {
+        //    self.dateTimeInterval = date.timeIntervalSinceReferenceDate
+        //}
+        storeID = Int32(record.storeID)
+
         /// TODO: switch to `status` enum
-        if let statusString = json["status"].string {
-            switch statusString {
-            case "pending":
-                self.uploaded = false
-            case "complete":
-                self.uploaded = true
-            default:
-                log.error("\(#function) - invalid status: \(statusString)")
-                self.uploaded = true
-            }
+        switch record.status {
+        case "pending":
+            self.uploaded = false
+        case "complete":
+            self.uploaded = true
+        default:
+            log.error("\(#function) - invalid status: \(record.status)")
+            self.uploaded = true
         }
 
         // Relationships
-        if let invoices = json["invoices"].array {
-            /// NOTE: this relies on conformance to SyncableParent
-            syncChildren(in: context, with: invoices)
+        if let invoices = record.invoices {
+            syncChildren(with: invoices, in: context)
         }
     }
 
 }
 
-// MARK: - Sync Children
+// MARK: - NewSyncableParent
 
-extension InvoiceCollection: SyncableParent {
+extension InvoiceCollection: NewSyncableParent {
     typealias ChildType = Invoice
 
-    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : Invoice]? {
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: Invoice]? {
         let fetchPredicate = NSPredicate(format: "collection == %@", self)
-        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+        guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
             return nil
         }
         return objectDict
@@ -120,6 +74,19 @@ extension InvoiceCollection: SyncableParent {
     func updateParent(of entity: ChildType) {
         entity.collection = self
         //addToInvoices(entity)
+    }
+
+}
+
+// MARK: - Serialization
+
+extension InvoiceCollection {
+
+    func serialize() -> [String: Any]? {
+        var myDict = [String: Any]()
+        myDict["date"] = dateTimeInterval.toPythonDateString()
+        myDict["store_id"] = storeID
+        return myDict
     }
 
 }

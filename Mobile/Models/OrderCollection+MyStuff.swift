@@ -6,49 +6,8 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 import CoreData
-import SwiftyJSON
-
-extension OrderCollection {
-
-    // MARK: - Lifecycle
-
-    convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
-        self.init(context: context)
-
-        // Set properties
-        if let dateString = json["date"].string,
-           let date = dateString.toBasicDate() {
-            self.date = date
-        }
-        if let inventoryID = json["inventory_id"].int32 {
-            self.inventoryID = inventoryID
-        }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
-        self.uploaded = uploaded
-
-        // Add Orders
-        if let orders = json["orders"].array {
-            for orderJSON in orders {
-                _ = Order(context: context, json: orderJSON, collection: self, uploaded: uploaded)
-            }
-        }
-    }
-
-    // MARK: - Serialization
-    func serialize() -> [String: Any]? {
-        var myDict = [String: Any]()
-        myDict["date"] = dateTimeInterval.toPythonDateString()
-
-        // ...
-
-        return myDict
-    }
-
-}
 
 extension OrderCollection {
 
@@ -78,32 +37,40 @@ extension OrderCollection {
 
 extension OrderCollection: DateFacade {}
 
-// MARK: - ManagedSyncableCollection
+// MARK: - NewSyncable
 
-extension OrderCollection: ManagedSyncableCollection {
+extension OrderCollection: NewSyncable {
+    typealias RemoteType = RemoteOrderCollection
+    typealias RemoteIdentifierType = Date
 
-    public func update(in context: NSManagedObjectContext, with json: JSON) {
+    static var remoteIdentifierName: String { return "dateTimeInterval" }
 
-        // Set properties
-        if let dateString = json["date"].string,
-           let date = dateString.toBasicDate() {
-            //dateTimeInterval = date.timeIntervalSince1970
-            self.date = date
+    var remoteIdentifier: RemoteIdentifierType { return Date(timeIntervalSinceReferenceDate: dateTimeInterval) }
+
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        if let date = record.date.toBasicDate() {
+            self.dateTimeInterval = date.timeIntervalSinceReferenceDate
+        } else {
+            /// TODO:find better way of handling error
+            fatalError("Unable to parse date from: \(record)")
         }
-        if let inventoryID = json["inventory_id"].int32 {
-            self.inventoryID = inventoryID
-        }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
+        self.uploaded = true
+        update(with: record, in: context)
+    }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        //if let date = record.date.toBasicDate() {
+        //    self.dateTimeInterval = date.timeIntervalSinceReferenceDate
+        //}
+        self.storeID = Int32(record.storeID)
+        if let inventoryID = record.inventoryId { self.inventoryID = Int32(inventoryID) }
 
         /// TODO: handle `uploaded`
-        //self.uploaded = uploaded
 
-        // Add Orders
-        if let orders = json["orders"].array {
-            /// NOTE: this relies on conformance to SyncableParent
-            syncChildren(in: context, with: orders)
+        // Relationships
+        if let orders = record.orders {
+            syncChildren(with: orders, in: context)
         }
 
         updateStatus()
@@ -111,14 +78,14 @@ extension OrderCollection: ManagedSyncableCollection {
 
 }
 
-// MARK: - Sync Children
-
-extension OrderCollection: SyncableParent {
+// MARK: - NewSyncableParent
+extension OrderCollection: NewSyncableParent {
     typealias ChildType = Order
 
-    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32 : Order]? {
+    /// TODO: handle remoteID == 0 on new Orders
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: Order]? {
         let fetchPredicate = NSPredicate(format: "collection == %@", self)
-        guard let objectDict = try? context.fetchEntityDict(ChildType.self, matching: fetchPredicate) else {
+        guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
             return nil
         }
         return objectDict
@@ -127,6 +94,21 @@ extension OrderCollection: SyncableParent {
     func updateParent(of entity: ChildType) {
         entity.collection = self
         entity.date = self.dateTimeInterval
+    }
+
+}
+
+// MARK: - Serialization
+
+extension OrderCollection {
+
+    func serialize() -> [String: Any]? {
+        var myDict = [String: Any]()
+        myDict["date"] = dateTimeInterval.toPythonDateString()
+
+        // ...
+
+        return myDict
     }
 
 }

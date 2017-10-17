@@ -124,7 +124,7 @@ extension LoginViewController {
         passwordTextField.addButton(button: onePasswordButton, direction: .right)
     }
 
-    func findLoginFrom1Password(sender: AnyObject) {
+    @objc func findLoginFrom1Password(sender: AnyObject) {
         OnePasswordExtension.shared().findLogin(
             forURLString: "***REMOVED***", for: self, sender: sender,
             completion: { (loginDictionary, error) -> Void in

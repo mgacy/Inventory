@@ -8,48 +8,69 @@
 
 import UIKit
 import CoreData
-import Alamofire
-import SwiftyJSON
 import PKHUD
+import RxCocoa
+import RxSwift
 
-class OrderDateViewController: UITableViewController, RootSectionViewController {
+// swiftlint:disable file_length
 
-    // MARK: Properties
+class OrderDateViewController: UIViewController {
 
-    var userManager: CurrentUserManager!
-    var selectedCollection: OrderCollection?
-    //var selectedCollectionIndex: IndexPath?
-
-    // MARK: FetchedResultsController
+    // OLD
     var managedObjectContext: NSManagedObjectContext!
-    //var filter: NSPredicate? = nil
-    //var cacheName: String? = "Master"
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    //var userManager: CurrentUserManager!
+    //var selectedCollection: OrderCollection?
+
+    private enum Strings {
+        static let navTitle = "Orders"
+        static let errorAlertTitle = "Error"
+        static let newOrderTitle = "Create Order"
+        static let newOrderMessage = "Set order quantities from the most recent inventory or simply use pars?"
+    }
+
+    // MARK: - Properties
+
+    var viewModel: OrderDateViewModel!
+    let disposeBag = DisposeBag()
+
+    let selectedObjects = PublishSubject<OrderCollection>()
 
     // TableViewCell
     let cellIdentifier = "Cell"
 
-    // Segues
-    let segueIdentifier = "showOrderVendors"
-
     /// TODO: provide interface to control these
     let orderTypeID = 1
+
+    // MARK: - Interface
+    private let refreshControl = UIRefreshControl()
+    let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+    let activityIndicatorView = UIActivityIndicatorView()
+    let messageLabel = UILabel()
+    //lazy var messageLabel: UILabel = {
+    //    let view = UILabel()
+    //    view.translatesAutoresizingMaskIntoConstraints = false
+    //    return view
+    //}()
+
+    lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = .white
+        tv.delegate = self
+        return tv
+    }()
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
-        title = "Orders"
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
-        self.refreshControl?.addTarget(self, action: #selector(OrderDateViewController.refreshTable(_:)),
-                                       for: UIControlEvents.valueChanged)
+        setupView()
+        setupConstraints()
+        setupBindings()
         setupTableView()
-
+        /*
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : unable to get storeID"); return
         }
@@ -57,6 +78,7 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
         HUD.show(.progress)
         APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
                                                             completion: self.completedGetListOfOrderCollections)
+     */
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -64,82 +86,131 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
         self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    //override func didReceiveMemoryWarning() {}
+
+    // MARK: - View Methods
+
+    private func setupView() {
+        title = Strings.navTitle
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem
+        self.navigationItem.rightBarButtonItem = addButtonItem
+
+        self.view.addSubview(tableView)
+        self.view.addSubview(activityIndicatorView)
+        self.view.addSubview(messageLabel)
     }
 
-    // MARK: - Navigation
+    private func setupConstraints() {
+        // TableView
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let controller = segue.destination as? OrderVendorViewController else {
-            fatalError("Wrong view controller type")
-        }
-        guard let selection = selectedCollection else {
-            fatalError("Showing detail, but no selected row?")
-        }
-        controller.parentObject = selection
-        controller.managedObjectContext = self.managedObjectContext
+        // ActivityIndicator
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+        activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
+
+        // MessageLabel
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+    }
+
+    // swiftlint:disable:next function_body_length
+    private func setupBindings() {
+
+        // Add Button
+        addButtonItem.rx.tap
+            .flatMap { [weak self] _ -> Observable<GenerationMethod> in
+                guard let `self` = self else { return Observable.just(.cancel) }
+                let actions: [GenerationMethod] = [.count, .par]
+                return self.promptFor(title: Strings.newOrderTitle, message: Strings.newOrderMessage,
+                                      cancelAction: .cancel, actions: actions)
+            }
+            .filter { $0 != .cancel }
+            .map { method -> NewOrderGenerationMethod in
+                switch method {
+                case .count:
+                    return NewOrderGenerationMethod.count
+                case .par:
+                    return NewOrderGenerationMethod.par
+                default:
+                    return NewOrderGenerationMethod.par
+                }
+            }
+            .bind(to: viewModel.addTaps)
+            .disposed(by: disposeBag)
+
+        // Edit Button
+        //editButtonItem.rx.tap
+        //    .bind(to: viewModel.editTaps)
+        //    .disposed(by: disposeBag)
+
+        // Row selection
+        //selectedObjects.asObservable()
+        //    .bind(to: viewModel.rowTaps)
+        //    .disposed(by: disposeBag)
+
+        // Refresh
+        refreshControl.rx.controlEvent(.valueChanged)
+            .bind(to: viewModel.refresh)
+            .disposed(by: disposeBag)
+
+        // Activity Indicator
+        viewModel.isRefreshing
+            .drive(refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
+
+        viewModel.hasRefreshed
+            /// TODO: use weak or unowned self?
+            .drive(onNext: { [weak self] _ in
+                self?.tableView.reloadData()
+            })
+            .disposed(by: disposeBag)
+
+        // Errors
+        viewModel.errorMessages
+            .drive(onNext: { [weak self] message in
+                self?.showAlert(title: Strings.errorAlertTitle, message: message)
+            })
+            .disposed(by: disposeBag)
+
+        // Navigation
+        viewModel.showCollection
+            .subscribe(onNext: { [weak self] selection in
+                guard let strongSelf = self else {
+                    log.error("\(#function) FAILED : unable to get reference to self"); return
+                }
+                log.debug("\(#function) SELECTED / CREATED: \(selection)")
+
+                let viewController = OrderVendorViewController.initFromStoryboard(name: "Main")
+                // NEW
+                //let viewModel = OrderVendorViewModel(dataManager: viewModel.dataManager)
+                //viewController = viewModel = viewModel
+                // OLD
+                viewController.managedObjectContext = strongSelf.managedObjectContext
+                viewController.parentObject = selection
+                strongSelf.navigationController?.pushViewController(viewController, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<OrderDateViewController>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
+        tableView.refreshControl = refreshControl
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
 
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "dateTimeInterval", ascending: false)
-        request.sortDescriptors = [sortDescriptor]
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    // MARK: - UITableViewDelegate
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCollection = dataSource.objectAtIndexPath(indexPath)
-        guard let selection = selectedCollection else { fatalError("Unable to get selection") }
-        guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED : unable to get storeID"); return
-        }
-
-        switch selection.uploaded {
-        case true:
-            //tableView.activityIndicatorView.startAnimating()
-            HUD.show(.progress)
-
-            log.info("GET OrderCollection from server ...")
-            APIManager.sharedInstance.getOrderCollection(
-                storeID: storeID, orderDate: selection.date.shortDate,
-                completion: completedGetExistingOrderCollection)
-
-        case false:
-            log.info("LOAD NEW selectedCollection from disk ...")
-            performSegue(withIdentifier: segueIdentifier, sender: self)
-        }
-
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-
+    /*
     // MARK: - User Actions
-
-    func refreshTable(_ refreshControl: UIRefreshControl) {
-        guard let storeID = userManager.storeID else { return }
-
-        //HUD.show(.progress)
-        _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
-    }
 
     @IBAction func newTapped(_ sender: AnyObject) {
         /// TODO: check if there is already an Order for the current date and of the current type
@@ -165,12 +236,37 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
 
     }
 
-    func createOrderCollection(storeID: Int, generateFrom method: NewOrderGenerationMethod) {
-        //tableView.activityIndicatorView.startAnimating()
-        HUD.show(.progress)
-        APIManager.sharedInstance.getNewOrderCollection(
-            storeID: storeID, generateFrom: method, returnUsage: false,
-            periodLength: 28, completion: completedGetNewOrderCollection)
+     */
+}
+
+// MARK: - Alert
+
+enum GenerationMethod: CustomStringConvertible {
+    //case count(method: NewOrderGenerationMethod)
+    //case par(method: NewOrderGenerationMethod)
+    case count
+    case par
+    //case sales
+    case cancel
+
+    var description: String {
+        switch self {
+        case .count:
+            return "From Count"
+        case .par:
+            return "From Par"
+        case .cancel:
+            return "Cancel"
+        }
+    }
+}
+
+// MARK: - TableViewDelegate
+extension OrderDateViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
@@ -200,6 +296,7 @@ extension OrderDateViewController: TableViewDataSourceDelegate {
 
 }
 
+/*
 // MARK: - Completion Handlers + Sync
 extension OrderDateViewController {
 
@@ -309,3 +406,4 @@ extension OrderDateViewController {
     }
 
 }
+*/

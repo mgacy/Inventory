@@ -7,8 +7,13 @@
 //
 
 import Foundation
+import CoreData
 import Alamofire
 import SwiftyJSON
+import RxCocoa
+import RxSwift
+
+// swiftlint:disable file_length
 
 /*
 NOTE - BackendError already declared in AlamofireRequest+JSONSerializable.swift
@@ -25,6 +30,7 @@ class APIManager {
 
     static let sharedInstance = APIManager()
     private let sessionManager: SessionManager
+    private let decoder: JSONDecoder
 
     typealias CompletionHandlerType = (JSON?, Error?) -> Void
 
@@ -35,6 +41,11 @@ class APIManager {
         configuration.timeoutIntervalForRequest = 8 // seconds
         configuration.timeoutIntervalForResource = 8
         sessionManager = Alamofire.SessionManager(configuration: configuration)
+
+        // JSON Decoding
+        decoder = JSONDecoder()
+        //decoder.dateDecodingStrategy = .formatted(Date.basicDate)
+        //decoder.dateDecodingStrategy = .iso8601
     }
 
     func configSession(_ authHandler: AuthenticationHandler?) {
@@ -43,6 +54,8 @@ class APIManager {
     }
 
     // MARK: - Authentication
+
+    //func logout() -> Observable<DataResonse> {}
 
     func logout(completion: @escaping (Bool) -> Void) {
         sessionManager.request(Router.logout)
@@ -59,57 +72,103 @@ class APIManager {
         }
     }
 
-    // MARK: - API Calls - General
+    // MARK: Private
+    /// TODO: pass `sessionManager: SessionManager, decoder: JSONDecoder`?
 
-    func getItems(storeID: Int, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getItems(storeID: storeID))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
+    private func postOne<M: Codable>(_ endpoint: Router) -> Observable<DataResponse<M>> {
+        /// TODO: include where validating endpoint.method == HTTPMethod.post
+        return Observable<DataResponse<M>>.create { observer in
+            let request = self.sessionManager.request(endpoint)
+            request
+                .validate()
+                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<M>) in
+                    observer.onNext(response)
+                    observer.onCompleted()
+            }
+            return Disposables.create {
+                request.cancel()
+            }
         }
     }
 
-    func getUnits(completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getUnits)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
+    private func requestOne<M: Codable>(_ endpoint: Router) -> Observable<DataResponse<M>> {
+        return Observable<DataResponse<M>>.create { observer in
+            //let decoder = JSONDecoder()
+            let request = self.sessionManager.request(endpoint)
+            request
+                .validate()
+                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<M>) in
+                    observer.onNext(response)
+                    observer.onCompleted()
+            }
+            return Disposables.create {
+                request.cancel()
+            }
         }
     }
 
-    func getVendors(storeID: Int, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getVendors(storeID: storeID))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
+    private func requestList<M: Codable>(_ route: Router) -> Observable<DataResponse<[M]>> {
+        return Observable<DataResponse<[M]>>.create { observer in
+            //let decoder = JSONDecoder()
+            let request = self.sessionManager.request(route)
+            request
+                .validate()
+                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<[M]>) in
+                    observer.onNext(response)
+                    observer.onCompleted()
+            }
+            return Disposables.create {
+                request.cancel()
+            }
         }
     }
 
-    // MARK: - API Calls - Inventory
+}
+
+// MARK: - General
+extension APIManager {
+
+    func getItems(storeID: Int) -> Observable<DataResponse<[RemoteItem]>> {
+        return requestList(Router.getItems(storeID: storeID))
+    }
+    /*
+     func getItemCategories(storeID: Int) -> Observable<DataResponse<[RemoteItemCategory]>> {
+     return requestList(Router.getItemCategories(storeID: storeID))
+     }
+     */
+    func getVendors(storeID: Int) -> Observable<DataResponse<[RemoteVendor]>> {
+        return requestList(Router.getVendors(storeID: storeID))
+    }
+
+}
+
+// MARK: - Inventory - NEW
+extension APIManager {
+
+    func getInventories(storeID: Int) -> Observable<DataResponse<[RemoteInventory]>> {
+        return requestList(Router.listInventories(storeID: storeID))
+    }
+
+    func getInventory(remoteID: Int) -> Observable<DataResponse<RemoteExistingInventory>> {
+        /// TODO: just accept `Inventory` so DataManager doesn't need to know anything about endpoint params?
+        return requestOne(Router.fetchInventory(remoteID: remoteID))
+    }
+
+    /// NOTE: I am designing this in accordance with how things should work, not how they currently do
+    func postInventory(storeID: Int) -> Observable<DataResponse<RemoteNewInventory>> {
+        /// TODO: update to actually use POST
+        //return postOne(Router.postInventory)
+        let isActive = true
+        let typeID = 1
+        return requestOne(Router.getNewInventory(isActive: isActive, typeID: typeID, storeID: storeID))
+    }
+
+    // func putInventory(_ inventory: RemoteInventory) -> Observable<DataResponse<RemoteInventory>> {}
+
+}
+
+// MARK: - Inventory - OLD
+extension APIManager {
 
     func getListOfInventories(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.listInventories(storeID: storeID))
@@ -176,7 +235,23 @@ class APIManager {
         }
     }
 
-    // MARK: - API Calls - Invoice
+}
+
+// MARK: - Invoice - NEW
+extension APIManager {
+
+    func getInvoiceCollections(storeID: Int) -> Observable<DataResponse<[RemoteInvoiceCollection]>> {
+        return requestList(Router.getInvoiceCollections(storeID: storeID))
+    }
+
+    func getInvoiceCollection(storeID: Int, invoiceDate: String) -> Observable<DataResponse<RemoteInvoiceCollection>> {
+        return requestOne(Router.getInvoiceCollection(storeID: storeID, forDate: invoiceDate))
+    }
+
+}
+
+// MARK: - Invoice - OLD
+extension APIManager {
 
     func getListOfInvoiceCollections(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.listInvoices(storeID: storeID))
@@ -193,7 +268,7 @@ class APIManager {
                 }
         }
     }
-
+    /*
     func getInvoiceCollection(storeID: Int, invoiceDate: String, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.fetchInvoice(storeID: storeID, invoiceDate: invoiceDate))
             .validate()
@@ -209,7 +284,7 @@ class APIManager {
                 }
         }
     }
-
+     */
     func getNewInvoiceCollection(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.getNewInvoice(storeID: storeID))
             .validate()
@@ -277,7 +352,37 @@ class APIManager {
         }
     }
 
-    // MARK: - API Calls - Order
+}
+
+// MARK: - Order - NEW
+extension APIManager {
+
+    func getOrderCollections(storeID: Int) -> Observable<DataResponse<[RemoteOrderCollection]>> {
+        return requestList(Router.getOrderCollections(storeID: storeID))
+    }
+
+    func getOrderCollection(storeID: Int, orderDate: String) -> Observable<DataResponse<RemoteOrderCollection>> {
+        return requestOne(Router.getOrderCollection(storeID: storeID, forDate: orderDate))
+    }
+
+    func postOrderCollection(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?) -> Observable<DataResponse<RemoteOrderCollection>> {
+
+        /// TODO: relocate / rework
+        var parameters = [String: Any]()
+        parameters["store_id"] = storeID
+        parameters["generation_method"] = generationMethod.rawValue
+        //parameters["return_usage"] = returnUsage
+        parameters["period_length"] = periodLength ?? 28
+
+        return postOne(Router.postOrderCollection(parameters))
+        //return postOne(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
+        //                                          returnUsage: returnUsage, periodLength: periodLength))
+    }
+
+}
+
+// MARK: - Order - OLD
+extension APIManager {
 
     func getListOfOrderCollections(storeID: Int, completion: @escaping CompletionHandlerType) {
         sessionManager.request(Router.listOrders(storeID: storeID))
@@ -344,4 +449,5 @@ class APIManager {
                 }
         }
     }
+
 }
