@@ -11,7 +11,8 @@ import CoreData
 import SwiftyJSON
 import PKHUD
 
-class InventoryLocationTVC: UITableViewController, SegueHandler {
+// swiftlint:disable:next type_name
+class InventoryLocationViewController: UIViewController, SegueHandler {
 
     // MARK: - Properties
 
@@ -38,6 +39,16 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
         case showCategory = "ShowLocationCategory"
         case showItem = "ShowLocationItem"
     }
+
+    // MARK: - Interface
+
+    lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = .white
+        tv.delegate = self
+        return tv
+    }()
 
     // MARK: - Lifecycle
 
@@ -82,7 +93,7 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
     }
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<InventoryLocationTVC>!
+    fileprivate var dataSource: TableViewDataSource<InventoryLocationViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
@@ -107,21 +118,6 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
                                          fetchedResultsController: frc, delegate: self)
     }
 
-    // MARK: - UITableViewDelegate
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedLocation = dataSource.objectAtIndexPath(indexPath)
-        switch selectedLocation!.locationType {
-        case "category"?:
-            performSegue(withIdentifier: "ShowLocationCategory", sender: self)
-        case "item"?:
-            performSegue(withIdentifier: "ShowLocationItem", sender: self)
-        default:
-            fatalError("\(#function) FAILED : wrong locationType")
-        }
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-
     // MARK: - User Actions
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
@@ -138,8 +134,25 @@ class InventoryLocationTVC: UITableViewController, SegueHandler {
 
 }
 
+// MARK: - UITableViewDelegate
+extension InventoryLocationViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedLocation = dataSource.objectAtIndexPath(indexPath)
+        switch selectedLocation!.locationType {
+        case "category"?:
+            performSegue(withIdentifier: "ShowLocationCategory", sender: self)
+        case "item"?:
+            performSegue(withIdentifier: "ShowLocationItem", sender: self)
+        default:
+            fatalError("\(#function) FAILED : wrong locationType")
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
 // MARK: - Completion Handlers
-extension InventoryLocationTVC {
+extension InventoryLocationViewController {
 
     func completedUpload(json: JSON?, error: Error?) {
         guard error == nil else {
@@ -164,7 +177,7 @@ extension InventoryLocationTVC {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension InventoryLocationTVC: TableViewDataSourceDelegate {
+extension InventoryLocationViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for location: InventoryLocation) {
         cell.textLabel?.text = location.name
