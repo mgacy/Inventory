@@ -190,7 +190,7 @@ extension InitialLoginVC {
             log.error("Failed to login: \(String(describing: error))")
             switch error! {
             case .authentication:
-                showErrorInHUD(title: Strings.errorAlertTitle, subtitle: Strings.loginErrorMessage)
+                UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: Strings.loginErrorMessage)
             default:
                 HUD.flash(.error, delay: 1.0)
             }
