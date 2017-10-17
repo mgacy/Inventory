@@ -74,25 +74,6 @@
             </objects>
             <point key="canvasLocation" x="2089" y="1200"/>
         </scene>
-        <!--OrderVendor-->
-        <scene sceneID="Sdp-Sd-Wvi">
-            <objects>
-                <tableViewController storyboardIdentifier="OrderVendorViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zlj-V1-U9C" userLabel="OrderVendor" customClass="OrderVendorViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ol5-oj-Brx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="Zlj-V1-U9C" id="cl7-rk-Weh"/>
-                            <outlet property="delegate" destination="Zlj-V1-U9C" id="JhV-rm-EhU"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="X5z-Yn-lep"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="d7d-b3-GeE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2985" y="1199"/>
-        </scene>
         <!--InvoiceDate-->
         <scene sceneID="bFo-UK-Oiq">
             <objects>

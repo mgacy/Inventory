@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class OrderVendorViewController: UITableViewController {
+class OrderVendorViewController: UIViewController {
 
     // MARK: - Properties
 
@@ -26,16 +26,23 @@ class OrderVendorViewController: UITableViewController {
     // TableView
     var cellIdentifier = "Cell"
 
+    // MARK: - Interface
+
+    lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = .white
+        tv.delegate = self
+        return tv
+    }()
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Vendors"
+        setupView()
+        setupConstraints()
         setupTableView()
-
-        let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneBarButton"), style: .done, target: self,
-                                                 action: #selector(tappedCompleteOrders))
-        navigationItem.rightBarButtonItem = completeButtonItem
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -48,6 +55,24 @@ class OrderVendorViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         log.warning("\(#function)")
         // Dispose of any resources that can be recreated.
+    }
+
+    // MARK: - View Methods
+
+    private func setupView() {
+        title = "Vendors"
+        let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneBarButton"), style: .done, target: self,
+                                                 action: #selector(tappedCompleteOrders))
+        navigationItem.rightBarButtonItem = completeButtonItem
+        self.view.addSubview(tableView)
+    }
+
+    private func setupConstraints() {
+        // TableView
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
     // MARK: - Navigation
@@ -88,9 +113,12 @@ class OrderVendorViewController: UITableViewController {
                                          fetchedResultsController: frc, delegate: self)
     }
 
-    // MARK: - UITableViewDelegate
+}
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+// MARK: - UITableViewDelegate
+extension OrderVendorViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedObject = dataSource.objectAtIndexPath(indexPath)
         log.verbose("Selected Order: \(String(describing: selectedObject))")
 
@@ -103,7 +131,7 @@ class OrderVendorViewController: UITableViewController {
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension OrderVendorViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for order: Order) {
