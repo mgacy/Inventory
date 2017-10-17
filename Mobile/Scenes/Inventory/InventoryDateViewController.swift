@@ -160,17 +160,14 @@ class InventoryDateViewController: UIViewController {
 
                 case .new(let inventory):
                     log.verbose("LOAD NEW selectedInventory from disk ...")
-                    let viewController = InventoryLocationViewController.initFromStoryboard(
-                        name: "InventoryLocationViewController")
-
-                    // NEW
-                    //let viewModel = InventoryLocationViewModel(dataManager: dataManager)
-                    //viewController.viewModel = viewModel
-
-                    // OLD
-                    viewController.managedObjectContext = self?.managedObjectContext
-                    viewController.inventory = inventory
-                    self?.navigationController?.pushViewController(viewController, animated: true)
+                    let vc = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
+                    let vm = InventoryLocationViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                        parentObject: inventory, rowTaps: vc.selectedObjects,
+                                                        //uploadTaps: vc.uploadButtonItem.rx.tap.asDriver()
+                                                        uploadTaps: vc.uploadButtonItem.rx.tap.asObservable()
+                    )
+                    vc.viewModel = vm
+                    self?.navigationController?.pushViewController(vc, animated: true)
                 }
             })
             .disposed(by: disposeBag)

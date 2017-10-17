@@ -1,35 +1,27 @@
 //
-//  InventoryLocationTVC.swift
-//  Playground
+//  InventoryLocationViewController.swift
+//  Mobile
 //
 //  Created by Mathew Gacy on 10/6/16.
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
 import UIKit
-import CoreData
-import SwiftyJSON
+//import CoreData
+//import SwiftyJSON
 import PKHUD
+import RxCocoa
+import RxSwift
 
 // swiftlint:disable:next type_name
 class InventoryLocationViewController: UIViewController, SegueHandler {
 
     // MARK: - Properties
 
-    /* Force unwrap (`!`) because:
-     (a) a variable must have an initial value
-     (b) while we could use `?`, we would then have to unwrap it whenever we access it
-     (c) using a forced unwrapped optional is safe since this controller won't work without a value
-     */
-    var inventory: Inventory!
-    var selectedLocation: InventoryLocation?
+    var viewModel: InventoryLocationViewModel!
+    let disposeBag = DisposeBag()
 
-    // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //let filter: NSPredicate? = nil
-    //let cacheName: String? = nil // "Master"
-    //let objectsAsFaults = false
-    let fetchBatchSize = 20 // 0 = No Limit
+    let selectedObjects = PublishSubject<InventoryLocation>()
 
     // TableViewCell
     let cellIdentifier = "InventoryLocationTableViewCell"
@@ -42,6 +34,11 @@ class InventoryLocationViewController: UIViewController, SegueHandler {
 
     // MARK: - Interface
 
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var messageLabel: UILabel!
+
+    let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -50,11 +47,18 @@ class InventoryLocationViewController: UIViewController, SegueHandler {
         return tv
     }()
 
+    private enum Strings {
+        static let navTitle = "Locations"
+        static let errorAlertTitle = "Error"
+    }
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Locations"
+        setupView()
+        setupConstraints()
+        setupBindings()
         setupTableView()
     }
 
@@ -69,8 +73,104 @@ class InventoryLocationViewController: UIViewController, SegueHandler {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: Navigation
+    // MARK: - View Methods
 
+    private func setupView() {
+        title = Strings.navTitle
+        /// TODO: add `messageLabel` output to viewModel?
+        //messageLabel.text = "You do not have any Items yet."
+
+        self.navigationItem.rightBarButtonItem = uploadButtonItem
+
+        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        //messageLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        //self.view.addSubview(activityIndicatorView)
+        //self.view.addSubview(messageLabel)
+        self.view.addSubview(tableView)
+    }
+
+    private func setupConstraints() {
+        // TableView
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        /*
+         // ActivityIndicator
+         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+         activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+         activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
+
+         // MessageLabel
+         //messageLabel.translatesAutoresizingMaskIntoConstraints = false
+         messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+         messageLabel.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
+         */
+    }
+
+    private func setupBindings() {
+
+        // Uploading
+        viewModel.isUploading
+            .filter { $0 }
+            .drive(onNext: { _ in
+                HUD.show(.progress)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.uploadResults
+            .subscribe(onNext: { [weak self] result in
+                switch result.event {
+                case .next:
+                    HUD.flash(.success, delay: 1.0)
+                    /// TODO: this should be handled elsewhere
+                    self?.navigationController!.popViewController(animated: true)
+                case .error:
+                    /// TODO: `case.error(let error):; switch error {}`
+                    UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
+                case .completed:
+                    log.warning("\(#function) : not sure how to handle completion")
+                }
+            })
+            .disposed(by: disposeBag)
+        /*
+        // Errors
+        viewModel.errorMessages
+            .drive(onNext: { [weak self] message in
+                log.error("Error: \(message)")
+                //self?.showAlert(title: Strings.errorAlertTitle, message: message)
+            })
+            .disposed(by: disposeBag)
+         */
+        // Selection
+        viewModel.showLocation
+            .subscribe(onNext: { [weak self] selection in
+                log.debug("\(#function) SELECTED: \(selection)")
+                guard let strongSelf = self else {
+                    log.error("\(#function) FAILED : unable to get reference to self"); return
+                }
+
+                switch selection {
+                //case .back:
+                case .category(let location):
+                    let vc = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
+                    vc.location = location
+                    vc.managedObjectContext = strongSelf.viewModel.dataManager.managedObjectContext
+                    strongSelf.navigationController?.pushViewController(vc, animated: true)
+                case .item(let location):
+                    let vc = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
+                    vc.location = location
+                    vc.title = location.name ?? "Error"
+                    vc.managedObjectContext = strongSelf.viewModel.dataManager.managedObjectContext
+                    strongSelf.navigationController?.pushViewController(vc, animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+
+    // MARK: Navigation
+    /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let selection = selectedLocation else { fatalError("Showing detail, but no selected row?") }
 
@@ -91,16 +191,17 @@ class InventoryLocationViewController: UIViewController, SegueHandler {
             destinationController.managedObjectContext = self.managedObjectContext
         }
     }
-
+     */
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocationViewController>!
     //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
+        //tableView.refreshControl = refreshControl
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-
+        /*
         //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
@@ -113,15 +214,16 @@ class InventoryLocationViewController: UIViewController, SegueHandler {
         request.returnsObjectsAsFaults = false
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
                                              sectionNameKeyPath: nil, cacheName: nil)
-
+         */
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
     }
 
     // MARK: - User Actions
 
     @IBAction func uploadTapped(_ sender: AnyObject) {
         log.info("Uploading Inventory ...")
+        /*
         HUD.show(.progress)
 
         guard let dict = self.inventory.serialize() else {
@@ -130,27 +232,21 @@ class InventoryLocationViewController: UIViewController, SegueHandler {
             return
         }
         APIManager.sharedInstance.postInventory(inventory: dict, completion: self.completedUpload)
+         */
     }
 
 }
 
-// MARK: - UITableViewDelegate
+// MARK: - TableViewDelegate
 extension InventoryLocationViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedLocation = dataSource.objectAtIndexPath(indexPath)
-        switch selectedLocation!.locationType {
-        case "category"?:
-            performSegue(withIdentifier: "ShowLocationCategory", sender: self)
-        case "item"?:
-            performSegue(withIdentifier: "ShowLocationItem", sender: self)
-        default:
-            fatalError("\(#function) FAILED : wrong locationType")
-        }
+        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
-}
 
+}
+/*
 // MARK: - Completion Handlers
 extension InventoryLocationViewController {
 
@@ -175,7 +271,7 @@ extension InventoryLocationViewController {
     }
 
 }
-
+*/
 // MARK: - TableViewDataSourceDelegate Extension
 extension InventoryLocationViewController: TableViewDataSourceDelegate {
 
@@ -195,3 +291,4 @@ extension InventoryLocationViewController: TableViewDataSourceDelegate {
     }
 
 }
+
