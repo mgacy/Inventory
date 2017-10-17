@@ -7,12 +7,16 @@
 //
 
 import UIKit
-//import CoreData
-import PKHUD
+//import PKHUD
 import RxCocoa
 import RxSwift
 
 class InventoryReviewViewController: UIViewController {
+
+    private enum Strings {
+        static let navTitle = "Items"
+        static let errorAlertTitle = "Error"
+    }
 
     // MARK: - Properties
 
@@ -66,9 +70,9 @@ class InventoryReviewViewController: UIViewController {
     // MARK: - View Methods
 
     private func setupView() {
-        title = "Items"
+        title = Strings.navTitle
         /// TODO: add `messageLabel` output to viewModel?
-        messageLabel.text = "You do not have any Items yet."
+        messageLabel.text = "Loading"
 
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         //self.navigationItem.rightBarButtonItem = addButtonItem
@@ -141,9 +145,15 @@ class InventoryReviewViewController: UIViewController {
             .drive(tableView.rx.isHidden)
             .disposed(by: disposeBag)
 
+        // Errors
+        viewModel.errorMessages
+            .drive(onNext: { [weak self] message in
+                self?.showAlert(title: Strings.errorAlertTitle, message: message)
+            })
+            .disposed(by: disposeBag)
+
         // Selection
         viewModel.showSelection
-            //.subscribe(onNext: { [weak self] selection in
             .subscribe(onNext: { selection in
                 log.debug("\(#function) SELECTED: \(selection)")
                 /*
