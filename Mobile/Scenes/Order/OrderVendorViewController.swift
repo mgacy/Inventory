@@ -138,11 +138,10 @@ extension OrderVendorViewController {
     @objc func tappedCompleteOrders() {
         // If there are pending orders we want to warn the user about marking this collection as completed
         guard checkStatusIsSafe() else {
-            let errorAlert = createAlert(title: "Warning: Pending Orders",
-                                         message: "Marking order collection as completed will delete any pending " +
-                                                  "orders. Are you sure you want to proceed?",
-                                         handler: completeOrders)
-            present(errorAlert, animated: true, completion: nil)
+            showAlert(title: "Warning: Pending Orders",
+                      message: "Marking order collection as completed will delete any pending " +
+                "orders. Are you sure you want to proceed?",
+                      handler: completeOrders)
             return
         }
         completeOrders()
