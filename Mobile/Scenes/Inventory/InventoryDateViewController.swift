@@ -160,7 +160,8 @@ class InventoryDateViewController: UIViewController {
 
                 case .new(let inventory):
                     log.verbose("LOAD NEW selectedInventory from disk ...")
-                    let viewController = InventoryLocationTVC.initFromStoryboard(name: "Main")
+                    let viewController = InventoryLocationViewController.initFromStoryboard(
+                        name: "InventoryLocationViewController")
 
                     // NEW
                     //let viewModel = InventoryLocationViewModel(dataManager: dataManager)

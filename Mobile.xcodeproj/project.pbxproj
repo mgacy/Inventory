@@ -48,6 +48,7 @@
 		C9534D371F90042B00DA4A78 /* materialized+elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9534D361F90042B00DA4A78 /* materialized+elements.swift */; };
 		C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9564F311F840276007D84F6 /* RemoteInventory.swift */; };
 		C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */; };
+		C95DE42C1F9587580079B43B /* InventoryLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C95DE42B1F9587580079B43B /* InventoryLocationViewController.storyboard */; };
 		C95F52F01F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */; };
 		C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */; };
 		C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */; };
@@ -114,7 +115,7 @@
 		C9F515EB1DB7EF98004C10E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */; };
 		C9F515EE1DB7EF98004C10E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515EC1DB7EF98004C10E6 /* LaunchScreen.storyboard */; };
 		C9F515F91DB7EF98004C10E6 /* MobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515F81DB7EF98004C10E6 /* MobileTests.swift */; };
-		C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */; };
+		C9F5160C1DB7F133004C10E6 /* InventoryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516071DB7F133004C10E6 /* InventoryLocationViewController.swift */; };
 		C9F5160D1DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516081DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift */; };
 		C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516091DB7F133004C10E6 /* InventoryLocationItemTVC.swift */; };
 		C9F5160F1DB7F133004C10E6 /* InventoryKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */; };
@@ -179,6 +180,7 @@
 		C9534D361F90042B00DA4A78 /* materialized+elements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "materialized+elements.swift"; sourceTree = "<group>"; };
 		C9564F311F840276007D84F6 /* RemoteInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInventory.swift; path = Models/RemoteInventory.swift; sourceTree = "<group>"; };
 		C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+MyStuff.swift"; sourceTree = "<group>"; };
+		C95DE42B1F9587580079B43B /* InventoryLocationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryLocationViewController.storyboard; sourceTree = "<group>"; };
 		C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertControllerStyle+Adaptive.swift"; sourceTree = "<group>"; };
 		C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InvoiceCollection+MyStuff.swift"; path = "Models/InvoiceCollection+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Invoice+MyStuff.swift"; path = "Models/Invoice+MyStuff.swift"; sourceTree = "<group>"; };
@@ -252,7 +254,7 @@
 		C9F515F81DB7EF98004C10E6 /* MobileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileTests.swift; sourceTree = "<group>"; };
 		C9F515FA1DB7EF98004C10E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C9F516031DB7F05A004C10E6 /* Mobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mobile.entitlements; sourceTree = "<group>"; };
-		C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocationTVC.swift; sourceTree = "<group>"; };
+		C9F516071DB7F133004C10E6 /* InventoryLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocationViewController.swift; sourceTree = "<group>"; };
 		C9F516081DB7F133004C10E6 /* InventoryLocationCategoryTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocationCategoryTVC.swift; sourceTree = "<group>"; };
 		C9F516091DB7F133004C10E6 /* InventoryLocationItemTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocationItemTVC.swift; sourceTree = "<group>"; };
 		C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryKeypadViewController.swift; sourceTree = "<group>"; };
@@ -469,7 +471,8 @@
 		C97A712D1F8EC0AF00F2F1CD /* Location List */ = {
 			isa = PBXGroup;
 			children = (
-				C9F516071DB7F133004C10E6 /* InventoryLocationTVC.swift */,
+				C95DE42B1F9587580079B43B /* InventoryLocationViewController.storyboard */,
+				C9F516071DB7F133004C10E6 /* InventoryLocationViewController.swift */,
 				C97A71331F8EC94A00F2F1CD /* InventoryLocationViewModel.swift */,
 			);
 			name = "Location List";
@@ -487,8 +490,8 @@
 		C97A713B1F8ECAEC00F2F1CD /* Review List */ = {
 			isa = PBXGroup;
 			children = (
-				C97A71371F8ECACE00F2F1CD /* InventoryReviewViewController.swift */,
 				C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */,
+				C97A71371F8ECACE00F2F1CD /* InventoryReviewViewController.swift */,
 				C97A71391F8ECADD00F2F1CD /* InventoryReviewViewModel.swift */,
 				C90459121F93E31400E517C7 /* InventoryReviewItemViewModel.swift */,
 			);
@@ -839,6 +842,7 @@
 				C9F515EE1DB7EF98004C10E6 /* LaunchScreen.storyboard in Resources */,
 				C9F515EB1DB7EF98004C10E6 /* Assets.xcassets in Resources */,
 				C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */,
+				C95DE42C1F9587580079B43B /* InventoryLocationViewController.storyboard in Resources */,
 				C91C928A1EFCE65800566CEB /* OrderKeypadViewController.storyboard in Resources */,
 				C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */,
 				C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */,
@@ -1053,7 +1057,7 @@
 				C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */,
 				C9BB058F1F831B2200A07529 /* OrderDateViewModel.swift in Sources */,
 				C9C2DA081F0F3EC2007263FB /* InventoryLocationItemViewModel.swift in Sources */,
-				C9F5160C1DB7F133004C10E6 /* InventoryLocationTVC.swift in Sources */,
+				C9F5160C1DB7F133004C10E6 /* InventoryLocationViewController.swift in Sources */,
 				C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */,
 				C9F5160E1DB7F133004C10E6 /* InventoryLocationItemTVC.swift in Sources */,
 				C9174D471F833265008639CC /* InitialLoginViewModel.swift in Sources */,
