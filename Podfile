@@ -12,6 +12,8 @@ def basic_pods
   pod 'RxSwift',            '~> 3.0'
   pod 'RxCocoa',            '~> 3.0'
   pod 'RxAlamofire'
+  # pod "RxSwiftExt"
+  # pod "RxSwiftExt",         :git => 'https://github.com/RxSwiftCommunity/RxSwiftExt.git', :branch => 'swift4.0'
   # pod 'RxDataSources',      '~> 1.0'
   # pod "RxCoreData",         '~> 0.3.1'
   # A
@@ -24,6 +26,11 @@ def basic_pods
   #
   # pod 'ChameleonFramework/Swift3'
 end
+
+# def test_pods
+#   pod 'RxBlocking',         '~> 3.0'
+#   pod 'RxTest',             '~> 3.0'
+# end
 
 target 'Mobile' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
