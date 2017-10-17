@@ -199,7 +199,28 @@ extension DataManager {
 
     //func deleteInventory(_ inventory: Inventory) -> Observable<> {}
 
-    //func updateInventory(_ inventory: Inventory) -> Observable<Bool> { return Observable.just(true) }
+    /// TODO: rename `completeInventory(:)`?
+    func updateInventory(_ inventory: Inventory) -> Observable<Event<Inventory>> {
+        guard let inventoryDict = inventory.serialize() else {
+            log.error("\(#function) FAILED : unable to serialize Inventory \(inventory)")
+            return Observable.error(DataManagerError.otherError(error: "Serializtion failied")).materialize()
+        }
+
+        return client.putInventory(inventoryDict)
+            .flatMap { response -> Observable<Inventory> in
+                switch response.result {
+                case .success(let record):
+                    inventory.remoteID = record.syncIdentifier
+                    inventory.uploaded = true
+                    //return inventory
+                    return Observable.just(inventory)
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    throw error
+                }
+            }
+            .materialize()
+    }
 
     func refreshInventory(_ inventory: Inventory) -> Observable<Event<Inventory>> {
         let remoteID = Int(inventory.remoteID)

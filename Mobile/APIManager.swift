@@ -163,7 +163,11 @@ extension APIManager {
         return requestOne(Router.getNewInventory(isActive: isActive, typeID: typeID, storeID: storeID))
     }
 
-    // func putInventory(_ inventory: RemoteInventory) -> Observable<DataResponse<RemoteInventory>> {}
+    /// NOTE: I am designing this in accordance with how things should work, not how they currently do
+    func putInventory(_ inventory: [String: Any]) -> Observable<DataResponse<RemoteExistingInventory>> {
+        //let serializedInventory = inventory.serialize()
+        return requestOne(Router.postInventory(inventory))
+    }
 
 }
 
