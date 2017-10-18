@@ -8,25 +8,29 @@
 
 import UIKit
 import CoreData
+import RxCocoa
+import RxSwift
 
 class OrderVendorViewController: UIViewController {
 
+    // OLD
+    var parentObject: OrderCollection!
+
     // MARK: - Properties
 
-    var parentObject: OrderCollection!
-    var selectedObject: Order?
+    var viewModel: OrderVendorViewModel!
+    let disposeBag = DisposeBag()
 
-    // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //var filter: NSPredicate? = nil
-    //var cacheName: String? = nil
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    let refresh = PublishSubject<Void>()
+    let selectedObjects = PublishSubject<Order>()
+    let confirmComplete = PublishSubject<Void>()
 
     // TableView
     var cellIdentifier = "Cell"
 
     // MARK: - Interface
+
+    let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneBarButton"), style: .done, target: nil, action: nil)
 
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
@@ -36,33 +40,37 @@ class OrderVendorViewController: UIViewController {
         return tv
     }()
 
+    private enum Strings {
+        static let navTitle = "Vendors"
+        //static let errorAlertTitle = "Error"
+        static let confirmCompleteTitle = "Warning: Pending Orders"
+        static let confirmCompleteMessage = "Marking order collection as completed will delete any pending " +
+        "orders. Are you sure you want to proceed?"
+    }
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        setupBindings()
         setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        parentObject.updateStatus()
-        self.tableView.reloadData()
+        refresh.onNext(())
+        //parentObject.updateStatus()
+        //self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        log.warning("\(#function)")
-        // Dispose of any resources that can be recreated.
-    }
+    //override func didReceiveMemoryWarning() {}
 
     // MARK: - View Methods
 
     private func setupView() {
-        title = "Vendors"
-        let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneBarButton"), style: .done, target: self,
-                                                 action: #selector(tappedCompleteOrders))
+        title = Strings.navTitle
         navigationItem.rightBarButtonItem = completeButtonItem
         self.view.addSubview(tableView)
     }
@@ -75,6 +83,43 @@ class OrderVendorViewController: UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
+    private func setupBindings() {
+
+        refresh.asObservable()
+            .bind(to: viewModel.refresh)
+            .disposed(by: disposeBag)
+
+        viewModel.hasRefreshed
+            .drive(onNext: { [weak self] _ in
+                self?.tableView.reloadData()
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.showAlert
+            .drive(onNext: { [weak self] _ in
+                self?.showAlert(title: Strings.confirmCompleteTitle, message: Strings.confirmCompleteMessage) {
+                    self?.confirmComplete.onNext(())
+                }
+            })
+            .disposed(by: disposeBag)
+
+        confirmComplete.asObservable()
+            .bind(to: viewModel.confirmComplete)
+            .disposed(by: disposeBag)
+
+        // Navigation
+        viewModel.showNext
+            .subscribe(onNext: { [weak self] segue in
+                switch segue {
+                case .back:
+                    self?.navigationController!.popViewController(animated: true)
+                case .item(let order):
+                    self?.showOrderItemView(withOrder: order)
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+
     // MARK: - Navigation
 
     private func showOrderItemView(withOrder order: Order) {
@@ -83,34 +128,19 @@ class OrderVendorViewController: UIViewController {
         }
         destinationController.viewModel = OrderViewModel(forOrder: order)
         destinationController.parentObject = order
-        destinationController.managedObjectContext = self.managedObjectContext
+        destinationController.managedObjectContext = viewModel.dataManager.managedObjectContext
         navigationController?.pushViewController(destinationController, animated: true)
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<OrderVendorViewController>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<Order> = Order.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        let fetchPredicate = NSPredicate(format: "collection == %@", parentObject)
-        request.predicate = fetchPredicate
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }
@@ -119,13 +149,7 @@ class OrderVendorViewController: UIViewController {
 extension OrderVendorViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected Order: \(String(describing: selectedObject))")
-
-        guard let selection = selectedObject else {
-            fatalError("Couldn't get selected Order")
-        }
-        showOrderItemView(withOrder: selection)
+        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -154,62 +178,8 @@ extension OrderVendorViewController: TableViewDataSourceDelegate {
             cell.textLabel?.textColor = UIColor.black
         default:
             /// TODO: use another color for values that aren't captured above
-            cell.textLabel?.textColor = UIColor.black
+            cell.textLabel?.textColor = UIColor.blue
         }
-    }
-
-}
-
-// MARK: - User Actions
-extension OrderVendorViewController {
-
-    @objc func tappedCompleteOrders() {
-        // If there are pending orders we want to warn the user about marking this collection as completed
-        guard checkStatusIsSafe() else {
-            showAlert(title: "Warning: Pending Orders",
-                      message: "Marking order collection as completed will delete any pending " +
-                "orders. Are you sure you want to proceed?",
-                      handler: completeOrders)
-            return
-        }
-        completeOrders()
-    }
-
-    func checkStatusIsSafe() -> Bool {
-        guard let orders = parentObject.orders else {
-            return true
-        }
-
-        //var hasEmpty = false
-        var hasPending = false
-
-        for order in orders {
-            if let status = (order as? Order)?.status {
-                switch status {
-                //case OrderStatus.empty.rawValue:
-                //    hasEmpty = true
-                case OrderStatus.pending.rawValue:
-                    hasPending = true
-                //case OrderStatus.placed.rawValue:
-                //case OrderStatus.uploaded.rawValue:
-                default:
-                    /// TODO: use another color for values that aren't captured above
-                    continue
-                }
-            }
-        }
-
-        if hasPending {
-            return false
-        } else {
-            return true
-        }
-    }
-
-    func completeOrders() {
-        parentObject.uploaded = true
-        /// TODO: refresh OrderDateViewController
-        self.navigationController!.popViewController(animated: true)
     }
 
 }

@@ -184,14 +184,17 @@ class OrderDateViewController: UIViewController {
                 }
                 log.debug("\(#function) SELECTED / CREATED: \(selection)")
 
-                let viewController = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
-                // NEW
-                //let viewModel = OrderVendorViewModel(dataManager: viewModel.dataManager)
-                //viewController = viewModel = viewModel
+                let vc = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
+                let vm = OrderVendorViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                              parentObject: selection,
+                                              rowTaps: vc.selectedObjects.asObservable(),
+                                              completeTaps: vc.completeButtonItem.rx.tap.asObservable()
+                )
+                vc.viewModel = vm
                 // OLD
-                viewController.managedObjectContext = strongSelf.managedObjectContext
-                viewController.parentObject = selection
-                strongSelf.navigationController?.pushViewController(viewController, animated: true)
+                //vc.managedObjectContext = strongSelf.managedObjectContext
+                vc.parentObject = selection
+                strongSelf.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
     }
