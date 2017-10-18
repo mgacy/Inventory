@@ -24,70 +24,6 @@ import SwiftyJSON
 
 }
 
-extension Order {
-
-    // MARK: - Order Generation
-    /// TODO: move into separate object
-    func getOrderMessage() -> String? {
-        guard let items = self.items else { return nil }
-
-        var messageItems: [String] = []
-        for case let item as OrderItem in items {
-            guard let quantity = item.quantity else { continue }
-
-            if quantity.doubleValue > 0.0 {
-                guard let name = item.item?.name else { continue }
-                messageItems.append("\n\(name) \(quantity) \(item.orderUnit?.abbreviation ?? "")")
-            }
-        }
-
-        if messageItems.count == 0 { return nil }
-
-        messageItems.sort()
-        /// TODO: handle conversion from NSDate to String
-        let message = "Order for \(collection?.date.altStringFromDate() ?? ""):\n\(messageItems.joined(separator: ""))"
-        log.debug("Order Message: \(message)")
-        return message
-    }
-
-}
-
-extension Order {
-
-    func updateStatus() {
-        guard status != OrderStatus.placed.rawValue,
-              status != OrderStatus.uploaded.rawValue else {
-                return
-        }
-
-        guard let items = items else {
-            log.debug("Order appears to be empty")
-            status = OrderStatus.empty.rawValue
-            return
-        }
-
-        var hasOrder = false
-        for item in items {
-            if let quantity = (item as? OrderItem)?.quantity {
-                if quantity.intValue > 0 {
-                    hasOrder = true
-                }
-            } else {
-                status = OrderStatus.incomplete.rawValue
-                return
-            }
-        }
-
-        if hasOrder {
-            status = OrderStatus.pending.rawValue
-        } else {
-            log.debug("It looks like we have an empty order.")
-            status = OrderStatus.empty.rawValue
-        }
-    }
-
-}
-
 // MARK: - NewSyncable
 
 extension Order: NewSyncable {
@@ -177,6 +113,73 @@ extension Order {
         myDict["items"] = itemsArray
 
         return myDict
+    }
+
+}
+
+// MARK: - Order Generation
+
+extension Order {
+
+    /// TODO: move into separate object
+    func getOrderMessage() -> String? {
+        guard let items = self.items else { return nil }
+
+        var messageItems: [String] = []
+        for case let item as OrderItem in items {
+            guard let quantity = item.quantity else { continue }
+
+            if quantity.doubleValue > 0.0 {
+                guard let name = item.item?.name else { continue }
+                messageItems.append("\n\(name) \(quantity) \(item.orderUnit?.abbreviation ?? "")")
+            }
+        }
+
+        if messageItems.count == 0 { return nil }
+
+        messageItems.sort()
+        /// TODO: handle conversion from NSDate to String
+        let message = "Order for \(collection?.date.altStringFromDate() ?? ""):\n\(messageItems.joined(separator: ""))"
+        log.debug("Order Message: \(message)")
+        return message
+    }
+
+}
+
+// MARK: - Status
+
+extension Order {
+
+    func updateStatus() {
+        guard status != OrderStatus.placed.rawValue,
+              status != OrderStatus.uploaded.rawValue else {
+                return
+        }
+
+        guard let items = items else {
+            log.debug("Order appears to be empty")
+            status = OrderStatus.empty.rawValue
+            return
+        }
+
+        var hasOrder = false
+        for item in items {
+            if let quantity = (item as? OrderItem)?.quantity {
+                if quantity.intValue > 0 {
+                    hasOrder = true
+                }
+            } else {
+                status = OrderStatus.incomplete.rawValue
+                return
+            }
+        }
+
+        if hasOrder {
+            status = OrderStatus.pending.rawValue
+        } else {
+            log.debug("It looks like we have an empty order.")
+            status = OrderStatus.empty.rawValue
+        }
     }
 
 }

@@ -9,32 +9,6 @@
 //import Foundation
 import CoreData
 
-extension OrderCollection {
-
-    func updateStatus() {
-        //log.debug("\(#function) starting ...")
-        guard uploaded == false else {
-            //log.debug("OrderCollection has already been uploaded.")
-            return
-        }
-        guard let orders = orders else {
-            //log.debug("OrderCollection does not appear to have any Orders.")
-            return
-        }
-        for order in orders {
-            // swiftlint:disable:next for_where
-            if (order as? Order)?.uploaded == false {
-                //log.debug("Order has not been uploaded")
-                return
-            }
-        }
-
-        //log.debug("It looks like all orders have been uploaded; we should change status")
-        uploaded = true
-    }
-
-}
-
 extension OrderCollection: DateFacade {}
 
 // MARK: - NewSyncable
@@ -79,6 +53,7 @@ extension OrderCollection: NewSyncable {
 }
 
 // MARK: - NewSyncableParent
+
 extension OrderCollection: NewSyncableParent {
     typealias ChildType = Order
 
@@ -109,6 +84,34 @@ extension OrderCollection {
         // ...
 
         return myDict
+    }
+
+}
+
+// MARK: - Status
+
+extension OrderCollection {
+
+    func updateStatus() {
+        //log.debug("\(#function) starting ...")
+        guard uploaded == false else {
+            //log.debug("OrderCollection has already been uploaded.")
+            return
+        }
+        guard let orders = orders else {
+            //log.debug("OrderCollection does not appear to have any Orders.")
+            return
+        }
+        for order in orders {
+            // swiftlint:disable:next for_where
+            if (order as? Order)?.uploaded == false {
+                //log.debug("Order has not been uploaded")
+                return
+            }
+        }
+
+        //log.debug("It looks like all orders have been uploaded; we should change status")
+        uploaded = true
     }
 
 }
