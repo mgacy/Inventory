@@ -99,7 +99,6 @@ class InventoryLocationItemTVC: UITableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 80
 
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
 
         let positionSort = NSSortDescriptor(key: "position", ascending: true)
@@ -128,12 +127,8 @@ class InventoryLocationItemTVC: UITableViewController {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedItem = dataSource.objectAtIndexPath(indexPath)
-        guard let selection = selectedItem else {
-            fatalError("Couldn't get selected Order")
-        }
-        showKeypad(withItem: selection)
-
+        let selectedItem = dataSource.objectAtIndexPath(indexPath)
+        showKeypad(withItem: selectedItem)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

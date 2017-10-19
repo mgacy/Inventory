@@ -44,11 +44,7 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
         self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        log.warning("\(#function)")
-        // Dispose of any resources that can be recreated.
-    }
+    //override func didReceiveMemoryWarning() {}
 
     // MARK: - Navigation
 
@@ -64,22 +60,17 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocationCategoryTVC>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
 
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
         let request: NSFetchRequest<InventoryLocationCategory> = InventoryLocationCategory.fetchRequest()
         let positionSort = NSSortDescriptor(key: "position", ascending: true)
         let nameSort = NSSortDescriptor(key: "name", ascending: true)
         request.sortDescriptors = [positionSort, nameSort]
-
-        let fetchPredicate = NSPredicate(format: "location == %@", location)
-        request.predicate = fetchPredicate
-
+        request.predicate = NSPredicate(format: "location == %@", location)
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
