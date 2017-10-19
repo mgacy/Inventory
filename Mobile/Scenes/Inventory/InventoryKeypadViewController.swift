@@ -13,8 +13,7 @@ class InventoryKeypadViewController: UIViewController {
 
     // MARK: Properties
 
-    var category: InventoryLocationCategory?
-    var location: InventoryLocation?
+    var parentObject: LocationItemListParent = .none
     var currentIndex = 0
 
     var items: [InventoryLocationItem] {
@@ -24,14 +23,10 @@ class InventoryKeypadViewController: UIViewController {
         let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
         request.sortDescriptors = [positionSort, nameSort]
 
-        if let parentLocation = self.location {
-            request.predicate = NSPredicate(format: "location == %@", parentLocation)
-        } else if let parentCategory = self.category {
-            request.predicate = NSPredicate(format: "category == %@", parentCategory)
-        } else {
-            log.error("PROBLEM : Unable to add predicate to InventoryLocationItem fetch request")
-            return [InventoryLocationItem]()
+        guard let fetchPredicate = parentObject.fetchPredicate else {
+            fatalError("\(#function) FAILED : LocationItemListParent not set")
         }
+        request.predicate = fetchPredicate
 
         do {
             let searchResults = try managedObjectContext?.fetch(request)

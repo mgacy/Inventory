@@ -15,15 +15,14 @@ enum LocationItemListParent {
     // This case allows us to set default value on classes w/o initializer
     case none
 
-    /// TODO: add associated fetchPredicate
-    var fetchPredicate: NSPredicate {
+    var fetchPredicate: NSPredicate? {
         switch self {
         case .category(let category):
             return NSPredicate(format: "category == %@", category)
         case .location(let location):
             return NSPredicate(format: "location == %@", location)
         case .none:
-            fatalError("\(#function) FAILED : not set")
+            return nil
         }
     }
 
@@ -75,15 +74,7 @@ class InventoryLocationItemTVC: UITableViewController {
                 fatalError("\(#function) FAILED: unable to get indexPath or moc")
         }
 
-        switch parentObject {
-        case .category(let parentCategory):
-            destinationController.category = parentCategory
-        case .location(let parentLocation):
-            destinationController.location = parentLocation
-        default:
-            fatalError("\(#function) FAILED : parentObject not set")
-        }
-
+        destinationController.parentObject = parentObject
         destinationController.currentIndex = indexPath
         destinationController.managedObjectContext = managedObjectContext
 
