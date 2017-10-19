@@ -159,11 +159,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="TEG-nL-6AW"/>
-                    <connections>
-                        <segue destination="2re-X1-JiU" kind="show" identifier="ShowLocationItems2" id="6Vu-cU-Z1a">
-                            <nil key="action"/>
-                        </segue>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g7T-hd-scX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -9,12 +9,11 @@
 import UIKit
 import CoreData
 
-class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
+class InventoryLocationCategoryTVC: UITableViewController {
 
     // MARK: Properties
 
     var location: InventoryLocation!
-    var selectedCategory: InventoryLocationCategory?
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
@@ -25,11 +24,6 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
 
     // TableViewCell
     let cellIdentifier = "InventoryLocationCategoryTableViewCell"
-
-    // Segues
-    enum SegueIdentifier: String {
-        case showItem = "ShowLocationItems2"
-    }
 
     // MARK: - Lifecycle
 
@@ -48,14 +42,12 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
 
     // MARK: - Navigation
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InventoryLocationItemTVC else {
-            fatalError("Wrong view controller type")
-        }
-        guard let selection = selectedCategory else { fatalError("Showing detail, but no selected row?") }
-        destinationController.title = selection.name
-        destinationController.parentObject = .category(selection)
-        destinationController.managedObjectContext = managedObjectContext
+    func showItemList(with category: InventoryLocationCategory) {
+        let controller = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
+        controller.parentObject = .category(category)
+        controller.title = category.name ?? "Error"
+        controller.managedObjectContext = managedObjectContext
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     // MARK: - TableViewDataSource
@@ -83,8 +75,8 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCategory = dataSource.objectAtIndexPath(indexPath)
-        performSegue(withIdentifier: .showItem)
+        let selectedCategory = dataSource.objectAtIndexPath(indexPath)
+        showItemList(with: selectedCategory)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
