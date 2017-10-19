@@ -58,7 +58,7 @@ class InventoryLocationCategoryTVC: UITableViewController, SegueHandler {
         }
         guard let selection = selectedCategory else { fatalError("Showing detail, but no selected row?") }
         destinationController.title = selection.name
-        destinationController.category = selection
+        destinationController.parentObject = .category(selection)
         destinationController.managedObjectContext = managedObjectContext
     }
 

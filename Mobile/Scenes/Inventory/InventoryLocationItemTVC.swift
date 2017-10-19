@@ -9,13 +9,31 @@
 import UIKit
 import CoreData
 
+enum LocationItemListParent {
+    case category(InventoryLocationCategory)
+    case location(InventoryLocation)
+    // This case allows us to set default value on classes w/o initializer
+    case none
+
+    /// TODO: add associated fetchPredicate
+    var fetchPredicate: NSPredicate {
+        switch self {
+        case .category(let category):
+            return NSPredicate(format: "category == %@", category)
+        case .location(let location):
+            return NSPredicate(format: "location == %@", location)
+        case .none:
+            fatalError("\(#function) FAILED : not set")
+        }
+    }
+
+}
+
 class InventoryLocationItemTVC: UITableViewController {
 
     // MARK: Properties
 
-    var category: InventoryLocationCategory?
-    var location: InventoryLocation?
-    var selectedItem: InventoryLocationItem?
+    var parentObject: LocationItemListParent = .none
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
@@ -57,8 +75,15 @@ class InventoryLocationItemTVC: UITableViewController {
                 fatalError("\(#function) FAILED: unable to get indexPath or moc")
         }
 
-        destinationController.category = category
-        destinationController.location = location
+        switch parentObject {
+        case .category(let parentCategory):
+            destinationController.category = parentCategory
+        case .location(let parentLocation):
+            destinationController.location = parentLocation
+        default:
+            fatalError("\(#function) FAILED : parentObject not set")
+        }
+
         destinationController.currentIndex = indexPath
         destinationController.managedObjectContext = managedObjectContext
 
@@ -81,16 +106,14 @@ class InventoryLocationItemTVC: UITableViewController {
         let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
         request.sortDescriptors = [positionSort, nameSort]
 
-        if let parentLocation = self.location {
-            let fetchPredicate = NSPredicate(format: "location == %@", parentLocation)
-            request.predicate = fetchPredicate
-
-        } else if let parentCategory = self.category {
-            let fetchPredicate = NSPredicate(format: "category == %@", parentCategory)
-            request.predicate = fetchPredicate
-
-        } else {
-            fatalError("Unable to add predicate")
+        //request.predicate = parentObject.fetchPredicate
+        switch self.parentObject {
+        case .category(let parentCategory):
+            request.predicate = NSPredicate(format: "category == %@", parentCategory)
+        case .location(let parentLocation):
+            request.predicate = NSPredicate(format: "location == %@", parentLocation)
+        case .none:
+            fatalError("\(#function) FAILED : parentObject not set")
         }
 
         request.fetchBatchSize = fetchBatchSize

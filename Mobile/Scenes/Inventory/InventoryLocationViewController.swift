@@ -149,7 +149,7 @@ class InventoryLocationViewController: UIViewController, SegueHandler {
                     strongSelf.navigationController?.pushViewController(vc, animated: true)
                 case .item(let location):
                     let vc = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
-                    vc.location = location
+                    vc.parentObject = .location(location)
                     vc.title = location.name ?? "Error"
                     vc.managedObjectContext = strongSelf.viewModel.dataManager.managedObjectContext
                     strongSelf.navigationController?.pushViewController(vc, animated: true)
