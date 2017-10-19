@@ -235,6 +235,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case is SettingsViewController:
                 guard let vc = topVC as? SettingsViewController else { fatalError("wrong view controller type") }
                 vc.managedObjectContext = persistentContainer.viewContext
+                vc.userManager = userManager
 
             default:
                 fatalError("wrong view controller type")
