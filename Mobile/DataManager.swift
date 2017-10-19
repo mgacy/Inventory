@@ -313,6 +313,12 @@ extension DataManager {
                      */
                     let newCollection = OrderCollection(with: record, in: context)
                     newCollection.uploaded = false
+                    newCollection.orders?.forEach { order in
+                        if let `order` = order as? Order {
+                            order.status = OrderStatus.pending.rawValue
+                            order.updateStatus()
+                        }
+                    }
                     return Observable.just(newCollection)
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
