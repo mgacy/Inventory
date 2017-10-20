@@ -45,6 +45,12 @@ class DataManager {
 
     // MARK: General
 
+    func saveOrRollback() -> Observable<Bool> {
+        /// TODO: use `saveOrRollback()` or `performSaveOrRollback()`
+        /// TODO: should we simply perform the do / catch here and materialize the error?
+        return Observable.just(managedObjectContext.saveOrRollback())
+    }
+
     /// TODO: rename
     func refreshStuff() -> Observable<Bool> {
         return refreshVendors()

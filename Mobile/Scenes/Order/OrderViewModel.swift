@@ -140,7 +140,8 @@ class OrderViewModel {
     func setOrderToZero(forItemAtIndexPath indexPath: IndexPath) {
         let orderItem = frc.object(at: indexPath)
         orderItem.quantity = 0
-        dataManager.managedObjectContext.performSaveOrRollback()
+        _ = dataManager.saveOrRollback()
+        //dataManager.managedObjectContext.performSaveOrRollback()
     }
 
 }
