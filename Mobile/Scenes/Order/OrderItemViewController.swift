@@ -18,7 +18,6 @@ class OrderItemViewController: UIViewController {
 
     var viewModel: OrderViewModel!
     var parentObject: Order!
-    var selectedObject: OrderItem?
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
@@ -66,17 +65,15 @@ class OrderItemViewController: UIViewController {
 
     // MARK: - Navigation
 
-    fileprivate func showKeypad(withItem item: OrderItem) {
+    fileprivate func showKeypad(withIndexPath indexPath: IndexPath) {
         guard let destinationController = OrderKeypadViewController.instance() else {
-            fatalError("\(#function) FAILED: unable to get destination view controller.")
+            fatalError("\(#function) FAILED : unable to get destination view controller.")
         }
-        guard
-            let indexPath = self.tableView.indexPathForSelectedRow?.row,
-            let managedObjectContext = managedObjectContext else {
-                fatalError("\(#function) FAILED: unable to get indexPath or moc")
+        guard let managedObjectContext = managedObjectContext else {
+                fatalError("\(#function) FAILED : unable to get moc")
         }
 
-        destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath,
+        destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath.row,
                                                                inContext: managedObjectContext)
         navigationController?.pushViewController(destinationController, animated: true)
     }
@@ -191,12 +188,8 @@ extension OrderItemViewController {
 extension OrderItemViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected Order: \(String(describing: selectedObject))")
-        guard let selection = selectedObject else {
-            fatalError("Couldn't get selected Order")
-        }
-        showKeypad(withItem: selection)
+        //log.verbose("Selected OrderItem: \(dataSource.objectAtIndexPath(indexPath))")
+        showKeypad(withIndexPath: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

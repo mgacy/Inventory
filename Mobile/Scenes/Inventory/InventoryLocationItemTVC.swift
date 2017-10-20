@@ -64,17 +64,15 @@ class InventoryLocationItemTVC: UITableViewController {
 
     // MARK: - Navigation
 
-    fileprivate func showKeypad(withItem item: InventoryLocationItem) {
+    fileprivate func showKeypad(withIndexPath indexPath: IndexPath) {
         guard let destinationController = InventoryKeypadViewController.instance() else {
-            fatalError("\(#function) FAILED: unable to get destination view controller.")
+            fatalError("\(#function) FAILED : unable to get destination view controller.")
         }
-        guard
-            let indexPath = self.tableView.indexPathForSelectedRow?.row,
-            let managedObjectContext = managedObjectContext else {
-                fatalError("\(#function) FAILED: unable to get indexPath or moc")
+        guard let managedObjectContext = managedObjectContext else {
+                fatalError("\(#function) FAILED : unable to get moc")
         }
 
-        let viewModel = InventoryKeypadViewModel(for: parentObject, atIndex: indexPath,
+        let viewModel = InventoryKeypadViewModel(for: parentObject, atIndex: indexPath.row,
                                                  inContext: managedObjectContext)
         destinationController.viewModel = viewModel
         navigationController?.pushViewController(destinationController, animated: true)
@@ -82,7 +80,6 @@ class InventoryLocationItemTVC: UITableViewController {
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocationItemTVC>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
         tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -117,8 +114,8 @@ class InventoryLocationItemTVC: UITableViewController {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedItem = dataSource.objectAtIndexPath(indexPath)
-        showKeypad(withItem: selectedItem)
+        //log.verbose("Selected InventoryLocationItem: \(dataSource.objectAtIndexPath(indexPath))")
+        showKeypad(withIndexPath: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
