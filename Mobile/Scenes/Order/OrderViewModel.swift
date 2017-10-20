@@ -131,6 +131,18 @@ class OrderViewModel {
         }
     }
 
+    // MARK: - Model
+
+    func updateOrderStatus() {
+        order.updateStatus()
+    }
+
+    func setOrderToZero(forItemAtIndexPath indexPath: IndexPath) {
+        let orderItem = frc.object(at: indexPath)
+        orderItem.quantity = 0
+        dataManager.managedObjectContext.performSaveOrRollback()
+    }
+
 }
 
 // MARK: - Various Classes, Extensions

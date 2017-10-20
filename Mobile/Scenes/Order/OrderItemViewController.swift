@@ -49,7 +49,7 @@ class OrderItemViewController: UIViewController {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
         // Update in case we have returned from the keypad where we updated the quantity of an OrderItem
-        parentObject.updateStatus()
+        viewModel.updateOrderStatus()
         setupView()
     }
 
@@ -177,12 +177,11 @@ extension OrderItemViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let orderItem = dataSource.objectAtIndexPath(indexPath)
+        //let orderItem = dataSource.objectAtIndexPath(indexPath)
 
         // Set to 0
         let setToZero = UITableViewRowAction(style: .normal, title: "No Order") { _, _ in
-            orderItem.quantity = 0
-            self.managedObjectContext?.performSaveOrRollback()
+            self.viewModel.setOrderToZero(forItemAtIndexPath: indexPath)
             tableView.isEditing = false
             // ALT
             // https://stackoverflow.com/a/43626096/4472195
