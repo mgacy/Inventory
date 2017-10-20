@@ -9,22 +9,18 @@
 import UIKit
 import CoreData
 import MessageUI
-import SwiftyJSON
+//import SwiftyJSON
 import PKHUD
 
 class OrderItemViewController: UIViewController {
 
+    // OLD
+    var managedObjectContext: NSManagedObjectContext?
+    var parentObject: Order!
+
     // MARK: - Properties
 
     var viewModel: OrderViewModel!
-    var parentObject: Order!
-
-    // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //var filter: NSPredicate = NSPredicate(format: "order == %@", parentObject)
-    //var cacheName: String? = nil
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
 
     // Create a MessageComposer
     /// TODO: should I instantiate this here or only in `.setupView()`?
@@ -85,21 +81,8 @@ class OrderItemViewController: UIViewController {
         //tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 80
-
-        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        let fetchPredicate = NSPredicate(format: "order == %@", parentObject)
-        request.predicate = fetchPredicate
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
     }
 
     func setupView() {

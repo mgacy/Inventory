@@ -6,15 +6,28 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
+import CoreData
 import SwiftyJSON
 
 class OrderViewModel {
 
-    typealias CompletionHandlerType = (JSON?, Error?) -> Void
+    // MARK: - Properties
 
+    //typealias CompletionHandlerType = (JSON?, Error?) -> Void
+
+    let dataManager: DataManager
     private var order: Order
 
+    // CoreData
+    private let filter: NSPredicate
+    private let sortDescriptors = [NSSortDescriptor(key: "item.name", ascending: true)]
+    private let cacheName: String? = nil
+    private let sectionNameKeyPath: String? = nil
+    private let fetchBatchSize = 20 // 0 = No Limit
+
+    // MARK: - Output
+
+    let frc: NSFetchedResultsController<OrderItem>
     var vendorName: String { return order.vendor?.name ?? "" }
     var repName: String { return "\(order.vendor?.rep?.firstName ?? "") \(order.vendor?.rep?.lastName ?? "")" }
     var email: String { return order.vendor?.rep?.email ?? "" }
@@ -62,8 +75,22 @@ class OrderViewModel {
 
     // MARK: - Lifecycle
 
-    required init(forOrder order: Order) {
-        self.order = order
+    required init(dataManager: DataManager, parentObject: Order) {
+        self.dataManager = dataManager
+        self.order = parentObject
+
+        // FetchRequest
+        self.filter = NSPredicate(format: "order == %@", parentObject)
+
+        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
+        request.sortDescriptors = sortDescriptors
+        request.predicate = filter
+        request.fetchBatchSize = fetchBatchSize
+        request.returnsObjectsAsFaults = false
+
+        let managedObjectContext = dataManager.managedObjectContext
+        self.frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext,
+                                              sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
     }
 
     // MARK: - Actions

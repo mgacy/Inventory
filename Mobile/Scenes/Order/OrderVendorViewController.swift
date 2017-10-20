@@ -126,7 +126,7 @@ class OrderVendorViewController: UIViewController {
         guard let destinationController = OrderItemViewController.instance() else {
             fatalError("\(#function) FAILED: unable to get destination view controller.")
         }
-        destinationController.viewModel = OrderViewModel(forOrder: order)
+        destinationController.viewModel = OrderViewModel(dataManager: viewModel.dataManager, parentObject: order)
         destinationController.parentObject = order
         destinationController.managedObjectContext = viewModel.dataManager.managedObjectContext
         navigationController?.pushViewController(destinationController, animated: true)
