@@ -10,6 +10,7 @@ import Foundation
 
 protocol KeypadType {
     var displayValue: String { get }
+    var delegate: KeypadDelegate? { get set }
 
     func popItem()
     func pushDecimal()
