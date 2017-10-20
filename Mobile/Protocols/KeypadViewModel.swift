@@ -9,8 +9,9 @@
 import Foundation
 import CoreData
 
+/// TODO: rename ItemListViewModelType?
 protocol KeypadViewModel: class {
-    associatedtype ParentType: NSManagedObject
+    associatedtype ParentType
     associatedtype ChildType: NSManagedObject
 
     var managedObjectContext: NSManagedObjectContext { get set }
@@ -19,11 +20,12 @@ protocol KeypadViewModel: class {
     var currentIndex: Int { get set }
     var currentItem: ChildType { get }
 
-    init(for: ParentType, atIndex: Int, inContext: NSManagedObjectContext)
     func nextItem() -> Bool
     func previousItem() -> Bool
     func didChangeItem(_: ChildType)
 }
+
+// MARK: - Default Implementation
 
 extension KeypadViewModel {
 
