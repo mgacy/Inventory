@@ -45,8 +45,7 @@ class OrderItemViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = parentObject.vendor?.name
-        tableView.delegate = self
+        title = viewModel.vendorName
         setupTableView()
     }
 
@@ -82,6 +81,7 @@ class OrderItemViewController: UIViewController {
     fileprivate var dataSource: TableViewDataSource<OrderItemViewController>!
 
     fileprivate func setupTableView() {
+        tableView.delegate = self
         //tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 80
