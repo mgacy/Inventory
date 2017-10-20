@@ -252,6 +252,10 @@ extension APIManager {
         return requestOne(Router.getInvoiceCollection(storeID: storeID, forDate: invoiceDate))
     }
 
+    func putInvoice(remoteID: Int, invoice: [String: Any]) -> Observable<DataResponse<RemoteInvoice>> {
+        return requestOne(Router.putInvoice(remoteID: remoteID, parameters: invoice))
+    }
+
 }
 
 // MARK: - Invoice - OLD
@@ -381,6 +385,12 @@ extension APIManager {
         return postOne(Router.postOrderCollection(parameters))
         //return postOne(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
         //                                          returnUsage: returnUsage, periodLength: periodLength))
+    }
+
+    /// NOTE: I am designing this in accordance with how things should work, not how they currently do
+    /// TODO: should remoteID be a separate argument?
+    func putOrder(_ order: [String: Any]) -> Observable<DataResponse<RemoteOrder>> {
+        return requestOne(Router.postOrder(order))
     }
 
 }
