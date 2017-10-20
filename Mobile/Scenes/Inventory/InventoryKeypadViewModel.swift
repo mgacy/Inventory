@@ -65,7 +65,7 @@ class InventoryKeypadViewModel: KeypadViewModel {
     // Display
     let itemName = Variable<String>("")
     let itemValue = Variable<String>("")
-    //var itemValueColor: UIColor
+    let itemValueColor = Variable<UIColor>(.black)
     let itemHistory = Variable<String>("")
     let itemPack = Variable<String>("")
     let itemUnit = Variable<String>("")
@@ -104,6 +104,11 @@ class InventoryKeypadViewModel: KeypadViewModel {
 
         // Update keypad with quantity of new currentItem
         keypad.updateNumber(currentItem.quantity)
+        if currentItem.quantity != nil {
+            itemValueColor.value = UIColor.black
+        } else {
+            itemValueColor.value = UIColor.lightGray
+        }
         itemValue.value = keypad.displayValue
         itemHistory.value = keypad.displayHistory
 
@@ -159,10 +164,12 @@ extension InventoryKeypadViewModel: KeypadDelegate {
         if let newValue = newValue {
             currentItem.quantity = newValue
             itemValue.value = keypad.displayValue
+            itemValueColor.value = UIColor.black
             itemHistory.value = keypad.displayHistory
         } else {
             currentItem.quantity = nil
             itemValue.value = keypad.displayValue
+            itemValueColor.value = UIColor.lightGray
             itemHistory.value = keypad.displayHistory
         }
         managedObjectContext.performSaveOrRollback()
