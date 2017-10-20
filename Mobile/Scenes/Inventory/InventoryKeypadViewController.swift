@@ -7,12 +7,18 @@
 //
 
 import UIKit
-import CoreData
+//import CoreData
+import RxCocoa
+import RxSwift
 
 class InventoryKeypadViewController: UIViewController {
 
     // MARK: Properties
 
+    var viewModel: InventoryKeypadViewModel!
+    let disposeBag = DisposeBag()
+
+    /*
     var parentObject: LocationItemListParent = .none
     var currentIndex = 0
 
@@ -47,6 +53,7 @@ class InventoryKeypadViewController: UIViewController {
 
     // CoreData
     var managedObjectContext: NSManagedObjectContext?
+     */
 
     // MARK: - Display Outlets
     @IBOutlet weak var itemValue: UILabel!
@@ -59,7 +66,8 @@ class InventoryKeypadViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        update(newItem: true)
+        setupBindings()
+        //update(newItem: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -68,33 +76,88 @@ class InventoryKeypadViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - View Methods
+
+    func setupBindings() {
+        viewModel.itemName
+            .asObservable()
+            .map { $0 }
+            .bind(to: itemName.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.itemValue
+            .asObservable()
+            .map { $0 }
+            .bind(to: itemValue.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.itemHistory
+            .asObservable()
+            .map { $0 }
+            .bind(to: itemHistory.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.itemPack
+            .asObservable()
+            .map { $0 }
+            .bind(to: itemPack.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.itemUnit
+            .asObservable()
+            .map { $0 }
+            .bind(to: itemUnit.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.itemValueColor
+            .asObservable()
+            //.bind(to: itemValue.rx.)
+            .subscribe(onNext: {[weak self] color in
+                self?.itemValue.textColor = color
+            })
+            .disposed(by: disposeBag)
+
+    }
+
     // MARK: - Keypad
 
     @IBAction func numberTapped(_ sender: AnyObject) {
         guard let digit = sender.currentTitle else { return }
         //log.verbose("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
+        /*
         keypad.pushDigit(value: number)
 
         // Update model and display with result of keypad
         update()
+         */
+        viewModel.pushDigit(value: number)
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
+        /*
         keypad.popItem()
         update()
+         */
+        viewModel.popItem()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
+        /*
         keypad.pushDecimal()
         update()
+        */
+        viewModel.pushDecimal()
     }
 
     // MARK: - Uncertain
 
     @IBAction func addTapped(_ sender: AnyObject) {
+        /*
         keypad.pushOperator()
         update()
+         */
+        viewModel.pushOperator()
     }
 
     @IBAction func decrementTapped(_ sender: AnyObject) {
@@ -102,15 +165,21 @@ class InventoryKeypadViewController: UIViewController {
     }
 
     @IBAction func incrementTapped(_ sender: AnyObject) {
+        /*
         keypad.pushOperator()
         keypad.pushDigit(value: 1)
         keypad.pushOperator()
         update()
+         */
+        viewModel.pushOperator()
+        viewModel.pushDigit(value: 1)
+        viewModel.pushOperator()
     }
 
     // MARK: - Item Navigation
 
     @IBAction func nextItemTapped(_ sender: AnyObject) {
+        /*
         if currentIndex < items.count - 1 {
             currentIndex += 1
             // Update keypad and display with new currentItem
@@ -119,9 +188,17 @@ class InventoryKeypadViewController: UIViewController {
             /// TODO: cleanup?
             navigationController!.popViewController(animated: true)
         }
+         */
+        switch viewModel.nextItem() {
+        case true:
+            return
+        case false:
+            navigationController!.popViewController(animated: true)
+        }
     }
 
     @IBAction func previousItemTapped(_ sender: AnyObject) {
+        /*
         if currentIndex > 0 {
             currentIndex -= 1
             // Update keypad and display with new currentItem
@@ -130,10 +207,19 @@ class InventoryKeypadViewController: UIViewController {
             /// TODO: cleanup?
             navigationController!.popViewController(animated: true)
         }
+         */
+        switch viewModel.previousItem() {
+        case true:
+            return
+        case false:
+            navigationController!.popViewController(animated: true)
+        }
     }
 
     // MARK: - View
 
+    // MARK: - View
+    /*
     func update(newItem: Bool = false) {
         let output: KeypadOutput
 
@@ -187,5 +273,6 @@ class InventoryKeypadViewController: UIViewController {
         // Item.unit
         itemUnit.text = "\(item.inventoryUnit?.abbreviation ?? "")"
     }
+     */
 
 }

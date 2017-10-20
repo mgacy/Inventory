@@ -74,10 +74,9 @@ class InventoryLocationItemTVC: UITableViewController {
                 fatalError("\(#function) FAILED: unable to get indexPath or moc")
         }
 
-        destinationController.parentObject = parentObject
-        destinationController.currentIndex = indexPath
-        destinationController.managedObjectContext = managedObjectContext
-
+        let viewModel = InventoryKeypadViewModel(for: parentObject, atIndex: indexPath,
+                                                 inContext: managedObjectContext)
+        destinationController.viewModel = viewModel
         navigationController?.pushViewController(destinationController, animated: true)
     }
 
