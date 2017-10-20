@@ -32,10 +32,7 @@ class OrderViewModel {
     var repName: String { return "\(order.vendor?.rep?.firstName ?? "") \(order.vendor?.rep?.lastName ?? "")" }
     var email: String { return order.vendor?.rep?.email ?? "" }
     var phone: String { return order.vendor?.rep?.phone ?? "" }
-
-    var formattedPhone: String {
-        return format(phoneNumber: phone) ?? ""
-    }
+    var formattedPhone: String { return format(phoneNumber: phone) ?? "" }
 
     var canMessageOrder: Bool {
         guard order.vendor?.rep?.phone != nil else {
@@ -138,6 +135,7 @@ class OrderViewModel {
 
 // MARK: - Various Classes, Extensions
 
+// FIXME: move this somewhere more general
 // Mobile Dan
 // https://stackoverflow.com/a/41668104
 func format(phoneNumber sourcePhoneNumber: String) -> String? {

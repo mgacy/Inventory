@@ -19,6 +19,7 @@ public enum DataManagerError: Error {
     //case dateParsing
     case missingMOC
     case missingStoreID
+    //case serializationError
     case otherError(error: String)
 }
 
@@ -31,7 +32,7 @@ class DataManager {
     let managedObjectContext: NSManagedObjectContext
     //let viewContext: NSManagedObjectContext
     //let syncContext: NSManagedObjectContext
-    /// TODO: use UserManagerType; should userManager be private?
+    /// TODO: use `UserManagerType`; should userManager be private?
     let userManager: CurrentUserManager
 
     // MARK: - Lifecycle
