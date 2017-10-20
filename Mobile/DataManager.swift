@@ -386,6 +386,32 @@ extension DataManager {
             .materialize()
     }
 
+    func updateOrder(_ order: Order) -> Observable<Event<Order>> {
+        //return Observable.just(order).materialize()
+        /// TODO: use RemoteRecords instead?
+        guard let orderDict = order.serialize() else {
+            log.error("\(#function) FAILED : unable to serialize Order \(order)")
+            return Observable.error(DataManagerError.otherError(error: "Serializtion failied")).materialize()
+        }
+
+        return client.putOrder(orderDict)
+            //.flatMap { response -> Observable<Order> in
+            .map { response -> Order in
+                switch response.result {
+                case .success(let record):
+                    order.remoteID = record.syncIdentifier
+                    order.status = OrderStatus.uploaded.rawValue
+                    //order.collection?.updateStatus()
+                    return order
+                    //return Observable.just(order)
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    throw error
+                }
+            }
+            .materialize()
+    }
+
 }
 
 // MARK: - Invoice
