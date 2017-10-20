@@ -73,6 +73,7 @@
 		C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */; };
 		C98A4FB31DCB0233002BB076 /* Unit+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */; };
 		C98A4FB51DCB0329002BB076 /* Vendor+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */; };
+		C98A90881F97E97400644548 /* InventoryKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A90871F97E97400644548 /* InventoryKeypadViewModel.swift */; };
 		C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */; };
 		C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */; };
 		C9A0B2EC1E63D2A300404320 /* InitialSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0B2EB1E63D2A300404320 /* InitialSignUpViewController.swift */; };
@@ -207,6 +208,7 @@
 		C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Unit+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Vendor+MyStuff.swift"; sourceTree = "<group>"; };
+		C98A90871F97E97400644548 /* InventoryKeypadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryKeypadViewModel.swift; sourceTree = "<group>"; };
 		C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadViewModel.swift; sourceTree = "<group>"; };
 		C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A0B2EB1E63D2A300404320 /* InitialSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSignUpViewController.swift; sourceTree = "<group>"; };
@@ -626,6 +628,7 @@
 			isa = PBXGroup;
 			children = (
 				C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */,
+				C98A90871F97E97400644548 /* InventoryKeypadViewModel.swift */,
 				C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */,
 			);
 			name = Keypad;
@@ -1036,6 +1039,7 @@
 				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
 				C976305F1F219A0900BA8E42 /* JSON+Date.swift in Sources */,
 				C9BB05911F831D6600A07529 /* InventoryDateViewController.swift in Sources */,
+				C98A90881F97E97400644548 /* InventoryKeypadViewModel.swift in Sources */,
 				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift in Sources */,
 				C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */,
 				C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */,
