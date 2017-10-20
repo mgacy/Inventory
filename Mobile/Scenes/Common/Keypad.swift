@@ -8,6 +8,15 @@
 
 import Foundation
 
+protocol KeypadType {
+    var displayValue: String { get }
+
+    func popItem()
+    func pushDecimal()
+    func pushDigit(_: Int)
+    func updateNumber(_: NSNumber?)
+}
+
 protocol KeypadDelegate: class {
     //var keypad: NewKeypad { get }
     //func pushDigit(value: Int)
@@ -17,7 +26,7 @@ protocol KeypadDelegate: class {
     func updateModel(_: NSNumber?)
 }
 
-class NewKeypad {
+class NewKeypad: KeypadType {
 
     /// TODO: rename `currentDisplay` to better differentiate purpose from currentValue?
     public var displayValue: String {
