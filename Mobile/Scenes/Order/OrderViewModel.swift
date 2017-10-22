@@ -94,10 +94,6 @@ class OrderViewModel {
 
     //func emailOrder() {}
 
-    func cancelOrder() {
-        order.status = OrderStatus.empty.rawValue
-    }
-
     // MARK: - Completion Handlers
 
     func postOrder(completion: @escaping (Bool, Error?) -> Void) {
@@ -135,6 +131,10 @@ class OrderViewModel {
 
     func updateOrderStatus() {
         order.updateStatus()
+    }
+
+    func cancelOrder() {
+        order.status = OrderStatus.empty.rawValue
     }
 
     func setOrderToZero(forItemAtIndexPath indexPath: IndexPath) {
