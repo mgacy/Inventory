@@ -7,13 +7,12 @@
 //
 
 import CoreData
-import SwiftyJSON
+import RxCocoa
+import RxSwift
 
 class OrderViewModel {
 
     // MARK: - Properties
-
-    //typealias CompletionHandlerType = (JSON?, Error?) -> Void
 
     let dataManager: DataManager
     private var order: Order
@@ -25,9 +24,14 @@ class OrderViewModel {
     private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Output
+    // MARK: - Input
+    let placedOrder: AnyObserver<Void>
 
+    // MARK: - Output
     let frc: NSFetchedResultsController<OrderItem>
+    let isUploading: Driver<Bool>
+    let uploadResults: Observable<Event<Order>>
+
     var vendorName: String { return order.vendor?.name ?? "" }
     var repName: String { return "\(order.vendor?.rep?.firstName ?? "") \(order.vendor?.rep?.lastName ?? "")" }
     var email: String { return order.vendor?.rep?.email ?? "" }
@@ -76,6 +80,23 @@ class OrderViewModel {
         self.dataManager = dataManager
         self.order = parentObject
 
+        let _placedOrder = PublishSubject<Void>()
+        self.placedOrder = _placedOrder.asObserver()
+
+        // Upload
+        let isUploading = ActivityIndicator()
+        self.isUploading = isUploading.asDriver()
+
+        self.uploadResults = _placedOrder.asObservable()
+            .flatMap { _ -> Observable<Event<Order>> in
+                log.info("POSTing Order ...")
+                parentObject.status = OrderStatus.placed.rawValue
+                return dataManager.updateOrder(parentObject)
+                    .trackActivity(isUploading)
+            }
+            /// TODO: save context?
+            .share()
+
         // FetchRequest
         self.filter = NSPredicate(format: "order == %@", parentObject)
 
@@ -93,39 +114,6 @@ class OrderViewModel {
     // MARK: - Actions
 
     //func emailOrder() {}
-
-    // MARK: - Completion Handlers
-
-    func postOrder(completion: @escaping (Bool, Error?) -> Void) {
-        order.status = OrderStatus.placed.rawValue
-
-        guard let json = order.serialize() else {
-            log.error("\(#function) FAILED : unable to serialize Order")
-            return completion(false, nil)
-        }
-        log.info("POSTing Order ...")
-        log.verbose("Order: \(json)")
-        APIManager.sharedInstance.postOrder(order: json) { (json: JSON?, error: Error?) in
-            guard error == nil else {
-                //log.error("\(#function) FAILED : unable to POST order \(order)")
-                log.error("\(#function) FAILED : \(String(describing: error))")
-                return completion(false, error)
-            }
-            guard let json = json else {
-                log.error("\(#function) FAILED : unable to get JSON")
-                return completion(false, nil)
-            }
-            guard let remoteID = json["id"].int32 else {
-                log.error("\(#function) FAILED : unable to get remoteID")
-                return completion(false, nil)
-            }
-            self.order.remoteID = remoteID
-            self.order.status = OrderStatus.uploaded.rawValue
-            //order.collection?.updateStatus()
-
-            completion(true, nil)
-        }
-    }
 
     // MARK: - Model
 

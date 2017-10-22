@@ -9,8 +9,9 @@
 import UIKit
 import CoreData
 import MessageUI
-//import SwiftyJSON
 import PKHUD
+import RxCocoa
+import RxSwift
 
 class OrderItemViewController: UIViewController {
 
@@ -21,6 +22,9 @@ class OrderItemViewController: UIViewController {
     // MARK: - Properties
 
     var viewModel: OrderViewModel!
+    let disposeBag = DisposeBag()
+
+    let placedOrder = PublishSubject<Void>()
 
     // Create a MessageComposer
     /// TODO: should I instantiate this here or only in `.setupView()`?
@@ -42,6 +46,7 @@ class OrderItemViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = viewModel.vendorName
+        setupBindings()
         setupTableView()
     }
 
@@ -56,6 +61,45 @@ class OrderItemViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+    // MARK: - View Methods
+
+    private func setupBindings() {
+
+        placedOrder.asObservable()
+            .bind(to: viewModel.placedOrder)
+            .disposed(by: disposeBag)
+
+        // Uploading
+        viewModel.isUploading
+            .filter { $0 }
+            .drive(onNext: { _ in
+                HUD.show(.progress)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.uploadResults
+            .subscribe(onNext: { [weak self] result in
+                switch result.event {
+                case .next:
+                    HUD.flash(.success, delay: 0.5) { _ in
+                        self?.navigationController!.popViewController(animated: true)
+                    }
+                case .error(let error):
+                    log.error("\(#function) FAILED : \(String(describing: error))")
+                    HUD.flash(.error, delay: 1.0)
+                    //UIViewController.showErrorInHUD(title: "Strings.errorAlertTitle", subtitle: "Message")
+                    //showAlert(title: "Problem", message: "Unable to upload Order")
+
+                case .completed:
+                    log.warning("\(#function) : not sure how to handle completion")
+                }
+            })
+            .disposed(by: disposeBag)
+
+        // Selection
+        //viewModel.showKeypad
     }
 
     // MARK: - Navigation
@@ -145,23 +189,7 @@ extension OrderItemViewController {
             showAlert(title: "Problem", message: "Unable to send Order message")
         case .sent:
             log.info("Sent Order message")
-            HUD.show(.progress)
-            /// TODO: simply pass closure?
-            viewModel.postOrder(completion: completedPostOrder)
-        }
-    }
-
-    /// TODO: change signature to (error: Error?)
-
-    func completedPostOrder(succeeded: Bool, error: Error?) {
-        if succeeded {
-            HUD.flash(.success, delay: 0.5) { _ in
-                self.navigationController!.popViewController(animated: true)
-            }
-        } else {
-            log.error("\(#function) FAILED : \(String(describing: error))")
-            HUD.flash(.error, delay: 1.0)
-            //showAlert(title: "Problem", message: "Unable to upload Order")
+            placedOrder.onNext(())
         }
     }
 
@@ -199,6 +227,7 @@ extension OrderItemViewController: UITableViewDelegate {
 extension OrderItemViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ item: OrderItem) -> Bool {
+        /// TODO: refer to viewModel property
         guard parentObject.status == OrderStatus.pending.rawValue else {
             return false
         }
