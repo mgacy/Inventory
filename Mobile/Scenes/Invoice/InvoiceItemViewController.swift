@@ -256,7 +256,7 @@ extension InvoiceItemViewController: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: SubItemTableViewCell, for invoiceItem: InvoiceItem) {
-        let viewModel = InvoiceItemViewModel(forInvoiceItem: invoiceItem)
+        let viewModel = InvoiceItemCellViewModel(forInvoiceItem: invoiceItem)
         cell.configure(withViewModel: viewModel)
     }
 

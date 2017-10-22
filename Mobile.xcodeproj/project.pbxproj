@@ -45,7 +45,7 @@
 		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
 		C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */; };
-		C949C20E1F160719008A5EC4 /* InvoiceItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949C20D1F160719008A5EC4 /* InvoiceItemViewModel.swift */; };
+		C949C20E1F160719008A5EC4 /* InvoiceItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */; };
 		C9534D371F90042B00DA4A78 /* materialized+elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9534D361F90042B00DA4A78 /* materialized+elements.swift */; };
 		C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9564F311F840276007D84F6 /* RemoteInventory.swift */; };
 		C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */; };
@@ -179,7 +179,7 @@
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Syncable.swift; path = "Core Data Helpers/Syncable.swift"; sourceTree = "<group>"; };
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = InvoiceKeypadViewController.storyboard; sourceTree = "<group>"; };
-		C949C20D1F160719008A5EC4 /* InvoiceItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemViewModel.swift; sourceTree = "<group>"; };
+		C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemCellViewModel.swift; sourceTree = "<group>"; };
 		C9534D361F90042B00DA4A78 /* materialized+elements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "materialized+elements.swift"; sourceTree = "<group>"; };
 		C9564F311F840276007D84F6 /* RemoteInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInventory.swift; path = Models/RemoteInventory.swift; sourceTree = "<group>"; };
 		C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+MyStuff.swift"; sourceTree = "<group>"; };
@@ -402,7 +402,7 @@
 			isa = PBXGroup;
 			children = (
 				C92D75BE1DC7A7E500AA1A02 /* InvoiceItemViewController.swift */,
-				C949C20D1F160719008A5EC4 /* InvoiceItemViewModel.swift */,
+				C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */,
 			);
 			name = "Item List";
 			sourceTree = "<group>";
@@ -1030,7 +1030,7 @@
 				C9A14AC01DC6748000ACDE69 /* OrderKeypadViewController.swift in Sources */,
 				C902FF411DBE70290063CD02 /* Inventory+MyStuff.swift in Sources */,
 				C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */,
-				C949C20E1F160719008A5EC4 /* InvoiceItemViewModel.swift in Sources */,
+				C949C20E1F160719008A5EC4 /* InvoiceItemCellViewModel.swift in Sources */,
 				C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */,
 				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
 				C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */,

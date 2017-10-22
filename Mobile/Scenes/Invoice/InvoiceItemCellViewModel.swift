@@ -1,5 +1,5 @@
 //
-//  InvoiceItemViewModel.swift
+//  InvoiceItemCellViewModel.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 7/12/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct InvoiceItemViewModel: SubItemCellViewModelType {
+struct InvoiceItemCellViewModel: SubItemCellViewModelType {
     private var invoiceItem: InvoiceItem
     private var item: Item
     private var status: ItemStatus {
