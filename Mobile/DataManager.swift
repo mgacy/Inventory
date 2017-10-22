@@ -45,6 +45,7 @@ class DataManager {
 
     // MARK: General
 
+    @discardableResult
     func saveOrRollback() -> Observable<Bool> {
         /// TODO: use `saveOrRollback()` or `performSaveOrRollback()`
         /// TODO: should we simply perform the do / catch here and materialize the error?
@@ -395,15 +396,17 @@ extension DataManager {
         }
 
         return client.putOrder(orderDict)
-            //.flatMap { response -> Observable<Order> in
-            .map { response -> Order in
+            .map { [weak self] response -> Order in
                 switch response.result {
                 case .success(let record):
                     order.remoteID = record.syncIdentifier
                     order.status = OrderStatus.uploaded.rawValue
-                    //order.collection?.updateStatus()
+                    order.collection?.updateStatus()
+
+                    /// TODO: is there a better way to handle this?
+                    self?.saveOrRollback()
+
                     return order
-                    //return Observable.just(order)
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
                     throw error
