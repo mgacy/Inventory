@@ -75,22 +75,6 @@ class APIManager {
     // MARK: Private
     /// TODO: pass `sessionManager: SessionManager, decoder: JSONDecoder`?
 
-    private func postOne<M: Codable>(_ endpoint: Router) -> Observable<DataResponse<M>> {
-        /// TODO: include where validating endpoint.method == HTTPMethod.post
-        return Observable<DataResponse<M>>.create { observer in
-            let request = self.sessionManager.request(endpoint)
-            request
-                .validate()
-                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<M>) in
-                    observer.onNext(response)
-                    observer.onCompleted()
-            }
-            return Disposables.create {
-                request.cancel()
-            }
-        }
-    }
-
     private func requestOne<M: Codable>(_ endpoint: Router) -> Observable<DataResponse<M>> {
         return Observable<DataResponse<M>>.create { observer in
             //let decoder = JSONDecoder()
@@ -157,7 +141,7 @@ extension APIManager {
     /// NOTE: I am designing this in accordance with how things should work, not how they currently do
     func postInventory(storeID: Int) -> Observable<DataResponse<RemoteNewInventory>> {
         /// TODO: update to actually use POST
-        //return postOne(Router.postInventory)
+        //return requestOne(Router.postInventory)
         let isActive = true
         let typeID = 1
         return requestOne(Router.getNewInventory(isActive: isActive, typeID: typeID, storeID: storeID))
@@ -382,8 +366,8 @@ extension APIManager {
         //parameters["return_usage"] = returnUsage
         parameters["period_length"] = periodLength ?? 28
 
-        return postOne(Router.postOrderCollection(parameters))
-        //return postOne(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
+        return requestOne(Router.postOrderCollection(parameters))
+        //return requestOne(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
         //                                          returnUsage: returnUsage, periodLength: periodLength))
     }
 
