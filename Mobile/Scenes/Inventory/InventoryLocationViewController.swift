@@ -12,7 +12,7 @@ import RxCocoa
 import RxSwift
 
 // swiftlint:disable:next type_name
-class InventoryLocationViewController: UIViewController, SegueHandler {
+class InventoryLocationViewController: UIViewController {
 
     // MARK: - Properties
 
@@ -23,12 +23,6 @@ class InventoryLocationViewController: UIViewController, SegueHandler {
 
     // TableViewCell
     let cellIdentifier = "InventoryLocationTableViewCell"
-
-    // Segues
-    enum SegueIdentifier: String {
-        case showCategory = "ShowLocationCategory"
-        case showItem = "ShowLocationItem"
-    }
 
     // MARK: - Interface
 
