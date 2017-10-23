@@ -16,7 +16,6 @@ class InvoiceItemViewController: UITableViewController {
     // MARK: - Properties
 
     var parentObject: Invoice!
-    var selectedObject: InvoiceItem?
 
     // FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
@@ -48,24 +47,21 @@ class InvoiceItemViewController: UITableViewController {
 
     // MARK: - Navigation
 
-    fileprivate func showKeypad(withItem item: InvoiceItem) {
+    fileprivate func showKeypad(withIndexPath indexPath: IndexPath) {
         guard let destinationController = InvoiceKeypadViewController.instance() else {
             fatalError("\(#function) FAILED: unable to get destination view controller.")
         }
-        guard
-            let indexPath = self.tableView.indexPathForSelectedRow?.row,
-            let managedObjectContext = managedObjectContext else {
-                fatalError("\(#function) FAILED: unable to get indexPath or moc")
+        guard let managedObjectContext = managedObjectContext else {
+                fatalError("\(#function) FAILED: unable to get moc")
         }
 
-        destinationController.viewModel = InvoiceKeypadViewModel(for: parentObject, atIndex: indexPath,
+        destinationController.viewModel = InvoiceKeypadViewModel(for: parentObject, atIndex: indexPath.row,
                                                                  inContext: managedObjectContext)
         navigationController?.pushViewController(destinationController, animated: true)
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceItemViewController>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
         tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -108,12 +104,8 @@ class InvoiceItemViewController: UITableViewController {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected InvoiceItem: \(String(describing: selectedObject))")
-        guard let selection = selectedObject else {
-            fatalError("Couldn't get selected Invoice")
-        }
-        showKeypad(withItem: selection)
+        //log.verbose("Selected InvoiceItem: \(dataSource.objectAtIndexPath(indexPath))")
+        showKeypad(withIndexPath: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
