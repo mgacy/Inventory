@@ -106,9 +106,10 @@ class InventoryLocationViewController: UIViewController {
             .subscribe(onNext: { [weak self] result in
                 switch result.event {
                 case .next:
-                    HUD.flash(.success, delay: 1.0)
-                    /// TODO: this should be handled elsewhere
-                    self?.navigationController!.popViewController(animated: true)
+                    HUD.flash(.success, delay: 1.0) { _ in
+                        /// TODO: handle this elsewhere
+                        self?.navigationController!.popViewController(animated: true)
+                    }
                 case .error:
                     /// TODO: `case.error(let error):; switch error {}`
                     UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
