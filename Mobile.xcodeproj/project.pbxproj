@@ -86,6 +86,7 @@
 		C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */; };
 		C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */; };
 		C9AA8DC01F9F0D2D00147F07 /* InventoryLocItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */; };
+		C9AA8DC21F9F191000147F07 /* InitialSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DC11F9F191000147F07 /* InitialSignUpViewModel.swift */; };
 		C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */; };
 		C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */; };
 		C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */; };
@@ -223,6 +224,7 @@
 		C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Order+MyStuff.swift"; path = "Models/Order+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OrderItem+MyStuff.swift"; path = "Models/OrderItem+MyStuff.swift"; sourceTree = "<group>"; };
 		C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryLocItemViewModel.swift; sourceTree = "<group>"; };
+		C9AA8DC11F9F191000147F07 /* InitialSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialSignUpViewModel.swift; sourceTree = "<group>"; };
 		C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegueHandler.swift; path = Protocols/SegueHandler.swift; sourceTree = "<group>"; };
 		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Magic.swift"; sourceTree = "<group>"; };
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Magic.swift"; sourceTree = "<group>"; };
@@ -530,6 +532,7 @@
 				C935E9A31E60D713003BF386 /* InitialLoginVC.swift */,
 				C9174D461F833265008639CC /* InitialLoginViewModel.swift */,
 				C9A0B2EB1E63D2A300404320 /* InitialSignUpViewController.swift */,
+				C9AA8DC11F9F191000147F07 /* InitialSignUpViewModel.swift */,
 			);
 			path = Initial;
 			sourceTree = "<group>";
@@ -1079,6 +1082,7 @@
 				C91194741F9D426200B65CF9 /* InvoiceItemViewModel.swift in Sources */,
 				C9174D451F832393008639CC /* NSManagedObjectContext+Syncable.swift in Sources */,
 				C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */,
+				C9AA8DC21F9F191000147F07 /* InitialSignUpViewModel.swift in Sources */,
 				C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */,
 				C97A71361F8EC96100F2F1CD /* InventoryLocationCategoryViewModel.swift in Sources */,
 				C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */,

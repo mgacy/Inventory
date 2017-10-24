@@ -500,9 +500,6 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ZO-r6-b1c">
                                         <rect key="frame" x="0.0" y="114" width="343" height="30"/>
                                         <state key="normal" title="Sign Up"/>
-                                        <connections>
-                                            <action selector="signupButtonPressed:" destination="Sgv-j7-TMT" eventType="touchUpInside" id="lnV-53-Q52"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -525,6 +522,7 @@
                     <connections>
                         <outlet property="loginTextField" destination="sws-8P-VjS" id="1tb-80-Pa1"/>
                         <outlet property="passwordTextField" destination="YvJ-Fj-nnH" id="oiX-uP-T9r"/>
+                        <outlet property="signupButton" destination="7ZO-r6-b1c" id="EW1-PQ-bE5"/>
                         <outlet property="usernameTextField" destination="eUh-md-0Ts" id="pct-kX-SYW"/>
                         <segue destination="Lwb-b5-sIi" kind="show" identifier="showTabController" id="RYI-Jx-XiF"/>
                     </connections>
