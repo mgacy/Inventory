@@ -15,10 +15,6 @@ import RxSwift
 
 class OrderDateViewController: UIViewController {
 
-    // OLD
-    //var userManager: CurrentUserManager!
-    //var selectedCollection: OrderCollection?
-
     private enum Strings {
         static let navTitle = "Orders"
         static let errorAlertTitle = "Error"

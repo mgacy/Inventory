@@ -14,8 +14,9 @@ class OrderViewModel {
 
     // MARK: - Properties
 
+    /// TODO: make private
     let dataManager: DataManager
-    private var order: Order
+    var order: Order
 
     // CoreData
     private let filter: NSPredicate
@@ -32,6 +33,7 @@ class OrderViewModel {
     let isUploading: Driver<Bool>
     let uploadResults: Observable<Event<Order>>
 
+    //var orderStatus: OrderStatus { return order.status }
     var vendorName: String { return order.vendor?.name ?? "" }
     var repName: String { return "\(order.vendor?.rep?.firstName ?? "") \(order.vendor?.rep?.lastName ?? "")" }
     var email: String { return order.vendor?.rep?.email ?? "" }

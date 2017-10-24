@@ -123,7 +123,6 @@ class OrderVendorViewController: UIViewController {
             fatalError("\(#function) FAILED: unable to get destination view controller.")
         }
         destinationController.viewModel = OrderViewModel(dataManager: viewModel.dataManager, parentObject: order)
-        destinationController.parentObject = order
         navigationController?.pushViewController(destinationController, animated: true)
     }
 

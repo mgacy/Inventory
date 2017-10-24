@@ -14,9 +14,6 @@ import RxSwift
 
 class OrderItemViewController: UIViewController {
 
-    // OLD
-    var parentObject: Order!
-
     // MARK: - Properties
 
     var viewModel: OrderViewModel!
@@ -107,6 +104,7 @@ class OrderItemViewController: UIViewController {
             fatalError("\(#function) FAILED : unable to get destination view controller.")
         }
 
+        let parentObject = viewModel.order
         let managedObjectContext = viewModel.dataManager.managedObjectContext
         destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath.row,
                                                                inContext: managedObjectContext)
@@ -205,6 +203,7 @@ extension OrderItemViewController: UITableViewDelegate {
 
         // Set to 0
         let setToZero = UITableViewRowAction(style: .normal, title: "No Order") { _, _ in
+            /// TODO: use weak self?
             self.viewModel.setOrderToZero(forItemAtIndexPath: indexPath)
             tableView.isEditing = false
             // ALT
@@ -223,8 +222,8 @@ extension OrderItemViewController: UITableViewDelegate {
 extension OrderItemViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ item: OrderItem) -> Bool {
-        /// TODO: refer to viewModel property
-        guard parentObject.status == OrderStatus.pending.rawValue else {
+        /// TODO: refer to viewModel.orderStatus rather than .order
+        guard viewModel.order.status == OrderStatus.pending.rawValue else {
             return false
         }
         guard let quantity = item.quantity else {
