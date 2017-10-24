@@ -85,6 +85,7 @@
 		C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */; };
 		C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */; };
 		C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */; };
+		C9AA8DC01F9F0D2D00147F07 /* InventoryLocItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */; };
 		C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */; };
 		C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */; };
 		C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */; };
@@ -221,6 +222,7 @@
 		C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OrderCollection+MyStuff.swift"; path = "Models/OrderCollection+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Order+MyStuff.swift"; path = "Models/Order+MyStuff.swift"; sourceTree = "<group>"; };
 		C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OrderItem+MyStuff.swift"; path = "Models/OrderItem+MyStuff.swift"; sourceTree = "<group>"; };
+		C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryLocItemViewModel.swift; sourceTree = "<group>"; };
 		C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegueHandler.swift; path = Protocols/SegueHandler.swift; sourceTree = "<group>"; };
 		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Magic.swift"; sourceTree = "<group>"; };
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Magic.swift"; sourceTree = "<group>"; };
@@ -622,6 +624,7 @@
 			isa = PBXGroup;
 			children = (
 				C9F516091DB7F133004C10E6 /* InventoryLocationItemTVC.swift */,
+				C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */,
 				C9C2DA071F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift */,
 			);
 			name = "LocationItem List";
@@ -1020,6 +1023,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */,
+				C9AA8DC01F9F0D2D00147F07 /* InventoryLocItemViewModel.swift in Sources */,
 				C91856951F8D881D001B08A0 /* InventoriesFactory.swift in Sources */,
 				C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */,
 				C9BB05851F83164400A07529 /* AlamofireDecodableError.swift in Sources */,
