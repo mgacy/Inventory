@@ -138,10 +138,10 @@ class InventoryLocationViewController: UIViewController {
                 switch selection {
                 //case .back:
                 case .category(let location):
-                    let vc = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
-                    vc.location = location
-                    vc.managedObjectContext = strongSelf.viewModel.dataManager.managedObjectContext
-                    strongSelf.navigationController?.pushViewController(vc, animated: true)
+                    let controller = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
+                    controller.viewModel = InventoryLocCatViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                                    parentObject: location)
+                    strongSelf.navigationController?.pushViewController(controller, animated: true)
                 case .item(let location):
                     let controller = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
                     controller.viewModel = InventoryLocItemViewModel(dataManager: strongSelf.viewModel.dataManager,

@@ -1,26 +1,19 @@
 //
 //  InventoryLocationCategoryTVC.swift
-//  Playground
+//  Mobile
 //
 //  Created by Mathew Gacy on 10/9/16.
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
 import UIKit
-import CoreData
 
 class InventoryLocationCategoryTVC: UITableViewController {
 
     // MARK: Properties
 
-    var location: InventoryLocation!
-
-    // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //let filter: NSPredicate? = nil
-    //let cacheName: String? = nil // "Master"
-    //let objectsAsFaults = false
-    let fetchBatchSize = 20 // 0 = No Limit
+    var viewModel: InventoryLocCatViewModel!
+    //let disposeBag = DisposeBag()
 
     // TableViewCell
     let cellIdentifier = "InventoryLocationCategoryTableViewCell"
@@ -29,7 +22,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = location.name
+        title = viewModel.locationName
         setupTableView()
     }
 
@@ -56,19 +49,8 @@ class InventoryLocationCategoryTVC: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-
-        let request: NSFetchRequest<InventoryLocationCategory> = InventoryLocationCategory.fetchRequest()
-        let positionSort = NSSortDescriptor(key: "position", ascending: true)
-        let nameSort = NSSortDescriptor(key: "name", ascending: true)
-        request.sortDescriptors = [positionSort, nameSort]
-        request.predicate = NSPredicate(format: "location == %@", location)
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
