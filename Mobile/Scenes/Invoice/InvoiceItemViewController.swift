@@ -7,22 +7,30 @@
 //
 
 import UIKit
-import CoreData
-import SwiftyJSON
+//import CoreData
 import PKHUD
+import RxCocoa
+import RxSwift
 
 class InvoiceItemViewController: UITableViewController {
 
+    private enum Strings {
+        //static let navTitle
+        static let errorAlertTitle = "Error"
+    }
+
+    // OLD
+    //var managedObjectContext: NSManagedObjectContext?
+
     // MARK: - Properties
 
-    var parentObject: Invoice!
+    var viewModel: InvoiceItemViewModel!
+    let disposeBag = DisposeBag()
 
-    // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //var filter: NSPredicate? = nil
-    //var cacheName: String? = nil
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    let selectedObjects = PublishSubject<InvoiceItem>()
+
+    // Interface
+    let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
 
     // TableView
     var cellIdentifier = "InvoiceItemCell"
@@ -31,7 +39,8 @@ class InvoiceItemViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = parentObject.vendor?.name
+        setupView()
+        setupBindings()
         setupTableView()
     }
 
@@ -41,6 +50,43 @@ class InvoiceItemViewController: UITableViewController {
     }
 
     //override func didReceiveMemoryWarning() {}
+
+    // MARK: - View Methods
+
+    func setupView() {
+        title = viewModel.vendorName
+        self.navigationItem.rightBarButtonItem = uploadButtonItem
+    }
+
+    func setupBindings() {
+
+        // Uploading
+        viewModel.isUploading
+            .filter { $0 }
+            .drive(onNext: { _ in
+                HUD.show(.progress)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.uploadResults
+            .subscribe(onNext: { [weak self] result in
+                switch result.event {
+                case .next:
+                    HUD.flash(.success, delay: 1.0) { _ in
+                        /// TODO: handle this elsewhere
+                        self?.navigationController!.popViewController(animated: true)
+                    }
+                case .error:
+                    /// TODO: `case.error(let error):; switch error {}`
+                    UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
+                case .completed:
+                    log.warning("\(#function) : not sure how to handle completion")
+                }
+            })
+            .disposed(by: disposeBag)
+
+        // Errors
+        // Selection
     }
 
     // MARK: - Navigation
@@ -49,11 +95,8 @@ class InvoiceItemViewController: UITableViewController {
         guard let destinationController = InvoiceKeypadViewController.instance() else {
             fatalError("\(#function) FAILED: unable to get destination view controller.")
         }
-        guard let managedObjectContext = managedObjectContext else {
-                fatalError("\(#function) FAILED: unable to get moc")
-        }
-
-        destinationController.viewModel = InvoiceKeypadViewModel(for: parentObject, atIndex: indexPath.row,
+        let managedObjectContext = viewModel.dataManager.managedObjectContext
+        destinationController.viewModel = InvoiceKeypadViewModel(for: viewModel.parentObject, atIndex: indexPath.row,
                                                                  inContext: managedObjectContext)
         navigationController?.pushViewController(destinationController, animated: true)
     }
@@ -63,40 +106,10 @@ class InvoiceItemViewController: UITableViewController {
 
     fileprivate func setupTableView() {
         tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 80
-
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        let fetchPredicate = NSPredicate(format: "invoice == %@", parentObject)
-        request.predicate = fetchPredicate
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
+        //tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.estimatedRowHeight = 80
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
-    }
-
-    // MARK: - User interaction
-
-    @IBAction func uploadTapped(_ sender: AnyObject) {
-        log.info("Uploading Invoice ...")
-        guard let dict = self.parentObject.serialize() else {
-            log.error("\(#function) FAILED : unable to serialize Invoice")
-            /// TODO: completedUpload(false)
-            return
-        }
-        //APIManager.sharedInstance.postInvoice(invoice: dict, completion: completedUpload)
-        /// TODO: mark parentObject as having in-progress update
-        HUD.show(.progress)
-        let remoteID = Int(parentObject.remoteID)
-        APIManager.sharedInstance.putInvoice(remoteID: remoteID, invoice: dict, completion: newCompletedUpload)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -126,49 +139,12 @@ class InvoiceItemViewController: UITableViewController {
         // Received Button
         let received = UITableViewRowAction(style: .normal, title: "Received") { _, _ in
             invoiceItem.status = InvoiceItemStatus.received.rawValue
-            self.managedObjectContext?.performSaveOrRollback()
+            //self.managedObjectContext?.performSaveOrRollback()
             self.isEditing = false
         }
         received.backgroundColor = ColorPalette.navyColor
 
         return [received, notReceived]
-    }
-
-}
-
-// MARK: - Completion Handlers
-extension InvoiceItemViewController {
-
-    /// TODO: change signature to accept standard (JSON?, Error?)
-
-    func completedUpload(succeeded: Bool, json: JSON) {
-        if succeeded {
-            parentObject.uploaded = true
-
-            /// TODO: set .uploaded of parentObject.collection if all are uploaded
-
-            HUD.flash(.success, delay: 1.0) { _ in
-                self.navigationController!.popViewController(animated: true)
-            }
-
-        } else {
-            log.error("\(#function) FAILED : unable to upload Invoice")
-        }
-    }
-
-    func newCompletedUpload(json: JSON?, error: Error?) {
-        guard error == nil else {
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.error("\(#function) FAILED : unable to get JSON")
-            HUD.hide(); return
-        }
-        /// TODO: mark parentObject as no longer having in-progress update
-        log.debug("\(#function) RESPONSE: \(json)")
-        HUD.flash(.success, delay: 1.0) { _ in
-            self.navigationController!.popViewController(animated: true)
-        }
     }
 
 }
@@ -183,7 +159,7 @@ extension InvoiceItemViewController {
         func updateItemStatus(forItem invoiceItem: InvoiceItem, withStatus status: InvoiceItemStatus) {
             self.isEditing = false
             invoiceItem.status = status.rawValue
-            managedObjectContext?.performSaveOrRollback()
+            //managedObjectContext?.performSaveOrRollback()
             log.info("Updated InvoiceItem: \(invoiceItem)")
         }
 

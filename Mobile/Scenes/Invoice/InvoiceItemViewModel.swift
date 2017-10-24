@@ -15,7 +15,7 @@ struct InvoiceItemViewModel {
     // MARK: - Properties
 
     let dataManager: DataManager
-    private var parentObject: Invoice
+    var parentObject: Invoice
 
     // CoreData
     private let filter: NSPredicate? = nil
@@ -29,14 +29,19 @@ struct InvoiceItemViewModel {
 
     // MARK: - Output
     let frc: NSFetchedResultsController<InvoiceItem>
+    let vendorName: String
     let isUploading: Driver<Bool>
     let uploadResults: Observable<Event<Invoice>>
+    /// TODO: add uploadIsEnabled: Driver<Bool>
 
     // MARK: - Lifecycle
 
     init(dataManager: DataManager, parentObject: Invoice, rowTaps: Observable<InvoiceItem>, uploadTaps: Observable<Void>) {
         self.dataManager = dataManager
         self.parentObject = parentObject
+
+        /// TODO: use computed property instead?
+        self.vendorName = parentObject.vendor?.name ?? "Error"
 
         // Upload
         let isUploading = ActivityIndicator()
