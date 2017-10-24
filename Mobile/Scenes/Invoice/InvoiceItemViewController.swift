@@ -17,6 +17,15 @@ class InvoiceItemViewController: UITableViewController {
     private enum Strings {
         //static let navTitle
         static let errorAlertTitle = "Error"
+        // Actions
+        static let alertMessage = "Why wasn't this item received?"
+        //static let notReceivedActionTitle = "Not Received ..."
+        //static let moreActionTitle = "More"
+        //static let receivedActionTitle = "Received"
+        //static let damagedActionTitle = "Damaged"
+        //static let outOfStockActionTitle = "Out of Stock"
+        //static let wrongItemActionTitle = "Wrong Item"
+        //static let cancelActionTitle = "Cancel"
     }
 
     // OLD
@@ -156,8 +165,8 @@ extension InvoiceItemViewController {
     func showNotReceivedAlert(forItemAt indexPath: IndexPath) {
 
         // Alert Controller
-        let alertController = UIAlertController(title: nil, message: "Why wasn't this item received?",
-                                                preferredStyle: .actionSheet)
+        /// FIXME: use adaptive stype
+        let alertController = UIAlertController(title: nil, message: Strings.alertMessage, preferredStyle: .actionSheet)
 
         // Actions
 
