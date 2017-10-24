@@ -189,8 +189,6 @@ class OrderDateViewController: UIViewController {
                                               completeTaps: vc.completeButtonItem.rx.tap.asObservable()
                 )
                 vc.viewModel = vm
-                // OLD
-                vc.parentObject = selection
                 strongSelf.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)

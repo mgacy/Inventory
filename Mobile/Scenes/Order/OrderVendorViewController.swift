@@ -12,9 +12,6 @@ import RxSwift
 
 class OrderVendorViewController: UIViewController {
 
-    // OLD
-    var parentObject: OrderCollection!
-
     // MARK: - Properties
 
     var viewModel: OrderVendorViewModel!
