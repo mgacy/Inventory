@@ -1,5 +1,5 @@
 //
-//  InventoryLocationItemViewModel.swift
+//  InventoryLocItemCellViewModel.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 7/6/17.
@@ -7,9 +7,8 @@
 //
 
 import UIKit
-//import Foundation
 
-struct InventoryLocationItemViewModel: SubItemCellViewModelType {
+struct InventoryLocItemCellViewModel: SubItemCellViewModelType {
     private var locationItem: InventoryLocationItem
     private var item: Item
     private var status: ItemStatus {
