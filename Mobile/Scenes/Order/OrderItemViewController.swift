@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 import MessageUI
 import PKHUD
 import RxCocoa
@@ -16,7 +15,6 @@ import RxSwift
 class OrderItemViewController: UIViewController {
 
     // OLD
-    var managedObjectContext: NSManagedObjectContext?
     var parentObject: Order!
 
     // MARK: - Properties
@@ -108,10 +106,8 @@ class OrderItemViewController: UIViewController {
         guard let destinationController = OrderKeypadViewController.instance() else {
             fatalError("\(#function) FAILED : unable to get destination view controller.")
         }
-        guard let managedObjectContext = managedObjectContext else {
-                fatalError("\(#function) FAILED : unable to get moc")
-        }
 
+        let managedObjectContext = viewModel.dataManager.managedObjectContext
         destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath.row,
                                                                inContext: managedObjectContext)
         navigationController?.pushViewController(destinationController, animated: true)

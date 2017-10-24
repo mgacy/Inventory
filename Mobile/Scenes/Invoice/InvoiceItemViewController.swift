@@ -7,7 +7,6 @@
 //
 
 import UIKit
-//import CoreData
 import PKHUD
 import RxCocoa
 import RxSwift
@@ -27,9 +26,6 @@ class InvoiceItemViewController: UITableViewController {
         //static let wrongItemActionTitle = "Wrong Item"
         //static let cancelActionTitle = "Cancel"
     }
-
-    // OLD
-    //var managedObjectContext: NSManagedObjectContext?
 
     // MARK: - Properties
 

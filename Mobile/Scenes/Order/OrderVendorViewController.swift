@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 import RxCocoa
 import RxSwift
 
@@ -128,7 +127,6 @@ class OrderVendorViewController: UIViewController {
         }
         destinationController.viewModel = OrderViewModel(dataManager: viewModel.dataManager, parentObject: order)
         destinationController.parentObject = order
-        destinationController.managedObjectContext = viewModel.dataManager.managedObjectContext
         navigationController?.pushViewController(destinationController, animated: true)
     }
 

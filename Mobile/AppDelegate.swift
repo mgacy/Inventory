@@ -224,7 +224,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 guard let vc = topVC as? InvoiceDateViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = InvoiceDateViewModel(dataManager: dataManager,
                                                     rowTaps: vc.selectedObjects.asObservable())
-                vc.managedObjectContext = persistentContainer.viewContext
 
             case is InitialLoginVC:
                 guard let vc = topVC as? InitialLoginVC else { fatalError("wrong view controller type") }

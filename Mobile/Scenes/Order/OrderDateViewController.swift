@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 import PKHUD
 import RxCocoa
 import RxSwift
@@ -17,7 +16,6 @@ import RxSwift
 class OrderDateViewController: UIViewController {
 
     // OLD
-    var managedObjectContext: NSManagedObjectContext!
     //var userManager: CurrentUserManager!
     //var selectedCollection: OrderCollection?
 
@@ -192,7 +190,6 @@ class OrderDateViewController: UIViewController {
                 )
                 vc.viewModel = vm
                 // OLD
-                //vc.managedObjectContext = strongSelf.managedObjectContext
                 vc.parentObject = selection
                 strongSelf.navigationController?.pushViewController(vc, animated: true)
             })

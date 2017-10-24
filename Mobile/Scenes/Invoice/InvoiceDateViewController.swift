@@ -7,17 +7,11 @@
 //
 
 import UIKit
-import CoreData
 import PKHUD
 import RxCocoa
 import RxSwift
 
 class InvoiceDateViewController: UIViewController {
-
-    // OLD
-    var managedObjectContext: NSManagedObjectContext!
-    //var userManager: CurrentUserManager!
-    //var selectedCollection: InvoiceCollection?
 
     private enum Strings {
         static let navTitle = "Invoices"
