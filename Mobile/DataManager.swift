@@ -19,7 +19,7 @@ public enum DataManagerError: Error {
     //case dateParsing
     case missingMOC
     case missingStoreID
-    //case serializationError
+    case serializationError
     case otherError(error: String)
 }
 
@@ -211,7 +211,7 @@ extension DataManager {
     func updateInventory(_ inventory: Inventory) -> Observable<Event<Inventory>> {
         guard let inventoryDict = inventory.serialize() else {
             log.error("\(#function) FAILED : unable to serialize Inventory \(inventory)")
-            return Observable.error(DataManagerError.otherError(error: "Serializtion failied")).materialize()
+            return Observable.error(DataManagerError.serializationError).materialize()
         }
 
         return client.putInventory(inventoryDict)
@@ -392,7 +392,7 @@ extension DataManager {
         /// TODO: use RemoteRecords instead?
         guard let orderDict = order.serialize() else {
             log.error("\(#function) FAILED : unable to serialize Order \(order)")
-            return Observable.error(DataManagerError.otherError(error: "Serializtion failied")).materialize()
+            return Observable.error(DataManagerError.serializationError).materialize()
         }
 
         return client.putOrder(orderDict)
