@@ -6,14 +6,21 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import CoreData
 import UIKit
+import RxCocoa
+import RxSwift
 
-class SettingsViewController: UITableViewController, RootSectionViewController {
+class SettingsViewController: UITableViewController {
+
+    enum Strings {
+        static let navTitle = "Settings"
+    }
 
     // MARK: Properties
-    var userManager: CurrentUserManager!
-    var managedObjectContext: NSManagedObjectContext!
+
+    var viewModel: SettingsViewModel!
+    let disposeBag = DisposeBag()
+    let rowTaps = PublishSubject<IndexPath>()
 
     // Segues
     let accountSegue = "showAccount"
@@ -24,17 +31,45 @@ class SettingsViewController: UITableViewController, RootSectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Settings"
-        configureAccountCell()
+        setupView()
+        setupBindings()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         configureAccountCell()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    //override func didReceiveMemoryWarning() {}
+
+    // MARK: - View Methods
+
+    private func setupView() {
+        title = Strings.navTitle
+        configureAccountCell()
+    }
+
+    //private func setupConstraints() {}
+
+    private func setupBindings() {
+        viewModel.didLogout
+            .drive(onNext: { [weak self] _ in
+                self?.accountCell.textLabel?.text = "Login"
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.showLogin
+            .drive(onNext: { [weak self] _ in
+                log.verbose("Showing AccountVC ...")
+                guard let strongSelf = self else { fatalError("Unable to get self") }
+                strongSelf.performSegue(withIdentifier: strongSelf.accountSegue, sender: self)
+                /*
+                let controller = LoginViewController.initFromStoryboard(name: "Main")
+                controller.userManager = strongSelf.viewModel.dataManager.userManager
+                /// TODO: fix how we show controller
+                strongSelf.navigationController?.pushViewController(controller, animated: true)
+                */
+            })
+            .disposed(by: disposeBag)
     }
 
     // MARK: - Navigation
@@ -48,7 +83,8 @@ class SettingsViewController: UITableViewController, RootSectionViewController {
             else {
                 fatalError("Wrong view controller type")
             }
-            destinationController.userManager = userManager
+            /// FIXME: change this
+            destinationController.userManager = viewModel.dataManager.userManager
         default:
             break
         }
@@ -58,7 +94,8 @@ class SettingsViewController: UITableViewController, RootSectionViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         log.verbose("Selected section \(indexPath.section)")
-
+        rowTaps.onNext(indexPath)
+        /*
         // Account
         if indexPath.section == 0 {
             if let user = userManager.user {
@@ -73,7 +110,7 @@ class SettingsViewController: UITableViewController, RootSectionViewController {
                 performSegue(withIdentifier: accountSegue, sender: self)
             }
         }
-
+        */
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -83,78 +120,11 @@ class SettingsViewController: UITableViewController, RootSectionViewController {
 
     /// TODO: pass User?
     func configureAccountCell() {
-        if let user = userManager.user {
+        if let user = viewModel.currentUser {
             accountCell.textLabel?.text = "Logout \(user.email)"
         } else {
             accountCell.textLabel?.text = "Login"
         }
-    }
-
-}
-
-// MARK: - Completion Handlers
-extension SettingsViewController {
-
-    func completedLogout(suceeded: Bool) {
-        if suceeded {
-            accountCell.textLabel?.text = "Login"
-            deleteData()
-        } else {
-            log.warning("Unable to actually logout")
-            accountCell.textLabel?.text = "Login"
-            deleteData()
-        }
-    }
-
-}
-
-// MARK: - Delete Data
-extension SettingsViewController {
-
-    func deleteData() {
-        guard let managedObjectContext = managedObjectContext else { return }
-
-        /// TODO: use cascade rules to reduce list of entities we need to manually delete
-
-        // Inventory
-        do {
-            try managedObjectContext.deleteEntities(Inventory.self)
-        } catch {
-            log.error("\(#function) FAILED: unable to delete Inventories")
-        }
-        // Order
-        do {
-            try managedObjectContext.deleteEntities(OrderCollection.self)
-        } catch {
-            log.error("\(#function) FAILED: unable to delete OrderCollections")
-        }
-        // Invoice
-        do {
-            try managedObjectContext.deleteEntities(InvoiceCollection.self)
-        } catch {
-            log.error("\(#function) FAILED: unable to delete InvoiceCollections")
-        }
-        // Item
-        do {
-            try managedObjectContext.deleteEntities(Item.self)
-        } catch {
-            log.error("\(#function) FAILED: unable to delete Items")
-        }
-        // ItemCategory
-        do {
-            try managedObjectContext.deleteEntities(ItemCategory.self)
-        } catch {
-            log.error("\(#function) FAILED: unable to delete ItemCategories")
-        }
-        // Vendor
-        do {
-            try managedObjectContext.deleteEntities(Vendor.self)
-        } catch {
-            log.error("\(#function) FAILED: unable to delete Vendors")
-        }
-
-        let result = managedObjectContext.saveOrRollback()
-        log.info("Save result: \(result)")
     }
 
 }
