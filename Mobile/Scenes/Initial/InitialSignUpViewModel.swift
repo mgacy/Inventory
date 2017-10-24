@@ -46,14 +46,15 @@ struct InitialSignUpViewModel {
         self.signupTaps = _signup.asObserver()
         //self.didSignup = _signup.asObservable()
 
-        let userInputs = Observable.combineLatest(username.asObservable(), password.asObservable()) { (login, password) -> (String, String) in
+        let userInputs = Observable.combineLatest(
+            username.asObservable(), password.asObservable()
+        ) { (login, password) -> (String, String) in
             return (login, password)
         }
 
         isValid = userInputs
             .map { username, password in
-                return username.characters.count > 0
-                    && password.characters.count > 0
+                return username.characters.count > 0 && password.characters.count > 0
         }
 
         // Signup
