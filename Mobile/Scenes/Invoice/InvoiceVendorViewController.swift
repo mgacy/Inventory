@@ -12,6 +12,10 @@ import CoreData
 class InvoiceVendorViewController: UITableViewController {
 
     // MARK: - Properties
+    private enum Strings {
+        static let navTitle = "Vendors"
+        static let errorAlertTitle = "Error"
+    }
 
     var parentObject: InvoiceCollection!
 
@@ -30,7 +34,7 @@ class InvoiceVendorViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Vendors"
+        setupView()
         setupTableView()
     }
 
@@ -41,7 +45,10 @@ class InvoiceVendorViewController: UITableViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    // MARK: - View Methods
 
+    private func setupView() {
+        title = Strings.navTitle
     }
 
     // MARK: - TableViewDataSource
