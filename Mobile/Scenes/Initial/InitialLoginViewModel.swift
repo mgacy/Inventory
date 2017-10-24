@@ -44,16 +44,15 @@ struct InitialLoginViewModel {
         self.signupTaps = _signup.asObserver()
         self.didSignup = _signup.asObservable()
 
-        isValid = Observable.combineLatest(
-            self.username.asObservable(), self.password.asObservable()
-        ) { (username, password) in
-            return username.characters.count > 0 && password.characters.count > 0
-        }
-
         let userInputs = Observable.combineLatest(
             username.asObservable(), password.asObservable()
         ) { (login, password) -> (String, String) in
             return (login, password)
+        }
+
+        isValid = userInputs
+            .map { username, password in
+                return username.characters.count > 0 && password.characters.count > 0
         }
 
         let loggingIn = ActivityIndicator()
