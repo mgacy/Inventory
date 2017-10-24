@@ -17,43 +17,6 @@ class InventoryKeypadViewController: UIViewController {
     var viewModel: InventoryKeypadViewModel!
     let disposeBag = DisposeBag()
 
-    /*
-    var parentObject: LocationItemListParent = .none
-    var currentIndex = 0
-
-    var items: [InventoryLocationItem] {
-        let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
-
-        let positionSort = NSSortDescriptor(key: "position", ascending: true)
-        let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [positionSort, nameSort]
-
-        guard let fetchPredicate = parentObject.fetchPredicate else {
-            fatalError("\(#function) FAILED : LocationItemListParent not set")
-        }
-        request.predicate = fetchPredicate
-
-        do {
-            let searchResults = try managedObjectContext?.fetch(request)
-            return searchResults!
-
-        } catch {
-            log.error("Error with InventoryLocationItem fetch request: \(error)")
-        }
-        return [InventoryLocationItem]()
-    }
-
-    var currentItem: InventoryLocationItem {
-        return items[currentIndex]
-    }
-
-    typealias KeypadOutput = (history: String, total: Double?, display: String)
-    let keypad = KeypadWithHistory()
-
-    // CoreData
-    var managedObjectContext: NSManagedObjectContext?
-     */
-
     // MARK: - Display Outlets
     @IBOutlet weak var itemValue: UILabel!
     @IBOutlet weak var itemName: UILabel!
@@ -124,38 +87,20 @@ class InventoryKeypadViewController: UIViewController {
         guard let digit = sender.currentTitle else { return }
         //log.verbose("Tapped '\(digit)'")
         guard let number = Int(digit!) else { return }
-        /*
-        keypad.pushDigit(value: number)
-
-        // Update model and display with result of keypad
-        update()
-         */
         viewModel.pushDigit(value: number)
     }
 
     @IBAction func clearTapped(_ sender: AnyObject) {
-        /*
-        keypad.popItem()
-        update()
-         */
         viewModel.popItem()
     }
 
     @IBAction func decimalTapped(_ sender: AnyObject) {
-        /*
-        keypad.pushDecimal()
-        update()
-        */
         viewModel.pushDecimal()
     }
 
     // MARK: - Uncertain
 
     @IBAction func addTapped(_ sender: AnyObject) {
-        /*
-        keypad.pushOperator()
-        update()
-         */
         viewModel.pushOperator()
     }
 
@@ -164,12 +109,6 @@ class InventoryKeypadViewController: UIViewController {
     }
 
     @IBAction func incrementTapped(_ sender: AnyObject) {
-        /*
-        keypad.pushOperator()
-        keypad.pushDigit(value: 1)
-        keypad.pushOperator()
-        update()
-         */
         viewModel.pushOperator()
         viewModel.pushDigit(value: 1)
         viewModel.pushOperator()
@@ -178,16 +117,6 @@ class InventoryKeypadViewController: UIViewController {
     // MARK: - Item Navigation
 
     @IBAction func nextItemTapped(_ sender: AnyObject) {
-        /*
-        if currentIndex < items.count - 1 {
-            currentIndex += 1
-            // Update keypad and display with new currentItem
-            update(newItem: true)
-        } else {
-            /// TODO: cleanup?
-            navigationController!.popViewController(animated: true)
-        }
-         */
         switch viewModel.nextItem() {
         case true:
             return
@@ -197,16 +126,6 @@ class InventoryKeypadViewController: UIViewController {
     }
 
     @IBAction func previousItemTapped(_ sender: AnyObject) {
-        /*
-        if currentIndex > 0 {
-            currentIndex -= 1
-            // Update keypad and display with new currentItem
-            update(newItem: true)
-        } else {
-            /// TODO: cleanup?
-            navigationController!.popViewController(animated: true)
-        }
-         */
         switch viewModel.previousItem() {
         case true:
             return
@@ -214,64 +133,5 @@ class InventoryKeypadViewController: UIViewController {
             navigationController!.popViewController(animated: true)
         }
     }
-
-    // MARK: - View
-
-    // MARK: - View
-    /*
-    func update(newItem: Bool = false) {
-        let output: KeypadOutput
-
-        switch newItem {
-        case true:
-            // Update keypad with quantity of new currentItem
-            //keypad.updateNumber(currentItem.quantity as Double?)
-            keypad.updateNumber(currentItem.quantity?.doubleValue)
-            output = keypad.output()
-        case false:
-            // Update model with output of keyapd
-            output = keypad.output()
-
-            if let keypadResult = output.total {
-                currentItem.quantity = keypadResult as NSNumber?
-            } else {
-                currentItem.quantity = nil
-            }
-            managedObjectContext?.performSaveOrRollback()
-        }
-
-        updateDisplay(item: currentItem, keypadOutput: output)
-    }
-
-    // func updateDisplay(item: InventoryLocationItem, history: String, total: Double?, display: String) {}
-    func updateDisplay(item: InventoryLocationItem, keypadOutput: KeypadOutput) {
-
-        // Item.quantity
-        itemValue.text = keypadOutput.display
-        if keypadOutput.total != nil {
-            itemValue.textColor = UIColor.black
-        } else {
-            itemValue.textColor = UIColor.lightGray
-        }
-
-        itemHistory.text = keypadOutput.history
-
-        // Item.name
-        guard let inventoryItem = currentItem.item else {
-            itemName.text = "Error (1)"; return
-        }
-        guard let name = inventoryItem.name else {
-            itemName.text = "Error (2)"; return
-        }
-        itemName.text = name
-
-        // Item.pack
-        guard let item = inventoryItem.item else { return }
-        itemPack.text = item.packDisplay
-
-        // Item.unit
-        itemUnit.text = "\(item.inventoryUnit?.abbreviation ?? "")"
-    }
-     */
 
 }
