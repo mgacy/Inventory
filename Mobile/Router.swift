@@ -16,7 +16,6 @@ public enum NewOrderGenerationMethod: String {
     case sales
 }
 
-// swiftlint:disable:next type_body_length
 public enum Router: URLRequestConvertible {
     // Authentication
     case forgotPassword(email: String)

@@ -13,8 +13,6 @@ import SwiftyJSON
 import RxCocoa
 import RxSwift
 
-// swiftlint:disable file_length
-
 /*
 NOTE - BackendError already declared in AlamofireRequest+JSONSerializable.swift
 
