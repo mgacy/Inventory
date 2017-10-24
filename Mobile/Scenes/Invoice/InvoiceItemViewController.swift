@@ -104,6 +104,7 @@ class InvoiceItemViewController: UITableViewController {
         guard let destinationController = InvoiceKeypadViewController.instance() else {
             fatalError("\(#function) FAILED: unable to get destination view controller.")
         }
+        /// TODO: pass DataManager
         let managedObjectContext = viewModel.dataManager.managedObjectContext
         destinationController.viewModel = InvoiceKeypadViewModel(for: viewModel.parentObject, atIndex: indexPath.row,
                                                                  inContext: managedObjectContext)

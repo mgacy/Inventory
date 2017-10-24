@@ -485,6 +485,8 @@ extension DataManager {
                 switch response.result {
                 case .success:
                     invoice.uploaded = true
+                    /// TODO: mark invoice as no longer having in-progress update
+                    /// TODO: set .uploaded of invoice.collection if all are uploaded
                     return invoice
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")

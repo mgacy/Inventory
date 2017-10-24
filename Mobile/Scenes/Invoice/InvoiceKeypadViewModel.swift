@@ -110,6 +110,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
 
     // MARK: - Lifecycle
 
+    /// TODO: pass DataManager
     required init(for invoice: Invoice, atIndex index: Int, inContext context: NSManagedObjectContext) {
         self.parentObject = invoice
         self.currentIndex = index
