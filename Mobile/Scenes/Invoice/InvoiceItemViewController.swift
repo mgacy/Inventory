@@ -257,12 +257,13 @@ extension InvoiceItemViewController {
 extension InvoiceItemViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ item: InvoiceItem) -> Bool {
-        switch item.status {
-        case InvoiceItemStatus.received.rawValue:
-            return false
-        default:
-            return true
-        }
+        return true
+        //switch item.status {
+        //case InvoiceItemStatus.received.rawValue:
+        //    return false
+        //default:
+        //    return true
+        //}
     }
 
     func configure(_ cell: SubItemTableViewCell, for invoiceItem: InvoiceItem) {
