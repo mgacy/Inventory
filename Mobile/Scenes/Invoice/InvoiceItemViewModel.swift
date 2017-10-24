@@ -70,4 +70,14 @@ struct InvoiceItemViewModel {
                                               sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
     }
 
+    // MARK: Model
+
+    func updateItemStatus(forItemAt indexPath: IndexPath, withStatus status: InvoiceItemStatus) {
+        /// TODO: add `completion: () -> Void` arg to so view controller can do `self?.isEditing = false` as completion?
+        let invoiceItem = frc.object(at: indexPath)
+        invoiceItem.status = status.rawValue
+        dataManager.saveOrRollback()
+        log.info("Updated InvoiceItem: \(invoiceItem)")
+    }
+
 }
