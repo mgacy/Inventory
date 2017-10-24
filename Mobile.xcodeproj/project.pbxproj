@@ -87,6 +87,7 @@
 		C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */; };
 		C9AA8DC01F9F0D2D00147F07 /* InventoryLocItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */; };
 		C9AA8DC21F9F191000147F07 /* InitialSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DC11F9F191000147F07 /* InitialSignUpViewModel.swift */; };
+		C9AA8DC41F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */; };
 		C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */; };
 		C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */; };
 		C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */; };
@@ -225,6 +226,7 @@
 		C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OrderItem+MyStuff.swift"; path = "Models/OrderItem+MyStuff.swift"; sourceTree = "<group>"; };
 		C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryLocItemViewModel.swift; sourceTree = "<group>"; };
 		C9AA8DC11F9F191000147F07 /* InitialSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialSignUpViewModel.swift; sourceTree = "<group>"; };
+		C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnePasswordExtension+MyStuff.swift"; sourceTree = "<group>"; };
 		C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegueHandler.swift; path = Protocols/SegueHandler.swift; sourceTree = "<group>"; };
 		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Magic.swift"; sourceTree = "<group>"; };
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Magic.swift"; sourceTree = "<group>"; };
@@ -545,6 +547,7 @@
 				C9534D351F9003C000DA4A78 /* RxSwift */,
 				C9BA91281DEB958200DA2C6C /* UIKit */,
 				C976305E1F219A0900BA8E42 /* JSON+Date.swift */,
+				C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1105,6 +1108,7 @@
 				C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */,
 				C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */,
 				C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */,
+				C9AA8DC41F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift in Sources */,
 				C9BB05891F83171000A07529 /* ActivityIndicator.swift in Sources */,
 				C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */,
 				C9A14ABC1DC6742700ACDE69 /* OrderVendorViewController.swift in Sources */,

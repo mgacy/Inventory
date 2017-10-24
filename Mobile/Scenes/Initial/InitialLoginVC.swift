@@ -239,28 +239,3 @@ extension InitialLoginVC {
     }
 
 }
-
-// MARK: - 1Password Extension
-
-extension OnePasswordExtension {
-
-    /// TODO: add enum for different images
-    // "onepassword-button.png"
-    // "onepassword-button-light.png"
-
-    func getButton(ofWidth width: Int) -> UIButton? {
-        let onePasswordButton = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: width))
-        onePasswordButton.contentMode = UIViewContentMode.center
-
-        guard let path = Bundle(for: type(of: OnePasswordExtension.shared())).path(
-            forResource: "OnePasswordExtensionResources", ofType: "bundle") as String? else {
-                return nil
-        }
-        let onepasswordBundle = Bundle(path: path)
-        let image = UIImage(named: "onepassword-button.png", in: onepasswordBundle, compatibleWith: nil)
-        onePasswordButton.setImage(image, for: .normal)
-
-        return onePasswordButton
-    }
-
-}
