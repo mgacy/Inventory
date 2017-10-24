@@ -199,12 +199,11 @@ public enum Router: URLRequestConvertible {
             return ["store_id": storeID]
         case .getOrderCollection(let storeID, let forDate):
             return ["store_id": storeID, "date": forDate]
-//        case .postOrderCollection(let storeID, let generationMethod, let returnUsage, let periodLength):
-//            return ["store_id": storeID, "generation_method": generationMethod, "return_usage": returnUsage,
-//                    "period_length": periodLength ?? 28]
+        //case .postOrderCollection(let storeID, let generationMethod, let returnUsage, let periodLength):
+        //    return ["store_id": storeID, "generation_method": generationMethod, "return_usage": returnUsage,
+        //            "period_length": periodLength ?? 28]
         case .postOrderCollection(let parameters):
             return parameters
-        //    return parameters
         // case .getNewOrder(let storeID, let typeID, let returnUsage, let periodLength):
         //     return ["store_id": storeID, "inventory_type": typeID,
         //             "return_usage": returnUsage, "period_length": periodLength ?? 28]
