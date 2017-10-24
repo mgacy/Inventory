@@ -562,15 +562,15 @@ extension DataManager {
 /// TODO: make this conform to a protocol?
 extension DataManager {
 
-    /// TODO: mark as @discardable and return Observable<User>?
-    public func login(email: String, password: String) -> Observable<Bool> {
+    /// TODO: mark as @discardable and return Observable<Event<User>>?
+    public func login(email: String, password: String) -> Observable<Event<Bool>> {
         return Observable.create { observer in
             self.userManager.login(email: email, password: password) { error in
                 if let error = error {
                     log.warning("\(#function) ERROR : \(error)")
-                    //observer.onError(error)
-                    observer.onNext(true)
-                    observer.onCompleted()
+                    observer.onError(error)
+                    //observer.onNext(true)
+                    //observer.onCompleted()
                 } else {
                     log.debug("We logged in")
                     observer.onNext(true)
@@ -579,6 +579,7 @@ extension DataManager {
             }
             return Disposables.create()
         }
+        .materialize()
     }
 
     public func logout() -> Observable<Bool> {
@@ -602,13 +603,21 @@ extension DataManager {
         //}
     }
 
-    public func signUp(username: String, email: String, password: String) -> Observable<Bool> {
-        var success: Bool = false
-        self.userManager.signUp(username: username, email: email, password: password) { error in
-            log.debug("\(#function) : \(String(describing: error))")
-            success = true
-        }
-        return Observable.just(success)
+    public func signUp(username: String, email: String, password: String) -> Observable<Event<Bool>> {
+        return Observable.create { observer in
+            self.userManager.signUp(username: username, email: email, password: password) { error in
+                if let error = error {
+                    log.warning("\(#function) ERROR : \(error)")
+                    observer.onError(error)
+                } else {
+                    log.debug("We signed up")
+                    observer.onNext(true)
+                    observer.onCompleted()
+                }
+            }
+            return Disposables.create()
+            }
+            .materialize()
     }
 
     private func deleteData(in context: NSManagedObjectContext) -> Observable<Bool> {
