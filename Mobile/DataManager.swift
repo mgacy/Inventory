@@ -583,6 +583,7 @@ extension DataManager {
     }
 
     public func logout() -> Observable<Bool> {
+        /// TODO: check for pending Inventory / Invoice / Order; throw error and use `.materialize()`
         /// TODO: return if already logged out
         //return Observable.create { observer in
         self.userManager.logout { success in
@@ -624,11 +625,23 @@ extension DataManager {
         /// TODO: use cascade rules to reduce list of entities we need to manually delete
 
         // Inventory
-
+        do {
+            try managedObjectContext.deleteEntities(Inventory.self)
+        } catch {
+            log.error("\(#function) FAILED: unable to delete Inventories")
+        }
         // Order
-
+        do {
+            try managedObjectContext.deleteEntities(OrderCollection.self)
+        } catch {
+            log.error("\(#function) FAILED: unable to delete OrderCollections")
+        }
         // Invoice
-
+        do {
+            try managedObjectContext.deleteEntities(InvoiceCollection.self)
+        } catch {
+            log.error("\(#function) FAILED: unable to delete InvoiceCollections")
+        }
         // Item
         do {
             try managedObjectContext.deleteEntities(Item.self)
