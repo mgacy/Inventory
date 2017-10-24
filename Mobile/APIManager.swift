@@ -126,7 +126,7 @@ extension APIManager {
 
 }
 
-// MARK: - Inventory - NEW
+// MARK: - Inventory
 extension APIManager {
 
     func getInventories(storeID: Int) -> Observable<DataResponse<[RemoteInventory]>> {
@@ -155,77 +155,7 @@ extension APIManager {
 
 }
 
-// MARK: - Inventory - OLD
-extension APIManager {
-
-    func getListOfInventories(storeID: Int, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.listInventories(storeID: storeID))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
-    func getInventory(remoteID: Int, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.fetchInventory(remoteID: remoteID))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
-    func getNewInventory(isActive: Bool, typeID: Int, storeID: Int, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getNewInventory(isActive: isActive, typeID: typeID, storeID: storeID))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
-    func postInventory(inventory: [String: Any], completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.postInventory(inventory))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    log.verbose("\(#function) success : \(value)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    let json = JSON(error)
-                    completion(json, error)
-                }
-        }
-    }
-
-}
-
-// MARK: - Invoice - NEW
+// MARK: - Invoice
 extension APIManager {
 
     func getInvoiceCollections(storeID: Int) -> Observable<DataResponse<[RemoteInvoiceCollection]>> {
@@ -241,57 +171,9 @@ extension APIManager {
     }
 
 }
-
+/*
 // MARK: - Invoice - OLD
 extension APIManager {
-
-    func getListOfInvoiceCollections(storeID: Int, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.listInvoices(storeID: storeID))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-    /*
-    func getInvoiceCollection(storeID: Int, invoiceDate: String, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.fetchInvoice(storeID: storeID, invoiceDate: invoiceDate))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-     */
-    func getNewInvoiceCollection(storeID: Int, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getNewInvoice(storeID: storeID))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
 
     func postInvoice(invoice: [String: Any], completion: @escaping (Bool, JSON) -> Void) {
         sessionManager.request(Router.postInvoice(invoice))
@@ -306,23 +188,6 @@ extension APIManager {
                     log.warning("\(#function) FAILED : \(error)")
                     let json = JSON(error)
                     completion(false, json)
-                }
-        }
-    }
-
-    func putInvoice(remoteID: Int, invoice: [String: Any], completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.putInvoice(remoteID: remoteID, parameters: invoice))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    log.verbose("\(#function) success : \(value)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    //let json = JSON(error)
-                    completion(nil, error)
                 }
         }
     }
@@ -345,8 +210,8 @@ extension APIManager {
     }
 
 }
-
-// MARK: - Order - NEW
+*/
+// MARK: - Order
 extension APIManager {
 
     func getOrderCollections(storeID: Int) -> Observable<DataResponse<[RemoteOrderCollection]>> {
@@ -378,41 +243,9 @@ extension APIManager {
     }
 
 }
-
+/*
 // MARK: - Order - OLD
 extension APIManager {
-
-    func getListOfOrderCollections(storeID: Int, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.listOrders(storeID: storeID))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
-    func getOrderCollection(storeID: Int, orderDate: String, completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.fetchOrder(storeID: storeID, orderDate: orderDate))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
 
     func getNewOrderCollection(storeID: Int, generateFrom method: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?, completion:
         @escaping CompletionHandlerType) {
@@ -432,20 +265,5 @@ extension APIManager {
         }
     }
 
-    func postOrder(order: [String: Any], completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.postOrder(order))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    log.verbose("\(#function) success : \(value)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
 }
+*/
