@@ -121,7 +121,7 @@ class CurrentUserManager {
         // token could be handled by another one. However, the access token is currently short-lived.
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
 
-        authHandler!.login(completion: {(json: JSON?, error: Error?) -> Void in
+        authHandler!.login { json, error in
             guard error == nil else {
                 log.error("\(#function) FAILED : \(error!)")
                 self.authHandler = nil
@@ -151,7 +151,7 @@ class CurrentUserManager {
             self.user = User(id: userID, email: email)
             APIManager.sharedInstance.configSession(self.authHandler!)
             completion(nil)
-        })
+        }
     }
 
     public func signUp(username: String, email: String, password: String, completion: @escaping CompletionHandlerType) {
