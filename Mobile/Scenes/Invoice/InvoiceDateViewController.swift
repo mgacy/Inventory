@@ -156,13 +156,10 @@ class InvoiceDateViewController: UIViewController {
                 }
                 log.debug("\(#function) SELECTED: \(selection)")
 
-                let viewController = InvoiceVendorViewController.initFromStoryboard(name: "Main")
-                //let viewModel = InvoiceVendorViewModel(dataManager: viewModel.dataManager)
-                //viewController = viewModel = viewModel
-                // OLD
-                viewController.managedObjectContext = strongSelf.managedObjectContext
-                viewController.parentObject = selection
-                strongSelf.navigationController?.pushViewController(viewController, animated: true)
+                let vc = InvoiceVendorViewController.initFromStoryboard(name: "Main")
+                let vm = InvoiceVendorViewModel(dataManager: strongSelf.viewModel.dataManager, parentObject: selection)
+                vc.viewModel = vm
+                strongSelf.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
     }

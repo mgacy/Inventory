@@ -8,27 +8,26 @@
 
 import UIKit
 import CoreData
+import RxCocoa
+import RxSwift
 
 class InvoiceVendorViewController: UITableViewController {
 
-    // MARK: - Properties
     private enum Strings {
         static let navTitle = "Vendors"
         static let errorAlertTitle = "Error"
     }
 
-    var parentObject: InvoiceCollection!
+    // MARK: - Properties
 
-    // MARK: FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //var filter: NSPredicate? = nil
-    //var cacheName: String? = "Master"
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    var viewModel: InvoiceVendorViewModel!
+    let disposeBag = DisposeBag()
+    //let selectedObjects = PublishSubject<Invoice>()
 
     // TableViewCell
     let cellIdentifier = "Cell"
 
+    // MARK: - Interface
 
     // MARK: - Lifecycle
 
@@ -51,6 +50,10 @@ class InvoiceVendorViewController: UITableViewController {
         title = Strings.navTitle
     }
 
+    //private func setupConstraints() {}
+
+    //private func setupBindings() {}
+
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
 
@@ -58,22 +61,8 @@ class InvoiceVendorViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<Invoice> = Invoice.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        let fetchPredicate = NSPredicate(format: "collection == %@", parentObject)
-        request.predicate = fetchPredicate
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
     }
 
     // MARK: - Navigation
@@ -81,7 +70,7 @@ class InvoiceVendorViewController: UITableViewController {
     fileprivate func showInvoice(withInvoice invoice: Invoice) {
         let vc = InvoiceItemViewController.initFromStoryboard(name: "Main")
         vc.parentObject = invoice
-        vc.managedObjectContext = managedObjectContext
+        vc.managedObjectContext = viewModel.dataManager.managedObjectContext
         navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -91,6 +80,7 @@ class InvoiceVendorViewController: UITableViewController {
         let selectedObject = dataSource.objectAtIndexPath(indexPath)
         log.verbose("Selected Invoice: \(selectedObject)")
         showInvoice(withInvoice: selectedObject)
+        //selectedObjects.onNext(selectedObject)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
