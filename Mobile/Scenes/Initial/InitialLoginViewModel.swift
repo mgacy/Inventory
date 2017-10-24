@@ -6,7 +6,6 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-//import CoreData
 import RxCocoa
 import RxSwift
 
@@ -16,8 +15,6 @@ struct InitialLoginViewModel {
 
     //private let dataManager: DataManager
     let dataManager: DataManager
-
-    // CoreData
 
     // MARK: - Input
     let username = Variable<String>("")
