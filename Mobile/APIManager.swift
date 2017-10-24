@@ -130,12 +130,12 @@ extension APIManager {
 extension APIManager {
 
     func getInventories(storeID: Int) -> Observable<DataResponse<[RemoteInventory]>> {
-        return requestList(Router.listInventories(storeID: storeID))
+        return requestList(Router.getInventories(storeID: storeID))
     }
 
     func getInventory(remoteID: Int) -> Observable<DataResponse<RemoteExistingInventory>> {
         /// TODO: just accept `Inventory` so DataManager doesn't need to know anything about endpoint params?
-        return requestOne(Router.fetchInventory(remoteID: remoteID))
+        return requestOne(Router.getInventory(remoteID: remoteID))
     }
 
     /// NOTE: I am designing this in accordance with how things should work, not how they currently do

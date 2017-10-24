@@ -29,8 +29,8 @@ public enum Router: URLRequestConvertible {
     case getVendors(storeID: Int)
     // Inventory
     case getNewInventory(isActive: Bool, typeID: Int, storeID: Int)
-    case listInventories(storeID: Int)
-    case fetchInventory(remoteID: Int)
+    case getInventories(storeID: Int)
+    case getInventory(remoteID: Int)
     case postInventory([String: Any])
     // Invoice
     case getInvoiceCollections(storeID: Int)
@@ -73,9 +73,9 @@ public enum Router: URLRequestConvertible {
         // Inventory
         case .getNewInventory:
             return .get
-        case .listInventories:
+        case .getInventories:
             return .get
-        case .fetchInventory:
+        case .getInventory:
             return .get
         case .postInventory:
             return .post
@@ -127,9 +127,9 @@ public enum Router: URLRequestConvertible {
         // Inventory
         case .getNewInventory:
             return "\(Router.apiPath)/new_inventory"
-        case .listInventories:
+        case .getInventories:
             return "\(Router.apiPath)/inventories"
-        case .fetchInventory(let remoteID):
+        case .getInventory(let remoteID):
             return "\(Router.apiPath)/inventories/\(remoteID)"
         case .postInventory:
             return "\(Router.apiPath)/inventories"
@@ -178,7 +178,7 @@ public enum Router: URLRequestConvertible {
         //     return ["active": isActive, "inventory_type_id": typeID, "store_id": storeID]
         case .getNewInventory(let isActive, _, let storeID):
             return ["active": isActive, "store_id": storeID]
-        case .listInventories(let storeID):
+        case .getInventories(let storeID):
             return ["store_id": storeID]
         // case .fetchInventory:
         case .postInventory(let parameters):
@@ -264,9 +264,8 @@ public enum Router: URLRequestConvertible {
         // Inventory
         case .getNewInventory:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .listInventories:
+        case .getInventories:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        // case .fetchInventory:
         case .postInventory:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
 
