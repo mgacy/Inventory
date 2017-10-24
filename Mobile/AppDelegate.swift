@@ -214,7 +214,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 guard let vc = topVC as? InventoryDateViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = InventoryDateViewModel(dataManager: dataManager,
                                                       rowTaps: vc.selectedObjects.asObservable())
-                vc.managedObjectContext = persistentContainer.viewContext
 
             case is OrderDateViewController:
                 guard let vc = topVC as? OrderDateViewController else { fatalError("wrong view controller type") }

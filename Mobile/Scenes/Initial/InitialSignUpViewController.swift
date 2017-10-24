@@ -82,7 +82,6 @@ class InitialSignUpViewController: UIViewController, SegueHandler {
                                                    rowTaps: controller.selectedObjects.asObservable())
 
             controller.viewModel = viewModel
-            controller.managedObjectContext = managedObjectContext
 
             // Sync with completion handler from the new view controller.
             //_ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!,

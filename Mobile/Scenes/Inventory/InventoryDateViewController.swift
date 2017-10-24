@@ -7,15 +7,11 @@
 //
 
 import UIKit
-import CoreData
 import PKHUD
 import RxCocoa
 import RxSwift
 
 class InventoryDateViewController: UIViewController {
-
-    // OLD
-    var managedObjectContext: NSManagedObjectContext!
 
     private enum Strings {
         static let navTitle = "Inventories"
