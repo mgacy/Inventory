@@ -50,8 +50,6 @@ class InitialLoginVC: UIViewController, SegueHandler {
 
         if let user = viewModel.currentUser {
             loginTextField.text = user.email
-        } else {
-            loginTextField.text = "Test"
         }
     }
 
