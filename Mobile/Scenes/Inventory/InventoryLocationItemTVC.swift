@@ -12,8 +12,6 @@ import CoreData
 enum LocationItemListParent {
     case category(InventoryLocationCategory)
     case location(InventoryLocation)
-    // This case allows us to set default value on classes w/o initializer
-    case none
 
     var fetchPredicate: NSPredicate? {
         switch self {
@@ -21,8 +19,6 @@ enum LocationItemListParent {
             return NSPredicate(format: "category == %@", category)
         case .location(let location):
             return NSPredicate(format: "location == %@", location)
-        case .none:
-            return nil
         }
     }
 
@@ -32,14 +28,7 @@ class InventoryLocationItemTVC: UITableViewController {
 
     // MARK: Properties
 
-    var parentObject: LocationItemListParent = .none
-
-    // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //let filter: NSPredicate? = nil
-    //let cacheName: String? = nil
-    //let objectsAsFaults = false
-    let fetchBatchSize = 20 // 0 = No Limit
+    var viewModel: InventoryLocItemViewModel!
 
     // TableViewCell
     let cellIdentifier = "InventoryItemCell"
@@ -48,6 +37,7 @@ class InventoryLocationItemTVC: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = viewModel.windowTitle
         setupTableView()
     }
 
@@ -65,17 +55,15 @@ class InventoryLocationItemTVC: UITableViewController {
     // MARK: - Navigation
 
     fileprivate func showKeypad(withIndexPath indexPath: IndexPath) {
-        guard let destinationController = InventoryKeypadViewController.instance() else {
+        guard let controller = InventoryKeypadViewController.instance() else {
             fatalError("\(#function) FAILED : unable to get destination view controller.")
         }
-        guard let managedObjectContext = managedObjectContext else {
-                fatalError("\(#function) FAILED : unable to get moc")
-        }
-
-        let viewModel = InventoryKeypadViewModel(for: parentObject, atIndex: indexPath.row,
-                                                 inContext: managedObjectContext)
-        destinationController.viewModel = viewModel
-        navigationController?.pushViewController(destinationController, animated: true)
+        /// TODO: improve this
+        let managedObjectContext = viewModel.dataManager.managedObjectContext
+        let parentObject = viewModel.parentObject
+        controller.viewModel = InventoryKeypadViewModel(for: parentObject, atIndex: indexPath.row,
+                                                        inContext: managedObjectContext)
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     // MARK: - TableViewDataSource
@@ -85,30 +73,8 @@ class InventoryLocationItemTVC: UITableViewController {
         tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 80
-
-        let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
-
-        let positionSort = NSSortDescriptor(key: "position", ascending: true)
-        let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [positionSort, nameSort]
-
-        //request.predicate = parentObject.fetchPredicate
-        switch self.parentObject {
-        case .category(let parentCategory):
-            request.predicate = NSPredicate(format: "category == %@", parentCategory)
-        case .location(let parentLocation):
-            request.predicate = NSPredicate(format: "location == %@", parentLocation)
-        case .none:
-            fatalError("\(#function) FAILED : parentObject not set")
-        }
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate
@@ -124,7 +90,7 @@ class InventoryLocationItemTVC: UITableViewController {
 // MARK: - TableViewDataSourceDelegate Extension
 extension InventoryLocationItemTVC: TableViewDataSourceDelegate {
     func configure(_ cell: SubItemTableViewCell, for locationItem: InventoryLocationItem) {
-        let viewModel = InventoryLocationItemViewModel(forLocationItem: locationItem)
+        let viewModel = InventoryLocItemCellViewModel(forLocationItem: locationItem)
         cell.configure(withViewModel: viewModel)
     }
 }

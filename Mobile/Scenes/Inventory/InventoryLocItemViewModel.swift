@@ -43,8 +43,6 @@ struct InventoryLocItemViewModel {
             self.windowTitle = parentCategory.name ?? "Error"
         case .location(let parentLocation):
             self.windowTitle = parentLocation.name ?? "Error"
-        //case .none:
-        //    self.windowTitle = "Error (2)"
         }
 
         // FetchRequest
@@ -54,12 +52,8 @@ struct InventoryLocItemViewModel {
         switch self.parentObject {
         case .category(let parentCategory):
             request.predicate = NSPredicate(format: "category == %@", parentCategory)
-        //self.windowTitle = parentCategory.name ?? "Error"
         case .location(let parentLocation):
             request.predicate = NSPredicate(format: "location == %@", parentLocation)
-        //self.windowTitle = parentLocation.name ?? "Error"
-        case .none:
-            fatalError("\(#function) FAILED : parentObject not set")
         }
         */
         request.sortDescriptors = sortDescriptors

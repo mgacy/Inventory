@@ -143,11 +143,10 @@ class InventoryLocationViewController: UIViewController {
                     vc.managedObjectContext = strongSelf.viewModel.dataManager.managedObjectContext
                     strongSelf.navigationController?.pushViewController(vc, animated: true)
                 case .item(let location):
-                    let vc = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
-                    vc.parentObject = .location(location)
-                    vc.title = location.name ?? "Error"
-                    vc.managedObjectContext = strongSelf.viewModel.dataManager.managedObjectContext
-                    strongSelf.navigationController?.pushViewController(vc, animated: true)
+                    let controller = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
+                    controller.viewModel = InventoryLocItemViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                                     parentObject: .location(location))
+                    strongSelf.navigationController?.pushViewController(controller, animated: true)
                 }
             })
             .disposed(by: disposeBag)

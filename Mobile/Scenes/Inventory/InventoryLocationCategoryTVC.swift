@@ -44,9 +44,8 @@ class InventoryLocationCategoryTVC: UITableViewController {
 
     func showItemList(with category: InventoryLocationCategory) {
         let controller = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
-        controller.parentObject = .category(category)
-        controller.title = category.name ?? "Error"
-        controller.managedObjectContext = managedObjectContext
+        controller.viewModel = InventoryLocItemViewModel(dataManager: viewModel.dataManager,
+                                                         parentObject: .category(category))
         navigationController?.pushViewController(controller, animated: true)
     }
 
