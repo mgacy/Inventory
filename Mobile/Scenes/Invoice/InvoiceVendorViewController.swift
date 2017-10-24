@@ -14,7 +14,6 @@ class InvoiceVendorViewController: UITableViewController {
     // MARK: - Properties
 
     var parentObject: InvoiceCollection!
-    var selectedObject: Invoice?
 
     // MARK: FetchedResultsController
     var managedObjectContext: NSManagedObjectContext?
@@ -26,8 +25,6 @@ class InvoiceVendorViewController: UITableViewController {
     // TableViewCell
     let cellIdentifier = "Cell"
 
-    // Segues
-    let segueIdentifier = "showInvoiceItems"
 
     // MARK: - Lifecycle
 
@@ -43,24 +40,12 @@ class InvoiceVendorViewController: UITableViewController {
     }
 
     //override func didReceiveMemoryWarning() {}
-    }
 
-    // MARK: - Navigation
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InvoiceItemViewController else {
-            fatalError("Wrong view controller type")
-        }
-        guard let selectedObject = selectedObject else {
-            fatalError("Showing detail, but no selected row?")
-        }
-        destinationController.parentObject = selectedObject
-        destinationController.managedObjectContext = managedObjectContext
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -84,13 +69,21 @@ class InvoiceVendorViewController: UITableViewController {
                                          fetchedResultsController: frc, delegate: self)
     }
 
+    // MARK: - Navigation
+
+    fileprivate func showInvoice(withInvoice invoice: Invoice) {
+        let vc = InvoiceItemViewController.initFromStoryboard(name: "Main")
+        vc.parentObject = invoice
+        vc.managedObjectContext = managedObjectContext
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected Invoice: \(String(describing: selectedObject))")
-
-        performSegue(withIdentifier: segueIdentifier, sender: self)
+        let selectedObject = dataSource.objectAtIndexPath(indexPath)
+        log.verbose("Selected Invoice: \(selectedObject)")
+        showInvoice(withInvoice: selectedObject)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
