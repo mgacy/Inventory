@@ -426,9 +426,6 @@
                                         <rect key="frame" x="0.0" y="76" width="343" height="33"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Login"/>
-                                        <connections>
-                                            <action selector="loginButtonPressed:" destination="37G-Gi-gMX" eventType="touchUpInside" id="tXi-xC-Qdg"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BcY-I3-lEg">
                                         <rect key="frame" x="0.0" y="117" width="343" height="33"/>
@@ -558,6 +555,6 @@
         <image name="settingsTab" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="fev-ZI-ohI"/>
+        <segue reference="RYI-Jx-XiF"/>
     </inferredMetricsTieBreakers>
 </document>

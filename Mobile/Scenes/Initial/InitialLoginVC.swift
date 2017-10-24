@@ -6,20 +6,13 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-import CoreData
 import UIKit
-//import RxCocoa
-//import RxSwift
-import KeychainAccess
 import OnePasswordExtension
 import PKHUD
-//import SwiftyJSON
+import RxCocoa
+import RxSwift
 
 class InitialLoginVC: UIViewController, SegueHandler {
-
-    // OLD
-    var managedObjectContext: NSManagedObjectContext!
-    var userManager: CurrentUserManager!
 
     private enum Strings {
         static let errorAlertTitle = "Error"
@@ -29,7 +22,7 @@ class InitialLoginVC: UIViewController, SegueHandler {
     // MARK: Properties
 
     var viewModel: InitialLoginViewModel!
-    //let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
 
     // MARK: Interface
     @IBOutlet weak var loginTextField: UITextField!
@@ -51,37 +44,105 @@ class InitialLoginVC: UIViewController, SegueHandler {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
+        //setupConstraints()
+        setupBindings()
+
+        if let user = viewModel.currentUser {
+            loginTextField.text = user.email
+        } else {
+            loginTextField.text = "Test"
+        }
+    }
+
+    // override func didReceiveMemoryWarning() {}
+
+    // MARK: - View Methods
+
+    private func setupView() {
         /// TODO: enable signup
         signupButton.isEnabled = false
 
         loginTextField.delegate = self
         passwordTextField.delegate = self
 
-        if let user = userManager.user {
-            loginTextField.text = user.email
-        }
-
         if OnePasswordExtension.shared().isAppExtensionAvailable() {
             setupTextFieldFor1Password()
         }
     }
 
-    // override func didReceiveMemoryWarning() {}
+    //private func setupConstraints() {}
 
-    // MARK: - User interaction
+    // swiftlint:disable:next function_body_length
+    private func setupBindings() {
+        loginTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.username)
+            .disposed(by: disposeBag)
 
-    @IBAction func loginButtonPressed(_ sender: AnyObject) {
-        login()
-    }
+        loginTextField.rx.controlEvent(.editingDidEndOnExit)
+            .subscribe(onNext: { _ in
+                self.passwordTextField.becomeFirstResponder()
+            })
+            .disposed(by: disposeBag)
 
-    //@IBAction func signupButtonPressed(_ sender: AnyObject) {}
+        passwordTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.password)
+            .disposed(by: disposeBag)
+        /*
+        passwordTextField.rx.controlEvent(.editingDidEndOnExit)
+            .subscribe(onNext: { _ in
+                 /// TODO: event to make viewModel login
+            })
+            .disposed(by: disposeBag)
+        */
+        loginButton.rx.tap
+            .bind(to: viewModel.loginTaps)
+            .disposed(by: disposeBag)
 
-    func login() {
-        guard let email = loginTextField.text, let pass = passwordTextField.text else {
-            return
-        }
-        HUD.show(.progress)
-        userManager.login(email: email, password: pass, completion: completedLogin)
+        signupButton.rx.tap
+            .bind(to: viewModel.signupTaps)
+            .disposed(by: disposeBag)
+
+        // from the viewModel
+
+        viewModel.isValid
+            .map { $0 }
+            .bind(to: loginButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+
+        viewModel.loggingIn
+            .filter { $0 }
+            .drive(onNext: { _ in
+                HUD.show(.progress)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.loginResults
+            .subscribe(onNext: { [weak self] result in
+                switch result.event {
+                case .next:
+                    log.verbose("Logged in")
+                    HUD.flash(.success, delay: 0.2) { _ in
+                        /// TODO: handle this elsewhere
+                        self?.performSegue(withIdentifier: .showMain)
+                    }
+                case .error(let error):
+                    //UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: Strings.loginErrorMessage)
+
+                    switch error as? BackendError {
+                    case .authentication?:
+                        UIViewController.showErrorInHUD(title: Strings.errorAlertTitle,
+                                                        subtitle: Strings.loginErrorMessage)
+                    default:
+                        HUD.flash(.error, delay: 1.0)
+                    }
+                case .completed:
+                    log.warning("\(#function) : not sure how to handle completion")
+                }
+            })
+            .disposed(by: disposeBag)
     }
 
     // MARK: - Navigation
@@ -111,18 +172,19 @@ class InitialLoginVC: UIViewController, SegueHandler {
 extension InitialLoginVC: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        /*
         switch textField {
         case loginTextField:
-            passwordTextField.becomeFirstResponder()
-        case passwordTextField:
+            log.debug("A")
             /// TODO: perform validation
-
-            // Hide the keyboard.
-            textField.resignFirstResponder()
-            login()
+        case passwordTextField:
+            log.debug("B")
+            /// TODO: perform validation
         default:
-            textField.resignFirstResponder()
+            log.debug("C")
+            //textField.resignFirstResponder()
         }
+        */
         return true
     }
     /*
@@ -174,27 +236,6 @@ extension InitialLoginVC {
                 }
                 */
         })
-    }
-
-}
-
-// MARK: - Completion Handlers
-extension InitialLoginVC {
-
-    func completedLogin(_ error: BackendError? = nil) {
-        guard error == nil else {
-            log.error("Failed to login: \(String(describing: error))")
-            switch error! {
-            case .authentication:
-                UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: Strings.loginErrorMessage)
-            default:
-                HUD.flash(.error, delay: 1.0)
-            }
-            return
-        }
-        log.verbose("Logged in")
-        // TODO: change so we only createUser() on success
-        performSegue(withIdentifier: .showMain)
     }
 
 }

@@ -51,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
         dataManager = DataManager(context: persistentContainer.viewContext, userManager: userManager)
+        //guard let manager = dataManager else { fatalError("Unable to instantiate DataManager") }
 
         // Check if we already have user + credentials
         if userManager.user != nil {
@@ -60,8 +61,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
                     fatalError("Unable to instantiate view controller")
             }
-            loginController.managedObjectContext = persistentContainer.viewContext
-            loginController.userManager = userManager
+            loginController.viewModel = InitialLoginViewModel(dataManager: dataManager!)
+
             self.window?.rootViewController = loginController
             self.window?.makeKeyAndVisible()
         }
@@ -227,7 +228,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case is InitialLoginVC:
                 guard let vc = topVC as? InitialLoginVC else { fatalError("wrong view controller type") }
                 vc.viewModel = InitialLoginViewModel(dataManager: dataManager)
-                vc.managedObjectContext = persistentContainer.viewContext
 
             case is SettingsViewController:
                 guard let vc = topVC as? SettingsViewController else { fatalError("wrong view controller type") }
