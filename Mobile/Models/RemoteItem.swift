@@ -84,7 +84,7 @@ extension RemoteNestedItem: RemoteRecord {
 struct RemoteItemCategory: Codable {
     let remoteID: Int
     let name: String
-    //let items: [RemoteNestedItem]
+    //let items: [RemoteNestedItem]?
 
     private enum CodingKeys: String, CodingKey {
         case remoteID = "id"
@@ -113,6 +113,13 @@ struct RemoteStore: Codable {
 extension RemoteStore: RemoteRecord {
     typealias SyncIdentifierType = Int32
     var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
+}
+
+// MARK: - Token
+
+struct RemoteToken: Codable {
+    let token: String
+    let user: RemoteUser
 }
 
 // MARK: - Unit
