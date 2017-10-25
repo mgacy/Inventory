@@ -34,18 +34,15 @@ public enum Router: URLRequestConvertible {
     // Invoice
     case getInvoiceCollections(storeID: Int)
     case getInvoiceCollection(storeID: Int, forDate: String)
-    // OLD
-    case postInvoice([String: Any])
+    case postInvoice([String: Any])                                                         // Deprecated
     case putInvoice(remoteID: Int, parameters: [String: Any])
     case putInvoiceItem(remoteID: Int, parameters: [String: Any])
     // Order
     case getOrderCollections(storeID: Int)
     case getOrderCollection(storeID: Int, forDate: String)
-    // OLD
-    case getNewOrder(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?)
-    case postOrder([String: Any])
     case postOrderCollection(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool,
                              periodLength: Int?)
+    case postOrder([String: Any])                                                           // Deprecated
 
     //static let baseURLString = "http://localhost:5000"
     static let baseURLString = "***REMOVED***"
@@ -83,7 +80,6 @@ public enum Router: URLRequestConvertible {
             return .get
         case .getInvoiceCollection:
             return .get
-        // OLD
         case .postInvoice:
             return .post
         case .putInvoice:
@@ -97,9 +93,6 @@ public enum Router: URLRequestConvertible {
             return .get
         case .postOrderCollection:
             return .post
-        // OLD
-        case .getNewOrder:
-            return .get
         case .postOrder:
             return .post
         }
@@ -150,8 +143,6 @@ public enum Router: URLRequestConvertible {
             return "\(Router.apiPath)/order_collections"
         case .postOrderCollection:
             return "\(Router.apiPath)/order_collections"
-        case .getNewOrder:
-            return "\(Router.apiPath)/new_order"
         case .postOrder:
             return "\(Router.apiPath)/orders"
         }
@@ -173,13 +164,10 @@ public enum Router: URLRequestConvertible {
         // case .getUnits:
         // case .getVendors(let storeID):
         // Inventory
-        // case .getNewInventory(let isActive, let typeID, let storeID):
-        //     return ["active": isActive, "inventory_type_id": typeID, "store_id": storeID]
-        case .getNewInventory(let isActive, _, let storeID):
+        case .getNewInventory(let isActive, _, let storeID):    // Note that we are ignoring `typeID`
             return ["active": isActive, "store_id": storeID]
         case .getInventories(let storeID):
             return ["store_id": storeID]
-        // case .fetchInventory:
         case .postInventory(let parameters):
             return parameters
         // Invoice
@@ -198,11 +186,6 @@ public enum Router: URLRequestConvertible {
             return ["store_id": storeID]
         case .getOrderCollection(let storeID, let forDate):
             return ["store_id": storeID, "date": forDate]
-        // case .getNewOrder(let storeID, let typeID, let returnUsage, let periodLength):
-        //     return ["store_id": storeID, "inventory_type": typeID,
-        //             "return_usage": returnUsage, "period_length": periodLength ?? 28]
-        case .getNewOrder(let storeID, let generationMethod, let returnUsage, let periodLength):
-            return ["store_id": storeID, "generation_method": generationMethod, "return_usage": returnUsage,
         case .postOrderCollection(let storeID, let generationMethod, let returnUsage, let periodLength):
             return ["store_id": storeID, "generation_method": generationMethod.rawValue, "return_usage": returnUsage,
                     "period_length": periodLength ?? 28]
@@ -283,8 +266,6 @@ public enum Router: URLRequestConvertible {
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .postOrderCollection:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
-        case .getNewOrder:
-            urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .postOrder:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         default:

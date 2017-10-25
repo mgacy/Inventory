@@ -232,27 +232,3 @@ extension APIManager {
     }
 
 }
-/*
-// MARK: - Order - OLD
-extension APIManager {
-
-    func getNewOrderCollection(storeID: Int, generateFrom method: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?, completion:
-        @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getNewOrder(storeID: storeID, generationMethod: method,
-                                                  returnUsage: returnUsage, periodLength: periodLength))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
-}
-*/
