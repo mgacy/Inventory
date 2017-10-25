@@ -82,13 +82,34 @@ class InventoryDateViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        //let marginGuide = view.layoutMarginsGuide
 
         // TableView
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        //tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        //tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        if #available(iOS 11, *) {
+            let guide = view.safeAreaLayoutGuide
+
+            tableView.topAnchor.constraintEqualToSystemSpacingBelow(guide.topAnchor, multiplier: 1.0).isActive = true
+            tableView.bottomAnchor.constraintEqualToSystemSpacingBelow(guide.bottomAnchor,
+                                                                       multiplier: 1.0).isActive = true
+            //NSLayoutConstraint.activate([
+            //    tableView.topAnchor.constraintEqualToSystemSpacingBelow(guide.topAnchor, multiplier: 1.0),
+            //    guide.bottomAnchor.constraintEqualToSystemSpacingBelow(tableView.bottomAnchor, multiplier: 1.0)
+            //    ])
+
+        } else {
+            //let marginGuide = view.layoutMarginsGuide
+            let standardSpacing: CGFloat = 8.0
+            NSLayoutConstraint.activate([
+                tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: standardSpacing),
+                bottomLayoutGuide.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: standardSpacing)
+                ])
+
+            //tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+            //tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        }
 
         // ActivityIndicator
         activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
