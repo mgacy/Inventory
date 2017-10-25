@@ -6,10 +6,7 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
-import CoreData
 import Alamofire
-import SwiftyJSON
 import RxCocoa
 import RxSwift
 
@@ -29,8 +26,6 @@ class APIManager {
     static let sharedInstance = APIManager()
     private let sessionManager: SessionManager
     private let decoder: JSONDecoder
-
-    typealias CompletionHandlerType = (JSON?, Error?) -> Void
 
     // MARK: Lifecycle
 
@@ -114,9 +109,9 @@ extension APIManager {
         return requestList(Router.getItems(storeID: storeID))
     }
     /*
-     func getItemCategories(storeID: Int) -> Observable<DataResponse<[RemoteItemCategory]>> {
-     return requestList(Router.getItemCategories(storeID: storeID))
-     }
+    func getItemCategories(storeID: Int) -> Observable<DataResponse<[RemoteItemCategory]>> {
+        return requestList(Router.getItemCategories(storeID: storeID))
+    }
      */
     func getVendors(storeID: Int) -> Observable<DataResponse<[RemoteVendor]>> {
         return requestList(Router.getVendors(storeID: storeID))
