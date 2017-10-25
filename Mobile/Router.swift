@@ -198,27 +198,19 @@ public enum Router: URLRequestConvertible {
 
     // MARK: URLRequestConvertible
 
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     public func asURLRequest() throws -> URLRequest {
-        // TODO: can I simply add apiURL here?
-        //let urlString = Router.baseURLString + Router.apiURL
-        //let url = try urlString.asURL()
-
         let url = try Router.baseURLString.asURL()
-
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.httpMethod = method.rawValue
 
         /*
         switch self {
         case .logout:
-            break
+            _ = true
         case .getUnits:
-            break
+            _ = true
         case .getVendors:
-            break
-        case .fetchInventory:
-            break
+            _ = true
         default:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         }
