@@ -47,8 +47,8 @@ public enum Router: URLRequestConvertible {
     case getNewOrder(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?)
     case postOrder([String: Any])
 
-    static let baseURLString = "http://localhost:5000"
-    //static let baseURLString = "***REMOVED***"
+    //static let baseURLString = "http://localhost:5000"
+    static let baseURLString = "***REMOVED***"
     static let apiPath = "/api/v1.0"
 
     var method: HTTPMethod {
