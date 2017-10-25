@@ -58,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             prepareTabBarController(dataManager: dataManager!)
         } else {
             guard let loginController = storyboard.instantiateViewController(
-                withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
+                withIdentifier: "InitialLoginViewController") as? InitialLoginViewController else {
                     fatalError("Unable to instantiate view controller")
             }
             loginController.viewModel = InitialLoginViewModel(dataManager: dataManager!)
@@ -225,8 +225,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 vc.viewModel = InvoiceDateViewModel(dataManager: dataManager,
                                                     rowTaps: vc.selectedObjects.asObservable())
 
-            case is InitialLoginVC:
-                guard let vc = topVC as? InitialLoginVC else { fatalError("wrong view controller type") }
+            case is InitialLoginViewController:
+                guard let vc = topVC as? InitialLoginViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = InitialLoginViewModel(dataManager: dataManager)
 
             case is SettingsViewController:

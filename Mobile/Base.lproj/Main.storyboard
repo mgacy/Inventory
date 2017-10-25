@@ -402,13 +402,13 @@
         <!--InitialLogin-->
         <scene sceneID="koq-0d-6Dk">
             <objects>
-                <viewController storyboardIdentifier="InitialLoginViewController" id="37G-Gi-gMX" userLabel="InitialLogin" customClass="InitialLoginVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InitialLoginViewController" id="37G-Gi-gMX" userLabel="InitialLogin" customClass="InitialLoginViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Xkz-o5-nv8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="lQ2-pa-8s7">
-                                <rect key="frame" x="16" y="120" width="343" height="147"/>
+                                <rect key="frame" x="16" y="120" width="343" height="150"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Zt6-K4-KGw">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
@@ -428,7 +428,7 @@
                                         <state key="normal" title="Login"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BcY-I3-lEg">
-                                        <rect key="frame" x="0.0" y="114" width="343" height="33"/>
+                                        <rect key="frame" x="0.0" y="117" width="343" height="33"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Sign Up"/>
                                         <connections>

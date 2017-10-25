@@ -1,5 +1,5 @@
 //
-//  InitialLoginVC.swift
+//  InitialLoginViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 2/24/17.
@@ -12,7 +12,7 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-class InitialLoginVC: UIViewController, SegueHandler {
+class InitialLoginViewController: UIViewController, SegueHandler {
 
     private enum Strings {
         static let errorAlertTitle = "Error"
@@ -167,7 +167,7 @@ class InitialLoginVC: UIViewController, SegueHandler {
 }
 
 // MARK: - UITextFieldDelegate
-extension InitialLoginVC: UITextFieldDelegate {
+extension InitialLoginViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         /*
@@ -199,7 +199,7 @@ extension InitialLoginVC: UITextFieldDelegate {
 }
 
 // MARK: - 1Password Integration
-extension InitialLoginVC {
+extension InitialLoginViewController {
 
     func setupTextFieldFor1Password() {
         guard let onePasswordButton = OnePasswordExtension.shared().getButton(ofWidth: 20) else {

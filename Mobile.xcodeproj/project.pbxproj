@@ -43,7 +43,7 @@
 		C92D75C31DC7A93100AA1A02 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C21DC7A93100AA1A02 /* LoginViewController.swift */; };
 		C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */; };
 		C92EC6321F84C80300B47C23 /* RemoteOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EC6311F84C80300B47C23 /* RemoteOrder.swift */; };
-		C935E9A41E60D713003BF386 /* InitialLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E9A31E60D713003BF386 /* InitialLoginVC.swift */; };
+		C935E9A41E60D713003BF386 /* InitialLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */; };
 		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
 		C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */; };
@@ -181,7 +181,7 @@
 		C92D75C21DC7A93100AA1A02 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C92EC6311F84C80300B47C23 /* RemoteOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteOrder.swift; path = Models/RemoteOrder.swift; sourceTree = "<group>"; };
-		C935E9A31E60D713003BF386 /* InitialLoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialLoginVC.swift; sourceTree = "<group>"; };
+		C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialLoginViewController.swift; sourceTree = "<group>"; };
 		C94084761EFCCB7F00638E25 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Syncable.swift; path = "Core Data Helpers/Syncable.swift"; sourceTree = "<group>"; };
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
@@ -534,7 +534,7 @@
 		C9B825E71EB9A0ED009B92F0 /* Initial */ = {
 			isa = PBXGroup;
 			children = (
-				C935E9A31E60D713003BF386 /* InitialLoginVC.swift */,
+				C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */,
 				C9174D461F833265008639CC /* InitialLoginViewModel.swift */,
 				C9A0B2EB1E63D2A300404320 /* InitialSignUpViewController.swift */,
 				C9AA8DC11F9F191000147F07 /* InitialSignUpViewModel.swift */,
@@ -1094,7 +1094,7 @@
 				C97A71361F8EC96100F2F1CD /* InventoryLocationCategoryViewModel.swift in Sources */,
 				C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */,
 				C97A71301F8EC4A100F2F1CD /* OrderVendorViewModel.swift in Sources */,
-				C935E9A41E60D713003BF386 /* InitialLoginVC.swift in Sources */,
+				C935E9A41E60D713003BF386 /* InitialLoginViewController.swift in Sources */,
 				C9BB05831F83162500A07529 /* DataRequest+Decodable.swift in Sources */,
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
 				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,
