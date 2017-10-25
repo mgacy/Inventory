@@ -125,9 +125,9 @@ class Keypad: KeypadType {
             } else {
                 // Limit significant digits to maximumFractionDigits
                 guard let decimalIndex = newNumber.range(of: ".")?.lowerBound else {
-                    fatalError("\(#function) FAILED: problem detecting '.'")
+                    fatalError("\(#function) FAILED : problem detecting '.'")
                 }
-                if newNumber.substring(from: decimalIndex).characters.count <= maximumFractionDigits {
+                if newNumber[decimalIndex...].count <= maximumFractionDigits {
                     currentNumber = newNumber + "\(value)"
                 }
             }
@@ -289,9 +289,9 @@ class KeypadWithHistory: KeypadWithHistoryType {
             } else {
                 // Limit significant digits to maximumFractionDigits
                 guard let decimalIndex = newNumber.range(of: ".")?.lowerBound else {
-                    fatalError("\(#function) FAILED: problem detecting '.'")
+                    fatalError("\(#function) FAILED : problem detecting '.'")
                 }
-                if newNumber.substring(from: decimalIndex).characters.count <= maximumFractionDigits {
+                if newNumber[decimalIndex...].count <= maximumFractionDigits {
                     currentNumber = newNumber + "\(value)"
                 }
             }
