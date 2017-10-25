@@ -7,25 +7,19 @@
 //
 
 import UIKit
-import CoreData
 import MessageUI
-import SwiftyJSON
 import PKHUD
+import RxCocoa
+import RxSwift
 
 class OrderItemViewController: UIViewController {
 
     // MARK: - Properties
 
     var viewModel: OrderViewModel!
-    var parentObject: Order!
-    var selectedObject: OrderItem?
+    let disposeBag = DisposeBag()
 
-    // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //var filter: NSPredicate = NSPredicate(format: "order == %@", parentObject)
-    //var cacheName: String? = nil
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    let placedOrder = PublishSubject<Void>()
 
     // Create a MessageComposer
     /// TODO: should I instantiate this here or only in `.setupView()`?
@@ -46,8 +40,8 @@ class OrderItemViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = parentObject.vendor?.name
-        tableView.delegate = self
+        title = viewModel.vendorName
+        setupBindings()
         setupTableView()
     }
 
@@ -55,7 +49,7 @@ class OrderItemViewController: UIViewController {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
         // Update in case we have returned from the keypad where we updated the quantity of an OrderItem
-        parentObject.updateStatus()
+        viewModel.updateOrderStatus()
         setupView()
     }
 
@@ -64,19 +58,55 @@ class OrderItemViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - View Methods
+
+    private func setupBindings() {
+
+        placedOrder.asObservable()
+            .bind(to: viewModel.placedOrder)
+            .disposed(by: disposeBag)
+
+        // Uploading
+        viewModel.isUploading
+            .filter { $0 }
+            .drive(onNext: { _ in
+                HUD.show(.progress)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.uploadResults
+            .subscribe(onNext: { [weak self] result in
+                switch result.event {
+                case .next:
+                    HUD.flash(.success, delay: 0.5) { _ in
+                        self?.navigationController!.popViewController(animated: true)
+                    }
+                case .error(let error):
+                    log.error("\(#function) FAILED : \(String(describing: error))")
+                    HUD.flash(.error, delay: 1.0)
+                    //UIViewController.showErrorInHUD(title: "Strings.errorAlertTitle", subtitle: "Message")
+                    //showAlert(title: "Problem", message: "Unable to upload Order")
+
+                case .completed:
+                    log.warning("\(#function) : not sure how to handle completion")
+                }
+            })
+            .disposed(by: disposeBag)
+
+        // Selection
+        //viewModel.showKeypad
+    }
+
     // MARK: - Navigation
 
-    fileprivate func showKeypad(withItem item: OrderItem) {
+    fileprivate func showKeypad(withIndexPath indexPath: IndexPath) {
         guard let destinationController = OrderKeypadViewController.instance() else {
-            fatalError("\(#function) FAILED: unable to get destination view controller.")
-        }
-        guard
-            let indexPath = self.tableView.indexPathForSelectedRow?.row,
-            let managedObjectContext = managedObjectContext else {
-                fatalError("\(#function) FAILED: unable to get indexPath or moc")
+            fatalError("\(#function) FAILED : unable to get destination view controller.")
         }
 
-        destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath,
+        let parentObject = viewModel.order
+        let managedObjectContext = viewModel.dataManager.managedObjectContext
+        destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath.row,
                                                                inContext: managedObjectContext)
         navigationController?.pushViewController(destinationController, animated: true)
     }
@@ -85,24 +115,12 @@ class OrderItemViewController: UIViewController {
     fileprivate var dataSource: TableViewDataSource<OrderItemViewController>!
 
     fileprivate func setupTableView() {
+        tableView.delegate = self
         //tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 80
-
-        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        let fetchPredicate = NSPredicate(format: "order == %@", parentObject)
-        request.predicate = fetchPredicate
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
     }
 
     func setupView() {
@@ -165,23 +183,7 @@ extension OrderItemViewController {
             showAlert(title: "Problem", message: "Unable to send Order message")
         case .sent:
             log.info("Sent Order message")
-            HUD.show(.progress)
-            /// TODO: simply pass closure?
-            viewModel.postOrder(completion: completedPostOrder)
-        }
-    }
-
-    /// TODO: change signature to (error: Error?)
-
-    func completedPostOrder(succeeded: Bool, error: Error?) {
-        if succeeded {
-            HUD.flash(.success, delay: 0.5) { _ in
-                self.navigationController!.popViewController(animated: true)
-            }
-        } else {
-            log.error("\(#function) FAILED : \(String(describing: error))")
-            HUD.flash(.error, delay: 1.0)
-            //showAlert(title: "Problem", message: "Unable to upload Order")
+            placedOrder.onNext(())
         }
     }
 
@@ -191,22 +193,18 @@ extension OrderItemViewController {
 extension OrderItemViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected Order: \(String(describing: selectedObject))")
-        guard let selection = selectedObject else {
-            fatalError("Couldn't get selected Order")
-        }
-        showKeypad(withItem: selection)
+        //log.verbose("Selected OrderItem: \(dataSource.objectAtIndexPath(indexPath))")
+        showKeypad(withIndexPath: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let orderItem = dataSource.objectAtIndexPath(indexPath)
+        //let orderItem = dataSource.objectAtIndexPath(indexPath)
 
         // Set to 0
         let setToZero = UITableViewRowAction(style: .normal, title: "No Order") { _, _ in
-            orderItem.quantity = 0
-            self.managedObjectContext?.performSaveOrRollback()
+            /// TODO: use weak self?
+            self.viewModel.setOrderToZero(forItemAtIndexPath: indexPath)
             tableView.isEditing = false
             // ALT
             // https://stackoverflow.com/a/43626096/4472195
@@ -224,7 +222,8 @@ extension OrderItemViewController: UITableViewDelegate {
 extension OrderItemViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ item: OrderItem) -> Bool {
-        guard parentObject.status == OrderStatus.pending.rawValue else {
+        /// TODO: refer to viewModel.orderStatus rather than .order
+        guard viewModel.order.status == OrderStatus.pending.rawValue else {
             return false
         }
         guard let quantity = item.quantity else {

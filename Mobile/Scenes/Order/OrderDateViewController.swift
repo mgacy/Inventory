@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 import PKHUD
 import RxCocoa
 import RxSwift
@@ -15,11 +14,6 @@ import RxSwift
 // swiftlint:disable file_length
 
 class OrderDateViewController: UIViewController {
-
-    // OLD
-    var managedObjectContext: NSManagedObjectContext!
-    //var userManager: CurrentUserManager!
-    //var selectedCollection: OrderCollection?
 
     private enum Strings {
         static let navTitle = "Orders"
@@ -184,14 +178,14 @@ class OrderDateViewController: UIViewController {
                 }
                 log.debug("\(#function) SELECTED / CREATED: \(selection)")
 
-                let viewController = OrderVendorViewController.initFromStoryboard(name: "Main")
-                // NEW
-                //let viewModel = OrderVendorViewModel(dataManager: viewModel.dataManager)
-                //viewController = viewModel = viewModel
-                // OLD
-                viewController.managedObjectContext = strongSelf.managedObjectContext
-                viewController.parentObject = selection
-                strongSelf.navigationController?.pushViewController(viewController, animated: true)
+                let vc = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
+                let vm = OrderVendorViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                              parentObject: selection,
+                                              rowTaps: vc.selectedObjects.asObservable(),
+                                              completeTaps: vc.completeButtonItem.rx.tap.asObservable()
+                )
+                vc.viewModel = vm
+                strongSelf.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
     }

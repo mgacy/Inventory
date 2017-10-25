@@ -34,8 +34,9 @@ struct InventoryReviewViewModel {
     let isRefreshing: Driver<Bool>
     //let hasRefreshed: Driver<Bool>
     let showTable: Driver<Bool>
+    //let messageLabel: Driver<String>
+    let errorMessages: Driver<String>
     let showSelection: Observable<InventoryItem>
-    //let errorMessages: Driver<String>
 
     init(dataManager: DataManager, parentObject: Inventory, rowTaps: Observable<InventoryItem>) {
         self.dataManager = dataManager
@@ -45,6 +46,24 @@ struct InventoryReviewViewModel {
         let isRefreshing = ActivityIndicator()
         self.isRefreshing = isRefreshing.asDriver()
 
+        let refreshResults = dataManager.refreshInventory(parentObject)
+            .trackActivity(isRefreshing)
+
+        //self.hasRefreshed = refreshResults
+
+        self.showTable = refreshResults
+            .elements()
+            .map { inventory -> Bool in
+                log.debug("\(#function) : \(inventory)")
+                if let itemCount = inventory.items?.count {
+                    return itemCount > 0
+                }
+                return false
+            }
+            .startWith(false)
+            .asDriver(onErrorJustReturn: false)
+
+        /*
         self.showTable = dataManager.refreshInventory(parentObject)
             .trackActivity(isRefreshing)
             //.dematerialize()
@@ -58,7 +77,7 @@ struct InventoryReviewViewModel {
             }
             .startWith(false)
             .asDriver(onErrorJustReturn: false)
-
+         */
         // Selection
 
         // Navigation
@@ -70,7 +89,13 @@ struct InventoryReviewViewModel {
             }
 
         // Errors
-        //errorMessages =
+        errorMessages = refreshResults
+            .errors()
+            .map { error in
+                return "There was an error"
+            }
+            .asDriver(onErrorJustReturn: "Other Error")
+            //.asDriver(onErrorDriveWith: .never())
 
         // FetchRequest
         self.filter = NSPredicate(format: "inventory == %@", parentObject)

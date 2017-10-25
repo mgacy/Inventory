@@ -6,4 +6,122 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
+import CoreData
+import RxCocoa
+import RxSwift
+
+enum InventoryLocationSegue {
+    //case back
+    case item(InventoryLocation)
+    case category(InventoryLocation)
+}
+
+struct InventoryLocationViewModel {
+
+    // MARK: Properties
+
+    //private let dataManager: DataManager
+    let dataManager: DataManager
+    private let parentObject: Inventory
+
+    // CoreData
+    private let filter: NSPredicate?
+    private let sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+    private let cacheName: String? = nil
+    private let sectionNameKeyPath: String? = nil
+    private let fetchBatchSize = 20 // 0 = No Limit
+
+    // MARK: - Input
+    //let uploadTaps: AnyObserver<Void>
+    //let rowTaps: AnyObserver<InventoryLocation>
+
+    // MARK: - Output
+    let frc: NSFetchedResultsController<InventoryLocation>
+    //let isRefreshing: Driver<Bool>
+    //let hasRefreshed: Driver<Bool>
+    let isUploading: Driver<Bool>
+    //let hasUploaded: Driver<Bool>
+    let uploadResults: Observable<Event<Inventory>>
+    //let showTable: Driver<Bool>
+    //let errorMessages: Driver<String>
+    let showLocation: Observable<InventoryLocationSegue>
+
+    // MARK: - Lifecycle
+
+    init(dataManager: DataManager, parentObject: Inventory, rowTaps: Observable<InventoryLocation>, uploadTaps: Observable<Void>) {
+        self.dataManager = dataManager
+        self.parentObject = parentObject
+
+        // Upload
+        let isUploading = ActivityIndicator()
+        self.isUploading = isUploading.asDriver()
+
+        self.uploadResults = uploadTaps
+            .flatMap { _ -> Observable<Event<Inventory>> in
+                log.debug("Starting to upload")
+                return dataManager.updateInventory(parentObject)
+                    .trackActivity(isUploading)
+            }
+            .share()
+
+        // Navigation
+        /*
+        let uploadSuccess = uploadResults
+            .elements()
+            .map { _ in return InventoryLocationSegue.back }
+
+        let selectionType = rowTaps
+            .map { selection -> InventoryLocationSegue in
+                log.debug("Selected: \(selection)")
+                switch selection.locationType {
+                case "category"?:
+                    return InventoryLocationSegue.category(selection)
+                case "item"?:
+                    return InventoryLocationSegue.item(selection)
+                default:
+                    fatalError("\(#function) FAILED : wrong locationType")
+                }
+            }
+
+        self.showLocations = Observable.of(uploadSuccess, selectionType)
+            .merge()
+         */
+        self.showLocation = rowTaps
+            .map { selection in
+                log.debug("Selected: \(selection)")
+                switch selection.locationType {
+                case "category"?:
+                    return InventoryLocationSegue.category(selection)
+                case "item"?:
+                    return InventoryLocationSegue.item(selection)
+                default:
+                    fatalError("\(#function) FAILED : wrong locationType")
+                }
+            }
+            //.asDriver()
+            //.share()
+        /*
+        // Errors
+        self.errorMessages = uploadResults
+            .errors()
+            .map { error in
+                log.debug("\(#function) ERROR : \(error)")
+                return "There was an error"
+            }
+            .asDriver(onErrorJustReturn: "Other Error")
+            //.asDriver(onErrorDriveWith: .never())
+         */
+        // FetchRequest
+        self.filter = NSPredicate(format: "inventory == %@", parentObject)
+        let request: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
+        request.sortDescriptors = sortDescriptors
+        request.predicate = filter
+        request.fetchBatchSize = fetchBatchSize
+        request.returnsObjectsAsFaults = false
+
+        let managedObjectContext = dataManager.managedObjectContext
+        self.frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext,
+                                              sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
+    }
+
+}

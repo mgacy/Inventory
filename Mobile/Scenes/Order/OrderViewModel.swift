@@ -6,23 +6,39 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
-import SwiftyJSON
+import CoreData
+import RxCocoa
+import RxSwift
 
 class OrderViewModel {
 
-    typealias CompletionHandlerType = (JSON?, Error?) -> Void
+    // MARK: - Properties
 
-    private var order: Order
+    /// TODO: make private
+    let dataManager: DataManager
+    var order: Order
 
+    // CoreData
+    private let filter: NSPredicate
+    private let sortDescriptors = [NSSortDescriptor(key: "item.name", ascending: true)]
+    private let cacheName: String? = nil
+    private let sectionNameKeyPath: String? = nil
+    private let fetchBatchSize = 20 // 0 = No Limit
+
+    // MARK: - Input
+    let placedOrder: AnyObserver<Void>
+
+    // MARK: - Output
+    let frc: NSFetchedResultsController<OrderItem>
+    let isUploading: Driver<Bool>
+    let uploadResults: Observable<Event<Order>>
+
+    //var orderStatus: OrderStatus { return order.status }
     var vendorName: String { return order.vendor?.name ?? "" }
     var repName: String { return "\(order.vendor?.rep?.firstName ?? "") \(order.vendor?.rep?.lastName ?? "")" }
     var email: String { return order.vendor?.rep?.email ?? "" }
     var phone: String { return order.vendor?.rep?.phone ?? "" }
-
-    var formattedPhone: String {
-        return format(phoneNumber: phone) ?? ""
-    }
+    var formattedPhone: String { return format(phoneNumber: phone) ?? "" }
 
     var canMessageOrder: Bool {
         guard order.vendor?.rep?.phone != nil else {
@@ -62,55 +78,67 @@ class OrderViewModel {
 
     // MARK: - Lifecycle
 
-    required init(forOrder order: Order) {
-        self.order = order
+    required init(dataManager: DataManager, parentObject: Order) {
+        self.dataManager = dataManager
+        self.order = parentObject
+
+        let _placedOrder = PublishSubject<Void>()
+        self.placedOrder = _placedOrder.asObserver()
+
+        // Upload
+        let isUploading = ActivityIndicator()
+        self.isUploading = isUploading.asDriver()
+
+        self.uploadResults = _placedOrder.asObservable()
+            .flatMap { _ -> Observable<Event<Order>> in
+                log.info("POSTing Order ...")
+                parentObject.status = OrderStatus.placed.rawValue
+                return dataManager.updateOrder(parentObject)
+                    .trackActivity(isUploading)
+            }
+            /// TODO: save context?
+            .share()
+
+        // FetchRequest
+        self.filter = NSPredicate(format: "order == %@", parentObject)
+
+        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
+        request.sortDescriptors = sortDescriptors
+        request.predicate = filter
+        request.fetchBatchSize = fetchBatchSize
+        request.returnsObjectsAsFaults = false
+
+        let managedObjectContext = dataManager.managedObjectContext
+        self.frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext,
+                                              sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
     }
 
     // MARK: - Actions
 
     //func emailOrder() {}
 
+    // MARK: - Model
+
+    func updateOrderStatus() {
+        order.updateStatus()
+    }
+
     func cancelOrder() {
         order.status = OrderStatus.empty.rawValue
     }
 
-    // MARK: - Completion Handlers
-
-    func postOrder(completion: @escaping (Bool, Error?) -> Void) {
-        order.status = OrderStatus.placed.rawValue
-
-        guard let json = order.serialize() else {
-            log.error("\(#function) FAILED : unable to serialize Order")
-            return completion(false, nil)
-        }
-        log.info("POSTing Order ...")
-        log.verbose("Order: \(json)")
-        APIManager.sharedInstance.postOrder(order: json) { (json: JSON?, error: Error?) in
-            guard error == nil else {
-                //log.error("\(#function) FAILED : unable to POST order \(order)")
-                log.error("\(#function) FAILED : \(String(describing: error))")
-                return completion(false, error)
-            }
-            guard let json = json else {
-                log.error("\(#function) FAILED : unable to get JSON")
-                return completion(false, nil)
-            }
-            guard let remoteID = json["id"].int32 else {
-                log.error("\(#function) FAILED : unable to get remoteID")
-                return completion(false, nil)
-            }
-            self.order.remoteID = remoteID
-            self.order.status = OrderStatus.uploaded.rawValue
-            //order.collection?.updateStatus()
-
-            completion(true, nil)
-        }
+    func setOrderToZero(forItemAtIndexPath indexPath: IndexPath) {
+        let orderItem = frc.object(at: indexPath)
+        orderItem.quantity = 0
+        _ = dataManager.saveOrRollback()
+        //dataManager.managedObjectContext.performSaveOrRollback()
     }
 
 }
 
 // MARK: - Various Classes, Extensions
 
+// FIXME: move this somewhere more general
 // Mobile Dan
 // https://stackoverflow.com/a/41668104
 func format(phoneNumber sourcePhoneNumber: String) -> String? {

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class InvoiceKeypadViewController: UIViewController {
 
@@ -34,10 +33,7 @@ class InvoiceKeypadViewController: UIViewController {
         updateDisplay()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    //override func didReceiveMemoryWarning() {}
 
     // MARK: - Keypad
 

@@ -19,6 +19,7 @@ public enum DataManagerError: Error {
     //case dateParsing
     case missingMOC
     case missingStoreID
+    case serializationError
     case otherError(error: String)
 }
 
@@ -31,7 +32,7 @@ class DataManager {
     let managedObjectContext: NSManagedObjectContext
     //let viewContext: NSManagedObjectContext
     //let syncContext: NSManagedObjectContext
-    /// TODO: use UserManagerType; should userManager be private?
+    /// TODO: use `UserManagerType`; should userManager be private?
     let userManager: CurrentUserManager
 
     // MARK: - Lifecycle
@@ -43,6 +44,13 @@ class DataManager {
     }
 
     // MARK: General
+
+    @discardableResult
+    func saveOrRollback() -> Observable<Bool> {
+        /// TODO: use `saveOrRollback()` or `performSaveOrRollback()`
+        /// TODO: should we simply perform the do / catch here and materialize the error?
+        return Observable.just(managedObjectContext.saveOrRollback())
+    }
 
     /// TODO: rename
     func refreshStuff() -> Observable<Bool> {
@@ -199,7 +207,28 @@ extension DataManager {
 
     //func deleteInventory(_ inventory: Inventory) -> Observable<> {}
 
-    //func updateInventory(_ inventory: Inventory) -> Observable<Bool> { return Observable.just(true) }
+    /// TODO: rename `completeInventory(:)`?
+    func updateInventory(_ inventory: Inventory) -> Observable<Event<Inventory>> {
+        guard let inventoryDict = inventory.serialize() else {
+            log.error("\(#function) FAILED : unable to serialize Inventory \(inventory)")
+            return Observable.error(DataManagerError.serializationError).materialize()
+        }
+
+        return client.putInventory(inventoryDict)
+            .flatMap { response -> Observable<Inventory> in
+                switch response.result {
+                case .success(let record):
+                    inventory.remoteID = record.syncIdentifier
+                    inventory.uploaded = true
+                    //return inventory
+                    return Observable.just(inventory)
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    throw error
+                }
+            }
+            .materialize()
+    }
 
     func refreshInventory(_ inventory: Inventory) -> Observable<Event<Inventory>> {
         let remoteID = Int(inventory.remoteID)
@@ -292,6 +321,12 @@ extension DataManager {
                      */
                     let newCollection = OrderCollection(with: record, in: context)
                     newCollection.uploaded = false
+                    newCollection.orders?.forEach { order in
+                        if let `order` = order as? Order {
+                            order.status = OrderStatus.pending.rawValue
+                            order.updateStatus()
+                        }
+                    }
                     return Observable.just(newCollection)
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
@@ -352,6 +387,34 @@ extension DataManager {
             .materialize()
     }
 
+    func updateOrder(_ order: Order) -> Observable<Event<Order>> {
+        //return Observable.just(order).materialize()
+        /// TODO: use RemoteRecords instead?
+        guard let orderDict = order.serialize() else {
+            log.error("\(#function) FAILED : unable to serialize Order \(order)")
+            return Observable.error(DataManagerError.serializationError).materialize()
+        }
+
+        return client.putOrder(orderDict)
+            .map { [weak self] response -> Order in
+                switch response.result {
+                case .success(let record):
+                    order.remoteID = record.syncIdentifier
+                    order.status = OrderStatus.uploaded.rawValue
+                    order.collection?.updateStatus()
+
+                    /// TODO: is there a better way to handle this?
+                    self?.saveOrRollback()
+
+                    return order
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    throw error
+                }
+            }
+            .materialize()
+    }
+
 }
 
 // MARK: - Invoice
@@ -402,6 +465,29 @@ extension DataManager {
                     }
                     InvoiceCollection.sync(with: records, in: context)
                     return true
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    throw error
+                }
+            }
+            .materialize()
+    }
+
+    func updateInvoice(_ invoice: Invoice) -> Observable<Event<Invoice>> {
+        let remoteID = Int(invoice.remoteID)
+        guard let dict = invoice.serialize() else {
+            log.error("\(#function) FAILED : unable to serialize Invoice \(invoice)")
+            return Observable.error(DataManagerError.serializationError).materialize()
+        }
+        /// TODO: mark invoice as having in-progress update
+        return client.putInvoice(remoteID: remoteID, invoice: dict)
+            .map { response in
+                switch response.result {
+                case .success:
+                    invoice.uploaded = true
+                    /// TODO: mark invoice as no longer having in-progress update
+                    /// TODO: set .uploaded of invoice.collection if all are uploaded
+                    return invoice
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
                     throw error
@@ -476,15 +562,15 @@ extension DataManager {
 /// TODO: make this conform to a protocol?
 extension DataManager {
 
-    /// TODO: mark as @discardable and return Observable<User>?
-    public func login(email: String, password: String) -> Observable<Bool> {
+    /// TODO: mark as @discardable and return Observable<Event<User>>?
+    public func login(email: String, password: String) -> Observable<Event<Bool>> {
         return Observable.create { observer in
             self.userManager.login(email: email, password: password) { error in
                 if let error = error {
                     log.warning("\(#function) ERROR : \(error)")
-                    //observer.onError(error)
-                    observer.onNext(true)
-                    observer.onCompleted()
+                    observer.onError(error)
+                    //observer.onNext(true)
+                    //observer.onCompleted()
                 } else {
                     log.debug("We logged in")
                     observer.onNext(true)
@@ -493,9 +579,11 @@ extension DataManager {
             }
             return Disposables.create()
         }
+        .materialize()
     }
 
     public func logout() -> Observable<Bool> {
+        /// TODO: check for pending Inventory / Invoice / Order; throw error and use `.materialize()`
         /// TODO: return if already logged out
         //return Observable.create { observer in
         self.userManager.logout { success in
@@ -516,24 +604,44 @@ extension DataManager {
         //}
     }
 
-    public func signUp(username: String, email: String, password: String) -> Observable<Bool> {
-        var success: Bool = false
-        self.userManager.signUp(username: username, email: email, password: password) { error in
-            log.debug("\(#function) : \(String(describing: error))")
-            success = true
-        }
-        return Observable.just(success)
+    public func signUp(username: String, email: String, password: String) -> Observable<Event<Bool>> {
+        return Observable.create { observer in
+            self.userManager.signUp(username: username, email: email, password: password) { error in
+                if let error = error {
+                    log.warning("\(#function) ERROR : \(error)")
+                    observer.onError(error)
+                } else {
+                    log.debug("We signed up")
+                    observer.onNext(true)
+                    observer.onCompleted()
+                }
+            }
+            return Disposables.create()
+            }
+            .materialize()
     }
 
     private func deleteData(in context: NSManagedObjectContext) -> Observable<Bool> {
         /// TODO: use cascade rules to reduce list of entities we need to manually delete
 
         // Inventory
-
+        do {
+            try managedObjectContext.deleteEntities(Inventory.self)
+        } catch {
+            log.error("\(#function) FAILED: unable to delete Inventories")
+        }
         // Order
-
+        do {
+            try managedObjectContext.deleteEntities(OrderCollection.self)
+        } catch {
+            log.error("\(#function) FAILED: unable to delete OrderCollections")
+        }
         // Invoice
-
+        do {
+            try managedObjectContext.deleteEntities(InvoiceCollection.self)
+        } catch {
+            log.error("\(#function) FAILED: unable to delete InvoiceCollections")
+        }
         // Item
         do {
             try managedObjectContext.deleteEntities(Item.self)

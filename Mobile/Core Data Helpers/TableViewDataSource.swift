@@ -12,7 +12,7 @@ import CoreData
 protocol TableViewDataSourceDelegate: class {
     associatedtype Object: NSFetchRequestResult
     associatedtype Cell: UITableViewCell
-    /// TODO: pass object or just indexPath?
+    /// TODO: pass Object or just IndexPath?
     func canEdit(_ object: Object) -> Bool
     func configure(_ cell: Cell, for object: Object)
 }

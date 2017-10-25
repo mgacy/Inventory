@@ -9,8 +9,9 @@
 import Foundation
 import CoreData
 
+/// TODO: rename ItemListViewModelType?
 protocol KeypadViewModel: class {
-    associatedtype ParentType: NSManagedObject
+    associatedtype ParentType
     associatedtype ChildType: NSManagedObject
 
     var managedObjectContext: NSManagedObjectContext { get set }
@@ -19,11 +20,12 @@ protocol KeypadViewModel: class {
     var currentIndex: Int { get set }
     var currentItem: ChildType { get }
 
-    init(for: ParentType, atIndex: Int, inContext: NSManagedObjectContext)
     func nextItem() -> Bool
     func previousItem() -> Bool
     func didChangeItem(_: ChildType)
 }
+
+// MARK: - Default Implementation
 
 extension KeypadViewModel {
 
@@ -56,8 +58,11 @@ extension KeypadViewModel {
 }
 
 /// TODO: make this part of KeypadViewModel?
+// Is this essentially the protocol for KeypadDelegate? We already have that in `Keypad.swift`
 protocol KeypadStuff: class {
-    var keypad: NewKeypad { get }
+    //var keypad: NewKeypad { get }
+    //var keypad: KeypadType { get set }
+
     func pushDigit(value: Int)
     func pushDecimal()
     func popItem()

@@ -7,15 +7,11 @@
 //
 
 import UIKit
-import CoreData
 import PKHUD
 import RxCocoa
 import RxSwift
 
 class InventoryDateViewController: UIViewController {
-
-    // OLD
-    var managedObjectContext: NSManagedObjectContext!
 
     private enum Strings {
         static let navTitle = "Inventories"
@@ -86,13 +82,34 @@ class InventoryDateViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        //let marginGuide = view.layoutMarginsGuide
 
         // TableView
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        //tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        //tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        if #available(iOS 11, *) {
+            let guide = view.safeAreaLayoutGuide
+
+            tableView.topAnchor.constraintEqualToSystemSpacingBelow(guide.topAnchor, multiplier: 1.0).isActive = true
+            tableView.bottomAnchor.constraintEqualToSystemSpacingBelow(guide.bottomAnchor,
+                                                                       multiplier: 1.0).isActive = true
+            //NSLayoutConstraint.activate([
+            //    tableView.topAnchor.constraintEqualToSystemSpacingBelow(guide.topAnchor, multiplier: 1.0),
+            //    guide.bottomAnchor.constraintEqualToSystemSpacingBelow(tableView.bottomAnchor, multiplier: 1.0)
+            //    ])
+
+        } else {
+            //let marginGuide = view.layoutMarginsGuide
+            let standardSpacing: CGFloat = 8.0
+            NSLayoutConstraint.activate([
+                tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: standardSpacing),
+                bottomLayoutGuide.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: standardSpacing)
+                ])
+
+            //tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+            //tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        }
 
         // ActivityIndicator
         activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
@@ -146,11 +163,11 @@ class InventoryDateViewController: UIViewController {
 
         // Navigation
         viewModel.showInventory
-            .subscribe(onNext: { [weak self] inventory in
-                log.debug("\(#function) SELECTED: \(inventory)")
+            .subscribe(onNext: { [weak self] transition in
+                log.debug("\(#function) SELECTED: \(transition)")
                 guard let strongSelf = self else { fatalError("Unable to get self") }
-                switch inventory.uploaded {
-                case true:
+                switch transition {
+                case .existing(let inventory):
                     log.verbose("GET selectedInventory from server - \(inventory.remoteID) ...")
                     let vc = InventoryReviewViewController.initFromStoryboard(name: "InventoryReviewViewController")
                     let vm = InventoryReviewViewModel(dataManager: strongSelf.viewModel.dataManager,
@@ -158,18 +175,16 @@ class InventoryDateViewController: UIViewController {
                     vc.viewModel = vm
                     strongSelf.navigationController?.pushViewController(vc, animated: true)
 
-                case false:
+                case .new(let inventory):
                     log.verbose("LOAD NEW selectedInventory from disk ...")
-                    let viewController = InventoryLocationTVC.initFromStoryboard(name: "Main")
-
-                    // NEW
-                    //let viewModel = InventoryLocationViewModel(dataManager: dataManager)
-                    //viewController.viewModel = viewModel
-
-                    // OLD
-                    viewController.managedObjectContext = self?.managedObjectContext
-                    viewController.inventory = inventory
-                    self?.navigationController?.pushViewController(viewController, animated: true)
+                    let vc = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
+                    let vm = InventoryLocationViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                        parentObject: inventory, rowTaps: vc.selectedObjects,
+                                                        //uploadTaps: vc.uploadButtonItem.rx.tap.asDriver()
+                                                        uploadTaps: vc.uploadButtonItem.rx.tap.asObservable()
+                    )
+                    vc.viewModel = vm
+                    self?.navigationController?.pushViewController(vc, animated: true)
                 }
             })
             .disposed(by: disposeBag)

@@ -51,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
         dataManager = DataManager(context: persistentContainer.viewContext, userManager: userManager)
+        //guard let manager = dataManager else { fatalError("Unable to instantiate DataManager") }
 
         // Check if we already have user + credentials
         if userManager.user != nil {
@@ -60,8 +61,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 withIdentifier: "InitialLoginViewController") as? InitialLoginVC else {
                     fatalError("Unable to instantiate view controller")
             }
-            loginController.managedObjectContext = persistentContainer.viewContext
-            loginController.userManager = userManager
+            loginController.viewModel = InitialLoginViewModel(dataManager: dataManager!)
+
             self.window?.rootViewController = loginController
             self.window?.makeKeyAndVisible()
         }
@@ -214,27 +215,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 guard let vc = topVC as? InventoryDateViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = InventoryDateViewModel(dataManager: dataManager,
                                                       rowTaps: vc.selectedObjects.asObservable())
-                vc.managedObjectContext = persistentContainer.viewContext
 
             case is OrderDateViewController:
                 guard let vc = topVC as? OrderDateViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = OrderDateViewModel(dataManager: dataManager, rowTaps: vc.selectedObjects.asObservable())
-                vc.managedObjectContext = persistentContainer.viewContext
 
             case is InvoiceDateViewController:
                 guard let vc = topVC as? InvoiceDateViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = InvoiceDateViewModel(dataManager: dataManager,
                                                     rowTaps: vc.selectedObjects.asObservable())
-                vc.managedObjectContext = persistentContainer.viewContext
 
             case is InitialLoginVC:
                 guard let vc = topVC as? InitialLoginVC else { fatalError("wrong view controller type") }
                 vc.viewModel = InitialLoginViewModel(dataManager: dataManager)
-                vc.managedObjectContext = persistentContainer.viewContext
 
             case is SettingsViewController:
                 guard let vc = topVC as? SettingsViewController else { fatalError("wrong view controller type") }
-                vc.managedObjectContext = persistentContainer.viewContext
+                vc.viewModel = SettingsViewModel(dataManager: dataManager, rowTaps: vc.rowTaps.asObservable())
 
             default:
                 fatalError("wrong view controller type")

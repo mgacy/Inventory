@@ -7,33 +7,32 @@
 //
 
 import UIKit
-import CoreData
+import RxCocoa
+import RxSwift
 
 class InvoiceVendorViewController: UITableViewController {
 
+    private enum Strings {
+        static let navTitle = "Vendors"
+        static let errorAlertTitle = "Error"
+    }
+
     // MARK: - Properties
 
-    var parentObject: InvoiceCollection!
-    var selectedObject: Invoice?
-
-    // MARK: FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //var filter: NSPredicate? = nil
-    //var cacheName: String? = "Master"
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    var viewModel: InvoiceVendorViewModel!
+    let disposeBag = DisposeBag()
+    //let selectedObjects = PublishSubject<Invoice>()
 
     // TableViewCell
     let cellIdentifier = "Cell"
 
-    // Segues
-    let segueIdentifier = "showInvoiceItems"
+    // MARK: - Interface
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Vendors"
+        setupView()
         setupTableView()
     }
 
@@ -42,57 +41,48 @@ class InvoiceVendorViewController: UITableViewController {
         self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    //override func didReceiveMemoryWarning() {}
+
+    // MARK: - View Methods
+
+    private func setupView() {
+        title = Strings.navTitle
     }
 
-    // MARK: - Navigation
+    //private func setupConstraints() {}
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InvoiceItemViewController else {
-            fatalError("Wrong view controller type")
-        }
-        guard let selectedObject = selectedObject else {
-            fatalError("Showing detail, but no selected row?")
-        }
-        destinationController.parentObject = selectedObject
-        destinationController.managedObjectContext = managedObjectContext
-    }
+    //private func setupBindings() {}
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<Invoice> = Invoice.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        let fetchPredicate = NSPredicate(format: "collection == %@", parentObject)
-        request.predicate = fetchPredicate
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+                                         fetchedResultsController: viewModel.frc, delegate: self)
+    }
+
+    // MARK: - Navigation
+
+    fileprivate func showInvoice(withInvoice invoice: Invoice) {
+        let vc = InvoiceItemViewController.initFromStoryboard(name: "Main")
+        let vm = InvoiceItemViewModel(dataManager: viewModel.dataManager, parentObject: invoice,
+                                      rowTaps: vc.selectedObjects,
+                                      uploadTaps: vc.uploadButtonItem.rx.tap.asObservable())
+        vc.viewModel = vm
+        //vc.managedObjectContext = viewModel.dataManager.managedObjectContext
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected Invoice: \(String(describing: selectedObject))")
-
-        performSegue(withIdentifier: segueIdentifier, sender: self)
+        let selectedObject = dataSource.objectAtIndexPath(indexPath)
+        log.verbose("Selected Invoice: \(selectedObject)")
+        showInvoice(withInvoice: selectedObject)
+        //selectedObjects.onNext(selectedObject)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

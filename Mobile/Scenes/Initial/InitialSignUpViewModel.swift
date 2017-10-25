@@ -1,45 +1,46 @@
 //
-//  InitialLoginViewModel.swift
+//  InitialSignUpViewModel.swift
 //  Mobile
 //
-//  Created by Mathew Gacy on 10/2/17.
+//  Created by Mathew Gacy on 10/23/17.
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
 import RxCocoa
 import RxSwift
 
-struct InitialLoginViewModel {
+struct InitialSignUpViewModel {
 
     // MARK: - Properties
 
     //private let dataManager: DataManager
     let dataManager: DataManager
 
-    // MARK: - Input
+    // MARK: Inputs
     let username = Variable<String>("")
+    let login = Variable<String>("")
     let password = Variable<String>("")
-    let loginTaps: AnyObserver<Void>
+    let cancelTaps: AnyObserver<Void>
     let signupTaps: AnyObserver<Void>
 
-    // MARK: - Output
-    var currentUser: User? { return dataManager.userManager.user }
+    // MARK: Outputs
+    let didCancel: Observable<Void>
+    //let didSignup: Observable<Bool>
     let isValid: Observable<Bool>
-    let loggingIn: Driver<Bool>
-    let loginResults: Observable<Event<Bool>>
-    let didSignup: Observable<Void>
+    let signingUp: Driver<Bool>
+    let signupResults: Observable<Event<Bool>>
 
     // MARK: - Lifecycle
-
     init(dataManager: DataManager) {
         self.dataManager = dataManager
 
-        let _login = PublishSubject<Void>()
-        self.loginTaps = _login.asObserver()
+        let _cancel = PublishSubject<Void>()
+        self.cancelTaps = _cancel.asObserver()
+        self.didCancel = _cancel.asObservable()
 
         let _signup = PublishSubject<Void>()
         self.signupTaps = _signup.asObserver()
-        self.didSignup = _signup.asObservable()
+        //self.didSignup = _signup.asObservable()
 
         let userInputs = Observable.combineLatest(
             username.asObservable(), password.asObservable()
@@ -52,16 +53,17 @@ struct InitialLoginViewModel {
                 return username.characters.count > 0 && password.characters.count > 0
         }
 
-        let loggingIn = ActivityIndicator()
-        self.loggingIn = loggingIn.asDriver()
+        // Signup
 
-        self.loginResults = _login.asObservable()
+        let signingUp = ActivityIndicator()
+        self.signingUp = signingUp.asDriver()
+
+        self.signupResults = _signup.asObservable()
             .withLatestFrom(userInputs)
             .flatMap { (arg) -> Observable<Event<Bool>> in
-            //.map { (arg) in
                 let (email, password) = arg
-                return dataManager.login(email: email, password: password)
-                    .trackActivity(loggingIn)
+                return dataManager.signUp(username: email, email: email, password: password)
+                    .trackActivity(signingUp)
             }
             .shareReplay(1)
     }

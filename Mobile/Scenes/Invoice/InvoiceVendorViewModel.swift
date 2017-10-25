@@ -14,7 +14,8 @@ struct InvoiceVendorViewModel {
 
     // MARK: - Properties
 
-    private let dataManager: DataManager
+    //private let dataManager: DataManager
+    let dataManager: DataManager
     private let parentObject: InvoiceCollection
 
     // CoreData
@@ -33,7 +34,7 @@ struct InvoiceVendorViewModel {
     //let showSelection: Observable<Invoice>
     //let errorMessages: Driver<String>
 
-    init(dataManager: DataManager, parentObject: InvoiceCollection, rowTaps: Observable<Invoice>) {
+    init(dataManager: DataManager, parentObject: InvoiceCollection) {
         self.dataManager = dataManager
         self.parentObject = parentObject
 
