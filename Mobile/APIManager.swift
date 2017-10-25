@@ -221,17 +221,8 @@ extension APIManager {
     }
 
     func postOrderCollection(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?) -> Observable<DataResponse<RemoteOrderCollection>> {
-
-        /// TODO: relocate / rework
-        var parameters = [String: Any]()
-        parameters["store_id"] = storeID
-        parameters["generation_method"] = generationMethod.rawValue
-        //parameters["return_usage"] = returnUsage
-        parameters["period_length"] = periodLength ?? 28
-
-        return requestOne(Router.postOrderCollection(parameters))
-        //return requestOne(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
-        //                                          returnUsage: returnUsage, periodLength: periodLength))
+        return requestOne(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
+                                                     returnUsage: returnUsage, periodLength: periodLength))
     }
 
     /// NOTE: I am designing this in accordance with how things should work, not how they currently do
