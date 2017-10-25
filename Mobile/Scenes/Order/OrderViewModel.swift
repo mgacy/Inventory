@@ -145,7 +145,7 @@ func format(phoneNumber sourcePhoneNumber: String) -> String? {
 
     // Remove any character that is not a number
     let numbersOnly = sourcePhoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-    let length = numbersOnly.characters.count
+    let length = numbersOnly.count
     let hasLeadingOne = numbersOnly.hasPrefix("1")
 
     // Check for supported phone number length
@@ -167,7 +167,7 @@ func format(phoneNumber sourcePhoneNumber: String) -> String? {
     var areaCode = ""
     if hasAreaCode {
         let areaCodeLength = 3
-        guard let areaCodeSubstring = numbersOnly.characters.substring(
+        guard let areaCodeSubstring = numbersOnly.substring(
             start: sourceIndex, offsetBy: areaCodeLength) else {
                 return nil
         }
@@ -177,14 +177,14 @@ func format(phoneNumber sourcePhoneNumber: String) -> String? {
 
     // Prefix, 3 characters
     let prefixLength = 3
-    guard let prefix = numbersOnly.characters.substring(start: sourceIndex, offsetBy: prefixLength) else {
+    guard let prefix = numbersOnly.substring(start: sourceIndex, offsetBy: prefixLength) else {
         return nil
     }
     sourceIndex += prefixLength
 
     // Suffix, 4 characters
     let suffixLength = 4
-    guard let suffix = numbersOnly.characters.substring(start: sourceIndex, offsetBy: suffixLength) else {
+    guard let suffix = numbersOnly.substring(start: sourceIndex, offsetBy: suffixLength) else {
         return nil
     }
 

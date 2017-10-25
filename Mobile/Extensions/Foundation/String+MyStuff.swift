@@ -11,7 +11,7 @@
 
 import Foundation
 
-extension String.CharacterView {
+extension String {
 
     /// This method makes it easier extract a substring by character index where a character is viewed as a human-readable character (grapheme cluster).
     internal func substring(start: Int, offsetBy: Int) -> String? {
