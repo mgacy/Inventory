@@ -50,7 +50,8 @@ struct InitialSignUpViewModel {
 
         isValid = userInputs
             .map { username, password in
-                return username.characters.count > 0 && password.characters.count > 0
+                //return !username.isEmpty && !password.isEmpty
+                return username.count > 0 && password.count > 0
         }
 
         // Signup
