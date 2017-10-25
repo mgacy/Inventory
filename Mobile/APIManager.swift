@@ -167,48 +167,17 @@ extension APIManager {
     func putInvoice(remoteID: Int, invoice: [String: Any]) -> Observable<DataResponse<RemoteInvoice>> {
         return requestOne(Router.putInvoice(remoteID: remoteID, parameters: invoice))
     }
-
-}
-/*
-// MARK: - Invoice - OLD
-extension APIManager {
-
-    func postInvoice(invoice: [String: Any], completion: @escaping (Bool, JSON) -> Void) {
-        sessionManager.request(Router.postInvoice(invoice))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    log.verbose("\(#function) success : \(value)")
-                    let json = JSON(value)
-                    completion(true, json)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    let json = JSON(error)
-                    completion(false, json)
-                }
-        }
+    /*
+    func postInvoice(_ invoice: [String: Any]) -> Observable<DataResponse<RemoteInvoice>> {
+        return requestOne(Router.postInvoice(invoice))
     }
 
-    func putInvoiceItem(remoteID: Int, item: [String: Any], completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.putInvoiceItem(remoteID: remoteID, parameters: item))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    log.verbose("\(#function) success : \(value)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    //let json = JSON(error)
-                    completion(nil, error)
-                }
-        }
+    func putInvoiceItem(remoteID: Int, invoiceItem: [String:Any]) -> Observable<DataResponse<RemoteInvoiceItem>> {
+        return requestOne(Router.putInvoiceItem(remoteID: remoteID, parameters: invoiceItem))
     }
-
+    */
 }
-*/
+
 // MARK: - Order
 extension APIManager {
 
