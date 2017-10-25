@@ -53,9 +53,7 @@ class InventoryKeypadViewModel: KeypadViewModel {
     //}
 
     // MARK: Keypad
-    /// TODO: change
-    //let keypad: OldKeypadWithHistory
-    let keypad: NewKeypadWithHistory
+    let keypad: KeypadWithHistory
     //let keypad: KeypadWithHistoryType
 
     var numberFormatter: NumberFormatter
@@ -87,8 +85,7 @@ class InventoryKeypadViewModel: KeypadViewModel {
 
         self.numberFormatter = numberFormatter
 
-        //self.keypad = OldKeypadWithHistory(formatter: numberFormatter)
-        self.keypad = NewKeypadWithHistory(formatter: numberFormatter)
+        self.keypad = KeypadWithHistory(formatter: numberFormatter)
         // We can only set the keypad's delegate after we have set all required attrs for self
         keypad.delegate = self
 

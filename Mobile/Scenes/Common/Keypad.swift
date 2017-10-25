@@ -25,7 +25,7 @@ protocol KeypadWithHistoryType: KeypadType {
 }
 
 protocol KeypadDelegate: class {
-    //var keypad: NewKeypad { get }
+    //var keypad: Keypad { get }
     //func pushDigit(value: Int)
     //func pushDecimal()
     //func popItem()
@@ -33,7 +33,7 @@ protocol KeypadDelegate: class {
     func updateModel(_: NSNumber?)
 }
 
-class NewKeypad: KeypadType {
+class Keypad: KeypadType {
 
     /// TODO: rename `currentDisplay` to better differentiate purpose from currentValue?
     public var displayValue: String {
@@ -157,7 +157,7 @@ class NewKeypad: KeypadType {
 
 // MARK: - History
 
-class NewKeypadWithHistory: KeypadWithHistoryType {
+class KeypadWithHistory: KeypadWithHistoryType {
 
     // NOTE: when displayHistory = `a + b + c`, stack == ["a", "b"] and currentNumber == "c"
 

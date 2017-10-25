@@ -133,7 +133,7 @@ class OrderKeypadViewModel: KeypadViewModel {
     }
 
     // MARK: Keypad
-    let keypad: NewKeypad
+    let keypad: Keypad
 
     var numberFormatter: NumberFormatter
 
@@ -204,7 +204,7 @@ class OrderKeypadViewModel: KeypadViewModel {
         keypadFormatter.numberStyle = .decimal
         keypadFormatter.roundingMode = .halfUp
         keypadFormatter.maximumFractionDigits = 2
-        self.keypad = NewKeypad(formatter: keypadFormatter, delegate: nil)
+        self.keypad = Keypad(formatter: keypadFormatter, delegate: nil)
         // We can only set the keypad's delegate after we have set all required attrs for self
         keypad.delegate = self
 
