@@ -6,7 +6,6 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import Alamofire
 import KeychainAccess
 import SwiftyJSON
@@ -116,12 +115,10 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
                     if let accessToken = accessToken, let refreshToken = refreshToken {
 
-                        /* NOTE: we do not actually use refreshToken at the moment
-                         * In order to keep these methods as close as possible to the example
-                         * OAuth2Handler given in the Alamofire README, we pass the message we
-                         * want to print
+                        /* We do not actually use refreshToken at the moment; in order to keep these methods as close as
+                         * possible to the example `OAuth2Handler` given in the Alamofire README, we pass the message we
+                         * want to log
                          */
-
                         log.info(refreshToken)
                         strongSelf.accessToken = accessToken
                         //strongSelf.refreshToken = refreshToken
@@ -151,8 +148,8 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
                 if let accessToken = JSON(response.result.value!)["token"].string {
                     log.verbose("Received new access token ...")
-                    // NOTE - we pass a string for refreshToken to keep should() as close to the
-                    //        example from the Alamofire README as possible
+                    // We pass a string for `refreshToken` to keep `.should()` as close to the `OAuth2Handler` example
+                    // from the Alamofire README as possible
                     completion(true, accessToken, "Updating accessToken ...")
                 } else {
                     log.error("Attempt to login again failed")

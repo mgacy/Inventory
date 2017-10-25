@@ -94,7 +94,7 @@ class CurrentUserManager {
     fileprivate func createUser(userID: Int, email: String, password: String) {
         self.email = email
         self.password = password
-        /// TODO: what about storeID?
+        /// TODO: self.storeID = ?
         user = User(id: userID, email: email)
 
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
@@ -145,6 +145,8 @@ class CurrentUserManager {
             let userID = json["user"]["id"].intValue
             let defaultStoreID: Int = json["user"]["default_store"]["id"].intValue
 
+            /// TODO: simply call .createUser(userID:email:password:)?
+
             self.email = email
             self.password = password
             self.storeID = defaultStoreID
@@ -176,6 +178,8 @@ class CurrentUserManager {
                 }
         }
     }
+
+    /// TODO: public func confirm(withToken token: String) {}
 
     public func logout(completion: @escaping (Bool) -> Void) {
         /// TODO: removeUser first, regardless of response.result?
