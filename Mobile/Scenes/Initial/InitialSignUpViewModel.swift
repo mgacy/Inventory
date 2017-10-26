@@ -66,7 +66,8 @@ struct InitialSignUpViewModel {
                 return dataManager.signUp(username: email, email: email, password: password)
                     .trackActivity(signingUp)
             }
-            .shareReplay(1)
+            .share(replay: 1)
+            //.shareReplay(1)
     }
 
 }

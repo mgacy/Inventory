@@ -79,7 +79,8 @@ struct InvoiceDateViewModel {
                 return dataManager.refreshInvoiceCollection(selection)
                     //.elements()
             }
-            .shareReplay(1)
+            .share(replay: 1)
+            //.shareReplay(1)
 
         // Errors
         self.errorMessages = showSelectionResults

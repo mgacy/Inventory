@@ -64,7 +64,8 @@ struct InitialLoginViewModel {
                 return dataManager.login(email: email, password: password)
                     .trackActivity(loggingIn)
             }
-            .shareReplay(1)
+            .share(replay: 1)
+            //.shareReplay(1)
     }
 
 }
