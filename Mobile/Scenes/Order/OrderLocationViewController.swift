@@ -13,7 +13,7 @@ import RxSwift
 class OrderLocationViewController: UIViewController {
 
     private enum Strings {
-        static let navTitle = "NAME"
+        static let navTitle = "Locations"
         static let errorAlertTitle = "Error"
     }
 
@@ -90,7 +90,7 @@ class OrderLocationViewController: UIViewController {
                 self?.tableView.reloadData()
             })
             .disposed(by: disposeBag)
-
+         */
         // Errors
         viewModel.errorMessages
             .drive(onNext: { [weak self] message in
@@ -98,8 +98,15 @@ class OrderLocationViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
+        viewModel.locations
+            .subscribe(onNext: { _ in
+                //log.debug("\(#function) LOCATIONS: \(locations)")
+                log.debug("Got locations")
+            })
+            .disposed(by: disposeBag)
+
         // Navigation
-        */
+
     }
     /*
     // MARK: - TableViewDataSource

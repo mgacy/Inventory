@@ -16,16 +16,45 @@ struct OrderLocationViewModel {
 
     /// TODO: make private
     let dataManager: DataManager
+    let collection: OrderCollection
 
     // MARK: - Input
 
     // MARK: - Output
+    let errorMessages: Driver<String>
+    let locations: Observable<[RemoteLocation]>
 
     // MARK: - Lifecycle
 
-    // swiftlint:disable:next function_body_length
-    init(dataManager: DataManager, rowTaps: Observable<Inventory>) {
+    init(dataManager: DataManager, collection: OrderCollection, rowTaps: Observable<IndexPath>) {
         self.dataManager = dataManager
+        self.collection = collection
+
+        // Fetch Locations
+        let locationResults = dataManager.getLocations()
+
+        // Errors
+
+        self.errorMessages = locationResults.errors()
+            .map { error in
+                log.debug("\(#function) ERROR : \(error)")
+                switch error {
+                default:
+                    return "There was a problem"
+                }
+            }
+            .asDriver(onErrorJustReturn: "Other Error")
+
+        self.locations = locationResults.elements()
+            .map { locations in
+                let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
+                factory.generateLocations(for: locations)
+                //if let dict = factory.fetchOrderItemDict(forCollection: collection) {
+                //    factory.nextStep(locations: locations, dict: dict)
+                //}
+
+                return locations
+            }
 
         // ...
     }
