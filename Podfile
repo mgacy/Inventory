@@ -27,8 +27,8 @@ def basic_pods
 end
 
 # def test_pods
-#   pod 'RxBlocking',         '~> 3.0'
-#   pod 'RxTest',             '~> 3.0'
+#   pod 'RxBlocking',         '~> 4.0'
+#   pod 'RxTest',             '~> 4.0'
 # end
 
 target 'Mobile' do
