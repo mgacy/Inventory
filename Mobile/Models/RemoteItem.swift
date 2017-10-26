@@ -98,6 +98,37 @@ extension RemoteItemCategory: RemoteRecord {
     var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
 }
 
+// MARK: - InventoryLocation (Non-Nested from /inventory_locations)
+
+enum RemoteLocationType: String, Codable {
+    case category
+    case item
+}
+
+struct RemoteLocation: Codable {
+    let remoteID: Int
+    let name: String
+    let storeId: Int
+
+    let locationType: RemoteLocationType
+    let categories: [RemoteItemCategory]
+    let items: [RemoteNestedItem]
+
+    private enum CodingKeys: String, CodingKey {
+        case remoteID = "id"
+        case name
+        case locationType = "loc_type"
+        case categories
+        case items
+        case storeId = "store_id"
+    }
+}
+
+extension RemoteLocation: RemoteRecord {
+    typealias SyncIdentifierType = Int32
+    var syncIdentifier: SyncIdentifierType { return Int32(self.remoteID) }
+}
+
 // MARK: - Store
 
 struct RemoteStore: Codable {

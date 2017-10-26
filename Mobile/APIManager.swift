@@ -113,6 +113,11 @@ extension APIManager {
         return requestList(Router.getItemCategories(storeID: storeID))
     }
      */
+
+    func getLocations(storeID: Int) -> Observable<DataResponse<[RemoteLocation]>> {
+        return requestList(Router.getLocations(storeID: storeID))
+    }
+
     func getVendors(storeID: Int) -> Observable<DataResponse<[RemoteVendor]>> {
         return requestList(Router.getVendors(storeID: storeID))
     }

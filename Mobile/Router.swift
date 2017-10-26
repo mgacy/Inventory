@@ -24,6 +24,7 @@ public enum Router: URLRequestConvertible {
     case signUp(username: String, email: String, password: String)
     // General
     case getItems(storeID: Int)
+    case getLocations(storeID: Int)
     case getUnits
     case getVendors(storeID: Int)
     // Inventory
@@ -61,6 +62,8 @@ public enum Router: URLRequestConvertible {
             return .post
         // General
         case .getItems:
+            return .get
+        case .getLocations:
             return .get
         case .getUnits:
             return .get
@@ -112,6 +115,8 @@ public enum Router: URLRequestConvertible {
         // General
         case .getItems:
             return "items"
+        case .getLocations:
+            return "inventory_locations"
         case .getUnits:
             return "units"
         case .getVendors:
@@ -160,6 +165,8 @@ public enum Router: URLRequestConvertible {
             return ["username": username, "email": email, "password": password]
         // General
         case .getItems(let storeID):
+            return ["store_id": storeID]
+        case .getLocations(let storeID):
             return ["store_id": storeID]
         // case .getUnits:
         // case .getVendors(let storeID):
