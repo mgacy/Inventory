@@ -50,6 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         /// TODO: Should we use a failable initializier with CurrentUserManager?
         //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
+        /// TODO: initialize a SessionManager here and pass to different components
+
         dataManager = DataManager(context: persistentContainer.viewContext, userManager: userManager)
         //guard let manager = dataManager else { fatalError("Unable to instantiate DataManager") }
 
