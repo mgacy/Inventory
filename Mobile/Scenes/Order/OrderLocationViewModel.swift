@@ -47,12 +47,8 @@ struct OrderLocationViewModel {
 
         self.locations = locationResults.elements()
             .map { locations in
-                let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
-                factory.generateLocations(for: locations)
-                //if let dict = factory.fetchOrderItemDict(forCollection: collection) {
-                //    factory.nextStep(locations: locations, dict: dict)
-                //}
-
+                //let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
+                //factory.generateLocations(for: locations)
                 return locations
             }
 
