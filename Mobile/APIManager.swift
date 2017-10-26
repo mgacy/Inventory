@@ -6,10 +6,7 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
-import CoreData
 import Alamofire
-import SwiftyJSON
 import RxCocoa
 import RxSwift
 
@@ -29,8 +26,6 @@ class APIManager {
     static let sharedInstance = APIManager()
     private let sessionManager: SessionManager
     private let decoder: JSONDecoder
-
-    typealias CompletionHandlerType = (JSON?, Error?) -> Void
 
     // MARK: Lifecycle
 
@@ -114,10 +109,15 @@ extension APIManager {
         return requestList(Router.getItems(storeID: storeID))
     }
     /*
-     func getItemCategories(storeID: Int) -> Observable<DataResponse<[RemoteItemCategory]>> {
-     return requestList(Router.getItemCategories(storeID: storeID))
-     }
+    func getItemCategories(storeID: Int) -> Observable<DataResponse<[RemoteItemCategory]>> {
+        return requestList(Router.getItemCategories(storeID: storeID))
+    }
      */
+
+    func getLocations(storeID: Int) -> Observable<DataResponse<[RemoteLocation]>> {
+        return requestList(Router.getLocations(storeID: storeID))
+    }
+
     func getVendors(storeID: Int) -> Observable<DataResponse<[RemoteVendor]>> {
         return requestList(Router.getVendors(storeID: storeID))
     }
@@ -167,48 +167,17 @@ extension APIManager {
     func putInvoice(remoteID: Int, invoice: [String: Any]) -> Observable<DataResponse<RemoteInvoice>> {
         return requestOne(Router.putInvoice(remoteID: remoteID, parameters: invoice))
     }
-
-}
-/*
-// MARK: - Invoice - OLD
-extension APIManager {
-
-    func postInvoice(invoice: [String: Any], completion: @escaping (Bool, JSON) -> Void) {
-        sessionManager.request(Router.postInvoice(invoice))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    log.verbose("\(#function) success : \(value)")
-                    let json = JSON(value)
-                    completion(true, json)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    let json = JSON(error)
-                    completion(false, json)
-                }
-        }
+    /*
+    func postInvoice(_ invoice: [String: Any]) -> Observable<DataResponse<RemoteInvoice>> {
+        return requestOne(Router.postInvoice(invoice))
     }
 
-    func putInvoiceItem(remoteID: Int, item: [String: Any], completion: @escaping CompletionHandlerType) {
-        sessionManager.request(Router.putInvoiceItem(remoteID: remoteID, parameters: item))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    log.verbose("\(#function) success : \(value)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    //let json = JSON(error)
-                    completion(nil, error)
-                }
-        }
+    func putInvoiceItem(remoteID: Int, invoiceItem: [String:Any]) -> Observable<DataResponse<RemoteInvoiceItem>> {
+        return requestOne(Router.putInvoiceItem(remoteID: remoteID, parameters: invoiceItem))
     }
-
+    */
 }
-*/
+
 // MARK: - Order
 extension APIManager {
 
@@ -221,17 +190,8 @@ extension APIManager {
     }
 
     func postOrderCollection(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?) -> Observable<DataResponse<RemoteOrderCollection>> {
-
-        /// TODO: relocate / rework
-        var parameters = [String: Any]()
-        parameters["store_id"] = storeID
-        parameters["generation_method"] = generationMethod.rawValue
-        //parameters["return_usage"] = returnUsage
-        parameters["period_length"] = periodLength ?? 28
-
-        return requestOne(Router.postOrderCollection(parameters))
-        //return requestOne(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
-        //                                          returnUsage: returnUsage, periodLength: periodLength))
+        return requestOne(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
+                                                     returnUsage: returnUsage, periodLength: periodLength))
     }
 
     /// NOTE: I am designing this in accordance with how things should work, not how they currently do
@@ -241,27 +201,3 @@ extension APIManager {
     }
 
 }
-/*
-// MARK: - Order - OLD
-extension APIManager {
-
-    func getNewOrderCollection(storeID: Int, generateFrom method: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?, completion:
-        @escaping CompletionHandlerType) {
-        sessionManager.request(Router.getNewOrder(storeID: storeID, generationMethod: method,
-                                                  returnUsage: returnUsage, periodLength: periodLength))
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-                    completion(json, nil)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(nil, error)
-                }
-        }
-    }
-
-}
-*/

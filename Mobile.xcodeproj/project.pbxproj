@@ -115,6 +115,9 @@
 		C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */; };
 		C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB7D891EE7910000515429 /* MailComposer.swift */; };
 		C9EDFD2C1F842F2300C07CB8 /* StoryboardInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EDFD2B1F842F2300C07CB8 /* StoryboardInitializable.swift */; };
+		C9F3564B1FA04536007ED98C /* OrderLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */; };
+		C9F3564D1FA0554C007ED98C /* OrderLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */; };
+		C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
 		C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E21DB7EF98004C10E6 /* ViewController.swift */; };
 		C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* Main.storyboard */; };
@@ -256,6 +259,9 @@
 		C9EB7D891EE7910000515429 /* MailComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
 		C9ECDB271F214DB9002AA99E /* Mobile 3a.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 3a.xcdatamodel"; sourceTree = "<group>"; };
 		C9EDFD2B1F842F2300C07CB8 /* StoryboardInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StoryboardInitializable.swift; path = Protocols/StoryboardInitializable.swift; sourceTree = "<group>"; };
+		C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationViewController.swift; sourceTree = "<group>"; };
+		C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationViewModel.swift; sourceTree = "<group>"; };
+		C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderLocationViewController.storyboard; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9F515E21DB7EF98004C10E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -378,6 +384,7 @@
 				C97A712B1F8EC07900F2F1CD /* Vendor List */,
 				C9C221151EFCCE4A009C7D01 /* Item List */,
 				C9C221161EFCCE61009C7D01 /* Keypad */,
+				C9F356491FA04496007ED98C /* Location List */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -661,6 +668,16 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		C9F356491FA04496007ED98C /* Location List */ = {
+			isa = PBXGroup;
+			children = (
+				C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */,
+				C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */,
+				C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */,
+			);
+			name = "Location List";
+			sourceTree = "<group>";
+		};
 		C9F515D41DB7EF98004C10E6 = {
 			isa = PBXGroup;
 			children = (
@@ -861,6 +878,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9F515EE1DB7EF98004C10E6 /* LaunchScreen.storyboard in Resources */,
+				C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */,
 				C9F515EB1DB7EF98004C10E6 /* Assets.xcassets in Resources */,
 				C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */,
 				C95DE42C1F9587580079B43B /* InventoryLocationViewController.storyboard in Resources */,
@@ -1076,6 +1094,7 @@
 				C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */,
 				C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */,
 				C9174D431F83232C008639CC /* SyncableParent.swift in Sources */,
+				C9F3564D1FA0554C007ED98C /* OrderLocationViewModel.swift in Sources */,
 				C97A71321F8EC83700F2F1CD /* InvoiceVendorViewModel.swift in Sources */,
 				C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */,
 				C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */,
@@ -1127,6 +1146,7 @@
 				C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */,
 				C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */,
 				C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */,
+				C9F3564B1FA04536007ED98C /* OrderLocationViewController.swift in Sources */,
 				C9CC04DF1F84C13C00180120 /* RemoteInvoice.swift in Sources */,
 				C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */,
 				C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */,

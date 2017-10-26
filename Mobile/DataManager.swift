@@ -135,6 +135,28 @@ class DataManager {
         }
     }
      */
+
+    // Location
+
+    func getLocations() -> Observable<Event<[RemoteLocation]>> {
+        guard let storeID = userManager.storeID else {
+            log.error("\(#function) FAILED : no storeID")
+            return Observable.error(DataManagerError.missingStoreID).materialize()
+        }
+
+        return client.getLocations(storeID: storeID)
+            .map { response in
+                switch response.result {
+                case .success(let records):
+                    return records
+                case .failure(let error):
+                    log.warning("\(#function) FAILED : \(error)")
+                    throw error
+                }
+            }
+            .materialize()
+    }
+
     // Vendor
 
     //func createVendor() -> Observable<Vendor> {}
