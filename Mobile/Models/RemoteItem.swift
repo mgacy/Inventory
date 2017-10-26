@@ -84,12 +84,12 @@ extension RemoteNestedItem: RemoteRecord {
 struct RemoteItemCategory: Codable {
     let remoteID: Int
     let name: String
-    //let items: [RemoteNestedItem]?
+    let items: [RemoteNestedItem]?
 
     private enum CodingKeys: String, CodingKey {
         case remoteID = "id"
         case name
-        //case item
+        case items
     }
 }
 
