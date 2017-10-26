@@ -146,7 +146,7 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
             .responseJSON { [weak self] response in
                 guard let strongSelf = self else { return }
 
-                if let accessToken = JSON(response.result.value!)["token"].string {
+                if let json = response.result.value as? [String: Any], let accessToken = json["token"] as? String {
                     log.verbose("Received new access token ...")
                     // We pass a string for `refreshToken` to keep `.should()` as close to the `OAuth2Handler` example
                     // from the Alamofire README as possible
