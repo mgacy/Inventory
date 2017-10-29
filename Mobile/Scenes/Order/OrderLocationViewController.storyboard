@@ -17,14 +17,31 @@
                     <view key="view" contentMode="scaleToFill" id="SCs-fD-Eb9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="VBj-r2-N4z">
+                                <rect key="frame" x="177" y="323" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Jp-cr-ftG">
+                                <rect key="frame" x="16" y="351" width="343" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="c0w-q9-Srf"/>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="AGM-hm-KDf"/>
+                    <connections>
+                        <outlet property="activityIndicatorView" destination="VBj-r2-N4z" id="3VK-6o-Kdm"/>
+                        <outlet property="messageLabel" destination="5Jp-cr-ftG" id="umk-hr-ezJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vIq-gc-Bmb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="25" y="125"/>
+            <point key="canvasLocation" x="24.800000000000001" y="124.58770614692655"/>
         </scene>
     </scenes>
 </document>

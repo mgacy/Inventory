@@ -28,6 +28,10 @@ class OrderLocationViewController: UIViewController {
     let cellIdentifier = "Cell"
 
     // MARK: - Interface
+
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var messageLabel: UILabel!
+
     private let refreshControl = UIRefreshControl()
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
@@ -77,19 +81,27 @@ class OrderLocationViewController: UIViewController {
         refreshControl.rx.controlEvent(.valueChanged)
             .bind(to: viewModel.refresh)
             .disposed(by: disposeBag)
-
+         */
         // Activity Indicator
         viewModel.isRefreshing
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
-        viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
-            .drive(onNext: { [weak self] _ in
-                self?.tableView.reloadData()
-            })
+        viewModel.isRefreshing
+            .map { !$0 }
+            .drive(activityIndicatorView.rx.isHidden)
             .disposed(by: disposeBag)
-         */
+
+        viewModel.isRefreshing
+            .map { !$0 }
+            .drive(messageLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+
+        viewModel.showTable
+            .map { !$0 }
+            .drive(tableView.rx.isHidden)
+            .disposed(by: disposeBag)
+
         // Errors
         viewModel.errorMessages
             .drive(onNext: { [weak self] message in
