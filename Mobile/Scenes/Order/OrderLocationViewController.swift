@@ -75,6 +75,7 @@ class OrderLocationViewController: UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
+    // swiftlint:disable:next function_body_length
     private func setupBindings() {
         /*
         // Refresh
@@ -125,6 +126,21 @@ class OrderLocationViewController: UIViewController {
                 guard let strongSelf = self else {
                     fatalError("\(#function) FAILED : unable to get self")
                 }
+                guard let controller = OrderLocItemViewController.instance() else {
+                    fatalError("\(#function) FAILED : unable to get view controller")
+                }
+
+                var parent: OrderLocItemParent
+                switch location.locationType {
+                case .category:
+                    parent = .category(location.categories[0])
+                case .item:
+                    parent = .location(location)
+                }
+                controller.viewModel = OrderLocItemViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                             parent: parent, factory: strongSelf.viewModel.factory,
+                                                             rowTaps: controller.rowTaps)
+                strongSelf.navigationController?.pushViewController(controller, animated: true)
             })
             .disposed(by: disposeBag)
     }
