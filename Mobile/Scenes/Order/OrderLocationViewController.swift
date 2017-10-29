@@ -59,6 +59,7 @@ class OrderLocationViewController: UIViewController {
         title = Strings.navTitle
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         self.view.addSubview(tableView)
     }
 
@@ -96,15 +97,24 @@ class OrderLocationViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
+        // Basic RxCocoa
         viewModel.locations
-            .subscribe(onNext: { _ in
-                //log.debug("\(#function) LOCATIONS: \(locations)")
-                log.debug("Got locations")
-            })
+            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier)) { _, model, cell in
+                // closure args are index (row), model, cell
+                cell.textLabel?.text = model.name
+            }
             .disposed(by: disposeBag)
 
         // Navigation
-
+        tableView.rx
+            .modelSelected(RemoteLocation.self)
+            .subscribe(onNext: { [weak self] location in
+                //log.debug("We selected: \(location)")
+                guard let strongSelf = self else {
+                    fatalError("\(#function) FAILED : unable to get self")
+                }
+            })
+            .disposed(by: disposeBag)
     }
 
 }
@@ -113,7 +123,6 @@ class OrderLocationViewController: UIViewController {
 extension OrderLocationViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //rowTaps.onNext(dataSource.objectAtIndexPath(indexPath))
         rowTaps.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }

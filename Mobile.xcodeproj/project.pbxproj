@@ -71,6 +71,7 @@
 		C97A713D1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */; };
 		C98165021F915E7F006EC785 /* SubItemCellViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */; };
 		C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* SyncManager.swift */; };
+		C98364401FA675F400DFAC6C /* OrderLocationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C983643F1FA675F400DFAC6C /* OrderLocationFactory.swift */; };
 		C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988CE701DF5050D00A8028B /* Array+MyStuff.swift */; };
 		C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */; };
 		C98A4FB31DCB0233002BB076 /* Unit+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */; };
@@ -214,6 +215,7 @@
 		C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryReviewViewController.storyboard; sourceTree = "<group>"; };
 		C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubItemCellViewModelType.swift; sourceTree = "<group>"; };
 		C982341A1DCD3B3A00E3E353 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
+		C983643F1FA675F400DFAC6C /* OrderLocationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationFactory.swift; sourceTree = "<group>"; };
 		C988CE701DF5050D00A8028B /* Array+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Unit+MyStuff.swift"; sourceTree = "<group>"; };
@@ -674,6 +676,7 @@
 				C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */,
 				C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */,
 				C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */,
+				C983643F1FA675F400DFAC6C /* OrderLocationFactory.swift */,
 			);
 			name = "Location List";
 			sourceTree = "<group>";
@@ -1118,6 +1121,7 @@
 				C935E9A41E60D713003BF386 /* InitialLoginViewController.swift in Sources */,
 				C9BB05831F83162500A07529 /* DataRequest+Decodable.swift in Sources */,
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
+				C98364401FA675F400DFAC6C /* OrderLocationFactory.swift in Sources */,
 				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,
 				C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */,
 				C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */,
