@@ -44,7 +44,6 @@ class OrderLocationViewController: UIViewController {
         setupView()
         setupConstraints()
         setupBindings()
-        //setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -60,7 +59,6 @@ class OrderLocationViewController: UIViewController {
         title = Strings.navTitle
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
-
         self.view.addSubview(tableView)
     }
 
@@ -108,19 +106,7 @@ class OrderLocationViewController: UIViewController {
         // Navigation
 
     }
-    /*
-    // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<OrderLocationViewController>!
 
-    fileprivate func setupTableView() {
-        tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        //tableView.rowHeight = UITableViewAutomaticDimension
-        //tableView.estimatedRowHeight = 100
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
-    }
-    */
 }
 
 // MARK: - TableViewDelegate
@@ -133,17 +119,3 @@ extension OrderLocationViewController: UITableViewDelegate {
     }
 
 }
-/*
-// MARK: - TableViewDataSourceDelegate Extension
-extension OrderLocationViewController: TableViewDataSourceDelegate {
-    /*
-    func canEdit(_ location: OrderLocation) -> Bool {
-        return true
-    }
-    */
-    func configure(_ cell: UITableViewCell, for location: OrderLocation) {
-
-    }
-
-}
-*/
