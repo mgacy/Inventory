@@ -28,7 +28,6 @@ class OrderLocItemViewController: UIViewController {
     let cellIdentifier = "Cell"
 
     // MARK: - Interface
-    private let refreshControl = UIRefreshControl()
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +63,6 @@ class OrderLocItemViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        // TableView
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -72,44 +70,14 @@ class OrderLocItemViewController: UIViewController {
     }
 
     private func setupBindings() {
-        /*
-        // Refresh
-        refreshControl.rx.controlEvent(.valueChanged)
-            .bind(to: viewModel.refresh)
-            .disposed(by: disposeBag)
-
-        // Activity Indicator
-        viewModel.isRefreshing
-            .drive(refreshControl.rx.isRefreshing)
-            .disposed(by: disposeBag)
-
-        viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
-            .drive(onNext: { [weak self] _ in
-                self?.tableView.reloadData()
-            })
-            .disposed(by: disposeBag)
-
-        // Errors
-        viewModel.errorMessages
-            .drive(onNext: { [weak self] message in
-                self?.showAlert(title: Strings.errorAlertTitle, message: message)
-            })
-            .disposed(by: disposeBag)
-        */
-
+        // TableView
         viewModel.items
             .bind(to: tableView.rx.items(cellIdentifier: "Cell", cellType: SubItemTableViewCell.self)) { (_, element, cell: SubItemTableViewCell) in
                 // closure args are index (row), model, cell
                 guard let cellViewModel = OrderItemCellViewModel(forOrderItem: element) else {
-                    fatalError("\(#function) FAILED : unable to init view model")
+                    fatalError("\(#function) FAILED : unable to init view model for \(element)")
                 }
                 cell.configure(withViewModel: cellViewModel)
-
-                //cell.nameTextLabel.text = element.item?.name ?? "Error"
-                //cell.textLabel?.text = element.item?.name ?? "Error"
-                //cell.nameTextLabel?.text = element.item?.name ?? "Error"
-                //cell.configure(forOrderItem: element)
             }
             .disposed(by: disposeBag)
 
