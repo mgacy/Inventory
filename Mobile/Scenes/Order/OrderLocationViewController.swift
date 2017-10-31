@@ -68,7 +68,6 @@ class OrderLocationViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        // TableView
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -123,24 +122,26 @@ class OrderLocationViewController: UIViewController {
             .modelSelected(RemoteLocation.self)
             .subscribe(onNext: { [weak self] location in
                 //log.debug("We selected: \(location)")
-                guard let strongSelf = self else {
-                    fatalError("\(#function) FAILED : unable to get self")
-                }
-                guard let controller = OrderLocItemViewController.instance() else {
-                    fatalError("\(#function) FAILED : unable to get view controller")
-                }
+                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
 
-                var parent: OrderLocItemParent
                 switch location.locationType {
                 case .category:
-                    parent = .category(location.categories[0])
+                    guard let controller = OrderLocCatViewController.instance() else {
+                        fatalError("\(#function) FAILED : unable to get view controller")
+                    }
+                    controller.viewModel = OrderLocCatViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                                location: location,
+                                                                factory: strongSelf.viewModel.factory)
+                    strongSelf.navigationController?.pushViewController(controller, animated: true)
                 case .item:
-                    parent = .location(location)
+                    guard let controller = OrderLocItemViewController.instance() else {
+                        fatalError("\(#function) FAILED : unable to get view controller")
+                    }
+                    controller.viewModel = OrderLocItemViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                                 parent: OrderLocItemParent.location(location),
+                                                                 factory: strongSelf.viewModel.factory)
+                    strongSelf.navigationController?.pushViewController(controller, animated: true)
                 }
-                controller.viewModel = OrderLocItemViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                             parent: parent, factory: strongSelf.viewModel.factory,
-                                                             rowTaps: controller.rowTaps)
-                strongSelf.navigationController?.pushViewController(controller, animated: true)
             })
             .disposed(by: disposeBag)
     }
