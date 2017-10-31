@@ -6,7 +6,6 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import Alamofire
 import KeychainAccess
 import SwiftyJSON

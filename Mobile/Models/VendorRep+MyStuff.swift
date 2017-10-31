@@ -6,9 +6,7 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
 
 extension VendorRep: NewSyncable {
     typealias RemoteType = RemoteRepresentative

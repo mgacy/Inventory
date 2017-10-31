@@ -7,7 +7,6 @@
 //
 
 import CoreData
-import SwiftyJSON
 
 // swiftlint:disable force_try
 

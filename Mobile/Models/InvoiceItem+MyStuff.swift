@@ -6,9 +6,7 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
 
 @objc public enum InvoiceItemStatus: Int16 {
     case pending        = 0
