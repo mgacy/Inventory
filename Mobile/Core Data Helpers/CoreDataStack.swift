@@ -7,11 +7,11 @@
 //
 
 import CoreData
-
+/*
 final class CoreDataStack {
 
     static let shared = CoreDataStack()
-    var errorHandler: (Error) -> Void = {_ in }
+    var errorHandler: (Error) -> Void = { _ in }
 
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Mobile")
@@ -45,3 +45,4 @@ final class CoreDataStack {
         self.persistentContainer.performBackgroundTask(block)
     }
 }
+*/
