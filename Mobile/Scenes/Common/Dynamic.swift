@@ -9,8 +9,7 @@
 // https://www.toptal.com/ios/swift-tutorial-introduction-to-mvvm
 
 class Dynamic<T> {
-    // swiftlint:disable:next void_return
-    typealias Listener = (T) -> ()
+    typealias Listener = (T) -> Void
     var listener: Listener?
 
     func bind(_ listener: Listener?) {

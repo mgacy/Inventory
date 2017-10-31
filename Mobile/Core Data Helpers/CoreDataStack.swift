@@ -14,10 +14,10 @@ final class CoreDataStack {
     var errorHandler: (Error) -> Void = {_ in }
 
     lazy var persistentContainer: NSPersistentContainer = {
-        //let container = NSPersistentContainer(name: "DataModel")
         let container = NSPersistentContainer(name: "Mobile")
-        // swiftlint:disable:next unused_closure_parameter
-        container.loadPersistentStores(completionHandler: { [weak self](storeDescription, error) in
+
+        // closure params are (errorDescription, error)
+        container.loadPersistentStores(completionHandler: { [weak self] (_, error) in
             if let error = error {
                 NSLog("CoreData error \(error), \(String(describing: error._userInfo))")
                 self?.errorHandler(error)
