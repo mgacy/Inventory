@@ -46,34 +46,6 @@ struct OrderLocItemViewModel {
             let orderItems = factory.getOrderItems(forItemType: location) ?? []
             self.items = Observable.just(orderItems)
         }
-
-        /*
-        switch location.locationType {
-        case .category:
-            log.debug("Category Type")
-
-            if location.categories.count > 0 {
-                let category1 = location.categories[0]
-                log.debug("Category: \(category1)")
-                let orderItems = factory.getLocations(forCategoryType: category1) ?? []
-                log.debug("orderItems: \(orderItems)")
-            }
-
-        case .item:
-            log.debug("Item Type")
-            let orderItems = factory.getLocations(forItemType: location) ?? []
-            log.debug("orderItems: \(orderItems)")
-        }
-        */
-
-        /*
-        self.locations = locationResults.elements()
-            .map { locations in
-                let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
-                return factory.generateLocations(for: locations)
-                //return locations
-        }
-        */
     }
 
 }
