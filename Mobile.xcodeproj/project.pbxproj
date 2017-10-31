@@ -431,8 +431,8 @@
 		C949C2091F15E210008A5EC4 /* Keypad */ = {
 			isa = PBXGroup;
 			children = (
-				C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */,
 				C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */,
+				C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */,
 				C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */,
 			);
 			name = Keypad;
@@ -622,12 +622,12 @@
 		C9C221151EFCCE4A009C7D01 /* Item List */ = {
 			isa = PBXGroup;
 			children = (
+				C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */,
+				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
+				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
 				C9EB7D891EE7910000515429 /* MailComposer.swift */,
 				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
 				C91C92831EFCDBE400566CEB /* OrderItemTableViewCell.swift */,
-				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
-				C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */,
-				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
 			);
 			name = "Item List";
 			sourceTree = "<group>";
@@ -635,9 +635,9 @@
 		C9C221161EFCCE61009C7D01 /* Keypad */ = {
 			isa = PBXGroup;
 			children = (
-				C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */,
-				C9A14ABF1DC6748000ACDE69 /* OrderKeypadViewController.swift */,
 				C91C92891EFCE65800566CEB /* OrderKeypadViewController.storyboard */,
+				C9A14ABF1DC6748000ACDE69 /* OrderKeypadViewController.swift */,
+				C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */,
 			);
 			name = Keypad;
 			sourceTree = "<group>";
