@@ -688,9 +688,9 @@
 		C9CB6FC71F01D28F0094ED07 /* Keypad */ = {
 			isa = PBXGroup;
 			children = (
+				C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */,
 				C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */,
 				C98A90871F97E97400644548 /* InventoryKeypadViewModel.swift */,
-				C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */,
 			);
 			name = Keypad;
 			sourceTree = "<group>";
