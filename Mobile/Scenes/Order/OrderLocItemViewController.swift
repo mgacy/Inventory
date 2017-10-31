@@ -11,18 +11,16 @@ import RxCocoa
 import RxSwift
 
 class OrderLocItemViewController: UIViewController {
-
+    /*
     private enum Strings {
         static let navTitle = "NAME"
         static let errorAlertTitle = "Error"
     }
-
+    */
     // MARK: - Properties
 
     var viewModel: OrderLocItemViewModel!
     let disposeBag = DisposeBag()
-
-    let rowTaps = PublishSubject<IndexPath>()
 
     // TableViewCell
     let cellIdentifier = "Cell"
@@ -32,7 +30,6 @@ class OrderLocItemViewController: UIViewController {
         let tv = UITableView(frame: .zero, style: .plain)
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.backgroundColor = .white
-        tv.delegate = self
         return tv
     }()
 
@@ -72,8 +69,8 @@ class OrderLocItemViewController: UIViewController {
     private func setupBindings() {
         // TableView
         viewModel.items
+            // closure args are index (row), model, cell
             .bind(to: tableView.rx.items(cellIdentifier: "Cell", cellType: SubItemTableViewCell.self)) { (_, element, cell: SubItemTableViewCell) in
-                // closure args are index (row), model, cell
                 guard let cellViewModel = OrderItemCellViewModel(forOrderItem: element) else {
                     fatalError("\(#function) FAILED : unable to init view model for \(element)")
                 }
@@ -88,16 +85,6 @@ class OrderLocItemViewController: UIViewController {
                 log.debug("We selected: \(item)")
             })
             .disposed(by: disposeBag)
-    }
-
-}
-
-// MARK: - TableViewDelegate
-extension OrderLocItemViewController: UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        rowTaps.onNext(indexPath)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }

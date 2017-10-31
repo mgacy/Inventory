@@ -31,7 +31,7 @@ struct OrderLocItemViewModel {
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, parent: OrderLocItemParent, factory: OrderLocationFactory, rowTaps: Observable<IndexPath>) {
+    init(dataManager: DataManager, parent: OrderLocItemParent, factory: OrderLocationFactory) {
         self.dataManager = dataManager
         self.parent = parent
         self.factory = factory
