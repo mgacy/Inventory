@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13528" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="34T-N1-ake">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,22 +15,27 @@
             <objects>
                 <viewController storyboardIdentifier="OrderLocationViewController" id="34T-N1-ake" userLabel="OrderLocation" customClass="OrderLocationViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SCs-fD-Eb9">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="VBj-r2-N4z">
-                                <rect key="frame" x="177" y="323" width="20" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="VBj-r2-N4z">
+                                <rect key="frame" x="177.66666666666666" y="401" width="20" height="20"/>
                             </activityIndicatorView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Jp-cr-ftG">
-                                <rect key="frame" x="16" y="351" width="343" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Jp-cr-ftG">
+                                <rect key="frame" x="0.0" y="429" width="375" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="VBj-r2-N4z" firstAttribute="centerX" secondItem="c0w-q9-Srf" secondAttribute="centerX" id="GHL-LN-c1W"/>
+                            <constraint firstItem="5Jp-cr-ftG" firstAttribute="leading" secondItem="c0w-q9-Srf" secondAttribute="leading" id="Urg-cu-QzY"/>
+                            <constraint firstItem="VBj-r2-N4z" firstAttribute="centerY" secondItem="c0w-q9-Srf" secondAttribute="centerY" id="XP8-dW-e7F"/>
+                            <constraint firstItem="5Jp-cr-ftG" firstAttribute="trailing" secondItem="c0w-q9-Srf" secondAttribute="trailing" id="pk7-Dj-pLb"/>
+                            <constraint firstItem="5Jp-cr-ftG" firstAttribute="top" secondItem="VBj-r2-N4z" secondAttribute="bottom" constant="8" id="tKV-Xs-Edg"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="c0w-q9-Srf"/>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="AGM-hm-KDf"/>
