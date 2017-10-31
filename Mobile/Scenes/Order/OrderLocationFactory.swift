@@ -74,14 +74,15 @@ class OrderLocationFactory {
 
     // MARK: - Generation
 
-    func getLocations(forCategoryType category: RemoteItemCategory) -> [OrderItem]? {
+    func getOrderItems(forCategoryType category: RemoteItemCategory) -> [OrderItem]? {
         guard let categoryItems = category.items else {
             return nil
         }
         return categoryItems.flatMap { self.orderItemDict[$0.syncIdentifier] }
     }
 
-    func getLocations(forItemType location: RemoteLocation) -> [OrderItem]? {
+    func getOrderItems(forItemType location: RemoteLocation) -> [OrderItem]? {
+        //guard location.locationType == .item else { log.warning("\(#function) : tried passing .category type") }
         return location.items.flatMap { self.orderItemDict[$0.syncIdentifier] }
     }
 
@@ -93,18 +94,16 @@ class OrderLocationFactory {
 
         let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
         request.predicate = NSPredicate(format: "order IN %@", orders)
+        request.relationshipKeyPathsForPrefetching = ["item"]
 
         /// TODO: complete (some of) the following
         //request.sortDescriptors = []
         //request.includesSubentities = true
         //request.propertiesToFetch = ["item"]
         //request.propertiesToGroupBy = []
-        request.relationshipKeyPathsForPrefetching = ["item"]
 
         do {
             let fetchResults = try context.fetch(request)
-            //log.debug("fetchResults: \(fetchResults)\n")
-            //return fetchResults.toDictionary { $0.itemID }
             return fetchResults.toDictionary { $0.item?.remoteID ?? 0 }
         } catch let error {
             log.error("\(#function) FAILED : \(error)")
