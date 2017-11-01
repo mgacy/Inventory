@@ -40,8 +40,8 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     // MARK: Keypad
     let keypad: Keypad
 
-    var numberFormatter: NumberFormatter
-    var currencyFormatter: NumberFormatter
+    private let numberFormatter: NumberFormatter
+    private let currencyFormatter: NumberFormatter
 
     // MARK: Mode
     /// TODO: move outside InvoiceKeypadViewModel?
@@ -118,21 +118,19 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         self.currentItemUnits = ItemUnits(item: nil, currentUnit: nil)
 
         // Setup numberFormatter
-        numberFormatter = NumberFormatter()
+        let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         numberFormatter.roundingMode = .halfUp
         numberFormatter.maximumFractionDigits = 2
+        self.numberFormatter = numberFormatter
 
         // Setup currencyFormatter
-        currencyFormatter = NumberFormatter()
+        let currencyFormatter = NumberFormatter()
         currencyFormatter.numberStyle = .currency
+        self.currencyFormatter = currencyFormatter
 
         // Keypad
-        let keypadFormatter = NumberFormatter()
-        keypadFormatter.numberStyle = .decimal
-        keypadFormatter.roundingMode = .halfUp
-        keypadFormatter.maximumFractionDigits = 2
-        self.keypad = Keypad(formatter: keypadFormatter, delegate: nil)
+        self.keypad = Keypad(formatter: numberFormatter, delegate: nil)
         // We can only set the keypad's delegate after we have set all required attrs for self
         keypad.delegate = self
 

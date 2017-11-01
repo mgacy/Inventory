@@ -56,7 +56,7 @@ class InventoryKeypadViewModel: KeypadViewModel {
     let keypad: KeypadWithHistory
     //let keypad: KeypadWithHistoryType
 
-    var numberFormatter: NumberFormatter
+    private let numberFormatter: NumberFormatter
 
     // MARK: - X
 
@@ -82,7 +82,6 @@ class InventoryKeypadViewModel: KeypadViewModel {
         numberFormatter.numberStyle = .decimal
         numberFormatter.roundingMode = .halfUp
         numberFormatter.maximumFractionDigits = 2
-
         self.numberFormatter = numberFormatter
 
         self.keypad = KeypadWithHistory(formatter: numberFormatter)
