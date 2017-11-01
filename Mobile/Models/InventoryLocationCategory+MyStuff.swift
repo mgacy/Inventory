@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import CoreData
-import SwiftyJSON
-
+//import CoreData
+//import SwiftyJSON
+/*
 extension InventoryLocationCategory {
 
     // MARK: - Lifecycle
@@ -53,7 +53,7 @@ extension InventoryLocationCategory {
         self.location = location
     }
 }
-
+*/
 // MARK: - Computed Properties
 extension InventoryLocationCategory {
 

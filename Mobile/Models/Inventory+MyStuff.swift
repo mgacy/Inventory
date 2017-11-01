@@ -7,7 +7,7 @@
 //
 
 import CoreData
-import SwiftyJSON
+//import SwiftyJSON
 
 extension Inventory: NewSyncable {
     typealias RemoteType = RemoteInventory
@@ -38,7 +38,7 @@ extension Inventory: NewSyncable {
 }
 
 //extension Inventory: DateFacade {}
-
+/*
 extension Inventory {
 
     // MARK: - Lifecycle
@@ -155,7 +155,7 @@ extension Inventory: Syncable {
     }
 
 }
-
+*/
 // MARK: - Serialization
 
 extension Inventory {
