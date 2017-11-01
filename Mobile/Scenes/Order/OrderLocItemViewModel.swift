@@ -22,6 +22,7 @@ struct OrderLocItemViewModel {
     let dataManager: DataManager
     let parent: OrderLocItemParent
     let factory: OrderLocationFactory
+    let orderItems: [OrderItem]
 
     // MARK: - Input
 
@@ -39,11 +40,11 @@ struct OrderLocItemViewModel {
         switch parent {
         case .category(let category):
             self.navTitle = category.name
-            let orderItems = factory.getOrderItems(forCategoryType: category) ?? []
+            self.orderItems = factory.getOrderItems(forCategoryType: category) ?? []
             self.items = Observable.just(orderItems)
         case .location(let location):
             self.navTitle = location.name
-            let orderItems = factory.getOrderItems(forItemType: location) ?? []
+            self.orderItems = factory.getOrderItems(forItemType: location) ?? []
             self.items = Observable.just(orderItems)
         }
     }
