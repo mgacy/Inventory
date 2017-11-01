@@ -25,11 +25,6 @@ protocol KeypadWithHistoryType: KeypadType {
 }
 
 protocol KeypadDelegate: class {
-    //var keypad: Keypad { get }
-    //func pushDigit(value: Int)
-    //func pushDecimal()
-    //func popItem()
-    //func updateDisplay()
     func updateModel(_: NSNumber?)
 }
 
