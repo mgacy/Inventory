@@ -22,8 +22,6 @@ class OrderLocationViewController: UIViewController {
     var viewModel: OrderLocationViewModel!
     let disposeBag = DisposeBag()
 
-    let rowTaps = PublishSubject<IndexPath>()
-
     // TableViewCell
     let cellIdentifier = "Cell"
 
@@ -37,7 +35,6 @@ class OrderLocationViewController: UIViewController {
         let tv = UITableView(frame: .zero, style: .plain)
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.backgroundColor = .white
-        tv.delegate = self
         return tv
     }()
 
@@ -144,16 +141,6 @@ class OrderLocationViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
-    }
-
-}
-
-// MARK: - TableViewDelegate
-extension OrderLocationViewController: UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        rowTaps.onNext(indexPath)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }

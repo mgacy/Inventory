@@ -26,11 +26,10 @@ struct OrderLocationViewModel {
     let showTable: Driver<Bool>
     let locations: Observable<[RemoteLocation]>
     let errorMessages: Driver<String>
-    let showLocation: Observable<Void>
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, collection: OrderCollection, rowTaps: Observable<IndexPath>) {
+    init(dataManager: DataManager, collection: OrderCollection) {
         self.dataManager = dataManager
         self.collection = collection
         self.factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
@@ -53,7 +52,6 @@ struct OrderLocationViewModel {
             .asDriver(onErrorJustReturn: false)
 
         // Errors
-
         self.errorMessages = locationResults.errors()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
@@ -65,15 +63,6 @@ struct OrderLocationViewModel {
             .asDriver(onErrorJustReturn: "Other Error")
 
         self.locations = locationResults.elements()
-
-        // ...
-
-        // Navigation
-        self.showLocation = rowTaps
-            .map { tap in
-                log.debug("Tapped: \(tap)")
-                return
-            }
     }
 
 }
