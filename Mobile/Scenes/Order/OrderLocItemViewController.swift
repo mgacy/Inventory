@@ -69,7 +69,7 @@ class OrderLocItemViewController: UIViewController {
     private func setupBindings() {
         // TableView
         viewModel.items
-            // closure args are index (row), model, cell
+            // closure args are row (IndexPath), element, cell
             .bind(to: tableView.rx.items(cellIdentifier: "Cell", cellType: SubItemTableViewCell.self)) { (_, element, cell: SubItemTableViewCell) in
                 guard let cellViewModel = OrderItemCellViewModel(forOrderItem: element) else {
                     fatalError("\(#function) FAILED : unable to init view model for \(element)")

@@ -69,9 +69,9 @@ class OrderLocCatViewController: UIViewController {
     private func setupBindings() {
         // TableView
         viewModel.categories
-            // closure args are index (row), model, cell
-            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier)) { _, model, cell in
-                cell.textLabel?.text = model.name
+            // closure args are row (IndexPath), element, cell
+            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier)) { _, element, cell in
+                cell.textLabel?.text = element.name
             }
             .disposed(by: disposeBag)
 

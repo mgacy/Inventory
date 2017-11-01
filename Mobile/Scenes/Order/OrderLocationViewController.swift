@@ -111,9 +111,9 @@ class OrderLocationViewController: UIViewController {
 
         // Basic RxCocoa
         viewModel.locations
-            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier)) { _, model, cell in
-                // closure args are index (row), model, cell
-                cell.textLabel?.text = model.name
+            // closure args are row (IndexPath), element, cell
+            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier)) { _, element, cell in
+                cell.textLabel?.text = element.name
             }
             .disposed(by: disposeBag)
 
