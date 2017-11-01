@@ -156,9 +156,14 @@ struct RemoteToken: Codable {
 // MARK: - Unit
 
 struct RemoteUnit: Codable {
-
-    // enum UnitType {}
-
+    /*
+    enum RemoteUnitType: String, Codable {
+        case count
+        case volume
+        case weight
+        case collection
+    }
+    */
     let remoteID: Int
     let name: String
     let abbreviation: String

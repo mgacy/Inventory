@@ -12,7 +12,7 @@ import Foundation
 
 struct RemoteInvoiceCollection: Codable {
 
-    // enum InvoiceCollectionStatus {}
+    // enum InvoiceCollectionStatus: String, Codable {}
 
     //let date: Date
     let date: String
@@ -36,9 +36,13 @@ extension RemoteInvoiceCollection: RemoteRecord {
 // MARK: - Invoice
 
 struct RemoteInvoice: Codable {
-
-    // enum InvoiceStatus {}
-
+    /*
+    enum RemoteInvoiceStatus: String, Codable {
+        case completed
+        case pending
+        case rejected
+    }
+    */
     let remoteID: Int
     let shipDate: String
     let receiveDate: String
@@ -82,9 +86,17 @@ extension RemoteInvoice: RemoteRecord {
 // MARK: - InvoiceItem
 
 struct RemoteInvoiceItem: Codable {
-
-    // enum InvoiceItemStatus {}
-
+    /*
+    enum RemoteInvoiceItemStatus: String, Codable {
+        case pending
+        case received
+        case damaged
+        case outOfStock
+        case promo
+        case substitute
+        case wrongItem
+    }
+    */
     let remoteID: Int
     /// TODO: should quantity be an Int or Double?
     let quantity: Double
