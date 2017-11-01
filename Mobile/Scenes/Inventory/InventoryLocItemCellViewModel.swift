@@ -21,12 +21,7 @@ struct InventoryLocItemCellViewModel: SubItemCellViewModelType {
     // MARK: - Public
 
     var nameColor: UIColor { return self.status.associatedColor }
-    var nameText: String {
-        guard let name = item.name else {
-            return "Error"
-        }
-        return name
-    }
+    var nameText: String { return item.name ?? "Error" }
 
     //var packColor: UIColor { return .lightGray }
     var packText: String { return item.packDisplay }
