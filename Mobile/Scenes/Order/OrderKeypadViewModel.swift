@@ -248,7 +248,7 @@ class OrderKeypadViewModel: KeypadViewModel {
 
 // MARK: - Keypad
 /// TODO: simply move to default implementation of KeypadStuff?
-extension OrderKeypadViewModel: KeypadStuff {
+extension OrderKeypadViewModel: KeypadProxy {
 
     func pushDigit(value: Int) {
         keypad.pushDigit(value)

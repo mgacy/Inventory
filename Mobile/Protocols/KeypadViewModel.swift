@@ -57,14 +57,19 @@ extension KeypadViewModel {
 
 }
 
-/// TODO: make this part of KeypadViewModel?
-// Is this essentially the protocol for KeypadDelegate? We already have that in `Keypad.swift`
-protocol KeypadStuff: class {
-    //var keypad: Keypad { get }
-    //var keypad: KeypadType { get set }
-
+// We don't want to expose the Keypad directly to the view controller, so they will interact with view models conforming
+// to this protocol instead
+protocol KeypadProxy: class {
+    //var keypad: KeypadType { get }
     func pushDigit(value: Int)
     func pushDecimal()
     func popItem()
-    //func update(_: Double?)
+}
+
+protocol KeypadWithHistoryProxy {
+    //var keypad: KeypadWithHistoryType { get }
+    func pushDigit(value: Int)
+    func pushDecimal()
+    func pushOperator()
+    func popItem()
 }

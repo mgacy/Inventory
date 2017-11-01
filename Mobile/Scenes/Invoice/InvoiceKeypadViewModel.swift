@@ -234,7 +234,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
 }
 
 // MARK: - Keypad
-extension InvoiceKeypadViewModel: KeypadStuff {
+extension InvoiceKeypadViewModel: KeypadProxy {
 
     func pushDigit(value: Int) {
         if currentMode == .status { return }

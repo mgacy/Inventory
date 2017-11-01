@@ -129,17 +129,9 @@ class InventoryKeypadViewModel: KeypadViewModel {
 
 }
 
-extension InventoryKeypadViewModel {
-
-    func pushOperator() {
-        keypad.pushOperator()
-    }
-
-}
-
 // MARK: - Keypad
 /// TODO: simply move to default implementation of KeypadStuff?
-extension InventoryKeypadViewModel: KeypadStuff {
+extension InventoryKeypadViewModel: KeypadWithHistoryProxy {
 
     func pushDigit(value: Int) {
         keypad.pushDigit(value)
@@ -151,6 +143,10 @@ extension InventoryKeypadViewModel: KeypadStuff {
 
     func popItem() {
         keypad.popItem()
+    }
+
+    func pushOperator() {
+        keypad.pushOperator()
     }
 
 }
