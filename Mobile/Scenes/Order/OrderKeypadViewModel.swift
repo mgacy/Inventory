@@ -134,6 +134,7 @@ class OrderKeypadViewModel: KeypadViewModel {
 
     // MARK: Keypad
     let keypad: Keypad
+    //internal var keypad: KeypadType
 
     private let numberFormatter: NumberFormatter
 

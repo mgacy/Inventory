@@ -54,7 +54,7 @@ class InventoryKeypadViewModel: KeypadViewModel {
 
     // MARK: Keypad
     let keypad: KeypadWithHistory
-    //let keypad: KeypadWithHistoryType
+    //internal var keypad: KeypadWithHistoryType
 
     private let numberFormatter: NumberFormatter
 

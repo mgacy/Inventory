@@ -39,6 +39,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
 
     // MARK: Keypad
     let keypad: Keypad
+    //internal var keypad: KeypadType
 
     private let numberFormatter: NumberFormatter
     private let currencyFormatter: NumberFormatter

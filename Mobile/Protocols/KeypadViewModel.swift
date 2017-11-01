@@ -65,7 +65,23 @@ protocol KeypadProxy: class {
     func pushDecimal()
     func popItem()
 }
+/*
+extension KeypadProxy {
 
+    func pushDigit(value: Int) {
+        keypad.pushDigit(value)
+    }
+
+    func pushDecimal() {
+        keypad.pushDecimal()
+    }
+
+    func popItem() {
+        keypad.popItem()
+    }
+
+}
+*/
 protocol KeypadWithHistoryProxy {
     //var keypad: KeypadWithHistoryType { get }
     func pushDigit(value: Int)
@@ -73,3 +89,24 @@ protocol KeypadWithHistoryProxy {
     func pushOperator()
     func popItem()
 }
+/*
+extension KeypadWithHistoryProxy {
+
+    func pushDigit(value: Int) {
+        keypad.pushDigit(value)
+    }
+
+    func pushDecimal() {
+        keypad.pushDecimal()
+    }
+
+    func popItem() {
+        keypad.popItem()
+    }
+
+    func pushOperator() {
+        keypad.pushOperator()
+    }
+
+}
+*/
