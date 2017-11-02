@@ -20,6 +20,28 @@ class OrderDateViewController: UIViewController {
         static let newOrderMessage = "Set order quantities from the most recent inventory or simply use pars?"
     }
 
+    // MARK: Alert
+
+    private enum GenerationMethod: CustomStringConvertible {
+        //case count(method: NewOrderGenerationMethod)
+        //case par(method: NewOrderGenerationMethod)
+        case count
+        case par
+        //case sales
+        case cancel
+
+        var description: String {
+            switch self {
+            case .count:
+                return "From Count"
+            case .par:
+                return "From Par"
+            case .cancel:
+                return "Cancel"
+            }
+        }
+    }
+
     // MARK: - Properties
 
     var viewModel: OrderDateViewModel!
@@ -208,28 +230,6 @@ class OrderDateViewController: UIViewController {
                                          fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-}
-
-// MARK: - Alert
-
-enum GenerationMethod: CustomStringConvertible {
-    //case count(method: NewOrderGenerationMethod)
-    //case par(method: NewOrderGenerationMethod)
-    case count
-    case par
-    //case sales
-    case cancel
-
-    var description: String {
-        switch self {
-        case .count:
-            return "From Count"
-        case .par:
-            return "From Par"
-        case .cancel:
-            return "Cancel"
-        }
-    }
 }
 
 // MARK: - TableViewDelegate
