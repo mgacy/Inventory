@@ -66,6 +66,8 @@
 		C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */; };
 		C968B85E1EF7275E005CE2FC /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */; };
 		C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */; };
+		C96A899E1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C96A899D1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard */; };
+		C96A89A01FAA5DB400CDDC59 /* OrderContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96A899F1FAA5DB400CDDC59 /* OrderContainerViewController.swift */; };
 		C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
 		C976305F1F219A0900BA8E42 /* JSON+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = C976305E1F219A0900BA8E42 /* JSON+Date.swift */; };
@@ -76,6 +78,7 @@
 		C97A71381F8ECACE00F2F1CD /* InventoryReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71371F8ECACE00F2F1CD /* InventoryReviewViewController.swift */; };
 		C97A713A1F8ECADD00F2F1CD /* InventoryReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71391F8ECADD00F2F1CD /* InventoryReviewViewModel.swift */; };
 		C97A713D1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */; };
+		C97B7C471FAB908000117D29 /* OrderContainerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97B7C461FAB908000117D29 /* OrderContainerViewModel.swift */; };
 		C98165021F915E7F006EC785 /* SubItemCellViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */; };
 		C982341B1DCD3B3A00E3E353 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C982341A1DCD3B3A00E3E353 /* SyncManager.swift */; };
 		C983643E1FA6744200DFAC6C /* OrderItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C983643D1FA6744200DFAC6C /* OrderItemCellViewModel.swift */; };
@@ -218,6 +221,8 @@
 		C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 2.xcdatamodel"; sourceTree = "<group>"; };
 		C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
+		C96A899D1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderContainerViewController.storyboard; sourceTree = "<group>"; };
+		C96A899F1FAA5DB400CDDC59 /* OrderContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderContainerViewController.swift; sourceTree = "<group>"; };
 		C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+Stuff.swift"; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		C976305E1F219A0900BA8E42 /* JSON+Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JSON+Date.swift"; sourceTree = "<group>"; };
@@ -228,6 +233,7 @@
 		C97A71371F8ECACE00F2F1CD /* InventoryReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryReviewViewController.swift; sourceTree = "<group>"; };
 		C97A71391F8ECADD00F2F1CD /* InventoryReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryReviewViewModel.swift; sourceTree = "<group>"; };
 		C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryReviewViewController.storyboard; sourceTree = "<group>"; };
+		C97B7C461FAB908000117D29 /* OrderContainerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderContainerViewModel.swift; sourceTree = "<group>"; };
 		C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubItemCellViewModelType.swift; sourceTree = "<group>"; };
 		C982341A1DCD3B3A00E3E353 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		C983643D1FA6744200DFAC6C /* OrderItemCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemCellViewModel.swift; sourceTree = "<group>"; };
@@ -403,6 +409,16 @@
 			name = "LocationCategory List";
 			sourceTree = "<group>";
 		};
+		C9208A2C1FAB89B200D7C830 /* Container */ = {
+			isa = PBXGroup;
+			children = (
+				C96A899D1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard */,
+				C96A899F1FAA5DB400CDDC59 /* OrderContainerViewController.swift */,
+				C97B7C461FAB908000117D29 /* OrderContainerViewModel.swift */,
+			);
+			name = Container;
+			sourceTree = "<group>";
+		};
 		C94084741EFCCB7F00638E25 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
@@ -420,6 +436,7 @@
 			isa = PBXGroup;
 			children = (
 				C97A712A1F8EC06B00F2F1CD /* Date List */,
+				C9208A2C1FAB89B200D7C830 /* Container */,
 				C97A712B1F8EC07900F2F1CD /* Vendor List */,
 				C9C221151EFCCE4A009C7D01 /* Item List */,
 				C9C221161EFCCE61009C7D01 /* Keypad */,
@@ -920,6 +937,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C96A899E1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard in Resources */,
 				C901A50B1FA2BC3900BC7BD2 /* OrderLocItemViewController.storyboard in Resources */,
 				C9F515EE1DB7EF98004C10E6 /* LaunchScreen.storyboard in Resources */,
 				C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */,
@@ -1165,8 +1183,10 @@
 				C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */,
 				C97A71301F8EC4A100F2F1CD /* OrderVendorViewModel.swift in Sources */,
 				C935E9A41E60D713003BF386 /* InitialLoginViewController.swift in Sources */,
+				C97B7C471FAB908000117D29 /* OrderContainerViewModel.swift in Sources */,
 				C9BB05831F83162500A07529 /* DataRequest+Decodable.swift in Sources */,
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
+				C96A89A01FAA5DB400CDDC59 /* OrderContainerViewController.swift in Sources */,
 				C98364401FA675F400DFAC6C /* OrderLocationFactory.swift in Sources */,
 				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,
 				C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */,

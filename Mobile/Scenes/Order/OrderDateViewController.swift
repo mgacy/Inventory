@@ -177,15 +177,22 @@ class OrderDateViewController: UIViewController {
                     log.error("\(#function) FAILED : unable to get reference to self"); return
                 }
                 log.debug("\(#function) SELECTED / CREATED: \(selection)")
-
-                let vc = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
-                let vm = OrderVendorViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                              parentObject: selection,
-                                              rowTaps: vc.selectedObjects.asObservable(),
-                                              completeTaps: vc.completeButtonItem.rx.tap.asObservable()
-                )
-                vc.viewModel = vm
-                strongSelf.navigationController?.pushViewController(vc, animated: true)
+                switch selection.uploaded {
+                case true:
+                    let vc = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
+                    let vm = OrderVendorViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                  parentObject: selection,
+                                                  rowTaps: vc.selectedObjects.asObservable(),
+                                                  completeTaps: vc.completeButtonItem.rx.tap.asObservable()
+                    )
+                    vc.viewModel = vm
+                    strongSelf.navigationController?.pushViewController(vc, animated: true)
+                case false:
+                    let vc = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
+                    vc.viewModel = OrderContainerViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                           parentObject: selection)
+                    strongSelf.navigationController?.pushViewController(vc, animated: true)
+                }
             })
             .disposed(by: disposeBag)
     }
