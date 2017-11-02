@@ -11,41 +11,7 @@ import CoreData
 
 class InvoiceKeypadViewModel: KeypadViewModel {
 
-    var managedObjectContext: NSManagedObjectContext
-    var parentObject: Invoice
-    var items: [InvoiceItem] {
-        let request: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
-        request.predicate = NSPredicate(format: "invoice == %@", parentObject)
-
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        do {
-            let searchResults = try managedObjectContext.fetch(request)
-            return searchResults
-
-        } catch {
-            log.error("Error with request: \(error)")
-        }
-        return [InvoiceItem]()
-    }
-    var currentIndex: Int
-
-    // MARK: Units
-    private var currentItemUnits: ItemUnits
-    public var currentUnit: CurrentUnit? {
-        return currentItemUnits.currentUnit
-    }
-
-    // MARK: Keypad
-    let keypad: Keypad
-    //internal var keypad: KeypadType
-
-    private let numberFormatter: NumberFormatter
-    private let currencyFormatter: NumberFormatter
-
     // MARK: Mode
-    /// TODO: move outside InvoiceKeypadViewModel?
     enum KeypadState {
         case cost
         case quantity
@@ -65,6 +31,37 @@ class InvoiceKeypadViewModel: KeypadViewModel {
             }
             //return self
         }
+    }
+
+    private let managedObjectContext: NSManagedObjectContext
+    private let numberFormatter: NumberFormatter
+    private let currencyFormatter: NumberFormatter
+    private var currentItemUnits: ItemUnits
+    private var parentObject: Invoice
+
+    internal var currentIndex: Int
+    internal let keypad: Keypad
+    //internal var keypad: KeypadType
+
+    var items: [InvoiceItem] {
+        let request: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
+        request.predicate = NSPredicate(format: "invoice == %@", parentObject)
+
+        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+
+        do {
+            let searchResults = try managedObjectContext.fetch(request)
+            return searchResults
+
+        } catch {
+            log.error("Error with request: \(error)")
+        }
+        return [InvoiceItem]()
+    }
+
+    public var currentUnit: CurrentUnit? {
+        return currentItemUnits.currentUnit
     }
 
     var currentMode: KeypadState = .cost

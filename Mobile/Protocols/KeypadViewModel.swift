@@ -11,11 +11,11 @@ import CoreData
 
 /// TODO: rename ItemListViewModelType?
 protocol KeypadViewModel: class {
-    associatedtype ParentType
+    //associatedtype ParentType
     associatedtype ChildType: NSManagedObject
 
-    var managedObjectContext: NSManagedObjectContext { get set }
-    var parentObject: ParentType { get set }
+    //var managedObjectContext: NSManagedObjectContext { get set }
+    //var parentObject: ParentType { get set }
     var items: [ChildType] { get }
     var currentIndex: Int { get set }
     var currentItem: ChildType { get }

@@ -9,12 +9,13 @@
 import Foundation
 import CoreData
 
-// MARK: - Actual
-
 class OrderKeypadViewModel: KeypadViewModel {
 
-    var managedObjectContext: NSManagedObjectContext
-    var parentObject: Order
+    private let managedObjectContext: NSManagedObjectContext
+    private let numberFormatter: NumberFormatter
+    private var currentItemUnits: ItemUnits
+    private var parentObject: Order
+
     var items: [OrderItem] {
         let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
         request.predicate = NSPredicate(format: "order == %@", parentObject)
@@ -30,18 +31,15 @@ class OrderKeypadViewModel: KeypadViewModel {
         }
         return [OrderItem]()
     }
-    var currentIndex: Int
+    internal var currentIndex: Int
 
-    private var currentItemUnits: ItemUnits
     public var currentUnit: CurrentUnit? {
         return currentItemUnits.currentUnit
     }
 
     // MARK: Keypad
-    let keypad: Keypad
+    internal let keypad: Keypad
     //internal var keypad: KeypadType
-
-    private let numberFormatter: NumberFormatter
 
     // MARK: - X
 
