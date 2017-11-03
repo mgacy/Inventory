@@ -22,18 +22,19 @@ class OrderLocationViewController: UIViewController {
     var viewModel: OrderLocationViewModel!
     let disposeBag = DisposeBag()
 
-    let rowTaps = PublishSubject<IndexPath>()
-
     // TableViewCell
     let cellIdentifier = "Cell"
 
     // MARK: - Interface
+
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var messageLabel: UILabel!
+
     private let refreshControl = UIRefreshControl()
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.backgroundColor = .white
-        tv.delegate = self
         return tv
     }()
 
@@ -44,7 +45,6 @@ class OrderLocationViewController: UIViewController {
         setupView()
         setupConstraints()
         setupBindings()
-        //setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -60,37 +60,45 @@ class OrderLocationViewController: UIViewController {
         title = Strings.navTitle
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
-
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         self.view.addSubview(tableView)
     }
 
     private func setupConstraints() {
-        // TableView
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
+    // swiftlint:disable:next function_body_length
     private func setupBindings() {
         /*
         // Refresh
         refreshControl.rx.controlEvent(.valueChanged)
             .bind(to: viewModel.refresh)
             .disposed(by: disposeBag)
-
+         */
         // Activity Indicator
         viewModel.isRefreshing
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
-        viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
-            .drive(onNext: { [weak self] _ in
-                self?.tableView.reloadData()
-            })
+        viewModel.isRefreshing
+            .map { !$0 }
+            .drive(activityIndicatorView.rx.isHidden)
             .disposed(by: disposeBag)
-         */
+
+        viewModel.isRefreshing
+            .map { !$0 }
+            .drive(messageLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+
+        viewModel.showTable
+            .map { !$0 }
+            .drive(tableView.rx.isHidden)
+            .disposed(by: disposeBag)
+
         // Errors
         viewModel.errorMessages
             .drive(onNext: { [weak self] message in
@@ -98,52 +106,41 @@ class OrderLocationViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
+        // Basic RxCocoa
         viewModel.locations
-            .subscribe(onNext: { _ in
-                //log.debug("\(#function) LOCATIONS: \(locations)")
-                log.debug("Got locations")
-            })
+            // closure args are row (IndexPath), element, cell
+            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier)) { _, element, cell in
+                cell.textLabel?.text = element.name
+            }
             .disposed(by: disposeBag)
 
         // Navigation
+        tableView.rx
+            .modelSelected(RemoteLocation.self)
+            .subscribe(onNext: { [weak self] location in
+                //log.debug("We selected: \(location)")
+                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
 
-    }
-    /*
-    // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<OrderLocationViewController>!
-
-    fileprivate func setupTableView() {
-        tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        //tableView.rowHeight = UITableViewAutomaticDimension
-        //tableView.estimatedRowHeight = 100
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
-    }
-    */
-}
-
-// MARK: - TableViewDelegate
-extension OrderLocationViewController: UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //rowTaps.onNext(dataSource.objectAtIndexPath(indexPath))
-        rowTaps.onNext(indexPath)
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-
-}
-/*
-// MARK: - TableViewDataSourceDelegate Extension
-extension OrderLocationViewController: TableViewDataSourceDelegate {
-    /*
-    func canEdit(_ location: OrderLocation) -> Bool {
-        return true
-    }
-    */
-    func configure(_ cell: UITableViewCell, for location: OrderLocation) {
-
+                switch location.locationType {
+                case .category:
+                    guard let controller = OrderLocCatViewController.instance() else {
+                        fatalError("\(#function) FAILED : unable to get view controller")
+                    }
+                    controller.viewModel = OrderLocCatViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                                location: location,
+                                                                factory: strongSelf.viewModel.factory)
+                    strongSelf.navigationController?.pushViewController(controller, animated: true)
+                case .item:
+                    guard let controller = OrderLocItemViewController.instance() else {
+                        fatalError("\(#function) FAILED : unable to get view controller")
+                    }
+                    controller.viewModel = OrderLocItemViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                                 parent: OrderLocItemParent.location(location),
+                                                                 factory: strongSelf.viewModel.factory)
+                    strongSelf.navigationController?.pushViewController(controller, animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
     }
 
 }
-*/

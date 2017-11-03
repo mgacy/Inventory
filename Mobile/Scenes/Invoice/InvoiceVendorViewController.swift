@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class InvoiceVendorViewController: UITableViewController {
+class InvoiceVendorViewController: UIViewController {
 
     private enum Strings {
         static let navTitle = "Vendors"
@@ -21,18 +21,27 @@ class InvoiceVendorViewController: UITableViewController {
 
     var viewModel: InvoiceVendorViewModel!
     let disposeBag = DisposeBag()
-    //let selectedObjects = PublishSubject<Invoice>()
+    //let selectedObjects = PublishSubject<IndexPath>()
 
     // TableViewCell
     let cellIdentifier = "Cell"
 
     // MARK: - Interface
 
+    lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = .white
+        tv.delegate = self
+        return tv
+    }()
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupConstraints()
         setupTableView()
     }
 
@@ -47,9 +56,15 @@ class InvoiceVendorViewController: UITableViewController {
 
     private func setupView() {
         title = Strings.navTitle
+        self.view.addSubview(tableView)
     }
 
-    //private func setupConstraints() {}
+    private func setupConstraints() {
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
 
     //private func setupBindings() {}
 
@@ -67,18 +82,19 @@ class InvoiceVendorViewController: UITableViewController {
     // MARK: - Navigation
 
     fileprivate func showInvoice(withInvoice invoice: Invoice) {
-        let vc = InvoiceItemViewController.initFromStoryboard(name: "Main")
-        let vm = InvoiceItemViewModel(dataManager: viewModel.dataManager, parentObject: invoice,
-                                      rowTaps: vc.selectedObjects,
-                                      uploadTaps: vc.uploadButtonItem.rx.tap.asObservable())
-        vc.viewModel = vm
-        //vc.managedObjectContext = viewModel.dataManager.managedObjectContext
+        let vc = InvoiceItemViewController.initFromStoryboard(name: "InvoiceItemViewController")
+        vc.viewModel = InvoiceItemViewModel(dataManager: viewModel.dataManager, parentObject: invoice,
+                                            rowTaps: vc.selectedObjects,
+                                            uploadTaps: vc.uploadButtonItem.rx.tap.asObservable())
         navigationController?.pushViewController(vc, animated: true)
     }
 
-    // MARK: - UITableViewDelegate
+}
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+// MARK: - UITableViewDelegate
+extension InvoiceVendorViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedObject = dataSource.objectAtIndexPath(indexPath)
         log.verbose("Selected Invoice: \(selectedObject)")
         showInvoice(withInvoice: selectedObject)

@@ -9,133 +9,32 @@
 import Foundation
 import CoreData
 
-// MARK: - Units
+class OrderKeypadViewModel {
 
-/// TODO: use abbreviation as associated value?
-enum CurrentUnit {
-    case packUnit
-    case singleUnit
-    case invalidUnit
-}
-
-struct ItemUnits {
-    var packUnit: Unit?
-    var singleUnit: Unit?
-    var currentUnit: CurrentUnit?
-
-    init(item: Item?, currentUnit: Unit?) {
-        guard let item = item else {
-            return
-        }
-
-        self.packUnit = item.purchaseUnit
-        self.singleUnit = item.purchaseSubUnit
-
-        guard let currentUnit = currentUnit else {
-            self.currentUnit = nil
-            return
-        }
-
-        if let pUnit = self.packUnit, currentUnit == pUnit {
-            self.currentUnit = .packUnit
-        } else if let sUnit = self.singleUnit, currentUnit == sUnit {
-            self.currentUnit = .singleUnit
-        } else {
-            self.currentUnit = .invalidUnit
-        }
-    }
-
-    public mutating func switchUnit(_ newUnitCase: CurrentUnit) -> Unit? {
-        guard newUnitCase != currentUnit else {
-            log.debug("\(#function) FAILED: tried to switchUnit to currentUnit")
-            return nil
-        }
-        switch newUnitCase {
-        case .singleUnit:
-            guard let newUnit = singleUnit else {
-                return nil
-            }
-            currentUnit = .singleUnit
-            return newUnit
-        case .packUnit:
-            guard let newUnit = packUnit else {
-                return nil
-            }
-            currentUnit = .packUnit
-            return newUnit
-        default:
-            log.error("\(#function)) FAILED: tried to switch unit to .invalidUnit")
-            return nil
-        }
-    }
-
-    public mutating func toggle() -> Unit? {
-        guard let currentUnitCase = self.currentUnit else {
-            /// TODO: can we somehow still change the unit?
-            return nil
-        }
-
-        switch currentUnitCase {
-        case .singleUnit:
-            guard let newUnit = packUnit else {
-                return nil
-            }
-            currentUnit = .packUnit
-            return newUnit
-        case .packUnit:
-            guard let newUnit = singleUnit else {
-                return nil
-            }
-            currentUnit = .singleUnit
-            return newUnit
-        case .invalidUnit:
-            log.error("\(#function) FAILED: currentUnit.invalidUnit")
-
-            if let newUnit = packUnit {
-                currentUnit = .packUnit
-                return newUnit
-            } else if let newUnit = singleUnit {
-                currentUnit = .singleUnit
-                return newUnit
-            }
-            return nil
-        }
-    }
-
-}
-
-// MARK: - Actual
-
-class OrderKeypadViewModel: KeypadViewModel {
-
-    var managedObjectContext: NSManagedObjectContext
-    var parentObject: Order
-    var items: [OrderItem] {
-        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
-        request.predicate = NSPredicate(format: "order == %@", parentObject)
-
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        do {
-            let searchResults = try managedObjectContext.fetch(request)
-            return searchResults
-        } catch {
-            log.error("Error with request: \(error)")
-        }
-        return [OrderItem]()
-    }
-    var currentIndex: Int
-
+    private let managedObjectContext: NSManagedObjectContext
+    private let numberFormatter: NumberFormatter
     private var currentItemUnits: ItemUnits
+    //private var dataSource: ListDataSource
+    internal var items: [OrderItem] = []
+
+    internal var currentIndex: Int {
+        didSet {
+            didChangeItem(currentItem)
+        }
+    }
+
+    internal var keypad: KeypadType
+
+    // Public
+
+    var currentItem: OrderItem {
+        //return dataSource.getItem(atIndex: currentIndex)!
+        return items[currentIndex]
+    }
+
     public var currentUnit: CurrentUnit? {
         return currentItemUnits.currentUnit
     }
-
-    // MARK: Keypad
-    let keypad: Keypad
-
-    var numberFormatter: NumberFormatter
 
     // MARK: - X
 
@@ -186,29 +85,52 @@ class OrderKeypadViewModel: KeypadViewModel {
 
     // MARK: - Lifecycle
 
-    required init(for order: Order, atIndex index: Int, inContext context: NSManagedObjectContext) {
-        self.parentObject = order
-        self.currentIndex = index
+    convenience init(for order: Order, atIndex index: Int, inContext context: NSManagedObjectContext) {
+        self.init(atIndex: index, in: context)
+        self.items = self.getItems(for: order, in: context)
+        //self.dataSource = CDOrderItemDataSource(for: order, inContext: context)
+        self.didChangeItem(self.currentItem)
+    }
+
+    convenience init(with items: [OrderItem], atIndex index: Int, in context: NSManagedObjectContext) {
+        self.init(atIndex: index, in: context)
+        self.items = items
+        //self.dataSource = RROrderItemDataSource(for: parent, factory: factory)
+        self.didChangeItem(self.currentItem)
+    }
+
+    private init(atIndex index: Int, in context: NSManagedObjectContext) {
         self.managedObjectContext = context
         self.currentItemUnits = ItemUnits(item: nil, currentUnit: nil)
+        self.currentIndex = index
 
         // Setup numberFormatter
-        /// TODO: do I even need this anymore?
-        self.numberFormatter = NumberFormatter()
-        self.numberFormatter.numberStyle = .decimal
-        self.numberFormatter.roundingMode = .halfUp
-        self.numberFormatter.maximumFractionDigits = 2
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.roundingMode = .halfUp
+        numberFormatter.maximumFractionDigits = 2
+        self.numberFormatter = numberFormatter
 
         // Keypad
-        let keypadFormatter = NumberFormatter()
-        keypadFormatter.numberStyle = .decimal
-        keypadFormatter.roundingMode = .halfUp
-        keypadFormatter.maximumFractionDigits = 2
-        self.keypad = Keypad(formatter: keypadFormatter, delegate: nil)
+        self.keypad = Keypad(formatter: numberFormatter, delegate: nil)
         // We can only set the keypad's delegate after we have set all required attrs for self
         keypad.delegate = self
+    }
 
-        self.didChangeItem(self.currentItem)
+    private func getItems(for order: Order, in managedObjectContext: NSManagedObjectContext) -> [OrderItem] {
+        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
+        request.predicate = NSPredicate(format: "order == %@", order)
+
+        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+
+        do {
+            let searchResults = try managedObjectContext.fetch(request)
+            return searchResults
+        } catch {
+            log.error("Error with request: \(error)")
+        }
+        return [OrderItem]()
     }
 
     // MARK: - Actions from View Controller
@@ -246,9 +168,33 @@ class OrderKeypadViewModel: KeypadViewModel {
 
 }
 
+extension OrderKeypadViewModel: ListViewModelType {
+
+    func nextItem() -> Bool {
+        //if currentIndex < dataSource.length - 1 {
+        if currentIndex < items.count - 1 {
+            currentIndex += 1
+            return true
+        } else {
+            /// TODO: cleanup?
+            return false
+        }
+    }
+
+    func previousItem() -> Bool {
+        if currentIndex > 0 {
+            currentIndex -= 1
+            return true
+        } else {
+            /// TODO: cleanup?
+            return false
+        }
+    }
+
+}
+
 // MARK: - Keypad
-/// TODO: simply move to default implementation of KeypadStuff?
-extension OrderKeypadViewModel: KeypadStuff {
+extension OrderKeypadViewModel: KeypadProxy {
 
     func pushDigit(value: Int) {
         keypad.pushDigit(value)
@@ -278,3 +224,73 @@ extension OrderKeypadViewModel: KeypadDelegate {
     }
 
 }
+/*
+// MARK: - Alternative Approach
+
+// It appears that implementing this would require type erasure
+
+protocol ListDataSource {
+    associatedtype ItemType
+
+    var items: [ItemType] { get }
+    var length: Int { get }
+
+    //mutating func addItem(_: ItemType)
+    func getItem(atIndex: Int) -> ItemType?
+}
+
+extension ListDataSource {
+    var length: Int {
+        return items.count
+    }
+
+    func getItem(atIndex index: Int) -> ItemType? {
+        return items[index]
+    }
+
+}
+
+// MARK: Implementation
+
+class RROrderItemDataSource: ListDataSource {
+    //private let factory: OrderLocationFactory
+    var items: [OrderItem]
+
+    init(for parent: OrderLocItemParent, factory: OrderLocationFactory) {
+        //self.factory = factory
+        switch parent {
+        case .category(let category):
+            self.items = factory.getOrderItems(forCategoryType: category) ?? []
+        case .location(let location):
+            self.items = factory.getOrderItems(forItemType: location) ?? []
+        }
+    }
+}
+
+class CDOrderItemDataSource: ListDataSource {
+    private var managedObjectContext: NSManagedObjectContext
+    private var parentObject: Order
+
+    var items: [OrderItem] {
+        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
+        request.predicate = NSPredicate(format: "order == %@", parentObject)
+
+        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+
+        do {
+            let searchResults = try managedObjectContext.fetch(request)
+            return searchResults
+        } catch {
+            log.error("Error with request: \(error)")
+        }
+        return [OrderItem]()
+    }
+
+    init(for order: Order, inContext context: NSManagedObjectContext) {
+        self.parentObject = order
+        self.managedObjectContext = context
+    }
+
+}
+*/

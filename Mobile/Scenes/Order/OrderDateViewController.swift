@@ -11,8 +11,6 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-// swiftlint:disable file_length
-
 class OrderDateViewController: UIViewController {
 
     private enum Strings {
@@ -20,6 +18,28 @@ class OrderDateViewController: UIViewController {
         static let errorAlertTitle = "Error"
         static let newOrderTitle = "Create Order"
         static let newOrderMessage = "Set order quantities from the most recent inventory or simply use pars?"
+    }
+
+    // MARK: Alert
+
+    private enum GenerationMethod: CustomStringConvertible {
+        //case count(method: NewOrderGenerationMethod)
+        //case par(method: NewOrderGenerationMethod)
+        case count
+        case par
+        //case sales
+        case cancel
+
+        var description: String {
+            switch self {
+            case .count:
+                return "From Count"
+            case .par:
+                return "From Par"
+            case .cancel:
+                return "Cancel"
+            }
+        }
     }
 
     // MARK: - Properties
@@ -177,15 +197,23 @@ class OrderDateViewController: UIViewController {
                     log.error("\(#function) FAILED : unable to get reference to self"); return
                 }
                 log.debug("\(#function) SELECTED / CREATED: \(selection)")
-
-                let vc = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
-                let vm = OrderVendorViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                              parentObject: selection,
-                                              rowTaps: vc.selectedObjects.asObservable(),
-                                              completeTaps: vc.completeButtonItem.rx.tap.asObservable()
-                )
-                vc.viewModel = vm
-                strongSelf.navigationController?.pushViewController(vc, animated: true)
+                switch selection.uploaded {
+                case true:
+                    let vc = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
+                    let vm = OrderVendorViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                  parentObject: selection,
+                                                  rowTaps: vc.selectedObjects.asObservable(),
+                                                  completeTaps: vc.completeButtonItem.rx.tap.asObservable()
+                    )
+                    vc.viewModel = vm
+                    strongSelf.navigationController?.pushViewController(vc, animated: true)
+                case false:
+                    let vc = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
+                    vc.viewModel = OrderContainerViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                           parentObject: selection,
+                                                           completeTaps: vc.completeButtonItem.rx.tap.asObservable())
+                    strongSelf.navigationController?.pushViewController(vc, animated: true)
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -203,56 +231,6 @@ class OrderDateViewController: UIViewController {
                                          fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    /*
-    // MARK: - User Actions
-
-    @IBAction func newTapped(_ sender: AnyObject) {
-        /// TODO: check if there is already an Order for the current date and of the current type
-        guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED : unable to get storeID"); return
-        }
-
-        /// TODO: should we first check if there are any valid Inventories to use for generating the Orders?
-        /// TODO: break out into `createAlertController() -> UIAlertController`
-        let alertController = UIAlertController(
-            title: "Create Order", message: "Set order quantities from the most recent inventory or simply use pars?",
-            preferredStyle: .actionSheet)
-
-        alertController.addAction(UIAlertAction(title: "From Count", style: .default, handler: { (_) in
-            self.createOrderCollection(storeID: storeID, generateFrom: .count)
-        }))
-        alertController.addAction(UIAlertAction(title: "From Par", style: .default, handler: { (_) in
-            self.createOrderCollection(storeID: storeID, generateFrom: .par)
-        }))
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-
-        present(alertController, animated: true, completion: nil)
-
-    }
-
-     */
-}
-
-// MARK: - Alert
-
-enum GenerationMethod: CustomStringConvertible {
-    //case count(method: NewOrderGenerationMethod)
-    //case par(method: NewOrderGenerationMethod)
-    case count
-    case par
-    //case sales
-    case cancel
-
-    var description: String {
-        switch self {
-        case .count:
-            return "From Count"
-        case .par:
-            return "From Par"
-        case .cancel:
-            return "Cancel"
-        }
-    }
 }
 
 // MARK: - TableViewDelegate
@@ -289,115 +267,3 @@ extension OrderDateViewController: TableViewDataSourceDelegate {
     }
 
 }
-
-/*
-// MARK: - Completion Handlers + Sync
-extension OrderDateViewController {
-
-    // MARK: Completion Handlers
-
-    func completedGetListOfOrderCollections(json: JSON?, error: Error?) {
-        refreshControl?.endRefreshing()
-        guard error == nil else {
-            //if error?._code == NSURLErrorTimedOut {}
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.warning("\(#function) FAILED : unable to get JSON")
-            HUD.hide(); return
-        }
-
-        do {
-            try managedObjectContext.syncCollections(OrderCollection.self, withJSON: json)
-        } catch {
-            log.error("Unable to sync OrderCollections")
-            HUD.flash(.error, delay: 1.0)
-        }
-        HUD.hide()
-        managedObjectContext.performSaveOrRollback()
-        tableView.reloadData()
-    }
-
-    func completedGetExistingOrderCollection(json: JSON?, error: Error?) {
-        guard error == nil else {
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.error("\(#function) FAILED : unable to get JSON")
-            HUD.flash(.error, delay: 1.0); return
-        }
-
-        guard let selection = selectedCollection else {
-            log.error("\(#function) FAILED : still unable to get selected OrderCollection\n")
-            HUD.flash(.error, delay: 1.0); return
-        }
-
-        selection.update(in: managedObjectContext!, with: json)
-        managedObjectContext!.performSaveOrRollback()
-
-        //tableView.activityIndicatorView.stopAnimating()
-        HUD.hide()
-        performSegue(withIdentifier: segueIdentifier, sender: self)
-    }
-
-    func completedGetNewOrderCollection(json: JSON?, error: Error?) {
-        guard error == nil else {
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.error("\(#function) FAILED : unable to get JSON")
-            HUD.flash(.error, delay: 1.0); return
-        }
-
-        log.verbose("Creating new OrderCollection ...")
-        selectedCollection = OrderCollection(context: managedObjectContext!, json: json, uploaded: false)
-        managedObjectContext!.performSaveOrRollback()
-
-        HUD.hide()
-        performSegue(withIdentifier: segueIdentifier, sender: self)
-    }
-
-    func completedSync(_ succeeded: Bool, _ error: Error?) {
-        if succeeded {
-            log.info("Completed login / sync - succeeded: \(succeeded)")
-            guard let storeID = userManager.storeID else {
-                log.error("\(#function) FAILED : unable to get storeID")
-                HUD.flash(.error, delay: 1.0); return
-            }
-
-            log.verbose("Fetching existing OrderCollections from server ...")
-            APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
-                                                                completion: self.completedGetListOfOrderCollections)
-        } else {
-            log.error("Unable to login / sync ...")
-            // if let error = error { // present more detailed error ...
-            HUD.flash(.error, delay: 1.0)
-        }
-    }
-
-    // MARK: Sync
-
-    // Source: https://code.tutsplus.com/tutorials/core-data-and-swift-batch-deletes--cms-25380
-    /// NOTE: I believe I scrapped a plan to make this a method because of the involvement of the moc
-    func deleteChildOrders(parent: OrderCollection) {
-        let fetchPredicate = NSPredicate(format: "collection == %@", parent)
-        do {
-            try managedObjectContext.deleteEntities(Order.self, filter: fetchPredicate)
-
-            /// TODO: perform fetch again?
-            //let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-            //let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-            //request.sortDescriptors = [sortDescriptor]
-            //dataSource.reconfigureFetchRequest(request)
-
-            // Reload Table View
-            tableView.reloadData()
-
-        } catch {
-            let updateError = error as NSError
-            log.error("Unable to delete Orders: \(updateError), \(updateError.userInfo)")
-        }
-    }
-
-}
-*/

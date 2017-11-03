@@ -6,7 +6,6 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
 
 protocol DateFacade: class, NSFetchRequestResult {

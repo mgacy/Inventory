@@ -11,53 +11,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--InvoiceVendor-->
-        <scene sceneID="YZi-Qr-cTX">
-            <objects>
-                <tableViewController storyboardIdentifier="InvoiceVendorViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="VhV-VD-YI0" userLabel="InvoiceVendor" customClass="InvoiceVendorViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ahH-Or-Iyl">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="VhV-VD-YI0" id="2tb-YW-wIU"/>
-                            <outlet property="delegate" destination="VhV-VD-YI0" id="dh5-8u-IFU"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="bKn-nO-xyi"/>
-                    <connections>
-                        <segue destination="l7g-UY-PfL" kind="show" identifier="showInvoiceItems" id="KBh-Of-pbq"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bRg-gA-w5F" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2985" y="2015"/>
-        </scene>
-        <!--InvoiceItem-->
-        <scene sceneID="sAK-Ak-TeE">
-            <objects>
-                <tableViewController storyboardIdentifier="InvoiceItemViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="l7g-UY-PfL" userLabel="InvoiceItem" customClass="InvoiceItemViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="8U1-sa-wNz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="l7g-UY-PfL" id="sCd-uL-Ybg"/>
-                            <outlet property="delegate" destination="l7g-UY-PfL" id="xMy-yH-tNB"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="Gpo-9C-2bo">
-                        <barButtonItem key="rightBarButtonItem" image="Upload" id="3tn-IB-IGT" userLabel="Upload">
-                            <connections>
-                                <action selector="uploadTapped:" destination="l7g-UY-PfL" id="EZv-H3-DjC"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="WNf-PQ-5Fe" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3902" y="2015"/>
-        </scene>
         <!--OrderDate-->
         <scene sceneID="VeK-7b-fRP">
             <objects>
@@ -548,7 +501,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Upload" width="22" height="22"/>
         <image name="inventoryTab" width="25" height="25"/>
         <image name="invoiceTab" width="25" height="25"/>
         <image name="orderTab" width="25" height="25"/>

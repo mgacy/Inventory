@@ -8,7 +8,6 @@
 
 import Foundation
 import KeychainAccess
-import SwiftyJSON
 
 class User {
 

@@ -12,9 +12,15 @@ import RxSwift
 
 class InventoryKeypadViewModel: KeypadViewModel {
 
-    var managedObjectContext: NSManagedObjectContext
-    internal var parentObject: LocationItemListParent
+    private let managedObjectContext: NSManagedObjectContext
+    private let numberFormatter: NumberFormatter
+    //private var currentItemUnits: ItemUnits
+    private var parentObject: LocationItemListParent
+
     internal var currentIndex: Int
+    internal let keypad: KeypadWithHistory
+    //internal var keypad: KeypadWithHistoryType
+
     internal var items: [InventoryLocationItem] {
         let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
 
@@ -27,16 +33,6 @@ class InventoryKeypadViewModel: KeypadViewModel {
             fatalError("\(#function) FAILED : LocationItemListParent not set")
         }
         request.predicate = fetchPredicate
-        /*
-        switch parentObject {
-        case .category(let category):
-            request.predicate = NSPredicate(format: "category == %@", category)
-        case .location(let location):
-            request.predicate = NSPredicate(format: "location == %@", location)
-        case .none:
-            fatalError("\(#function) FAILED : LocationItemListParent not set")
-        }
-         */
 
         do {
             let searchResults = try managedObjectContext.fetch(request)
@@ -46,17 +42,6 @@ class InventoryKeypadViewModel: KeypadViewModel {
         }
         return [InventoryLocationItem]()
     }
-
-    //private var currentItemUnits: ItemUnits
-    //public var currentUnit: CurrentUnit? {
-    //    return currentItemUnits.currentUnit
-    //}
-
-    // MARK: Keypad
-    let keypad: KeypadWithHistory
-    //let keypad: KeypadWithHistoryType
-
-    var numberFormatter: NumberFormatter
 
     // MARK: - X
 
@@ -82,7 +67,6 @@ class InventoryKeypadViewModel: KeypadViewModel {
         numberFormatter.numberStyle = .decimal
         numberFormatter.roundingMode = .halfUp
         numberFormatter.maximumFractionDigits = 2
-
         self.numberFormatter = numberFormatter
 
         self.keypad = KeypadWithHistory(formatter: numberFormatter)
@@ -129,17 +113,8 @@ class InventoryKeypadViewModel: KeypadViewModel {
 
 }
 
-extension InventoryKeypadViewModel {
-
-    func pushOperator() {
-        keypad.pushOperator()
-    }
-
-}
-
 // MARK: - Keypad
-/// TODO: simply move to default implementation of KeypadStuff?
-extension InventoryKeypadViewModel: KeypadStuff {
+extension InventoryKeypadViewModel: KeypadWithHistoryProxy {
 
     func pushDigit(value: Int) {
         keypad.pushDigit(value)
@@ -151,6 +126,10 @@ extension InventoryKeypadViewModel: KeypadStuff {
 
     func popItem() {
         keypad.popItem()
+    }
+
+    func pushOperator() {
+        keypad.pushOperator()
     }
 
 }

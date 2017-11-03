@@ -6,7 +6,6 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
 import Alamofire
 //import RxCocoa
@@ -355,6 +354,7 @@ extension DataManager {
                     throw error
                 }
             }
+            /// TODO: save context?
             .materialize()
     }
 
@@ -383,6 +383,7 @@ extension DataManager {
                     throw error
                 }
             }
+            /// TODO: save context?
             .materialize()
     }
 
@@ -406,6 +407,7 @@ extension DataManager {
                     throw error
                 }
             }
+            /// TODO: save context?
             .materialize()
     }
 
@@ -434,6 +436,7 @@ extension DataManager {
                     throw error
                 }
             }
+            /// TODO: save context?
             .materialize()
     }
 

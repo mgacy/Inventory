@@ -6,9 +6,7 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import Alamofire
-import SwiftyJSON
 
 public enum NewOrderGenerationMethod: String {
     case count
@@ -35,9 +33,9 @@ public enum Router: URLRequestConvertible {
     // Invoice
     case getInvoiceCollections(storeID: Int)
     case getInvoiceCollection(storeID: Int, forDate: String)
-    case postInvoice([String: Any])                                                         // Deprecated
+    //case postInvoice([String: Any])                                                         // Deprecated
     case putInvoice(remoteID: Int, parameters: [String: Any])
-    case putInvoiceItem(remoteID: Int, parameters: [String: Any])
+    //case putInvoiceItem(remoteID: Int, parameters: [String: Any])
     // Order
     case getOrderCollections(storeID: Int)
     case getOrderCollection(storeID: Int, forDate: String)
@@ -83,12 +81,12 @@ public enum Router: URLRequestConvertible {
             return .get
         case .getInvoiceCollection:
             return .get
-        case .postInvoice:
-            return .post
+        //case .postInvoice:
+        //    return .post
         case .putInvoice:
             return .put
-        case .putInvoiceItem:
-            return .put
+        //case .putInvoiceItem:
+        //    return .put
         // Order
         case .getOrderCollections:
             return .get
@@ -135,12 +133,12 @@ public enum Router: URLRequestConvertible {
             return "\(Router.apiPath)/invoice_collections"
         case .getInvoiceCollection:
             return "\(Router.apiPath)/invoice_collections"
-        case .postInvoice:
-            return "\(Router.apiPath)/invoices"
+        //case .postInvoice:
+        //    return "\(Router.apiPath)/invoices"
         case .putInvoice(let remoteID, _):
             return "\(Router.apiPath)/invoices/\(remoteID)"
-        case .putInvoiceItem(let remoteID, _):
-            return "\(Router.apiPath)/invoice_items/\(remoteID)"
+        //case .putInvoiceItem(let remoteID, _):
+        //    return "\(Router.apiPath)/invoice_items/\(remoteID)"
         // Order
         case .getOrderCollections:
             return "\(Router.apiPath)/order_collections"
@@ -182,12 +180,12 @@ public enum Router: URLRequestConvertible {
             return ["store_id": storeID]
         case .getInvoiceCollection(let storeID, let forDate):
             return ["store_id": storeID, "date": forDate]
-        case .postInvoice(let parameters):
-            return parameters
+        //case .postInvoice(let parameters):
+        //    return parameters
         case .putInvoice(_, let parameters):
             return parameters
-        case .putInvoiceItem(_, let parameters):
-            return parameters
+        //case .putInvoiceItem(_, let parameters):
+        //    return parameters
         // Order
         case .getOrderCollections(let storeID):
             return ["store_id": storeID]
@@ -251,12 +249,12 @@ public enum Router: URLRequestConvertible {
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
         case .getInvoiceCollection:
             urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
-        case .postInvoice:
-            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+        //case .postInvoice:
+        //    urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         case .putInvoice:
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
-        case .putInvoiceItem:
-            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+        //case .putInvoiceItem:
+        //    urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
 
         // Order
         case .getOrderCollections:

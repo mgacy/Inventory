@@ -6,7 +6,6 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
 import SwiftyJSON
 
@@ -143,6 +142,8 @@ extension NewSyncable where Self: NSManagedObject {
 }
 
 // MARK: - Syncable
+// NOTE: Unit still conforms to Syncable
+
 public protocol Syncable {
     var remoteID: Int32 { get set }
 

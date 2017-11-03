@@ -10,8 +10,6 @@
 //  Copyright © 2015 Tim Roadley. All rights reserved.
 //
 
-import Foundation
-import UIKit
 import CoreData
 import SwiftyJSON
 

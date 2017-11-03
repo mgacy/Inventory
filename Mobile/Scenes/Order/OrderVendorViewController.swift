@@ -67,7 +67,9 @@ class OrderVendorViewController: UIViewController {
 
     private func setupView() {
         title = Strings.navTitle
+        /// TODO: should we show this button as disabled or simply omit it?
         navigationItem.rightBarButtonItem = completeButtonItem
+        completeButtonItem.isEnabled = false
         self.view.addSubview(tableView)
     }
 

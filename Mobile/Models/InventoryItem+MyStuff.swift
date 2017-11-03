@@ -6,9 +6,8 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
+//import SwiftyJSON
 
 extension InventoryItem: NewSyncable {
     typealias RemoteType = RemoteInventoryItem
@@ -91,7 +90,7 @@ extension InventoryItem {
 }
 
 // MARK: - OLD
-
+/*
 extension InventoryItem {
 
     // MARK: - Lifecycle
@@ -155,7 +154,7 @@ extension InventoryItem {
     }
 
 }
-
+*/
 // MARK: - Serialization
 
 extension InventoryItem {

@@ -17,24 +17,41 @@ struct OrderLocationViewModel {
     /// TODO: make private
     let dataManager: DataManager
     let collection: OrderCollection
+    let factory: OrderLocationFactory
 
     // MARK: - Input
 
     // MARK: - Output
-    let errorMessages: Driver<String>
+    let isRefreshing: Driver<Bool>
+    let showTable: Driver<Bool>
     let locations: Observable<[RemoteLocation]>
+    let errorMessages: Driver<String>
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, collection: OrderCollection, rowTaps: Observable<IndexPath>) {
+    init(dataManager: DataManager, collection: OrderCollection) {
         self.dataManager = dataManager
         self.collection = collection
+        self.factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
+
+        // Activity
+        let isRefreshing = ActivityIndicator()
+        self.isRefreshing = isRefreshing.asDriver()
 
         // Fetch Locations
         let locationResults = dataManager.getLocations()
+            .trackActivity(isRefreshing)
+            .share()
+
+        self.showTable = locationResults
+            .elements()
+            .map { locations -> Bool in
+                return locations.count > 0
+            }
+            .startWith(false)
+            .asDriver(onErrorJustReturn: false)
 
         // Errors
-
         self.errorMessages = locationResults.errors()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
@@ -46,13 +63,6 @@ struct OrderLocationViewModel {
             .asDriver(onErrorJustReturn: "Other Error")
 
         self.locations = locationResults.elements()
-            .map { locations in
-                //let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
-                //factory.generateLocations(for: locations)
-                return locations
-            }
-
-        // ...
     }
 
 }

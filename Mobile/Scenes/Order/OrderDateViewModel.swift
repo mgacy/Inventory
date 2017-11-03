@@ -80,6 +80,7 @@ struct OrderDateViewModel {
                 log.debug("Tapped: \(selection)")
                 switch selection.uploaded {
                 case true:
+                    /// TODO: show PKHUD progress
                     return dataManager.refreshOrderCollection(selection)
                 case false:
                     return Observable.just(selection).materialize()

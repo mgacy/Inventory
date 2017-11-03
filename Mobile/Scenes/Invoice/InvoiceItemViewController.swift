@@ -11,7 +11,7 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-class InvoiceItemViewController: UITableViewController {
+class InvoiceItemViewController: UIViewController {
 
     private enum Strings {
         //static let navTitle
@@ -34,17 +34,26 @@ class InvoiceItemViewController: UITableViewController {
 
     let selectedObjects = PublishSubject<InvoiceItem>()
 
-    // Interface
-    let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-
     // TableView
     var cellIdentifier = "InvoiceItemCell"
+
+    // MARK: - Interface
+    let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+
+    lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = .white
+        tv.delegate = self
+        return tv
+    }()
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupConstraints()
         setupBindings()
         setupTableView()
     }
@@ -61,6 +70,14 @@ class InvoiceItemViewController: UITableViewController {
     func setupView() {
         title = viewModel.vendorName
         self.navigationItem.rightBarButtonItem = uploadButtonItem
+        self.view.addSubview(tableView)
+    }
+
+    private func setupConstraints() {
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
     func setupBindings() {
@@ -118,17 +135,21 @@ class InvoiceItemViewController: UITableViewController {
                                          fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    // MARK: - UITableViewDelegate
+}
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+// MARK: - UITableViewDelegate
+extension InvoiceItemViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         //log.verbose("Selected InvoiceItem: \(dataSource.objectAtIndexPath(indexPath))")
         showKeypad(withIndexPath: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         /*
-         let invoiceItem = dataSource.objectAtIndexPath(indexPath)
+        let invoiceItem = dataSource.objectAtIndexPath(indexPath)
 
         // More Button
         let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
