@@ -156,6 +156,7 @@ class OrderItemViewController: UIViewController {
         }
 
         #if !(arch(i386) || arch(x86_64)) && os(iOS)
+            /// TODO: wait until this point to instantiate `MessageComposer`?
             let messageComposeVC = messageComposer.configuredMessageComposeViewController(
                 phoneNumber: viewModel.phone, message: message,
                 completionHandler: completedPlaceOrder)

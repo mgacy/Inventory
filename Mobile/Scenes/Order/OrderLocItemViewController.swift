@@ -70,6 +70,7 @@ class OrderLocItemViewController: UIViewController {
         // TableView
         viewModel.items
             // closure args are row (IndexPath), element, cell
+            // swiftlint:disable:next line_length
             .bind(to: tableView.rx.items(cellIdentifier: "Cell", cellType: SubItemTableViewCell.self)) { (_, element, cell: SubItemTableViewCell) in
                 guard let cellViewModel = OrderItemCellViewModel(forOrderItem: element) else {
                     fatalError("\(#function) FAILED : unable to init view model for \(element)")
