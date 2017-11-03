@@ -9,37 +9,30 @@
 import Foundation
 import CoreData
 
-class OrderKeypadViewModel: KeypadViewModel {
+class OrderKeypadViewModel {
 
     private let managedObjectContext: NSManagedObjectContext
     private let numberFormatter: NumberFormatter
     private var currentItemUnits: ItemUnits
-    private var parentObject: Order
+    internal var items: [OrderItem] = []
 
-    var items: [OrderItem] {
-        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
-        request.predicate = NSPredicate(format: "order == %@", parentObject)
-
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        do {
-            let searchResults = try managedObjectContext.fetch(request)
-            return searchResults
-        } catch {
-            log.error("Error with request: \(error)")
+    internal var currentIndex: Int {
+        didSet {
+            didChangeItem(currentItem)
         }
-        return [OrderItem]()
     }
-    internal var currentIndex: Int
+
+    internal var keypad: KeypadType
+
+    // Public
+
+    var currentItem: OrderItem {
+        return items[currentIndex]
+    }
 
     public var currentUnit: CurrentUnit? {
         return currentItemUnits.currentUnit
     }
-
-    // MARK: Keypad
-    internal let keypad: Keypad
-    //internal var keypad: KeypadType
 
     // MARK: - X
 
@@ -90,11 +83,22 @@ class OrderKeypadViewModel: KeypadViewModel {
 
     // MARK: - Lifecycle
 
-    required init(for order: Order, atIndex index: Int, inContext context: NSManagedObjectContext) {
-        self.parentObject = order
-        self.currentIndex = index
+    convenience init(for order: Order, atIndex index: Int, inContext context: NSManagedObjectContext) {
+        self.init(atIndex: index, in: context)
+        self.items = self.getItems(for: order, in: context)
+        self.didChangeItem(self.currentItem)
+    }
+
+    convenience init(with items: [OrderItem], atIndex index: Int, in context: NSManagedObjectContext) {
+        self.init(atIndex: index, in: context)
+        self.items = items
+        self.didChangeItem(self.currentItem)
+    }
+
+    private init(atIndex index: Int, in context: NSManagedObjectContext) {
         self.managedObjectContext = context
         self.currentItemUnits = ItemUnits(item: nil, currentUnit: nil)
+        self.currentIndex = index
 
         // Setup numberFormatter
         let numberFormatter = NumberFormatter()
@@ -107,8 +111,22 @@ class OrderKeypadViewModel: KeypadViewModel {
         self.keypad = Keypad(formatter: numberFormatter, delegate: nil)
         // We can only set the keypad's delegate after we have set all required attrs for self
         keypad.delegate = self
+    }
 
-        self.didChangeItem(self.currentItem)
+    private func getItems(for order: Order, in managedObjectContext: NSManagedObjectContext) -> [OrderItem] {
+        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
+        request.predicate = NSPredicate(format: "order == %@", order)
+
+        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+
+        do {
+            let searchResults = try managedObjectContext.fetch(request)
+            return searchResults
+        } catch {
+            log.error("Error with request: \(error)")
+        }
+        return [OrderItem]()
     }
 
     // MARK: - Actions from View Controller
@@ -142,6 +160,30 @@ class OrderKeypadViewModel: KeypadViewModel {
             return "\(quantityString) \(abbreviation ?? "")"
         }
         return ""
+    }
+
+}
+
+extension OrderKeypadViewModel: ListViewModelType {
+
+    func nextItem() -> Bool {
+        if currentIndex < items.count - 1 {
+            currentIndex += 1
+            return true
+        } else {
+            /// TODO: cleanup?
+            return false
+        }
+    }
+
+    func previousItem() -> Bool {
+        if currentIndex > 0 {
+            currentIndex -= 1
+            return true
+        } else {
+            /// TODO: cleanup?
+            return false
+        }
     }
 
 }
