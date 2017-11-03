@@ -150,7 +150,7 @@ class InvoiceDateViewController: UIViewController {
                 }
                 log.debug("\(#function) SELECTED: \(selection)")
 
-                let vc = InvoiceVendorViewController.initFromStoryboard(name: "Main")
+                let vc = InvoiceVendorViewController.initFromStoryboard(name: "InvoiceVendorViewController")
                 let vm = InvoiceVendorViewModel(dataManager: strongSelf.viewModel.dataManager, parentObject: selection)
                 vc.viewModel = vm
                 strongSelf.navigationController?.pushViewController(vc, animated: true)
