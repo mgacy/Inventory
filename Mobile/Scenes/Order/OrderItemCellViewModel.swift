@@ -6,7 +6,6 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-//import Foundation
 import UIKit
 
 struct OrderItemCellViewModel: SubItemCellViewModelType {
@@ -17,7 +16,14 @@ struct OrderItemCellViewModel: SubItemCellViewModelType {
     private let orderItem: OrderItem
     private let item: Item
     private var status: ItemStatus {
-        return .normal
+        guard let quantity = orderItem.quantity else {
+            return .warning
+        }
+        if quantity.doubleValue > 0.0 {
+            return .normal
+        } else {
+            return .inactive
+        }
     }
 
     // MARK: Public
@@ -28,6 +34,7 @@ struct OrderItemCellViewModel: SubItemCellViewModelType {
 
     var quantityColor: UIColor { return self.status.associatedColor }
     var quantityText: String {
+        /// TODO: simply use `switch status {}`?
         guard self.status != .inactive else {
             return ""
         }
@@ -39,10 +46,15 @@ struct OrderItemCellViewModel: SubItemCellViewModelType {
 
     var unitColor: UIColor { return self.status.associatedColor }
     var unitText: String {
-        if self.status == .warning {
+        switch status {
+        case .inactive:
             return ""
-        } else {
+        case .normal:
             return orderItem.orderUnit?.abbreviation ?? ""
+        case .pending:
+            return orderItem.orderUnit?.abbreviation ?? ""
+        case .warning:
+            return ""
         }
     }
 
