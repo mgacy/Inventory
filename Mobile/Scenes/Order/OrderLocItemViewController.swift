@@ -85,6 +85,85 @@ class OrderLocItemViewController: UIViewController {
                 log.debug("We selected: \(item)")
             })
             .disposed(by: disposeBag)
+
+        // Other Delegate Methods
+        tableView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
+    }
+
+}
+
+// MARK: - UITableViewDelegate (Swipe Actions)
+@available(iOS 11.0, *)
+extension OrderLocItemViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let setToZeroAction = contextualSetToZeroAction(forRowAtIndexPath: indexPath)
+        let setToParAction = contextualSetToParAction(forRowAtIndexPath: indexPath)
+        let swipeConfig = UISwipeActionsConfiguration(actions: [setToZeroAction, setToParAction])
+        return swipeConfig
+    }
+
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let incrementAction = contextualIncrementAction(forRowAtIndexPath: indexPath)
+        let decrementAction = contextualDecrementAction(forRowAtIndexPath: indexPath)
+        let swipeConfig = UISwipeActionsConfiguration(actions: [incrementAction, decrementAction])
+        return swipeConfig
+    }
+
+    // MARK: - Contextual Actions
+
+    func contextualDecrementAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .normal, title: "- 1") { [weak self] _, _, completionHandler in
+            let result = self?.viewModel.decrementOrder(forRowAtIndexPath: indexPath) ?? false
+            if result {
+                self?.tableView.reloadRows(at: [indexPath], with: .fade)
+            }
+            completionHandler(result)
+        }
+        //action.image = UIImage(named: "")
+        action.backgroundColor = UIColor.blue
+        return action
+    }
+
+    func contextualIncrementAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .normal, title: "+ 1") { [weak self] _, _, completionHandler in
+            let result = self?.viewModel.incrementOrder(forRowAtIndexPath: indexPath) ?? false
+            if result {
+                self?.tableView.reloadRows(at: [indexPath], with: .fade)
+            }
+            completionHandler(result)
+        }
+        //action.image = UIImage(named: "")
+        action.backgroundColor = UIColor.orange
+        return action
+    }
+
+    func contextualSetToZeroAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .normal, title: "0") { [weak self] _, _, completionHandler in
+            let result = self?.viewModel.setOrderToZero(forRowAtIndexPath: indexPath) ?? false
+            if result {
+                self?.tableView.reloadRows(at: [indexPath], with: .fade)
+            }
+            completionHandler(result)
+        }
+        //action.image = UIImage(named: "")
+        action.backgroundColor = UIColor.blue
+        return action
+    }
+
+    func contextualSetToParAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .normal, title: "Par") { [weak self] _, _, completionHandler in
+            let result = self?.viewModel.setOrderToPar(forRowAtIndexPath: indexPath) ?? false
+            if result {
+                self?.tableView.reloadRows(at: [indexPath], with: .fade)
+            }
+            completionHandler(result)
+        }
+        //action.image = UIImage(named: "")
+        action.backgroundColor = UIColor.orange
+        return action
     }
 
 }

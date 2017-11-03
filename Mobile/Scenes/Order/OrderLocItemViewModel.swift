@@ -49,4 +49,52 @@ struct OrderLocItemViewModel {
         }
     }
 
+    // MARK: - Swipe Actions
+
+    func decrementOrder(forRowAtIndexPath indexPath: IndexPath) -> Bool {
+        let orderItem = orderItems[indexPath.row]
+        guard let currentQuantity = orderItem.quantity else {
+            /// TODO: should we simply set .quantity to 0?
+            //orderItem.quantity = 0.0
+            return false
+        }
+
+        if currentQuantity.doubleValue >= 1.0 {
+            orderItem.quantity = NSNumber(value: currentQuantity.doubleValue - 1.0)
+        } else {
+            orderItem.quantity = 0.0
+        }
+        return true
+    }
+
+    func incrementOrder(forRowAtIndexPath indexPath: IndexPath) -> Bool {
+        let orderItem = orderItems[indexPath.row]
+        guard let currentQuantity: NSNumber = orderItem.quantity else {
+            /// TODO: should we simply increment by 1 if .quantity is nil?
+            //orderItem.quantity = 1.0
+            return false
+        }
+        orderItem.quantity = NSNumber(value: currentQuantity.doubleValue + 1.0)
+        return true
+    }
+
+    func setOrderToPar(forRowAtIndexPath indexPath: IndexPath) -> Bool {
+        let orderItem = orderItems[indexPath.row]
+        guard let parUnit = orderItem.parUnit else {
+            return false
+        }
+        /// TODO: should we return false if orderItem.par == 0?
+        let newQuantity = orderItem.par.rounded(.awayFromZero)
+
+        orderItem.quantity = newQuantity as NSNumber
+        orderItem.orderUnit = parUnit
+        return true
+    }
+
+    func setOrderToZero(forRowAtIndexPath indexPath: IndexPath) -> Bool {
+        let orderItem = orderItems[indexPath.row]
+        orderItem.quantity = 0
+        return true
+    }
+
 }
