@@ -124,7 +124,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
             completionHandler(result)
         }
         //action.image = UIImage(named: "")
-        action.backgroundColor = UIColor.blue
+        action.backgroundColor = ColorPalette.blueColor
         return action
     }
 
@@ -137,7 +137,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
             completionHandler(result)
         }
         //action.image = UIImage(named: "")
-        action.backgroundColor = UIColor.orange
+        action.backgroundColor = ColorPalette.lazurColor
         return action
     }
 
@@ -150,7 +150,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
             completionHandler(result)
         }
         //action.image = UIImage(named: "")
-        action.backgroundColor = UIColor.blue
+        action.backgroundColor = ColorPalette.blueColor
         return action
     }
 
@@ -163,7 +163,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
             completionHandler(result)
         }
         //action.image = UIImage(named: "")
-        action.backgroundColor = UIColor.orange
+        action.backgroundColor = ColorPalette.navyColor
         return action
     }
 
