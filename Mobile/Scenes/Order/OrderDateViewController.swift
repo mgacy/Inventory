@@ -210,7 +210,8 @@ class OrderDateViewController: UIViewController {
                 case false:
                     let vc = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
                     vc.viewModel = OrderContainerViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                           parentObject: selection)
+                                                           parentObject: selection,
+                                                           completeTaps: vc.completeButtonItem.rx.tap.asObservable())
                     strongSelf.navigationController?.pushViewController(vc, animated: true)
                 }
             })

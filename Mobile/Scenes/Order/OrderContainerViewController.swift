@@ -7,8 +7,8 @@
 //
 
 import UIKit
-//import RxCocoa
-//import RxSwift
+import RxCocoa
+import RxSwift
 
 class OrderContainerViewController: UIViewController {
 
@@ -16,14 +16,21 @@ class OrderContainerViewController: UIViewController {
         static let locationsNavTitle = "Locations"
         static let vendorsNavTitle = "Vendors"
         static let errorAlertTitle = "Error"
+        static let confirmCompleteTitle = "Warning: Pending Orders"
+        static let confirmCompleteMessage = "Marking order collection as completed will delete any pending " +
+        "orders. Are you sure you want to proceed?"
     }
 
     // MARK: - Properties
 
     var viewModel: OrderContainerViewModel!
-    //let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
+
+    let confirmComplete = PublishSubject<Void>()
 
     // MARK: - Interface
+
+    let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneBarButton"), style: .done, target: nil, action: nil)
 
     private lazy var segmentedControl: UISegmentedControl = {
         let items = ["Vendors", "Locations"]
@@ -61,7 +68,7 @@ class OrderContainerViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         //setupConstraints()
-        //setupBindings()
+        setupBindings()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -75,7 +82,7 @@ class OrderContainerViewController: UIViewController {
     private func setupView() {
         navigationItem.titleView = segmentedControl
         //navigationItem.leftBarButtonItem =
-        //navigationItem.rightBarButtonItem =
+        navigationItem.rightBarButtonItem = completeButtonItem
         updateView()
     }
 
@@ -84,16 +91,38 @@ class OrderContainerViewController: UIViewController {
             remove(asChildViewController: locationsViewController)
             add(asChildViewController: vendorsViewControlller)
             title = Strings.vendorsNavTitle
+            completeButtonItem.isEnabled = true
         } else {
             remove(asChildViewController: vendorsViewControlller)
             add(asChildViewController: locationsViewController)
             title = Strings.locationsNavTitle
+            completeButtonItem.isEnabled = false
         }
     }
 
     //private func setupConstraints() {}
 
-    //private func setupBindings() {}
+    private func setupBindings() {
+        // Complete Order Alert
+        viewModel.showAlert
+            .drive(onNext: { [weak self] _ in
+                self?.showAlert(title: Strings.confirmCompleteTitle, message: Strings.confirmCompleteMessage) {
+                    self?.confirmComplete.onNext(())
+                }
+            })
+            .disposed(by: disposeBag)
+
+        confirmComplete.asObservable()
+            .bind(to: viewModel.confirmComplete)
+            .disposed(by: disposeBag)
+
+        // Navigation
+        viewModel.popView
+            .drive(onNext: { [weak self] in
+                self?.navigationController!.popViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
 
     // MARK: - Actions
 
