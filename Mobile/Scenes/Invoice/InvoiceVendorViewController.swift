@@ -67,12 +67,10 @@ class InvoiceVendorViewController: UITableViewController {
     // MARK: - Navigation
 
     fileprivate func showInvoice(withInvoice invoice: Invoice) {
-        let vc = InvoiceItemViewController.initFromStoryboard(name: "Main")
-        let vm = InvoiceItemViewModel(dataManager: viewModel.dataManager, parentObject: invoice,
-                                      rowTaps: vc.selectedObjects,
-                                      uploadTaps: vc.uploadButtonItem.rx.tap.asObservable())
-        vc.viewModel = vm
-        //vc.managedObjectContext = viewModel.dataManager.managedObjectContext
+        let vc = InvoiceItemViewController.initFromStoryboard(name: "InvoiceItemViewController")
+        vc.viewModel = InvoiceItemViewModel(dataManager: viewModel.dataManager, parentObject: invoice,
+                                            rowTaps: vc.selectedObjects,
+                                            uploadTaps: vc.uploadButtonItem.rx.tap.asObservable())
         navigationController?.pushViewController(vc, animated: true)
     }
 
