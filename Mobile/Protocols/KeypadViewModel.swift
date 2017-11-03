@@ -57,6 +57,50 @@ extension KeypadViewModel {
 
 }
 
+// MARK: - NEW
+
+/// TODO: rename `ListProxy`?
+// In practice, use of this relies on `didSet` on `currentIndex` which calls `didChangeItem(currentItem)`
+protocol ListViewModelType {
+    associatedtype ItemType
+
+    var items: [ItemType] { get }
+    var currentItem: ItemType { get }
+    var currentIndex: Int { get set }
+
+    func nextItem() -> Bool
+    func previousItem() -> Bool
+    //func didChangeItem(_: ItemType)
+}
+
+extension ListViewModelType {
+
+    var currentItem: ItemType {
+        return items[currentIndex]
+    }
+
+    mutating func nextItem() -> Bool {
+        if currentIndex < items.count - 1 {
+            currentIndex += 1
+            return true
+        } else {
+            /// TODO: cleanup?
+            return false
+        }
+    }
+
+    mutating func previousItem() -> Bool {
+        if currentIndex > 0 {
+            currentIndex -= 1
+            return true
+        } else {
+            /// TODO: cleanup?
+            return false
+        }
+    }
+
+}
+
 // We don't want to expose the Keypad directly to the view controller, so they will interact with view models conforming
 // to this protocol instead
 protocol KeypadProxy: class {
