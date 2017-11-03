@@ -38,7 +38,7 @@ class OrderViewModel {
     var repName: String { return "\(order.vendor?.rep?.firstName ?? "") \(order.vendor?.rep?.lastName ?? "")" }
     var email: String { return order.vendor?.rep?.email ?? "" }
     var phone: String { return order.vendor?.rep?.phone ?? "" }
-    var formattedPhone: String { return format(phoneNumber: phone) ?? "" }
+    var formattedPhone: String { return phone.formattedPhoneNumber() ?? "" }
 
     var canMessageOrder: Bool {
         guard order.vendor?.rep?.phone != nil else {
@@ -134,59 +134,4 @@ class OrderViewModel {
         //dataManager.managedObjectContext.performSaveOrRollback()
     }
 
-}
-
-// MARK: - Various Classes, Extensions
-
-// FIXME: move this somewhere more general
-// Mobile Dan
-// https://stackoverflow.com/a/41668104
-func format(phoneNumber sourcePhoneNumber: String) -> String? {
-
-    // Remove any character that is not a number
-    let numbersOnly = sourcePhoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-    let length = numbersOnly.count
-    let hasLeadingOne = numbersOnly.hasPrefix("1")
-
-    // Check for supported phone number length
-    guard length == 7 || length == 10 || (length == 11 && hasLeadingOne) else {
-        return nil
-    }
-
-    let hasAreaCode = (length >= 10)
-    var sourceIndex = 0
-
-    // Leading 1
-    var leadingOne = ""
-    if hasLeadingOne {
-        leadingOne = "1 "
-        sourceIndex += 1
-    }
-
-    // Area code
-    var areaCode = ""
-    if hasAreaCode {
-        let areaCodeLength = 3
-        guard let areaCodeSubstring = numbersOnly.substring(
-            start: sourceIndex, offsetBy: areaCodeLength) else {
-                return nil
-        }
-        areaCode = String(format: "(%@) ", areaCodeSubstring)
-        sourceIndex += areaCodeLength
-    }
-
-    // Prefix, 3 characters
-    let prefixLength = 3
-    guard let prefix = numbersOnly.substring(start: sourceIndex, offsetBy: prefixLength) else {
-        return nil
-    }
-    sourceIndex += prefixLength
-
-    // Suffix, 4 characters
-    let suffixLength = 4
-    guard let suffix = numbersOnly.substring(start: sourceIndex, offsetBy: suffixLength) else {
-        return nil
-    }
-
-    return leadingOne + areaCode + prefix + "-" + suffix
 }
