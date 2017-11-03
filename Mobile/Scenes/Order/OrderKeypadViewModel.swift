@@ -14,6 +14,7 @@ class OrderKeypadViewModel {
     private let managedObjectContext: NSManagedObjectContext
     private let numberFormatter: NumberFormatter
     private var currentItemUnits: ItemUnits
+    //private var dataSource: ListDataSource
     internal var items: [OrderItem] = []
 
     internal var currentIndex: Int {
@@ -27,6 +28,7 @@ class OrderKeypadViewModel {
     // Public
 
     var currentItem: OrderItem {
+        //return dataSource.getItem(atIndex: currentIndex)!
         return items[currentIndex]
     }
 
@@ -86,12 +88,14 @@ class OrderKeypadViewModel {
     convenience init(for order: Order, atIndex index: Int, inContext context: NSManagedObjectContext) {
         self.init(atIndex: index, in: context)
         self.items = self.getItems(for: order, in: context)
+        //self.dataSource = CDOrderItemDataSource(for: order, inContext: context)
         self.didChangeItem(self.currentItem)
     }
 
     convenience init(with items: [OrderItem], atIndex index: Int, in context: NSManagedObjectContext) {
         self.init(atIndex: index, in: context)
         self.items = items
+        //self.dataSource = RROrderItemDataSource(for: parent, factory: factory)
         self.didChangeItem(self.currentItem)
     }
 
@@ -167,6 +171,7 @@ class OrderKeypadViewModel {
 extension OrderKeypadViewModel: ListViewModelType {
 
     func nextItem() -> Bool {
+        //if currentIndex < dataSource.length - 1 {
         if currentIndex < items.count - 1 {
             currentIndex += 1
             return true
@@ -219,3 +224,73 @@ extension OrderKeypadViewModel: KeypadDelegate {
     }
 
 }
+/*
+// MARK: - Alternative Approach
+
+// It appears that implementing this would require type erasure
+
+protocol ListDataSource {
+    associatedtype ItemType
+
+    var items: [ItemType] { get }
+    var length: Int { get }
+
+    //mutating func addItem(_: ItemType)
+    func getItem(atIndex: Int) -> ItemType?
+}
+
+extension ListDataSource {
+    var length: Int {
+        return items.count
+    }
+
+    func getItem(atIndex index: Int) -> ItemType? {
+        return items[index]
+    }
+
+}
+
+// MARK: Implementation
+
+class RROrderItemDataSource: ListDataSource {
+    //private let factory: OrderLocationFactory
+    var items: [OrderItem]
+
+    init(for parent: OrderLocItemParent, factory: OrderLocationFactory) {
+        //self.factory = factory
+        switch parent {
+        case .category(let category):
+            self.items = factory.getOrderItems(forCategoryType: category) ?? []
+        case .location(let location):
+            self.items = factory.getOrderItems(forItemType: location) ?? []
+        }
+    }
+}
+
+class CDOrderItemDataSource: ListDataSource {
+    private var managedObjectContext: NSManagedObjectContext
+    private var parentObject: Order
+
+    var items: [OrderItem] {
+        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
+        request.predicate = NSPredicate(format: "order == %@", parentObject)
+
+        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+
+        do {
+            let searchResults = try managedObjectContext.fetch(request)
+            return searchResults
+        } catch {
+            log.error("Error with request: \(error)")
+        }
+        return [OrderItem]()
+    }
+
+    init(for order: Order, inContext context: NSManagedObjectContext) {
+        self.parentObject = order
+        self.managedObjectContext = context
+    }
+
+}
+*/
