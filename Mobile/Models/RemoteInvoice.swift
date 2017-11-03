@@ -36,17 +36,17 @@ extension RemoteInvoiceCollection: RemoteRecord {
 // MARK: - Invoice
 
 struct RemoteInvoice: Codable {
-    /*
+
     enum RemoteInvoiceStatus: String, Codable {
         case completed
         case pending
         case rejected
     }
-    */
+
     let remoteID: Int
     let shipDate: String
     let receiveDate: String
-    let status: String
+    let status: RemoteInvoiceStatus
     let storeID: Int
     // Optional
     let invoiceNo: Int?

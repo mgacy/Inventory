@@ -62,13 +62,14 @@ extension Invoice: NewSyncable {
         }
         /// TODO: switch to method on `InvoiceStatus`
         switch record.status {
-        case "pending":
+        case .pending:
             self.uploaded = false
-        case "completed":
+            status = InvoiceStatus.pending.rawValue
+        case .completed:
             self.uploaded = true
-        default:
-            log.error("\(#function) - Invalid status: \(record.status)")
-            self.uploaded = true
+            status = InvoiceStatus.received.rawValue
+        case .rejected:
+            status = InvoiceStatus.rejected.rawValue
         }
 
         // Optional
