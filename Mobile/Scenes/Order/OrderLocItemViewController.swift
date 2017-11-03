@@ -81,9 +81,18 @@ class OrderLocItemViewController: UIViewController {
 
         // Navigation
         tableView.rx
-            .modelSelected(OrderItem.self)
-            .subscribe(onNext: { item in
-                log.debug("We selected: \(item)")
+            .itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                log.debug("We selected: \(indexPath)")
+                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self")}
+                guard let destinationController = OrderKeypadViewController.instance() else {
+                    fatalError("\(#function) FAILED : unable to get destination view controller.")
+                }
+                let managedObjectContext = strongSelf.viewModel.dataManager.managedObjectContext
+                destinationController.viewModel = OrderKeypadViewModel(with: strongSelf.viewModel.orderItems,
+                                                                       atIndex: indexPath.row,
+                                                                       in: managedObjectContext)
+                strongSelf.navigationController?.pushViewController(destinationController, animated: true)
             })
             .disposed(by: disposeBag)
 
