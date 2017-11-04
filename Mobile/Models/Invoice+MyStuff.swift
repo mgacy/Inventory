@@ -37,6 +37,14 @@ import CoreData
         }
     }
 
+    init?(status: RemoteInvoice.RemoteInvoiceStatus) {
+        switch status {
+        case .pending: self = .pending
+        case .rejected: self = .rejected
+        case .completed: self = .completed
+        }
+    }
+
 }
 
 // MARK: - NewSyncable
@@ -57,6 +65,7 @@ extension Invoice: NewSyncable {
         // Required
         //remoteID = record.syncIdentifier
         guard let shipDate = record.shipDate.toBasicDate(), let receiveDate = record.receiveDate.toBasicDate() else {
+            /// TODO: a fatalError seems excessive for this type of error
             fatalError("\(#function) FAILED : unable to parse shipDate or receiveDate from \(record)")
         }
         self.shipDate = shipDate.timeIntervalSinceReferenceDate
@@ -65,17 +74,12 @@ extension Invoice: NewSyncable {
         if record.vendor.syncIdentifier != vendor?.remoteIdentifier {
             vendor = Vendor.updateOrCreate(with: record.vendor, in: context)
         }
-        /// TODO: switch to method on `InvoiceStatus`
-        switch record.status {
-        case .pending:
-            self.uploaded = false
-            status = InvoiceStatus.pending.rawValue
-        case .completed:
-            self.uploaded = true
-            status = InvoiceStatus.completed.rawValue
-        case .rejected:
-            status = InvoiceStatus.rejected.rawValue
+
+        guard let status = InvoiceStatus(status: record.status)?.rawValue else {
+            /// TODO: a fatalError seems excessive for this type of error
+            fatalError("\(#function) FAILED : unable to parse status from \(record)")
         }
+        self.status = status
 
         // Optional
         if let invoiceNo = record.invoiceNo {
