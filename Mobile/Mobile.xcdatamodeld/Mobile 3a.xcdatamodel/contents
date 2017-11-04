@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13532" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13533" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Base" representedClassName="Base" syncable="YES" codeGenerationType="class">
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -72,7 +72,6 @@
         <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="taxes" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="totalCost" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="collection" maxCount="1" deletionRule="Nullify" destinationEntity="InvoiceCollection" inverseName="invoices" inverseEntity="InvoiceCollection" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InvoiceItem" inverseName="invoice" inverseEntity="InvoiceItem" syncable="YES"/>
         <relationship name="vendor" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="invoices" inverseEntity="Vendor" syncable="YES"/>
@@ -227,7 +226,7 @@
         <element name="InventoryLocation" positionX="-344" positionY="-117" width="128" height="135"/>
         <element name="InventoryLocationCategory" positionX="-135" positionY="-135" width="128" height="120"/>
         <element name="InventoryLocationItem" positionX="124" positionY="-81" width="128" height="165"/>
-        <element name="Invoice" positionX="-371" positionY="45" width="128" height="270"/>
+        <element name="Invoice" positionX="-371" positionY="45" width="128" height="255"/>
         <element name="InvoiceCollection" positionX="-677" positionY="162" width="128" height="105"/>
         <element name="InvoiceItem" positionX="-164" positionY="213" width="128" height="165"/>
         <element name="Item" positionX="-1512" positionY="-135" width="128" height="270"/>
