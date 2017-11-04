@@ -210,62 +210,7 @@ extension InvoiceItemViewController {
         // Present Alert
         present(alertController, animated: true, completion: nil)
     }
-    /*
-    func showNotReceivedAlert(forItem invoiceItem: InvoiceItem) {
 
-        // Generic Action Handler
-
-        func updateItemStatus(forItem invoiceItem: InvoiceItem, withStatus status: InvoiceItemStatus) {
-            self.isEditing = false
-            invoiceItem.status = status.rawValue
-            //managedObjectContext?.performSaveOrRollback()
-            log.info("Updated InvoiceItem: \(invoiceItem)")
-        }
-
-        // Alert Controller
-        let alertController = UIAlertController(title: nil, message: "Why wasn't this item received?",
-                                                preferredStyle: .actionSheet)
-
-        // Actions
-
-        /// TODO: use InvoiceItemStatus.description for alert action title?
-
-        // damaged
-        alertController.addAction(UIAlertAction(title: "Damaged", style: .default, handler: { (_) in
-            updateItemStatus(forItem: invoiceItem, withStatus: .damaged)
-        }))
-
-        // outOfStock
-        alertController.addAction(UIAlertAction(title: "Out of Stock", style: .default, handler: { (_) in
-            updateItemStatus(forItem: invoiceItem, withStatus: .outOfStock)
-        }))
-
-        // wrongItem
-        alertController.addAction(UIAlertAction(title: "Wrong Item", style: .default, handler: { (_) in
-            updateItemStatus(forItem: invoiceItem, withStatus: .wrongItem)
-        }))
-
-        // cancel
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
-            self.isEditing = false
-        }))
-
-        // Present Alert
-        present(alertController, animated: true, completion: nil)
-    }
-
-    func showMoreAlert(forItem invoiceItem: InvoiceItem) {
-
-        // Generic Action Handler
-
-        // Alert Controller
-
-        // Actions
-
-        // Present Alert
-
-    }
-    */
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
