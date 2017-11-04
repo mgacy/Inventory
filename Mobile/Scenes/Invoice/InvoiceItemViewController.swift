@@ -148,31 +148,28 @@ extension InvoiceItemViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        /*
-        let invoiceItem = dataSource.objectAtIndexPath(indexPath)
 
-        // More Button
-        let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
-            self.isEditing = false
-            log.info("more button tapped")
-        }
-        more.backgroundColor = UIColor.lightGray
-        */
-        // Not Received Button
-        let notReceived = UITableViewRowAction(style: .normal, title: "Not Received ...") { _, indexPath in
-            //self.showNotReceivedAlert(forItem: invoiceItem)
+        // More
+        let more = UITableViewRowAction(style: .normal, title: "More") { _, indexPath in
             self.showNotReceivedAlert(forItemAt: indexPath)
         }
-        notReceived.backgroundColor = ColorPalette.redColor
+        more.backgroundColor = UIColor.lightGray
+        //more.backgroundColor = ColorPalette.yellowColor
 
-        // Received Button
+        // Out of Stock
+        let outOfStock = UITableViewRowAction(style: .normal, title: "Out of Stock") { _, indexPath in
+            self.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .outOfStock)
+        }
+        outOfStock.backgroundColor = ColorPalette.redColor
+
+        // Received
         let received = UITableViewRowAction(style: .normal, title: "Received") { [weak self] _, indexPath in
             /// TODO: do we not need to handle setting `self.isEditing = false`?
             self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .received) //{ self?.isEditing = false }
         }
         received.backgroundColor = ColorPalette.navyColor
 
-        return [received, notReceived]
+        return [received, outOfStock, more]
     }
 
 }
@@ -194,12 +191,12 @@ extension InvoiceItemViewController {
         alertController.addAction(UIAlertAction(title: "Damaged", style: .default, handler: { [weak self] (_) in
             self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .damaged) //{ self?.isEditing = false }
         }))
-
+        /*
         // outOfStock
         alertController.addAction(UIAlertAction(title: "Out of Stock", style: .default, handler: { [weak self] (_) in
             self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .outOfStock)
         }))
-
+        */
         // wrongItem
         alertController.addAction(UIAlertAction(title: "Wrong Item", style: .default, handler: { [weak self] (_) in
             self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .wrongItem)
