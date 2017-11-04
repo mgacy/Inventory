@@ -38,8 +38,8 @@ extension RemoteInvoiceCollection: RemoteRecord {
 struct RemoteInvoice: Codable {
 
     enum RemoteInvoiceStatus: String, Codable {
-        case completed
         case pending
+        case completed
         case rejected
     }
 
