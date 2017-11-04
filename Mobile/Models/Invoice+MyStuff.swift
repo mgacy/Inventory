@@ -10,15 +10,18 @@ import CoreData
 
 @objc public enum InvoiceStatus: Int16 {
     case pending        = 0
-    case received       = 1
+    //case received       = 1
     case rejected       = 2
-    //case paymentIssue     = 3
+    //case paymentIssue   = 3
+    case completed      = 4
 
     static func asString(raw: Int16) -> String? {
         switch raw {
         case 0: return "pending"
-        case 1: return "received"
+        //case 1: return "received"
         case 2: return "rejected"
+        //case 3: return "payment_issue"
+        case 4: return "completed"
         default: return nil
         }
     }
@@ -26,8 +29,10 @@ import CoreData
     init?(string: String) {
         switch string {
         case "pending": self = .pending
-        case "complete": self = .received
-        //case "pending": self = .rejected
+        //case "completed": self = .received
+        case "rejected": self = .rejected
+        //case "payment_issue": self = .paymentIssue
+        case "completed": self = .completed
         default: return nil
         }
     }
@@ -67,7 +72,7 @@ extension Invoice: NewSyncable {
             status = InvoiceStatus.pending.rawValue
         case .completed:
             self.uploaded = true
-            status = InvoiceStatus.received.rawValue
+            status = InvoiceStatus.completed.rawValue
         case .rejected:
             status = InvoiceStatus.rejected.rawValue
         }
