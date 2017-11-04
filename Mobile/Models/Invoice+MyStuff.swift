@@ -139,23 +139,18 @@ extension Invoice {
         /// FIXME: why is total_cost not Double?
         myDict["total_cost"] = Int(self.totalCost)
         myDict["check_no"] = Int(self.checkNo)
-        //myDict["status"] = InvoiceStatus.asString(raw: status) ?? ""
+        myDict["status"] = InvoiceStatus.asString(raw: status) ?? ""
         myDict["store_id"] = Int((self.collection?.storeID)!)
-
-        if uploaded {
-            myDict["status"] = "received"
-        } else {
-            myDict["status"] = "pending"
+        guard let vendor = self.vendor else {
+            log.error("\(#function) FAILED : unable to serialize without a Vendor")
+            return nil
         }
-
-        if let vendor = self.vendor {
-            myDict["vendor_id"] = Int(vendor.remoteID)
-        }
+        myDict["vendor_id"] = Int(vendor.remoteID)
 
         // Generate array of dictionaries for InventoryItems
         guard let items = self.items else {
             log.error("\(#function) FAILED : unable to serialize without any InvoiceItems")
-            return myDict
+            return nil
         }
 
         /// TODO: use map / flatmap / reduce
