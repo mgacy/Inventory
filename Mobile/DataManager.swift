@@ -500,6 +500,7 @@ extension DataManager {
 
     func updateInvoice(_ invoice: Invoice) -> Observable<Event<Invoice>> {
         let remoteID = Int(invoice.remoteID)
+        invoice.updateStatus()
         guard let dict = invoice.serialize() else {
             log.error("\(#function) FAILED : unable to serialize Invoice \(invoice)")
             return Observable.error(DataManagerError.serializationError).materialize()

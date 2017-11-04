@@ -170,3 +170,53 @@ extension Invoice {
     }
 
 }
+
+// MARK: - Status
+
+extension Invoice {
+
+    /// TODO: rename `updatedStatus()` and return true if we actually change status
+    func updateStatus() {
+        let currentStatusIsPending = status == InvoiceStatus.pending.rawValue ? true : false
+
+        var hasPending: Bool = false
+        var hasCompleted: Bool = false
+        items?.forEach { item in
+            guard let invoiceItem = item as? InvoiceItem else {
+                log.error("\(#function) FAILED : unable to case \(item) as InvoiceItem"); return
+            }
+            switch invoiceItem.status {
+            case InvoiceItemStatus.pending.rawValue:
+                hasPending = true
+                if !currentStatusIsPending {
+                    status = InvoiceStatus.pending.rawValue
+                    /// TODO: collection.upateStatus()
+                    return //true
+                }
+            //case InvoiceItemStatus.received.rawValue:
+            //case InvoiceItemStatus.damaged.rawValue:
+            //case InvoiceItemStatus.outOfStock.rawValue:
+            //case InvoiceItemStatus.promo.rawValue:
+            //case InvoiceItemStatus.substitute.rawValue:
+            //case InvoiceItemStatus.wrongItem.rawValue:
+            default:
+                hasCompleted = true
+            }
+        }
+
+        switch currentStatusIsPending {
+        case true:
+            if hasCompleted && !hasPending {
+                status = InvoiceStatus.completed.rawValue
+                /// TODO: collection.updateStatus()
+                //return true
+            }
+        case false:
+            if hasPending {
+                status = InvoiceStatus.pending.rawValue
+                /// TODO: collection.updateStatus()
+                //return true
+            }
+        }
+    }
+}
