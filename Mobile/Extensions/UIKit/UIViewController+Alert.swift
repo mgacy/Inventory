@@ -74,7 +74,7 @@ extension UIViewController {
                 return Disposables.create()
             }
 
-            let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let alertView = UIAlertController(title: title, message: message, preferredStyle: .adaptiveActionSheet)
             /// TODO: can we simply set the cancelAction handler to nil / dismiss alertView / observer.onCompleted()?
             alertView.addAction(UIAlertAction(title: cancelAction.description, style: .cancel) { _ in
                 observer.on(.next(cancelAction))

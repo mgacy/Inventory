@@ -181,7 +181,8 @@ extension InvoiceItemViewController {
 
         // Alert Controller
         /// FIXME: use adaptive stype
-        let alertController = UIAlertController(title: nil, message: Strings.alertMessage, preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: nil, message: Strings.alertMessage,
+                                                preferredStyle: .adaptiveActionSheet)
 
         // Actions
 
