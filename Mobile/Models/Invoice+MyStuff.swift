@@ -26,17 +26,6 @@ import CoreData
         }
     }
 
-    init?(string: String) {
-        switch string {
-        case "pending": self = .pending
-        //case "completed": self = .received
-        case "rejected": self = .rejected
-        //case "payment_issue": self = .paymentIssue
-        case "completed": self = .completed
-        default: return nil
-        }
-    }
-
     init(recordStatus status: RemoteInvoice.Status) {
         switch status {
         case .pending: self = .pending

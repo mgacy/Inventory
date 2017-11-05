@@ -74,20 +74,6 @@ import CoreData
         }
     }
 
-    init?(string: String) {
-        switch string {
-        case "pending": self = .pending
-        case "received": self = .received
-        case "damaged": self = .damaged
-        case "outOfStock": self = .outOfStock
-        case "promo": self = .promo
-        case "substitute": self = .substitute
-        case "wrongItem": self = .wrongItem
-        case "notReceived": self = .notReceived
-        default: return nil
-        }
-    }
-
     init(recordStatus status: RemoteInvoiceItem.Status) {
         switch status {
         case .pending: self = .pending
