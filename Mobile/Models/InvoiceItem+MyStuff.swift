@@ -16,6 +16,7 @@ import CoreData
     case promo          = 4
     case substitute     = 5
     case wrongItem      = 6
+    case notReceived    = 7
 
     var description: String {
         switch self {
@@ -33,6 +34,8 @@ import CoreData
             return "Substitute"
         case .wrongItem:
             return "Wrong Item"
+        case .notReceived:
+            return "Not Received"
         }
     }
 
@@ -52,6 +55,8 @@ import CoreData
             return "Sub"
         case .wrongItem:
             return "WI"
+        case .notReceived:
+            return "NR"
         }
     }
 
@@ -64,6 +69,7 @@ import CoreData
         case 4: return "promo"
         case 5: return "substitute"
         case 6: return "wrong_item"
+        case 7: return "not_received"
         default: return nil
         }
     }
@@ -77,6 +83,7 @@ import CoreData
         case "promo": self = .promo
         case "substitute": self = .substitute
         case "wrongItem": self = .wrongItem
+        case "notReceived": self = .notReceived
         default: return nil
         }
     }
@@ -96,6 +103,8 @@ import CoreData
         case .substitute:
             self = .wrongItem
         case .wrongItem:
+            self = .notReceived
+        case .notReceived:
             self = .pending
         }
     }
