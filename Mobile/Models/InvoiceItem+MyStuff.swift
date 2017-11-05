@@ -60,10 +60,10 @@ import CoreData
         case 0: return "pending"
         case 1: return "received"
         case 2: return "damaged"
-        case 3: return "outOfStock"
+        case 3: return "out_of_stock"
         case 4: return "promo"
         case 5: return "substitute"
-        case 6: return "wrongItem"
+        case 6: return "wrong_item"
         default: return nil
         }
     }
