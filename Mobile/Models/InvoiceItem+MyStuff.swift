@@ -88,6 +88,19 @@ import CoreData
         }
     }
 
+    init(recordStatus status: RemoteInvoiceItem.Status) {
+        switch status {
+        case .pending: self = .pending
+        case .received: self = .received
+        case .damaged: self = .damaged
+        case .outOfStock: self = .outOfStock
+        case .promo: self = .promo
+        case .substitute: self = .substitute
+        case .wrongItem: self = .wrongItem
+        case .notReceived: self = .notReceived
+        }
+    }
+
     mutating func next() {
         switch self {
         case .pending:
@@ -129,10 +142,7 @@ extension InvoiceItem: NewSyncable {
         // Required
         //remoteID = record.syncIdentifier
         quantity = record.quantity
-        /// TODO: handle failure below
-        if let status = InvoiceItemStatus(string: record.status) {
-            self.status = status.rawValue
-        }
+        self.status = InvoiceItemStatus(recordStatus: record.status).rawValue
 
         // Optional
         discount = record.discount ?? 0.0
