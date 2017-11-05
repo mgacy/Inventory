@@ -37,7 +37,7 @@ extension RemoteInvoiceCollection: RemoteRecord {
 
 struct RemoteInvoice: Codable {
 
-    enum RemoteInvoiceStatus: String, Codable {
+    enum Status: String, Codable {
         case pending
         case completed
         case rejected
@@ -46,7 +46,7 @@ struct RemoteInvoice: Codable {
     let remoteID: Int
     let shipDate: String
     let receiveDate: String
-    let status: RemoteInvoiceStatus
+    let status: Status
     let storeID: Int
     // Optional
     let invoiceNo: Int?

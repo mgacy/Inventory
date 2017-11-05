@@ -37,7 +37,7 @@ import CoreData
         }
     }
 
-    init?(status: RemoteInvoice.RemoteInvoiceStatus) {
+    init(recordStatus status: RemoteInvoice.Status) {
         switch status {
         case .pending: self = .pending
         case .rejected: self = .rejected
@@ -70,16 +70,11 @@ extension Invoice: NewSyncable {
         }
         self.shipDate = shipDate.timeIntervalSinceReferenceDate
         self.receiveDate = receiveDate.timeIntervalSinceReferenceDate
+        self.status = InvoiceStatus(recordStatus: record.status).rawValue
 
         if record.vendor.syncIdentifier != vendor?.remoteIdentifier {
             vendor = Vendor.updateOrCreate(with: record.vendor, in: context)
         }
-
-        guard let status = InvoiceStatus(status: record.status)?.rawValue else {
-            /// TODO: a fatalError seems excessive for this type of error
-            fatalError("\(#function) FAILED : unable to parse status from \(record)")
-        }
-        self.status = status
 
         // Optional
         if let invoiceNo = record.invoiceNo {
