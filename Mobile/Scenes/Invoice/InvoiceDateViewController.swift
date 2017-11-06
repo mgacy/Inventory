@@ -169,26 +169,7 @@ class InvoiceDateViewController: UIViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
                                          fetchedResultsController: viewModel.frc, delegate: self)
     }
-    /*
-    // MARK: - UITableViewDelegate
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCollection = dataSource.objectAtIndexPath(indexPath)
-        guard let selection = selectedCollection else { fatalError("Unable to get selection") }
-        guard let storeID = userManager.storeID else {
-                log.error("\(#function) FAILED : unable to get storeID"); return
-        }
-        /*
-        HUD.show(.progress)
-        log.info("GET InvoiceCollection from server ...")
-        APIManager.sharedInstance.getInvoiceCollection(
-            storeID: storeID, invoiceDate: selection.date.shortDate,
-            completion: completedGetInvoiceCollection)
-         */
-        /// TODO: move before call to APIManager?
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-     */
 }
 
 // MARK: - TableViewDelegate
@@ -224,82 +205,3 @@ extension InvoiceDateViewController: TableViewDataSourceDelegate {
     }
 
 }
-/*
-// MARK: - Completion Handlers + Sync
-extension InvoiceDateViewController {
-
-    // MARK: Completion Handlers
-
-    func completedGetListOfInvoiceCollections(json: JSON?, error: Error?) {
-        refreshControl?.endRefreshing()
-        guard error == nil else {
-            //if error?._code == NSURLErrorTimedOut {}
-            log.error("\(#function) FAILED : \(String(describing: error))")
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.warning("\(#function) FAILED : unable to get JSON")
-            HUD.hide(); return
-        }
-
-        do {
-            try managedObjectContext.syncCollections(InvoiceCollection.self, withJSON: json)
-            //try InvoiceCollection.sync(withJSON: json, in: managedObjectContext)
-        } catch let error {
-            log.error("Unable to sync Invoices: \(error)")
-            HUD.flash(.error, delay: 1.0)
-        }
-        HUD.hide()
-        managedObjectContext.performSaveOrRollback()
-        tableView.reloadData()
-    }
-
-    func completedGetInvoiceCollection(json: JSON?, error: Error?) {
-        guard error == nil else {
-            log.error("Unable to get InvoiceCollection: \(String(describing: error))")
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.error("\(#function) FAILED : unable to get JSON")
-            HUD.hide(); return
-        }
-        guard let selection = selectedCollection else {
-            log.error("\(#function) FAILED : still unable to get selected InvoiceCollection"); return
-        }
-
-        /// TODO: make this more elegant
-        var jsonArray: [JSON] = []
-        for (_, objectJSON) in json {
-            jsonArray.append(objectJSON)
-        }
-
-        // Update selected Inventory with full JSON from server.
-        selection.syncChildren(in: managedObjectContext!, with: jsonArray)
-        managedObjectContext!.performSaveOrRollback()
-
-        HUD.hide()
-        performSegue(withIdentifier: segueIdentifier, sender: self)
-    }
-
-    func completedSync(_ succeeded: Bool, error: Error?) {
-        if succeeded {
-            log.verbose("Completed login / sync - succeeded: \(succeeded)")
-            guard let storeID = userManager.storeID else {
-                log.error("\(#function) FAILED : unable to get storeID")
-                HUD.flash(.error, delay: 1.0); return
-            }
-
-            // Get list of Invoices from server
-            log.verbose("Fetching existing InvoiceCollections from server ...")
-            APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
-                                                                  completion: self.completedGetListOfInvoiceCollections)
-        } else {
-            // if let error = error { // present more detailed error ...
-            log.error("Unable to sync: \(String(describing: error))")
-            refreshControl?.endRefreshing()
-            HUD.flash(.error, delay: 1.0)
-        }
-    }
-
-}
-*/

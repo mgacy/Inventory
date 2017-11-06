@@ -48,14 +48,6 @@ struct InventoryLocItemViewModel {
         // FetchRequest
         let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
         request.predicate = parentObject.fetchPredicate
-        /*
-        switch self.parentObject {
-        case .category(let parentCategory):
-            request.predicate = NSPredicate(format: "category == %@", parentCategory)
-        case .location(let parentLocation):
-            request.predicate = NSPredicate(format: "location == %@", parentLocation)
-        }
-        */
         request.sortDescriptors = sortDescriptors
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false

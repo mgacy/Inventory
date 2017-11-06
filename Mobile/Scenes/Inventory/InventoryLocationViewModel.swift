@@ -65,27 +65,6 @@ struct InventoryLocationViewModel {
             .share()
 
         // Navigation
-        /*
-        let uploadSuccess = uploadResults
-            .elements()
-            .map { _ in return InventoryLocationSegue.back }
-
-        let selectionType = rowTaps
-            .map { selection -> InventoryLocationSegue in
-                log.debug("Selected: \(selection)")
-                switch selection.locationType {
-                case "category"?:
-                    return InventoryLocationSegue.category(selection)
-                case "item"?:
-                    return InventoryLocationSegue.item(selection)
-                default:
-                    fatalError("\(#function) FAILED : wrong locationType")
-                }
-            }
-
-        self.showLocations = Observable.of(uploadSuccess, selectionType)
-            .merge()
-         */
         self.showLocation = rowTaps
             .map { selection in
                 log.debug("Selected: \(selection)")
