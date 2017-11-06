@@ -23,10 +23,9 @@ struct InventoryDateViewModel {
     let dataManager: DataManager
 
     // CoreData
-    private let filter: NSPredicate? = nil
     private let sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-    private let cacheName: String? = nil
-    private let sectionNameKeyPath: String? = nil
+    //private let cacheName: String? = nil
+    //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
     // MARK: - Input
@@ -126,14 +125,12 @@ struct InventoryDateViewModel {
 
         // FetchRequest
         let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
+        //request.predicate = filter
         request.sortDescriptors = sortDescriptors
-        request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
 
-        let managedObjectContext = dataManager.managedObjectContext
-        self.frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext,
-                                              sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
+        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
     }
 
 }

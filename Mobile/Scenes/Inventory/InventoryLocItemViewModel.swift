@@ -18,11 +18,10 @@ struct InventoryLocItemViewModel {
     var parentObject: LocationItemListParent
 
     // CoreData
-    //private let filter: NSPredicate? = nil
     private let sortDescriptors = [NSSortDescriptor(key: "position", ascending: true),
                                    NSSortDescriptor(key: "item.name", ascending: true)]
-    private let cacheName: String? = nil
-    private let sectionNameKeyPath: String? = nil
+    //private let cacheName: String? = nil
+    //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
     // MARK: - Input
@@ -51,10 +50,7 @@ struct InventoryLocItemViewModel {
         request.sortDescriptors = sortDescriptors
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-
-        let managedObjectContext = dataManager.managedObjectContext
-        self.frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext,
-                                              sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
+        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
     }
 
 }

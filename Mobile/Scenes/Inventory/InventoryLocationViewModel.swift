@@ -25,10 +25,9 @@ struct InventoryLocationViewModel {
     private let parentObject: Inventory
 
     // CoreData
-    private let filter: NSPredicate?
     private let sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-    private let cacheName: String? = nil
-    private let sectionNameKeyPath: String? = nil
+    //private let cacheName: String? = nil
+    //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
     // MARK: - Input
@@ -91,16 +90,12 @@ struct InventoryLocationViewModel {
             //.asDriver(onErrorDriveWith: .never())
          */
         // FetchRequest
-        self.filter = NSPredicate(format: "inventory == %@", parentObject)
         let request: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
+        request.predicate = NSPredicate(format: "inventory == %@", parentObject)
         request.sortDescriptors = sortDescriptors
-        request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-
-        let managedObjectContext = dataManager.managedObjectContext
-        self.frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext,
-                                              sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
+        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
     }
 
 }
