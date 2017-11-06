@@ -74,11 +74,11 @@ class OrderContainerViewModel {
         for order in orders {
             if let status = (order as? Order)?.status {
                 switch status {
-                    //case OrderStatus.empty.rawValue:
+                //case OrderStatus.empty.rawValue:
                 //    hasEmpty = true
                 case OrderStatus.pending.rawValue:
                     hasPending = true
-                    //case OrderStatus.placed.rawValue:
+                //case OrderStatus.placed.rawValue:
                 //case OrderStatus.uploaded.rawValue:
                 default:
                     /// TODO: use another color for values that aren't captured above

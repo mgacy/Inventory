@@ -183,7 +183,6 @@ extension InvoiceItemViewController {
     func showNotReceivedAlert(forItemAt indexPath: IndexPath, with statusList: [InvoiceItemStatus], handler: @escaping (IndexPath, InvoiceItemStatus) -> Void) {
 
         // Alert Controller
-        /// FIXME: use adaptive stype
         let alertController = UIAlertController(title: nil, message: Strings.alertMessage,
                                                 preferredStyle: .adaptiveActionSheet)
 
