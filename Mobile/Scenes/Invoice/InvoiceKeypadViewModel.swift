@@ -33,6 +33,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         }
     }
 
+    private let dataManager: DataManager
     private let managedObjectContext: NSManagedObjectContext
     private let numberFormatter: NumberFormatter
     private let currencyFormatter: NumberFormatter
@@ -109,10 +110,11 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     // MARK: - Lifecycle
 
     /// TODO: pass DataManager
-    required init(for invoice: Invoice, atIndex index: Int, inContext context: NSManagedObjectContext) {
+    required init(dataManager: DataManager, for invoice: Invoice, atIndex index: Int) {
+        self.dataManager = dataManager
         self.parentObject = invoice
         self.currentIndex = index
-        self.managedObjectContext = context
+        self.managedObjectContext = dataManager.managedObjectContext
         self.currentItemUnits = ItemUnits(item: nil, currentUnit: nil)
 
         // Setup numberFormatter

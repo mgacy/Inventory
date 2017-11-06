@@ -58,11 +58,8 @@ class InventoryLocationItemTVC: UITableViewController {
         guard let controller = InventoryKeypadViewController.instance() else {
             fatalError("\(#function) FAILED : unable to get destination view controller.")
         }
-        /// TODO: improve this
-        let managedObjectContext = viewModel.dataManager.managedObjectContext
-        let parentObject = viewModel.parentObject
-        controller.viewModel = InventoryKeypadViewModel(for: parentObject, atIndex: indexPath.row,
-                                                        inContext: managedObjectContext)
+        controller.viewModel = InventoryKeypadViewModel(dataManager: viewModel.dataManager, for: viewModel.parentObject,
+                                                        atIndex: indexPath.row)
         navigationController?.pushViewController(controller, animated: true)
     }
 

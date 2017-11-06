@@ -117,10 +117,8 @@ class InvoiceItemViewController: UIViewController {
         guard let destinationController = InvoiceKeypadViewController.instance() else {
             fatalError("\(#function) FAILED: unable to get destination view controller.")
         }
-        /// TODO: pass DataManager
-        let managedObjectContext = viewModel.dataManager.managedObjectContext
-        destinationController.viewModel = InvoiceKeypadViewModel(for: viewModel.parentObject, atIndex: indexPath.row,
-                                                                 inContext: managedObjectContext)
+        destinationController.viewModel = InvoiceKeypadViewModel(dataManager: viewModel.dataManager,
+                                                                 for: viewModel.parentObject, atIndex: indexPath.row)
         navigationController?.pushViewController(destinationController, animated: true)
     }
 

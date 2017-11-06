@@ -88,10 +88,9 @@ class OrderLocItemViewController: UIViewController {
                 guard let destinationController = OrderKeypadViewController.instance() else {
                     fatalError("\(#function) FAILED : unable to get destination view controller.")
                 }
-                let managedObjectContext = strongSelf.viewModel.dataManager.managedObjectContext
-                destinationController.viewModel = OrderKeypadViewModel(with: strongSelf.viewModel.orderItems,
-                                                                       atIndex: indexPath.row,
-                                                                       in: managedObjectContext)
+                destinationController.viewModel = OrderKeypadViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                                       with: strongSelf.viewModel.orderItems,
+                                                                       atIndex: indexPath.row)
                 strongSelf.navigationController?.pushViewController(destinationController, animated: true)
             })
             .disposed(by: disposeBag)
