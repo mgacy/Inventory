@@ -151,7 +151,10 @@ extension InvoiceItemViewController: UITableViewDelegate {
 
         // More
         let more = UITableViewRowAction(style: .normal, title: "More") { _, indexPath in
-            self.showNotReceivedAlert(forItemAt: indexPath)
+            /// TODO: .promo and .substitute will require further action
+            let statusList: [InvoiceItemStatus] = [.damaged, .wrongItem, .notReceived]
+            self.showNotReceivedAlert(forItemAt: indexPath, with: statusList,
+                                      handler: self.viewModel.updateItemStatus(forItemAt:withStatus:))
         }
         more.backgroundColor = UIColor.lightGray
         //more.backgroundColor = ColorPalette.yellowColor
@@ -177,31 +180,18 @@ extension InvoiceItemViewController: UITableViewDelegate {
 // MARK: - Alert Controller Extension
 extension InvoiceItemViewController {
 
-    func showNotReceivedAlert(forItemAt indexPath: IndexPath) {
+    func showNotReceivedAlert(forItemAt indexPath: IndexPath, with statusList: [InvoiceItemStatus], handler: @escaping (IndexPath, InvoiceItemStatus) -> Void) {
 
         // Alert Controller
         /// FIXME: use adaptive stype
         let alertController = UIAlertController(title: nil, message: Strings.alertMessage,
                                                 preferredStyle: .adaptiveActionSheet)
 
-        // Actions
-
-        /// TODO: use InvoiceItemStatus.description for alert action title?
-
-        // damaged
-        alertController.addAction(UIAlertAction(title: "Damaged", style: .default, handler: { [weak self] (_) in
-            self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .damaged) //{ self?.isEditing = false }
-        }))
-        /*
-        // outOfStock
-        alertController.addAction(UIAlertAction(title: "Out of Stock", style: .default, handler: { [weak self] (_) in
-            self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .outOfStock)
-        }))
-        */
-        // wrongItem
-        alertController.addAction(UIAlertAction(title: "Wrong Item", style: .default, handler: { [weak self] (_) in
-            self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .wrongItem)
-        }))
+        statusList.forEach { status in
+            alertController.addAction(UIAlertAction(title: status.description, style: .default) { _ in
+                handler(indexPath, status)
+            })
+        }
 
         // cancel
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
