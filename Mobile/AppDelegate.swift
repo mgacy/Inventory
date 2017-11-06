@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         /// TODO: initialize a SessionManager here and pass to different components
 
-        dataManager = DataManager(context: persistentContainer.viewContext, userManager: userManager)
+        dataManager = DataManager(container: persistentContainer, userManager: userManager)
         //guard let manager = dataManager else { fatalError("Unable to instantiate DataManager") }
 
         // Check if we already have user + credentials

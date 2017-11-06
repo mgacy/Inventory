@@ -36,8 +36,8 @@ class DataManager {
 
     // MARK: - Lifecycle
 
-    init(context: NSManagedObjectContext, userManager: CurrentUserManager) {
-        self.managedObjectContext = context
+    init(container: NSPersistentContainer, userManager: CurrentUserManager) {
+        self.managedObjectContext = container.viewContext
         self.userManager = userManager
         self.client = APIManager.sharedInstance
     }
