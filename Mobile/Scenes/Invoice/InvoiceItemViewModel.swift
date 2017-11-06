@@ -76,6 +76,8 @@ struct InvoiceItemViewModel {
         /// TODO: add `completion: () -> Void` arg to so view controller can do `self?.isEditing = false` as completion?
         let invoiceItem = frc.object(at: indexPath)
         invoiceItem.status = status.rawValue
+        parentObject.updateStatus() // ???
+        /// TODO: dataManager.updateInvoiceItem?
         dataManager.saveOrRollback()
         log.info("Updated InvoiceItem: \(invoiceItem)")
     }

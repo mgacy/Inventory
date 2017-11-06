@@ -109,13 +109,18 @@ extension InvoiceVendorViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for invoice: Invoice) {
        cell.textLabel?.text = invoice.vendor?.name
-
-        switch invoice.uploaded {
-        case false:
-            //cell.textLabel?.textColor = UIColor.lightGray
+        switch invoice.status {
+        case InvoiceStatus.pending.rawValue:
             cell.textLabel?.textColor = ColorPalette.yellowColor
-        case true:
+        case InvoiceStatus.completed.rawValue:
             cell.textLabel?.textColor = UIColor.black
+        case InvoiceStatus.rejected.rawValue:
+            /// TODO: what color should we use?
+            cell.textLabel?.textColor = ColorPalette.redColor
+            //cell.textLabel?.textColor = UIColor.black
+        default:
+            log.warning("\(#function) : invalid status for \(invoice)")
+            cell.textLabel?.textColor = UIColor.lightGray
         }
     }
 

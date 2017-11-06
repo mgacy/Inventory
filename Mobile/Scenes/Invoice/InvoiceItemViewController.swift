@@ -148,31 +148,31 @@ extension InvoiceItemViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        /*
-        let invoiceItem = dataSource.objectAtIndexPath(indexPath)
 
-        // More Button
-        let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
-            self.isEditing = false
-            log.info("more button tapped")
+        // More
+        let more = UITableViewRowAction(style: .normal, title: "More") { _, indexPath in
+            /// TODO: .promo and .substitute will require further action
+            let statusList: [InvoiceItemStatus] = [.damaged, .wrongItem, .notReceived]
+            self.showNotReceivedAlert(forItemAt: indexPath, with: statusList,
+                                      handler: self.viewModel.updateItemStatus(forItemAt:withStatus:))
         }
         more.backgroundColor = UIColor.lightGray
-        */
-        // Not Received Button
-        let notReceived = UITableViewRowAction(style: .normal, title: "Not Received ...") { _, indexPath in
-            //self.showNotReceivedAlert(forItem: invoiceItem)
-            self.showNotReceivedAlert(forItemAt: indexPath)
-        }
-        notReceived.backgroundColor = ColorPalette.redColor
+        //more.backgroundColor = ColorPalette.yellowColor
 
-        // Received Button
+        // Out of Stock
+        let outOfStock = UITableViewRowAction(style: .normal, title: "Out of Stock") { _, indexPath in
+            self.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .outOfStock)
+        }
+        outOfStock.backgroundColor = ColorPalette.redColor
+
+        // Received
         let received = UITableViewRowAction(style: .normal, title: "Received") { [weak self] _, indexPath in
             /// TODO: do we not need to handle setting `self.isEditing = false`?
             self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .received) //{ self?.isEditing = false }
         }
         received.backgroundColor = ColorPalette.navyColor
 
-        return [received, notReceived]
+        return [received, outOfStock, more]
     }
 
 }
@@ -180,74 +180,19 @@ extension InvoiceItemViewController: UITableViewDelegate {
 // MARK: - Alert Controller Extension
 extension InvoiceItemViewController {
 
-    func showNotReceivedAlert(forItemAt indexPath: IndexPath) {
+    func showNotReceivedAlert(forItemAt indexPath: IndexPath, with statusList: [InvoiceItemStatus], handler: @escaping (IndexPath, InvoiceItemStatus) -> Void) {
 
         // Alert Controller
         /// FIXME: use adaptive stype
-        let alertController = UIAlertController(title: nil, message: Strings.alertMessage, preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: nil, message: Strings.alertMessage,
+                                                preferredStyle: .adaptiveActionSheet)
 
-        // Actions
-
-        /// TODO: use InvoiceItemStatus.description for alert action title?
-
-        // damaged
-        alertController.addAction(UIAlertAction(title: "Damaged", style: .default, handler: { [weak self] (_) in
-            self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .damaged) //{ self?.isEditing = false }
-        }))
-
-        // outOfStock
-        alertController.addAction(UIAlertAction(title: "Out of Stock", style: .default, handler: { [weak self] (_) in
-            self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .outOfStock)
-        }))
-
-        // wrongItem
-        alertController.addAction(UIAlertAction(title: "Wrong Item", style: .default, handler: { [weak self] (_) in
-            self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .wrongItem)
-        }))
-
-        // cancel
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
-            self.isEditing = false
-        }))
-
-        // Present Alert
-        present(alertController, animated: true, completion: nil)
-    }
-    /*
-    func showNotReceivedAlert(forItem invoiceItem: InvoiceItem) {
-
-        // Generic Action Handler
-
-        func updateItemStatus(forItem invoiceItem: InvoiceItem, withStatus status: InvoiceItemStatus) {
-            self.isEditing = false
-            invoiceItem.status = status.rawValue
-            //managedObjectContext?.performSaveOrRollback()
-            log.info("Updated InvoiceItem: \(invoiceItem)")
+        statusList.forEach { status in
+            alertController.addAction(UIAlertAction(title: status.description, style: .default) { _ in
+                handler(indexPath, status)
+            })
         }
 
-        // Alert Controller
-        let alertController = UIAlertController(title: nil, message: "Why wasn't this item received?",
-                                                preferredStyle: .actionSheet)
-
-        // Actions
-
-        /// TODO: use InvoiceItemStatus.description for alert action title?
-
-        // damaged
-        alertController.addAction(UIAlertAction(title: "Damaged", style: .default, handler: { (_) in
-            updateItemStatus(forItem: invoiceItem, withStatus: .damaged)
-        }))
-
-        // outOfStock
-        alertController.addAction(UIAlertAction(title: "Out of Stock", style: .default, handler: { (_) in
-            updateItemStatus(forItem: invoiceItem, withStatus: .outOfStock)
-        }))
-
-        // wrongItem
-        alertController.addAction(UIAlertAction(title: "Wrong Item", style: .default, handler: { (_) in
-            updateItemStatus(forItem: invoiceItem, withStatus: .wrongItem)
-        }))
-
         // cancel
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
             self.isEditing = false
@@ -257,18 +202,6 @@ extension InvoiceItemViewController {
         present(alertController, animated: true, completion: nil)
     }
 
-    func showMoreAlert(forItem invoiceItem: InvoiceItem) {
-
-        // Generic Action Handler
-
-        // Alert Controller
-
-        // Actions
-
-        // Present Alert
-
-    }
-    */
 }
 
 // MARK: - TableViewDataSourceDelegate Extension

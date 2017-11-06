@@ -16,6 +16,7 @@ import CoreData
     case promo          = 4
     case substitute     = 5
     case wrongItem      = 6
+    case notReceived    = 7
 
     var description: String {
         switch self {
@@ -33,6 +34,8 @@ import CoreData
             return "Substitute"
         case .wrongItem:
             return "Wrong Item"
+        case .notReceived:
+            return "Not Received"
         }
     }
 
@@ -52,6 +55,8 @@ import CoreData
             return "Sub"
         case .wrongItem:
             return "WI"
+        case .notReceived:
+            return "NR"
         }
     }
 
@@ -60,24 +65,25 @@ import CoreData
         case 0: return "pending"
         case 1: return "received"
         case 2: return "damaged"
-        case 3: return "outOfStock"
+        case 3: return "out_of_stock"
         case 4: return "promo"
         case 5: return "substitute"
-        case 6: return "wrongItem"
+        case 6: return "wrong_item"
+        case 7: return "not_received"
         default: return nil
         }
     }
 
-    init?(string: String) {
-        switch string {
-        case "pending": self = .pending
-        case "received": self = .received
-        case "damaged": self = .damaged
-        case "outOfStock": self = .outOfStock
-        case "promo": self = .promo
-        case "substitute": self = .substitute
-        case "wrongItem": self = .wrongItem
-        default: return nil
+    init(recordStatus status: RemoteInvoiceItem.Status) {
+        switch status {
+        case .pending: self = .pending
+        case .received: self = .received
+        case .damaged: self = .damaged
+        case .outOfStock: self = .outOfStock
+        case .promo: self = .promo
+        case .substitute: self = .substitute
+        case .wrongItem: self = .wrongItem
+        case .notReceived: self = .notReceived
         }
     }
 
@@ -96,6 +102,8 @@ import CoreData
         case .substitute:
             self = .wrongItem
         case .wrongItem:
+            self = .notReceived
+        case .notReceived:
             self = .pending
         }
     }
@@ -120,10 +128,7 @@ extension InvoiceItem: NewSyncable {
         // Required
         //remoteID = record.syncIdentifier
         quantity = record.quantity
-        /// TODO: handle failure below
-        if let status = InvoiceItemStatus(string: record.status) {
-            self.status = status.rawValue
-        }
+        self.status = InvoiceItemStatus(recordStatus: record.status).rawValue
 
         // Optional
         discount = record.discount ?? 0.0
