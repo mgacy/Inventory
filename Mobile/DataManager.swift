@@ -51,6 +51,12 @@ class DataManager {
         return Observable.just(managedObjectContext.saveOrRollback())
     }
 
+}
+
+// MARK: - General
+
+extension DataManager {
+
     /// TODO: rename
     func refreshStuff() -> Observable<Bool> {
         return refreshVendors()
