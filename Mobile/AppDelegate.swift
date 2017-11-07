@@ -187,8 +187,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //log.addDestination(file)
     }
 
-    // func prepareTabBarController(context: NSManagedObjectContext, userManager: CurrentUserManager) {}
-
     func prepareTabBarController(dataManager: DataManager) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let tabBarController = storyboard.instantiateViewController(
@@ -198,43 +196,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Fix dark shadow in nav bar on segue
         tabBarController.view.backgroundColor = UIColor.white
-        //tabBarController.managedObjectContext = persistentContainer.viewContext
-        //tabBarController.userManager = userManager
 
         for child in tabBarController.viewControllers ?? [] {
-            guard let navController = child as? UINavigationController
-                else { fatalError("wrong view controller type") }
-            /*
-            guard let vc = navController.topViewController as? RootSectionViewController
-                else { fatalError("wrong view controller type") }
-            vc.managedObjectContext = persistentContainer.viewContext
-            vc.userManager = userManager
-             */
-            // TEMP:
-            guard let topVC = navController.topViewController else { fatalError("wrong view controller type") }
+            guard
+                let navController = child as? UINavigationController,
+                let topVC = navController.topViewController else {
+                    fatalError("wrong view controller type")
+            }
+
             switch topVC {
             case is InventoryDateViewController:
                 guard let vc = topVC as? InventoryDateViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = InventoryDateViewModel(dataManager: dataManager,
                                                       rowTaps: vc.selectedObjects.asObservable())
-
             case is OrderDateViewController:
                 guard let vc = topVC as? OrderDateViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = OrderDateViewModel(dataManager: dataManager, rowTaps: vc.selectedObjects.asObservable())
-
             case is InvoiceDateViewController:
                 guard let vc = topVC as? InvoiceDateViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = InvoiceDateViewModel(dataManager: dataManager,
                                                     rowTaps: vc.selectedObjects.asObservable())
-
             case is InitialLoginViewController:
                 guard let vc = topVC as? InitialLoginViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = InitialLoginViewModel(dataManager: dataManager)
-
             case is SettingsViewController:
                 guard let vc = topVC as? SettingsViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = SettingsViewModel(dataManager: dataManager, rowTaps: vc.rowTaps.asObservable())
-
             default:
                 fatalError("wrong view controller type")
             }
