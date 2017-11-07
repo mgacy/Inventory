@@ -16,15 +16,11 @@ let log = SwiftyBeaver.self
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var dataManager: DataManager?
-    let userManager: CurrentUserManager = CurrentUserManager()
+    var dataManager: DataManager!
+    var userManager: CurrentUserManager!
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-
-        /// TODO: set up CoreDataStack
-
         let defaults = UserDefaults.standard
 
         setupSwiftyBeaverLogging(defaults: defaults)
@@ -41,19 +37,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             defaults.set(true, forKey: "isPreloaded")
         }
 
+        /// TODO: Should we use a failable initializier with CurrentUserManager?
+        //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
+
+        /// TODO: initialize a SessionManager here and pass to different components
+        userManager = CurrentUserManager()
+        dataManager = DataManager(container: persistentContainer, userManager: userManager)
+
+        // View Stuff
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
         HUD.dimsBackground = false
         HUD.allowsInteraction = false
-
-        /// TODO: Should we use a failable initializier with CurrentUserManager?
-        //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
-
-        /// TODO: initialize a SessionManager here and pass to different components
-
-        dataManager = DataManager(container: persistentContainer, userManager: userManager)
-        //guard let manager = dataManager else { fatalError("Unable to instantiate DataManager") }
 
         // Check if we already have user + credentials
         if userManager.user != nil {
