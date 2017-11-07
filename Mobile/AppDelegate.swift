@@ -132,7 +132,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //DispatchQueue.main.async { completion(self.configuredContainer) }
             } else {
                 log.debug("There was an error loading the persistent stores: \(error!)")
-                guard !migrating else { fatalError("was unable to migrate store") }
+                guard !migrating else {
+                    log.error("\(#function) FAILED : unable to migrate store: \(error!)")
+                    fatalError("was unable to migrate store")
+                }
                 self.destroyStore(for: self.configuredContainer)
                 self.createPersistentContainer(migrating: true, progress: progress, completion: completion)
                 /*
