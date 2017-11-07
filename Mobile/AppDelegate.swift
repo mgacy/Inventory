@@ -16,54 +16,60 @@ let log = SwiftyBeaver.self
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    var persistentContainer: NSPersistentContainer!
     var dataManager: DataManager!
     var userManager: CurrentUserManager!
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         let defaults = UserDefaults.standard
-
         setupSwiftyBeaverLogging(defaults: defaults)
 
-        // Check if we have already preloaded data
-        let isPreloaded = defaults.bool(forKey: "isPreloaded")
-        if !isPreloaded {
-            log.info("Preloading data ...")
-            let importer = CoreDataImporter()
-            guard importer.preloadData(in: persistentContainer.viewContext) == true else {
-                /// TODO: tell user why we are crashing?
-                fatalError("Unable to import Unit data")
+        createPersistentContainer { container in
+            self.persistentContainer = container
+
+            // Check if we have already preloaded data
+            let isPreloaded = defaults.bool(forKey: "isPreloaded")
+            if !isPreloaded {
+                log.info("Preloading data ...")
+                let importer = CoreDataImporter()
+                guard importer.preloadData(in: container.viewContext) == true else {
+                    /// TODO: tell user why we are crashing?
+                    fatalError("Unable to import Unit data")
+                }
+                defaults.set(true, forKey: "isPreloaded")
             }
-            defaults.set(true, forKey: "isPreloaded")
-        }
 
-        /// TODO: Should we use a failable initializier with CurrentUserManager?
-        //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
+            /// TODO: Should we use a failable initializier with CurrentUserManager?
+            //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
-        /// TODO: initialize a SessionManager here and pass to different components
-        userManager = CurrentUserManager()
-        dataManager = DataManager(container: persistentContainer, userManager: userManager)
+            /// TODO: initialize a SessionManager here and pass to different components
+            self.userManager = CurrentUserManager()
+            let dataManager = DataManager(container: container, userManager: self.userManager)
+            self.dataManager = dataManager
 
-        // View Stuff
+            // View Stuff
 
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-        HUD.dimsBackground = false
-        HUD.allowsInteraction = false
+            HUD.dimsBackground = false
+            HUD.allowsInteraction = false
 
-        // Check if we already have user + credentials
-        if userManager.user != nil {
-            self.window?.rootViewController = prepareTabBarController(dataManager: dataManager)
-        } else {
-            guard let loginController = storyboard.instantiateViewController(
-                withIdentifier: "InitialLoginViewController") as? InitialLoginViewController else {
-                    fatalError("Unable to instantiate view controller")
+            // Check if we already have user + credentials
+            if self.userManager.user != nil {
+                let tabBarController = self.prepareTabBarController(dataManager: dataManager)
+                self.window?.rootViewController = tabBarController
+            } else {
+                guard let loginController = storyboard.instantiateViewController(
+                    withIdentifier: "InitialLoginViewController") as? InitialLoginViewController else {
+                        fatalError("Unable to instantiate view controller")
+                }
+                loginController.viewModel = InitialLoginViewModel(dataManager: dataManager)
+                self.window?.rootViewController = loginController
             }
-            loginController.viewModel = InitialLoginViewModel(dataManager: dataManager)
-            self.window?.rootViewController = loginController
+            self.window?.makeKeyAndVisible()
         }
-        self.window?.makeKeyAndVisible()
         return true
     }
 
@@ -109,34 +115,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     */
     // MARK: - Core Data stack
 
-    lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-        */
+    private let configuredContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Mobile")
-        // swiftlint:disable:next unused_closure_parameter
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                log.error("Unresolved error \(error), \(error.userInfo)")
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
+        let defaultURL = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("Mobile.sqlite")
+        let storeDescription = NSPersistentStoreDescription(url: defaultURL)
+        storeDescription.shouldMigrateStoreAutomatically = false
+        container.persistentStoreDescriptions = [storeDescription]
         return container
     }()
+
+    private func createPersistentContainer(migrating: Bool = false, progress: Progress? = nil, completion: @escaping (NSPersistentContainer) -> Void) {
+        configuredContainer.loadPersistentStores { _, error in
+            if error == nil {
+                /// TODO: set mergePolicy
+                completion(self.configuredContainer)
+                //DispatchQueue.main.async { completion(self.configuredContainer) }
+            } else {
+                log.debug("There was an error loading the persistent stores: \(error!)")
+                guard !migrating else { fatalError("was unable to migrate store") }
+                self.destroyStore(for: self.configuredContainer)
+                self.createPersistentContainer(migrating: true, progress: progress, completion: completion)
+                /*
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.destroyStore(for: self.configuredContainer)
+                    self.createPersistentContainer(migrating: true, progress: progress, completion: completion)
+                }
+                */
+            }
+        }
+    }
+
+    private func destroyStore(for container: NSPersistentContainer) {
+        /// TODO: should we simply move the store?
+        // see: https://code.tutsplus.com/tutorials/core-data-and-swift-migrations--cms-25084
+        let psc = container.persistentStoreCoordinator
+        let dbURL = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("Mobile.sqlite")
+        do {
+            try psc.destroyPersistentStore(at: dbURL, ofType: NSSQLiteStoreType, options: nil)
+        } catch let error {
+            log.error("\(#function) FAILED : unable to destroy persistent store: \(error)")
+        }
+    }
 
     // MARK: - Core Data Saving support
 
