@@ -28,16 +28,21 @@ class DataManager {
 
     /// TODO: specify client as conforming to NetworkServiceType protocol
     private let client: APIManager
-    let managedObjectContext: NSManagedObjectContext
-    //let viewContext: NSManagedObjectContext
+    let viewContext: NSManagedObjectContext
     //let syncContext: NSManagedObjectContext
     /// TODO: use `UserManagerType`; should userManager be private?
     let userManager: CurrentUserManager
 
+    var managedObjectContext: NSManagedObjectContext {
+        return viewContext
+    }
+
     // MARK: - Lifecycle
 
-    init(context: NSManagedObjectContext, userManager: CurrentUserManager) {
-        self.managedObjectContext = context
+    init(container: NSPersistentContainer, userManager: CurrentUserManager) {
+        self.viewContext = container.viewContext
+        //self.syncContext = container.newBackgroundContext()
+        //self.syncContext.name = "SyncCoordinator"
         self.userManager = userManager
         self.client = APIManager.sharedInstance
     }
@@ -48,8 +53,19 @@ class DataManager {
     func saveOrRollback() -> Observable<Bool> {
         /// TODO: use `saveOrRollback()` or `performSaveOrRollback()`
         /// TODO: should we simply perform the do / catch here and materialize the error?
-        return Observable.just(managedObjectContext.saveOrRollback())
+        return Observable.just(viewContext.saveOrRollback())
     }
+
+    func createFetchedResultsController<T: NSManagedObject>(fetchRequest: NSFetchRequest<T>, sectionNameKeyPath: String? = nil, cacheName: String? = nil) -> NSFetchedResultsController<T> {
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: viewContext,
+                                          sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
+    }
+
+}
+
+// MARK: - General
+
+extension DataManager {
 
     /// TODO: rename
     func refreshStuff() -> Observable<Bool> {
@@ -61,7 +77,7 @@ class DataManager {
             }
             .flatMap { result -> Observable<Bool> in
                 //log.debug("\(#function) - \(result)")
-                return Observable.just(self.managedObjectContext.saveOrRollback())
+                return Observable.just(self.viewContext.saveOrRollback())
         }
         //.materialize()
     }
@@ -85,14 +101,14 @@ class DataManager {
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
-                    guard let context = self?.managedObjectContext else {
+                    guard let context = self?.viewContext else {
                         return false
                         //throw DataManagerError.missingMOC
                     }
                     Item.sync(with: records, in: context)
                     /*
                     do {
-                        try self?.managedObjectContext.syncEntitiesNew(Item.self, with: records)
+                        try self?.viewContext(Item.self, with: records)
                     } catch let error {
                         log.error("\(#function) FAILED : \(error)")
                         return false
@@ -121,7 +137,7 @@ class DataManager {
                 switch response.result {
                 case .success(let records):
                     do {
-                        try self?.managedObjectContext.syncEntities(ItemCategory.self, with: records)
+                        try self?.viewContext(ItemCategory.self, with: records)
                     } catch let error {
                         log.error("\(#function) FAILED : \(error)")
                         return false
@@ -170,14 +186,14 @@ class DataManager {
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
-                    guard let context = self?.managedObjectContext else {
+                    guard let context = self?.viewContext else {
                         return false
                         //throw DataManagerError.missingMOC
                     }
                     Vendor.sync(with: records, in: context)
                     /*
                     do {
-                        try self?.managedObjectContext.syncEntities(Vendor.self, with: records)
+                        try self?.viewContext.syncEntities(Vendor.self, with: records)
                     } catch let error {
                         log.error("\(#function) FAILED : \(error)")
                         return false
@@ -208,7 +224,7 @@ extension DataManager {
             .map { [weak self] response -> Inventory in
                 switch response.result {
                 case .success(let record):
-                    guard let context = self?.managedObjectContext else {
+                    guard let context = self?.viewContext else {
                         throw DataManagerError.missingMOC
                     }
 
@@ -262,7 +278,7 @@ extension DataManager {
             .map { [weak self] response in
                 switch response.result {
                 case .success(let record):
-                    guard let context = self?.managedObjectContext else {
+                    guard let context = self?.viewContext else {
                         throw DataManagerError.missingMOC
                     }
                     let factory = InventoriesFactory(context: context)
@@ -289,13 +305,13 @@ extension DataManager {
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
-                    guard let context = self?.managedObjectContext else {
+                    guard let context = self?.viewContext else {
                         throw DataManagerError.missingMOC
                     }
                     Inventory.sync(with: records, in: context)
                     /*
                     do {
-                        try self?.managedObjectContext.syncEntitiesNew(Item.self, with: records)
+                        try self?.viewContext.syncEntitiesNew(Item.self, with: records)
                     } catch let error {
                         log.error("\(#function) FAILED : \(error)")
                         return false
@@ -326,7 +342,7 @@ extension DataManager {
             .flatMap { [weak self] response -> Observable<OrderCollection> in
                 switch response.result {
                 case .success(let record):
-                    guard let context = self?.managedObjectContext else {
+                    guard let context = self?.viewContext else {
                         throw DataManagerError.missingMOC
                     }
                     /*
@@ -371,7 +387,7 @@ extension DataManager {
             .map { [weak self] response in
                 switch response.result {
                 case .success(let record):
-                    guard let context = self?.managedObjectContext else {
+                    guard let context = self?.viewContext else {
                         throw DataManagerError.missingMOC
                     }
                     collection.update(with: record, in: context)
@@ -397,7 +413,7 @@ extension DataManager {
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
-                    guard let context = self?.managedObjectContext else {
+                    guard let context = self?.viewContext else {
                         throw DataManagerError.missingMOC
                     }
                     OrderCollection.sync(with: records, in: context)
@@ -462,7 +478,7 @@ extension DataManager {
             .map { [weak self] response in
                 switch response.result {
                 case .success(let record):
-                    guard let context = self?.managedObjectContext else {
+                    guard let context = self?.viewContext else {
                         throw DataManagerError.missingMOC
                     }
                     collection.update(with: record, in: context)
@@ -485,7 +501,7 @@ extension DataManager {
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
-                    guard let context = self?.managedObjectContext else {
+                    guard let context = self?.viewContext else {
                         throw DataManagerError.missingMOC
                     }
                     InvoiceCollection.sync(with: records, in: context)
@@ -528,7 +544,7 @@ extension DataManager {
 extension DataManager {
 
     func test(records: [RemoteMenuItem]) -> Observable<Void> {
-        try? managedObjectContext.syncEntitiesNew(MenuItem.self, with: records)
+        try? viewContext.syncEntitiesNew(MenuItem.self, with: records)
         return Observable.just(())
     }
 
@@ -549,7 +565,7 @@ extension DataManager {
         switch response.result {
         case .success(let records):
             do {
-                try managedObjectContext.syncEntitiesNew(M, with: records)
+                try viewContext.syncEntitiesNew(M, with: records)
             } catch let error {
                 log.error("\(#function) FAILED : \(error)")
                 return false
@@ -567,7 +583,7 @@ extension DataManager {
             M.sync(with: records, in: managedObjectContext)
             /*
              do {
-             try managedObjectContext.syncEntitiesNew(M, with: records)
+             try viewContext.syncEntitiesNew(M, with: records)
              } catch let error {
              log.error("\(#function) FAILED : \(error)")
              return false
@@ -619,11 +635,11 @@ extension DataManager {
             case false:
                 log.verbose("Logout: Failure")
             }
-            //let deletionResult = self.deleteData(in: self.managedObjectContext)
+            //let deletionResult = self.deleteData(in: self.viewContext)
         }
         // NOTE: this currently starts deleting data before we have received a response from server
         log.verbose("Deleting data ...")
-        return deleteData(in: self.managedObjectContext)
+        return deleteData(in: self.viewContext)
 
         //return Disposables.create()
         //}
@@ -651,42 +667,42 @@ extension DataManager {
 
         // Inventory
         do {
-            try managedObjectContext.deleteEntities(Inventory.self)
+            try viewContext.deleteEntities(Inventory.self)
         } catch {
             log.error("\(#function) FAILED: unable to delete Inventories")
         }
         // Order
         do {
-            try managedObjectContext.deleteEntities(OrderCollection.self)
+            try viewContext.deleteEntities(OrderCollection.self)
         } catch {
             log.error("\(#function) FAILED: unable to delete OrderCollections")
         }
         // Invoice
         do {
-            try managedObjectContext.deleteEntities(InvoiceCollection.self)
+            try viewContext.deleteEntities(InvoiceCollection.self)
         } catch {
             log.error("\(#function) FAILED: unable to delete InvoiceCollections")
         }
         // Item
         do {
-            try managedObjectContext.deleteEntities(Item.self)
+            try viewContext.deleteEntities(Item.self)
         } catch {
             log.error("\(#function) FAILED : unable to delete Items")
         }
         // ItemCategory
         do {
-            try managedObjectContext.deleteEntities(ItemCategory.self)
+            try viewContext.deleteEntities(ItemCategory.self)
         } catch {
             log.error("\(#function) FAILED : unable to delete ItemCategories")
         }
         // Vendor
         do {
-            try managedObjectContext.deleteEntities(Vendor.self)
+            try viewContext.deleteEntities(Vendor.self)
         } catch {
             log.error("\(#function) FAILED : unable to delete Vendors")
         }
 
-        let result = managedObjectContext.saveOrRollback()
+        let result = viewContext.saveOrRollback()
         log.info("Save result: \(result)")
         return Observable.just(result)
     }

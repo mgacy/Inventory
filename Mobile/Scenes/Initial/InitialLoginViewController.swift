@@ -151,7 +151,8 @@ class InitialLoginViewController: UIViewController, SegueHandler {
 
             // swiftlint:disable:next force_cast
             let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-            appDelegate.prepareTabBarController(dataManager: appDelegate.dataManager!)
+            let tabBarController = appDelegate.prepareTabBarController(dataManager: appDelegate.dataManager)
+            appDelegate.window?.rootViewController = tabBarController
 
         case .showSignUp:
             guard

@@ -26,8 +26,8 @@ class OrderVendorViewModel {
     // CoreData
     private let filter: NSPredicate?
     private let sortDescriptors = [NSSortDescriptor(key: "vendor.name", ascending: true)]
-    private let cacheName: String? = nil
-    private let sectionNameKeyPath: String? = nil
+    //private let cacheName: String? = nil
+    //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
     // MARK: - Input
@@ -43,7 +43,6 @@ class OrderVendorViewModel {
 
     // MARK: - Lifecycle
 
-    // swiftlint:disable:next function_body_length
     init(dataManager: DataManager, parentObject: OrderCollection, rowTaps: Observable<Order>, completeTaps: Observable<Void>) {
         self.dataManager = dataManager
         self.parentObject = parentObject
@@ -69,11 +68,7 @@ class OrderVendorViewModel {
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-
-        //let managedObjectContext = dataManager.managedObjectContext
-        self.frc = NSFetchedResultsController(fetchRequest: request,
-                                              managedObjectContext: dataManager.managedObjectContext,
-                                              sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
+        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
 
         // Check collection status
         let safeToComplete = completeTaps

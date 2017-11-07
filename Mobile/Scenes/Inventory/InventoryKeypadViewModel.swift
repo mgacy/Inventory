@@ -12,6 +12,7 @@ import RxSwift
 
 class InventoryKeypadViewModel: KeypadViewModel {
 
+    private let dataManager: DataManager
     private let managedObjectContext: NSManagedObjectContext
     private let numberFormatter: NumberFormatter
     //private var currentItemUnits: ItemUnits
@@ -56,10 +57,11 @@ class InventoryKeypadViewModel: KeypadViewModel {
 
     // MARK: - Lifecycle
 
-    required init(for parent: LocationItemListParent, atIndex index: Int, inContext context: NSManagedObjectContext) {
+    required init(dataManager: DataManager, for parent: LocationItemListParent, atIndex index: Int) {
+        self.dataManager = dataManager
         self.parentObject = parent
         self.currentIndex = index
-        self.managedObjectContext = context
+        self.managedObjectContext = dataManager.managedObjectContext
         //self.currentItemUnits = ItemUnits(item: nil, currentUnit: nil)
 
         // Setup numberFormatter

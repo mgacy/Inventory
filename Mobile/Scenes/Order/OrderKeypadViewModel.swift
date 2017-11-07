@@ -11,7 +11,7 @@ import CoreData
 
 class OrderKeypadViewModel {
 
-    private let managedObjectContext: NSManagedObjectContext
+    private let dataManager: DataManager
     private let numberFormatter: NumberFormatter
     private var currentItemUnits: ItemUnits
     //private var dataSource: ListDataSource
@@ -85,22 +85,23 @@ class OrderKeypadViewModel {
 
     // MARK: - Lifecycle
 
-    convenience init(for order: Order, atIndex index: Int, inContext context: NSManagedObjectContext) {
-        self.init(atIndex: index, in: context)
-        self.items = self.getItems(for: order, in: context)
+    convenience init(dataManager: DataManager, for order: Order, atIndex index: Int) {
+        self.init(dataManager: dataManager, atIndex: index)
+        self.items = self.getItems(for: order, in: dataManager.managedObjectContext)
         //self.dataSource = CDOrderItemDataSource(for: order, inContext: context)
         self.didChangeItem(self.currentItem)
     }
 
-    convenience init(with items: [OrderItem], atIndex index: Int, in context: NSManagedObjectContext) {
-        self.init(atIndex: index, in: context)
+    convenience init(dataManager: DataManager, with items: [OrderItem], atIndex index: Int) {
+        self.init(dataManager: dataManager, atIndex: index)
         self.items = items
         //self.dataSource = RROrderItemDataSource(for: parent, factory: factory)
         self.didChangeItem(self.currentItem)
     }
 
-    private init(atIndex index: Int, in context: NSManagedObjectContext) {
-        self.managedObjectContext = context
+    private init(dataManager: DataManager, atIndex index: Int) {
+        self.dataManager = dataManager
+        //self.managedObjectContext = context
         self.currentItemUnits = ItemUnits(item: nil, currentUnit: nil)
         self.currentIndex = index
 
@@ -220,7 +221,8 @@ extension OrderKeypadViewModel: KeypadDelegate {
             currentItem.quantity = 0
             orderQuantity = "0"
         }
-        managedObjectContext.performSaveOrRollback()
+        _ = dataManager.saveOrRollback()
+        //managedObjectContext.performSaveOrRollback()
     }
 
 }

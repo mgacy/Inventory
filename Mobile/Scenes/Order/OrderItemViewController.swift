@@ -103,11 +103,8 @@ class OrderItemViewController: UIViewController {
         guard let destinationController = OrderKeypadViewController.instance() else {
             fatalError("\(#function) FAILED : unable to get destination view controller.")
         }
-
-        let parentObject = viewModel.order
-        let managedObjectContext = viewModel.dataManager.managedObjectContext
-        destinationController.viewModel = OrderKeypadViewModel(for: parentObject, atIndex: indexPath.row,
-                                                               inContext: managedObjectContext)
+        destinationController.viewModel = OrderKeypadViewModel(dataManager: viewModel.dataManager,
+                                                               for: viewModel.order, atIndex: indexPath.row)
         navigationController?.pushViewController(destinationController, animated: true)
     }
 
