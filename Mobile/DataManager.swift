@@ -41,6 +41,8 @@ class DataManager {
 
     init(container: NSPersistentContainer, userManager: CurrentUserManager) {
         self.viewContext = container.viewContext
+        //self.syncContext = container.newBackgroundContext()
+        //self.syncContext.name = "SyncCoordinator"
         self.userManager = userManager
         self.client = APIManager.sharedInstance
     }
