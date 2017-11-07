@@ -54,17 +54,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Check if we already have user + credentials
         if userManager.user != nil {
-            prepareTabBarController(dataManager: dataManager!)
+            self.window?.rootViewController = prepareTabBarController(dataManager: dataManager)
         } else {
             guard let loginController = storyboard.instantiateViewController(
                 withIdentifier: "InitialLoginViewController") as? InitialLoginViewController else {
                     fatalError("Unable to instantiate view controller")
             }
-            loginController.viewModel = InitialLoginViewModel(dataManager: dataManager!)
-
+            loginController.viewModel = InitialLoginViewModel(dataManager: dataManager)
             self.window?.rootViewController = loginController
-            self.window?.makeKeyAndVisible()
         }
+        self.window?.makeKeyAndVisible()
         return true
     }
 
@@ -184,7 +183,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //log.addDestination(file)
     }
 
-    func prepareTabBarController(dataManager: DataManager) {
+    func prepareTabBarController(dataManager: DataManager) -> UITabBarController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let tabBarController = storyboard.instantiateViewController(
             withIdentifier: "TabBarViewController") as? UITabBarController else {
@@ -223,20 +222,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("wrong view controller type")
             }
         }
-        self.window?.rootViewController = tabBarController
-        self.window?.makeKeyAndVisible()
 
         // Sync
         /*
         guard
             let inventoryNavController = tabBarController.viewControllers?[0] as? UINavigationController,
-            let controller = inventoryNavController.topViewController as? InventoryDateTVC else {
+            let controller = inventoryNavController.topViewController as? InventoryDateViewController else {
                 fatalError("wrong view controller type")
         }
         HUD.show(.progress)
         _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!,
                         completionHandler: controller.completedSync)
          */
+        return tabBarController
     }
 
 }
