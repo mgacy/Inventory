@@ -25,6 +25,9 @@ class SettingsViewController: UITableViewController {
     // Segues
     let accountSegue = "showAccount"
 
+    // MARK: - Interface
+    let doneButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: nil)
+
     @IBOutlet weak var accountCell: UITableViewCell!
 
     // MARK: - Lifecycle
@@ -45,6 +48,7 @@ class SettingsViewController: UITableViewController {
 
     private func setupView() {
         title = Strings.navTitle
+        navigationItem.rightBarButtonItem = doneButtonItem
         configureAccountCell()
     }
 
@@ -68,6 +72,12 @@ class SettingsViewController: UITableViewController {
                 /// TODO: fix how we show controller
                 strongSelf.navigationController?.pushViewController(controller, animated: true)
                 */
+            })
+            .disposed(by: disposeBag)
+
+        doneButtonItem.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
     }

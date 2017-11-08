@@ -223,6 +223,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
 
             switch topVC {
+            case is HomeViewController:
+                guard let vc = topVC as? HomeViewController else { fatalError("wrong view controller type") }
+                vc.viewModel = HomeViewModel(dataManager: dataManager)
             case is InventoryDateViewController:
                 guard let vc = topVC as? InventoryDateViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = InventoryDateViewModel(dataManager: dataManager,
@@ -237,9 +240,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case is InitialLoginViewController:
                 guard let vc = topVC as? InitialLoginViewController else { fatalError("wrong view controller type") }
                 vc.viewModel = InitialLoginViewModel(dataManager: dataManager)
-            case is SettingsViewController:
-                guard let vc = topVC as? SettingsViewController else { fatalError("wrong view controller type") }
-                vc.viewModel = SettingsViewModel(dataManager: dataManager, rowTaps: vc.rowTaps.asObservable())
+            //case is SettingsViewController:
+            //    guard let vc = topVC as? SettingsViewController else { fatalError("wrong view controller type") }
+            //    vc.viewModel = SettingsViewModel(dataManager: dataManager, rowTaps: vc.rowTaps.asObservable())
+            case is ItemViewController:
+                guard let vc = topVC as? ItemViewController else { fatalError("wrong view controller type") }
+                vc.viewModel = ItemViewModel(dataManager: dataManager, rowTaps: vc.rowTaps.asObservable())
             default:
                 fatalError("wrong view controller type")
             }
