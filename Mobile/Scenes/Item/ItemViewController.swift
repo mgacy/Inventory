@@ -73,7 +73,7 @@ class ItemViewController: UIViewController {
     }
 
     private func setupBindings() {
-        /*
+
         // Refresh
         refreshControl.rx.controlEvent(.valueChanged)
             .bind(to: viewModel.refresh)
@@ -90,7 +90,7 @@ class ItemViewController: UIViewController {
                 self?.tableView.reloadData()
             })
             .disposed(by: disposeBag)
-
+        /*
         // Errors
         viewModel.errorMessages
             .drive(onNext: { [weak self] message in
