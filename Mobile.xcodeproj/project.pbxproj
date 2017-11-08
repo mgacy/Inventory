@@ -64,6 +64,7 @@
 		C95E44681FB2968C00820067 /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95E44671FB2968C00820067 /* ItemViewController.swift */; };
 		C95E446A1FB296A700820067 /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95E44691FB296A700820067 /* ItemViewModel.swift */; };
 		C95E446C1FB2AB3A00820067 /* SettingsViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C95E446B1FB2AB3A00820067 /* SettingsViewController.storyboard */; };
+		C95E446E1FB2C26200820067 /* ItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */; };
 		C95F52F01F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */; };
 		C964D2131FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C964D2121FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard */; };
 		C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */; };
@@ -225,6 +226,7 @@
 		C95E44671FB2968C00820067 /* ItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
 		C95E44691FB296A700820067 /* ItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewModel.swift; sourceTree = "<group>"; };
 		C95E446B1FB2AB3A00820067 /* SettingsViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingsViewController.storyboard; sourceTree = "<group>"; };
+		C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCellViewModel.swift; sourceTree = "<group>"; };
 		C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertControllerStyle+Adaptive.swift"; sourceTree = "<group>"; };
 		C964D2121FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InvoiceVendorViewController.storyboard; sourceTree = "<group>"; };
 		C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InvoiceCollection+MyStuff.swift"; path = "Models/InvoiceCollection+MyStuff.swift"; sourceTree = "<group>"; };
@@ -525,6 +527,7 @@
 			children = (
 				C95E44671FB2968C00820067 /* ItemViewController.swift */,
 				C95E44691FB296A700820067 /* ItemViewModel.swift */,
+				C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */,
 			);
 			path = Item;
 			sourceTree = "<group>";
@@ -1209,6 +1212,7 @@
 				C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */,
 				C9BB058F1F831B2200A07529 /* OrderDateViewModel.swift in Sources */,
 				C9C2DA081F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift in Sources */,
+				C95E446E1FB2C26200820067 /* ItemCellViewModel.swift in Sources */,
 				C92C2F8D1F9FE3E500B69CF5 /* SettingsViewModel.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationViewController.swift in Sources */,
 				C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */,

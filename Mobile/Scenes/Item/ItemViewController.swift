@@ -106,7 +106,7 @@ class ItemViewController: UIViewController {
 
     fileprivate func setupTableView() {
         tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
@@ -133,8 +133,9 @@ extension ItemViewController: TableViewDataSourceDelegate {
      return true
      }
      */
-    func configure(_ cell: UITableViewCell, for model: Item) {
-
+    func configure(_ cell: SubItemTableViewCell, for item: Item) {
+        let viewModel = ItemCellViewModel(forItem: item)
+        cell.configure(withViewModel: viewModel)
     }
 
 }
