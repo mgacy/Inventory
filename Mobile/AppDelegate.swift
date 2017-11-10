@@ -155,6 +155,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let dbURL = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("Mobile.sqlite")
         do {
             try psc.destroyPersistentStore(at: dbURL, ofType: NSSQLiteStoreType, options: nil)
+
+            // We will need to reload Units after we destroy the store
+            UserDefaults.standard.set(false, forKey: "isPreloaded")
         } catch let error {
             log.error("\(#function) FAILED : unable to destroy persistent store: \(error)")
         }
