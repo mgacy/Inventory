@@ -106,7 +106,7 @@ class InventoryLocationViewController: UIViewController {
             .subscribe(onNext: { [weak self] result in
                 switch result.event {
                 case .next:
-                    HUD.flash(.success, delay: 1.0) { _ in
+                    HUD.flash(.success, delay: 0.5) { _ in
                         /// TODO: handle this elsewhere
                         self?.navigationController!.popViewController(animated: true)
                     }
@@ -122,11 +122,9 @@ class InventoryLocationViewController: UIViewController {
         // Selection
         viewModel.showLocation
             .subscribe(onNext: { [weak self] selection in
-                log.debug("\(#function) SELECTED: \(selection)")
                 guard let strongSelf = self else {
                     log.error("\(#function) FAILED : unable to get reference to self"); return
                 }
-
                 switch selection {
                 //case .back:
                 case .category(let location):
