@@ -29,6 +29,7 @@ class InventoryLocationViewController: UIViewController {
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var messageLabel: UILabel!
 
+    let cancelButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: nil, action: nil)
     let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
 
     lazy var tableView: UITableView = {
@@ -73,6 +74,9 @@ class InventoryLocationViewController: UIViewController {
         //messageLabel.text = "You do not have any Items yet."
 
         self.navigationItem.rightBarButtonItem = uploadButtonItem
+        if self.presentingViewController != nil {
+            self.navigationItem.leftBarButtonItem = cancelButtonItem
+        }
 
         //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         //messageLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -94,6 +98,15 @@ class InventoryLocationViewController: UIViewController {
 
     private func setupBindings() {
 
+        // Cancel Button
+         if self.presentingViewController != nil {
+            cancelButtonItem.rx.tap.asObservable()
+                .subscribe(onNext: { [weak self] _ in
+                    self?.navigationController?.dismiss(animated: true)
+                })
+                .disposed(by: disposeBag)
+        }
+
         // Uploading
         viewModel.isUploading
             .filter { $0 }
@@ -108,7 +121,11 @@ class InventoryLocationViewController: UIViewController {
                 case .next:
                     HUD.flash(.success, delay: 0.5) { _ in
                         /// TODO: handle this elsewhere
-                        self?.navigationController!.popViewController(animated: true)
+                        if self?.presentingViewController != nil {
+                            self?.navigationController?.dismiss(animated: true)
+                        } else {
+                            self?.navigationController!.popViewController(animated: true)
+                        }
                     }
                 case .error:
                     /// TODO: `case.error(let error):; switch error {}`

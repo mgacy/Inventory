@@ -30,6 +30,7 @@ class OrderContainerViewController: UIViewController {
 
     // MARK: - Interface
 
+    let cancelButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: nil, action: nil)
     let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneBarButton"), style: .done, target: nil, action: nil)
 
     private lazy var segmentedControl: UISegmentedControl = {
@@ -81,8 +82,10 @@ class OrderContainerViewController: UIViewController {
 
     private func setupView() {
         navigationItem.titleView = segmentedControl
-        //navigationItem.leftBarButtonItem =
         navigationItem.rightBarButtonItem = completeButtonItem
+        if self.presentingViewController != nil {
+            self.navigationItem.leftBarButtonItem = cancelButtonItem
+        }
         updateView()
     }
 
@@ -103,6 +106,15 @@ class OrderContainerViewController: UIViewController {
     //private func setupConstraints() {}
 
     private func setupBindings() {
+        // Cancel Button
+        if self.presentingViewController != nil {
+            cancelButtonItem.rx.tap.asObservable()
+                .subscribe(onNext: { [weak self] _ in
+                    self?.navigationController?.dismiss(animated: true)
+                })
+                .disposed(by: disposeBag)
+        }
+
         // Complete Order Alert
         viewModel.showAlert
             .drive(onNext: { [weak self] _ in
@@ -119,7 +131,11 @@ class OrderContainerViewController: UIViewController {
         // Navigation
         viewModel.popView
             .drive(onNext: { [weak self] in
-                self?.navigationController!.popViewController(animated: true)
+                if self?.presentingViewController != nil {
+                    self?.navigationController?.dismiss(animated: true)
+                } else {
+                    self?.navigationController!.popViewController(animated: true)
+                }
             })
             .disposed(by: disposeBag)
     }
