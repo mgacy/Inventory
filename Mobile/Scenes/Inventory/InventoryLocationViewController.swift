@@ -118,15 +118,7 @@ class InventoryLocationViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
-        /*
-        // Errors
-        viewModel.errorMessages
-            .drive(onNext: { [weak self] message in
-                log.error("Error: \(message)")
-                //self?.showAlert(title: Strings.errorAlertTitle, message: message)
-            })
-            .disposed(by: disposeBag)
-         */
+
         // Selection
         viewModel.showLocation
             .subscribe(onNext: { [weak self] selection in

@@ -20,7 +20,6 @@ struct InventoryLocationViewModel {
 
     // MARK: Properties
 
-    //private let dataManager: DataManager
     let dataManager: DataManager
     private let parentObject: Inventory
 
@@ -36,13 +35,9 @@ struct InventoryLocationViewModel {
 
     // MARK: - Output
     let frc: NSFetchedResultsController<InventoryLocation>
-    //let isRefreshing: Driver<Bool>
-    //let hasRefreshed: Driver<Bool>
     let isUploading: Driver<Bool>
-    //let hasUploaded: Driver<Bool>
     let uploadResults: Observable<Event<Inventory>>
     //let showTable: Driver<Bool>
-    //let errorMessages: Driver<String>
     let showLocation: Observable<InventoryLocationSegue>
 
     // MARK: - Lifecycle
@@ -78,17 +73,6 @@ struct InventoryLocationViewModel {
             }
             //.asDriver()
             //.share()
-        /*
-        // Errors
-        self.errorMessages = uploadResults
-            .errors()
-            .map { error in
-                log.debug("\(#function) ERROR : \(error)")
-                return "There was an error"
-            }
-            .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .never())
-         */
         // FetchRequest
         let request: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
         request.predicate = NSPredicate(format: "inventory == %@", parentObject)
