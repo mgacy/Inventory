@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PKHUD
 import RxCocoa
 import RxSwift
 
@@ -16,6 +17,37 @@ class HomeViewController: UIViewController {
         /// TODO: navTitle should be store name
         static let navTitle = "Home"
         static let errorAlertTitle = "Error"
+        static let newOrderTitle = "Create Order"
+        static let newOrderMessage = "Set order quantities from the most recent inventory or simply use pars?"
+    }
+
+    // MARK: - Alert
+    private enum GenerationMethod: CustomStringConvertible {
+        case count
+        case par
+        case cancel
+
+        var description: String {
+            switch self {
+            case .count:
+                return "From Count"
+            case .par:
+                return "From Par"
+            case .cancel:
+                return "Cancel"
+            }
+        }
+
+        var method: NewOrderGenerationMethod {
+            switch self {
+            case .count:
+                return NewOrderGenerationMethod.count
+            case .par:
+                return NewOrderGenerationMethod.par
+            default:
+                return NewOrderGenerationMethod.par
+            }
+        }
     }
 
     // MARK: - Properties
@@ -26,6 +58,9 @@ class HomeViewController: UIViewController {
     // MARK: - Interface
     let settingsButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Settings"), style: .plain, target: nil, action: nil)
 
+    @IBOutlet weak var addInventoryButton: UIButton!
+    @IBOutlet weak var addOrderButton: UIButton!
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -33,6 +68,7 @@ class HomeViewController: UIViewController {
         setupView()
         //setupConstraints()
         setupBindings()
+        bindViewModel()
         //setupTableView()
     }
 
@@ -45,43 +81,78 @@ class HomeViewController: UIViewController {
     // MARK: - View Methods
 
     private func setupView() {
-        title = Strings.navTitle
+        //title = Strings.navTitle
         self.navigationItem.leftBarButtonItem = settingsButtonItem
         //self.navigationItem.rightBarButtonItem =
     }
 
     //private func setupConstraints() {}
 
-    private func setupBindings() {
-        /*
-        // Refresh
-        refreshControl.rx.controlEvent(.valueChanged)
-            .bind(to: viewModel.refresh)
-            .disposed(by: disposeBag)
+    // swiftlint:disable:next function_body_length
+    private func bindViewModel() {
+        let inputs = HomeViewModel.Input(addInventoryTaps: addInventoryButton.rx.tap.asObservable(),
+                                         addOrderTaps: addOrderButton.rx.tap
+                                            // FIXME: is this safe?
+                                            .flatMap { [unowned self] _ in return self.mapAlert() })
+        let outputs = viewModel.transform(input: inputs)
 
-        // Activity Indicator
-        viewModel.isRefreshing
-            .drive(refreshControl.rx.isRefreshing)
-            .disposed(by: disposeBag)
-
-        viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
-            .drive(onNext: { [weak self] _ in
-                self?.tableView.reloadData()
+        outputs.storeName
+            .drive(onNext: { [weak self] name in
+                self?.title = name
             })
             .disposed(by: disposeBag)
 
-        // Errors
-        viewModel.errorMessages
+        outputs.isLoading
+            .drive(onNext: { status in
+                switch status {
+                case true:
+                    HUD.show(.progress)
+                case false:
+                    HUD.hide()
+                }
+            })
+            .disposed(by: disposeBag)
+
+        outputs.errorMessages
             .drive(onNext: { [weak self] message in
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
             })
             .disposed(by: disposeBag)
-         */
+
+        outputs.showInventory
+            .drive(onNext: { [weak self] inventory in
+                log.debug("Show Inventory view with: \(inventory)")
+                guard let strongSelf = self else {
+                    log.error("\(#function) FAILED : unable to get reference to self"); return
+                }
+                let vc = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
+                vc.viewModel = InventoryLocationViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                          parentObject: inventory, rowTaps: vc.selectedIndices,
+                                                          uploadTaps: vc.uploadButtonItem.rx.tap.asObservable())
+                let navigationController = UINavigationController(rootViewController: vc)
+                strongSelf.navigationController?.present(navigationController, animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+
+        outputs.showOrder
+            .subscribe(onNext: { [weak self] orderCollection in
+                guard let strongSelf = self else {
+                    log.error("\(#function) FAILED : unable to get reference to self"); return
+                }
+                let vc = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
+                vc.viewModel = OrderContainerViewModel(dataManager: strongSelf.viewModel.dataManager,
+                                                       parentObject: orderCollection,
+                                                       completeTaps: vc.completeButtonItem.rx.tap.asObservable())
+                let navigationController = UINavigationController(rootViewController: vc)
+                strongSelf.navigationController?.present(navigationController, animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func setupBindings() {
         // Navigation
         settingsButtonItem.rx.tap
             .subscribe(onNext: { [weak self] in
-                log.debug("Tapped settings button")
                 guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
                 let controller = SettingsViewController.initFromStoryboard(name: "SettingsViewController")
                 controller.viewModel = SettingsViewModel(dataManager: strongSelf.viewModel.dataManager,
@@ -92,17 +163,13 @@ class HomeViewController: UIViewController {
             })
             .disposed(by: disposeBag)
     }
-    /*
-    // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<HomeViewController>!
 
-    fileprivate func setupTableView() {
-        tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        //tableView.rowHeight = UITableViewAutomaticDimension
-        //tableView.estimatedRowHeight = 100
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+    private func mapAlert() -> Observable<NewOrderGenerationMethod> {
+        let actions: [GenerationMethod] = [.count, .par]
+        return promptFor(title: Strings.newOrderTitle, message: Strings.newOrderMessage, cancelAction: .cancel,
+                         actions: actions)
+            .filter { $0 != .cancel }
+            .map { $0.method }
     }
-    */
+
 }
