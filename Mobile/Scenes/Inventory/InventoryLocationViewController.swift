@@ -19,7 +19,7 @@ class InventoryLocationViewController: UIViewController {
     var viewModel: InventoryLocationViewModel!
     let disposeBag = DisposeBag()
 
-    let selectedObjects = PublishSubject<InventoryLocation>()
+    let selectedIndices = PublishSubject<IndexPath>()
 
     // TableViewCell
     let cellIdentifier = "InventoryLocationTableViewCell"
@@ -162,7 +162,7 @@ class InventoryLocationViewController: UIViewController {
 extension InventoryLocationViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
+        selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

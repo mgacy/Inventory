@@ -179,7 +179,7 @@ class InventoryDateViewController: UIViewController {
                     log.verbose("LOAD NEW selectedInventory from disk ...")
                     let vc = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
                     let vm = InventoryLocationViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                        parentObject: inventory, rowTaps: vc.selectedObjects,
+                                                        parentObject: inventory, rowTaps: vc.selectedIndices,
                                                         //uploadTaps: vc.uploadButtonItem.rx.tap.asDriver()
                                                         uploadTaps: vc.uploadButtonItem.rx.tap.asObservable()
                     )

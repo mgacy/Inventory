@@ -42,7 +42,7 @@ struct InventoryLocationViewModel {
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, parentObject: Inventory, rowTaps: Observable<InventoryLocation>, uploadTaps: Observable<Void>) {
+    init(dataManager: DataManager, parentObject: Inventory, rowTaps: Observable<IndexPath>, uploadTaps: Observable<Void>) {
         self.dataManager = dataManager
         self.parentObject = parentObject
 
@@ -58,8 +58,18 @@ struct InventoryLocationViewModel {
             }
             .share()
 
+        // FetchRequest
+        let request: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
+        request.predicate = NSPredicate(format: "inventory == %@", parentObject)
+        request.sortDescriptors = sortDescriptors
+        request.fetchBatchSize = fetchBatchSize
+        request.returnsObjectsAsFaults = false
+        let frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        self.frc = frc
+
         // Navigation
         self.showLocation = rowTaps
+            .map { frc.object(at: $0) }
             .map { selection in
                 log.debug("Selected: \(selection)")
                 switch selection.locationType {
@@ -73,13 +83,6 @@ struct InventoryLocationViewModel {
             }
             //.asDriver()
             //.share()
-        // FetchRequest
-        let request: NSFetchRequest<InventoryLocation> = InventoryLocation.fetchRequest()
-        request.predicate = NSPredicate(format: "inventory == %@", parentObject)
-        request.sortDescriptors = sortDescriptors
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
     }
 
 }
