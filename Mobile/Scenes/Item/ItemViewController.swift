@@ -29,6 +29,8 @@ class ItemViewController: UIViewController {
 
     // MARK: - Interface
     private let refreshControl = UIRefreshControl()
+    @IBOutlet weak var tableView: UITableView!
+    /*
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -36,13 +38,13 @@ class ItemViewController: UIViewController {
         tv.delegate = self
         return tv
     }()
-
+    */
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupConstraints()
+        //setupConstraints()
         setupBindings()
         setupTableView()
     }
@@ -61,7 +63,7 @@ class ItemViewController: UIViewController {
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
 
-        self.view.addSubview(tableView)
+        //self.view.addSubview(tableView)
     }
 
     private func setupConstraints() {
@@ -105,6 +107,7 @@ class ItemViewController: UIViewController {
     fileprivate var dataSource: TableViewDataSource<ItemViewController>!
 
     fileprivate func setupTableView() {
+        tableView.delegate = self
         tableView.refreshControl = refreshControl
         tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension

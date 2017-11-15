@@ -246,14 +246,29 @@
                     <view key="view" contentMode="scaleToFill" id="msO-U0-tUQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Kdb-xU-DyU">
+                                <rect key="frame" x="0.0" y="116" width="375" height="502"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Kdb-xU-DyU" firstAttribute="leading" secondItem="Kig-Gg-2lB" secondAttribute="leading" id="1aM-98-y8Z"/>
+                            <constraint firstItem="Kdb-xU-DyU" firstAttribute="trailing" secondItem="Kig-Gg-2lB" secondAttribute="trailing" id="48A-8Z-NwK"/>
+                            <constraint firstItem="Kdb-xU-DyU" firstAttribute="top" secondItem="Kig-Gg-2lB" secondAttribute="top" id="MSf-ZK-VcA"/>
+                            <constraint firstItem="Kdb-xU-DyU" firstAttribute="bottom" secondItem="Kig-Gg-2lB" secondAttribute="bottom" id="j2z-Uj-3Yp"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Kig-Gg-2lB"/>
                     </view>
                     <navigationItem key="navigationItem" id="RdG-9C-dth"/>
+                    <connections>
+                        <outlet property="tableView" destination="Kdb-xU-DyU" id="5Dp-XW-2lh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JTe-Qh-dcw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2089" y="2809"/>
+            <point key="canvasLocation" x="2088.8000000000002" y="2808.8455772113944"/>
         </scene>
         <!--InitialLogin-->
         <scene sceneID="koq-0d-6Dk">
