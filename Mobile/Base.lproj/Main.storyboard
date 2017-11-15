@@ -50,10 +50,38 @@
                     <view key="view" contentMode="scaleToFill" id="T52-iS-z2H">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="v7v-d2-uJ3">
+                                <rect key="frame" x="12" y="564" width="351" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZCW-WT-Aiv" userLabel="Inventory">
+                                        <rect key="frame" x="0.0" y="0.0" width="169.5" height="30"/>
+                                        <state key="normal" title="+ Inventory"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FPz-Jd-4m3" userLabel="Order">
+                                        <rect key="frame" x="181.5" y="0.0" width="169.5" height="30"/>
+                                        <state key="normal" title="+ Order"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="FPz-Jd-4m3" firstAttribute="width" secondItem="ZCW-WT-Aiv" secondAttribute="width" id="D0k-II-m57"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bXG-HS-bgw" firstAttribute="bottom" secondItem="v7v-d2-uJ3" secondAttribute="bottom" constant="24" id="5bH-Hv-8Id"/>
+                            <constraint firstItem="v7v-d2-uJ3" firstAttribute="leading" secondItem="bXG-HS-bgw" secondAttribute="leading" constant="12" id="65E-L0-qgL"/>
+                            <constraint firstItem="bXG-HS-bgw" firstAttribute="trailing" secondItem="v7v-d2-uJ3" secondAttribute="trailing" constant="12" id="Uct-2y-0ZI"/>
+                            <constraint firstItem="v7v-d2-uJ3" firstAttribute="centerX" secondItem="bXG-HS-bgw" secondAttribute="centerX" id="g4O-Bb-shx"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="bXG-HS-bgw"/>
                     </view>
                     <navigationItem key="navigationItem" id="RCx-Lz-Fkj"/>
+                    <connections>
+                        <outlet property="addInventoryButton" destination="ZCW-WT-Aiv" id="jUZ-xX-YOY"/>
+                        <outlet property="addOrderButton" destination="FPz-Jd-4m3" id="KyV-lG-eJr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="giW-TU-27K" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
