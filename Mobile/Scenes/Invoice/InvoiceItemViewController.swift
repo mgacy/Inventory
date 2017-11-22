@@ -112,7 +112,7 @@ class InvoiceItemViewController: UIViewController {
     }
 
     // MARK: - Navigation
-
+    /*
     fileprivate func showKeypad(withIndexPath indexPath: IndexPath) {
         guard let destinationController = InvoiceKeypadViewController.instance() else {
             fatalError("\(#function) FAILED: unable to get destination view controller.")
@@ -121,7 +121,7 @@ class InvoiceItemViewController: UIViewController {
                                                                  for: viewModel.parentObject, atIndex: indexPath.row)
         navigationController?.pushViewController(destinationController, animated: true)
     }
-
+    */
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceItemViewController>!
 

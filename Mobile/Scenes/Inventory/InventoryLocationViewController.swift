@@ -135,7 +135,7 @@ class InventoryLocationViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
-
+        /*
         // Selection
         viewModel.showLocation
             .subscribe(onNext: { [weak self] selection in
@@ -157,6 +157,7 @@ class InventoryLocationViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
+        */
     }
 
     // MARK: - TableViewDataSource

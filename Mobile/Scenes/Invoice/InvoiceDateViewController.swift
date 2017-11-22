@@ -141,7 +141,7 @@ class InvoiceDateViewController: UIViewController {
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
             })
             .disposed(by: disposeBag)
-
+        /*
         // Navigation
         viewModel.showCollection
             .subscribe(onNext: { [weak self] selection in
@@ -156,6 +156,7 @@ class InvoiceDateViewController: UIViewController {
                 strongSelf.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+        */
     }
 
     // MARK: - TableViewDataSource

@@ -160,7 +160,7 @@ class InventoryDateViewController: UIViewController {
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
             })
             .disposed(by: disposeBag)
-
+        /*
         // Navigation
         viewModel.showInventory
             .subscribe(onNext: { [weak self] transition in
@@ -188,6 +188,7 @@ class InventoryDateViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
+            */
     }
 
     // MARK: - TableViewDataSource
