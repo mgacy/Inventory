@@ -36,7 +36,7 @@ struct InvoiceItemViewModel {
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, parentObject: Invoice, rowTaps: Observable<InvoiceItem>, uploadTaps: Observable<Void>) {
+    init(dataManager: DataManager, parentObject: Invoice, uploadTaps: Observable<Void>) {
         self.dataManager = dataManager
         self.parentObject = parentObject
 
