@@ -127,8 +127,6 @@ class InitialLoginViewController: UIViewController, SegueHandler {
                         self?.performSegue(withIdentifier: .showMain)
                     }
                 case .error(let error):
-                    //UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: Strings.loginErrorMessage)
-
                     switch error as? BackendError {
                     case .authentication?:
                         UIViewController.showErrorInHUD(title: Strings.errorAlertTitle,

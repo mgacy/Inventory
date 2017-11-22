@@ -58,8 +58,6 @@ class TabBarCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        log.debug("\(#function)")
-
         let tabBarController = UITabBarController()
         let tabs: [SectionTab] = [.home, .inventory, .order, .invoice, .item]
         let coordinationResults = Observable.from(configure(tabBarController: tabBarController, withTabs: tabs)).merge()
@@ -67,7 +65,6 @@ class TabBarCoordinator: BaseCoordinator<Void> {
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()
 
-        //return Observable.never()
         return coordinationResults
     }
 
@@ -84,29 +81,25 @@ class TabBarCoordinator: BaseCoordinator<Void> {
 
         tabBarController.viewControllers = navControllers
         tabBarController.view.backgroundColor = UIColor.white  // Fix dark shadow in nav bar on segue
-        //window.rootViewController = tabBarController
 
         return zip(tabs, navControllers)
-            .map { (tab, nc) in
+            .map { (tab, navCtrl) in
                 switch tab {
                 case .home:
-                    let coordinator = HomeCoordinator(navigationController: nc, dataManager: dataManager)
+                    let coordinator = HomeCoordinator(navigationController: navCtrl, dataManager: dataManager)
                     return coordinate(to: coordinator)
-                    //return Observable.just(())
                 case .inventory:
-                    let coordinator = InventoryCoordinator(navigationController: nc, dataManager: self.dataManager)
+                    let coordinator = InventoryCoordinator(navigationController: navCtrl, dataManager: self.dataManager)
                     return coordinate(to: coordinator)
                 case .order:
-                    let coordinator = OrderCoordinator(navigationController: nc, dataManager: dataManager)
+                    let coordinator = OrderCoordinator(navigationController: navCtrl, dataManager: dataManager)
                     return coordinate(to: coordinator)
                 case .invoice:
-                    let coordinator = InvoiceCoordinator(navigationController: nc, dataManager: dataManager)
+                    let coordinator = InvoiceCoordinator(navigationController: navCtrl, dataManager: dataManager)
                     return coordinate(to: coordinator)
-                    //return Observable.just(())
                 case .item:
-                    let coordinator = ItemCoordinator(navigationController: nc, dataManager: dataManager)
+                    let coordinator = ItemCoordinator(navigationController: navCtrl, dataManager: dataManager)
                     return coordinate(to: coordinator)
-                    //return Observable.just(())
                 }
             }
     }

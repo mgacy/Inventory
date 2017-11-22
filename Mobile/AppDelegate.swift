@@ -8,8 +8,8 @@
 
 import UIKit
 import CoreData
-import SwiftyBeaver
 import PKHUD
+import SwiftyBeaver
 
 let log = SwiftyBeaver.self
 

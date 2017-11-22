@@ -36,8 +36,6 @@ final class HomeViewModel: ViewModelType {
         self.dataManager = dataManager
     }
 
-    // Note that this is not a pure function given our dependencies; we could pass dependencies to `bindViewModel()` on
-    // controller if we called that from the Coordinator / Router
     func transform(input: Input) -> Output {
 
         // FIXME: actually get this from somewhere
