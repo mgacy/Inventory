@@ -8,49 +8,51 @@
 
 import RxSwift
 
-enum SectionTab {
-    case home
-    case inventory
-    case order
-    case invoice
-    case item
-
-    var title: String {
-        switch self {
-        case .home: return "Home"
-        case .inventory: return "Inventory"
-        case .order: return "Order"
-        case .invoice: return "Invoice"
-        case .item: return "Item"
-        }
-    }
-
-    var image: UIImage {
-        switch self {
-        case .home: return #imageLiteral(resourceName: "homeTab")
-        case .inventory: return #imageLiteral(resourceName: "inventoryTab")
-        case .order: return #imageLiteral(resourceName: "orderTab")
-        case .invoice: return #imageLiteral(resourceName: "invoiceTab")
-        case .item: return #imageLiteral(resourceName: "itemTab")
-        }
-    }
-
-    var tag: Int {
-        switch self {
-        case .home: return 0
-        case .inventory: return 1
-        case .order: return 2
-        case .invoice: return 3
-        case .item: return 4
-        }
-    }
-}
-
 class TabBarCoordinator: BaseCoordinator<Void> {
 
     private let window: UIWindow
     private let dataManager: DataManager
     //private let splitViewController: UISplitViewController
+
+    enum SectionTab {
+        case home
+        case inventory
+        case order
+        case invoice
+        case item
+
+        var title: String {
+            switch self {
+            case .home: return "Home"
+            case .inventory: return "Inventory"
+            case .order: return "Order"
+            case .invoice: return "Invoice"
+            case .item: return "Item"
+            }
+        }
+
+        var image: UIImage {
+            switch self {
+            case .home: return #imageLiteral(resourceName: "homeTab")
+            case .inventory: return #imageLiteral(resourceName: "inventoryTab")
+            case .order: return #imageLiteral(resourceName: "orderTab")
+            case .invoice: return #imageLiteral(resourceName: "invoiceTab")
+            case .item: return #imageLiteral(resourceName: "itemTab")
+            }
+        }
+
+        var tag: Int {
+            switch self {
+            case .home: return 0
+            case .inventory: return 1
+            case .order: return 2
+            case .invoice: return 3
+            case .item: return 4
+            }
+        }
+    }
+
+    // MARK: - Lifecycle
 
     init(window: UIWindow, dataManager: DataManager) {
         self.window = window
