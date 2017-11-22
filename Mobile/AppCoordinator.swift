@@ -13,20 +13,21 @@ import RxSwift
 class AppCoordinator: BaseCoordinator<Void> {
 
     private let window: UIWindow
-    private var persistentContainer: NSPersistentContainer!
-    //private let userManager: UserManager
-    //private let dataManager: DataManager
+    //private var persistentContainer: NSPersistentContainer!
+    private let userManager: CurrentUserManager
+    private let dataManager: DataManager
 
-    init(window: UIWindow, container: NSPersistentContainer) {
+    init(window: UIWindow, userManager: CurrentUserManager, dataManager: DataManager) {
         self.window = window
-        self.persistentContainer = container
+        self.userManager = userManager
+        self.dataManager = dataManager
     }
 
     // NOTE: this will return whatever `to.start()` returns
     override func start() -> Observable<Void> {
         log.debug("\(#function)")
-        let userManager = CurrentUserManager()
-        let dataManager = DataManager(container: persistentContainer, userManager: userManager)
+        //let userManager = CurrentUserManager()
+        //let dataManager = DataManager(container: persistentContainer, userManager: userManager)
 
         // Check if we already have user + credentials
         if userManager.user != nil {
@@ -36,8 +37,11 @@ class AppCoordinator: BaseCoordinator<Void> {
 
         } else {
             log.debug("Missing User")
-            //let loginCoordinator = LoginCoordinator(window: window, dataManager: dataManager)
+            let loginCoordinator = InitialLoginCoordinator(window: window, dataManager: dataManager)
             //return coordinate(to: loginCoordinator)
+            loginCoordinator.start()
+                .subscribe()
+                .disposed(by: disposeBag)
         }
 
         /*
@@ -79,10 +83,9 @@ class AppCoordinator: BaseCoordinator<Void> {
 
         }
         */
-
         return Observable.never()
     }
-
+    /*
     // MARK: - Core Data stack
     /// TODO: move into separate object
 
@@ -110,11 +113,11 @@ class AppCoordinator: BaseCoordinator<Void> {
                 self.destroyStore(for: self.configuredContainer)
                 self.createPersistentContainer(migrating: true, progress: progress, completion: completion)
                 /*
-                 DispatchQueue.global(qos: .userInitiated).async {
-                 self.destroyStore(for: self.configuredContainer)
-                 self.createPersistentContainer(migrating: true, progress: progress, completion: completion)
-                 }
-                 */
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.destroyStore(for: self.configuredContainer)
+                    self.createPersistentContainer(migrating: true, progress: progress, completion: completion)
+                }
+                */
             }
         }
     }
@@ -150,5 +153,5 @@ class AppCoordinator: BaseCoordinator<Void> {
             }
         }
     }
-
+    */
 }

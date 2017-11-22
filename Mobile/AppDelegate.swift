@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import PKHUD
+import RxSwift
 import SwiftyBeaver
 
 let log = SwiftyBeaver.self
@@ -17,9 +18,9 @@ let log = SwiftyBeaver.self
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var persistentContainer: NSPersistentContainer!
-    var dataManager: DataManager!
-    var userManager: CurrentUserManager!
     var window: UIWindow?
+    private var appCoordinator: AppCoordinator!
+    private let disposeBag = DisposeBag()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         let defaults = UserDefaults.standard
@@ -44,31 +45,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
             /// TODO: initialize a SessionManager here and pass to different components
-            self.userManager = CurrentUserManager()
-            let dataManager = DataManager(container: container, userManager: self.userManager)
-            self.dataManager = dataManager
+            let userManager = CurrentUserManager()
+            let dataManager = DataManager(container: container, userManager: userManager)
 
             // View Stuff
-
             self.window = UIWindow(frame: UIScreen.main.bounds)
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
             HUD.dimsBackground = false
             HUD.allowsInteraction = false
 
-            // Check if we already have user + credentials
-            if self.userManager.user != nil {
-                let tabBarController = self.prepareTabBarController(dataManager: dataManager)
-                self.window?.rootViewController = tabBarController
-            } else {
-                guard let loginController = storyboard.instantiateViewController(
-                    withIdentifier: "InitialLoginViewController") as? InitialLoginViewController else {
-                        fatalError("Unable to instantiate view controller")
-                }
-                loginController.viewModel = InitialLoginViewModel(dataManager: dataManager)
-                self.window?.rootViewController = loginController
-            }
-            self.window?.makeKeyAndVisible()
+            self.appCoordinator = AppCoordinator(window: self.window!, userManager: userManager,
+                                                 dataManager: dataManager)
+            self.appCoordinator.start()
+                .subscribe()
+                .disposed(by: self.disposeBag)
         }
         return true
     }
