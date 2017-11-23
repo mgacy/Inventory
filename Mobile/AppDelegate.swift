@@ -57,6 +57,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                  dataManager: dataManager)
             self.appCoordinator.start()
                 .subscribe()
+                //.subscribe(onNext: { result in
+                //    log.debug("\(#function) : next : \(result)")
+                //})
                 .disposed(by: self.disposeBag)
         }
         return true
