@@ -12,7 +12,7 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-class InitialLoginViewController: UIViewController, SegueHandler {
+class InitialLoginViewController: UIViewController {
 
     private enum Strings {
         static let errorAlertTitle = "Error"
@@ -29,16 +29,6 @@ class InitialLoginViewController: UIViewController, SegueHandler {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signupButton: UIButton!
-
-    // Segue
-    enum SegueIdentifier: String {
-        //case showInventories = "showInventories"
-        //case showOrders = "showOrders"
-        //case showInvoices = "showInvoices"
-        //case showSettings = "showSettings"
-        case showMain = "showTabController"
-        case showSignUp = "showSignUpController"
-    }
 
     // MARK: Lifecycle
 
@@ -140,29 +130,6 @@ class InitialLoginViewController: UIViewController, SegueHandler {
             })
             .disposed(by: disposeBag)
     }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segueIdentifier(for: segue) {
-        case .showMain:
-
-            // swiftlint:disable:next force_cast
-            let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-            let tabBarController = appDelegate.prepareTabBarController(dataManager: appDelegate.dataManager)
-            appDelegate.window?.rootViewController = tabBarController
-
-        case .showSignUp:
-            guard
-                let destinationNavController = segue.destination as? UINavigationController,
-                let destinationController = destinationNavController.topViewController as? InitialSignUpViewController
-                else {
-                    fatalError("\(#function) FAILED : unable to get destination")
-            }
-            destinationController.viewModel = InitialSignUpViewModel(dataManager: viewModel.dataManager)
-        }
-    }
-
 }
 
 // MARK: - UITextFieldDelegate
