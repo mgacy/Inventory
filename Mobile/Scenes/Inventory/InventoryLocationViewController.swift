@@ -135,29 +135,6 @@ class InventoryLocationViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
-        /*
-        // Selection
-        viewModel.showLocation
-            .subscribe(onNext: { [weak self] selection in
-                guard let strongSelf = self else {
-                    log.error("\(#function) FAILED : unable to get reference to self"); return
-                }
-                switch selection {
-                //case .back:
-                case .category(let location):
-                    let controller = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
-                    controller.viewModel = InventoryLocCatViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                                    parentObject: location)
-                    strongSelf.navigationController?.pushViewController(controller, animated: true)
-                case .item(let location):
-                    let controller = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
-                    controller.viewModel = InventoryLocItemViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                                     parentObject: .location(location))
-                    strongSelf.navigationController?.pushViewController(controller, animated: true)
-                }
-            })
-            .disposed(by: disposeBag)
-        */
     }
 
     // MARK: - TableViewDataSource

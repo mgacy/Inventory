@@ -141,22 +141,6 @@ class InvoiceDateViewController: UIViewController {
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
             })
             .disposed(by: disposeBag)
-        /*
-        // Navigation
-        viewModel.showCollection
-            .subscribe(onNext: { [weak self] selection in
-                guard let strongSelf = self else {
-                    log.error("\(#function) FAILED : unable to get reference to self"); return
-                }
-                log.debug("\(#function) SELECTED: \(selection)")
-
-                let vc = InvoiceVendorViewController.initFromStoryboard(name: "InvoiceVendorViewController")
-                let vm = InvoiceVendorViewModel(dataManager: strongSelf.viewModel.dataManager, parentObject: selection)
-                vc.viewModel = vm
-                strongSelf.navigationController?.pushViewController(vc, animated: true)
-            })
-            .disposed(by: disposeBag)
-        */
     }
 
     // MARK: - TableViewDataSource

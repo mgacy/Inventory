@@ -21,7 +21,7 @@ class InvoiceVendorViewController: UIViewController {
 
     var viewModel: InvoiceVendorViewModel!
     let disposeBag = DisposeBag()
-    //let selectedObjects = PublishSubject<IndexPath>()
+    let selectedObjects = PublishSubject<Invoice>()
 
     // TableViewCell
     let cellIdentifier = "Cell"
@@ -79,25 +79,13 @@ class InvoiceVendorViewController: UIViewController {
                                          fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    // MARK: - Navigation
-
-    fileprivate func showInvoice(withInvoice invoice: Invoice) {
-        let vc = InvoiceItemViewController.initFromStoryboard(name: "InvoiceItemViewController")
-        vc.viewModel = InvoiceItemViewModel(dataManager: viewModel.dataManager, parentObject: invoice,
-                                            uploadTaps: vc.uploadButtonItem.rx.tap.asObservable())
-        navigationController?.pushViewController(vc, animated: true)
-    }
-
 }
 
 // MARK: - UITableViewDelegate
 extension InvoiceVendorViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected Invoice: \(selectedObject)")
-        showInvoice(withInvoice: selectedObject)
-        //selectedObjects.onNext(selectedObject)
+        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
