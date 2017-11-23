@@ -100,20 +100,6 @@ class OrderItemViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
-
-        // Selection
-        //viewModel.showKeypad
-    }
-
-    // MARK: - Navigation
-
-    fileprivate func showKeypad(withIndexPath indexPath: IndexPath) {
-        guard let destinationController = OrderKeypadViewController.instance() else {
-            fatalError("\(#function) FAILED : unable to get destination view controller.")
-        }
-        destinationController.viewModel = OrderKeypadViewModel(dataManager: viewModel.dataManager,
-                                                               for: viewModel.order, atIndex: indexPath.row)
-        navigationController?.pushViewController(destinationController, animated: true)
     }
 
     // MARK: - TableViewDataSource

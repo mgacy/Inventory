@@ -74,22 +74,6 @@ class OrderLocCatViewController: UIViewController {
                 cell.textLabel?.text = element.name
             }
             .disposed(by: disposeBag)
-
-        // Navigation
-        tableView.rx
-            .modelSelected(RemoteItemCategory.self)
-            .subscribe(onNext: { [weak self] category in
-                log.debug("We selected: \(category)")
-                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
-                guard let controller = OrderLocItemViewController.instance() else {
-                    fatalError("\(#function) FAILED : unable to get view controller")
-                }
-                controller.viewModel = OrderLocItemViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                             parent: OrderLocItemParent.category(category),
-                                                             factory: strongSelf.viewModel.factory)
-                strongSelf.navigationController?.pushViewController(controller, animated: true)
-            })
-            .disposed(by: disposeBag)
     }
 
 }

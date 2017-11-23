@@ -71,7 +71,6 @@ class OrderLocationViewController: UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
-    // swiftlint:disable:next function_body_length
     private func setupBindings() {
         /*
         // Refresh
@@ -112,34 +111,6 @@ class OrderLocationViewController: UIViewController {
             .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier)) { _, element, cell in
                 cell.textLabel?.text = element.name
             }
-            .disposed(by: disposeBag)
-
-        // Navigation
-        tableView.rx
-            .modelSelected(RemoteLocation.self)
-            .subscribe(onNext: { [weak self] location in
-                //log.debug("We selected: \(location)")
-                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
-
-                switch location.locationType {
-                case .category:
-                    guard let controller = OrderLocCatViewController.instance() else {
-                        fatalError("\(#function) FAILED : unable to get view controller")
-                    }
-                    controller.viewModel = OrderLocCatViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                                location: location,
-                                                                factory: strongSelf.viewModel.factory)
-                    strongSelf.navigationController?.pushViewController(controller, animated: true)
-                case .item:
-                    guard let controller = OrderLocItemViewController.instance() else {
-                        fatalError("\(#function) FAILED : unable to get view controller")
-                    }
-                    controller.viewModel = OrderLocItemViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                                 parent: OrderLocItemParent.location(location),
-                                                                 factory: strongSelf.viewModel.factory)
-                    strongSelf.navigationController?.pushViewController(controller, animated: true)
-                }
-            })
             .disposed(by: disposeBag)
     }
 
