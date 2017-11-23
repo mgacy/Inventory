@@ -11,7 +11,7 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-class InitialSignUpViewController: UIViewController, SegueHandler {
+class InitialSignUpViewController: UIViewController {
 
     enum Strings {
         static let navTitle = "Signup"
@@ -25,15 +25,9 @@ class InitialSignUpViewController: UIViewController, SegueHandler {
     var viewModel: InitialSignUpViewModel!
     let disposeBag = DisposeBag()
 
-    // Segue
-    enum SegueIdentifier: String {
-        case showMain = "showTabController"
-        //case showInventories = "showInventories"
-        //case showLogin = "showLogin"
-    }
 
     // MARK: Interface
-    //private let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: nil)
+    let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: nil)
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var loginTextField: UITextField!
@@ -44,7 +38,7 @@ class InitialSignUpViewController: UIViewController, SegueHandler {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //setupView()
+        setupView()
         //setupConstraints()
         setupBindings()
     }
@@ -54,7 +48,7 @@ class InitialSignUpViewController: UIViewController, SegueHandler {
     // MARK: - View Methods
 
     private func setupView() {
-        //self.navigationItem.leftBarButtonItem = cancelButton
+        self.navigationItem.leftBarButtonItem = cancelButton
     }
 
     // private func setupConstraints() {}
@@ -117,33 +111,7 @@ class InitialSignUpViewController: UIViewController, SegueHandler {
             })
             .disposed(by: disposeBag)
 
-    }
 
-    // MARK: - User interaction
-
-    @IBAction func cancel(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segueIdentifier(for: segue) {
-        case .showMain:
-            guard
-                let tabBarController = segue.destination as? UITabBarController,
-                let inventoryNavController = tabBarController.viewControllers![0] as? UINavigationController,
-                let controller = inventoryNavController.topViewController as? InventoryDateViewController
-            else {
-                fatalError("Wrong view controller type")
-            }
-            controller.viewModel = InventoryDateViewModel(dataManager: viewModel.dataManager,
-                                                          rowTaps: controller.selectedObjects.asObservable())
-
-            // Sync with completion handler from the new view controller.
-            //_ = SyncManager(context: managedObjectContext, storeID: userManager.storeID!,
-            //                completionHandler: controller.completedSync)
-        }
     }
 
 }
