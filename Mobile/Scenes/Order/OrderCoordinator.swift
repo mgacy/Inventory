@@ -12,7 +12,6 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     private let navigationController: UINavigationController
     private let dataManager: DataManager
-    var factory: OrderLocationFactory?
 
     init(navigationController: UINavigationController, dataManager: DataManager) {
         self.navigationController = navigationController
@@ -20,17 +19,14 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        log.debug("\(#function)")
+        //log.debug("\(#function)")
         let viewController = OrderDateViewController.initFromStoryboard(name: "Main")
         let viewModel = OrderDateViewModel(dataManager: dataManager,
                                            rowTaps: viewController.selectedObjects.asObservable())
         viewController.viewModel = viewModel
-
-        //let navigationController = UINavigationController(rootViewController: viewController)
-        //navigationController.setViewControllers([viewController], animated: true)
         navigationController.viewControllers = [viewController]
 
-        // Selction
+        // Selection
         viewModel.showCollection
             .subscribe(onNext: { [weak self] selection in
                 log.debug("\(#function) SELECTED / CREATED: \(selection)")
@@ -49,13 +45,13 @@ class OrderCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     func showContainer(collection: OrderCollection) {
+        let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
         let viewController = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
         let viewModel = OrderContainerViewModel(dataManager: dataManager, parentObject: collection,
                                                 completeTaps: viewController.completeButtonItem.rx.tap.asObservable())
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
-        self.factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
 
         // Selection
         /// TODO: how to handle this?
