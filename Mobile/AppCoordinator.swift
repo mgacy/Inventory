@@ -25,9 +25,7 @@ class AppCoordinator: BaseCoordinator<Void> {
 
     // NOTE: this will return whatever `to.start()` returns
     override func start() -> Observable<Void> {
-        log.debug("\(#function)")
-        //let userManager = CurrentUserManager()
-        //let dataManager = DataManager(container: persistentContainer, userManager: userManager)
+        //log.debug("\(#function)")
 
         // Check if we already have user + credentials
         if userManager.user != nil {
@@ -37,11 +35,12 @@ class AppCoordinator: BaseCoordinator<Void> {
 
         } else {
             log.debug("Missing User")
-            let loginCoordinator = InitialLoginCoordinator(window: window, dataManager: dataManager)
-            //return coordinate(to: loginCoordinator)
-            loginCoordinator.start()
-                .subscribe()
-                .disposed(by: disposeBag)
+            return showLogin()
+                .flatMap { [weak self] result -> Observable<Void> in
+                    //log.debug("\(#function) - result: \(result)")
+                    guard let strongSelf = self else { return .empty() }
+                    return strongSelf.showTabBar()
+                }
         }
 
         /*
@@ -83,8 +82,18 @@ class AppCoordinator: BaseCoordinator<Void> {
 
         }
         */
-        return Observable.never()
     }
+
+    private func showTabBar() -> Observable<Void> {
+        let tabBarCoordinator = TabBarCoordinator(window: self.window, dataManager: self.dataManager)
+        return coordinate(to: tabBarCoordinator)
+    }
+
+    private func showLogin() -> Observable<Void> {
+        let loginCoordinator = InitialLoginCoordinator(window: window, dataManager: dataManager)
+        return coordinate(to: loginCoordinator)
+    }
+
     /*
     // MARK: - Core Data stack
     /// TODO: move into separate object

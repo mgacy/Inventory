@@ -18,7 +18,7 @@ class InitialLoginCoordinator: BaseCoordinator<Void> {
         self.dataManager = dataManager
     }
 
-    override func start() -> Observable<Void> {
+    override func start() -> Observable<CoordinationResult> {
         let viewController = InitialLoginViewController.initFromStoryboard(name: "Main")
         let viewModel = InitialLoginViewModel(dataManager: dataManager)
         viewController.viewModel = viewModel
@@ -26,48 +26,28 @@ class InitialLoginCoordinator: BaseCoordinator<Void> {
         window.rootViewController = viewController
         window.makeKeyAndVisible()
 
-        viewController.didLogin
-            .subscribe(onNext: { [weak self] _ in
-                log.debug("We should showMain")
-                self?.showMain()
-            })
-            .disposed(by: disposeBag)
+        let signedUp = viewController.signupButton.rx.tap
+            .flatMap { _ -> Observable<SignupCoordinationResult> in
+                //log.debug("Tapped signupButton")
+                return self.showSignup(on: viewController)
+            }
+            .filter { $0 != SignupCoordinationResult.cancel }
+            .flatMap { _ in
+                return Observable.just(())
+            }
 
-        viewController.signupButton.rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                log.debug("Tapped signupButton")
-                self?.showSignup(from: viewController)
-            })
-            .disposed(by: disposeBag)
-
-        return Observable.never()
+        return Observable.merge(viewController.didLogin, signedUp)
+            .take(1)
+            //.do(onNext: { log.debug("\(#function)") })
     }
 
     // MARK: - Sections
 
-    private func showMain() {
-        log.debug("\(#function)")
-    }
-
-    private func showSignup(from presentingViewController: UIViewController) {
-        log.debug("\(#function)")
-        let viewController = InitialSignUpViewController.initFromStoryboard(name: "Main")
-        let viewModel = InitialSignUpViewModel(dataManager: dataManager)
-        viewController.viewModel = viewModel
-
-        let navigationController = UINavigationController(rootViewController: viewController)
-        presentingViewController.present(navigationController, animated: true, completion: nil)
-
-        // cancelButton
-        viewController.cancelButton.rx.tap
-            .subscribe(onNext: { _ in
-                log.debug("Dismissing ...")
-                viewController.dismiss(animated: true, completion: nil)
-            })
-            .disposed(by: disposeBag)
-
-        // didSignup
-
+    private func showSignup(on rootViewController: UIViewController) -> Observable<SignupCoordinationResult> {
+        //log.debug("\(#function)")
+        let signupCoordinator = SignupCoordinator(rootViewController: rootViewController, dataManager: self.dataManager)
+        return coordinate(to: signupCoordinator)
+            //.filter { $0 != .cancel }
     }
 
 }
