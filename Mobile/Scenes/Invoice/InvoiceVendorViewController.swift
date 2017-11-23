@@ -22,6 +22,8 @@ class InvoiceVendorViewController: UIViewController {
     var viewModel: InvoiceVendorViewModel!
     let disposeBag = DisposeBag()
     let selectedObjects = PublishSubject<Invoice>()
+    //let selectedObjects: Observable<Invoice>
+    //fileprivate let _selectedObjects = PublishSubject<Invoice>()
 
     // TableViewCell
     let cellIdentifier = "Cell"
@@ -37,6 +39,11 @@ class InvoiceVendorViewController: UIViewController {
     }()
 
     // MARK: - Lifecycle
+
+    //required init?(coder aDecoder: NSCoder) {
+    //    self.selectedObjects = _selectedObjects.asObservable()
+    //    super.init(coder: aDecoder)
+    //}
 
     override func viewDidLoad() {
         super.viewDidLoad()
