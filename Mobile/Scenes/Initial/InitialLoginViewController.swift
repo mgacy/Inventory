@@ -21,8 +21,12 @@ class InitialLoginViewController: UIViewController {
 
     // MARK: Properties
 
+    private typealias Input = InitialLoginViewModel.Input
     var viewModel: InitialLoginViewModel!
     let disposeBag = DisposeBag()
+
+    fileprivate let _didLogin = PublishSubject<Void>()
+    let didLogin: Observable<Void>
 
     // MARK: Interface
     @IBOutlet weak var loginTextField: UITextField!
@@ -32,15 +36,16 @@ class InitialLoginViewController: UIViewController {
 
     // MARK: Lifecycle
 
+    required init?(coder aDecoder: NSCoder) {
+        self.didLogin = _didLogin.asObservable()
+        super.init(coder: aDecoder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         //setupConstraints()
-        setupBindings()
-
-        if let user = viewModel.currentUser {
-            loginTextField.text = user.email
-        }
+        bindViewModel()
     }
 
     // override func didReceiveMemoryWarning() {}
@@ -62,59 +67,42 @@ class InitialLoginViewController: UIViewController {
     //private func setupConstraints() {}
 
     // swiftlint:disable:next function_body_length
-    private func setupBindings() {
-        loginTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.username)
-            .disposed(by: disposeBag)
+    private func bindViewModel() {
+        let inputs = Input(
+            username: loginTextField.rx.text.orEmpty.asObservable(),
+            password: passwordTextField.rx.text.orEmpty.asObservable(),
+            loginTaps: loginButton.rx.tap.asObservable(),
+            doneTaps: passwordTextField.rx.controlEvent(.editingDidEndOnExit).asObservable()
+        )
+        let outputs = viewModel.transform(input: inputs)
 
-        loginTextField.rx.controlEvent(.editingDidEndOnExit)
-            .subscribe(onNext: { _ in
-                self.passwordTextField.becomeFirstResponder()
+        outputs.currentUser
+            .flatMap { $0 == nil ? Observable.empty() : Observable.just($0!) }
+            .map { return $0.email }
+            .subscribe(onNext: { [weak self] email in
+                self?.loginTextField.text = email
             })
             .disposed(by: disposeBag)
 
-        passwordTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.password)
-            .disposed(by: disposeBag)
-        /*
-        passwordTextField.rx.controlEvent(.editingDidEndOnExit)
-            .subscribe(onNext: { _ in
-                 /// TODO: event to make viewModel login
-            })
-            .disposed(by: disposeBag)
-        */
-        loginButton.rx.tap
-            .bind(to: viewModel.loginTaps)
-            .disposed(by: disposeBag)
-
-        signupButton.rx.tap
-            .bind(to: viewModel.signupTaps)
-            .disposed(by: disposeBag)
-
-        // from the viewModel
-
-        viewModel.isValid
+        outputs.isValid
             .map { $0 }
             .bind(to: loginButton.rx.isEnabled)
             .disposed(by: disposeBag)
 
-        viewModel.loggingIn
+        outputs.loggingIn
             .filter { $0 }
             .drive(onNext: { _ in
                 HUD.show(.progress)
             })
             .disposed(by: disposeBag)
 
-        viewModel.loginResults
+        outputs.loginResults
             .subscribe(onNext: { [weak self] result in
                 switch result.event {
                 case .next:
                     log.verbose("Logged in")
                     HUD.flash(.success, delay: 0.2) { _ in
-                        /// TODO: handle this elsewhere
-                        self?.performSegue(withIdentifier: .showMain)
+                        self?._didLogin.onNext(())
                     }
                 case .error(let error):
                     switch error as? BackendError {
@@ -129,7 +117,15 @@ class InitialLoginViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
+
+        // Next keyboard button
+        loginTextField.rx.controlEvent(.editingDidEndOnExit)
+            .subscribe(onNext: { _ in
+                self.passwordTextField.becomeFirstResponder()
+            })
+            .disposed(by: disposeBag)
     }
+
 }
 
 // MARK: - UITextFieldDelegate
