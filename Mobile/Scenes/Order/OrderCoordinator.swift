@@ -99,13 +99,11 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Pop on uploadResults?
 
         // Selection
-        /*
         viewController.selectedIndices
             .subscribe(onNext: { [weak self] index in
-                self?.showKeypad(order: viewModel.order, atIndex: index)
+                self?.showKeypad(order: order, atIndex: index.row)
             })
             .disposed(by: disposeBag)
-        */
     }
 
     func showKeypad(order: Order, atIndex index: Int) {
