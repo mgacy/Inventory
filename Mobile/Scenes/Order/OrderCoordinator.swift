@@ -73,6 +73,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let viewModel = OrderVendorViewModel(dataManager: dataManager, parentObject: collection,
                                              rowTaps: viewController.selectedObjects.asObservable(),
                                              completeTaps: viewController.completeButtonItem.rx.tap.asObservable())
+        viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
         viewModel.showNext
