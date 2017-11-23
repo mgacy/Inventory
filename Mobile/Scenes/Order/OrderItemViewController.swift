@@ -20,6 +20,7 @@ class OrderItemViewController: UIViewController {
     let disposeBag = DisposeBag()
 
     let placedOrder = PublishSubject<Void>()
+    let selectedIndices = PublishSubject<IndexPath>()
 
     // Create a MessageComposer
     /// TODO: should I instantiate this here or only in `.setupView()`?
@@ -191,8 +192,7 @@ extension OrderItemViewController {
 extension OrderItemViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //log.verbose("Selected OrderItem: \(dataSource.objectAtIndexPath(indexPath))")
-        showKeypad(withIndexPath: indexPath)
+        selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
