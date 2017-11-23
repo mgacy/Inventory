@@ -41,6 +41,9 @@ class OrderContainerViewController: UIViewController {
         return control
     }()
 
+    private var vendorsViewControlller: OrderVendorViewController!
+    private var locationsViewController: OrderLocationViewController!
+    /*
     private lazy var vendorsViewControlller: OrderVendorViewController = {
         let controller = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
         controller.viewModel = OrderVendorViewModel(dataManager: self.viewModel.dataManager,
@@ -62,7 +65,7 @@ class OrderContainerViewController: UIViewController {
         self.add(asChildViewController: viewController)
         return viewController
     }()
-
+    */
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -79,6 +82,11 @@ class OrderContainerViewController: UIViewController {
     //override func didReceiveMemoryWarning() {}
 
     // MARK: - View Methods
+
+    func configureChildControllers(vendorsController: OrderVendorViewController, locationsController: OrderLocationViewController) {
+        vendorsViewControlller = vendorsController
+        locationsViewController = locationsController
+    }
 
     private func setupView() {
         navigationItem.titleView = segmentedControl
@@ -129,6 +137,7 @@ class OrderContainerViewController: UIViewController {
             .disposed(by: disposeBag)
 
         // Navigation
+        /// TODO: move into OrderCoordinator
         viewModel.popView
             .drive(onNext: { [weak self] in
                 if self?.presentingViewController != nil {

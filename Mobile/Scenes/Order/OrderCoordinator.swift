@@ -46,22 +46,56 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     func showContainer(collection: OrderCollection) {
         let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
+
+        // OrderVendorViewController
+        let vendorsController = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
+        let vendorsViewModel = OrderVendorViewModel(dataManager: dataManager, parentObject: collection,
+                                                    rowTaps: vendorsController.selectedObjects.asObservable(),
+                                                    completeTaps: vendorsController.completeButtonItem.rx.tap
+                                                        .asObservable())
+        vendorsController.viewModel = vendorsViewModel
+
+        // OrderLocationViewController
+        guard let locationsController = OrderLocationViewController.instance() else {
+            fatalError("\(#function) FAILED : wrong view controller")
+        }
+        let locationsViewModel = OrderLocationViewModel(dataManager: dataManager, collection: collection)
+        locationsController.viewModel = locationsViewModel
+
+        // OrderContainerViewController
         let viewController = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
         let viewModel = OrderContainerViewModel(dataManager: dataManager, parentObject: collection,
                                                 completeTaps: viewController.completeButtonItem.rx.tap.asObservable())
         viewController.viewModel = viewModel
+        viewController.configureChildControllers(vendorsController: vendorsController,
+                                                 locationsController: locationsController)
         navigationController.pushViewController(viewController, animated: true)
 
+        // Selction - Vendor
+        vendorsViewModel.showNext
+            .subscribe(onNext: { [weak self] segue in
+                switch segue {
+                case .back:
+                    self?.navigationController.popViewController(animated: true)
+                case .item(let order):
+                    self?.showItemList(order: order)
+                }
+            })
+            .disposed(by: disposeBag)
 
-        // Selection
-        /// TODO: how to handle this?
-
-        // OrderVendorViewController
-        //viewController.vendorsViewControlller
-
-        // OrderLocationViewController
-        //viewController.locationsViewController
-
+        // Selection - Location
+        locationsController.tableView.rx
+            .modelSelected(RemoteLocation.self)
+            .subscribe(onNext: { [weak self] location in
+                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
+                switch location.locationType {
+                case .category:
+                    strongSelf.showLocationCategoryList(location: location, factory: factory)
+                case .item:
+                    strongSelf.showLocationItemList(parent: OrderLocItemParent.location(location), factory: factory)
+                }
+            })
+            .disposed(by: disposeBag)
     }
 
     func showVendorList(collection: OrderCollection) {
