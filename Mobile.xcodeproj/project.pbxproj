@@ -59,6 +59,7 @@
 		C92D75C31DC7A93100AA1A02 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C21DC7A93100AA1A02 /* LoginViewController.swift */; };
 		C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */; };
 		C92EC6321F84C80300B47C23 /* RemoteOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EC6311F84C80300B47C23 /* RemoteOrder.swift */; };
+		C93203EA1FC678D200ACFC1D /* SignupCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */; };
 		C935E9A41E60D713003BF386 /* InitialLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */; };
 		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
@@ -230,6 +231,7 @@
 		C92D75C21DC7A93100AA1A02 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C92EC6311F84C80300B47C23 /* RemoteOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteOrder.swift; path = Models/RemoteOrder.swift; sourceTree = "<group>"; };
+		C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupCoordinator.swift; sourceTree = "<group>"; };
 		C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialLoginViewController.swift; sourceTree = "<group>"; };
 		C94084761EFCCB7F00638E25 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Syncable.swift; path = "Core Data Helpers/Syncable.swift"; sourceTree = "<group>"; };
@@ -668,6 +670,7 @@
 				C9045C201FC5122800F55FB3 /* InitialLoginCoordinator.swift */,
 				C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */,
 				C9174D461F833265008639CC /* InitialLoginViewModel.swift */,
+				C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */,
 				C9A0B2EB1E63D2A300404320 /* InitialSignUpViewController.swift */,
 				C9AA8DC11F9F191000147F07 /* InitialSignUpViewModel.swift */,
 			);
@@ -1215,6 +1218,7 @@
 				C976305F1F219A0900BA8E42 /* JSON+Date.swift in Sources */,
 				C9BB05911F831D6600A07529 /* InventoryDateViewController.swift in Sources */,
 				C98A90881F97E97400644548 /* InventoryKeypadViewModel.swift in Sources */,
+				C93203EA1FC678D200ACFC1D /* SignupCoordinator.swift in Sources */,
 				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift in Sources */,
 				C99568CA1FBB809C00AE6949 /* ViewModelType.swift in Sources */,
 				C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */,
