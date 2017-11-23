@@ -16,15 +16,17 @@ class InitialSignUpViewController: UIViewController {
     enum Strings {
         static let navTitle = "Signup"
         static let errorAlertTitle = "Error"
+        static let signupErrorMessage = "There was a problem"
     }
 
     // MARK: Properties
 
-    /// TODO: move this to view model
-    //var dataManager: DataManager!
+    private typealias Input = InitialSignUpViewModel.Input
     var viewModel: InitialSignUpViewModel!
     let disposeBag = DisposeBag()
 
+    fileprivate let _didSignup = PublishSubject<Void>()
+    let didSignup: Observable<Void>
 
     // MARK: Interface
     let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: nil)
@@ -36,11 +38,16 @@ class InitialSignUpViewController: UIViewController {
 
     // MARK: Lifecycle
 
+    required init?(coder aDecoder: NSCoder) {
+        self.didSignup = _didSignup.asObservable()
+        super.init(coder: aDecoder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         //setupConstraints()
-        setupBindings()
+        bindViewModel()
     }
 
     // override func didReceiveMemoryWarning() {}
@@ -49,69 +56,70 @@ class InitialSignUpViewController: UIViewController {
 
     private func setupView() {
         self.navigationItem.leftBarButtonItem = cancelButton
+        usernameTextField.delegate = self
+        loginTextField.delegate = self
+        passwordTextField.delegate = self
     }
 
     // private func setupConstraints() {}
 
-    private func setupBindings() {
-        usernameTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.username)
-            .disposed(by: disposeBag)
+    // swiftlint:disable:next function_body_length
+    private func bindViewModel() {
+        let inputs = Input(
+            username: usernameTextField.rx.text.orEmpty.asObservable(),
+            login: loginTextField.rx.text.orEmpty.asObservable(),
+            password: passwordTextField.rx.text.orEmpty.asObservable(),
+            signupTaps: signupButton.rx.tap.asObservable(),
+            doneTaps: passwordTextField.rx.controlEvent(.editingDidEndOnExit).asObservable()
+        )
+        let outputs = viewModel.transform(input: inputs)
 
-        loginTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.login)
-            .disposed(by: disposeBag)
-
-        passwordTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.password)
-            .disposed(by: disposeBag)
-        /*
-        cancelButton.rx.tap
-            //.bind(to: viewModel.cancel)
-            .subscribe(onNext: {
-                dismiss(animated: true, completion: nil)
-            })
-            .disposed(by: disposeBag)
-        */
-        signupButton.rx.tap
-            .bind(to: viewModel.signupTaps)
-            .disposed(by: disposeBag)
-
-        // from the viewModel
-        viewModel.isValid.map { $0 }
+        outputs.isValid
+            .map { $0 }
             .bind(to: signupButton.rx.isEnabled)
             .disposed(by: disposeBag)
 
-        viewModel.signingUp
+        outputs.signingUp
             .filter { $0 }
             .drive(onNext: { _ in
                 HUD.show(.progress)
             })
             .disposed(by: disposeBag)
 
-        viewModel.signupResults
+        outputs.signupResults
             .subscribe(onNext: { [weak self] result in
                 switch result.event {
                 case .next:
-                    HUD.flash(.success, delay: 1.0) { _ in
-                        /// TODO: handle this elsewhere
-                        /// TODO: replace use of segues
-                        self?.performSegue(withIdentifier: .showMain)
-                        //self?.navigationController!.popViewController(animated: true)
+                    log.verbose("Logged in")
+                    HUD.flash(.success, delay: 0.2) { _ in
+                        self?._didSignup.onNext(())
                     }
-                case .error:
-                    /// TODO: `case.error(let error):; switch error {}`
-                    UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
+                case .error(let error):
+                    switch error as? BackendError {
+                    case .authentication?:
+                        UIViewController.showErrorInHUD(title: Strings.errorAlertTitle,
+                                                        subtitle: Strings.signupErrorMessage)
+                    default:
+                        HUD.flash(.error, delay: 1.0)
+                    }
                 case .completed:
                     log.warning("\(#function) : not sure how to handle completion")
                 }
             })
             .disposed(by: disposeBag)
 
+        // Next keyboard button
+        usernameTextField.rx.controlEvent(.editingDidEndOnExit)
+            .subscribe(onNext: { _ in
+                self.loginTextField.becomeFirstResponder()
+            })
+            .disposed(by: disposeBag)
 
+        loginTextField.rx.controlEvent(.editingDidEndOnExit)
+            .subscribe(onNext: { _ in
+                self.passwordTextField.becomeFirstResponder()
+            })
+            .disposed(by: disposeBag)
     }
 
 }
@@ -120,11 +128,9 @@ class InitialSignUpViewController: UIViewController {
 extension InitialSignUpViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        // Hide the keyboard.
-        textField.resignFirstResponder()
         return true
     }
-
+    /*
     func textFieldDidBeginEditing(_ textField: UITextField) {
         // Disable the SignUp button while editing.
         signupButton.isEnabled = false
@@ -133,5 +139,5 @@ extension InitialSignUpViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         // checkValidMealName()
     }
-
+    */
 }
