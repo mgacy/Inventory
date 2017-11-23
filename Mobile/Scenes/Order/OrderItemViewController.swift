@@ -194,9 +194,11 @@ extension OrderItemViewController: UITableViewDelegate {
         //let orderItem = dataSource.objectAtIndexPath(indexPath)
 
         // Set to 0
-        let setToZero = UITableViewRowAction(style: .normal, title: "No Order") { _, _ in
-            /// TODO: use weak self?
-            self.viewModel.setOrderToZero(forItemAtIndexPath: indexPath)
+        let setToZero = UITableViewRowAction(style: .normal, title: "No Order") { [weak self] _, _ in
+            guard let strongSelf = self else {
+                log.error("\(#function) FAILED : unable to get self"); return
+            }
+            strongSelf.viewModel.setOrderToZero(forItemAtIndexPath: indexPath)
             tableView.isEditing = false
             // ALT
             // https://stackoverflow.com/a/43626096/4472195
