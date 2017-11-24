@@ -216,8 +216,7 @@ extension OrderItemViewController: UITableViewDelegate {
 extension OrderItemViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ item: OrderItem) -> Bool {
-        /// TODO: refer to viewModel.orderStatus rather than .order
-        guard viewModel.order.status == OrderStatus.pending.rawValue else {
+        guard viewModel.rawOrderStatus == OrderStatus.pending.rawValue else {
             return false
         }
         guard let quantity = item.quantity else {
