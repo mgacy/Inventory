@@ -88,8 +88,11 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
-        // ...
-        //self?.showLocationItemList(with: .category(selection))
+        viewController.selectedObjects
+            .subscribe(onNext: { [weak self] selection in
+                self?.showLocationItemList(with: LocationItemListParent.category(selection))
+            })
+            .disposed(by: disposeBag)
     }
 
     func showLocationItemList(with parent: LocationItemListParent) {
@@ -101,10 +104,14 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
+        viewController.selectedIndices
+            .subscribe(onNext: { [weak self] index in
+                self?.showKeypad(for: parent, atIndex: index.row)
+            })
+            .disposed(by: disposeBag)
     }
 
     func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
-        //let viewController = InventoryKeypadViewController.initFromStoryboard(name: "Main")
         guard let viewController = InventoryKeypadViewController.instance() else {
             fatalError("Wrong view controller.")
         }

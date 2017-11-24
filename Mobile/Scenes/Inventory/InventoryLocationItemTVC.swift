@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import CoreData
+import RxSwift
 
 enum LocationItemListParent {
     case category(InventoryLocationCategory)
@@ -29,11 +29,20 @@ class InventoryLocationItemTVC: UITableViewController {
     // MARK: Properties
 
     var viewModel: InventoryLocItemViewModel!
+    let disposeBag = DisposeBag()
+
+    let selectedIndices: Observable<IndexPath>
+    fileprivate let _selectedIndices = PublishSubject<IndexPath>()
 
     // TableViewCell
     let cellIdentifier = "InventoryItemCell"
 
     // MARK: - Lifecycle
+
+    required init?(coder aDecoder: NSCoder) {
+        self.selectedIndices = _selectedIndices.asObservable()
+        super.init(coder: aDecoder)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,22 +55,7 @@ class InventoryLocationItemTVC: UITableViewController {
         self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        log.warning("\(#function)")
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Navigation
-
-    fileprivate func showKeypad(withIndexPath indexPath: IndexPath) {
-        guard let controller = InventoryKeypadViewController.instance() else {
-            fatalError("\(#function) FAILED : unable to get destination view controller.")
-        }
-        controller.viewModel = InventoryKeypadViewModel(dataManager: viewModel.dataManager, for: viewModel.parentObject,
-                                                        atIndex: indexPath.row)
-        navigationController?.pushViewController(controller, animated: true)
-    }
+    //override func didReceiveMemoryWarning() {}
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocationItemTVC>!
@@ -77,8 +71,7 @@ class InventoryLocationItemTVC: UITableViewController {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //log.verbose("Selected InventoryLocationItem: \(dataSource.objectAtIndexPath(indexPath))")
-        showKeypad(withIndexPath: indexPath)
+        _selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

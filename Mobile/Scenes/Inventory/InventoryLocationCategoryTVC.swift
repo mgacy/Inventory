@@ -7,18 +7,27 @@
 //
 
 import UIKit
+import RxSwift
 
 class InventoryLocationCategoryTVC: UITableViewController {
 
     // MARK: Properties
 
     var viewModel: InventoryLocCatViewModel!
-    //let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
+
+    let selectedObjects: Observable<InventoryLocationCategory>
+    fileprivate let _selectedObjects = PublishSubject<InventoryLocationCategory>()
 
     // TableViewCell
     let cellIdentifier = "InventoryLocationCategoryTableViewCell"
 
     // MARK: - Lifecycle
+
+    required init?(coder aDecoder: NSCoder) {
+        self.selectedObjects = _selectedObjects.asObservable()
+        super.init(coder: aDecoder)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,15 +41,6 @@ class InventoryLocationCategoryTVC: UITableViewController {
     }
 
     //override func didReceiveMemoryWarning() {}
-
-    // MARK: - Navigation
-
-    func showItemList(with category: InventoryLocationCategory) {
-        let controller = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
-        controller.viewModel = InventoryLocItemViewModel(dataManager: viewModel.dataManager,
-                                                         parentObject: .category(category))
-        navigationController?.pushViewController(controller, animated: true)
-    }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocationCategoryTVC>!
@@ -56,8 +56,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCategory = dataSource.objectAtIndexPath(indexPath)
-        showItemList(with: selectedCategory)
+        _selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
