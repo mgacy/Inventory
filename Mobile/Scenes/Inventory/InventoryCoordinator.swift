@@ -19,7 +19,6 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        log.debug("\(#function)")
         let viewController = InventoryDateViewController.initFromStoryboard(name: "Main")
 
         let viewModel = InventoryDateViewModel(dataManager: dataManager,
@@ -27,14 +26,11 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         //let viewModel = InventoryDateViewModel2(dataManager: dataManager)
 
         viewController.viewModel = viewModel
-
         navigationController.viewControllers = [viewController]
-        //navigationController.setViewControllers([viewController], animated: true)
 
         // Selection
         viewModel.showInventory
             .subscribe(onNext: { [weak self] transition in
-                log.debug("\(#function) SELECTED: \(transition)")
                 switch transition {
                 case .existing(let inventory):
                     log.verbose("GET selectedInventory from server - \(inventory.remoteID) ...")

@@ -19,7 +19,6 @@ class SettingsCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<CoordinationResult> {
-        //log.debug("\(#function)")
         let viewController = SettingsViewController.initFromStoryboard(name: "SettingsViewController")
         let navigationController = UINavigationController(rootViewController: viewController)
 

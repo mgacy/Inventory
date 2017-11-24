@@ -19,7 +19,6 @@ class HomeCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        //log.debug("\(#function)")
         let viewController = HomeViewController.initFromStoryboard(name: "Main")
         let viewModel = HomeViewModel(dataManager: dataManager)
         viewController.viewModel = viewModel

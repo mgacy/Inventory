@@ -19,7 +19,6 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        log.debug("\(#function)")
         let viewController = InvoiceDateViewController.initFromStoryboard(name: "Main")
         let viewModel = InvoiceDateViewModel(dataManager: dataManager,
                                              rowTaps: viewController.selectedObjects.asObservable())

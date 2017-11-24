@@ -24,7 +24,6 @@ class SignupCoordinator: BaseCoordinator<SignupCoordinationResult> {
     }
 
     override func start() -> Observable<CoordinationResult> {
-        //log.debug("\(#function)")
         let viewController = InitialSignUpViewController.initFromStoryboard(name: "Main")
         let navigationController = UINavigationController(rootViewController: viewController)
 

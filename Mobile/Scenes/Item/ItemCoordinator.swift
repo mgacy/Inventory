@@ -19,7 +19,6 @@ class ItemCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        log.debug("\(#function)")
         let viewController = ItemViewController.initFromStoryboard(name: "Main")
         let viewModel = ItemViewModel(dataManager: dataManager,
                                       rowTaps: viewController.rowTaps.asObservable())
