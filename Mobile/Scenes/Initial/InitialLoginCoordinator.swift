@@ -31,9 +31,7 @@ class InitialLoginCoordinator: BaseCoordinator<Void> {
                 return self.showSignup(on: viewController)
             }
             .filter { $0 != SignupCoordinationResult.cancel }
-            .flatMap { _ in
-                return Observable.just(())
-            }
+            .map { _ in return }
 
         return Observable.merge(viewController.didLogin, signedUp)
             .take(1)
