@@ -55,8 +55,7 @@ class InitialLoginViewController: UIViewController {
     // MARK: - View Methods
 
     private func setupView() {
-        /// TODO: enable signup
-        signupButton.isEnabled = false
+        //signupButton.isEnabled = false
 
         loginTextField.delegate = self
         passwordTextField.delegate = self
