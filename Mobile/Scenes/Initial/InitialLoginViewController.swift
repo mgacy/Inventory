@@ -29,6 +29,8 @@ class InitialLoginViewController: UIViewController {
     let didLogin: Observable<Void>
 
     // MARK: Interface
+    let cancelButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: nil)
+
     @IBOutlet weak var loginTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
@@ -58,6 +60,12 @@ class InitialLoginViewController: UIViewController {
 
         loginTextField.delegate = self
         passwordTextField.delegate = self
+
+        if self.presentingViewController != nil {
+            // We are being presented from settings (or somewhere else within rather than during startup)
+            /// TODO: should we hide the 'Sign Up' button?
+            self.navigationItem.leftBarButtonItem = cancelButtonItem
+        }
 
         if OnePasswordExtension.shared().isAppExtensionAvailable() {
             setupTextFieldFor1Password()
