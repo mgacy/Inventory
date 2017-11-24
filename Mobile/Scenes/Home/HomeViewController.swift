@@ -67,7 +67,6 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         //setupConstraints()
-        setupBindings()
         bindViewModel()
         //setupTableView()
     }
@@ -145,21 +144,6 @@ class HomeViewController: UIViewController {
                                                        completeTaps: vc.completeButtonItem.rx.tap.asObservable())
                 let navigationController = UINavigationController(rootViewController: vc)
                 strongSelf.navigationController?.present(navigationController, animated: true, completion: nil)
-            })
-            .disposed(by: disposeBag)
-    }
-
-    private func setupBindings() {
-        // Navigation
-        settingsButtonItem.rx.tap
-            .subscribe(onNext: { [weak self] in
-                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
-                let controller = SettingsViewController.initFromStoryboard(name: "SettingsViewController")
-                controller.viewModel = SettingsViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                         rowTaps: controller.rowTaps.asObservable())
-                let navigationController = UINavigationController(rootViewController: controller)
-                strongSelf.navigationController?.present(navigationController, animated: true, completion: nil)
-
             })
             .disposed(by: disposeBag)
     }

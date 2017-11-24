@@ -19,16 +19,28 @@ class HomeCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        log.debug("\(#function)")
+        //log.debug("\(#function)")
         let viewController = HomeViewController.initFromStoryboard(name: "Main")
         let viewModel = HomeViewModel(dataManager: dataManager)
         viewController.viewModel = viewModel
-
         navigationController.viewControllers = [viewController]
+
+        viewController.settingsButtonItem.rx.tap
+            .flatMap { [weak self] _ -> Observable<Void> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showSettings(on: viewController)
+            }
+            .subscribe()
+            .disposed(by: disposeBag)
 
         return Observable.never()
     }
 
     // MARK: - Sections
+
+    private func showSettings(on rootViewController: UIViewController) -> Observable<Void> {
+        let settingsCoordinator = SettingsCoordinator(rootViewController: rootViewController, dataManager: dataManager)
+        return coordinate(to: settingsCoordinator)
+    }
 
 }

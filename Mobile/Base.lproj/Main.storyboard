@@ -314,13 +314,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="FUi-5r-TRR"/>
                     </view>
-                    <navigationItem key="navigationItem" id="TaB-cC-MgH">
-                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="0JG-qN-Ar8">
-                            <connections>
-                                <action selector="cancel:" destination="37G-Gi-gMX" id="jou-6q-FHz"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="TaB-cC-MgH"/>
                     <connections>
                         <outlet property="loginButton" destination="ofl-0V-Bsb" id="Z9V-eD-E1z"/>
                         <outlet property="loginTextField" destination="Zt6-K4-KGw" id="mWr-y3-rG0"/>
@@ -418,6 +412,6 @@
         <image name="orderTab" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="RYI-Jx-XiF"/>
+        <segue reference="fev-ZI-ohI"/>
     </inferredMetricsTieBreakers>
 </document>

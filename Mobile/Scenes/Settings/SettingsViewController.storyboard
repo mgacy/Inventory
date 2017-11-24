@@ -80,7 +80,6 @@
                     <connections>
                         <outlet property="AccountCell" destination="TXg-dm-GHJ" id="aWg-f8-Ed1"/>
                         <outlet property="accountCell" destination="TXg-dm-GHJ" id="6KQ-Hs-87f"/>
-                        <segue destination="jSr-Gh-1SR" kind="presentation" identifier="showAccount" id="tQs-zi-pOl"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ehE-Wd-jEX" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -96,7 +95,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="NJ3-RJ-SKX">
-                                <rect key="frame" x="16" y="124" width="343" height="150"/>
+                                <rect key="frame" x="16" y="80" width="343" height="150"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Zfp-Ew-O3S">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
@@ -134,13 +133,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fPq-JE-pqb"/>
                     </view>
-                    <navigationItem key="navigationItem" id="V6n-lu-duc">
-                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="505-vf-Hx8">
-                            <connections>
-                                <action selector="cancel:" destination="E03-Ia-D5r" id="hWO-pd-ix2"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="V6n-lu-duc"/>
                     <connections>
                         <outlet property="loginButton" destination="4TH-u5-M6e" id="g9m-oU-s1i"/>
                         <outlet property="loginTextField" destination="Zfp-Ew-O3S" id="35Y-hu-tKG"/>
@@ -150,25 +143,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QMp-uf-hLL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3902" y="2809"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="9bi-fa-kLo">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jSr-Gh-1SR" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="C1j-lU-ugN">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="E03-Ia-D5r" kind="relationship" relationship="rootViewController" id="f06-zg-aqK"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="oEY-af-dcE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2985" y="2809"/>
+            <point key="canvasLocation" x="2838" y="2810"/>
         </scene>
     </scenes>
 </document>
