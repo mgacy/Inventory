@@ -28,7 +28,6 @@ class InitialLoginCoordinator: BaseCoordinator<Void> {
 
         let signedUp = viewController.signupButton.rx.tap
             .flatMap { _ -> Observable<SignupCoordinationResult> in
-                //log.debug("Tapped signupButton")
                 return self.showSignup(on: viewController)
             }
             .filter { $0 != SignupCoordinationResult.cancel }
@@ -44,7 +43,6 @@ class InitialLoginCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     private func showSignup(on rootViewController: UIViewController) -> Observable<SignupCoordinationResult> {
-        //log.debug("\(#function)")
         let signupCoordinator = SignupCoordinator(rootViewController: rootViewController, dataManager: self.dataManager)
         return coordinate(to: signupCoordinator)
             //.filter { $0 != .cancel }

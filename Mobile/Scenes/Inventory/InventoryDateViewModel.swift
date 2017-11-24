@@ -114,6 +114,7 @@ struct InventoryDateViewModel {
             }
 
         // Errors
+        /// TODO: include errors from `hasRefreshed`
         self.errorMessages = Observable.of(showNewResults.errors(), showSelectionResults.errors())
             .merge()
             .map { error in
