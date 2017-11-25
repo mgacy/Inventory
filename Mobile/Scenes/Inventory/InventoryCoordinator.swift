@@ -47,7 +47,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     // MARK: - Sections
 
-    func showReviewList(with inventory: Inventory) {
+    private func showReviewList(with inventory: Inventory) {
         let viewController = InventoryReviewViewController.initFromStoryboard(name: "InventoryReviewViewController")
         let viewModel = InventoryReviewViewModel(dataManager: dataManager, parentObject: inventory,
                                                  rowTaps: viewController.selectedObjects)
@@ -57,7 +57,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         // Selection?
     }
 
-    func showLocationList(with inventory: Inventory) {
+    private func showLocationList(with inventory: Inventory) {
         let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
         let viewModel = InventoryLocationViewModel(dataManager: dataManager, parentObject: inventory,
                                                    rowTaps: viewController.selectedIndices,
@@ -79,7 +79,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    func showCategoryList(with location: InventoryLocation) {
+    private func showCategoryList(with location: InventoryLocation) {
         let viewController = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
         //guard let viewController = InventoryLocationCategoryTVC.instance() else {
         //    fatalError("Wrong view controller.")
@@ -95,7 +95,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    func showLocationItemList(with parent: LocationItemListParent) {
+    private func showLocationItemList(with parent: LocationItemListParent) {
         let viewController = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
         //guard let viewController = InventoryLocationItemTVC.instance() else {
         //    fatalError("Wrong view controller.")
@@ -111,7 +111,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
+    private func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
         guard let viewController = InventoryKeypadViewController.instance() else {
             fatalError("Wrong view controller.")
         }
