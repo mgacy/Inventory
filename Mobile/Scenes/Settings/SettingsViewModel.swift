@@ -13,8 +13,7 @@ struct SettingsViewModel {
 
     // MARK: - Properties
 
-    //private let dataManager: DataManager
-    let dataManager: DataManager
+    private let dataManager: DataManager
 
     // MARK: Inputs
     //let accountCellTaps: AnyObserver<Void>

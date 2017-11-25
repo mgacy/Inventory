@@ -14,8 +14,8 @@ class OrderContainerViewModel {
 
     // MARK: - Properties
 
-    let dataManager: DataManager
-    let parentObject: OrderCollection
+    private let dataManager: DataManager
+    private let parentObject: OrderCollection
 
     // CoreData
 

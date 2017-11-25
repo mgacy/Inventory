@@ -14,8 +14,7 @@ struct InvoiceDateViewModel {
 
     // MARK: Properties
 
-    //private let dataManager: DataManager
-    let dataManager: DataManager
+    private let dataManager: DataManager
 
     // CoreData
     private let filter: NSPredicate? = nil
@@ -77,7 +76,6 @@ struct InvoiceDateViewModel {
             .flatMap { selection -> Observable<Event<InvoiceCollection>> in
                 log.debug("Tapped: \(selection)")
                 return dataManager.refreshInvoiceCollection(selection)
-                    //.elements()
             }
             .share(replay: 1)
             //.shareReplay(1)

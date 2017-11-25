@@ -14,8 +14,7 @@ struct OrderDateViewModel {
 
     // MARK: - Properties
 
-    //private let dataManager: DataManager
-    let dataManager: DataManager
+    private let dataManager: DataManager
 
     // CoreData
     private let filter: NSPredicate? = nil

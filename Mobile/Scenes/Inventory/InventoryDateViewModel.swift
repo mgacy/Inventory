@@ -19,8 +19,7 @@ struct InventoryDateViewModel {
 
     // MARK: Properties
 
-    //private let dataManager: DataManager
-    let dataManager: DataManager
+    private let dataManager: DataManager
 
     // CoreData
     private let sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]

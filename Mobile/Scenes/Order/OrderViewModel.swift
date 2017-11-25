@@ -15,8 +15,8 @@ class OrderViewModel {
     // MARK: - Properties
 
     /// TODO: make private
-    let dataManager: DataManager
-    var order: Order
+    private let dataManager: DataManager
+    private let order: Order
 
     // CoreData
     private let filter: NSPredicate

@@ -11,7 +11,6 @@ import RxCocoa
 import RxSwift
 
 enum InventoryLocationSegue {
-    //case back
     case item(InventoryLocation)
     case category(InventoryLocation)
 }
@@ -20,7 +19,7 @@ struct InventoryLocationViewModel {
 
     // MARK: Properties
 
-    let dataManager: DataManager
+    private let dataManager: DataManager
     private let parentObject: Inventory
 
     // CoreData

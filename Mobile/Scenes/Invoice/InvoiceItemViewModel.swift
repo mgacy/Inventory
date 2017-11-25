@@ -14,8 +14,8 @@ struct InvoiceItemViewModel {
 
     // MARK: - Properties
 
-    let dataManager: DataManager
-    var parentObject: Invoice
+    private let dataManager: DataManager
+    private let parentObject: Invoice
 
     // CoreData
     private let filter: NSPredicate? = nil
