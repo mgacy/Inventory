@@ -97,6 +97,8 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
+    // MARK: Vendor
+
     private func showVendorList(collection: OrderCollection) {
         let viewController = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
         let viewModel = OrderVendorViewModel(dataManager: dataManager, parentObject: collection,
@@ -144,14 +146,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
     }
 
-    private func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
-        guard let viewController = OrderKeypadViewController.instance() else {
-            fatalError("Wrong view controller")
-        }
-        let viewModel = OrderKeypadViewModel(dataManager: dataManager, with: orderItems, atIndex: index)
-        viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
-    }
+    // MARK: Location
 
     private func showLocationList(collection: OrderCollection) {
         guard let viewController = OrderLocationViewController.instance() else {
@@ -215,4 +210,14 @@ class OrderCoordinator: BaseCoordinator<Void> {
             })
             .disposed(by: disposeBag)
     }
+
+    private func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
+        guard let viewController = OrderKeypadViewController.instance() else {
+            fatalError("Wrong view controller")
+        }
+        let viewModel = OrderKeypadViewModel(dataManager: dataManager, with: orderItems, atIndex: index)
+        viewController.viewModel = viewModel
+        navigationController.pushViewController(viewController, animated: true)
+    }
+
 }
