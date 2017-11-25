@@ -10,8 +10,8 @@ import RxSwift
 
 class InventoryCoordinator: BaseCoordinator<Void> {
 
-    private let navigationController: UINavigationController
-    private let dataManager: DataManager
+    fileprivate let navigationController: UINavigationController
+    fileprivate let dataManager: DataManager
 
     init(navigationController: UINavigationController, dataManager: DataManager) {
         self.navigationController = navigationController
@@ -20,7 +20,6 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     override func start() -> Observable<Void> {
         let viewController = InventoryDateViewController.initFromStoryboard(name: "Main")
-
         let viewModel = InventoryDateViewModel(dataManager: dataManager,
                                                rowTaps: viewController.selectedObjects.asObservable())
         //let viewModel = InventoryDateViewModel2(dataManager: dataManager)
@@ -47,7 +46,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     // MARK: - Sections
 
-    private func showReviewList(with inventory: Inventory) {
+    fileprivate func showReviewList(with inventory: Inventory) {
         let viewController = InventoryReviewViewController.initFromStoryboard(name: "InventoryReviewViewController")
         let viewModel = InventoryReviewViewModel(dataManager: dataManager, parentObject: inventory,
                                                  rowTaps: viewController.selectedObjects)
@@ -57,7 +56,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         // Selection?
     }
 
-    private func showLocationList(with inventory: Inventory) {
+    fileprivate func showLocationList(with inventory: Inventory) {
         let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
         let viewModel = InventoryLocationViewModel(dataManager: dataManager, parentObject: inventory,
                                                    rowTaps: viewController.selectedIndices,
@@ -79,7 +78,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    private func showCategoryList(with location: InventoryLocation) {
+    fileprivate func showCategoryList(with location: InventoryLocation) {
         let viewController = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
         //guard let viewController = InventoryLocationCategoryTVC.instance() else {
         //    fatalError("Wrong view controller.")
@@ -95,7 +94,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    private func showLocationItemList(with parent: LocationItemListParent) {
+    fileprivate func showLocationItemList(with parent: LocationItemListParent) {
         let viewController = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
         //guard let viewController = InventoryLocationItemTVC.instance() else {
         //    fatalError("Wrong view controller.")
@@ -111,7 +110,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    private func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
+    fileprivate func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
         guard let viewController = InventoryKeypadViewController.instance() else {
             fatalError("Wrong view controller.")
         }

@@ -10,8 +10,8 @@ import RxSwift
 
 class OrderCoordinator: BaseCoordinator<Void> {
 
-    private let navigationController: UINavigationController
-    private let dataManager: DataManager
+    fileprivate let navigationController: UINavigationController
+    fileprivate let dataManager: DataManager
 
     init(navigationController: UINavigationController, dataManager: DataManager) {
         self.navigationController = navigationController
@@ -99,7 +99,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     // MARK: Vendor
 
-    private func showVendorList(collection: OrderCollection) {
+    fileprivate func showVendorList(collection: OrderCollection) {
         let viewController = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
         let viewModel = OrderVendorViewModel(dataManager: dataManager, parentObject: collection,
                                              rowTaps: viewController.selectedObjects.asObservable(),
@@ -119,7 +119,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    private func showItemList(order: Order) {
+    fileprivate func showItemList(order: Order) {
         guard let viewController = OrderItemViewController.instance() else {
             fatalError("Wrong view controller")
         }
@@ -137,7 +137,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    private func showKeypad(order: Order, atIndex index: Int) {
+    fileprivate func showKeypad(order: Order, atIndex index: Int) {
         guard let viewController = OrderKeypadViewController.instance() else {
             fatalError("Wrong view controller")
         }
@@ -148,7 +148,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     // MARK: Location
 
-    private func showLocationList(collection: OrderCollection) {
+    fileprivate func showLocationList(collection: OrderCollection) {
         guard let viewController = OrderLocationViewController.instance() else {
             fatalError("Wrong view controller")
         }
@@ -173,7 +173,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    private func showLocationCategoryList(location: RemoteLocation, factory: OrderLocationFactory) {
+    fileprivate func showLocationCategoryList(location: RemoteLocation, factory: OrderLocationFactory) {
         guard let viewController = OrderLocCatViewController.instance() else {
             fatalError("Wrong view controller")
         }
@@ -193,7 +193,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    private func showLocationItemList(parent: OrderLocItemParent, factory: OrderLocationFactory) {
+    fileprivate func showLocationItemList(parent: OrderLocItemParent, factory: OrderLocationFactory) {
         guard let viewController = OrderLocItemViewController.instance() else {
             fatalError("Wrong view controller")
         }
@@ -211,7 +211,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    private func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
+    fileprivate func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
         guard let viewController = OrderKeypadViewController.instance() else {
             fatalError("Wrong view controller")
         }
