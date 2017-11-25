@@ -43,9 +43,12 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     // MARK: - Sections
 
-    func showContainer(collection: OrderCollection) {
-        let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
+    // MARK: Container
 
+    fileprivate typealias ContainerConfigurationResult = (OrderContainerViewController, OrderLocationViewController,
+                                                          OrderVendorViewModel)
+
+    fileprivate func configureContainer(with collection: OrderCollection) -> ContainerConfigurationResult {
         // OrderVendorViewController
         let vendorsController = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
         let vendorsViewModel = OrderVendorViewModel(dataManager: dataManager, parentObject: collection,
@@ -62,13 +65,21 @@ class OrderCoordinator: BaseCoordinator<Void> {
         locationsController.viewModel = locationsViewModel
 
         // OrderContainerViewController
-        let viewController = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
+        let containerController = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
         let viewModel = OrderContainerViewModel(dataManager: dataManager, parentObject: collection,
-                                                completeTaps: viewController.completeButtonItem.rx.tap.asObservable())
-        viewController.viewModel = viewModel
-        viewController.configureChildControllers(vendorsController: vendorsController,
-                                                 locationsController: locationsController)
-        navigationController.pushViewController(viewController, animated: true)
+                                                completeTaps: containerController.completeButtonItem.rx.tap
+                                                    .asObservable())
+        containerController.viewModel = viewModel
+        containerController.configureChildControllers(vendorsController: vendorsController,
+                                                      locationsController: locationsController)
+
+        return (containerController, locationsController, vendorsViewModel)
+    }
+
+    fileprivate func showContainer(collection: OrderCollection) {
+        let (containerController, locationsController, vendorsViewModel) = configureContainer(with: collection)
+        let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
+        navigationController.pushViewController(containerController, animated: true)
 
         // Selction - Vendor
         vendorsViewModel.showNext
