@@ -106,14 +106,7 @@ extension DataManager {
                         //throw DataManagerError.missingMOC
                     }
                     Item.sync(with: records, in: context)
-                    /*
-                    do {
-                        try self?.viewContext(Item.self, with: records)
-                    } catch let error {
-                        log.error("\(#function) FAILED : \(error)")
-                        return false
-                    }
-                     */
+
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
@@ -191,14 +184,6 @@ extension DataManager {
                         //throw DataManagerError.missingMOC
                     }
                     Vendor.sync(with: records, in: context)
-                    /*
-                    do {
-                        try self?.viewContext.syncEntities(Vendor.self, with: records)
-                    } catch let error {
-                        log.error("\(#function) FAILED : \(error)")
-                        return false
-                    }
-                     */
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
@@ -309,14 +294,6 @@ extension DataManager {
                         throw DataManagerError.missingMOC
                     }
                     Inventory.sync(with: records, in: context)
-                    /*
-                    do {
-                        try self?.viewContext.syncEntitiesNew(Item.self, with: records)
-                    } catch let error {
-                        log.error("\(#function) FAILED : \(error)")
-                        return false
-                    }
-                     */
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
@@ -557,23 +534,6 @@ extension DataManager {
             .flatMap { response -> Bool in
                 return self.syncEntitiesB(Item.self, with: response)
                 //return true
-        }
-    }
-
-    private func syncEntitiesA<M: NewSyncable, R>(_ entity: M, with response: DataResponse<[R]>) -> Bool where R == M.RemoteType {
-        //return true
-        switch response.result {
-        case .success(let records):
-            do {
-                try viewContext.syncEntitiesNew(M, with: records)
-            } catch let error {
-                log.error("\(#function) FAILED : \(error)")
-                return false
-            }
-            return true
-        case .failure(let error):
-            log.warning("\(#function) FAILED : \(error)")
-            return false
         }
     }
 
