@@ -92,14 +92,6 @@ class OrderContainerViewController: UIViewController {
     //private func setupConstraints() {}
 
     private func setupBindings() {
-        // Cancel Button
-        if self.presentingViewController != nil {
-            cancelButtonItem.rx.tap.asObservable()
-                .subscribe(onNext: { [weak self] _ in
-                    self?.navigationController?.dismiss(animated: true)
-                })
-                .disposed(by: disposeBag)
-        }
 
         // Complete Order Alert
         viewModel.showAlert
@@ -112,18 +104,6 @@ class OrderContainerViewController: UIViewController {
 
         confirmComplete.asObservable()
             .bind(to: viewModel.confirmComplete)
-            .disposed(by: disposeBag)
-
-        // Navigation
-        /// TODO: move into OrderCoordinator
-        viewModel.popView
-            .drive(onNext: { [weak self] in
-                if self?.presentingViewController != nil {
-                    self?.navigationController?.dismiss(animated: true)
-                } else {
-                    self?.navigationController!.popViewController(animated: true)
-                }
-            })
             .disposed(by: disposeBag)
     }
 

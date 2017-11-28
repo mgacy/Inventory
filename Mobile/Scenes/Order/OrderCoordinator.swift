@@ -106,6 +106,14 @@ class OrderCoordinator: BaseCoordinator<Void> {
                 }
             })
             .disposed(by: disposeBag)
+
+        // Completion
+        containerController.viewModel.popView
+            .subscribe(onNext: { [weak self] _ in
+                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
+                strongSelf.navigationController.popViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
     }
 
     // MARK: Vendor
@@ -279,8 +287,9 @@ class ModalOrderCoordinator: OrderCoordinator {
             })
             .disposed(by: disposeBag)
 
-        // Cancel
-        return containerController.cancelButtonItem.rx.tap
+        // Cancel / Completion
+        let cancelTaps = containerController.cancelButtonItem.rx.tap.asObservable()
+        return Observable.merge(cancelTaps, containerController.viewModel.popView)
             .take(1)
             .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
     }

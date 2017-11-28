@@ -24,7 +24,7 @@ class OrderContainerViewModel {
 
     // MARK: - Output
     let showAlert: Driver<Void>
-    let popView: Driver<Void>
+    let popView: Observable<Void>
 
     // MARK: - Lifecycle
 
@@ -60,7 +60,7 @@ class OrderContainerViewModel {
                 parentObject.uploaded = true
                 return
             }
-            .asDriver(onErrorJustReturn: ())
+            //.asDriver(onErrorJustReturn: ())
     }
 
     private static func checkStatusIsSafe(forCollection collection: OrderCollection) -> Bool {
