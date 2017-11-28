@@ -22,6 +22,7 @@ class HomeCoordinator: BaseCoordinator<Void> {
         var viewController = HomeViewController.initFromStoryboard(name: "Main")
 
         var avm: Attachable<HomeViewModel> = .detached(HomeViewModel.Dependency(dataManager: dataManager))
+        //let viewModel = viewController.bindViewModel(to: &avm)
         viewController.bindViewModel(to: &avm)
         navigationController.viewControllers = [viewController]
 
