@@ -12,14 +12,24 @@ import RxCocoa
 import RxSwift
 
 // swiftlint:disable:next type_name
-class InventoryLocationViewController: UIViewController {
+class InventoryLocationViewController: UIViewController, AttachableType {
 
     // MARK: - Properties
 
+    var bindings: InventoryLocationViewModel.Bindings {
+        return InventoryLocationViewModel.Bindings(
+            cancelTaps: cancelButtonItem.rx.tap.asObservable(),
+            rowTaps: selectedIndices,
+            uploadTaps: uploadButtonItem.rx.tap.asObservable()
+        )
+    }
     var viewModel: InventoryLocationViewModel!
-    let disposeBag = DisposeBag()
+    let selectedIndices: Observable<IndexPath>
+    let dismissView: Observable<Void>
 
-    let selectedObjects = PublishSubject<InventoryLocation>()
+    private let disposeBag = DisposeBag()
+    private let _selectedIndices = PublishSubject<IndexPath>()
+    private let _dismissView = PublishSubject<Void>()
 
     // TableViewCell
     let cellIdentifier = "InventoryLocationTableViewCell"
@@ -29,6 +39,7 @@ class InventoryLocationViewController: UIViewController {
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var messageLabel: UILabel!
 
+    let cancelButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: nil, action: nil)
     let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
 
     lazy var tableView: UITableView = {
@@ -46,16 +57,23 @@ class InventoryLocationViewController: UIViewController {
 
     // MARK: - Lifecycle
 
+    required init?(coder aDecoder: NSCoder) {
+        selectedIndices = _selectedIndices.asObservable()
+        dismissView = _dismissView.asObservable()
+        super.init(coder: aDecoder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        setupBindings()
-        setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if self.presentingViewController != nil {
+            self.navigationItem.leftBarButtonItem = cancelButtonItem
+        }
         self.tableView.reloadData()
     }
 
@@ -92,7 +110,17 @@ class InventoryLocationViewController: UIViewController {
         // MessageLabel
     }
 
-    private func setupBindings() {
+    // Compiler fails to recognize this function as added by protocol extension
+    func bindViewModel(to model: inout Attachable<InventoryLocationViewModel>) {
+        loadViewIfNeeded()
+        viewModel = model.bind(bindings)
+        bindViewModel()
+        //return viewModel
+    }
+
+    func bindViewModel() {
+        // We have to wait until after we set .viewModel since we use viewModel.frc
+        setupTableView()
 
         // Uploading
         viewModel.isUploading
@@ -106,47 +134,14 @@ class InventoryLocationViewController: UIViewController {
             .subscribe(onNext: { [weak self] result in
                 switch result.event {
                 case .next:
-                    HUD.flash(.success, delay: 1.0) { _ in
-                        /// TODO: handle this elsewhere
-                        self?.navigationController!.popViewController(animated: true)
+                    HUD.flash(.success, delay: 0.5) { _ in
+                        self?._dismissView.onNext(())
                     }
                 case .error:
                     /// TODO: `case.error(let error):; switch error {}`
                     UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
                 case .completed:
                     log.warning("\(#function) : not sure how to handle completion")
-                }
-            })
-            .disposed(by: disposeBag)
-        /*
-        // Errors
-        viewModel.errorMessages
-            .drive(onNext: { [weak self] message in
-                log.error("Error: \(message)")
-                //self?.showAlert(title: Strings.errorAlertTitle, message: message)
-            })
-            .disposed(by: disposeBag)
-         */
-        // Selection
-        viewModel.showLocation
-            .subscribe(onNext: { [weak self] selection in
-                log.debug("\(#function) SELECTED: \(selection)")
-                guard let strongSelf = self else {
-                    log.error("\(#function) FAILED : unable to get reference to self"); return
-                }
-
-                switch selection {
-                //case .back:
-                case .category(let location):
-                    let controller = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
-                    controller.viewModel = InventoryLocCatViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                                    parentObject: location)
-                    strongSelf.navigationController?.pushViewController(controller, animated: true)
-                case .item(let location):
-                    let controller = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
-                    controller.viewModel = InventoryLocItemViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                                     parentObject: .location(location))
-                    strongSelf.navigationController?.pushViewController(controller, animated: true)
                 }
             })
             .disposed(by: disposeBag)
@@ -170,7 +165,7 @@ class InventoryLocationViewController: UIViewController {
 extension InventoryLocationViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
+        _selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

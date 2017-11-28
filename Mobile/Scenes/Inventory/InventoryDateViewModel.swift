@@ -19,8 +19,7 @@ struct InventoryDateViewModel {
 
     // MARK: Properties
 
-    //private let dataManager: DataManager
-    let dataManager: DataManager
+    private let dataManager: DataManager
 
     // CoreData
     private let sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
@@ -114,6 +113,7 @@ struct InventoryDateViewModel {
             }
 
         // Errors
+        /// TODO: include errors from `hasRefreshed`
         self.errorMessages = Observable.of(showNewResults.errors(), showSelectionResults.errors())
             .merge()
             .map { error in
@@ -121,7 +121,7 @@ struct InventoryDateViewModel {
                 return "There was an error"
             }
             .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .never())
+            //.asDriver(onErrorDriveWith: .empty())
 
         // FetchRequest
         let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()

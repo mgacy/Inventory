@@ -15,8 +15,8 @@ class OrderViewModel {
     // MARK: - Properties
 
     /// TODO: make private
-    let dataManager: DataManager
-    var order: Order
+    private let dataManager: DataManager
+    private let order: Order
 
     // CoreData
     private let filter: NSPredicate
@@ -33,7 +33,7 @@ class OrderViewModel {
     let isUploading: Driver<Bool>
     let uploadResults: Observable<Event<Order>>
 
-    //var orderStatus: OrderStatus { return order.status }
+    var rawOrderStatus: Int16 { return order.status }
     var vendorName: String { return order.vendor?.name ?? "" }
     var repName: String { return "\(order.vendor?.rep?.firstName ?? "") \(order.vendor?.rep?.lastName ?? "")" }
     var email: String { return order.vendor?.rep?.email ?? "" }
@@ -128,7 +128,6 @@ class OrderViewModel {
         let orderItem = frc.object(at: indexPath)
         orderItem.quantity = 0
         _ = dataManager.saveOrRollback()
-        //dataManager.managedObjectContext.performSaveOrRollback()
     }
 
 }

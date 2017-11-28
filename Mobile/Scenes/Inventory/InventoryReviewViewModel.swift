@@ -92,10 +92,12 @@ struct InventoryReviewViewModel {
         errorMessages = refreshResults
             .errors()
             .map { error in
+                log.debug("\(#function) ERROR : \(error)")
+                /// TEMP:
                 return "There was an error"
             }
             .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .never())
+            //.asDriver(onErrorDriveWith: .empty())
 
         // FetchRequest
         self.filter = NSPredicate(format: "inventory == %@", parentObject)

@@ -131,7 +131,6 @@ class OrderDateViewController: UIViewController {
         messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
     }
 
-    // swiftlint:disable:next function_body_length
     private func setupBindings() {
 
         // Add Button
@@ -187,33 +186,6 @@ class OrderDateViewController: UIViewController {
         viewModel.errorMessages
             .drive(onNext: { [weak self] message in
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
-            })
-            .disposed(by: disposeBag)
-
-        // Navigation
-        viewModel.showCollection
-            .subscribe(onNext: { [weak self] selection in
-                guard let strongSelf = self else {
-                    log.error("\(#function) FAILED : unable to get reference to self"); return
-                }
-                log.debug("\(#function) SELECTED / CREATED: \(selection)")
-                switch selection.uploaded {
-                case true:
-                    let vc = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
-                    let vm = OrderVendorViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                  parentObject: selection,
-                                                  rowTaps: vc.selectedObjects.asObservable(),
-                                                  completeTaps: vc.completeButtonItem.rx.tap.asObservable()
-                    )
-                    vc.viewModel = vm
-                    strongSelf.navigationController?.pushViewController(vc, animated: true)
-                case false:
-                    let vc = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
-                    vc.viewModel = OrderContainerViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                           parentObject: selection,
-                                                           completeTaps: vc.completeButtonItem.rx.tap.asObservable())
-                    strongSelf.navigationController?.pushViewController(vc, animated: true)
-                }
             })
             .disposed(by: disposeBag)
     }

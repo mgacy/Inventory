@@ -25,6 +25,9 @@ class SettingsViewController: UITableViewController {
     // Segues
     let accountSegue = "showAccount"
 
+    // MARK: - Interface
+    let doneButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: nil)
+
     @IBOutlet weak var accountCell: UITableViewCell!
 
     // MARK: - Lifecycle
@@ -45,6 +48,7 @@ class SettingsViewController: UITableViewController {
 
     private func setupView() {
         title = Strings.navTitle
+        navigationItem.rightBarButtonItem = doneButtonItem
         configureAccountCell()
     }
 
@@ -56,38 +60,6 @@ class SettingsViewController: UITableViewController {
                 self?.accountCell.textLabel?.text = "Login"
             })
             .disposed(by: disposeBag)
-
-        viewModel.showLogin
-            .drive(onNext: { [weak self] _ in
-                log.verbose("Showing AccountVC ...")
-                guard let strongSelf = self else { fatalError("Unable to get self") }
-                strongSelf.performSegue(withIdentifier: strongSelf.accountSegue, sender: self)
-                /*
-                let controller = LoginViewController.initFromStoryboard(name: "Main")
-                controller.userManager = strongSelf.viewModel.dataManager.userManager
-                /// TODO: fix how we show controller
-                strongSelf.navigationController?.pushViewController(controller, animated: true)
-                */
-            })
-            .disposed(by: disposeBag)
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
-        case accountSegue:
-            guard
-                let destinationNavController = segue.destination as? UINavigationController,
-                let destinationController = destinationNavController.topViewController as? LoginViewController
-            else {
-                fatalError("Wrong view controller type")
-            }
-            /// FIXME: change this
-            destinationController.userManager = viewModel.dataManager.userManager
-        default:
-            break
-        }
     }
 
     // MARK: - UITableViewDelegate
@@ -95,26 +67,8 @@ class SettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         log.verbose("Selected section \(indexPath.section)")
         rowTaps.onNext(indexPath)
-        /*
-        // Account
-        if indexPath.section == 0 {
-            if let user = userManager.user {
-                log.verbose("Logging out \(user.email)")
-
-                /// TODO: check for pending Inventory / Invoice / Order
-                /// TODO: if so, present warning
-
-                userManager.logout(completion: completedLogout)
-            } else {
-                log.verbose("Showing AccountVC ...")
-                performSegue(withIdentifier: accountSegue, sender: self)
-            }
-        }
-        */
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
-    // MARK: - User Actions
 
     // MARK: - Configuration
 

@@ -14,8 +14,7 @@ struct OrderDateViewModel {
 
     // MARK: - Properties
 
-    //private let dataManager: DataManager
-    let dataManager: DataManager
+    private let dataManager: DataManager
 
     // CoreData
     private let filter: NSPredicate? = nil
@@ -104,7 +103,7 @@ struct OrderDateViewModel {
                 }
             }
             .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .never())
+            //.asDriver(onErrorDriveWith: .empty())
 
         // FetchRequest
         let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()

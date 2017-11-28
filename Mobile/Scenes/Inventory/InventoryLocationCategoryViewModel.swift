@@ -14,8 +14,8 @@ struct InventoryLocCatViewModel {
 
     // MARK: - Properties
 
-    let dataManager: DataManager
-    var parentObject: InventoryLocation
+    private let dataManager: DataManager
+    private let parentObject: InventoryLocation
 
     // CoreData
     private let sortDescriptors = [NSSortDescriptor(key: "position", ascending: true),
@@ -35,8 +35,6 @@ struct InventoryLocCatViewModel {
     init(dataManager: DataManager, parentObject: InventoryLocation) {
         self.dataManager = dataManager
         self.parentObject = parentObject
-
-        // ...
 
         // FetchRequest
         let request: NSFetchRequest<InventoryLocationCategory> = InventoryLocationCategory.fetchRequest()

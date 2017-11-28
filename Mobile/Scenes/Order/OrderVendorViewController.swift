@@ -104,28 +104,6 @@ class OrderVendorViewController: UIViewController {
         confirmComplete.asObservable()
             .bind(to: viewModel.confirmComplete)
             .disposed(by: disposeBag)
-
-        // Navigation
-        viewModel.showNext
-            .subscribe(onNext: { [weak self] segue in
-                switch segue {
-                case .back:
-                    self?.navigationController!.popViewController(animated: true)
-                case .item(let order):
-                    self?.showOrderItemView(withOrder: order)
-                }
-            })
-            .disposed(by: disposeBag)
-    }
-
-    // MARK: - Navigation
-
-    private func showOrderItemView(withOrder order: Order) {
-        guard let destinationController = OrderItemViewController.instance() else {
-            fatalError("\(#function) FAILED: unable to get destination view controller.")
-        }
-        destinationController.viewModel = OrderViewModel(dataManager: viewModel.dataManager, parentObject: order)
-        navigationController?.pushViewController(destinationController, animated: true)
     }
 
     // MARK: - TableViewDataSource

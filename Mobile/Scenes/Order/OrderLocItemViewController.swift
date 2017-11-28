@@ -71,28 +71,12 @@ class OrderLocItemViewController: UIViewController {
         viewModel.items
             // closure args are row (IndexPath), element, cell
             // swiftlint:disable:next line_length
-            .bind(to: tableView.rx.items(cellIdentifier: "Cell", cellType: SubItemTableViewCell.self)) { (_, element, cell: SubItemTableViewCell) in
+            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier, cellType: SubItemTableViewCell.self)) { (_, element, cell: SubItemTableViewCell) in
                 guard let cellViewModel = OrderItemCellViewModel(forOrderItem: element) else {
                     fatalError("\(#function) FAILED : unable to init view model for \(element)")
                 }
                 cell.configure(withViewModel: cellViewModel)
             }
-            .disposed(by: disposeBag)
-
-        // Navigation
-        tableView.rx
-            .itemSelected
-            .subscribe(onNext: { [weak self] indexPath in
-                log.debug("We selected: \(indexPath)")
-                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self")}
-                guard let destinationController = OrderKeypadViewController.instance() else {
-                    fatalError("\(#function) FAILED : unable to get destination view controller.")
-                }
-                destinationController.viewModel = OrderKeypadViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                                       with: strongSelf.viewModel.orderItems,
-                                                                       atIndex: indexPath.row)
-                strongSelf.navigationController?.pushViewController(destinationController, animated: true)
-            })
             .disposed(by: disposeBag)
 
         // Other Delegate Methods

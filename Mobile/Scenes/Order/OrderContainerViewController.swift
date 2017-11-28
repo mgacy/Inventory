@@ -30,6 +30,7 @@ class OrderContainerViewController: UIViewController {
 
     // MARK: - Interface
 
+    let cancelButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: nil, action: nil)
     let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneBarButton"), style: .done, target: nil, action: nil)
 
     private lazy var segmentedControl: UISegmentedControl = {
@@ -40,27 +41,8 @@ class OrderContainerViewController: UIViewController {
         return control
     }()
 
-    private lazy var vendorsViewControlller: OrderVendorViewController = {
-        let controller = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
-        controller.viewModel = OrderVendorViewModel(dataManager: self.viewModel.dataManager,
-                                                    parentObject: self.viewModel.parentObject,
-                                                    rowTaps: controller.selectedObjects.asObservable(),
-                                                    completeTaps: controller.completeButtonItem.rx.tap.asObservable())
-
-        self.add(asChildViewController: controller)
-        return controller
-    }()
-
-    private lazy var locationsViewController: OrderLocationViewController = {
-        guard let viewController = OrderLocationViewController.instance() else {
-            fatalError("\(#function) FAILED : wrong view controller")
-        }
-        viewController.viewModel = OrderLocationViewModel(dataManager: self.viewModel.dataManager,
-                                                          collection: self.viewModel.parentObject)
-
-        self.add(asChildViewController: viewController)
-        return viewController
-    }()
+    private var vendorsViewControlller: OrderVendorViewController!
+    private var locationsViewController: OrderLocationViewController!
 
     // MARK: - Lifecycle
 
@@ -79,10 +61,17 @@ class OrderContainerViewController: UIViewController {
 
     // MARK: - View Methods
 
+    func configureChildControllers(vendorsController: OrderVendorViewController, locationsController: OrderLocationViewController) {
+        vendorsViewControlller = vendorsController
+        locationsViewController = locationsController
+    }
+
     private func setupView() {
         navigationItem.titleView = segmentedControl
-        //navigationItem.leftBarButtonItem =
         navigationItem.rightBarButtonItem = completeButtonItem
+        if self.presentingViewController != nil {
+            self.navigationItem.leftBarButtonItem = cancelButtonItem
+        }
         updateView()
     }
 
@@ -103,6 +92,7 @@ class OrderContainerViewController: UIViewController {
     //private func setupConstraints() {}
 
     private func setupBindings() {
+
         // Complete Order Alert
         viewModel.showAlert
             .drive(onNext: { [weak self] _ in
@@ -114,13 +104,6 @@ class OrderContainerViewController: UIViewController {
 
         confirmComplete.asObservable()
             .bind(to: viewModel.confirmComplete)
-            .disposed(by: disposeBag)
-
-        // Navigation
-        viewModel.popView
-            .drive(onNext: { [weak self] in
-                self?.navigationController!.popViewController(animated: true)
-            })
             .disposed(by: disposeBag)
     }
 

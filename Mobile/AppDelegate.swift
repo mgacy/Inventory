@@ -8,8 +8,9 @@
 
 import UIKit
 import CoreData
-import SwiftyBeaver
 import PKHUD
+import RxSwift
+import SwiftyBeaver
 
 let log = SwiftyBeaver.self
 
@@ -17,9 +18,9 @@ let log = SwiftyBeaver.self
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var persistentContainer: NSPersistentContainer!
-    var dataManager: DataManager!
-    var userManager: CurrentUserManager!
     var window: UIWindow?
+    private var appCoordinator: AppCoordinator!
+    private let disposeBag = DisposeBag()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         let defaults = UserDefaults.standard
@@ -44,31 +45,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
             /// TODO: initialize a SessionManager here and pass to different components
-            self.userManager = CurrentUserManager()
-            let dataManager = DataManager(container: container, userManager: self.userManager)
-            self.dataManager = dataManager
+            let userManager = CurrentUserManager()
+            let dataManager = DataManager(container: container, userManager: userManager)
 
             // View Stuff
-
             self.window = UIWindow(frame: UIScreen.main.bounds)
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
             HUD.dimsBackground = false
             HUD.allowsInteraction = false
 
-            // Check if we already have user + credentials
-            if self.userManager.user != nil {
-                let tabBarController = self.prepareTabBarController(dataManager: dataManager)
-                self.window?.rootViewController = tabBarController
-            } else {
-                guard let loginController = storyboard.instantiateViewController(
-                    withIdentifier: "InitialLoginViewController") as? InitialLoginViewController else {
-                        fatalError("Unable to instantiate view controller")
-                }
-                loginController.viewModel = InitialLoginViewModel(dataManager: dataManager)
-                self.window?.rootViewController = loginController
-            }
-            self.window?.makeKeyAndVisible()
+            self.appCoordinator = AppCoordinator(window: self.window!, userManager: userManager,
+                                                 dataManager: dataManager)
+            self.appCoordinator.start()
+                .subscribe()
+                //.subscribe(onNext: { result in
+                //    log.debug("\(#function) : next : \(result)")
+                //})
+                .disposed(by: self.disposeBag)
         }
         return true
     }
@@ -206,60 +198,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         log.addDestination(console)
         //log.addDestination(file)
-    }
-
-    func prepareTabBarController(dataManager: DataManager) -> UITabBarController {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let tabBarController = storyboard.instantiateViewController(
-            withIdentifier: "TabBarViewController") as? UITabBarController else {
-                fatalError("Unable to instantiate tab bar controller")
-        }
-
-        // Fix dark shadow in nav bar on segue
-        tabBarController.view.backgroundColor = UIColor.white
-
-        for child in tabBarController.viewControllers ?? [] {
-            guard
-                let navController = child as? UINavigationController,
-                let topVC = navController.topViewController else {
-                    fatalError("wrong view controller type")
-            }
-
-            switch topVC {
-            case is InventoryDateViewController:
-                guard let vc = topVC as? InventoryDateViewController else { fatalError("wrong view controller type") }
-                vc.viewModel = InventoryDateViewModel(dataManager: dataManager,
-                                                      rowTaps: vc.selectedObjects.asObservable())
-            case is OrderDateViewController:
-                guard let vc = topVC as? OrderDateViewController else { fatalError("wrong view controller type") }
-                vc.viewModel = OrderDateViewModel(dataManager: dataManager, rowTaps: vc.selectedObjects.asObservable())
-            case is InvoiceDateViewController:
-                guard let vc = topVC as? InvoiceDateViewController else { fatalError("wrong view controller type") }
-                vc.viewModel = InvoiceDateViewModel(dataManager: dataManager,
-                                                    rowTaps: vc.selectedObjects.asObservable())
-            case is InitialLoginViewController:
-                guard let vc = topVC as? InitialLoginViewController else { fatalError("wrong view controller type") }
-                vc.viewModel = InitialLoginViewModel(dataManager: dataManager)
-            case is SettingsViewController:
-                guard let vc = topVC as? SettingsViewController else { fatalError("wrong view controller type") }
-                vc.viewModel = SettingsViewModel(dataManager: dataManager, rowTaps: vc.rowTaps.asObservable())
-            default:
-                fatalError("wrong view controller type")
-            }
-        }
-
-        // Sync
-        /*
-        guard
-            let inventoryNavController = tabBarController.viewControllers?[0] as? UINavigationController,
-            let controller = inventoryNavController.topViewController as? InventoryDateViewController else {
-                fatalError("wrong view controller type")
-        }
-        HUD.show(.progress)
-        _ = SyncManager(context: persistentContainer.viewContext, storeID: userManager.storeID!,
-                        completionHandler: controller.completedSync)
-         */
-        return tabBarController
     }
 
 }

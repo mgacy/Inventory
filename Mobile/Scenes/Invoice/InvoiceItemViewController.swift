@@ -32,7 +32,8 @@ class InvoiceItemViewController: UIViewController {
     var viewModel: InvoiceItemViewModel!
     let disposeBag = DisposeBag()
 
-    let selectedObjects = PublishSubject<InvoiceItem>()
+    /// TODO: make PublishSubject fileprivate and expose observable
+    let selectedIndices = PublishSubject<IndexPath>()
 
     // TableView
     var cellIdentifier = "InvoiceItemCell"
@@ -108,18 +109,6 @@ class InvoiceItemViewController: UIViewController {
             .disposed(by: disposeBag)
 
         // Errors
-        // Selection
-    }
-
-    // MARK: - Navigation
-
-    fileprivate func showKeypad(withIndexPath indexPath: IndexPath) {
-        guard let destinationController = InvoiceKeypadViewController.instance() else {
-            fatalError("\(#function) FAILED: unable to get destination view controller.")
-        }
-        destinationController.viewModel = InvoiceKeypadViewModel(dataManager: viewModel.dataManager,
-                                                                 for: viewModel.parentObject, atIndex: indexPath.row)
-        navigationController?.pushViewController(destinationController, animated: true)
     }
 
     // MARK: - TableViewDataSource
@@ -139,9 +128,7 @@ class InvoiceItemViewController: UIViewController {
 extension InvoiceItemViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
-        //log.verbose("Selected InvoiceItem: \(dataSource.objectAtIndexPath(indexPath))")
-        showKeypad(withIndexPath: indexPath)
+        selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

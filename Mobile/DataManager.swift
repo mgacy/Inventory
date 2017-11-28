@@ -331,7 +331,7 @@ extension DataManager {
 
 extension DataManager {
 
-    func createOrderCollection(generationMethod method: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?) -> Observable<Event<OrderCollection>> {
+    func createOrderCollection(generationMethod method: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int? = nil) -> Observable<Event<OrderCollection>> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
             return Observable.error(DataManagerError.missingStoreID).materialize()
