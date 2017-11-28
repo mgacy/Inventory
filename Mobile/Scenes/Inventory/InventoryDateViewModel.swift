@@ -121,7 +121,7 @@ struct InventoryDateViewModel {
                 return "There was an error"
             }
             .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .never())
+            //.asDriver(onErrorDriveWith: .empty())
 
         // FetchRequest
         let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()

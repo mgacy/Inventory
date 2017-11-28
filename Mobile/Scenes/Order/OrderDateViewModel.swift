@@ -103,7 +103,7 @@ struct OrderDateViewModel {
                 }
             }
             .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .never())
+            //.asDriver(onErrorDriveWith: .empty())
 
         // FetchRequest
         let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()

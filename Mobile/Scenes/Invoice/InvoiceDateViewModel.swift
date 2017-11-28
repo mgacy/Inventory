@@ -89,7 +89,7 @@ struct InvoiceDateViewModel {
                 return "There was an error"
             }
             .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .never())
+            //.asDriver(onErrorDriveWith: .empty())
 
         // Navigation
         self.showCollection = showSelectionResults.elements()
