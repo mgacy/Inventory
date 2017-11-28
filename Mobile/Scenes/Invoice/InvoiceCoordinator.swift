@@ -70,9 +70,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
     }
 
     private func showKeypad(invoice: Invoice, atIndex index: Int) {
-        guard let viewController = InvoiceKeypadViewController.instance() else {
-            fatalError("\(#function) FAILED: unable to get destination view controller.")
-        }
+        let viewController = InvoiceKeypadViewController.instance()
         let viewModel = InvoiceKeypadViewModel(dataManager: dataManager, for: invoice, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)

@@ -11,7 +11,7 @@
 import UIKit
 
 extension UIViewController {
-    class func instance() -> Self? {
+    class func instance() -> Self {
         let storyboardName = String(describing: self)
         let storyboard = UIStoryboard(name: storyboardName, bundle: nil)
         return storyboard.initialViewController()
@@ -19,7 +19,10 @@ extension UIViewController {
 }
 
 extension UIStoryboard {
-    func initialViewController<T: UIViewController>() -> T? {
-        return self.instantiateInitialViewController() as? T
+    func initialViewController<T: UIViewController>() -> T {
+        guard let viewController = self.instantiateInitialViewController() as? T else {
+            fatalError("Wrong view controller: \(T.self)")
+        }
+        return viewController
     }
 }

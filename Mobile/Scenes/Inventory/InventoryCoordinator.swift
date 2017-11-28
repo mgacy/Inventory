@@ -89,9 +89,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showCategoryList(with location: InventoryLocation) {
         let viewController = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
-        //guard let viewController = InventoryLocationCategoryTVC.instance() else {
-        //    fatalError("Wrong view controller.")
-        //}
+        //let viewController = InventoryLocationCategoryTVC.instance()
         viewController.viewModel = InventoryLocCatViewModel(dataManager: dataManager, parentObject: location)
         navigationController.pushViewController(viewController, animated: true)
 
@@ -105,9 +103,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationItemList(with parent: LocationItemListParent) {
         let viewController = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
-        //guard let viewController = InventoryLocationItemTVC.instance() else {
-        //    fatalError("Wrong view controller.")
-        //}
+        //let viewController = InventoryLocationItemTVC.instance()
         viewController.viewModel = InventoryLocItemViewModel(dataManager: dataManager, parentObject: parent)
         navigationController.pushViewController(viewController, animated: true)
 
@@ -120,9 +116,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
-        guard let viewController = InventoryKeypadViewController.instance() else {
-            fatalError("Wrong view controller.")
-        }
+        let viewController = InventoryKeypadViewController.instance()
         let viewModel = InventoryKeypadViewModel(dataManager: dataManager, for: parent, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)

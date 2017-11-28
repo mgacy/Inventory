@@ -58,9 +58,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         vendorsController.viewModel = vendorsViewModel
 
         // OrderLocationViewController
-        guard let locationsController = OrderLocationViewController.instance() else {
-            fatalError("\(#function) FAILED : wrong view controller")
-        }
+        let locationsController = OrderLocationViewController.instance()
         let locationsViewModel = OrderLocationViewModel(dataManager: dataManager, collection: collection)
         locationsController.viewModel = locationsViewModel
 
@@ -139,9 +137,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showItemList(order: Order) {
-        guard let viewController = OrderItemViewController.instance() else {
-            fatalError("Wrong view controller")
-        }
+        let viewController = OrderItemViewController.instance()
         let viewModel = OrderViewModel(dataManager: dataManager, parentObject: order)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
@@ -157,9 +153,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showKeypad(order: Order, atIndex index: Int) {
-        guard let viewController = OrderKeypadViewController.instance() else {
-            fatalError("Wrong view controller")
-        }
+        let viewController = OrderKeypadViewController.instance()
         let viewModel = OrderKeypadViewModel(dataManager: dataManager, for: order, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
@@ -168,9 +162,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
     // MARK: Location
 
     fileprivate func showLocationList(collection: OrderCollection) {
-        guard let viewController = OrderLocationViewController.instance() else {
-            fatalError("Wrong view controller")
-        }
+        let viewController = OrderLocationViewController.instance()
         let viewModel = OrderLocationViewModel(dataManager: dataManager, collection: collection)
         viewController.viewModel = viewModel
         //navigationController.pushViewController(viewController, animated: true)
@@ -193,9 +185,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showLocationCategoryList(location: RemoteLocation, factory: OrderLocationFactory) {
-        guard let viewController = OrderLocCatViewController.instance() else {
-            fatalError("Wrong view controller")
-        }
+        let viewController = OrderLocCatViewController.instance()
         let viewModel = OrderLocCatViewModel(dataManager: dataManager, location: location, factory: factory)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
@@ -213,9 +203,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showLocationItemList(parent: OrderLocItemParent, factory: OrderLocationFactory) {
-        guard let viewController = OrderLocItemViewController.instance() else {
-            fatalError("Wrong view controller")
-        }
+        let viewController = OrderLocItemViewController.instance()
         let viewModel = OrderLocItemViewModel(dataManager: dataManager, parent: parent, factory: factory)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
@@ -231,9 +219,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
-        guard let viewController = OrderKeypadViewController.instance() else {
-            fatalError("Wrong view controller")
-        }
+        let viewController = OrderKeypadViewController.instance()
         let viewModel = OrderKeypadViewModel(dataManager: dataManager, with: orderItems, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
