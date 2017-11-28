@@ -33,6 +33,23 @@ class HomeCoordinator: BaseCoordinator<Void> {
             .subscribe()
             .disposed(by: disposeBag)
 
+        // Navigation
+        viewController.viewModel.showInventory
+            .flatMap { [weak self] inventory -> Observable<Void> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showNewInventory(with: inventory)
+            }
+            .subscribe()
+            .disposed(by: disposeBag)
+
+        viewController.viewModel.showOrder
+            .flatMap { [weak self] orderCollection -> Observable<Void> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showNewOrder(with: orderCollection)
+            }
+            .subscribe()
+            .disposed(by: disposeBag)
+
         return Observable.never()
     }
 
@@ -41,6 +58,18 @@ class HomeCoordinator: BaseCoordinator<Void> {
     private func showSettings(on rootViewController: UIViewController) -> Observable<Void> {
         let settingsCoordinator = SettingsCoordinator(rootViewController: rootViewController, dataManager: dataManager)
         return coordinate(to: settingsCoordinator)
+    }
+
+    public func showNewInventory(with inventory: Inventory) -> Observable<Void> {
+        let newInventoryCoordinator = ModalInventoryCoordinator(rootViewController: navigationController,
+                                                                dataManager: dataManager, inventory: inventory)
+        return coordinate(to: newInventoryCoordinator)
+    }
+
+    private func showNewOrder(with collection: OrderCollection) -> Observable<Void> {
+        let newOrderCoordinator = ModalOrderCoordinator(rootViewController: navigationController,
+                                                        dataManager: dataManager, collection: collection)
+        return coordinate(to: newOrderCoordinator)
     }
 
 }
