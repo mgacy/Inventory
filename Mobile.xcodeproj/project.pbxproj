@@ -123,7 +123,6 @@
 		C9AA8DC01F9F0D2D00147F07 /* InventoryLocItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */; };
 		C9AA8DC21F9F191000147F07 /* InitialSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DC11F9F191000147F07 /* InitialSignUpViewModel.swift */; };
 		C9AA8DC41F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */; };
-		C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */; };
 		C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */; };
 		C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */; };
 		C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB057F1F8315B000A07529 /* RemoteItem.swift */; };
@@ -239,7 +238,6 @@
 		C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundRectButton.swift; sourceTree = "<group>"; };
 		C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialLoginViewController.swift; sourceTree = "<group>"; };
-		C94084761EFCCB7F00638E25 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Syncable.swift; path = "Core Data Helpers/Syncable.swift"; sourceTree = "<group>"; };
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = InvoiceKeypadViewController.storyboard; sourceTree = "<group>"; };
@@ -301,7 +299,6 @@
 		C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryLocItemViewModel.swift; sourceTree = "<group>"; };
 		C9AA8DC11F9F191000147F07 /* InitialSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialSignUpViewModel.swift; sourceTree = "<group>"; };
 		C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnePasswordExtension+MyStuff.swift"; sourceTree = "<group>"; };
-		C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegueHandler.swift; path = Protocols/SegueHandler.swift; sourceTree = "<group>"; };
 		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Magic.swift"; sourceTree = "<group>"; };
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Magic.swift"; sourceTree = "<group>"; };
 		C9BB057F1F8315B000A07529 /* RemoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteItem.swift; sourceTree = "<group>"; };
@@ -444,7 +441,6 @@
 				C98A64F51FCB47A4008F02F9 /* AttachableViewModelType.swift */,
 				C9DEC1051F805CF6004602EB /* DateFacade.swift */,
 				C90477201EEE30D60082D894 /* KeypadViewModel.swift */,
-				C9B825EA1EB9A47C009B92F0 /* SegueHandler.swift */,
 				C9EDFD2B1F842F2300C07CB8 /* StoryboardInitializable.swift */,
 				C99568C91FBB809C00AE6949 /* ViewModelType.swift */,
 			);
@@ -766,7 +762,6 @@
 				C9045C121FC49EDA00F55FB3 /* BaseCoordinator.swift */,
 				C9045C141FC49F0000F55FB3 /* TabBarCoordinator.swift */,
 				C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */,
-				C94084761EFCCB7F00638E25 /* Dynamic.swift */,
 				C902FF2D1DB816EB0063CD02 /* Keypad.swift */,
 				C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */,
 				C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */,
@@ -1303,7 +1298,6 @@
 				C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */,
 				C9208A2E1FAB8BFA00D7C830 /* ItemUnits.swift in Sources */,
 				C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */,
-				C9B825EB1EB9A47C009B92F0 /* SegueHandler.swift in Sources */,
 				C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */,
 				C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */,
 				C95E44651FB2582400820067 /* HomeViewModel.swift in Sources */,
