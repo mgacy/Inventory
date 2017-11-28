@@ -11,14 +11,18 @@ import CodableAlamofire
 import RxCocoa
 import RxSwift
 
-/*
-NOTE - BackendError already declared in AlamofireRequest+JSONSerializable.swift
+// NOTE: this is taken from Alamofire README
+// NOTE: See "iOS Apps with REST APIs" Ch. 3.4 for an explanation of what is going on here
 
-enum MyResult {
-    case success(JSON?)
-    case failure(BackendError)
+public enum BackendError: Error {
+    case network(error: Error) // Capture any underlying Error from the URLSession API
+    case authentication(error: Error)
+    case dataSerialization(error: Error)
+    case jsonSerialization(error: Error)
+    case xmlSerialization(error: Error)
+    case objectSerialization(reason: String)
+    case myError(error: String)
 }
-*/
 
 class APIManager {
 
