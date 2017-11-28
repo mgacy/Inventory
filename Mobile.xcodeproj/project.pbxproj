@@ -61,6 +61,7 @@
 		C92EC6321F84C80300B47C23 /* RemoteOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EC6311F84C80300B47C23 /* RemoteOrder.swift */; };
 		C93203EA1FC678D200ACFC1D /* SignupCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */; };
 		C93203EC1FC6AA3000ACFC1D /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */; };
+		C93565361FCDF77D00CAFB16 /* RoundRectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */; };
 		C935E9A41E60D713003BF386 /* InitialLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */; };
 		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
@@ -236,6 +237,7 @@
 		C92EC6311F84C80300B47C23 /* RemoteOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteOrder.swift; path = Models/RemoteOrder.swift; sourceTree = "<group>"; };
 		C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupCoordinator.swift; sourceTree = "<group>"; };
 		C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
+		C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundRectButton.swift; sourceTree = "<group>"; };
 		C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialLoginViewController.swift; sourceTree = "<group>"; };
 		C94084761EFCCB7F00638E25 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Syncable.swift; path = "Core Data Helpers/Syncable.swift"; sourceTree = "<group>"; };
@@ -769,6 +771,7 @@
 				C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */,
 				C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */,
 				C91C92851EFCDD9000566CEB /* RoundButton.swift */,
+				C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */,
 				C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */,
 				C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */,
 			);
@@ -1257,6 +1260,7 @@
 				C97A71321F8EC83700F2F1CD /* InvoiceVendorViewModel.swift in Sources */,
 				C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */,
 				C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */,
+				C93565361FCDF77D00CAFB16 /* RoundRectButton.swift in Sources */,
 				C9BB058F1F831B2200A07529 /* OrderDateViewModel.swift in Sources */,
 				C9C2DA081F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift in Sources */,
 				C95E446E1FB2C26200820067 /* ItemCellViewModel.swift in Sources */,
@@ -1489,7 +1493,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mgacy.Mobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -1507,7 +1511,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mgacy.Mobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -1523,7 +1527,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mgacy.MobileTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mobile.app/Mobile";
 			};
@@ -1540,7 +1544,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mgacy.MobileTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mobile.app/Mobile";
 			};
