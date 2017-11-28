@@ -19,14 +19,15 @@ class InventoryLocationViewController: UIViewController, AttachableType {
     var bindings: InventoryLocationViewModel.Bindings {
         return InventoryLocationViewModel.Bindings(
             cancelTaps: cancelButtonItem.rx.tap.asObservable(),
-            rowTaps: selectedIndices.asObservable(),
+            rowTaps: selectedIndices,
             uploadTaps: uploadButtonItem.rx.tap.asObservable()
         )
     }
     var viewModel: InventoryLocationViewModel!
     let disposeBag = DisposeBag()
+    let selectedIndices: Observable<IndexPath>
 
-    let selectedIndices = PublishSubject<IndexPath>()
+    private let _selectedIndices = PublishSubject<IndexPath>()
 
     // TableViewCell
     let cellIdentifier = "InventoryLocationTableViewCell"
@@ -53,6 +54,11 @@ class InventoryLocationViewController: UIViewController, AttachableType {
     }
 
     // MARK: - Lifecycle
+
+    required init?(coder aDecoder: NSCoder) {
+        selectedIndices = _selectedIndices.asObservable()
+        super.init(coder: aDecoder)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,7 +167,7 @@ class InventoryLocationViewController: UIViewController, AttachableType {
 extension InventoryLocationViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedIndices.onNext(indexPath)
+        _selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
