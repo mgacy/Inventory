@@ -66,9 +66,9 @@ extension Order: Syncable {
 
 }
 
-// MARK: - NewSyncableParent
+// MARK: - SyncableParent
 
-extension Order: NewSyncableParent {
+extension Order: SyncableParent {
     typealias ChildType = OrderItem
 
     func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: OrderItem]? {

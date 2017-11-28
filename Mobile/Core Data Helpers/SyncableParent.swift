@@ -9,7 +9,7 @@
 import CoreData
 
 /// TODO: rename to reference relationships
-protocol NewSyncableParent: class, NSFetchRequestResult {
+protocol SyncableParent: class, NSFetchRequestResult {
     associatedtype ChildType: Syncable
 
     func syncChildren(with: [ChildType.RemoteType], in: NSManagedObjectContext)
@@ -20,7 +20,7 @@ protocol NewSyncableParent: class, NSFetchRequestResult {
     func deleteChildren(deletedIDs: Set<ChildType.RemoteType.SyncIdentifierType>, in: NSManagedObjectContext)
 }
 
-extension NewSyncableParent where ChildType: NSManagedObject {
+extension SyncableParent where ChildType: NSManagedObject {
 
     /// TODO: pass closure `configure: (ChildType) -> Void` to allow configuring relationships
     func syncChildren<R, I>(with records: [R], in context: NSManagedObjectContext) where R == ChildType.RemoteType,

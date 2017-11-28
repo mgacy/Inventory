@@ -92,9 +92,9 @@ extension Invoice: Syncable {
 
 }
 
-// MARK: - NewSyncableParent
+// MARK: - SyncableParent
 
-extension Invoice: NewSyncableParent {
+extension Invoice: SyncableParent {
     typealias ChildType = InvoiceItem
 
     func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: InvoiceItem]? {

@@ -51,9 +51,9 @@ extension OrderCollection: Syncable {
 
 }
 
-// MARK: - NewSyncableParent
+// MARK: - SyncableParent
 
-extension OrderCollection: NewSyncableParent {
+extension OrderCollection: SyncableParent {
     typealias ChildType = Order
 
     /// TODO: handle remoteID == 0 on new Orders
