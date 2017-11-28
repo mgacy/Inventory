@@ -52,15 +52,27 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="v7v-d2-uJ3">
-                                <rect key="frame" x="12" y="564" width="351" height="30"/>
+                                <rect key="frame" x="12" y="534" width="351" height="60"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZCW-WT-Aiv" userLabel="Inventory">
-                                        <rect key="frame" x="0.0" y="0.0" width="169.5" height="30"/>
-                                        <state key="normal" title="+ Inventory"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZCW-WT-Aiv" userLabel="Inventory" customClass="RoundRectButton" customModule="Mobile" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="169.5" height="60"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="IqB-ZY-0ka"/>
+                                        </constraints>
+                                        <state key="normal" title="+ Inventory">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FPz-Jd-4m3" userLabel="Order">
-                                        <rect key="frame" x="181.5" y="0.0" width="169.5" height="30"/>
-                                        <state key="normal" title="+ Order"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FPz-Jd-4m3" userLabel="Order" customClass="RoundRectButton" customModule="Mobile" customModuleProvider="target">
+                                        <rect key="frame" x="181.5" y="0.0" width="169.5" height="60"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="SMv-ke-oUP"/>
+                                        </constraints>
+                                        <state key="normal" title="+ Order">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
                                     </button>
                                 </subviews>
                                 <constraints>
