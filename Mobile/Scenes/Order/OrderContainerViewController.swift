@@ -43,29 +43,7 @@ class OrderContainerViewController: UIViewController {
 
     private var vendorsViewControlller: OrderVendorViewController!
     private var locationsViewController: OrderLocationViewController!
-    /*
-    private lazy var vendorsViewControlller: OrderVendorViewController = {
-        let controller = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
-        controller.viewModel = OrderVendorViewModel(dataManager: self.viewModel.dataManager,
-                                                    parentObject: self.viewModel.parentObject,
-                                                    rowTaps: controller.selectedObjects.asObservable(),
-                                                    completeTaps: controller.completeButtonItem.rx.tap.asObservable())
 
-        self.add(asChildViewController: controller)
-        return controller
-    }()
-
-    private lazy var locationsViewController: OrderLocationViewController = {
-        guard let viewController = OrderLocationViewController.instance() else {
-            fatalError("\(#function) FAILED : wrong view controller")
-        }
-        viewController.viewModel = OrderLocationViewModel(dataManager: self.viewModel.dataManager,
-                                                          collection: self.viewModel.parentObject)
-
-        self.add(asChildViewController: viewController)
-        return viewController
-    }()
-    */
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
