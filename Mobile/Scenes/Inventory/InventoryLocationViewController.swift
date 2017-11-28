@@ -99,7 +99,7 @@ class InventoryLocationViewController: UIViewController {
     private func setupBindings() {
 
         // Cancel Button
-         if self.presentingViewController != nil {
+        if self.presentingViewController != nil {
             cancelButtonItem.rx.tap.asObservable()
                 .subscribe(onNext: { [weak self] _ in
                     self?.navigationController?.dismiss(animated: true)
