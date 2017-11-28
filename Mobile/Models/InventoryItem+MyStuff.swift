@@ -7,7 +7,6 @@
 //
 
 import CoreData
-//import SwiftyJSON
 
 extension InventoryItem: NewSyncable {
     typealias RemoteType = RemoteInventoryItem
@@ -89,72 +88,6 @@ extension InventoryItem {
 
 }
 
-// MARK: - OLD
-/*
-extension InventoryItem {
-
-    // MARK: - Lifecycle
-
-    convenience init(context: NSManagedObjectContext, json: JSON,
-                     inventory: Inventory) {
-        self.init(context: context)
-
-        // Is this the best way to determine whether response is for a new or
-        // an existing InventoryItem?
-        if json["item"]["id"].int != nil {
-            initExisting(context: context, json: json)
-        } else {
-            initNew(context: context, json: json)
-        }
-
-        // Relationship
-        self.inventory = inventory
-    }
-
-    private func initNew(context: NSManagedObjectContext, json: JSON) {
-
-        if let itemID = json["id"].int32 {
-            self.itemID = itemID
-            //if let item = context.fetchWithRemoteID(Item.self, withID: itemID) {
-            if let item = context.fetchWithRemoteIdentifier(Item.self, identifier: itemID) {
-                self.item = item
-            } else {
-                log.warning("\(#function) : unable to fetch Item with remoteID \(itemID) for \(self)")
-            }
-        }
-        if let name = json["name"].string {
-            self.name = name
-        }
-        if let categoryID = json["category_id"].int32 {
-            self.categoryID = categoryID
-        }
-    }
-
-    private func initExisting(context: NSManagedObjectContext, json: JSON) {
-
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let name = json["item"]["name"].string {
-            self.name = name
-        }
-        if let itemID = json["item"]["id"].int32 {
-            self.itemID = itemID
-            //self.item = context.fetchWithRemoteID(Item.self, withID: itemID)
-            self.item = context.fetchWithRemoteIdentifier(Item.self, identifier: itemID)
-        }
-        if let categoryID = json["item"]["category"]["id"].int32 {
-            self.categoryID = categoryID
-        }
-
-        //if let quantity = json["quantity"].double {
-        //    self.quantity = Int32(quantity)
-        //}
-        // if let unitID = json["unit_id"].int {
-    }
-
-}
-*/
 // MARK: - Serialization
 
 extension InventoryItem {

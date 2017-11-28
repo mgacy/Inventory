@@ -10,7 +10,6 @@ import UIKit
 import KeychainAccess
 import OnePasswordExtension
 import PKHUD
-//import SwiftyJSON
 
 class LoginViewController: UIViewController {
 

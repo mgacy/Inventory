@@ -7,53 +7,7 @@
 //
 
 import Foundation
-//import CoreData
-//import SwiftyJSON
-/*
-extension InventoryLocationCategory {
 
-    // MARK: - Lifecycle
-
-    convenience init(context: NSManagedObjectContext, json: JSON,
-                     location: InventoryLocation, position: Int) {
-        self.init(context: context)
-
-        // Properties
-        self.position = Int16(position)
-        if let name = json["name"].string {
-            self.name = name
-        }
-        if let categoryID = json["id"].int32 {
-            self.categoryID = categoryID
-        }
-
-        // Relationship
-        self.location = location
-
-        // LocationItems
-        if let itemIDs = json["items"].array {
-            for (position, itemID) in itemIDs.enumerated() {
-                if let id = itemID.int {
-                    _ = InventoryLocationItem(context: context, itemID: id, category: self,
-                                              position: position + 1)
-                }
-            }
-        }
-    }
-
-    convenience init(context: NSManagedObjectContext, id: Int, name: String,
-                     location: InventoryLocation) {
-        self.init(context: context)
-
-        // Properties
-        self.categoryID = Int32(id)
-        self.name = name
-
-        // Relationship
-        self.location = location
-    }
-}
-*/
 // MARK: - Computed Properties
 extension InventoryLocationCategory {
 
