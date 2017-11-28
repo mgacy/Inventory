@@ -9,65 +9,62 @@
 import RxCocoa
 import RxSwift
 
-struct InitialSignUpViewModel {
+final class InitialSignUpViewModel: ViewModelType {
 
-    // MARK: - Properties
+    struct Input {
+        let username: Observable<String>
+        let login: Observable<String>
+        let password: Observable<String>
+        //let cancelTaps: Observable<Void>
+        let signupTaps: Observable<Void>
+        let doneTaps: Observable<Void>
+    }
 
-    //private let dataManager: DataManager
-    let dataManager: DataManager
+    struct Output {
+        //let didCancel: Observable<Void>
+        let isValid: Observable<Bool>
+        let signingUp: Driver<Bool>
+        let signupResults: Observable<Event<Bool>>
+    }
 
-    // MARK: Inputs
-    let username = Variable<String>("")
-    let login = Variable<String>("")
-    let password = Variable<String>("")
-    let cancelTaps: AnyObserver<Void>
-    let signupTaps: AnyObserver<Void>
-
-    // MARK: Outputs
-    let didCancel: Observable<Void>
-    //let didSignup: Observable<Bool>
-    let isValid: Observable<Bool>
-    let signingUp: Driver<Bool>
-    let signupResults: Observable<Event<Bool>>
+    // MARK: Dependencies
+    private let dataManager: DataManager
 
     // MARK: - Lifecycle
     init(dataManager: DataManager) {
         self.dataManager = dataManager
+    }
 
-        let _cancel = PublishSubject<Void>()
-        self.cancelTaps = _cancel.asObserver()
-        self.didCancel = _cancel.asObservable()
-
-        let _signup = PublishSubject<Void>()
-        self.signupTaps = _signup.asObserver()
-        //self.didSignup = _signup.asObservable()
-
+    func transform(input: Input) -> Output {
         let userInputs = Observable.combineLatest(
-            username.asObservable(), password.asObservable()
+            input.username, input.password
         ) { (login, password) -> (String, String) in
             return (login, password)
         }
 
-        isValid = userInputs
+        let isValid = userInputs
             .map { username, password in
                 //return !username.isEmpty && !password.isEmpty
                 return username.count > 0 && password.count > 0
         }
 
-        // Signup
-
         let signingUp = ActivityIndicator()
-        self.signingUp = signingUp.asDriver()
-
-        self.signupResults = _signup.asObservable()
+        let signupResults = Observable.of(input.signupTaps, input.doneTaps)
+            .merge()
             .withLatestFrom(userInputs)
             .flatMap { (arg) -> Observable<Event<Bool>> in
                 let (email, password) = arg
-                return dataManager.signUp(username: email, email: email, password: password)
+                return self.dataManager.signUp(username: email, email: email, password: password)
                     .trackActivity(signingUp)
             }
             .share(replay: 1)
-            //.shareReplay(1)
+
+        return Output(
+            //didCancel: input.cancelTaps,
+            isValid: isValid,
+            signingUp: signingUp.asDriver(),
+            signupResults: signupResults
+        )
     }
 
 }

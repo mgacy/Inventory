@@ -13,8 +13,7 @@ struct SettingsViewModel {
 
     // MARK: - Properties
 
-    //private let dataManager: DataManager
-    let dataManager: DataManager
+    private let dataManager: DataManager
 
     // MARK: Inputs
     //let accountCellTaps: AnyObserver<Void>
@@ -23,7 +22,8 @@ struct SettingsViewModel {
     var currentUser: User? { return dataManager.userManager.user }
     //let accountCellText: Driver<String>
     let didLogout: Driver<Bool>
-    let showLogin: Driver<Void>
+    //let showLogin: Driver<Void>
+    let showLogin: Observable<Void>
 
     // MARK: - Lifecycle
     init(dataManager: DataManager, rowTaps: Observable<IndexPath>) {
@@ -45,7 +45,7 @@ struct SettingsViewModel {
         showLogin = accountCellTaps
             .filter { _ in dataManager.userManager.user == nil }
             .map { _ in return }
-            .asDriver(onErrorJustReturn: ())
+            //.asDriver(onErrorJustReturn: ())
     }
 
 }

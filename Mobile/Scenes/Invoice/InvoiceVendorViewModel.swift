@@ -14,8 +14,7 @@ struct InvoiceVendorViewModel {
 
     // MARK: - Properties
 
-    //private let dataManager: DataManager
-    let dataManager: DataManager
+    private let dataManager: DataManager
     private let parentObject: InvoiceCollection
 
     // CoreData

@@ -14,8 +14,8 @@ struct InventoryLocItemViewModel {
 
     // MARK: - Properties
 
-    let dataManager: DataManager
-    var parentObject: LocationItemListParent
+    private let dataManager: DataManager
+    private let parentObject: LocationItemListParent
 
     // CoreData
     private let sortDescriptors = [NSSortDescriptor(key: "position", ascending: true),

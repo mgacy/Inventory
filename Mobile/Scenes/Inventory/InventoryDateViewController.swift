@@ -160,34 +160,6 @@ class InventoryDateViewController: UIViewController {
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
             })
             .disposed(by: disposeBag)
-
-        // Navigation
-        viewModel.showInventory
-            .subscribe(onNext: { [weak self] transition in
-                log.debug("\(#function) SELECTED: \(transition)")
-                guard let strongSelf = self else { fatalError("Unable to get self") }
-                switch transition {
-                case .existing(let inventory):
-                    log.verbose("GET selectedInventory from server - \(inventory.remoteID) ...")
-                    let vc = InventoryReviewViewController.initFromStoryboard(name: "InventoryReviewViewController")
-                    let vm = InventoryReviewViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                      parentObject: inventory, rowTaps: vc.selectedObjects)
-                    vc.viewModel = vm
-                    strongSelf.navigationController?.pushViewController(vc, animated: true)
-
-                case .new(let inventory):
-                    log.verbose("LOAD NEW selectedInventory from disk ...")
-                    let vc = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
-                    let vm = InventoryLocationViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                        parentObject: inventory, rowTaps: vc.selectedIndices,
-                                                        //uploadTaps: vc.uploadButtonItem.rx.tap.asDriver()
-                                                        uploadTaps: vc.uploadButtonItem.rx.tap.asObservable()
-                    )
-                    vc.viewModel = vm
-                    self?.navigationController?.pushViewController(vc, animated: true)
-                }
-            })
-            .disposed(by: disposeBag)
     }
 
     // MARK: - TableViewDataSource

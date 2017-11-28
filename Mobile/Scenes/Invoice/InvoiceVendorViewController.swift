@@ -21,7 +21,9 @@ class InvoiceVendorViewController: UIViewController {
 
     var viewModel: InvoiceVendorViewModel!
     let disposeBag = DisposeBag()
-    //let selectedObjects = PublishSubject<IndexPath>()
+    let selectedObjects = PublishSubject<Invoice>()
+    //let selectedObjects: Observable<Invoice>
+    //fileprivate let _selectedObjects = PublishSubject<Invoice>()
 
     // TableViewCell
     let cellIdentifier = "Cell"
@@ -37,6 +39,11 @@ class InvoiceVendorViewController: UIViewController {
     }()
 
     // MARK: - Lifecycle
+
+    //required init?(coder aDecoder: NSCoder) {
+    //    self.selectedObjects = _selectedObjects.asObservable()
+    //    super.init(coder: aDecoder)
+    //}
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,26 +86,13 @@ class InvoiceVendorViewController: UIViewController {
                                          fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    // MARK: - Navigation
-
-    fileprivate func showInvoice(withInvoice invoice: Invoice) {
-        let vc = InvoiceItemViewController.initFromStoryboard(name: "InvoiceItemViewController")
-        vc.viewModel = InvoiceItemViewModel(dataManager: viewModel.dataManager, parentObject: invoice,
-                                            rowTaps: vc.selectedObjects,
-                                            uploadTaps: vc.uploadButtonItem.rx.tap.asObservable())
-        navigationController?.pushViewController(vc, animated: true)
-    }
-
 }
 
 // MARK: - UITableViewDelegate
 extension InvoiceVendorViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected Invoice: \(selectedObject)")
-        showInvoice(withInvoice: selectedObject)
-        //selectedObjects.onNext(selectedObject)
+        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

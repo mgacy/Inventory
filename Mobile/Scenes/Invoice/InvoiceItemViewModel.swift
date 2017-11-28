@@ -14,8 +14,8 @@ struct InvoiceItemViewModel {
 
     // MARK: - Properties
 
-    let dataManager: DataManager
-    var parentObject: Invoice
+    private let dataManager: DataManager
+    private let parentObject: Invoice
 
     // CoreData
     private let filter: NSPredicate? = nil
@@ -36,7 +36,7 @@ struct InvoiceItemViewModel {
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, parentObject: Invoice, rowTaps: Observable<InvoiceItem>, uploadTaps: Observable<Void>) {
+    init(dataManager: DataManager, parentObject: Invoice, uploadTaps: Observable<Void>) {
         self.dataManager = dataManager
         self.parentObject = parentObject
 

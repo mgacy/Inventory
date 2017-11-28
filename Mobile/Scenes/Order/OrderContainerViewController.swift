@@ -41,27 +41,8 @@ class OrderContainerViewController: UIViewController {
         return control
     }()
 
-    private lazy var vendorsViewControlller: OrderVendorViewController = {
-        let controller = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
-        controller.viewModel = OrderVendorViewModel(dataManager: self.viewModel.dataManager,
-                                                    parentObject: self.viewModel.parentObject,
-                                                    rowTaps: controller.selectedObjects.asObservable(),
-                                                    completeTaps: controller.completeButtonItem.rx.tap.asObservable())
-
-        self.add(asChildViewController: controller)
-        return controller
-    }()
-
-    private lazy var locationsViewController: OrderLocationViewController = {
-        guard let viewController = OrderLocationViewController.instance() else {
-            fatalError("\(#function) FAILED : wrong view controller")
-        }
-        viewController.viewModel = OrderLocationViewModel(dataManager: self.viewModel.dataManager,
-                                                          collection: self.viewModel.parentObject)
-
-        self.add(asChildViewController: viewController)
-        return viewController
-    }()
+    private var vendorsViewControlller: OrderVendorViewController!
+    private var locationsViewController: OrderLocationViewController!
 
     // MARK: - Lifecycle
 
@@ -79,6 +60,11 @@ class OrderContainerViewController: UIViewController {
     //override func didReceiveMemoryWarning() {}
 
     // MARK: - View Methods
+
+    func configureChildControllers(vendorsController: OrderVendorViewController, locationsController: OrderLocationViewController) {
+        vendorsViewControlller = vendorsController
+        locationsViewController = locationsController
+    }
 
     private func setupView() {
         navigationItem.titleView = segmentedControl
@@ -106,14 +92,6 @@ class OrderContainerViewController: UIViewController {
     //private func setupConstraints() {}
 
     private func setupBindings() {
-        // Cancel Button
-        if self.presentingViewController != nil {
-            cancelButtonItem.rx.tap.asObservable()
-                .subscribe(onNext: { [weak self] _ in
-                    self?.navigationController?.dismiss(animated: true)
-                })
-                .disposed(by: disposeBag)
-        }
 
         // Complete Order Alert
         viewModel.showAlert
@@ -126,17 +104,6 @@ class OrderContainerViewController: UIViewController {
 
         confirmComplete.asObservable()
             .bind(to: viewModel.confirmComplete)
-            .disposed(by: disposeBag)
-
-        // Navigation
-        viewModel.popView
-            .drive(onNext: { [weak self] in
-                if self?.presentingViewController != nil {
-                    self?.navigationController?.dismiss(animated: true)
-                } else {
-                    self?.navigationController!.popViewController(animated: true)
-                }
-            })
             .disposed(by: disposeBag)
     }
 

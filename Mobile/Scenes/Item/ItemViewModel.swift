@@ -14,7 +14,7 @@ struct ItemViewModel {
 
     // MARK: Properties
 
-    let dataManager: DataManager
+    private let dataManager: DataManager
 
     // CoreData
     private let sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]

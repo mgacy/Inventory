@@ -10,62 +10,63 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-final class HomeViewModel: ViewModelType {
+final class HomeViewModel: AttachableViewModelType {
 
-    struct Input {
+    struct Dependency {
+        let dataManager: DataManager
+    }
+
+    struct Bindings {
         let addInventoryTaps: Observable<Void>
         let addOrderTaps: Observable<NewOrderGenerationMethod>
     }
 
-    struct Output {
-        let storeName: Driver<String>
-        let isLoading: Driver<Bool>
-        let errorMessages: Driver<String>
-        let showInventory: Driver<Inventory>
-        //let createInventoryResults: Observable<Event<Inventory>>
-        let showOrder: Observable<OrderCollection>
-        //let createOrderResults: Observable<Event<OrderCollection>>
-    }
-
     // MARK: Dependencies
-    let dataManager: DataManager
+    //let dataManager: DataManager
+
+    // MARK: Properties
+    let storeName: Driver<String>
+    let isLoading: Driver<Bool>
+    let errorMessages: Driver<String>
+    let showInventory: Observable<Inventory>
+    let showOrder: Observable<OrderCollection>
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager) {
-        self.dataManager = dataManager
-    }
-
-    // Note that this is not a pure function given our dependencies; we could pass dependencies to `bindViewModel()` on
-    // controller if we called that from the Coordinator / Router
-    func transform(input: Input) -> Output {
+    required init(dependency: Dependency, bindings: Bindings) {
+        //self.dataManager = model.dataManager
 
         // FIXME: actually get this from somewhere
-        let storeName = Observable.just("Lux").asDriver(onErrorJustReturn: "")
+        self.storeName = Observable.just("Lux").asDriver(onErrorJustReturn: "")
 
         // Loading
         let isLoading = ActivityIndicator()
 
         // Inventory
-        let createInventoryResults = input.addInventoryTaps
+        let createInventoryResults = bindings.addInventoryTaps
             .throttle(0.5, scheduler: MainScheduler.instance)
             .flatMap { _ -> Observable<Event<Inventory>> in
-                return self.dataManager.createInventory()
+                return dependency.dataManager.createInventory()
                     .trackActivity(isLoading)
             }
             .share()
+        //self.showInventory = createInventoryResults.elements().asDriver(onErrorDriveWith: .empty())
+        self.showInventory = createInventoryResults.elements()
 
         // Order
-        let createOrderResults = input.addOrderTaps
+        let createOrderResults = bindings.addOrderTaps
             .throttle(0.5, scheduler: MainScheduler.instance)
             .flatMap { method -> Observable<Event<OrderCollection>> in
-                return self.dataManager.createOrderCollection(generationMethod: method, returnUsage: false)
+                return dependency.dataManager.createOrderCollection(generationMethod: method, returnUsage: false)
                     .trackActivity(isLoading)
             }
             .share()
+        self.showOrder = createOrderResults.elements()
+
+        self.isLoading = isLoading.asDriver()
 
         // Errors
-        let errorMessages = Observable.of(createInventoryResults.errors(), createOrderResults.errors())
+        self.errorMessages = Observable.of(createInventoryResults.errors(), createOrderResults.errors())
             .merge()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
@@ -75,16 +76,6 @@ final class HomeViewModel: ViewModelType {
                 }
             }
             .asDriver(onErrorJustReturn: "Other Error")
-
-        // Output
-        return Output(
-            storeName: storeName,
-            isLoading: isLoading.asDriver(),
-            errorMessages: errorMessages,
-            showInventory: createInventoryResults.elements().asDriver(onErrorDriveWith: .never()),
-            //createInventoryResults: createInventoryResults,
-            showOrder: createOrderResults.elements())
-            //createOrderResults: createOrderResults
     }
 
 }
