@@ -37,6 +37,7 @@ class BaseCoordinator<ResultType> {
     ///
     /// - Parameter coordinator: Coordinator to release.
     private func free<T>(coordinator: BaseCoordinator<T>) {
+        log.debug("\(self) : freeing : \(coordinator)")
         childCoordinators[coordinator.identifier] = nil
     }
 
