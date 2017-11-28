@@ -120,3 +120,44 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
 }
+
+// MARK: - Modal Display from Home
+
+class ModalInventoryCoordinator: InventoryCoordinator {
+
+    private let rootViewController: UIViewController
+    private let inventory: Inventory
+
+    init(rootViewController: UIViewController, dataManager: DataManager, inventory: Inventory) {
+        self.rootViewController = rootViewController
+        self.inventory = inventory
+        super.init(navigationController: UINavigationController(), dataManager: dataManager)
+    }
+
+    override func start() -> Observable<Void> {
+        let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
+        let viewModel = InventoryLocationViewModel(dataManager: dataManager, parentObject: inventory,
+                                                   rowTaps: viewController.selectedIndices,
+                                                   uploadTaps: viewController.uploadButtonItem.rx.tap.asObservable())
+        viewController.viewModel = viewModel
+        navigationController.viewControllers = [viewController]
+        rootViewController.present(navigationController, animated: true)
+
+        // Selection
+        viewModel.showLocation
+            .subscribe(onNext: { [weak self] selection in
+                switch selection {
+                case .category(let location):
+                    self?.showCategoryList(with: location)
+                case .item(let location):
+                    self?.showLocationItemList(with: .location(location))
+                }
+            })
+            .disposed(by: disposeBag)
+
+        return viewController.cancelButtonItem.rx.tap
+            .take(1)
+            .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
+    }
+
+}

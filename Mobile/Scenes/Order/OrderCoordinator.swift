@@ -232,3 +232,57 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
 }
+
+// MARK: - Modal Display from Home
+
+class ModalOrderCoordinator: OrderCoordinator {
+
+    private let rootViewController: UIViewController
+    private let collection: OrderCollection
+
+    init(rootViewController: UIViewController, dataManager: DataManager, collection: OrderCollection) {
+        self.rootViewController = rootViewController
+        self.collection = collection
+        super.init(navigationController: UINavigationController(), dataManager: dataManager)
+    }
+
+    override func start() -> Observable<Void> {
+        let (containerController, locationsController, vendorsViewModel) = configureContainer(with: collection)
+        let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
+
+        navigationController.viewControllers = [containerController]
+        rootViewController.present(navigationController, animated: true)
+
+        // Selction - Vendor
+        vendorsViewModel.showNext
+            .subscribe(onNext: { [weak self] segue in
+                switch segue {
+                case .back:
+                    self?.navigationController.popViewController(animated: true)
+                case .item(let order):
+                    self?.showItemList(order: order)
+                }
+            })
+            .disposed(by: disposeBag)
+
+        // Selection - Location
+        locationsController.tableView.rx
+            .modelSelected(RemoteLocation.self)
+            .subscribe(onNext: { [weak self] location in
+                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
+                switch location.locationType {
+                case .category:
+                    strongSelf.showLocationCategoryList(location: location, factory: factory)
+                case .item:
+                    strongSelf.showLocationItemList(parent: OrderLocItemParent.location(location), factory: factory)
+                }
+            })
+            .disposed(by: disposeBag)
+
+        // Cancel
+        return containerController.cancelButtonItem.rx.tap
+            .take(1)
+            .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
+    }
+
+}
