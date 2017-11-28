@@ -110,9 +110,9 @@ import CoreData
 
 }
 
-// MARK: - NewSyncable
+// MARK: - Syncable
 
-extension InvoiceItem: NewSyncable {
+extension InvoiceItem: Syncable {
     typealias RemoteType = RemoteInvoiceItem
     typealias RemoteIdentifierType = Int32
 

@@ -12,7 +12,7 @@ import CoreData
 
 extension NSManagedObjectContext {
 
-    func fetchWithRemoteIdentifier<T: NewSyncable, I>(_ entity: T.Type, identifier id: I) -> T? where T: NSManagedObject, I == T.RemoteIdentifierType {
+    func fetchWithRemoteIdentifier<T: Syncable, I>(_ entity: T.Type, identifier id: I) -> T? where T: NSManagedObject, I == T.RemoteIdentifierType {
         let request: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
         request.predicate = NSPredicate(format: "\(entity.remoteIdentifierName) == \(id)")
         request.fetchLimit = 2
@@ -38,7 +38,7 @@ extension NSManagedObjectContext {
         }
     }
 
-    func fetchEntityDict<T: NewSyncable, I>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [I: T] where T: NSManagedObject, I == T.RemoteIdentifierType {
+    func fetchEntityDict<T: Syncable, I>(_ entityClass: T.Type, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [I: T] where T: NSManagedObject, I == T.RemoteIdentifierType {
 
         //let request: NSFetchRequest<T> = entityClass.fetchRequest() as! NSFetchRequest<T>
         let request = NSFetchRequest<T>(entityName: T.entityName)

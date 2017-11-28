@@ -537,7 +537,7 @@ extension DataManager {
         }
     }
 
-    private func syncEntitiesB<M: NewSyncable, R>(_ entity: M, with response: DataResponse<[R]>) -> Bool where M: NSManagedObject, R == M.RemoteType {
+    private func syncEntitiesB<M: Syncable, R>(_ entity: M, with response: DataResponse<[R]>) -> Bool where M: NSManagedObject, R == M.RemoteType {
         switch response.result {
         case .success(let records):
             M.sync(with: records, in: managedObjectContext)

@@ -8,7 +8,7 @@
 
 import CoreData
 
-protocol NewSyncable: Managed {
+protocol Syncable: Managed {
     /// TODO: rename `RemoteType` as `RemoteRecordType`?
     associatedtype RemoteType: RemoteRecord
     associatedtype RemoteIdentifierType: Hashable
@@ -22,7 +22,7 @@ protocol NewSyncable: Managed {
     func update(with: RemoteType, in: NSManagedObjectContext)
 }
 
-extension NewSyncable where Self: NSManagedObject {
+extension Syncable where Self: NSManagedObject {
 
     static var remoteIdentifierName: String { return "remoteID" }
 

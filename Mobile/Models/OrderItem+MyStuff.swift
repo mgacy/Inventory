@@ -8,9 +8,9 @@
 
 import CoreData
 
-// MARK: - NewSyncable
+// MARK: - Syncable
 
-extension OrderItem: NewSyncable {
+extension OrderItem: Syncable {
     typealias RemoteType = RemoteOrderItem
     typealias RemoteIdentifierType = Int32
 

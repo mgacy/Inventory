@@ -10,9 +10,9 @@ import CoreData
 
 extension OrderCollection: DateFacade {}
 
-// MARK: - NewSyncable
+// MARK: - Syncable
 
-extension OrderCollection: NewSyncable {
+extension OrderCollection: Syncable {
     typealias RemoteType = RemoteOrderCollection
     typealias RemoteIdentifierType = Date
 

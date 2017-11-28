@@ -10,7 +10,7 @@ import CoreData
 
 /// TODO: rename to reference relationships
 protocol NewSyncableParent: class, NSFetchRequestResult {
-    associatedtype ChildType: NewSyncable
+    associatedtype ChildType: Syncable
 
     func syncChildren(with: [ChildType.RemoteType], in: NSManagedObjectContext)
     func fetchChildDict(in: NSManagedObjectContext) -> [ChildType.RemoteIdentifierType: ChildType]?

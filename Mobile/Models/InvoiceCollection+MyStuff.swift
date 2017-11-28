@@ -10,9 +10,9 @@ import CoreData
 
 extension InvoiceCollection: DateFacade {}
 
-// MARK: - NewSyncable
+// MARK: - Syncable
 
-extension InvoiceCollection: NewSyncable {
+extension InvoiceCollection: Syncable {
     typealias RemoteType = RemoteInvoiceCollection
     typealias RemoteIdentifierType = Date
 

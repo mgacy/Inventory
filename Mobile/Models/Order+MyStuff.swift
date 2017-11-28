@@ -22,9 +22,9 @@ import CoreData
 
 }
 
-// MARK: - NewSyncable
+// MARK: - Syncable
 
-extension Order: NewSyncable {
+extension Order: Syncable {
     typealias RemoteType = RemoteOrder
     typealias RemoteIdentifierType = Int32
 

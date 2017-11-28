@@ -8,7 +8,7 @@
 
 import CoreData
 
-extension InventoryItem: NewSyncable {
+extension InventoryItem: Syncable {
     typealias RemoteType = RemoteInventoryItem
     typealias RemoteIdentifierType = Int32
 

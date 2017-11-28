@@ -8,7 +8,7 @@
 
 import CoreData
 
-extension VendorRep: NewSyncable {
+extension VendorRep: Syncable {
     typealias RemoteType = RemoteRepresentative
     typealias RemoteIdentifierType = Int32
 

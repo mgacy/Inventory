@@ -20,9 +20,9 @@ enum InventoryStatus {
     case complete
 }
 
-// MARK: - NewSyncable
+// MARK: - Syncable
 
-extension InventoryLocation: NewSyncable {
+extension InventoryLocation: Syncable {
     typealias RemoteType = RemoteInventoryLocation
     typealias RemoteIdentifierType = Int32
 
