@@ -19,9 +19,10 @@ class HomeCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = HomeViewController.initFromStoryboard(name: "Main")
-        let viewModel = HomeViewModel(dataManager: dataManager)
-        viewController.viewModel = viewModel
+        var viewController = HomeViewController.initFromStoryboard(name: "Main")
+
+        var avm: Attachable<HomeViewModel> = .detached(HomeViewModel.Dependency(dataManager: dataManager))
+        viewController.bindViewModel(to: &avm)
         navigationController.viewControllers = [viewController]
 
         viewController.settingsButtonItem.rx.tap

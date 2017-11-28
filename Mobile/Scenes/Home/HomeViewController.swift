@@ -11,7 +11,7 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, AttachableType {
 
     private enum Strings {
         /// TODO: navTitle should be store name
@@ -52,6 +52,13 @@ class HomeViewController: UIViewController {
 
     // MARK: - Properties
 
+    var bindings: HomeViewModel.Bindings {
+        return HomeViewModel.Bindings(
+            addInventoryTaps: addInventoryButton.rx.tap.asObservable(),
+            // FIXME: is this safe?
+            addOrderTaps: addOrderButton.rx.tap.flatMap { [unowned self] _ in return self.mapAlert() }
+        )
+    }
     var viewModel: HomeViewModel!
     let disposeBag = DisposeBag()
 
@@ -66,9 +73,6 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        //setupConstraints()
-        bindViewModel()
-        //setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -87,21 +91,14 @@ class HomeViewController: UIViewController {
 
     //private func setupConstraints() {}
 
-    // swiftlint:disable:next function_body_length
-    private func bindViewModel() {
-        let inputs = HomeViewModel.Input(addInventoryTaps: addInventoryButton.rx.tap.asObservable(),
-                                         addOrderTaps: addOrderButton.rx.tap
-                                            // FIXME: is this safe?
-                                            .flatMap { [unowned self] _ in return self.mapAlert() })
-        let outputs = viewModel.transform(input: inputs)
-
-        outputs.storeName
+    func bindViewModel() {
+        viewModel.storeName
             .drive(onNext: { [weak self] name in
                 self?.title = name
             })
             .disposed(by: disposeBag)
 
-        outputs.isLoading
+        viewModel.isLoading
             .drive(onNext: { status in
                 switch status {
                 case true:
@@ -112,38 +109,9 @@ class HomeViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        outputs.errorMessages
+        viewModel.errorMessages
             .drive(onNext: { [weak self] message in
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
-            })
-            .disposed(by: disposeBag)
-
-        outputs.showInventory
-            .drive(onNext: { [weak self] inventory in
-                log.debug("Show Inventory view with: \(inventory)")
-                guard let strongSelf = self else {
-                    log.error("\(#function) FAILED : unable to get reference to self"); return
-                }
-                let vc = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
-                vc.viewModel = InventoryLocationViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                          parentObject: inventory, rowTaps: vc.selectedIndices,
-                                                          uploadTaps: vc.uploadButtonItem.rx.tap.asObservable())
-                let navigationController = UINavigationController(rootViewController: vc)
-                strongSelf.navigationController?.present(navigationController, animated: true, completion: nil)
-            })
-            .disposed(by: disposeBag)
-
-        outputs.showOrder
-            .subscribe(onNext: { [weak self] orderCollection in
-                guard let strongSelf = self else {
-                    log.error("\(#function) FAILED : unable to get reference to self"); return
-                }
-                let vc = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
-                vc.viewModel = OrderContainerViewModel(dataManager: strongSelf.viewModel.dataManager,
-                                                       parentObject: orderCollection,
-                                                       completeTaps: vc.completeButtonItem.rx.tap.asObservable())
-                let navigationController = UINavigationController(rootViewController: vc)
-                strongSelf.navigationController?.present(navigationController, animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
     }
