@@ -17,7 +17,7 @@ PODS:
     - RxSwiftExt/Core (= 3.0.0)
   - RxSwiftExt/Core (3.0.0):
     - RxSwift (~> 4.0)
-  - SwiftyBeaver (1.4.2)
+  - SwiftyBeaver (1.4.3)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
@@ -54,7 +54,7 @@ SPEC CHECKSUMS:
   RxDataSources: 098b7e62b6316313b14d6bf594e3f4f4f62a238a
   RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
   RxSwiftExt: b06c47dff66cd33ca7683bba1e74b0c5c8e3592e
-  SwiftyBeaver: 91057725648ee4980308f1650af077d04b3654a0
+  SwiftyBeaver: e10b1668e0512229c36c34769b97eed3dfae2ca3
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
 PODFILE CHECKSUM: 95a8cdfb93c636a82faa2301580ee73904f7641d
