@@ -24,10 +24,12 @@ class InventoryLocationViewController: UIViewController, AttachableType {
         )
     }
     var viewModel: InventoryLocationViewModel!
-    let disposeBag = DisposeBag()
     let selectedIndices: Observable<IndexPath>
+    let dismissView: Observable<Void>
 
+    private let disposeBag = DisposeBag()
     private let _selectedIndices = PublishSubject<IndexPath>()
+    private let _dismissView = PublishSubject<Void>()
 
     // TableViewCell
     let cellIdentifier = "InventoryLocationTableViewCell"
@@ -57,6 +59,7 @@ class InventoryLocationViewController: UIViewController, AttachableType {
 
     required init?(coder aDecoder: NSCoder) {
         selectedIndices = _selectedIndices.asObservable()
+        dismissView = _dismissView.asObservable()
         super.init(coder: aDecoder)
     }
 
@@ -132,12 +135,7 @@ class InventoryLocationViewController: UIViewController, AttachableType {
                 switch result.event {
                 case .next:
                     HUD.flash(.success, delay: 0.5) { _ in
-                        /// TODO: handle this elsewhere
-                        if self?.presentingViewController != nil {
-                            self?.navigationController?.dismiss(animated: true)
-                        } else {
-                            self?.navigationController!.popViewController(animated: true)
-                        }
+                        self?._dismissView.onNext(())
                     }
                 case .error:
                     /// TODO: `case.error(let error):; switch error {}`

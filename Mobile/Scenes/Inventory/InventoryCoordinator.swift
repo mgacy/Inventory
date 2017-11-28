@@ -58,7 +58,6 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationList(with inventory: Inventory) {
         let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
-
         var avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
             dataManager: dataManager,
             parentObject: inventory
@@ -77,6 +76,13 @@ class InventoryCoordinator: BaseCoordinator<Void> {
                 case .item(let location):
                     self?.showLocationItemList(with: .location(location))
                 }
+            })
+            .disposed(by: disposeBag)
+
+        // Dismiss
+        viewController.dismissView
+            .subscribe(onNext: { [weak self] _ in
+                self?.navigationController.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
     }
@@ -160,7 +166,11 @@ class ModalInventoryCoordinator: InventoryCoordinator {
             })
             .disposed(by: disposeBag)
 
-        return viewController.cancelButtonItem.rx.tap
+        // Dismiss
+        return Observable.merge(
+                viewController.cancelButtonItem.rx.tap.asObservable(),
+                viewController.dismissView
+            )
             .take(1)
             .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
     }
