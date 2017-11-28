@@ -12,10 +12,17 @@ import RxCocoa
 import RxSwift
 
 // swiftlint:disable:next type_name
-class InventoryLocationViewController: UIViewController {
+class InventoryLocationViewController: UIViewController, AttachableType {
 
     // MARK: - Properties
 
+    var bindings: InventoryLocationViewModel.Bindings {
+        return InventoryLocationViewModel.Bindings(
+            cancelTaps: cancelButtonItem.rx.tap.asObservable(),
+            rowTaps: selectedIndices.asObservable(),
+            uploadTaps: uploadButtonItem.rx.tap.asObservable()
+        )
+    }
     var viewModel: InventoryLocationViewModel!
     let disposeBag = DisposeBag()
 
@@ -51,12 +58,13 @@ class InventoryLocationViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        setupBindings()
-        setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if self.presentingViewController != nil {
+            self.navigationItem.leftBarButtonItem = cancelButtonItem
+        }
         self.tableView.reloadData()
     }
 
@@ -74,9 +82,6 @@ class InventoryLocationViewController: UIViewController {
         //messageLabel.text = "You do not have any Items yet."
 
         self.navigationItem.rightBarButtonItem = uploadButtonItem
-        if self.presentingViewController != nil {
-            self.navigationItem.leftBarButtonItem = cancelButtonItem
-        }
 
         //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         //messageLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -96,16 +101,17 @@ class InventoryLocationViewController: UIViewController {
         // MessageLabel
     }
 
-    private func setupBindings() {
+    // Compiler fails to recognize this function as added by protocol extension
+    func bindViewModel(to model: inout Attachable<InventoryLocationViewModel>) {
+        loadViewIfNeeded()
+        viewModel = model.bind(bindings)
+        bindViewModel()
+        //return viewModel
+    }
 
-        // Cancel Button
-        if self.presentingViewController != nil {
-            cancelButtonItem.rx.tap.asObservable()
-                .subscribe(onNext: { [weak self] _ in
-                    self?.navigationController?.dismiss(animated: true)
-                })
-                .disposed(by: disposeBag)
-        }
+    func bindViewModel() {
+        // We have to wait until after we set .viewModel since we use viewModel.frc
+        setupTableView()
 
         // Uploading
         viewModel.isUploading

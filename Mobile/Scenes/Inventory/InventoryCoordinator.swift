@@ -58,15 +58,18 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationList(with inventory: Inventory) {
         let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
-        let viewModel = InventoryLocationViewModel(dataManager: dataManager, parentObject: inventory,
-                                                   rowTaps: viewController.selectedIndices,
-                                                   uploadTaps: viewController.uploadButtonItem.rx.tap.asObservable())
-        viewController.viewModel = viewModel
+
+        var avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
+            dataManager: dataManager,
+            parentObject: inventory
+        ))
+        viewController.bindViewModel(to: &avm)
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
         /// TODO: shouldn't this only take one and then complete?
-        viewModel.showLocation
+        viewController.viewModel.showLocation
+            //.take(1)
             .subscribe(onNext: { [weak self] selection in
                 switch selection {
                 case .category(let location):
@@ -136,15 +139,17 @@ class ModalInventoryCoordinator: InventoryCoordinator {
 
     override func start() -> Observable<Void> {
         let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
-        let viewModel = InventoryLocationViewModel(dataManager: dataManager, parentObject: inventory,
-                                                   rowTaps: viewController.selectedIndices,
-                                                   uploadTaps: viewController.uploadButtonItem.rx.tap.asObservable())
-        viewController.viewModel = viewModel
+        var avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
+            dataManager: dataManager,
+            parentObject: inventory
+        ))
+        viewController.bindViewModel(to: &avm)
         navigationController.viewControllers = [viewController]
         rootViewController.present(navigationController, animated: true)
 
         // Selection
-        viewModel.showLocation
+        viewController.viewModel.showLocation
+            //.take(1)
             .subscribe(onNext: { [weak self] selection in
                 switch selection {
                 case .category(let location):
