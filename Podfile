@@ -4,16 +4,18 @@ platform :ios, '10.0'
 # Basic
 def basic_pods
   pod 'Alamofire',          '~> 4.4'
+  pod 'CodableAlamofire'
   pod 'SwiftyJSON'
   pod 'KeychainAccess'
   pod 'PKHUD',              '~> 5.0'
   pod 'SwiftyBeaver'
   pod '1PasswordExtension', :git => 'https://github.com/AgileBits/onepassword-app-extension.git', :branch => 'new/ios10'
+  # Rx
   pod 'RxSwift',            '~> 4.0'
   pod 'RxCocoa',            '~> 4.0'
   pod 'RxDataSources',      '~> 3.0'
+  pod "RxSwiftExt",         '~> 3.0'
   # pod 'RxAlamofire',        '~> 4.0'
-  # pod "RxSwiftExt",         '~> 3.0'
   # pod "RxCoreData",         '~> 0.3.1'
   # A
   # pod 'DATAStack',        '~> 6'

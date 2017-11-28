@@ -7,6 +7,7 @@
 //
 
 import Alamofire
+import CodableAlamofire
 import RxCocoa
 import RxSwift
 

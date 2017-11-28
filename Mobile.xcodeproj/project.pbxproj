@@ -67,7 +67,6 @@
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
 		C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */; };
 		C949C20E1F160719008A5EC4 /* InvoiceItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */; };
-		C9534D371F90042B00DA4A78 /* materialized+elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9534D361F90042B00DA4A78 /* materialized+elements.swift */; };
 		C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9564F311F840276007D84F6 /* RemoteInventory.swift */; };
 		C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */; };
 		C95DE42C1F9587580079B43B /* InventoryLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C95DE42B1F9587580079B43B /* InventoryLocationViewController.storyboard */; };
@@ -126,8 +125,6 @@
 		C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */; };
 		C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */; };
 		C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB057F1F8315B000A07529 /* RemoteItem.swift */; };
-		C9BB05831F83162500A07529 /* DataRequest+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05821F83162500A07529 /* DataRequest+Decodable.swift */; };
-		C9BB05851F83164400A07529 /* AlamofireDecodableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05841F83164400A07529 /* AlamofireDecodableError.swift */; };
 		C9BB05871F83169800A07529 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05861F83169800A07529 /* DataManager.swift */; };
 		C9BB05891F83171000A07529 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05881F83171000A07529 /* ActivityIndicator.swift */; };
 		C9BB058B1F831AF900A07529 /* InventoryDateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB058A1F831AF900A07529 /* InventoryDateViewModel.swift */; };
@@ -242,7 +239,6 @@
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = InvoiceKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemCellViewModel.swift; sourceTree = "<group>"; };
-		C9534D361F90042B00DA4A78 /* materialized+elements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "materialized+elements.swift"; sourceTree = "<group>"; };
 		C9564F311F840276007D84F6 /* RemoteInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInventory.swift; path = Models/RemoteInventory.swift; sourceTree = "<group>"; };
 		C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+MyStuff.swift"; sourceTree = "<group>"; };
 		C95DE42B1F9587580079B43B /* InventoryLocationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryLocationViewController.storyboard; sourceTree = "<group>"; };
@@ -302,8 +298,6 @@
 		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Magic.swift"; sourceTree = "<group>"; };
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Magic.swift"; sourceTree = "<group>"; };
 		C9BB057F1F8315B000A07529 /* RemoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteItem.swift; sourceTree = "<group>"; };
-		C9BB05821F83162500A07529 /* DataRequest+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataRequest+Decodable.swift"; sourceTree = "<group>"; };
-		C9BB05841F83164400A07529 /* AlamofireDecodableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireDecodableError.swift; sourceTree = "<group>"; };
 		C9BB05861F83169800A07529 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		C9BB05881F83171000A07529 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		C9BB058A1F831AF900A07529 /* InventoryDateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryDateViewModel.swift; sourceTree = "<group>"; };
@@ -540,7 +534,6 @@
 		C9534D351F9003C000DA4A78 /* RxSwift */ = {
 			isa = PBXGroup;
 			children = (
-				C9534D361F90042B00DA4A78 /* materialized+elements.swift */,
 			);
 			path = RxSwift;
 			sourceTree = "<group>";
@@ -687,7 +680,6 @@
 		C9BA91271DEB957400DA2C6C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C9BB05811F8315F700A07529 /* Alamofire */,
 				C9BA91291DEB959500DA2C6C /* Foundation */,
 				C9534D351F9003C000DA4A78 /* RxSwift */,
 				C9BA91281DEB958200DA2C6C /* UIKit */,
@@ -721,15 +713,6 @@
 				C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */,
 			);
 			path = Foundation;
-			sourceTree = "<group>";
-		};
-		C9BB05811F8315F700A07529 /* Alamofire */ = {
-			isa = PBXGroup;
-			children = (
-				C9BB05841F83164400A07529 /* AlamofireDecodableError.swift */,
-				C9BB05821F83162500A07529 /* DataRequest+Decodable.swift */,
-			);
-			path = Alamofire;
 			sourceTree = "<group>";
 		};
 		C9C221151EFCCE4A009C7D01 /* Item List */ = {
@@ -1074,12 +1057,14 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Mobile/Pods-Mobile-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/1PasswordExtension/OnePasswordExtension.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CodableAlamofire/CodableAlamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework",
 				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwiftExt/RxSwiftExt.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
@@ -1087,12 +1072,14 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OnePasswordExtension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CodableAlamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differentiator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainAccess.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwiftExt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyBeaver.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
@@ -1202,7 +1189,6 @@
 				C91856951F8D881D001B08A0 /* InventoriesFactory.swift in Sources */,
 				C901A50D1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift in Sources */,
 				C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */,
-				C9BB05851F83164400A07529 /* AlamofireDecodableError.swift in Sources */,
 				C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */,
 				C92EC6321F84C80300B47C23 /* RemoteOrder.swift in Sources */,
 				C95F52F01F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift in Sources */,
@@ -1219,7 +1205,6 @@
 				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
 				C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */,
 				C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */,
-				C9534D371F90042B00DA4A78 /* materialized+elements.swift in Sources */,
 				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
 				C91417EE1FA8F63500168064 /* OrderLocCatViewController.swift in Sources */,
 				C976305F1F219A0900BA8E42 /* JSON+Date.swift in Sources */,
@@ -1279,7 +1264,6 @@
 				C97A71301F8EC4A100F2F1CD /* OrderVendorViewModel.swift in Sources */,
 				C935E9A41E60D713003BF386 /* InitialLoginViewController.swift in Sources */,
 				C97B7C471FAB908000117D29 /* OrderContainerViewModel.swift in Sources */,
-				C9BB05831F83162500A07529 /* DataRequest+Decodable.swift in Sources */,
 				C9F516171DB7F158004C10E6 /* AlamofireRequest+JSONSerializable.swift in Sources */,
 				C95E44681FB2968C00820067 /* ItemViewController.swift in Sources */,
 				C96A89A01FAA5DB400CDDC59 /* OrderContainerViewController.swift in Sources */,
