@@ -130,31 +130,6 @@ extension Inventory {
     }
 
 }
-
-extension Inventory: Syncable {
-
-    public func update(context: NSManagedObjectContext, withJSON json: JSON) {
-        // guard let json = json as? JSON else {
-        //     log.error("\(#function) FAILED : SwiftyJSON"); return
-        // }
-
-        if let dateString = json["date"].string,
-           let date = dateString.toBasicDate() {
-                //self.date = date.timeIntervalSince1970
-                self.date = date.timeIntervalSinceReferenceDate
-        }
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
-        if let typeID = json["inventory_type_id"].int32 {
-            self.typeID = typeID
-        }
-    }
-
-}
 */
 // MARK: - Serialization
 

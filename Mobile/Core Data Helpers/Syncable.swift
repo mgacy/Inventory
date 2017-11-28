@@ -7,7 +7,6 @@
 //
 
 import CoreData
-import SwiftyJSON
 
 protocol NewSyncable: Managed {
     /// TODO: rename `RemoteType` as `RemoteRecordType`?
@@ -139,14 +138,4 @@ extension NewSyncable where Self: NSManagedObject {
             }
     }
 
-}
-
-// MARK: - Syncable
-// NOTE: Unit still conforms to Syncable
-
-public protocol Syncable {
-    var remoteID: Int32 { get set }
-
-    //convenience init(context: NSManagedObjectContext, representation: Any)
-    func update(context: NSManagedObjectContext, withJSON json: JSON)
 }
