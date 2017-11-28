@@ -28,5 +28,6 @@ extension AttachableType where Self: UIViewController {
         loadViewIfNeeded()
         viewModel = model.bind(bindings)
         bindViewModel()
+        //return viewModel
     }
 }
