@@ -50,5 +50,8 @@ public struct ColorPalette {
     public static let navBackground = UIColor(red: 0.18, green: 0.25, blue: 0.31, alpha: 1.0)
     public static let navText = UIColor(red: 0.65, green: 0.69, blue: 0.76, alpha: 1.0)
 
+    // MARK: - Additions
+    public static let hintOfRed = UIColor(red: 0.98, green: 0.98, blue: 0.98, alpha: 1.00)  // NavigationBar
+
     private init() {}
 }

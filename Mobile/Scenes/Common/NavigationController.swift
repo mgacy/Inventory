@@ -25,6 +25,14 @@ class NavigationController: UINavigationController {
 
     var detailView: DetailView<UIViewController> = .empty
 
+    // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationBar.isTranslucent = false
+        navigationBar.barTintColor = ColorPalette.hintOfRed
+    }
+
     // MARK: - A
 
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
