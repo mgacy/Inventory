@@ -14,7 +14,6 @@ class OrderViewModel {
 
     // MARK: - Properties
 
-    /// TODO: make private
     private let dataManager: DataManager
     private let order: Order
 

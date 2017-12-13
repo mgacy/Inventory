@@ -13,7 +13,6 @@ struct OrderLocCatViewModel {
 
     // MARK: - Properties
 
-    /// TODO: make private
     private let dataManager: DataManager
     private let location: RemoteLocation
     private let factory: OrderLocationFactory
