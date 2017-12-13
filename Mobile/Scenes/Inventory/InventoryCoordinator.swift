@@ -119,7 +119,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         let viewController = InventoryKeypadViewController.instance()
         let viewModel = InventoryKeypadViewModel(dataManager: dataManager, for: parent, atIndex: index)
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
+        navigationController.showDetailViewController(viewController, sender: nil)
     }
 
 }

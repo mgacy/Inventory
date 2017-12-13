@@ -73,7 +73,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
         let viewController = InvoiceKeypadViewController.instance()
         let viewModel = InvoiceKeypadViewModel(dataManager: dataManager, for: invoice, atIndex: index)
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
+        navigationController.showDetailViewController(viewController, sender: nil)
     }
 
 }

@@ -222,7 +222,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let viewController = OrderKeypadViewController.instance()
         let viewModel = OrderKeypadViewModel(dataManager: dataManager, with: orderItems, atIndex: index)
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
+        navigationController.showDetailViewController(viewController, sender: nil)
     }
 
 }
