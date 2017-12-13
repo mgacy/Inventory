@@ -27,11 +27,11 @@ extension OrderItemTableViewCell {
 
         guard let quantity = orderItem.quantity else {
             // Highlight OrderItems w/o order
-            nameTextLabel.textColor = ColorPalette.redColor
+            nameTextLabel.textColor = ColorPalette.red
             quantityTextLabel.text = "?"
-            quantityTextLabel.textColor = ColorPalette.redColor
+            quantityTextLabel.textColor = ColorPalette.red
             unitTextLabel.text = ""
-            unitTextLabel.textColor = ColorPalette.redColor
+            unitTextLabel.textColor = ColorPalette.red
             return
         }
         if quantity.doubleValue > 0.0 {

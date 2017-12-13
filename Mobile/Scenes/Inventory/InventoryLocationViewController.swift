@@ -182,7 +182,7 @@ extension InventoryLocationViewController: TableViewDataSourceDelegate {
             case .notStarted:
                 cell.textLabel?.textColor = UIColor.lightGray
             case .incomplete:
-                cell.textLabel?.textColor = ColorPalette.yellowColor
+                cell.textLabel?.textColor = ColorPalette.yellow
             case .complete:
                 cell.textLabel?.textColor = UIColor.black
             }

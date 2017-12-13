@@ -205,7 +205,7 @@ extension OrderItemViewController: UITableViewDelegate {
             //self.tableView.cellForRow(at: cellIndex)?.setEditing(false, animated: true)
             //self.tableView.reloadData() // this is necessary, otherwise, it won't animate
         }
-        setToZero.backgroundColor = ColorPalette.lightGrayColor
+        setToZero.backgroundColor = ColorPalette.lightGray
 
         return [setToZero]
     }

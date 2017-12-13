@@ -21,11 +21,11 @@ enum ItemStatus: String {
         case .inactive:
             return .lightGray
         case .pending:
-            return ColorPalette.yellowColor
+            return ColorPalette.yellow
         case .normal:
             return .black
         case .warning:
-            return ColorPalette.redColor
+            return ColorPalette.red
         }
     }
 }

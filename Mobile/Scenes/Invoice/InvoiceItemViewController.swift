@@ -148,14 +148,14 @@ extension InvoiceItemViewController: UITableViewDelegate {
         let outOfStock = UITableViewRowAction(style: .normal, title: "Out of Stock") { _, indexPath in
             self.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .outOfStock)
         }
-        outOfStock.backgroundColor = ColorPalette.redColor
+        outOfStock.backgroundColor = ColorPalette.red
 
         // Received
         let received = UITableViewRowAction(style: .normal, title: "Received") { [weak self] _, indexPath in
             /// TODO: do we not need to handle setting `self.isEditing = false`?
             self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .received) //{ self?.isEditing = false }
         }
-        received.backgroundColor = ColorPalette.navyColor
+        received.backgroundColor = ColorPalette.navy
 
         return [received, outOfStock, more]
     }

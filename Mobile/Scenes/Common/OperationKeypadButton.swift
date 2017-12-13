@@ -16,10 +16,10 @@ class OperationKeypadButton: UIButton {
         super.init(coder: aDecoder)
 
         // set other operations after super.init, if required
-        backgroundColor = ColorPalette.secondaryColor
+        backgroundColor = ColorPalette.secondary
         setTitleColor(.white, for: .normal)
-        setTitleColor(ColorPalette.yellowColor, for: .highlighted)
-        setTitleColor(ColorPalette.textColor, for: .disabled)
+        setTitleColor(ColorPalette.yellow, for: .highlighted)
+        setTitleColor(ColorPalette.text, for: .disabled)
         //setTitleColor(ColorPalette.darkGrayColor, for: .disabled)
         /// NOTE: not sure about the following states for UIButton
         setTitleColor(.red, for: .selected)

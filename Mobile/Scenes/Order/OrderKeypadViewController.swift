@@ -136,21 +136,21 @@ class OrderKeypadViewController: UIViewController {
         bottleButton.isEnabled = viewModel.packUnitIsEnabled
 
         guard let currentUnit = viewModel.currentUnit else {
-            caseButton.backgroundColor = ColorPalette.secondaryColor
-            bottleButton.backgroundColor = ColorPalette.secondaryColor
+            caseButton.backgroundColor = ColorPalette.secondary
+            bottleButton.backgroundColor = ColorPalette.secondary
             return
         }
 
         switch currentUnit {
         case .singleUnit:
-            caseButton.backgroundColor = ColorPalette.secondaryColor
-            bottleButton.backgroundColor = ColorPalette.navyColor
+            caseButton.backgroundColor = ColorPalette.secondary
+            bottleButton.backgroundColor = ColorPalette.navy
         case .packUnit:
-            caseButton.backgroundColor = ColorPalette.navyColor
-            bottleButton.backgroundColor = ColorPalette.secondaryColor
+            caseButton.backgroundColor = ColorPalette.navy
+            bottleButton.backgroundColor = ColorPalette.secondary
         case .invalidUnit:
-            caseButton.backgroundColor = ColorPalette.secondaryColor
-            bottleButton.backgroundColor = ColorPalette.secondaryColor
+            caseButton.backgroundColor = ColorPalette.secondary
+            bottleButton.backgroundColor = ColorPalette.secondary
         }
     }
 
