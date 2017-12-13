@@ -137,6 +137,7 @@
 		C9CC04DF1F84C13C00180120 /* RemoteInvoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CC04DE1F84C13C00180120 /* RemoteInvoice.swift */; };
 		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
+		C9D59C5C1FE0FA280050A4AB /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */; };
 		C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */; };
 		C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DEC1051F805CF6004602EB /* DateFacade.swift */; };
 		C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */; };
@@ -307,6 +308,7 @@
 		C9CC04DE1F84C13C00180120 /* RemoteInvoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInvoice.swift; path = Models/RemoteInvoice.swift; sourceTree = "<group>"; };
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
+		C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+MyStuff.swift"; sourceTree = "<group>"; };
 		C9DEC1051F805CF6004602EB /* DateFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DateFacade.swift; path = Protocols/DateFacade.swift; sourceTree = "<group>"; };
 		C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSManagedObjectContext+Managed.swift"; path = "Core Data Helpers/NSManagedObjectContext+Managed.swift"; sourceTree = "<group>"; };
@@ -745,6 +747,7 @@
 				C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */,
 				C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */,
 				C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */,
+				C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1232,6 +1235,7 @@
 				C93565361FCDF77D00CAFB16 /* RoundRectButton.swift in Sources */,
 				C9BB058F1F831B2200A07529 /* OrderDateViewModel.swift in Sources */,
 				C9C2DA081F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift in Sources */,
+				C9D59C5C1FE0FA280050A4AB /* TabBarController.swift in Sources */,
 				C95E446E1FB2C26200820067 /* ItemCellViewModel.swift in Sources */,
 				C92C2F8D1F9FE3E500B69CF5 /* SettingsViewModel.swift in Sources */,
 				C9045C191FC4AD1000F55FB3 /* OrderCoordinator.swift in Sources */,
