@@ -18,6 +18,7 @@ identifier_name:
     - id
     - in
     - of
+    - vc
 
 large_tuple: # warn user when using 3 values in tuple, give error if there are 4
    - 3
