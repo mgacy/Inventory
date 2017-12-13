@@ -13,7 +13,7 @@ class EmptyDetailViewController: UIViewController {
     /// TODO: is there any need to do this?
     lazy var mainView: UIView = {
         let view = UIView()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = ColorPalette.lightGray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
