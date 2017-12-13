@@ -138,6 +138,7 @@
 		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
 		C9D59C5C1FE0FA280050A4AB /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */; };
+		C9D59C5E1FE0FA870050A4AB /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */; };
 		C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */; };
 		C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DEC1051F805CF6004602EB /* DateFacade.swift */; };
 		C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */; };
@@ -309,6 +310,7 @@
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
 		C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+MyStuff.swift"; sourceTree = "<group>"; };
 		C9DEC1051F805CF6004602EB /* DateFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DateFacade.swift; path = Protocols/DateFacade.swift; sourceTree = "<group>"; };
 		C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSManagedObjectContext+Managed.swift"; path = "Core Data Helpers/NSManagedObjectContext+Managed.swift"; sourceTree = "<group>"; };
@@ -748,6 +750,7 @@
 				C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */,
 				C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */,
 				C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */,
+				C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1208,6 +1211,7 @@
 				C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */,
 				C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */,
 				C901A50F1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift in Sources */,
+				C9D59C5E1FE0FA870050A4AB /* NavigationController.swift in Sources */,
 				C9045C1D1FC4D20500F55FB3 /* InvoiceCoordinator.swift in Sources */,
 				C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */,
 				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,
