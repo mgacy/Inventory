@@ -72,7 +72,7 @@ class NavigationController: UINavigationController {
         //log.debug("\(#function)")
         switch detailView {
         case .visible(let detailViewController):
-            viewControllers = viewControllers + [detailViewController]
+            viewControllers += [detailViewController]
         case .empty:
             return
         }
