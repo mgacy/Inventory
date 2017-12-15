@@ -74,8 +74,6 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
 
         // Detail
         let emptyDetailViewController = EmptyDetailViewController()
-        emptyDetailViewController.navigationItem.leftItemsSupplementBackButton = true
-        emptyDetailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
         detailNavigationController.viewControllers = [emptyDetailViewController]
         detailNavigationController.navigationBar.isTranslucent = false
         detailNavigationController.navigationBar.barTintColor = ColorPalette.hintOfRed
@@ -177,8 +175,6 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
                 fatalError("\(#function) FAILED : wrong view controller type")
             }
             let emptyDetailViewController = EmptyDetailViewController()
-            emptyDetailViewController.navigationItem.leftItemsSupplementBackButton = true
-            emptyDetailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
             detailNavigationController.viewControllers = [emptyDetailViewController]
         }
     }
@@ -250,8 +246,6 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
         case .empty:
             //log.debug("Providing empty detail view controller")
             let emptyDetailViewController = EmptyDetailViewController()
-            emptyDetailViewController.navigationItem.leftItemsSupplementBackButton = true
-            emptyDetailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
             detailNavigationController.viewControllers = [emptyDetailViewController]
             return detailNavigationController
         case .visible(let detailViewController):

@@ -29,6 +29,8 @@ class EmptyDetailViewController: UIViewController {
 
     func setupView() {
         self.view.addSubview(mainView)
+        navigationItem.leftItemsSupplementBackButton = true
+        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
     }
 
     func setupConstraints() {
