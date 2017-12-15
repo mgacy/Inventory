@@ -267,15 +267,19 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
             let navigationController = tabBarController.selectedViewController as? NavigationController else {
                 fatalError("\(#function) FAILED : unable to get section navigation controller")
         }
-        navigationController.detailView = .visible(vc)
-
         if splitViewController.isCollapsed {
             navigationController.pushViewController(vc, animated: true)
         } else {
             vc.navigationItem.leftItemsSupplementBackButton = true
             vc.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
-            detailNavigationController.setViewControllers([vc], animated: true)
+            switch navigationController.detailView {
+            case .empty:
+                detailNavigationController.setViewControllers([vc], animated: true)
+            case .visible:
+                detailNavigationController.setViewControllers([vc], animated: false)
+            }
         }
+        navigationController.detailView = .visible(vc)
         return true
     }
 
