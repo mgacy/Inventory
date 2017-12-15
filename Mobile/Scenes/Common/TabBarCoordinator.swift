@@ -209,17 +209,6 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
         }
         tabBarController.collapseTabs()
         return true
-        /*
-        switch navigationController.detailView {
-        case .empty:
-            // Return true to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
-            log.debug("detailViewController is EMPTY")
-            return true
-        case .visible(let detailViewController):
-            log.debug("detailViewController is VISIBLE")
-            return true
-        }
-        */
         */
     }
 
