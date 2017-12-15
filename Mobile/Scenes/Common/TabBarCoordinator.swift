@@ -145,21 +145,20 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
         if splitViewController.isCollapsed { return }
 
         // Otherwise, we want to change the secondary view controller to this tab's detail view
-        guard
-            let navigationController = viewController as? NavigationController,
-            let rootVC = navigationController.viewControllers.first else {
+        guard let navigationController = viewController as? NavigationController else {
                 fatalError("\(#function) FAILED : wrong view controller type")
         }
-
         switch navigationController.detailView {
         case .visible(let detailViewController):
-            //log.debug("Detail View VISIBLE")
             detailViewController.navigationItem.leftItemsSupplementBackButton = true
             detailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
             detailNavigationController.viewControllers = [detailViewController]; return
         case .empty:
-            //log.debug("Detail View HIDDEN")
+            /*
             // We can use rootVC if we want tab-specific empty detail view controllers
+            guard let rootVC = navigationController.viewControllers.first else {
+                fatalError("\(#function) FAILED : wrong view controller type")
+            }
             switch rootVC {
             case is HomeViewController:
                 log.debug("Selected HOME Tab")
@@ -174,6 +173,7 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
             default:
                 fatalError("\(#function) FAILED : wrong view controller type")
             }
+            */
             let emptyDetailViewController = EmptyDetailViewController()
             detailNavigationController.viewControllers = [emptyDetailViewController]
         }
@@ -233,7 +233,6 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
 
         switch navigationController.detailView {
         case .empty:
-            //log.debug("Providing empty detail view controller")
             let emptyDetailViewController = EmptyDetailViewController()
             detailNavigationController.viewControllers = [emptyDetailViewController]
             return detailNavigationController
