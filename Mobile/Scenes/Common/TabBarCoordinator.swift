@@ -64,8 +64,6 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
         self.splitViewController = UISplitViewController()
         self.tabBarController = TabBarController()
         self.detailNavigationController = UINavigationController()
-        // Configuration
-        splitViewController.preferredDisplayMode = .allVisible
     }
 
     override func start() -> Observable<Void> {
@@ -85,6 +83,7 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
         // Split
         splitViewController.delegate = self
         splitViewController.viewControllers = [tabBarController, detailNavigationController]
+        splitViewController.preferredDisplayMode = .allVisible
 
         window.rootViewController = splitViewController
         window.makeKeyAndVisible()
