@@ -478,12 +478,12 @@
 			isa = PBXGroup;
 			children = (
 				C9C2DA041F0F3AF7007263FB /* Common */,
-				C9B825E71EB9A0ED009B92F0 /* Initial */,
 				C95E44611FB257DC00820067 /* Home */,
 				C9F516051DB7F11D004C10E6 /* Inventory */,
 				C902FF311DB81BF70063CD02 /* Invoice */,
 				C94084751EFCCB7F00638E25 /* Order */,
 				C95E44661FB2966400820067 /* Item */,
+				C9B825E71EB9A0ED009B92F0 /* Login */,
 				C945DAC11FEA2B3F009D0EB0 /* Signup */,
 				C902FF2F1DB81BD00063CD02 /* Settings */,
 			);
@@ -691,7 +691,7 @@
 			name = "Core Data Helpers";
 			sourceTree = "<group>";
 		};
-		C9B825E71EB9A0ED009B92F0 /* Initial */ = {
+		C9B825E71EB9A0ED009B92F0 /* Login */ = {
 			isa = PBXGroup;
 			children = (
 				C9045C201FC5122800F55FB3 /* LoginCoordinator.swift */,
@@ -699,7 +699,7 @@
 				C935E9A31E60D713003BF386 /* LoginViewController.swift */,
 				C9174D461F833265008639CC /* LoginViewModel.swift */,
 			);
-			path = Initial;
+			path = Login;
 			sourceTree = "<group>";
 		};
 		C9BA91271DEB957400DA2C6C /* Extensions */ = {
