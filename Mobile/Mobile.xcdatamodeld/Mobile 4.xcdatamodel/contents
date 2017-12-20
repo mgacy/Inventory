@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13533" systemVersion="16G1114" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="16G1114" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Base" representedClassName="Base" syncable="YES" codeGenerationType="class">
-        <attribute name="name" attributeType="String" syncable="YES"/>
-        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <fetchIndex name="byRemoteIDIndex">
-            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        <attribute name="dateTimeInterval" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="storeID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <fetchIndex name="byStoreIDIndex">
+            <fetchIndexElement property="storeID" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
     <entity name="Inventory" representedClassName="Inventory" syncable="YES" codeGenerationType="class">
@@ -220,7 +221,7 @@
         </fetchIndex>
     </entity>
     <elements>
-        <element name="Base" positionX="-947" positionY="-324" width="128" height="75"/>
+        <element name="Base" positionX="-947" positionY="-324" width="128" height="90"/>
         <element name="Inventory" positionX="-549" positionY="-342" width="128" height="165"/>
         <element name="InventoryItem" positionX="-65" positionY="-333" width="128" height="150"/>
         <element name="InventoryLocation" positionX="-344" positionY="-117" width="128" height="135"/>
