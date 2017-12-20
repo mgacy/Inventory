@@ -8,14 +8,15 @@
 
 import RxSwift
 
-class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, UITabBarControllerDelegate {
+class TabBarCoordinator: BaseCoordinator<Void> {
 
     private let window: UIWindow
     private let dataManager: DataManager
 
     private let splitViewController: UISplitViewController
     private let tabBarController: TabBarController
-    private let detailNavigationController: UINavigationController
+    // swiftlint:disable:next weak_delegate
+    private var viewDelegate: SplitViewDelegate?
 
     enum SectionTab {
         case home
@@ -63,7 +64,6 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
 
         self.splitViewController = UISplitViewController()
         self.tabBarController = TabBarController()
-        self.detailNavigationController = UINavigationController()
     }
 
     override func start() -> Observable<Void> {
@@ -72,16 +72,8 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
         let tabs: [SectionTab] = [.home, .inventory, .order, .invoice, .item]
         let coordinationResults = Observable.from(configure(tabBarController: tabBarController, withTabs: tabs)).merge()
 
-        // Detail
-        let emptyDetailViewController = EmptyDetailViewController()
-        detailNavigationController.viewControllers = [emptyDetailViewController]
-        detailNavigationController.navigationBar.isTranslucent = false
-        detailNavigationController.navigationBar.barTintColor = ColorPalette.hintOfRed
-
-        // Split
-        splitViewController.delegate = self
-        splitViewController.viewControllers = [tabBarController, detailNavigationController]
-        splitViewController.preferredDisplayMode = .allVisible
+        self.viewDelegate = SplitViewDelegate(splitViewController: splitViewController,
+                                              tabBarController: tabBarController)
 
         window.rootViewController = splitViewController
         window.makeKeyAndVisible()
@@ -90,7 +82,6 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
     }
 
     private func configure(tabBarController: UITabBarController, withTabs tabs: [SectionTab]) -> [Observable<Void>] {
-        tabBarController.delegate = self
         let navControllers = tabs
             .map { tab -> UINavigationController in
                 let navController = NavigationController()
@@ -99,7 +90,7 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
                     navController.navigationBar.prefersLargeTitles = true
                 }
                 return navController
-            }
+        }
 
         tabBarController.viewControllers = navControllers
         tabBarController.view.backgroundColor = UIColor.white  // Fix dark shadow in nav bar on segue
@@ -123,10 +114,44 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
                     let coordinator = ItemCoordinator(navigationController: navCtrl, dataManager: dataManager)
                     return coordinate(to: coordinator)
                 }
-            }
+        }
     }
 
-    // MARK: - UITabBarControllerDelegate
+}
+
+// MARK: - Delegate Object
+
+class SplitViewDelegate: NSObject {
+
+    private let splitViewController: UISplitViewController
+    private let tabBarController: TabBarController
+    private let detailNavigationController: UINavigationController
+
+    init(splitViewController: UISplitViewController, tabBarController: TabBarController) {
+        self.splitViewController = splitViewController
+        self.tabBarController = tabBarController
+        self.detailNavigationController = UINavigationController()
+        super.init()
+
+        // Tab
+        tabBarController.delegate = self
+
+        // Detail
+        let emptyDetailViewController = EmptyDetailViewController()
+        detailNavigationController.viewControllers = [emptyDetailViewController]
+        detailNavigationController.navigationBar.isTranslucent = false
+        detailNavigationController.navigationBar.barTintColor = ColorPalette.hintOfRed
+
+        // Split
+        splitViewController.delegate = self
+        splitViewController.viewControllers = [tabBarController, detailNavigationController]
+        splitViewController.preferredDisplayMode = .allVisible
+    }
+
+}
+
+// MARK: - UITabBarControllerDelegate
+extension SplitViewDelegate: UITabBarControllerDelegate {
 
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         // Prevent selection of the same tab twice (which would reset the sections navigation controller)
@@ -179,7 +204,10 @@ class TabBarCoordinator: BaseCoordinator<Void>, UISplitViewControllerDelegate, U
         }
     }
 
-    // MARK: - UISplitViewControllerDelegate
+}
+
+// MARK: - UISplitViewControllerDelegate
+extension SplitViewDelegate: UISplitViewControllerDelegate {
 
     // MARK: Responding to Display Mode Changes
 

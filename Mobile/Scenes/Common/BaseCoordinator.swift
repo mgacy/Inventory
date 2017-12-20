@@ -9,7 +9,7 @@
 import RxSwift
 
 /// Base abstract coordinator generic over the return type of the `start` method.
-class BaseCoordinator<ResultType>: NSObject {
+class BaseCoordinator<ResultType> {
 
     /// Typealias which will allows to access a ResultType of the Coordainator by `CoordinatorName.CoordinationResult`.
     typealias CoordinationResult = ResultType
