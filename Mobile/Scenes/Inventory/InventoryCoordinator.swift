@@ -19,7 +19,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = InventoryDateViewController.initFromStoryboard(name: "Main")
+        let viewController = InventoryDateViewController.instance()
         let viewModel = InventoryDateViewModel(dataManager: dataManager,
                                                rowTaps: viewController.selectedObjects.asObservable())
         //let viewModel = InventoryDateViewModel2(dataManager: dataManager)

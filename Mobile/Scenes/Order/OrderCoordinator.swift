@@ -19,7 +19,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = OrderDateViewController.initFromStoryboard(name: "Main")
+        let viewController = OrderDateViewController.instance()
         let viewModel = OrderDateViewModel(dataManager: dataManager,
                                            rowTaps: viewController.selectedObjects.asObservable())
         viewController.viewModel = viewModel

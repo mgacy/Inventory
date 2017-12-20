@@ -143,6 +143,10 @@
 		C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */; };
 		C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DEC1051F805CF6004602EB /* DateFacade.swift */; };
 		C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */; };
+		C9DF81D61FEA158500C86A75 /* InvoiceDateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81D51FEA158500C86A75 /* InvoiceDateViewController.storyboard */; };
+		C9DF81D81FEA167E00C86A75 /* OrderDateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81D71FEA167E00C86A75 /* OrderDateViewController.storyboard */; };
+		C9DF81DA1FEA16FA00C86A75 /* InventoryDateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81D91FEA16FA00C86A75 /* InventoryDateViewController.storyboard */; };
+		C9DF81DC1FEA177800C86A75 /* ItemViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81DB1FEA177800C86A75 /* ItemViewController.storyboard */; };
 		C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */; };
 		C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB7D891EE7910000515429 /* MailComposer.swift */; };
 		C9EC6E5D1FCCF7E000A3860E /* AttachableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EC6E5C1FCCF7E000A3860E /* AttachableType.swift */; };
@@ -316,6 +320,10 @@
 		C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+MyStuff.swift"; sourceTree = "<group>"; };
 		C9DEC1051F805CF6004602EB /* DateFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DateFacade.swift; path = Protocols/DateFacade.swift; sourceTree = "<group>"; };
 		C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSManagedObjectContext+Managed.swift"; path = "Core Data Helpers/NSManagedObjectContext+Managed.swift"; sourceTree = "<group>"; };
+		C9DF81D51FEA158500C86A75 /* InvoiceDateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InvoiceDateViewController.storyboard; sourceTree = "<group>"; };
+		C9DF81D71FEA167E00C86A75 /* OrderDateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderDateViewController.storyboard; sourceTree = "<group>"; };
+		C9DF81D91FEA16FA00C86A75 /* InventoryDateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryDateViewController.storyboard; sourceTree = "<group>"; };
+		C9DF81DB1FEA177800C86A75 /* ItemViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ItemViewController.storyboard; sourceTree = "<group>"; };
 		C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderDateViewController.swift; sourceTree = "<group>"; };
 		C9EB7D891EE7910000515429 /* MailComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
 		C9EC6E5C1FCCF7E000A3860E /* AttachableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AttachableType.swift; path = Protocols/AttachableType.swift; sourceTree = "<group>"; };
@@ -552,6 +560,7 @@
 			isa = PBXGroup;
 			children = (
 				C9045C1E1FC4D21E00F55FB3 /* ItemCoordinator.swift */,
+				C9DF81DB1FEA177800C86A75 /* ItemViewController.storyboard */,
 				C95E44671FB2968C00820067 /* ItemViewController.swift */,
 				C95E44691FB296A700820067 /* ItemViewModel.swift */,
 				C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */,
@@ -574,6 +583,7 @@
 		C97A71281F8EC03D00F2F1CD /* Date List */ = {
 			isa = PBXGroup;
 			children = (
+				C9DF81D51FEA158500C86A75 /* InvoiceDateViewController.storyboard */,
 				C9A14AC11DC67A0F00ACDE69 /* InvoiceDateViewController.swift */,
 				C9BB058C1F831B0F00A07529 /* InvoiceDateViewModel.swift */,
 			);
@@ -593,6 +603,7 @@
 		C97A712A1F8EC06B00F2F1CD /* Date List */ = {
 			isa = PBXGroup;
 			children = (
+				C9DF81D71FEA167E00C86A75 /* OrderDateViewController.storyboard */,
 				C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */,
 				C9BB058E1F831B2200A07529 /* OrderDateViewModel.swift */,
 			);
@@ -612,6 +623,7 @@
 		C97A712C1F8EC09600F2F1CD /* Date List */ = {
 			isa = PBXGroup;
 			children = (
+				C9DF81D91FEA16FA00C86A75 /* InventoryDateViewController.storyboard */,
 				C9BB05901F831D6600A07529 /* InventoryDateViewController.swift */,
 				C9BB058A1F831AF900A07529 /* InventoryDateViewModel.swift */,
 			);
@@ -1011,12 +1023,16 @@
 				C964D2131FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard in Resources */,
 				C91417EC1FA8F62200168064 /* OrderLocCatViewController.storyboard in Resources */,
 				C90482301F96A543001A3E01 /* OrderVendorViewController.storyboard in Resources */,
+				C9DF81D81FEA167E00C86A75 /* OrderDateViewController.storyboard in Resources */,
 				C91C928A1EFCE65800566CEB /* OrderKeypadViewController.storyboard in Resources */,
+				C9DF81DC1FEA177800C86A75 /* ItemViewController.storyboard in Resources */,
 				C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */,
 				C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */,
 				C97A713D1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard in Resources */,
+				C9DF81DA1FEA16FA00C86A75 /* InventoryDateViewController.storyboard in Resources */,
 				C9A114F01FAC336500308974 /* InvoiceItemViewController.storyboard in Resources */,
 				C91C92821EFCD98F00566CEB /* OrderItemViewController.storyboard in Resources */,
+				C9DF81D61FEA158500C86A75 /* InvoiceDateViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
