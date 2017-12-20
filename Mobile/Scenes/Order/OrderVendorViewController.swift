@@ -140,11 +140,11 @@ extension OrderVendorViewController: TableViewDataSourceDelegate {
 
         switch order.status {
         case OrderStatus.incomplete.rawValue:
-            cell.textLabel?.textColor = ColorPalette.redColor
+            cell.textLabel?.textColor = ColorPalette.red
         case OrderStatus.empty.rawValue:
             cell.textLabel?.textColor = UIColor.lightGray
         case OrderStatus.pending.rawValue:
-            cell.textLabel?.textColor = ColorPalette.yellowColor
+            cell.textLabel?.textColor = ColorPalette.yellow
         case OrderStatus.placed.rawValue:
             /// TODO: use another color?
             cell.textLabel?.textColor = UIColor.black

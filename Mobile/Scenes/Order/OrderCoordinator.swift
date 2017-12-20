@@ -19,7 +19,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = OrderDateViewController.initFromStoryboard(name: "Main")
+        let viewController = OrderDateViewController.instance()
         let viewModel = OrderDateViewModel(dataManager: dataManager,
                                            rowTaps: viewController.selectedObjects.asObservable())
         viewController.viewModel = viewModel
@@ -156,7 +156,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let viewController = OrderKeypadViewController.instance()
         let viewModel = OrderKeypadViewModel(dataManager: dataManager, for: order, atIndex: index)
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
+        navigationController.showDetailViewController(viewController, sender: nil)
     }
 
     // MARK: Location
@@ -222,7 +222,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let viewController = OrderKeypadViewController.instance()
         let viewModel = OrderKeypadViewModel(dataManager: dataManager, with: orderItems, atIndex: index)
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
+        navigationController.showDetailViewController(viewController, sender: nil)
     }
 
 }

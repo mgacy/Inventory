@@ -1,5 +1,5 @@
 //
-//  InitialLoginViewModel.swift
+//  LoginViewModel.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/2/17.
@@ -9,7 +9,7 @@
 import RxCocoa
 import RxSwift
 
-final class InitialLoginViewModel: ViewModelType {
+final class LoginViewModel: ViewModelType {
 
     struct Input {
         let username: Observable<String>

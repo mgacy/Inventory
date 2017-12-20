@@ -12,7 +12,11 @@ class TabBarCoordinator: BaseCoordinator<Void> {
 
     private let window: UIWindow
     private let dataManager: DataManager
-    //private let splitViewController: UISplitViewController
+
+    private let splitViewController: UISplitViewController
+    private let tabBarController: TabBarController
+    // swiftlint:disable:next weak_delegate
+    private var viewDelegate: SplitViewDelegate?
 
     enum SectionTab {
         case home
@@ -57,14 +61,21 @@ class TabBarCoordinator: BaseCoordinator<Void> {
     init(window: UIWindow, dataManager: DataManager) {
         self.window = window
         self.dataManager = dataManager
+
+        self.splitViewController = UISplitViewController()
+        self.tabBarController = TabBarController()
     }
 
     override func start() -> Observable<Void> {
-        let tabBarController = UITabBarController()
+
+        // Master
         let tabs: [SectionTab] = [.home, .inventory, .order, .invoice, .item]
         let coordinationResults = Observable.from(configure(tabBarController: tabBarController, withTabs: tabs)).merge()
 
-        window.rootViewController = tabBarController
+        self.viewDelegate = SplitViewDelegate(splitViewController: splitViewController,
+                                              tabBarController: tabBarController)
+
+        window.rootViewController = splitViewController
         window.makeKeyAndVisible()
 
         return coordinationResults
@@ -73,13 +84,13 @@ class TabBarCoordinator: BaseCoordinator<Void> {
     private func configure(tabBarController: UITabBarController, withTabs tabs: [SectionTab]) -> [Observable<Void>] {
         let navControllers = tabs
             .map { tab -> UINavigationController in
-                let navController = UINavigationController()
+                let navController = NavigationController()
                 navController.tabBarItem = UITabBarItem(title: tab.title, image: tab.image, tag: tab.tag)
                 if #available(iOS 11.0, *) {
                     navController.navigationBar.prefersLargeTitles = true
                 }
                 return navController
-            }
+        }
 
         tabBarController.viewControllers = navControllers
         tabBarController.view.backgroundColor = UIColor.white  // Fix dark shadow in nav bar on segue
@@ -103,7 +114,189 @@ class TabBarCoordinator: BaseCoordinator<Void> {
                     let coordinator = ItemCoordinator(navigationController: navCtrl, dataManager: dataManager)
                     return coordinate(to: coordinator)
                 }
+        }
+    }
+
+}
+
+// MARK: - Delegate Object
+
+class SplitViewDelegate: NSObject {
+
+    private let splitViewController: UISplitViewController
+    private let tabBarController: TabBarController
+    private let detailNavigationController: UINavigationController
+
+    init(splitViewController: UISplitViewController, tabBarController: TabBarController) {
+        self.splitViewController = splitViewController
+        self.tabBarController = tabBarController
+        self.detailNavigationController = UINavigationController()
+        super.init()
+
+        // Tab
+        tabBarController.delegate = self
+
+        // Detail
+        let emptyDetailViewController = EmptyDetailViewController()
+        detailNavigationController.viewControllers = [emptyDetailViewController]
+        detailNavigationController.navigationBar.isTranslucent = false
+        detailNavigationController.navigationBar.barTintColor = ColorPalette.hintOfRed
+
+        // Split
+        splitViewController.delegate = self
+        splitViewController.viewControllers = [tabBarController, detailNavigationController]
+        splitViewController.preferredDisplayMode = .allVisible
+    }
+
+}
+
+// MARK: - UITabBarControllerDelegate
+extension SplitViewDelegate: UITabBarControllerDelegate {
+
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        // Prevent selection of the same tab twice (which would reset the sections navigation controller)
+        if tabBarController.selectedViewController === viewController {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    // This is available through RxCocoa
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        //log.debug("\(#function) : didSelect: \(viewController)")
+
+        // If svc is collapsed, detail will be on section nav controller if it is visible
+        if splitViewController.isCollapsed { return }
+
+        // Otherwise, we want to change the secondary view controller to this tab's detail view
+        guard let navigationController = viewController as? NavigationController else {
+                fatalError("\(#function) FAILED : wrong view controller type")
+        }
+        switch navigationController.detailView {
+        case .visible(let detailViewController):
+            detailViewController.navigationItem.leftItemsSupplementBackButton = true
+            detailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
+            detailNavigationController.viewControllers = [detailViewController]; return
+        case .empty:
+            /*
+            // We can use rootVC if we want tab-specific empty detail view controllers
+            guard let rootVC = navigationController.viewControllers.first else {
+                fatalError("\(#function) FAILED : wrong view controller type")
             }
+            switch rootVC {
+            case is HomeViewController:
+                log.debug("Selected HOME Tab")
+            case is InventoryDateViewController:
+                log.debug("Selected INVENTORY Tab")
+            case is OrderDateViewController:
+                log.debug("Selected ORDER Tab")
+            case is InvoiceDateViewController:
+                log.debug("Selected INVOICE Tab")
+            case is ItemViewController:
+                log.debug("Selected ITEM Tab")
+            default:
+                fatalError("\(#function) FAILED : wrong view controller type")
+            }
+            */
+            let emptyDetailViewController = EmptyDetailViewController()
+            detailNavigationController.viewControllers = [emptyDetailViewController]
+        }
+    }
+
+}
+
+// MARK: - UISplitViewControllerDelegate
+extension SplitViewDelegate: UISplitViewControllerDelegate {
+
+    // MARK: Responding to Display Mode Changes
+
+    func splitViewController(_ svc: UISplitViewController, willChangeTo displayMode: UISplitViewControllerDisplayMode) {
+        //log.debug("\(#function): \(displayMode)")
+        log.debug("splitViewController willChangeTo: \(displayMode.self)")
+    }
+
+    // MARK: Overriding the Interface Orientations
+
+    // MARK: Collapsing the Interface
+
+    // This method is called when a split view controller is collapsing its children for a transition to a compact-width
+    // size class. Override this method to perform custom adjustments to the view controller hierarchy of the target
+    // controller. When you return from this method, you're expected to have modified the `primaryViewController` so as
+    // to be suitable for display in a compact-width split view controller, potentially using `secondaryViewController`
+    // to do so. Return YES to prevent UIKit from applying its default behavior; return NO to request that UIKit
+    // perform its default collapsing behavior.
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+        //log.debug("\(#function)")
+        return false
+        /*
+        guard
+            let tabBarController = splitViewController.viewControllers.first as? TabBarController,
+            let navigationController = tabBarController.selectedViewController as? NavigationController else {
+                fatalError("\(#function) FAILED : unable to get selectedViewController")
+        }
+        tabBarController.collapseTabs()
+        return true
+        */
+    }
+
+    // MARK: Expanding the Interface
+
+    // This method is called when a split view controller is separating its child into two children for a transition
+    // from a compact-width size class to a regular-width size class. Override this method to perform custom separation
+    // behavior. The controller returned from this method will be set as the secondary view controller of the split
+    // view controller. When you return from this method, `primaryViewController` should have been configured for
+    // display in a regular-width split view controller. If you return `nil`, then `UISplitViewController` will perform
+    // its default behavior.
+    func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
+        //log.debug("\(#function)")
+        guard
+            let tabBarController = primaryViewController as? TabBarController,
+            let navigationController = tabBarController.selectedViewController as? NavigationController else {
+                fatalError("\(#function) FAILED : unable to get selectedViewController")
+        }
+        log.debug("\(#function) : separating: \(String(describing: navigationController.topViewController.self))")
+
+        tabBarController.separateTabs()
+
+        switch navigationController.detailView {
+        case .empty:
+            let emptyDetailViewController = EmptyDetailViewController()
+            detailNavigationController.viewControllers = [emptyDetailViewController]
+            return detailNavigationController
+        case .visible(let detailViewController):
+            detailViewController.navigationItem.leftItemsSupplementBackButton = true
+            detailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
+            detailNavigationController.viewControllers = [detailViewController]
+            return detailNavigationController
+        }
+    }
+
+    // MARK: Overriding the Presentation Behavior
+
+    // Customize the behavior of `showDetailViewController:` on a split view controller. Return YES to indicate that
+    // you've handled the action yourself; return NO to cause the default behavior to be executed.
+    func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
+        //log.debug("\(#function) - controllers: \(splitViewController.viewControllers)")
+        guard
+            let tabBarController = splitViewController.viewControllers.first as? UITabBarController,
+            let navigationController = tabBarController.selectedViewController as? NavigationController else {
+                fatalError("\(#function) FAILED : unable to get section navigation controller")
+        }
+        if splitViewController.isCollapsed {
+            navigationController.pushViewController(vc, animated: true)
+        } else {
+            vc.navigationItem.leftItemsSupplementBackButton = true
+            vc.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
+            switch navigationController.detailView {
+            case .empty:
+                detailNavigationController.setViewControllers([vc], animated: true)
+            case .visible:
+                detailNavigationController.setViewControllers([vc], animated: false)
+            }
+        }
+        navigationController.detailView = .visible(vc)
+        return true
     }
 
 }

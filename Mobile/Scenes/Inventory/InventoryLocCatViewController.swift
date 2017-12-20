@@ -1,5 +1,5 @@
 //
-//  InventoryLocationCategoryTVC.swift
+//  InventoryLocCatViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/9/16.
@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class InventoryLocationCategoryTVC: UITableViewController {
+class InventoryLocCatViewController: UITableViewController {
 
     // MARK: Properties
 
@@ -43,7 +43,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
     //override func didReceiveMemoryWarning() {}
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<InventoryLocationCategoryTVC>!
+    fileprivate var dataSource: TableViewDataSource<InventoryLocCatViewController>!
 
     fileprivate func setupTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -63,7 +63,7 @@ class InventoryLocationCategoryTVC: UITableViewController {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension InventoryLocationCategoryTVC: TableViewDataSourceDelegate {
+extension InventoryLocCatViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for locationCategory: InventoryLocationCategory) {
         cell.textLabel?.text = locationCategory.name
@@ -72,7 +72,7 @@ extension InventoryLocationCategoryTVC: TableViewDataSourceDelegate {
         case .notStarted:
             cell.textLabel?.textColor = UIColor.lightGray
         case .incomplete:
-            cell.textLabel?.textColor = ColorPalette.yellowColor
+            cell.textLabel?.textColor = ColorPalette.yellow
         case .complete:
             cell.textLabel?.textColor = UIColor.black
         }

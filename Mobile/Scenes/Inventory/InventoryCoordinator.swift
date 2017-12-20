@@ -19,7 +19,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = InventoryDateViewController.initFromStoryboard(name: "Main")
+        let viewController = InventoryDateViewController.instance()
         let viewModel = InventoryDateViewModel(dataManager: dataManager,
                                                rowTaps: viewController.selectedObjects.asObservable())
         //let viewModel = InventoryDateViewModel2(dataManager: dataManager)
@@ -47,7 +47,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     fileprivate func showReviewList(with inventory: Inventory) {
-        let viewController = InventoryReviewViewController.initFromStoryboard(name: "InventoryReviewViewController")
+        let viewController = InventoryReviewViewController.instance()
         let viewModel = InventoryReviewViewModel(dataManager: dataManager, parentObject: inventory,
                                                  rowTaps: viewController.selectedObjects)
         viewController.viewModel = viewModel
@@ -57,7 +57,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showLocationList(with inventory: Inventory) {
-        let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
+        let viewController = InventoryLocationViewController.instance()
         var avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
             dataManager: dataManager,
             parentObject: inventory
@@ -88,8 +88,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showCategoryList(with location: InventoryLocation) {
-        let viewController = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
-        //let viewController = InventoryLocationCategoryTVC.instance()
+        let viewController = InventoryLocCatViewController.instance()
         viewController.viewModel = InventoryLocCatViewModel(dataManager: dataManager, parentObject: location)
         navigationController.pushViewController(viewController, animated: true)
 
@@ -102,8 +101,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showLocationItemList(with parent: LocationItemListParent) {
-        let viewController = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
-        //let viewController = InventoryLocationItemTVC.instance()
+        let viewController = InventoryLocItemViewController.instance()
         viewController.viewModel = InventoryLocItemViewModel(dataManager: dataManager, parentObject: parent)
         navigationController.pushViewController(viewController, animated: true)
 
@@ -119,7 +117,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         let viewController = InventoryKeypadViewController.instance()
         let viewModel = InventoryKeypadViewModel(dataManager: dataManager, for: parent, atIndex: index)
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
+        navigationController.showDetailViewController(viewController, sender: nil)
     }
 
 }

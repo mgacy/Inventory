@@ -19,7 +19,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = InvoiceDateViewController.initFromStoryboard(name: "Main")
+        let viewController = InvoiceDateViewController.instance()
         let viewModel = InvoiceDateViewModel(dataManager: dataManager,
                                              rowTaps: viewController.selectedObjects.asObservable())
         viewController.viewModel = viewModel
@@ -73,7 +73,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
         let viewController = InvoiceKeypadViewController.instance()
         let viewModel = InvoiceKeypadViewModel(dataManager: dataManager, for: invoice, atIndex: index)
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
+        navigationController.showDetailViewController(viewController, sender: nil)
     }
 
 }

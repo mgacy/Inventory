@@ -1,5 +1,5 @@
 //
-//  InitialLoginCoordinator.swift
+//  LoginCoordinator.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 11/21/17.
@@ -19,8 +19,8 @@ class InitialLoginCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<CoordinationResult> {
-        let viewController = InitialLoginViewController.initFromStoryboard(name: "Main")
-        let viewModel = InitialLoginViewModel(dataManager: dataManager)
+        let viewController = LoginViewController.instance()
+        let viewModel = LoginViewModel(dataManager: dataManager)
         viewController.viewModel = viewModel
 
         window.rootViewController = viewController
@@ -75,8 +75,8 @@ class LoginCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<CoordinationResult> {
-        let viewController = InitialLoginViewController.initFromStoryboard(name: "Main")
-        let viewModel = InitialLoginViewModel(dataManager: dataManager)
+        let viewController = LoginViewController.instance()
+        let viewModel = LoginViewModel(dataManager: dataManager)
         viewController.viewModel = viewModel
 
         if let `window` = window {
