@@ -322,20 +322,11 @@ extension DataManager {
                     guard let context = self?.viewContext else {
                         throw DataManagerError.missingMOC
                     }
-                    /*
-                    guard let date = record.date.toBasicDate() else {
-                        log.error("\(#function) FAILED : unable to parse date")
-                        throw DataManagerError.otherError(error: "Unable to parse date")
-                    }
 
-                    let newCollection: OrderCollection = context.insertObject()
-                    /// TODO: should these be part of an `.init(with:in:)` method?
-                    newCollection.dateTimeInterval = date.timeIntervalSinceReferenceDate
-                    newCollection.update(with: record, in: context)
-                     */
                     let newCollection = OrderCollection(with: record, in: context)
                     newCollection.uploaded = false
                     newCollection.orders?.forEach { order in
+                        // FIXME: use `guard ... else ... fatalError` here? Why do we call `.updateStatus()`?
                         if let `order` = order as? Order {
                             order.status = OrderStatus.pending.rawValue
                             order.updateStatus()
@@ -404,6 +395,7 @@ extension DataManager {
             .materialize()
     }
 
+    // Method is named in anticipation of `createOrderCollection()` actually creating records on the server
     func updateOrder(_ order: Order) -> Observable<Event<Order>> {
         //return Observable.just(order).materialize()
         /// TODO: use RemoteRecords instead?
