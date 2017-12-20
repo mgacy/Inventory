@@ -13,12 +13,12 @@ class TabBarController: UITabBarController {
     // MARK: - A
 
     override func collapseSecondaryViewController(_ secondaryViewController: UIViewController, for splitViewController: UISplitViewController) {
-        log.debug("\(#function)")
+        //log.debug("\(#function)")
         collapseTabs()
     }
 
     override func separateSecondaryViewController(for splitViewController: UISplitViewController) -> UIViewController? {
-        log.debug("separateSecondaryViewController")
+        //log.debug("separateSecondaryViewController")
         return viewControllers?
             .flatMap { vc in
                 guard let navController = vc as? NavigationController else { return nil }

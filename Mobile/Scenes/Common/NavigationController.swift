@@ -34,22 +34,19 @@ class NavigationController: UINavigationController {
     }
 
     // MARK: - A
-
+    /*
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         log.debug("\(#function) : \(String(describing: viewController.self))")
         super.pushViewController(viewController, animated: animated)
     }
-
+    */
     override func popViewController(animated: Bool) -> UIViewController? {
-        log.debug("\(#function) : \(String(describing: topViewController.self))")
+        //log.debug("\(#function) : \(String(describing: topViewController.self))")
         if case .visible(let detailViewController) = detailView {
             if topViewController === detailViewController {
-                log.debug("\(#function) : POPPED DETAIL")
+                //log.debug("\(#function) : POPPED DETAIL")
                 detailView = .empty
             } else {
-                log.warning("\(#function) FAILED : tried to pop wrong view controller")
-                /// TODO: call `setViewControllers([emptyDetailViewController], animated: true)` on detailViewController
-
                 // Set detail view controller to empty to prevent confusion
                 if
                     let splitViewController = splitViewController,
@@ -61,8 +58,6 @@ class NavigationController: UINavigationController {
                     detailView = .empty
                 }
             }
-        } else {
-            log.debug("\(#function) : POPPED OTHER")
         }
         return super.popViewController(animated: animated)
     }
