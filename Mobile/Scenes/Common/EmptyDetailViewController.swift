@@ -10,10 +10,10 @@ import UIKit
 
 class EmptyDetailViewController: UIViewController {
 
-    /// TODO: is there any need to do this?
-    lazy var mainView: UIView = {
-        let view = UIView()
-        view.backgroundColor = ColorPalette.lightGray
+    let backgroundImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = #imageLiteral(resourceName: "Logo")
+        view.tintColor = .gray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -22,22 +22,22 @@ class EmptyDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // meh ...
         setupView()
         setupConstraints()
     }
 
     func setupView() {
-        self.view.addSubview(mainView)
+        self.view.backgroundColor = ColorPalette.lightGray
+        self.view.addSubview(backgroundImageView)
         navigationItem.leftItemsSupplementBackButton = true
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
     }
 
     func setupConstraints() {
-        mainView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        mainView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        mainView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        mainView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        backgroundImageView.widthAnchor.constraint(equalToConstant: 180.0).isActive = true
+        backgroundImageView.heightAnchor.constraint(equalToConstant: 180.0).isActive = true
+        backgroundImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        backgroundImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 
 }
