@@ -24,10 +24,10 @@ class SignupCoordinator: BaseCoordinator<SignupCoordinationResult> {
     }
 
     override func start() -> Observable<CoordinationResult> {
-        let viewController = InitialSignUpViewController.initFromStoryboard(name: "Main")
+        let viewController = SignUpViewController.instance()
         let navigationController = UINavigationController(rootViewController: viewController)
 
-        let viewModel = InitialSignUpViewModel(dataManager: dataManager)
+        let viewModel = SignUpViewModel(dataManager: dataManager)
         viewController.viewModel = viewModel
 
         let cancel = viewController.cancelButton.rx.tap

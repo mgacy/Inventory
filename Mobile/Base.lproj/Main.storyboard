@@ -141,63 +141,6 @@
             </objects>
             <point key="canvasLocation" x="-831" y="139"/>
         </scene>
-        <!--InitialSignUp-->
-        <scene sceneID="lZ4-in-Zpe">
-            <objects>
-                <viewController storyboardIdentifier="InitialSignUpViewController" id="Sgv-j7-TMT" userLabel="InitialSignUp" customClass="InitialSignUpViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="kl8-31-nOL">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ou6-ao-5A9">
-                                <rect key="frame" x="16" y="76" width="343" height="144"/>
-                                <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="eUh-md-0Ts">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
-                                    </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="sws-8P-VjS">
-                                        <rect key="frame" x="0.0" y="38" width="343" height="30"/>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
-                                    </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="YvJ-Fj-nnH">
-                                        <rect key="frame" x="0.0" y="76" width="343" height="30"/>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="join" secureTextEntry="YES"/>
-                                    </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ZO-r6-b1c">
-                                        <rect key="frame" x="0.0" y="114" width="343" height="30"/>
-                                        <state key="normal" title="Sign Up"/>
-                                    </button>
-                                </subviews>
-                            </stackView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="ou6-ao-5A9" firstAttribute="top" secondItem="hh6-DN-KM8" secondAttribute="top" constant="56" id="KT2-1n-HE0"/>
-                            <constraint firstItem="ou6-ao-5A9" firstAttribute="leading" secondItem="kl8-31-nOL" secondAttribute="leadingMargin" id="T5N-PV-IE5"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="ou6-ao-5A9" secondAttribute="trailing" id="hmG-53-2zJ"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="hh6-DN-KM8"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="yXo-CZ-HGq"/>
-                    <connections>
-                        <outlet property="loginTextField" destination="sws-8P-VjS" id="1tb-80-Pa1"/>
-                        <outlet property="passwordTextField" destination="YvJ-Fj-nnH" id="oiX-uP-T9r"/>
-                        <outlet property="signupButton" destination="7ZO-r6-b1c" id="EW1-PQ-bE5"/>
-                        <outlet property="usernameTextField" destination="eUh-md-0Ts" id="pct-kX-SYW"/>
-                        <segue destination="Lwb-b5-sIi" kind="show" identifier="showTabController" id="RYI-Jx-XiF"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cIL-qK-hAG" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-105" y="139"/>
-        </scene>
         <!--Home-->
         <scene sceneID="htM-qN-ZJ0">
             <objects>
@@ -221,7 +164,4 @@
     <resources>
         <image name="homeTab" width="25" height="25"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="fev-ZI-ohI"/>
-    </inferredMetricsTieBreakers>
 </document>

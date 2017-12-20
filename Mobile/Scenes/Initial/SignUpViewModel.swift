@@ -1,5 +1,5 @@
 //
-//  InitialSignUpViewModel.swift
+//  SignUpViewModel.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/23/17.
@@ -9,7 +9,7 @@
 import RxCocoa
 import RxSwift
 
-final class InitialSignUpViewModel: ViewModelType {
+final class SignUpViewModel: ViewModelType {
 
     struct Input {
         let username: Observable<String>

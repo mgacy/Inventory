@@ -1,5 +1,5 @@
 //
-//  InitialSignUpViewController.swift
+//  SignUpViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 2/26/17.
@@ -11,7 +11,7 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-class InitialSignUpViewController: UIViewController {
+class SignUpViewController: UIViewController {
 
     enum Strings {
         static let navTitle = "Signup"
@@ -21,8 +21,8 @@ class InitialSignUpViewController: UIViewController {
 
     // MARK: Properties
 
-    private typealias Input = InitialSignUpViewModel.Input
-    var viewModel: InitialSignUpViewModel!
+    private typealias Input = SignUpViewModel.Input
+    var viewModel: SignUpViewModel!
     let disposeBag = DisposeBag()
 
     fileprivate let _didSignup = PublishSubject<Void>()
@@ -125,7 +125,7 @@ class InitialSignUpViewController: UIViewController {
 }
 
 // MARK: - UITextFieldDelegate
-extension InitialSignUpViewController: UITextFieldDelegate {
+extension SignUpViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return true
