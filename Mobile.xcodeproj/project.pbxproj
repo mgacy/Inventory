@@ -485,6 +485,7 @@
 				C902FF311DB81BF70063CD02 /* Invoice */,
 				C94084751EFCCB7F00638E25 /* Order */,
 				C95E44661FB2966400820067 /* Item */,
+				C945DAC11FEA2B3F009D0EB0 /* Signup */,
 				C902FF2F1DB81BD00063CD02 /* Settings */,
 			);
 			path = Scenes;
@@ -522,6 +523,17 @@
 				C9BB057F1F8315B000A07529 /* RemoteItem.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		C945DAC11FEA2B3F009D0EB0 /* Signup */ = {
+			isa = PBXGroup;
+			children = (
+				C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */,
+				C9DF81E21FEA1FB000C86A75 /* SignUpViewController.storyboard */,
+				C9A0B2EB1E63D2A300404320 /* SignUpViewController.swift */,
+				C9AA8DC11F9F191000147F07 /* SignUpViewModel.swift */,
+			);
+			path = Signup;
 			sourceTree = "<group>";
 		};
 		C949C2091F15E210008A5EC4 /* Keypad */ = {
@@ -686,10 +698,6 @@
 				C9045C201FC5122800F55FB3 /* InitialLoginCoordinator.swift */,
 				C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */,
 				C9174D461F833265008639CC /* InitialLoginViewModel.swift */,
-				C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */,
-				C9DF81E21FEA1FB000C86A75 /* SignUpViewController.storyboard */,
-				C9A0B2EB1E63D2A300404320 /* SignUpViewController.swift */,
-				C9AA8DC11F9F191000147F07 /* SignUpViewModel.swift */,
 			);
 			path = Initial;
 			sourceTree = "<group>";
