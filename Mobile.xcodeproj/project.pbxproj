@@ -564,10 +564,7 @@
 			isa = PBXGroup;
 			children = (
 				C9045C1E1FC4D21E00F55FB3 /* ItemCoordinator.swift */,
-				C9DF81DB1FEA177800C86A75 /* ItemViewController.storyboard */,
-				C95E44671FB2968C00820067 /* ItemViewController.swift */,
-				C95E44691FB296A700820067 /* ItemViewModel.swift */,
-				C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */,
+				C9DF81E11FEA1E3200C86A75 /* Item List */,
 			);
 			path = Item;
 			sourceTree = "<group>";
@@ -794,6 +791,17 @@
 				C98A90871F97E97400644548 /* InventoryKeypadViewModel.swift */,
 			);
 			name = Keypad;
+			sourceTree = "<group>";
+		};
+		C9DF81E11FEA1E3200C86A75 /* Item List */ = {
+			isa = PBXGroup;
+			children = (
+				C9DF81DB1FEA177800C86A75 /* ItemViewController.storyboard */,
+				C95E44671FB2968C00820067 /* ItemViewController.swift */,
+				C95E44691FB296A700820067 /* ItemViewModel.swift */,
+				C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */,
+			);
+			name = "Item List";
 			sourceTree = "<group>";
 		};
 		C9E198D31DC566780065FB98 /* Order Models */ = {
