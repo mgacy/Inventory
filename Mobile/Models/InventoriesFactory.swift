@@ -121,7 +121,7 @@ class InventoriesFactory {
         let inventory = Inventory(context: context)
         // remoteID
         if let date = record.date.toBasicDate() {
-            inventory.date = date.timeIntervalSinceReferenceDate
+            inventory.dateTimeInterval = date.timeIntervalSinceReferenceDate
         }
         inventory.storeID = Int32(record.storeID)
         inventory.typeID = Int32(record.inventoryTypeID ?? 0)

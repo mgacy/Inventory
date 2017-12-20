@@ -24,7 +24,7 @@ extension Inventory: Syncable {
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
         //remoteID
         if let date = record.date.toBasicDate() {
-            self.date = date.timeIntervalSinceReferenceDate
+            self.dateTimeInterval = date.timeIntervalSinceReferenceDate
         }
         storeID = Int32(record.storeID)
         typeID = Int32(record.inventoryTypeID ?? 0)
@@ -49,7 +49,7 @@ extension Inventory {
         }
 
         var myDict = [String: Any]()
-        myDict["date"] = date.toPythonDateString()
+        myDict["date"] = dateTimeInterval.toPythonDateString()
         myDict["store_id"] = storeID
 
         // Apple suggests using a default value of 0 over using optional attributes

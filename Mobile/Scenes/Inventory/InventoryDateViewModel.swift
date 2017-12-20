@@ -23,7 +23,7 @@ struct InventoryDateViewModel {
     private let dataManager: DataManager
 
     // CoreData
-    private let sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+    private let sortDescriptors = [NSSortDescriptor(key: "dateTimeInterval", ascending: false)]
     //private let cacheName: String? = nil
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit

@@ -199,7 +199,7 @@ extension InventoryDateViewController: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: UITableViewCell, for inventory: Inventory) {
-        cell.textLabel?.text = Date(timeIntervalSinceReferenceDate: inventory.date).altStringFromDate()
+        cell.textLabel?.text = Date(timeIntervalSinceReferenceDate: inventory.dateTimeInterval).altStringFromDate()
         switch inventory.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black
