@@ -29,7 +29,7 @@
 		C9045C1B1FC4D1F200F55FB3 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C1A1FC4D1F200F55FB3 /* HomeCoordinator.swift */; };
 		C9045C1D1FC4D20500F55FB3 /* InvoiceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C1C1FC4D20500F55FB3 /* InvoiceCoordinator.swift */; };
 		C9045C1F1FC4D21E00F55FB3 /* ItemCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C1E1FC4D21E00F55FB3 /* ItemCoordinator.swift */; };
-		C9045C211FC5122800F55FB3 /* InitialLoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C201FC5122800F55FB3 /* InitialLoginCoordinator.swift */; };
+		C9045C211FC5122800F55FB3 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C201FC5122800F55FB3 /* LoginCoordinator.swift */; };
 		C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90477201EEE30D60082D894 /* KeypadViewModel.swift */; };
 		C90482301F96A543001A3E01 /* OrderVendorViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C904822F1F96A543001A3E01 /* OrderVendorViewController.storyboard */; };
 		C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */; };
@@ -43,7 +43,7 @@
 		C91417F01FA8F64B00168064 /* OrderLocCatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91417EF1FA8F64B00168064 /* OrderLocCatViewModel.swift */; };
 		C9174D431F83232C008639CC /* SyncableParent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9174D421F83232C008639CC /* SyncableParent.swift */; };
 		C9174D451F832393008639CC /* NSManagedObjectContext+Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9174D441F832393008639CC /* NSManagedObjectContext+Syncable.swift */; };
-		C9174D471F833265008639CC /* InitialLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9174D461F833265008639CC /* InitialLoginViewModel.swift */; };
+		C9174D471F833265008639CC /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9174D461F833265008639CC /* LoginViewModel.swift */; };
 		C91856951F8D881D001B08A0 /* InventoriesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91856941F8D881D001B08A0 /* InventoriesFactory.swift */; };
 		C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B4EDB1E5C2863002DA2A5 /* User.swift */; };
 		C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */; };
@@ -56,15 +56,15 @@
 		C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift */; };
 		C92D75BF1DC7A7E500AA1A02 /* InvoiceItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BE1DC7A7E500AA1A02 /* InvoiceItemViewController.swift */; };
 		C92D75C11DC7A81400AA1A02 /* InvoiceKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */; };
-		C92D75C31DC7A93100AA1A02 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C21DC7A93100AA1A02 /* LoginViewController.swift */; };
 		C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */; };
 		C92EC6321F84C80300B47C23 /* RemoteOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EC6311F84C80300B47C23 /* RemoteOrder.swift */; };
 		C93203EA1FC678D200ACFC1D /* SignupCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */; };
 		C93203EC1FC6AA3000ACFC1D /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */; };
 		C93565361FCDF77D00CAFB16 /* RoundRectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */; };
-		C935E9A41E60D713003BF386 /* InitialLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */; };
+		C935E9A41E60D713003BF386 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E9A31E60D713003BF386 /* LoginViewController.swift */; };
 		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
+		C945DAC31FEA2EAD009D0EB0 /* LoginViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */; };
 		C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */; };
 		C949C20E1F160719008A5EC4 /* InvoiceItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */; };
 		C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9564F311F840276007D84F6 /* RemoteInventory.swift */; };
@@ -208,7 +208,7 @@
 		C9045C1A1FC4D1F200F55FB3 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		C9045C1C1FC4D20500F55FB3 /* InvoiceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceCoordinator.swift; sourceTree = "<group>"; };
 		C9045C1E1FC4D21E00F55FB3 /* ItemCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCoordinator.swift; sourceTree = "<group>"; };
-		C9045C201FC5122800F55FB3 /* InitialLoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialLoginCoordinator.swift; sourceTree = "<group>"; };
+		C9045C201FC5122800F55FB3 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
 		C90477201EEE30D60082D894 /* KeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeypadViewModel.swift; path = Protocols/KeypadViewModel.swift; sourceTree = "<group>"; };
 		C904822F1F96A543001A3E01 /* OrderVendorViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderVendorViewController.storyboard; sourceTree = "<group>"; };
 		C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VendorRep+MyStuff.swift"; sourceTree = "<group>"; };
@@ -222,7 +222,7 @@
 		C91417EF1FA8F64B00168064 /* OrderLocCatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocCatViewModel.swift; sourceTree = "<group>"; };
 		C9174D421F83232C008639CC /* SyncableParent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SyncableParent.swift; path = "Core Data Helpers/SyncableParent.swift"; sourceTree = "<group>"; };
 		C9174D441F832393008639CC /* NSManagedObjectContext+Syncable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSManagedObjectContext+Syncable.swift"; path = "Core Data Helpers/NSManagedObjectContext+Syncable.swift"; sourceTree = "<group>"; };
-		C9174D461F833265008639CC /* InitialLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialLoginViewModel.swift; sourceTree = "<group>"; };
+		C9174D461F833265008639CC /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		C91856941F8D881D001B08A0 /* InventoriesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InventoriesFactory.swift; path = Models/InventoriesFactory.swift; sourceTree = "<group>"; };
 		C91B4EDB1E5C2863002DA2A5 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUserManager.swift; sourceTree = "<group>"; };
@@ -235,15 +235,15 @@
 		C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceVendorViewController.swift; sourceTree = "<group>"; };
 		C92D75BE1DC7A7E500AA1A02 /* InvoiceItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemViewController.swift; sourceTree = "<group>"; };
 		C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadViewController.swift; sourceTree = "<group>"; };
-		C92D75C21DC7A93100AA1A02 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C92EC6311F84C80300B47C23 /* RemoteOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteOrder.swift; path = Models/RemoteOrder.swift; sourceTree = "<group>"; };
 		C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupCoordinator.swift; sourceTree = "<group>"; };
 		C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundRectButton.swift; sourceTree = "<group>"; };
-		C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialLoginViewController.swift; sourceTree = "<group>"; };
+		C935E9A31E60D713003BF386 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Syncable.swift; path = "Core Data Helpers/Syncable.swift"; sourceTree = "<group>"; };
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
+		C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginViewController.storyboard; sourceTree = "<group>"; };
 		C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = InvoiceKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemCellViewModel.swift; sourceTree = "<group>"; };
 		C9564F311F840276007D84F6 /* RemoteInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInventory.swift; path = Models/RemoteInventory.swift; sourceTree = "<group>"; };
@@ -410,7 +410,6 @@
 				C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */,
 				C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */,
 				C92C2F8C1F9FE3E500B69CF5 /* SettingsViewModel.swift */,
-				C92D75C21DC7A93100AA1A02 /* LoginViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -695,9 +694,10 @@
 		C9B825E71EB9A0ED009B92F0 /* Initial */ = {
 			isa = PBXGroup;
 			children = (
-				C9045C201FC5122800F55FB3 /* InitialLoginCoordinator.swift */,
-				C935E9A31E60D713003BF386 /* InitialLoginViewController.swift */,
-				C9174D461F833265008639CC /* InitialLoginViewModel.swift */,
+				C9045C201FC5122800F55FB3 /* LoginCoordinator.swift */,
+				C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */,
+				C935E9A31E60D713003BF386 /* LoginViewController.swift */,
+				C9174D461F833265008639CC /* LoginViewModel.swift */,
 			);
 			path = Initial;
 			sourceTree = "<group>";
@@ -1059,6 +1059,7 @@
 				C9DF81DA1FEA16FA00C86A75 /* InventoryDateViewController.storyboard in Resources */,
 				C9A114F01FAC336500308974 /* InvoiceItemViewController.storyboard in Resources */,
 				C91C92821EFCD98F00566CEB /* OrderItemViewController.storyboard in Resources */,
+				C945DAC31FEA2EAD009D0EB0 /* LoginViewController.storyboard in Resources */,
 				C9DF81D61FEA158500C86A75 /* InvoiceDateViewController.storyboard in Resources */,
 				C9DF81E01FEA1BDE00C86A75 /* InventoryLocItemViewController.storyboard in Resources */,
 			);
@@ -1267,7 +1268,6 @@
 				C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */,
 				C902FF431DBE769C0063CD02 /* InventoryItem+MyStuff.swift in Sources */,
 				C9F645591EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift in Sources */,
-				C92D75C31DC7A93100AA1A02 /* LoginViewController.swift in Sources */,
 				C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */,
 				C9BB058B1F831AF900A07529 /* InventoryDateViewModel.swift in Sources */,
 				C9C221191EFCD424009C7D01 /* UIViewController+Instance.swift in Sources */,
@@ -1296,7 +1296,7 @@
 				C9045C171FC4A1BA00F55FB3 /* InventoryCoordinator.swift in Sources */,
 				C9045C151FC49F0000F55FB3 /* TabBarCoordinator.swift in Sources */,
 				C95E446A1FB296A700820067 /* ItemViewModel.swift in Sources */,
-				C9174D471F833265008639CC /* InitialLoginViewModel.swift in Sources */,
+				C9174D471F833265008639CC /* LoginViewModel.swift in Sources */,
 				C91194741F9D426200B65CF9 /* InvoiceItemViewModel.swift in Sources */,
 				C9174D451F832393008639CC /* NSManagedObjectContext+Syncable.swift in Sources */,
 				C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */,
@@ -1306,7 +1306,7 @@
 				C97A71361F8EC96100F2F1CD /* InventoryLocCatViewModel.swift in Sources */,
 				C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */,
 				C97A71301F8EC4A100F2F1CD /* OrderVendorViewModel.swift in Sources */,
-				C935E9A41E60D713003BF386 /* InitialLoginViewController.swift in Sources */,
+				C935E9A41E60D713003BF386 /* LoginViewController.swift in Sources */,
 				C97B7C471FAB908000117D29 /* OrderContainerViewModel.swift in Sources */,
 				C95E44681FB2968C00820067 /* ItemViewController.swift in Sources */,
 				C96A89A01FAA5DB400CDDC59 /* OrderContainerViewController.swift in Sources */,
@@ -1359,7 +1359,7 @@
 				C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */,
 				C91C92861EFCDD9000566CEB /* RoundButton.swift in Sources */,
 				C9F5160F1DB7F133004C10E6 /* InventoryKeypadViewController.swift in Sources */,
-				C9045C211FC5122800F55FB3 /* InitialLoginCoordinator.swift in Sources */,
+				C9045C211FC5122800F55FB3 /* LoginCoordinator.swift in Sources */,
 				C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */,
 				C97A71341F8EC94A00F2F1CD /* InventoryLocationViewModel.swift in Sources */,
 				C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */,

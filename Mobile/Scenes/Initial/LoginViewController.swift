@@ -1,5 +1,5 @@
 //
-//  InitialLoginViewController.swift
+//  LoginViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 2/24/17.
@@ -12,7 +12,7 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-class InitialLoginViewController: UIViewController {
+class LoginViewController: UIViewController {
 
     private enum Strings {
         static let errorAlertTitle = "Error"
@@ -21,8 +21,8 @@ class InitialLoginViewController: UIViewController {
 
     // MARK: Properties
 
-    private typealias Input = InitialLoginViewModel.Input
-    var viewModel: InitialLoginViewModel!
+    private typealias Input = LoginViewModel.Input
+    var viewModel: LoginViewModel!
     let disposeBag = DisposeBag()
 
     fileprivate let _didLogin = PublishSubject<Void>()
@@ -136,7 +136,7 @@ class InitialLoginViewController: UIViewController {
 }
 
 // MARK: - UITextFieldDelegate
-extension InitialLoginViewController: UITextFieldDelegate {
+extension LoginViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         /*
@@ -168,7 +168,7 @@ extension InitialLoginViewController: UITextFieldDelegate {
 }
 
 // MARK: - 1Password Integration
-extension InitialLoginViewController {
+extension LoginViewController {
 
     func setupTextFieldFor1Password() {
         guard let onePasswordButton = OnePasswordExtension.shared().getButton(ofWidth: 20) else {

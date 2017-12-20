@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -82,64 +81,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Eb-RW-jV6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-402" y="1200"/>
-        </scene>
-        <!--InitialLogin-->
-        <scene sceneID="koq-0d-6Dk">
-            <objects>
-                <viewController storyboardIdentifier="InitialLoginViewController" id="37G-Gi-gMX" userLabel="InitialLogin" customClass="InitialLoginViewController" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Xkz-o5-nv8">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="lQ2-pa-8s7">
-                                <rect key="frame" x="16" y="120" width="343" height="150"/>
-                                <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Zt6-K4-KGw">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
-                                    </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="M7C-ku-sZj">
-                                        <rect key="frame" x="0.0" y="38" width="343" height="30"/>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <textInputTraits key="textInputTraits" spellCheckingType="no" returnKeyType="go" secureTextEntry="YES"/>
-                                    </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofl-0V-Bsb">
-                                        <rect key="frame" x="0.0" y="76" width="343" height="33"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Login"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BcY-I3-lEg">
-                                        <rect key="frame" x="0.0" y="117" width="343" height="33"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Sign Up"/>
-                                    </button>
-                                </subviews>
-                            </stackView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="lQ2-pa-8s7" firstAttribute="trailing" secondItem="Xkz-o5-nv8" secondAttribute="trailingMargin" id="5hf-lA-yEe"/>
-                            <constraint firstItem="lQ2-pa-8s7" firstAttribute="top" secondItem="FUi-5r-TRR" secondAttribute="top" constant="100" id="iLQ-FR-u98"/>
-                            <constraint firstItem="lQ2-pa-8s7" firstAttribute="leading" secondItem="Xkz-o5-nv8" secondAttribute="leadingMargin" id="leR-8X-rLf"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="FUi-5r-TRR"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="TaB-cC-MgH"/>
-                    <connections>
-                        <outlet property="loginButton" destination="ofl-0V-Bsb" id="Z9V-eD-E1z"/>
-                        <outlet property="loginTextField" destination="Zt6-K4-KGw" id="mWr-y3-rG0"/>
-                        <outlet property="passwordTextField" destination="M7C-ku-sZj" id="Kwf-kj-9Zu"/>
-                        <outlet property="signupButton" destination="BcY-I3-lEg" id="O2t-Ak-dTJ"/>
-                        <segue destination="Lwb-b5-sIi" kind="show" identifier="showTabController" id="fev-ZI-ohI"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9EX-X0-wAO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-831" y="139"/>
+            <point key="canvasLocation" x="65" y="-379"/>
         </scene>
         <!--Home-->
         <scene sceneID="htM-qN-ZJ0">
