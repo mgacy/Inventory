@@ -49,6 +49,17 @@ class NavigationController: UINavigationController {
             } else {
                 log.warning("\(#function) FAILED : tried to pop wrong view controller")
                 /// TODO: call `setViewControllers([emptyDetailViewController], animated: true)` on detailViewController
+
+                // Set detail view controller to empty to prevent confusion
+                if
+                    let splitViewController = splitViewController,
+                    splitViewController.viewControllers.count > 1,
+                    let detailViewController = splitViewController.viewControllers.last as? UINavigationController
+                {
+                    let emptyDetailViewController = EmptyDetailViewController()
+                    detailViewController.setViewControllers([emptyDetailViewController], animated: false)
+                    detailView = .empty
+                }
             }
         } else {
             log.debug("\(#function) : POPPED OTHER")
