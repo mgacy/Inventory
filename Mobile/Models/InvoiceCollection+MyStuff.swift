@@ -22,19 +22,15 @@ extension InvoiceCollection: Syncable {
 
     convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
-        if let date = record.date.toBasicDate() {
-            self.dateTimeInterval = date.timeIntervalSinceReferenceDate
-        } else {
-            /// TODO: find better way of handling error
+        guard let date = record.date.toBasicDate() else {
+            /// TODO: find better way of handling error; use SyncError type
             fatalError("Unable to parse date from: \(record)")
         }
+        self.dateTimeInterval = date.timeIntervalSinceReferenceDate
         update(with: record, in: context)
     }
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
-        //if let date = record.date.toBasicDate() {
-        //    self.dateTimeInterval = date.timeIntervalSinceReferenceDate
-        //}
         storeID = Int32(record.storeID)
 
         switch record.status {
@@ -67,7 +63,6 @@ extension InvoiceCollection: SyncableParent {
 
     func updateParent(of entity: ChildType) {
         entity.collection = self
-        //addToInvoices(entity)
     }
 
 }

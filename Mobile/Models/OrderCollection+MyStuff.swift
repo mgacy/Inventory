@@ -22,20 +22,16 @@ extension OrderCollection: Syncable {
 
     convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
-        if let date = record.date.toBasicDate() {
-            self.dateTimeInterval = date.timeIntervalSinceReferenceDate
-        } else {
-            /// TODO:find better way of handling error
+        guard let date = record.date.toBasicDate() else {
+            /// TODO:find better way of handling error; use SyncError type
             fatalError("Unable to parse date from: \(record)")
         }
+        self.dateTimeInterval = date.timeIntervalSinceReferenceDate
         self.uploaded = true
         update(with: record, in: context)
     }
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
-        //if let date = record.date.toBasicDate() {
-        //    self.dateTimeInterval = date.timeIntervalSinceReferenceDate
-        //}
         self.storeID = Int32(record.storeID)
         if let inventoryID = record.inventoryId { self.inventoryID = Int32(inventoryID) }
 
