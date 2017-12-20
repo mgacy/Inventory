@@ -84,45 +84,6 @@
             </objects>
             <point key="canvasLocation" x="-402" y="1200"/>
         </scene>
-        <!--InventoryLocationCategory-->
-        <scene sceneID="TtP-wW-j50">
-            <objects>
-                <tableViewController storyboardIdentifier="InventoryLocationCategoryTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="EVU-Sa-EdD" userLabel="InventoryLocationCategory" customClass="InventoryLocationCategoryTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="TgE-k8-v4G">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="EVU-Sa-EdD" id="JHU-pV-1A8"/>
-                            <outlet property="delegate" destination="EVU-Sa-EdD" id="0mw-jQ-UsK"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="TEG-nL-6AW"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="g7T-hd-scX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3818" y="361"/>
-        </scene>
-        <!--InventoryLocationItem-->
-        <scene sceneID="kiM-cd-BbP">
-            <objects>
-                <tableViewController storyboardIdentifier="InventoryLocationItemTVC" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2re-X1-JiU" userLabel="InventoryLocationItem" customClass="InventoryLocationItemTVC" customModule="Mobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="64" sectionHeaderHeight="28" sectionFooterHeight="28" id="mFn-T5-2tF">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <sections/>
-                        <connections>
-                            <outlet property="dataSource" destination="2re-X1-JiU" id="def-3A-tPe"/>
-                            <outlet property="delegate" destination="2re-X1-JiU" id="aWM-YD-fCe"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="y4h-zb-3aV"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="m0u-Gl-dub" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4682" y="361"/>
-        </scene>
         <!--InitialLogin-->
         <scene sceneID="koq-0d-6Dk">
             <objects>

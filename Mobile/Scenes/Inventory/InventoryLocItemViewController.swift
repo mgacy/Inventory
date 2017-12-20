@@ -1,5 +1,5 @@
 //
-//  InventoryLocationItemTVC.swift
+//  InventoryLocItemViewController.swift
 //  Playground
 //
 //  Created by Mathew Gacy on 10/6/16.
@@ -24,7 +24,7 @@ enum LocationItemListParent {
 
 }
 
-class InventoryLocationItemTVC: UITableViewController {
+class InventoryLocItemViewController: UITableViewController {
 
     // MARK: Properties
 
@@ -58,7 +58,7 @@ class InventoryLocationItemTVC: UITableViewController {
     //override func didReceiveMemoryWarning() {}
 
     // MARK: - TableViewDataSource
-    fileprivate var dataSource: TableViewDataSource<InventoryLocationItemTVC>!
+    fileprivate var dataSource: TableViewDataSource<InventoryLocItemViewController>!
 
     fileprivate func setupTableView() {
         tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -78,7 +78,7 @@ class InventoryLocationItemTVC: UITableViewController {
 }
 
 // MARK: - TableViewDataSourceDelegate Extension
-extension InventoryLocationItemTVC: TableViewDataSourceDelegate {
+extension InventoryLocItemViewController: TableViewDataSourceDelegate {
     func configure(_ cell: SubItemTableViewCell, for locationItem: InventoryLocationItem) {
         let viewModel = InventoryLocItemCellViewModel(forLocationItem: locationItem)
         cell.configure(withViewModel: viewModel)

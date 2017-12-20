@@ -47,7 +47,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     fileprivate func showReviewList(with inventory: Inventory) {
-        let viewController = InventoryReviewViewController.initFromStoryboard(name: "InventoryReviewViewController")
+        let viewController = InventoryReviewViewController.instance()
         let viewModel = InventoryReviewViewModel(dataManager: dataManager, parentObject: inventory,
                                                  rowTaps: viewController.selectedObjects)
         viewController.viewModel = viewModel
@@ -57,7 +57,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showLocationList(with inventory: Inventory) {
-        let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
+        let viewController = InventoryLocationViewController.instance()
         var avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
             dataManager: dataManager,
             parentObject: inventory
@@ -88,8 +88,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showCategoryList(with location: InventoryLocation) {
-        let viewController = InventoryLocationCategoryTVC.initFromStoryboard(name: "Main")
-        //let viewController = InventoryLocationCategoryTVC.instance()
+        let viewController = InventoryLocCatViewController.instance()
         viewController.viewModel = InventoryLocCatViewModel(dataManager: dataManager, parentObject: location)
         navigationController.pushViewController(viewController, animated: true)
 
@@ -102,8 +101,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showLocationItemList(with parent: LocationItemListParent) {
-        let viewController = InventoryLocationItemTVC.initFromStoryboard(name: "Main")
-        //let viewController = InventoryLocationItemTVC.instance()
+        let viewController = InventoryLocItemViewController.instance()
         viewController.viewModel = InventoryLocItemViewModel(dataManager: dataManager, parentObject: parent)
         navigationController.pushViewController(viewController, animated: true)
 
