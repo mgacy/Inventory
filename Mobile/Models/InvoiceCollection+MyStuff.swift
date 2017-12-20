@@ -37,14 +37,10 @@ extension InvoiceCollection: Syncable {
         //}
         storeID = Int32(record.storeID)
 
-        /// TODO: switch to `status` enum
         switch record.status {
-        case "pending":
+        case .pending:
             self.uploaded = false
-        case "complete":
-            self.uploaded = true
-        default:
-            log.error("\(#function) - invalid status: \(record.status)")
+        case .complete:
             self.uploaded = true
         }
 

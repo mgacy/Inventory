@@ -12,11 +12,14 @@ import Foundation
 
 struct RemoteInvoiceCollection: Codable {
 
-    // enum InvoiceCollectionStatus: String, Codable {}
+    enum Status: String, Codable {
+        case pending
+        case completed
+    }
 
     //let date: Date
     let date: String
-    let status: String
+    let status: Status
     let storeID: Int
     let invoices: [RemoteInvoice]?
 
