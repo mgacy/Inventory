@@ -33,6 +33,10 @@ class SettingsCoordinator: BaseCoordinator<Void> {
             .subscribe()
             .disposed(by: disposeBag)
 
+        if let navVC = rootViewController.parent as? UINavigationController, let tabVC = navVC.parent,
+           let splitVC = tabVC.parent, splitVC.traitCollection.horizontalSizeClass == .regular {
+            navigationController.modalPresentationStyle = .formSheet
+        }
         rootViewController.present(navigationController, animated: true)
 
         return viewController.doneButtonItem.rx.tap
