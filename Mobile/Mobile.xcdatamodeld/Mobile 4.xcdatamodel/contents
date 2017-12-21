@@ -171,7 +171,7 @@
         </fetchIndex>
     </entity>
     <entity name="Store" representedClassName="Store" syncable="YES" codeGenerationType="class">
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="inventories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Inventory" inverseName="store" inverseEntity="Inventory" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="store" inverseEntity="Item" syncable="YES"/>
