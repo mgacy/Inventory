@@ -36,7 +36,7 @@ extension InvoiceCollection: Syncable {
         switch record.status {
         case .pending:
             self.uploaded = false
-        case .complete:
+        case .completed:
             self.uploaded = true
         }
 
