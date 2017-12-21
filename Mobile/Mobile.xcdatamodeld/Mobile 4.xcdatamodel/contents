@@ -83,7 +83,7 @@
     <entity name="InvoiceCollection" representedClassName="InvoiceCollection" syncable="YES" codeGenerationType="class">
         <attribute name="dateTimeInterval" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="storeID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="invoices" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Invoice" inverseName="collection" inverseEntity="Invoice" syncable="YES"/>
         <fetchIndex name="byDateIndex">
             <fetchIndexElement property="dateTimeInterval" type="Binary" order="ascending"/>
@@ -148,7 +148,7 @@
         <attribute name="dateTimeInterval" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="inventoryID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="storeID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="orders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Order" inverseName="collection" inverseEntity="Order" syncable="YES"/>
         <fetchIndex name="byDateIndex">
             <fetchIndexElement property="dateTimeInterval" type="Binary" order="ascending"/>
