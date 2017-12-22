@@ -79,3 +79,29 @@ extension InvoiceCollection {
     }
 
 }
+
+// MARK: - Status
+
+extension InvoiceCollection {
+
+    func updateStatus() {
+        guard uploaded == false else {
+            //log.debug("InvoiceCollection has already been uploaded.")
+            return
+        }
+        guard let invoices = invoices else {
+            //log.debug("InvoiceCollection does not appear to have any Invoices.")
+            return
+        }
+        for item in invoices {
+            guard let invoice = item as? Invoice else {
+                fatalError("\(#function) FAILED : unable to cast \(item) as Invoice")
+            }
+            if invoice.status == InvoiceStatus.pending.rawValue {
+                return
+            }
+        }
+        uploaded = true
+    }
+
+}
