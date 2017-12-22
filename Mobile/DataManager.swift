@@ -78,8 +78,8 @@ extension DataManager {
             .flatMap { result -> Observable<Bool> in
                 //log.debug("\(#function) - \(result)")
                 return Observable.just(self.viewContext.saveOrRollback())
-        }
-        //.materialize()
+            }
+            //.materialize()
     }
 
     // Item
@@ -106,15 +106,14 @@ extension DataManager {
                         //throw DataManagerError.missingMOC
                     }
                     Item.sync(with: records, in: context)
-
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
                     return false
                     //throw error
                 }
-        }
-        //.materialize()
+            }
+            //.materialize()
     }
 
     // ItemCategory
@@ -190,7 +189,7 @@ extension DataManager {
                     return false
                     //throw error
                 }
-        }
+            }
     }
 
 }
@@ -326,11 +325,10 @@ extension DataManager {
                     let newCollection = OrderCollection(with: record, in: context)
                     newCollection.uploaded = false
                     newCollection.orders?.forEach { any in
-                        // FIXME: use `guard ... else ... fatalError` here? Why do we call `.updateStatus()`?
-                        if let `order` = any as? Order {
-                            order.status = OrderStatus.pending.rawValue
-                            order.updateStatus()
-                        }
+                        guard let order = any as? Order else { fatalError("\(#function) FAILED : wrong type") }
+                        order.status = OrderStatus.pending.rawValue
+                        // Change status to .empty if .quantity = 0 for all OrderItems
+                        order.updateStatus()
                     }
                     return Observable.just(newCollection)
                 case .failure(let error):
