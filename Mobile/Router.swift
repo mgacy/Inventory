@@ -181,11 +181,9 @@ public enum Router: URLRequestConvertible {
         case .getInvoiceCollection(let storeID, let forDate):
             return ["store_id": storeID, "date": forDate]
         //case .postInvoice(let parameters):
-        //    return parameters
         case .putInvoice(_, let parameters):
             return parameters
         //case .putInvoiceItem(_, let parameters):
-        //    return parameters
         // Order
         case .getOrderCollections(let storeID):
             return ["store_id": storeID]
