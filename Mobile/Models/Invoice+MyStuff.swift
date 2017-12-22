@@ -52,7 +52,6 @@ extension Invoice: Syncable {
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
         // Required
-        //remoteID = record.syncIdentifier
         guard let shipDate = record.shipDate.toBasicDate(), let receiveDate = record.receiveDate.toBasicDate() else {
             /// TODO: a fatalError seems excessive for this type of error
             fatalError("\(#function) FAILED : unable to parse shipDate or receiveDate from \(record)")
@@ -124,8 +123,7 @@ extension Invoice {
         myDict["credit"] = Double(self.credit)
         myDict["shipping"] = Double(self.shipping)
         myDict["taxes"] = Double(self.taxes)
-        /// FIXME: why is total_cost not Double?
-        myDict["total_cost"] = Int(self.totalCost)
+        myDict["total_cost"] = Double(self.totalCost)
         myDict["check_no"] = Int(self.checkNo)
         myDict["status"] = InvoiceStatus.asString(raw: status) ?? ""
         myDict["store_id"] = Int((self.collection?.storeID)!)
