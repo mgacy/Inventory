@@ -159,18 +159,21 @@ extension Invoice {
 
     /// TODO: rename `updatedStatus()` and return true if we actually change status
     func updateStatus() {
-        let currentStatusIsPending = status == InvoiceStatus.pending.rawValue ? true : false
+        guard let invoiceItems = items else { return }
 
+        // Save current status so we can compare it to updated status
+        let currentStatusIsPending = status == InvoiceStatus.pending.rawValue ? true : false
         var hasPending: Bool = false
         var hasCompleted: Bool = false
-        items?.forEach { any in
+
+        for any in invoiceItems {
             guard let invoiceItem = any as? InvoiceItem else { fatalError("\(#function) FAILED : wrong type") }
             switch invoiceItem.status {
             case InvoiceItemStatus.pending.rawValue:
                 hasPending = true
                 if !currentStatusIsPending {
                     status = InvoiceStatus.pending.rawValue
-                    /// TODO: collection.upateStatus()
+                    collection?.updateStatus()
                     return //true
                 }
             //case InvoiceItemStatus.received.rawValue:
@@ -188,13 +191,13 @@ extension Invoice {
         case true:
             if hasCompleted && !hasPending {
                 status = InvoiceStatus.completed.rawValue
-                /// TODO: collection.updateStatus()
+                collection?.updateStatus()
                 //return true
             }
         case false:
             if hasPending {
                 status = InvoiceStatus.pending.rawValue
-                /// TODO: collection.updateStatus()
+                collection?.updateStatus()
                 //return true
             }
         }
