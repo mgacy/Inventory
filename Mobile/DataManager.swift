@@ -595,9 +595,10 @@ extension DataManager {
         //}
     }
 
-    public func signUp(username: String, email: String, password: String) -> Observable<Event<Bool>> {
+    public func signUp(firstName: String, lastName: String, email: String, password: String) -> Observable<Event<Bool>> {
         return Observable.create { observer in
-            self.userManager.signUp(username: username, email: email, password: password) { error in
+            // swiftlint:disable:next line_length
+            self.userManager.signUp(firstName: firstName, lastName: lastName, email: email, password: password) { error in
                 if let error = error {
                     log.warning("\(#function) ERROR : \(error)")
                     observer.onError(error)

@@ -147,10 +147,9 @@ class CurrentUserManager {
         }
     }
 
-    public func signUp(username: String, email: String, password: String, completion: @escaping CompletionHandlerType) {
-
-        Alamofire.request(Router.signUp(username: username, email: email, password: password))
+    public func signUp(firstName: String, lastName: String, email: String, password: String, completion: @escaping CompletionHandlerType) {
         let decoder = JSONDecoder()
+        Alamofire.request(Router.signUp(firstName: firstName, lastName: lastName, email: email, password: password))
             .validate()
             .responseDecodableObject(decoder: decoder) { (response: DataResponse<RemoteUser>) in
                 switch response.result {

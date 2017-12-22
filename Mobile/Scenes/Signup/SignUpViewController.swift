@@ -31,7 +31,8 @@ class SignUpViewController: UIViewController {
     // MARK: Interface
     let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: nil)
 
-    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var firstNameTextField: UITextField!
+    @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var loginTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signupButton: UIButton!
@@ -56,7 +57,8 @@ class SignUpViewController: UIViewController {
 
     private func setupView() {
         self.navigationItem.leftBarButtonItem = cancelButton
-        usernameTextField.delegate = self
+        firstNameTextField.delegate = self
+        lastNameTextField.delegate = self
         loginTextField.delegate = self
         passwordTextField.delegate = self
     }
@@ -66,7 +68,8 @@ class SignUpViewController: UIViewController {
     // swiftlint:disable:next function_body_length
     private func bindViewModel() {
         let inputs = Input(
-            username: usernameTextField.rx.text.orEmpty.asObservable(),
+            firstName: firstNameTextField.rx.text.orEmpty.asObservable(),
+            lastName: lastNameTextField.rx.text.orEmpty.asObservable(),
             login: loginTextField.rx.text.orEmpty.asObservable(),
             password: passwordTextField.rx.text.orEmpty.asObservable(),
             signupTaps: signupButton.rx.tap.asObservable(),
@@ -109,7 +112,13 @@ class SignUpViewController: UIViewController {
             .disposed(by: disposeBag)
 
         // Next keyboard button
-        usernameTextField.rx.controlEvent(.editingDidEndOnExit)
+        firstNameTextField.rx.controlEvent(.editingDidEndOnExit)
+            .subscribe(onNext: { _ in
+                self.lastNameTextField.becomeFirstResponder()
+            })
+            .disposed(by: disposeBag)
+
+        lastNameTextField.rx.controlEvent(.editingDidEndOnExit)
             .subscribe(onNext: { _ in
                 self.loginTextField.becomeFirstResponder()
             })
