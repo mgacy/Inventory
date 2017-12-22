@@ -13,6 +13,7 @@
 import UIKit
 import RxSwift
 
+/// TODO: rename ViewModelAttaching?
 protocol AttachableType {
     associatedtype ViewModel: AttachableViewModelType
     associatedtype Bindings

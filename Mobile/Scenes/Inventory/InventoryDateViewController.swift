@@ -148,7 +148,6 @@ class InventoryDateViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })

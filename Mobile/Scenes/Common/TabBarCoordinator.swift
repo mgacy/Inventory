@@ -114,7 +114,7 @@ class TabBarCoordinator: BaseCoordinator<Void> {
                     let coordinator = ItemCoordinator(navigationController: navCtrl, dataManager: dataManager)
                     return coordinate(to: coordinator)
                 }
-        }
+            }
     }
 
 }
@@ -289,6 +289,7 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
             vc.navigationItem.leftItemsSupplementBackButton = true
             vc.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
             switch navigationController.detailView {
+            // Animate only the initial presentation of the detail vc
             case .empty:
                 detailNavigationController.setViewControllers([vc], animated: true)
             case .visible:
