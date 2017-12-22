@@ -237,7 +237,7 @@ class ModalOrderCoordinator: OrderCoordinator {
     init(rootViewController: UIViewController, dataManager: DataManager, collection: OrderCollection) {
         self.rootViewController = rootViewController
         self.collection = collection
-        super.init(navigationController: UINavigationController(), dataManager: dataManager)
+        super.init(navigationController: NavigationController(), dataManager: dataManager)
     }
 
     override func start() -> Observable<Void> {
