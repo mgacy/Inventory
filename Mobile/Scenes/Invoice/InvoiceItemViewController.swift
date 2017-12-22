@@ -95,7 +95,7 @@ class InvoiceItemViewController: UIViewController {
             .subscribe(onNext: { [weak self] result in
                 switch result.event {
                 case .next:
-                    HUD.flash(.success, delay: 1.0) { _ in
+                    HUD.flash(.success, delay: 0.5) { _ in
                         /// TODO: handle this elsewhere
                         self?.navigationController!.popViewController(animated: true)
                     }
