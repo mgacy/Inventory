@@ -74,8 +74,7 @@ class APIManager {
     /// TODO: pass `sessionManager: SessionManager, decoder: JSONDecoder`?
 
     private func requestOne<M: Codable>(_ endpoint: Router) -> Observable<DataResponse<M>> {
-        return Observable<DataResponse<M>>.create { observer in
-            //let decoder = JSONDecoder()
+        return Observable<DataResponse<M>>.create { [unowned self] observer in
             let request = self.sessionManager.request(endpoint)
             request
                 .validate()
@@ -90,8 +89,7 @@ class APIManager {
     }
 
     private func requestList<M: Codable>(_ route: Router) -> Observable<DataResponse<[M]>> {
-        return Observable<DataResponse<[M]>>.create { observer in
-            //let decoder = JSONDecoder()
+        return Observable<DataResponse<[M]>>.create { [unowned self] observer in
             let request = self.sessionManager.request(route)
             request
                 .validate()
