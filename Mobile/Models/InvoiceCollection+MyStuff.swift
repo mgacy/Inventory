@@ -93,9 +93,9 @@ extension InvoiceCollection {
             //log.debug("InvoiceCollection does not appear to have any Invoices.")
             return
         }
-        for item in invoices {
-            guard let invoice = item as? Invoice else {
-                fatalError("\(#function) FAILED : unable to cast \(item) as Invoice")
+        for any in invoices {
+            guard let invoice = any as? Invoice else {
+                fatalError("\(#function) FAILED : unable to cast \(any) as Invoice")
             }
             if invoice.status == InvoiceStatus.pending.rawValue {
                 return

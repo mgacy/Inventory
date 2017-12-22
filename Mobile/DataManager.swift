@@ -325,9 +325,9 @@ extension DataManager {
 
                     let newCollection = OrderCollection(with: record, in: context)
                     newCollection.uploaded = false
-                    newCollection.orders?.forEach { order in
+                    newCollection.orders?.forEach { any in
                         // FIXME: use `guard ... else ... fatalError` here? Why do we call `.updateStatus()`?
-                        if let `order` = order as? Order {
+                        if let `order` = any as? Order {
                             order.status = OrderStatus.pending.rawValue
                             order.updateStatus()
                         }
