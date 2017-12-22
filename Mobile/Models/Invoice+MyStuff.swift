@@ -164,9 +164,7 @@ extension Invoice {
         var hasPending: Bool = false
         var hasCompleted: Bool = false
         items?.forEach { any in
-            guard let invoiceItem = any as? InvoiceItem else {
-                log.error("\(#function) FAILED : unable to cast \(any) as InvoiceItem"); return
-            }
+            guard let invoiceItem = any as? InvoiceItem else { fatalError("\(#function) FAILED : wrong type") }
             switch invoiceItem.status {
             case InvoiceItemStatus.pending.rawValue:
                 hasPending = true

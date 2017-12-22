@@ -161,8 +161,9 @@ extension Order {
         }
 
         var hasOrder = false
-        for item in items {
-            if let quantity = (item as? OrderItem)?.quantity {
+        for any in items {
+            guard let orderItem = any as? OrderItem else { fatalError("\(#function) FAILED : wrong type") }
+            if let quantity = orderItem.quantity {
                 if quantity.intValue > 0 {
                     hasOrder = true
                 }

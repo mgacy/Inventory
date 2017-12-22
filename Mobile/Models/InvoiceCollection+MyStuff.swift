@@ -94,9 +94,7 @@ extension InvoiceCollection {
             return
         }
         for any in invoices {
-            guard let invoice = any as? Invoice else {
-                fatalError("\(#function) FAILED : unable to cast \(any) as Invoice")
-            }
+            guard let invoice = any as? Invoice else { fatalError("\(#function) FAILED : wrong type") }
             if invoice.status == InvoiceStatus.pending.rawValue {
                 return
             }
