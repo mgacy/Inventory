@@ -93,8 +93,7 @@ extension DataManager {
     func refreshItems() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
-            return Observable.just(false)
-            //return Observable.error(DataManagerError.missingStoreID).materialize()
+            return Observable.error(DataManagerError.missingStoreID)
         }
 
         return client.getItems(storeID: storeID)
@@ -102,15 +101,13 @@ extension DataManager {
                 switch response.result {
                 case .success(let records):
                     guard let context = self?.viewContext else {
-                        return false
-                        //throw DataManagerError.missingMOC
+                        throw DataManagerError.missingMOC
                     }
                     Item.sync(with: records, in: context)
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    return false
-                    //throw error
+                    throw error
                 }
             }
             //.materialize()
@@ -171,25 +168,23 @@ extension DataManager {
     func refreshVendors() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
-            return Observable.just(false)
-            //return Observable.error(DataManagerError.missingStoreID).materialize()
+            return Observable.error(DataManagerError.missingStoreID)
         }
         return client.getVendors(storeID: storeID)
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
                     guard let context = self?.viewContext else {
-                        return false
-                        //throw DataManagerError.missingMOC
+                        throw DataManagerError.missingMOC
                     }
                     Vendor.sync(with: records, in: context)
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    return false
-                    //throw error
+                    throw error
                 }
             }
+            //.materialize()
     }
 
 }
