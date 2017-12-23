@@ -49,6 +49,7 @@ struct InventoryReviewViewModel {
 
         let refreshResults = dataManager.refreshInventory(parentObject)
             .trackActivity(isRefreshing)
+            .share()
 
         //self.hasRefreshed = refreshResults
 
