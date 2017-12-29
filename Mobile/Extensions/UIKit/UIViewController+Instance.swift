@@ -5,8 +5,9 @@
 //  Created by Mathew Gacy on 6/22/17.
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
-
-// https://medium.cobeisfresh.com/a-case-for-using-storyboards-on-ios-3bbe69efbdf4
+//  Taken from:
+//  https://medium.cobeisfresh.com/a-case-for-using-storyboards-on-ios-3bbe69efbdf4
+//
 
 import UIKit
 

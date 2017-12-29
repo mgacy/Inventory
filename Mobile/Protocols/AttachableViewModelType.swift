@@ -2,11 +2,11 @@
 //  AttachableViewModelType.swift
 //  Mobile
 //
-//  Thomas Visser
-//  [Reactive MVVM](http://www.thomasvisser.me/2017/02/09/mvvm-rx/)
-//
 //  Created by Mathew Gacy on 11/26/17.
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
+//
+//  Adopted from Thomas Visser:
+//  [Reactive MVVM](http://www.thomasvisser.me/2017/02/09/mvvm-rx/)
 //
 
 import Foundation
