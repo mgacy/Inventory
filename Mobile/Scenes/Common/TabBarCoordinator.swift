@@ -219,7 +219,7 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
     // MARK: Overriding the Interface Orientations
 
     // MARK: Collapsing the Interface
-
+    /*
     // This method is called when a split view controller is collapsing its children for a transition to a compact-width
     // size class. Override this method to perform custom adjustments to the view controller hierarchy of the target
     // controller. When you return from this method, you're expected to have modified the `primaryViewController` so as
@@ -239,7 +239,7 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
         return true
         */
     }
-
+    */
     // MARK: Expanding the Interface
 
     // This method is called when a split view controller is separating its child into two children for a transition
