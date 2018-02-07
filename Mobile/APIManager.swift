@@ -31,6 +31,8 @@ class APIManager {
     static let sharedInstance = APIManager()
     private let sessionManager: SessionManager
     private let decoder: JSONDecoder
+    private let queue = DispatchQueue.main
+    //private let queue = DispatchQueue(label: "com.mgacy.response-queue", qos: .utility, attributes: [.concurrent])
 
     // MARK: Lifecycle
 
@@ -78,7 +80,7 @@ class APIManager {
             let request = self.sessionManager.request(endpoint)
             request
                 .validate()
-                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<M>) in
+                .responseDecodableObject(queue: self.queue, decoder: self.decoder) { (response: DataResponse<M>) in
                     observer.onNext(response)
                     observer.onCompleted()
             }
@@ -93,7 +95,7 @@ class APIManager {
             let request = self.sessionManager.request(route)
             request
                 .validate()
-                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<[M]>) in
+                .responseDecodableObject(queue: self.queue, decoder: self.decoder) { (response: DataResponse<[M]>) in
                     observer.onNext(response)
                     observer.onCompleted()
             }
