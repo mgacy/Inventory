@@ -159,7 +159,7 @@
 		C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
 		C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E21DB7EF98004C10E6 /* ViewController.swift */; };
-		C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* Main.storyboard */; };
+		C9F515E61DB7EF98004C10E6 /* HomeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */; };
 		C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */; };
 		C9F515EB1DB7EF98004C10E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */; };
 		C9F515EE1DB7EF98004C10E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515EC1DB7EF98004C10E6 /* LaunchScreen.storyboard */; };
@@ -342,7 +342,7 @@
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9F515E21DB7EF98004C10E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		C9F515E51DB7EF98004C10E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C9F515E51DB7EF98004C10E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/HomeViewController.storyboard; sourceTree = "<group>"; };
 		C9F515E81DB7EF98004C10E6 /* Mobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mobile.xcdatamodel; sourceTree = "<group>"; };
 		C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C9F515ED1DB7EF98004C10E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -568,6 +568,7 @@
 			isa = PBXGroup;
 			children = (
 				C9045C1A1FC4D1F200F55FB3 /* HomeCoordinator.swift */,
+				C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */,
 				C95E44621FB2581400820067 /* HomeViewController.swift */,
 				C95E44641FB2582400820067 /* HomeViewModel.swift */,
 			);
@@ -873,7 +874,6 @@
 				C904771F1EEE30770082D894 /* Protocols */,
 				C9F516101DB7F144004C10E6 /* Networking */,
 				C94084741EFCCB7F00638E25 /* Scenes */,
-				C9F515E41DB7EF98004C10E6 /* Main.storyboard */,
 				C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */,
 				C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */,
 				C9F516041DB7F062004C10E6 /* Support */,
@@ -1055,7 +1055,7 @@
 				C91C928A1EFCE65800566CEB /* OrderKeypadViewController.storyboard in Resources */,
 				C9DF81DC1FEA177800C86A75 /* ItemViewController.storyboard in Resources */,
 				C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */,
-				C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */,
+				C9F515E61DB7EF98004C10E6 /* HomeViewController.storyboard in Resources */,
 				C97A713D1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard in Resources */,
 				C9DF81DA1FEA16FA00C86A75 /* InventoryDateViewController.storyboard in Resources */,
 				C9A114F01FAC336500308974 /* InvoiceItemViewController.storyboard in Resources */,
@@ -1389,12 +1389,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		C9F515E41DB7EF98004C10E6 /* Main.storyboard */ = {
+		C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				C9F515E51DB7EF98004C10E6 /* Base */,
 			);
-			name = Main.storyboard;
+			name = HomeViewController.storyboard;
 			sourceTree = "<group>";
 		};
 		C9F515EC1DB7EF98004C10E6 /* LaunchScreen.storyboard */ = {
