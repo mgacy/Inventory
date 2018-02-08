@@ -16,7 +16,7 @@ def basic_pods
   pod 'RxDataSources',      '~> 3.0'
   pod "RxSwiftExt",         '~> 3.0'
   # pod 'RxAlamofire',        '~> 4.0'
-  # pod "RxCoreData",         '~> 0.3.1'
+  # pod "RxCoreData",         '~> 0.4.0'
   # A
   # pod 'DATAStack',        '~> 6'
   # pod 'DATASource',       '~> 6'

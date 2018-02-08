@@ -46,6 +46,7 @@ class APIManager {
         decoder = JSONDecoder()
         //decoder.dateDecodingStrategy = .formatted(Date.basicDate)
         //decoder.dateDecodingStrategy = .iso8601
+        //decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
 
     func configSession(_ authHandler: AuthenticationHandler?) {

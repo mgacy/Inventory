@@ -42,7 +42,7 @@ class OrderContainerViewModel {
         let safeToComplete = completeTaps
             .map { _ in
                 return OrderContainerViewModel.checkStatusIsSafe(forCollection: parentObject)
-        }
+            }
 
         /// TODO: rename `confirmUnsafeComplete`?
         // If there are pending orders we want to warn the user about marking this collection as completed
