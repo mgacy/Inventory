@@ -8,19 +8,6 @@
 
 import UIKit
 
-// MARK: - Protocols
-
-protocol DetailViewControllerType where Self: UIViewController {}
-
-// MARK: - Supporting
-
-enum DetailView<T: UIViewController> {
-    case visible(T)
-    case empty
-}
-
-// MARK: - Class
-
 class NavigationController: UINavigationController {
 
     var detailView: DetailView<UIViewController> = .empty
@@ -33,13 +20,6 @@ class NavigationController: UINavigationController {
         navigationBar.barTintColor = ColorPalette.hintOfRed
     }
 
-    // MARK: - A
-    /*
-    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        log.debug("\(#function) : \(String(describing: viewController.self))")
-        super.pushViewController(viewController, animated: animated)
-    }
-    */
     override func popViewController(animated: Bool) -> UIViewController? {
         //log.debug("\(#function) : \(String(describing: topViewController.self))")
         if case .visible(let detailViewController) = detailView {
@@ -48,13 +28,13 @@ class NavigationController: UINavigationController {
                 detailView = .empty
             } else {
                 // Set detail view controller to empty to prevent confusion
+                // FIXME: it's really ugly that we are reaching up into splitViewController to get its detail nav controller
                 if
                     let splitViewController = splitViewController,
                     splitViewController.viewControllers.count > 1,
-                    let detailViewController = splitViewController.viewControllers.last as? UINavigationController
+                    let detailNavigationController = splitViewController.viewControllers.last as? UINavigationController
                 {
-                    let emptyDetailViewController = EmptyDetailViewController()
-                    detailViewController.setViewControllers([emptyDetailViewController], animated: false)
+                    detailNavigationController.setViewControllers([makeEmptyViewController()], animated: true)
                     detailView = .empty
                 }
             }
@@ -62,20 +42,14 @@ class NavigationController: UINavigationController {
         return super.popViewController(animated: animated)
     }
 
-    // MARK: - B
+}
 
-    func separate() {
-        //log.debug("\(#function)")
-        switch detailView {
-        case .visible:
-            viewControllers = Array(viewControllers.dropLast())
-        case .empty:
-            return
-        }
-    }
+// MARK: - PrimaryContainerType
 
-    func collapse() {
-        //log.debug("\(#function)")
+extension NavigationController: PrimaryContainerType {
+
+    /// Add detail view controller to `viewControllers` if it is visible.
+    func collapseDetail() {
         switch detailView {
         case .visible(let detailViewController):
             viewControllers += [detailViewController]
@@ -83,5 +57,21 @@ class NavigationController: UINavigationController {
             return
         }
     }
+
+    /// Remove detail view controller from `viewControllers` if it is visible.
+    func separateDetail() {
+        switch detailView {
+        case .visible:
+            viewControllers.removeLast()
+        case .empty:
+            return
+        }
+    }
+
+    func makeEmptyViewController() -> UIViewController {
+        return EmptyDetailViewController()
+    }
+
+}
 
 }

@@ -65,6 +65,7 @@
 		C9375060202D72050076B65E /* ErrorTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C937505F202D72050076B65E /* ErrorTracker.swift */; };
 		C9375062202D72B50076B65E /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9375061202D72B50076B65E /* Coordinator.swift */; };
 		C9375064202D738D0076B65E /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9375063202D738D0076B65E /* Observable+Extensions.swift */; };
+		C9375066202D75390076B65E /* PrimaryContainerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9375065202D75390076B65E /* PrimaryContainerType.swift */; };
 		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
 		C945DAC31FEA2EAD009D0EB0 /* LoginViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */; };
@@ -247,6 +248,7 @@
 		C937505F202D72050076B65E /* ErrorTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTracker.swift; sourceTree = "<group>"; };
 		C9375061202D72B50076B65E /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		C9375063202D738D0076B65E /* Observable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
+		C9375065202D75390076B65E /* PrimaryContainerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryContainerType.swift; sourceTree = "<group>"; };
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Syncable.swift; sourceTree = "<group>"; };
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginViewController.storyboard; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 				C9375061202D72B50076B65E /* Coordinator.swift */,
 				C9DEC1051F805CF6004602EB /* DateFacade.swift */,
 				C90477201EEE30D60082D894 /* KeypadViewModel.swift */,
+				C9375065202D75390076B65E /* PrimaryContainerType.swift */,
 				C9EDFD2B1F842F2300C07CB8 /* StoryboardInitializable.swift */,
 				C99568C91FBB809C00AE6949 /* ViewModelType.swift */,
 			);
@@ -808,7 +811,6 @@
 				C9BB05881F83171000A07529 /* ActivityIndicator.swift */,
 				C937505F202D72050076B65E /* ErrorTracker.swift */,
 				C9045C121FC49EDA00F55FB3 /* BaseCoordinator.swift */,
-				C9045C141FC49F0000F55FB3 /* TabBarCoordinator.swift */,
 				C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */,
 				C902FF2D1DB816EB0063CD02 /* Keypad.swift */,
 				C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */,
@@ -817,9 +819,10 @@
 				C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */,
 				C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */,
 				C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */,
-				C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */,
+				C9045C141FC49F0000F55FB3 /* TabBarCoordinator.swift */,
 				C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */,
 				C9D59C5F1FE0FAE60050A4AB /* EmptyDetailViewController.swift */,
+				C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1348,6 +1351,7 @@
 				C9D59C601FE0FAE60050A4AB /* EmptyDetailViewController.swift in Sources */,
 				C9A14AC21DC67A0F00ACDE69 /* InvoiceDateViewController.swift in Sources */,
 				C9428EE71E032FCC002771EA /* Syncable.swift in Sources */,
+				C9375066202D75390076B65E /* PrimaryContainerType.swift in Sources */,
 				C9BB05871F83169800A07529 /* DataManager.swift in Sources */,
 				C91C92841EFCDBE400566CEB /* OrderItemTableViewCell.swift in Sources */,
 				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,

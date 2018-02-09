@@ -21,8 +21,8 @@ class TabBarController: UITabBarController {
         //log.debug("separateSecondaryViewController")
         return viewControllers?
             .flatMap { vc in
-                guard let navController = vc as? NavigationController else { return nil }
-                navController.separate()
+                guard let navController = vc as? PrimaryContainerType else { return nil }
+                navController.separateDetail()
                 return vc
             }
             .filter { $0 == self.selectedViewController }
@@ -31,25 +31,25 @@ class TabBarController: UITabBarController {
 
     // MARK: - B
 
+    /// Call `PrimaryContainerType.collapseDetail()` on children to add visible detail view controllers.
     func collapseTabs() {
-        //log.debug("\(#function)")
         guard let vcs = viewControllers else { return }
         vcs.forEach { viewController in
-            guard let navController = viewController as? NavigationController else {
+            guard let navController = viewController as? PrimaryContainerType else {
                 fatalError("\(#function) FAILED : wrong view controller type")
             }
-            navController.collapse()
+            navController.collapseDetail()
         }
     }
 
+    /// Call `PrimaryContainerType.separateDetail()` on children to remove visible detail view controllers.
     func separateTabs() {
-        //log.debug("\(#function)")
         guard let vcs = viewControllers else { return }
         vcs.forEach { viewController in
-            guard let navController = viewController as? NavigationController else {
+            guard let navController = viewController as? PrimaryContainerType else {
                 fatalError("\(#function) FAILED : wrong view controller type")
             }
-            navController.separate()
+            navController.separateDetail()
         }
     }
 

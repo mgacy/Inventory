@@ -280,15 +280,15 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
         //log.debug("\(#function) - controllers: \(splitViewController.viewControllers)")
         guard
             let tabBarController = splitViewController.viewControllers.first as? UITabBarController,
-            let navigationController = tabBarController.selectedViewController as? NavigationController else {
-                fatalError("\(#function) FAILED : unable to get section navigation controller")
+            let selectedNavController = tabBarController.selectedViewController as? UINavigationController & PrimaryContainerType else {
+                fatalError("\(#function) FAILED : wrong view controller type")
         }
         if splitViewController.isCollapsed {
-            navigationController.pushViewController(vc, animated: true)
+            selectedNavController.pushViewController(vc, animated: true)
         } else {
             vc.navigationItem.leftItemsSupplementBackButton = true
             vc.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
-            switch navigationController.detailView {
+            switch selectedNavController.detailView {
             // Animate only the initial presentation of the detail vc
             case .empty:
                 detailNavigationController.setViewControllers([vc], animated: true)
@@ -296,8 +296,8 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
                 detailNavigationController.setViewControllers([vc], animated: false)
             }
         }
-        navigationController.detailView = .visible(vc)
-        return true
+        selectedNavController.detailView = .visible(vc)
+        return true // Prevent UIKit from performing default behavior
     }
 
 }
