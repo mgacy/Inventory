@@ -538,6 +538,7 @@
 		C940847A1EFCCC8B00638E25 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C9BB05861F83169800A07529 /* DataManager.swift */,
 				C902FF4A1DBE77290063CD02 /* Inventory Models */,
 				C96870E01DDA1ED000EC06AB /* Invoice Models */,
 				C9E198D31DC566780065FB98 /* Order Models */,
@@ -892,7 +893,6 @@
 		C9F515DF1DB7EF98004C10E6 /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
-				C9BB05861F83169800A07529 /* DataManager.swift */,
 				C937505C202D6C9B0076B65E /* Application */,
 				C9B825E61EB9A0A4009B92F0 /* Core Data Helpers */,
 				C9BA91271DEB957400DA2C6C /* Extensions */,
