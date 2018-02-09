@@ -62,6 +62,8 @@
 		C93203EC1FC6AA3000ACFC1D /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */; };
 		C93565361FCDF77D00CAFB16 /* RoundRectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */; };
 		C935E9A41E60D713003BF386 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E9A31E60D713003BF386 /* LoginViewController.swift */; };
+		C9375060202D72050076B65E /* ErrorTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C937505F202D72050076B65E /* ErrorTracker.swift */; };
+		C9375064202D738D0076B65E /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9375063202D738D0076B65E /* Observable+Extensions.swift */; };
 		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
 		C945DAC31FEA2EAD009D0EB0 /* LoginViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */; };
@@ -241,6 +243,8 @@
 		C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundRectButton.swift; sourceTree = "<group>"; };
 		C935E9A31E60D713003BF386 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		C937505F202D72050076B65E /* ErrorTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTracker.swift; sourceTree = "<group>"; };
+		C9375063202D738D0076B65E /* Observable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Syncable.swift; sourceTree = "<group>"; };
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginViewController.storyboard; sourceTree = "<group>"; };
@@ -589,6 +593,7 @@
 		C9534D351F9003C000DA4A78 /* RxSwift */ = {
 			isa = PBXGroup;
 			children = (
+				C9375063202D738D0076B65E /* Observable+Extensions.swift */,
 			);
 			path = RxSwift;
 			sourceTree = "<group>";
@@ -798,6 +803,7 @@
 			isa = PBXGroup;
 			children = (
 				C9BB05881F83171000A07529 /* ActivityIndicator.swift */,
+				C937505F202D72050076B65E /* ErrorTracker.swift */,
 				C9045C121FC49EDA00F55FB3 /* BaseCoordinator.swift */,
 				C9045C141FC49F0000F55FB3 /* TabBarCoordinator.swift */,
 				C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */,
@@ -1265,6 +1271,7 @@
 				C949C20E1F160719008A5EC4 /* InvoiceItemCellViewModel.swift in Sources */,
 				C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */,
 				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
+				C9375064202D738D0076B65E /* Observable+Extensions.swift in Sources */,
 				C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */,
 				C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */,
 				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
@@ -1375,6 +1382,7 @@
 				C902FF3E1DBD8B3F0063CD02 /* NumberKeypadButton.swift in Sources */,
 				C91417F01FA8F64B00168064 /* OrderLocCatViewModel.swift in Sources */,
 				C9A0B2EC1E63D2A300404320 /* SignUpViewController.swift in Sources */,
+				C9375060202D72050076B65E /* ErrorTracker.swift in Sources */,
 				C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */,
 				C91C92861EFCDD9000566CEB /* RoundButton.swift in Sources */,
 				C9F5160F1DB7F133004C10E6 /* InventoryKeypadViewController.swift in Sources */,
