@@ -6,7 +6,7 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import PKHUD
 import RxCocoa
 import RxSwift
@@ -93,9 +93,7 @@ class HomeViewController: UIViewController, AttachableType {
 
     func bindViewModel() {
         viewModel.storeName
-            .drive(onNext: { [weak self] name in
-                self?.title = name
-            })
+            .drive(self.rx.title)
             .disposed(by: disposeBag)
 
         viewModel.isLoading

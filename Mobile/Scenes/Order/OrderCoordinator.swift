@@ -79,6 +79,10 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
         navigationController.pushViewController(containerController, animated: true)
 
+        /// TODO: replace `.subscribe(onNext: { ... }) in the following with:
+        /// .subscribe()
+        /// .do(onNext: { ... })
+
         // Selection - Vendor
         vendorsViewModel.showNext
             .subscribe(onNext: { [weak self] segue in
