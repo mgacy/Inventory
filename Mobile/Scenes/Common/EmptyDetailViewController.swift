@@ -35,8 +35,8 @@ class EmptyDetailViewController: UIViewController {
     // MARK: - View Methods
 
     func setupView() {
-        self.view.backgroundColor = ColorPalette.athensGray
-        self.view.addSubview(backgroundImageView)
+        view.backgroundColor = ColorPalette.athensGray
+        view.addSubview(backgroundImageView)
         navigationItem.leftItemsSupplementBackButton = true
     }
 
