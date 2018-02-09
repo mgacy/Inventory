@@ -13,7 +13,7 @@ class EmptyDetailViewController: UIViewController {
     let backgroundImageView: UIImageView = {
         let view = UIImageView()
         view.image = #imageLiteral(resourceName: "Logo")
-        view.tintColor = .gray
+        view.tintColor = ColorPalette.starDust
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -26,18 +26,27 @@ class EmptyDetailViewController: UIViewController {
         setupConstraints()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        if let displayModeButtonItem = splitViewController?.displayModeButtonItem {
+            navigationItem.leftBarButtonItem = displayModeButtonItem
+        }
+    }
+
+    // MARK: - View Methods
+
     func setupView() {
-        self.view.backgroundColor = ColorPalette.lightGray
+        self.view.backgroundColor = ColorPalette.athensGray
         self.view.addSubview(backgroundImageView)
         navigationItem.leftItemsSupplementBackButton = true
-        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
     }
 
     func setupConstraints() {
-        backgroundImageView.widthAnchor.constraint(equalToConstant: 180.0).isActive = true
-        backgroundImageView.heightAnchor.constraint(equalToConstant: 180.0).isActive = true
-        backgroundImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        backgroundImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            backgroundImageView.widthAnchor.constraint(equalToConstant: 180.0),
+            backgroundImageView.heightAnchor.constraint(equalToConstant: 180.0),
+            backgroundImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            backgroundImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 
 }
