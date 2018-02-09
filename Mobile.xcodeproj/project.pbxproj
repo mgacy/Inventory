@@ -159,7 +159,6 @@
 		C9F3564D1FA0554C007ED98C /* OrderLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */; };
 		C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
-		C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E21DB7EF98004C10E6 /* ViewController.swift */; };
 		C9F515E61DB7EF98004C10E6 /* HomeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */; };
 		C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */; };
 		C9F515EB1DB7EF98004C10E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */; };
@@ -343,7 +342,6 @@
 		C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderLocationViewController.storyboard; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C9F515E21DB7EF98004C10E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C9F515E51DB7EF98004C10E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/HomeViewController.storyboard; sourceTree = "<group>"; };
 		C9F515E81DB7EF98004C10E6 /* Mobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mobile.xcdatamodel; sourceTree = "<group>"; };
 		C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -894,7 +892,6 @@
 		C9F515DF1DB7EF98004C10E6 /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
-				C9F515E21DB7EF98004C10E6 /* ViewController.swift */,
 				C9BB05861F83169800A07529 /* DataManager.swift */,
 				C937505C202D6C9B0076B65E /* Application */,
 				C9B825E61EB9A0A4009B92F0 /* Core Data Helpers */,
@@ -1255,7 +1252,6 @@
 				C9AA8DC01F9F0D2D00147F07 /* InventoryLocItemViewModel.swift in Sources */,
 				C91856951F8D881D001B08A0 /* InventoriesFactory.swift in Sources */,
 				C901A50D1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift in Sources */,
-				C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */,
 				C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */,
 				C92EC6321F84C80300B47C23 /* RemoteOrder.swift in Sources */,
 				C95F52F01F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift in Sources */,
