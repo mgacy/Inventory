@@ -51,6 +51,13 @@ class HomeCoordinator: BaseCoordinator<Void> {
             .subscribe()
             .disposed(by: disposeBag)
 
+        viewController.viewModel.transition
+            .asObservable()
+            .subscribe(onNext: { transition in
+                log.warning("We should transition to: \(transition)")
+            })
+            .disposed(by: disposeBag)
+
         return Observable.never()
     }
 

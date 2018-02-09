@@ -56,7 +56,8 @@ class HomeViewController: UIViewController, AttachableType {
         return HomeViewModel.Bindings(
             addInventoryTaps: addInventoryButton.rx.tap.asObservable(),
             // FIXME: is this safe?
-            addOrderTaps: addOrderButton.rx.tap.flatMap { [unowned self] _ in return self.mapAlert() }
+            addOrderTaps: addOrderButton.rx.tap.flatMap { [unowned self] _ in return self.mapAlert() },
+            selection: childViewController.tableView.rx.itemSelected.asDriver()
         )
     }
     var viewModel: HomeViewModel!
@@ -64,6 +65,7 @@ class HomeViewController: UIViewController, AttachableType {
 
     // MARK: - Interface
     let settingsButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Settings"), style: .plain, target: nil, action: nil)
+    lazy var childViewController = PendingViewController(style: .plain)
 
     @IBOutlet weak var addInventoryButton: UIButton!
     @IBOutlet weak var addOrderButton: UIButton!
@@ -87,9 +89,27 @@ class HomeViewController: UIViewController, AttachableType {
         //title = Strings.navTitle
         self.navigationItem.leftBarButtonItem = settingsButtonItem
         //self.navigationItem.rightBarButtonItem =
+        embedViewController()
     }
 
     //private func setupConstraints() {}
+
+    private func embedViewController() {
+        let guide: UILayoutGuide
+        if #available(iOS 11, *) {
+            guide = view.safeAreaLayoutGuide
+        } else {
+            guide = view.layoutMarginsGuide
+        }
+
+        let constraints = [
+            childViewController.view.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 0),
+            childViewController.view.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: 0),
+            childViewController.view.heightAnchor.constraint(equalToConstant: 132),
+            childViewController.view.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -108)
+        ]
+        add(childViewController, with: constraints)
+    }
 
     func bindViewModel() {
         viewModel.storeName
@@ -112,6 +132,19 @@ class HomeViewController: UIViewController, AttachableType {
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
             })
             .disposed(by: disposeBag)
+
+        // MARK: TableView
+        viewModel.pendingInventoryCount
+            .drive(childViewController.inventoryCell.detailTextLabel!.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.pendingOrderCount
+            .drive(childViewController.orderCell.detailTextLabel!.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.pendingInvoiceCount
+            .drive(childViewController.invoiceCell.detailTextLabel!.rx.text)
+            .disposed(by: disposeBag)
     }
 
     private func mapAlert() -> Observable<NewOrderGenerationMethod> {
@@ -120,6 +153,49 @@ class HomeViewController: UIViewController, AttachableType {
                          actions: actions)
             .filter { $0 != .cancel }
             .map { $0.method }
+    }
+
+}
+
+// MARK: - childViewController
+
+final class PendingViewController: UITableViewController {
+
+    // MARK: - Interface
+
+    var inventoryCell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: nil)
+    var orderCell: UITableViewCell = UITableViewCell(style: .value1, reuseIdentifier: nil)
+    var invoiceCell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: nil)
+
+    // MARK: - Lifecycle
+
+    override func loadView() {
+        super.loadView()
+        tableView.isScrollEnabled = false
+
+        // Cells
+        inventoryCell.textLabel?.text = "Inventories"
+        orderCell.textLabel?.text = "Orders"
+        invoiceCell.textLabel?.text = "Invoices"
+    }
+
+    // MARK: - UITableViewDatasource
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.row {
+        case 0: return self.inventoryCell
+        case 1: return self.orderCell
+        case 2: return invoiceCell
+        default: fatalError("Unknown row in section 0")
+        }
     }
 
 }
