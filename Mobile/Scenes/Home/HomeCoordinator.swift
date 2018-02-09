@@ -19,7 +19,7 @@ class HomeCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        var viewController = HomeViewController.initFromStoryboard(name: "Main")
+        var viewController = HomeViewController.instance()
 
         var avm: Attachable<HomeViewModel> = .detached(HomeViewModel.Dependency(dataManager: dataManager))
         //let viewModel = viewController.bindViewModel(to: &avm)
@@ -49,6 +49,13 @@ class HomeCoordinator: BaseCoordinator<Void> {
                 return strongSelf.showNewOrder(with: orderCollection)
             }
             .subscribe()
+            .disposed(by: disposeBag)
+
+        viewController.viewModel.transition
+            .asObservable()
+            .subscribe(onNext: { transition in
+                log.warning("We should transition to: \(transition)")
+            })
             .disposed(by: disposeBag)
 
         return Observable.never()

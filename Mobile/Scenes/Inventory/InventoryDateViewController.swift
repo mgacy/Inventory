@@ -148,7 +148,6 @@ class InventoryDateViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })
@@ -199,7 +198,7 @@ extension InventoryDateViewController: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: UITableViewCell, for inventory: Inventory) {
-        cell.textLabel?.text = Date(timeIntervalSinceReferenceDate: inventory.date).altStringFromDate()
+        cell.textLabel?.text = Date(timeIntervalSinceReferenceDate: inventory.dateTimeInterval).altStringFromDate()
         switch inventory.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black

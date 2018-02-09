@@ -79,6 +79,10 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
         navigationController.pushViewController(containerController, animated: true)
 
+        /// TODO: replace `.subscribe(onNext: { ... }) in the following with:
+        /// .subscribe()
+        /// .do(onNext: { ... })
+
         // Selection - Vendor
         vendorsViewModel.showNext
             .subscribe(onNext: { [weak self] segue in
@@ -152,7 +156,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    fileprivate func showKeypad(order: Order, atIndex index: Int) {
+    func showKeypad(order: Order, atIndex index: Int) {
         let viewController = OrderKeypadViewController.instance()
         let viewModel = OrderKeypadViewModel(dataManager: dataManager, for: order, atIndex: index)
         viewController.viewModel = viewModel
@@ -218,7 +222,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
     }
 
-    fileprivate func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
+    func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
         let viewController = OrderKeypadViewController.instance()
         let viewModel = OrderKeypadViewModel(dataManager: dataManager, with: orderItems, atIndex: index)
         viewController.viewModel = viewModel
@@ -237,7 +241,7 @@ class ModalOrderCoordinator: OrderCoordinator {
     init(rootViewController: UIViewController, dataManager: DataManager, collection: OrderCollection) {
         self.rootViewController = rootViewController
         self.collection = collection
-        super.init(navigationController: UINavigationController(), dataManager: dataManager)
+        super.init(navigationController: NavigationController(), dataManager: dataManager)
     }
 
     override func start() -> Observable<Void> {
@@ -278,6 +282,20 @@ class ModalOrderCoordinator: OrderCoordinator {
         return Observable.merge(cancelTaps, containerController.viewModel.popView)
             .take(1)
             .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
+    }
+
+    override func showKeypad(order: Order, atIndex index: Int) {
+        let viewController = OrderKeypadViewController.instance()
+        let viewModel = OrderKeypadViewModel(dataManager: dataManager, for: order, atIndex: index)
+        viewController.viewModel = viewModel
+        navigationController.pushViewController(viewController, animated: true)
+    }
+
+    override func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
+        let viewController = OrderKeypadViewController.instance()
+        let viewModel = OrderKeypadViewModel(dataManager: dataManager, with: orderItems, atIndex: index)
+        viewController.viewModel = viewModel
+        navigationController.pushViewController(viewController, animated: true)
     }
 
 }

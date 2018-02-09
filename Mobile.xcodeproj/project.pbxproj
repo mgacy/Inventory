@@ -136,6 +136,7 @@
 		C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */; };
 		C9CC04DF1F84C13C00180120 /* RemoteInvoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CC04DE1F84C13C00180120 /* RemoteInvoice.swift */; };
 		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
+		C9D38DB2202D5F6800B8B381 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D38DB1202D5F6800B8B381 /* UIViewController+Extensions.swift */; };
 		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
 		C9D59C5C1FE0FA280050A4AB /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */; };
 		C9D59C5E1FE0FA870050A4AB /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */; };
@@ -159,7 +160,7 @@
 		C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
 		C9F515E31DB7EF98004C10E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E21DB7EF98004C10E6 /* ViewController.swift */; };
-		C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* Main.storyboard */; };
+		C9F515E61DB7EF98004C10E6 /* HomeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */; };
 		C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */; };
 		C9F515EB1DB7EF98004C10E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */; };
 		C9F515EE1DB7EF98004C10E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515EC1DB7EF98004C10E6 /* LaunchScreen.storyboard */; };
@@ -244,6 +245,7 @@
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Syncable.swift; path = "Core Data Helpers/Syncable.swift"; sourceTree = "<group>"; };
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginViewController.storyboard; sourceTree = "<group>"; };
+		C945DAC41FEA37E5009D0EB0 /* Mobile 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 4.xcdatamodel"; sourceTree = "<group>"; };
 		C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = InvoiceKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemCellViewModel.swift; sourceTree = "<group>"; };
 		C9564F311F840276007D84F6 /* RemoteInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInventory.swift; path = Models/RemoteInventory.swift; sourceTree = "<group>"; };
@@ -316,6 +318,7 @@
 		C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = InventoryKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C9CC04DE1F84C13C00180120 /* RemoteInvoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInvoice.swift; path = Models/RemoteInvoice.swift; sourceTree = "<group>"; };
 		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
+		C9D38DB1202D5F6800B8B381 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewDataSource.swift; path = "Core Data Helpers/TableViewDataSource.swift"; sourceTree = "<group>"; };
 		C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
@@ -341,7 +344,7 @@
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9F515E21DB7EF98004C10E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		C9F515E51DB7EF98004C10E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C9F515E51DB7EF98004C10E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/HomeViewController.storyboard; sourceTree = "<group>"; };
 		C9F515E81DB7EF98004C10E6 /* Mobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mobile.xcdatamodel; sourceTree = "<group>"; };
 		C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C9F515ED1DB7EF98004C10E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -567,6 +570,7 @@
 			isa = PBXGroup;
 			children = (
 				C9045C1A1FC4D1F200F55FB3 /* HomeCoordinator.swift */,
+				C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */,
 				C95E44621FB2581400820067 /* HomeViewController.swift */,
 				C95E44641FB2582400820067 /* HomeViewModel.swift */,
 			);
@@ -721,6 +725,7 @@
 				C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */,
 				C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */,
 				C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */,
+				C9D38DB1202D5F6800B8B381 /* UIViewController+Extensions.swift */,
 				C9C221181EFCD423009C7D01 /* UIViewController+Instance.swift */,
 			);
 			path = UIKit;
@@ -872,7 +877,6 @@
 				C904771F1EEE30770082D894 /* Protocols */,
 				C9F516101DB7F144004C10E6 /* Networking */,
 				C94084741EFCCB7F00638E25 /* Scenes */,
-				C9F515E41DB7EF98004C10E6 /* Main.storyboard */,
 				C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */,
 				C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */,
 				C9F516041DB7F062004C10E6 /* Support */,
@@ -1054,7 +1058,7 @@
 				C91C928A1EFCE65800566CEB /* OrderKeypadViewController.storyboard in Resources */,
 				C9DF81DC1FEA177800C86A75 /* ItemViewController.storyboard in Resources */,
 				C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */,
-				C9F515E61DB7EF98004C10E6 /* Main.storyboard in Resources */,
+				C9F515E61DB7EF98004C10E6 /* HomeViewController.storyboard in Resources */,
 				C97A713D1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard in Resources */,
 				C9DF81DA1FEA16FA00C86A75 /* InventoryDateViewController.storyboard in Resources */,
 				C9A114F01FAC336500308974 /* InvoiceItemViewController.storyboard in Resources */,
@@ -1107,6 +1111,7 @@
 				"${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework",
 				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCoreData/RxCoreData.framework",
 				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwiftExt/RxSwiftExt.framework",
@@ -1122,6 +1127,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainAccess.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCoreData.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwiftExt.framework",
@@ -1275,6 +1281,7 @@
 				C983643E1FA6744200DFAC6C /* OrderItemCellViewModel.swift in Sources */,
 				C9BB058D1F831B0F00A07529 /* InvoiceDateViewModel.swift in Sources */,
 				C97A713A1F8ECADD00F2F1CD /* InventoryReviewViewModel.swift in Sources */,
+				C9D38DB2202D5F6800B8B381 /* UIViewController+Extensions.swift in Sources */,
 				C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */,
 				C9045C111FC49EB400F55FB3 /* AppCoordinator.swift in Sources */,
 				C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */,
@@ -1388,12 +1395,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		C9F515E41DB7EF98004C10E6 /* Main.storyboard */ = {
+		C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				C9F515E51DB7EF98004C10E6 /* Base */,
 			);
-			name = Main.storyboard;
+			name = HomeViewController.storyboard;
 			sourceTree = "<group>";
 		};
 		C9F515EC1DB7EF98004C10E6 /* LaunchScreen.storyboard */ = {
@@ -1620,11 +1627,12 @@
 		C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C945DAC41FEA37E5009D0EB0 /* Mobile 4.xcdatamodel */,
 				C9ECDB271F214DB9002AA99E /* Mobile 3a.xcdatamodel */,
 				C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */,
 				C9F515E81DB7EF98004C10E6 /* Mobile.xcdatamodel */,
 			);
-			currentVersion = C9ECDB271F214DB9002AA99E /* Mobile 3a.xcdatamodel */;
+			currentVersion = C945DAC41FEA37E5009D0EB0 /* Mobile 4.xcdatamodel */;
 			path = Mobile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

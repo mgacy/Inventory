@@ -8,7 +8,6 @@
 
 import Alamofire
 import KeychainAccess
-import SwiftyJSON
 
 class CurrentUserManager {
 
@@ -120,29 +119,21 @@ class CurrentUserManager {
         // token could be handled by another one. However, the access token is currently short-lived.
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
 
-        authHandler!.login { json, error in
+        authHandler!.login { remoteUser, error in
             guard error == nil else {
                 log.error("\(#function) FAILED : \(error!)")
                 self.authHandler = nil
                 return completion(BackendError.network(error: error!))
             }
             // AuthenticationHandler.login ensures json != nil, but we need to unwrap json.
-            guard let json = json else {
+            guard let user = remoteUser else {
                 log.error("\(#function) FAILED : unable to get JSON")
                 self.authHandler = nil
                 return completion(BackendError.myError(error: "Unable to get JSON from response."))
             }
 
-            /// TODO: move parsing out somewhere else?
-            //let user: [String: JSON] = json["user"].dictionaryValue
-            //let userID: Int = user["id"]!.intValue
-
-            //let stores: [JSON] = user["stores"]!.arrayValue
-            //let defaultStore = stores[0]
-            //let defaultStoreID: Int = defaultStore["id"].intValue
-
-            let userID = json["user"]["id"].intValue
-            let defaultStoreID: Int = json["user"]["default_store"]["id"].intValue
+            let userID = user.remoteID
+            let defaultStoreID = user.defaultStore.remoteID
 
             /// TODO: simply call .createUser(userID:email:password:)?
 
@@ -150,25 +141,21 @@ class CurrentUserManager {
             self.password = password
             self.storeID = defaultStoreID
             self.user = User(id: userID, email: email)
+
             APIManager.sharedInstance.configSession(self.authHandler!)
             completion(nil)
         }
     }
 
-    public func signUp(username: String, email: String, password: String, completion: @escaping CompletionHandlerType) {
-
-        Alamofire.request(Router.signUp(username: username, email: email, password: password))
+    public func signUp(firstName: String, lastName: String, email: String, password: String, completion: @escaping CompletionHandlerType) {
+        let decoder = JSONDecoder()
+        Alamofire.request(Router.signUp(firstName: firstName, lastName: lastName, email: email, password: password))
             .validate()
-            .responseJSON { response in
+            .responseDecodableObject(decoder: decoder) { (response: DataResponse<RemoteUser>) in
                 switch response.result {
                 case .success(let value):
                     log.verbose("\(#function) - response: \(response)")
-                    let json = JSON(value)
-
-                    //let user: [String: JSON] = json["user"].dictionaryValue
-                    //let userID: Int = user["id"]!.intValue
-                    let userID = json["user"]["id"].intValue
-
+                    let userID = value.remoteID
                     self.createUser(userID: userID, email: email, password: password)
                     completion(nil)
                 case .failure(let error):

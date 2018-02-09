@@ -22,29 +22,21 @@ extension InvoiceCollection: Syncable {
 
     convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
-        if let date = record.date.toBasicDate() {
-            self.dateTimeInterval = date.timeIntervalSinceReferenceDate
-        } else {
-            /// TODO: find better way of handling error
+        guard let date = record.date.toBasicDate() else {
+            /// TODO: find better way of handling error; use SyncError type
             fatalError("Unable to parse date from: \(record)")
         }
+        self.dateTimeInterval = date.timeIntervalSinceReferenceDate
         update(with: record, in: context)
     }
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
-        //if let date = record.date.toBasicDate() {
-        //    self.dateTimeInterval = date.timeIntervalSinceReferenceDate
-        //}
         storeID = Int32(record.storeID)
 
-        /// TODO: switch to `status` enum
         switch record.status {
-        case "pending":
+        case .pending:
             self.uploaded = false
-        case "complete":
-            self.uploaded = true
-        default:
-            log.error("\(#function) - invalid status: \(record.status)")
+        case .completed:
             self.uploaded = true
         }
 
@@ -71,7 +63,6 @@ extension InvoiceCollection: SyncableParent {
 
     func updateParent(of entity: ChildType) {
         entity.collection = self
-        //addToInvoices(entity)
     }
 
 }
@@ -85,6 +76,30 @@ extension InvoiceCollection {
         myDict["date"] = dateTimeInterval.toPythonDateString()
         myDict["store_id"] = storeID
         return myDict
+    }
+
+}
+
+// MARK: - Status
+
+extension InvoiceCollection {
+
+    func updateStatus() {
+        guard uploaded == false else {
+            //log.debug("InvoiceCollection has already been uploaded.")
+            return
+        }
+        guard let invoices = invoices else {
+            //log.debug("InvoiceCollection does not appear to have any Invoices.")
+            return
+        }
+        for any in invoices {
+            guard let invoice = any as? Invoice else { fatalError("\(#function) FAILED : wrong type") }
+            if invoice.status == InvoiceStatus.pending.rawValue {
+                return
+            }
+        }
+        uploaded = true
     }
 
 }

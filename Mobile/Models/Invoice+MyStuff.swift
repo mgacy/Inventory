@@ -52,7 +52,6 @@ extension Invoice: Syncable {
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
         // Required
-        //remoteID = record.syncIdentifier
         guard let shipDate = record.shipDate.toBasicDate(), let receiveDate = record.receiveDate.toBasicDate() else {
             /// TODO: a fatalError seems excessive for this type of error
             fatalError("\(#function) FAILED : unable to parse shipDate or receiveDate from \(record)")
@@ -124,8 +123,7 @@ extension Invoice {
         myDict["credit"] = Double(self.credit)
         myDict["shipping"] = Double(self.shipping)
         myDict["taxes"] = Double(self.taxes)
-        /// FIXME: why is total_cost not Double?
-        myDict["total_cost"] = Int(self.totalCost)
+        myDict["total_cost"] = Double(self.totalCost)
         myDict["check_no"] = Int(self.checkNo)
         myDict["status"] = InvoiceStatus.asString(raw: status) ?? ""
         myDict["store_id"] = Int((self.collection?.storeID)!)
@@ -161,20 +159,21 @@ extension Invoice {
 
     /// TODO: rename `updatedStatus()` and return true if we actually change status
     func updateStatus() {
-        let currentStatusIsPending = status == InvoiceStatus.pending.rawValue ? true : false
+        guard let invoiceItems = items else { return }
 
+        // Save current status so we can compare it to updated status
+        let currentStatusIsPending = status == InvoiceStatus.pending.rawValue ? true : false
         var hasPending: Bool = false
         var hasCompleted: Bool = false
-        items?.forEach { item in
-            guard let invoiceItem = item as? InvoiceItem else {
-                log.error("\(#function) FAILED : unable to case \(item) as InvoiceItem"); return
-            }
+
+        for any in invoiceItems {
+            guard let invoiceItem = any as? InvoiceItem else { fatalError("\(#function) FAILED : wrong type") }
             switch invoiceItem.status {
             case InvoiceItemStatus.pending.rawValue:
                 hasPending = true
                 if !currentStatusIsPending {
                     status = InvoiceStatus.pending.rawValue
-                    /// TODO: collection.upateStatus()
+                    collection?.updateStatus()
                     return //true
                 }
             //case InvoiceItemStatus.received.rawValue:
@@ -192,13 +191,13 @@ extension Invoice {
         case true:
             if hasCompleted && !hasPending {
                 status = InvoiceStatus.completed.rawValue
-                /// TODO: collection.updateStatus()
+                collection?.updateStatus()
                 //return true
             }
         case false:
             if hasPending {
                 status = InvoiceStatus.pending.rawValue
-                /// TODO: collection.updateStatus()
+                collection?.updateStatus()
                 //return true
             }
         }

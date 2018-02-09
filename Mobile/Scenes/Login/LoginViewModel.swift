@@ -47,7 +47,7 @@ final class LoginViewModel: ViewModelType {
             .map { username, password in
                 //return !username.isEmpty && !password.isEmpty
                 return username.count > 0 && password.count > 0
-        }
+            }
 
         let loggingIn = ActivityIndicator()
 

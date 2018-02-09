@@ -2,17 +2,18 @@
 //  AttachableType.swift
 //  Mobile
 //
+//  Created by Mathew Gacy on 11/27/17.
+//  Copyright © 2017 Mathew Gacy. All rights reserved.
+//
 //  Modelled after `BindableType.swift`
 //  RxSwift: Reactive Programming with Swift
 //  Copyright (c) 2016 Razeware LLC
-//
-//  Created by Mathew Gacy on 11/27/17.
-//  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
 import UIKit
 import RxSwift
 
+/// TODO: rename ViewModelAttaching?
 protocol AttachableType {
     associatedtype ViewModel: AttachableViewModelType
     associatedtype Bindings

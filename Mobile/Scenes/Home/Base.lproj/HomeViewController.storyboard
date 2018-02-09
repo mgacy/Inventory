@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vtd-ez-r3E">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,6 +18,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jA7-Qz-33F">
+                                <rect key="frame" x="0.0" y="489" width="375" height="132"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="132" id="zsE-FQ-JKd"/>
+                                </constraints>
+                            </containerView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="v7v-d2-uJ3">
                                 <rect key="frame" x="12" y="645" width="351" height="60"/>
                                 <subviews>
@@ -51,12 +57,17 @@
                         <constraints>
                             <constraint firstItem="bXG-HS-bgw" firstAttribute="bottom" secondItem="v7v-d2-uJ3" secondAttribute="bottom" constant="24" id="5bH-Hv-8Id"/>
                             <constraint firstItem="v7v-d2-uJ3" firstAttribute="leading" secondItem="bXG-HS-bgw" secondAttribute="leading" constant="12" id="65E-L0-qgL"/>
+                            <constraint firstItem="jA7-Qz-33F" firstAttribute="leading" secondItem="bXG-HS-bgw" secondAttribute="leading" id="RtF-DJ-U98"/>
                             <constraint firstItem="bXG-HS-bgw" firstAttribute="trailing" secondItem="v7v-d2-uJ3" secondAttribute="trailing" constant="12" id="Uct-2y-0ZI"/>
+                            <constraint firstItem="bXG-HS-bgw" firstAttribute="bottom" secondItem="jA7-Qz-33F" secondAttribute="bottom" constant="108" id="Zv6-zE-eo6"/>
                             <constraint firstItem="v7v-d2-uJ3" firstAttribute="centerX" secondItem="bXG-HS-bgw" secondAttribute="centerX" id="g4O-Bb-shx"/>
+                            <constraint firstItem="jA7-Qz-33F" firstAttribute="trailing" secondItem="bXG-HS-bgw" secondAttribute="trailing" id="zW4-2w-eFJ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bXG-HS-bgw"/>
                     </view>
                     <navigationItem key="navigationItem" id="RCx-Lz-Fkj"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="addInventoryButton" destination="ZCW-WT-Aiv" id="jUZ-xX-YOY"/>
                         <outlet property="addOrderButton" destination="FPz-Jd-4m3" id="KyV-lG-eJr"/>
@@ -64,30 +75,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="giW-TU-27K" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2089" y="-379"/>
-        </scene>
-        <!--Home-->
-        <scene sceneID="htM-qN-ZJ0">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eYq-vW-3EZ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" image="homeTab" id="Xu2-v3-9IE"/>
-                    <toolbarItems/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="mL2-Rf-GxA">
-                        <rect key="frame" x="0.0" y="44" width="375" height="96"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="vtd-ez-r3E" kind="relationship" relationship="rootViewController" id="TOu-dX-TLG"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="GCO-Sw-GYe" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1150" y="-379"/>
+            <point key="canvasLocation" x="2088.8000000000002" y="-379.06403940886702"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="homeTab" width="25" height="25"/>
-    </resources>
 </document>

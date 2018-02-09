@@ -31,6 +31,8 @@ class APIManager {
     static let sharedInstance = APIManager()
     private let sessionManager: SessionManager
     private let decoder: JSONDecoder
+    private let queue = DispatchQueue.main
+    //private let queue = DispatchQueue(label: "com.mgacy.response-queue", qos: .utility, attributes: [.concurrent])
 
     // MARK: Lifecycle
 
@@ -44,6 +46,7 @@ class APIManager {
         decoder = JSONDecoder()
         //decoder.dateDecodingStrategy = .formatted(Date.basicDate)
         //decoder.dateDecodingStrategy = .iso8601
+        //decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
 
     func configSession(_ authHandler: AuthenticationHandler?) {
@@ -74,12 +77,11 @@ class APIManager {
     /// TODO: pass `sessionManager: SessionManager, decoder: JSONDecoder`?
 
     private func requestOne<M: Codable>(_ endpoint: Router) -> Observable<DataResponse<M>> {
-        return Observable<DataResponse<M>>.create { observer in
-            //let decoder = JSONDecoder()
+        return Observable<DataResponse<M>>.create { [unowned self] observer in
             let request = self.sessionManager.request(endpoint)
             request
                 .validate()
-                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<M>) in
+                .responseDecodableObject(queue: self.queue, decoder: self.decoder) { (response: DataResponse<M>) in
                     observer.onNext(response)
                     observer.onCompleted()
             }
@@ -90,12 +92,11 @@ class APIManager {
     }
 
     private func requestList<M: Codable>(_ route: Router) -> Observable<DataResponse<[M]>> {
-        return Observable<DataResponse<[M]>>.create { observer in
-            //let decoder = JSONDecoder()
+        return Observable<DataResponse<[M]>>.create { [unowned self] observer in
             let request = self.sessionManager.request(route)
             request
                 .validate()
-                .responseDecodableObject(decoder: self.decoder) { (response: DataResponse<[M]>) in
+                .responseDecodableObject(queue: self.queue, decoder: self.decoder) { (response: DataResponse<[M]>) in
                     observer.onNext(response)
                     observer.onCompleted()
             }

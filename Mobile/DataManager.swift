@@ -78,8 +78,8 @@ extension DataManager {
             .flatMap { result -> Observable<Bool> in
                 //log.debug("\(#function) - \(result)")
                 return Observable.just(self.viewContext.saveOrRollback())
-        }
-        //.materialize()
+            }
+            //.materialize()
     }
 
     // Item
@@ -93,8 +93,7 @@ extension DataManager {
     func refreshItems() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
-            return Observable.just(false)
-            //return Observable.error(DataManagerError.missingStoreID).materialize()
+            return Observable.error(DataManagerError.missingStoreID)
         }
 
         return client.getItems(storeID: storeID)
@@ -102,19 +101,16 @@ extension DataManager {
                 switch response.result {
                 case .success(let records):
                     guard let context = self?.viewContext else {
-                        return false
-                        //throw DataManagerError.missingMOC
+                        throw DataManagerError.missingMOC
                     }
                     Item.sync(with: records, in: context)
-
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    return false
-                    //throw error
+                    throw error
                 }
-        }
-        //.materialize()
+            }
+            //.materialize()
     }
 
     // ItemCategory
@@ -172,25 +168,23 @@ extension DataManager {
     func refreshVendors() -> Observable<Bool> {
         guard let storeID = userManager.storeID else {
             log.error("\(#function) FAILED : no storeID")
-            return Observable.just(false)
-            //return Observable.error(DataManagerError.missingStoreID).materialize()
+            return Observable.error(DataManagerError.missingStoreID)
         }
         return client.getVendors(storeID: storeID)
             .map { [weak self] response in
                 switch response.result {
                 case .success(let records):
                     guard let context = self?.viewContext else {
-                        return false
-                        //throw DataManagerError.missingMOC
+                        throw DataManagerError.missingMOC
                     }
                     Vendor.sync(with: records, in: context)
                     return true
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
-                    return false
-                    //throw error
+                    throw error
                 }
-        }
+            }
+            //.materialize()
     }
 
 }
@@ -322,24 +316,14 @@ extension DataManager {
                     guard let context = self?.viewContext else {
                         throw DataManagerError.missingMOC
                     }
-                    /*
-                    guard let date = record.date.toBasicDate() else {
-                        log.error("\(#function) FAILED : unable to parse date")
-                        throw DataManagerError.otherError(error: "Unable to parse date")
-                    }
 
-                    let newCollection: OrderCollection = context.insertObject()
-                    /// TODO: should these be part of an `.init(with:in:)` method?
-                    newCollection.dateTimeInterval = date.timeIntervalSinceReferenceDate
-                    newCollection.update(with: record, in: context)
-                     */
                     let newCollection = OrderCollection(with: record, in: context)
                     newCollection.uploaded = false
-                    newCollection.orders?.forEach { order in
-                        if let `order` = order as? Order {
-                            order.status = OrderStatus.pending.rawValue
-                            order.updateStatus()
-                        }
+                    newCollection.orders?.forEach { any in
+                        guard let order = any as? Order else { fatalError("\(#function) FAILED : wrong type") }
+                        order.status = OrderStatus.pending.rawValue
+                        // Change status to .empty if .quantity = 0 for all OrderItems
+                        order.updateStatus()
                     }
                     return Observable.just(newCollection)
                 case .failure(let error):
@@ -404,6 +388,7 @@ extension DataManager {
             .materialize()
     }
 
+    // Method is named in anticipation of `createOrderCollection()` actually creating records on the server
     func updateOrder(_ order: Order) -> Observable<Event<Order>> {
         //return Observable.just(order).materialize()
         /// TODO: use RemoteRecords instead?
@@ -504,7 +489,7 @@ extension DataManager {
                 switch response.result {
                 case .success:
                     /// TODO: mark invoice as no longer having in-progress update
-                    /// TODO: set .uploaded of invoice.collection if all are uploaded
+                    invoice.collection?.updateStatus()
                     return invoice
                 case .failure(let error):
                     log.warning("\(#function) FAILED : \(error)")
@@ -605,9 +590,10 @@ extension DataManager {
         //}
     }
 
-    public func signUp(username: String, email: String, password: String) -> Observable<Event<Bool>> {
+    public func signUp(firstName: String, lastName: String, email: String, password: String) -> Observable<Event<Bool>> {
         return Observable.create { observer in
-            self.userManager.signUp(username: username, email: email, password: password) { error in
+            // swiftlint:disable:next line_length
+            self.userManager.signUp(firstName: firstName, lastName: lastName, email: email, password: password) { error in
                 if let error = error {
                     log.warning("\(#function) ERROR : \(error)")
                     observer.onError(error)

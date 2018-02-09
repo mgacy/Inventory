@@ -7,8 +7,8 @@
 //
 
 import Alamofire
+import CodableAlamofire
 import KeychainAccess
-import SwiftyJSON
 
 class AuthenticationHandler: RequestAdapter, RequestRetrier {
     private typealias RefreshCompletion = (_ succeeded: Bool, _ accessToken: String?, _ refreshToken: String?) -> Void
@@ -54,6 +54,11 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
         }
     }
 
+    struct LoginResponse: Codable {
+        let token: String
+        let user: RemoteUser
+    }
+
     // MARK: Lifecycle
 
     public init(keychain: Keychain, email: String, password: String) {
@@ -89,7 +94,11 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
     public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
         // TODO: include call to requestToken if accessToken == nil?
-        if let accessToken = accessToken, let url = urlRequest.url, url.absoluteString.hasPrefix(baseURLString) {
+        if
+            let accessToken = accessToken,
+            let urlString = urlRequest.url?.absoluteString,
+            urlString.hasPrefix(baseURLString)
+        {
             var urlRequest = urlRequest
             urlRequest.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
             return urlRequest
@@ -150,7 +159,8 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
                     log.verbose("Received new access token ...")
                     // We pass a string for `refreshToken` to keep `.should()` as close to the `OAuth2Handler` example
                     // from the Alamofire README as possible
-                    completion(true, accessToken, "Updating accessToken ...")
+                    let refreshToken = "Updating accessToken ..."
+                    completion(true, accessToken, refreshToken)
                 } else {
                     log.error("Attempt to login again failed")
                     completion(false, nil, nil)
@@ -162,23 +172,16 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
 
     // MARK: - Request Token
 
-    public func login(completion: @escaping (JSON?, Error?) -> Void) {
+    public func login(completion: @escaping (RemoteUser?, Error?) -> Void) {
+        let decoder = JSONDecoder()
         sessionManager.request(Router.login(email: email, password: password))
             .validate()
-            .responseJSON { response in
+            .responseDecodableObject(decoder: decoder) { (response: DataResponse<LoginResponse>) in
                 switch response.result {
                 case .success(let value):
-                    // log.verbose("\(#function) - response: \(response)")
-
-                    let json = JSON(value)
-                    guard let token = json["token"].string else {
-                        //log.error("\(#function) FAILED : unable to get token")
-                        return completion(nil, BackendError.authentication(
-                            error: BackendError.myError(error: "Unable to parse token from response.")))
-                    }
-                    self.accessToken = token
-                    completion(json, nil)
-
+                    log.verbose("\(#function) - response: \(response)")
+                    self.accessToken = value.token
+                    completion(value.user, nil)
                 case .failure(let error):
                     //log.error("\(#function) FAILED : unable to get token : \(error)")
                     completion(nil, BackendError.authentication(error: error))

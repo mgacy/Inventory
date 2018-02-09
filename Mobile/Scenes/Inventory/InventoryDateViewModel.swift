@@ -23,7 +23,7 @@ struct InventoryDateViewModel {
     private let dataManager: DataManager
 
     // CoreData
-    private let sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+    private let sortDescriptors = [NSSortDescriptor(key: "dateTimeInterval", ascending: false)]
     //private let cacheName: String? = nil
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
@@ -58,11 +58,13 @@ struct InventoryDateViewModel {
             .flatMapLatest { _ -> Observable<Bool> in
                 log.debug("\(#function) : Refreshing (1) ...")
                 return dataManager.refreshStuff()
+                    .catchErrorJustReturn(false)
             }
             .flatMapLatest { _ -> Observable<Bool> in
                 log.debug("\(#function) : Refreshing (2) ...")
                 return dataManager.refreshInventories()
                     .dematerialize()
+                    .catchErrorJustReturn(false)
                     .trackActivity(isRefreshing)
             }
             .asDriver(onErrorJustReturn: false)

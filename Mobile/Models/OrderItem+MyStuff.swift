@@ -32,7 +32,7 @@ extension OrderItem: Syncable {
         minOrder = record.minOrder ?? -1
         onHand = record.inventory ?? -1
         par = record.par ?? -1
-        // NOTE: old .init() setminOrder and quantity to json["min_order"]
+        // NOTE: old .init() set minOrder and quantity to json["min_order"]
         if let quantity = record.quantity {
             self.quantity = quantity as NSNumber
         }

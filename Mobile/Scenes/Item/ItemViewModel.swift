@@ -48,7 +48,7 @@ struct ItemViewModel {
             .flatMapLatest { _ -> Observable<Bool> in
                 log.debug("\(#function) : Refreshing (1) ...")
                 return dataManager.refreshItems()
-                    //.dematerialize()
+                    .catchErrorJustReturn(false)
                     .trackActivity(isRefreshing)
             }
             .asDriver(onErrorJustReturn: false)

@@ -54,11 +54,13 @@ struct OrderDateViewModel {
             .flatMapLatest { _ -> Observable<Bool> in
                 log.debug("\(#function) : Refreshing (1) ...")
                 return dataManager.refreshStuff()
+                    .catchErrorJustReturn(false)
             }
             .flatMapLatest { _ -> Observable<Bool> in
                 log.debug("\(#function) : Refreshing (2) ...")
                 return dataManager.refreshOrderCollections()
                     .dematerialize()
+                    .catchErrorJustReturn(false)
                     .trackActivity(isRefreshing)
             }
             .asDriver(onErrorJustReturn: false)
