@@ -45,15 +45,6 @@ class TabBarCoordinator: BaseCoordinator<Void> {
             }
         }
 
-        var tag: Int {
-            switch self {
-            case .home: return 0
-            case .inventory: return 1
-            case .order: return 2
-            case .invoice: return 3
-            case .item: return 4
-            }
-        }
     }
 
     // MARK: - Lifecycle
@@ -85,7 +76,7 @@ class TabBarCoordinator: BaseCoordinator<Void> {
         let navControllers = tabs
             .map { tab -> UINavigationController in
                 let navController = NavigationController()
-                navController.tabBarItem = UITabBarItem(title: tab.title, image: tab.image, tag: tab.tag)
+                navController.tabBarItem = UITabBarItem(title: tab.title, image: tab.image, selectedImage: nil)
                 if #available(iOS 11.0, *) {
                     navController.navigationBar.prefersLargeTitles = true
                 }
@@ -154,7 +145,7 @@ class SplitViewDelegate: NSObject {
 extension SplitViewDelegate: UITabBarControllerDelegate {
 
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        // Prevent selection of the same tab twice (which would reset the sections navigation controller)
+        // Prevent selection of the same tab twice (which would reset its navigation controller)
         if tabBarController.selectedViewController === viewController {
             return false
         } else {
@@ -162,7 +153,6 @@ extension SplitViewDelegate: UITabBarControllerDelegate {
         }
     }
 
-    // This is available through RxCocoa
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         //log.debug("\(#function) : didSelect: \(viewController)")
 
@@ -216,16 +206,10 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
         log.debug("splitViewController willChangeTo: \(displayMode.self)")
     }
 
-    // MARK: Overriding the Interface Orientations
-
     // MARK: Collapsing the Interface
     /*
     // This method is called when a split view controller is collapsing its children for a transition to a compact-width
-    // size class. Override this method to perform custom adjustments to the view controller hierarchy of the target
-    // controller. When you return from this method, you're expected to have modified the `primaryViewController` so as
-    // to be suitable for display in a compact-width split view controller, potentially using `secondaryViewController`
-    // to do so. Return YES to prevent UIKit from applying its default behavior; return NO to request that UIKit
-    // perform its default collapsing behavior.
+    // size class.
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
         //log.debug("\(#function)")
         return false
@@ -243,11 +227,7 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
     // MARK: Expanding the Interface
 
     // This method is called when a split view controller is separating its child into two children for a transition
-    // from a compact-width size class to a regular-width size class. Override this method to perform custom separation
-    // behavior. The controller returned from this method will be set as the secondary view controller of the split
-    // view controller. When you return from this method, `primaryViewController` should have been configured for
-    // display in a regular-width split view controller. If you return `nil`, then `UISplitViewController` will perform
-    // its default behavior.
+    // from a compact-width size class to a regular-width size class.
     func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
         //log.debug("\(#function)")
         guard
@@ -274,8 +254,7 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
 
     // MARK: Overriding the Presentation Behavior
 
-    // Customize the behavior of `showDetailViewController:` on a split view controller. Return YES to indicate that
-    // you've handled the action yourself; return NO to cause the default behavior to be executed.
+    // Customize the behavior of `showDetailViewController:` on a split view controller.
     func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
         //log.debug("\(#function) - controllers: \(splitViewController.viewControllers)")
         guard
