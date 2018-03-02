@@ -9,9 +9,10 @@
 import RxSwift
 
 class TabBarCoordinator: BaseCoordinator<Void> {
+    typealias Dependencies = HasUserManager & HasDataManager
 
     private let window: UIWindow
-    private let dataManager: DataManager
+    private let dependencies: Dependencies
 
     // swiftlint:disable:next weak_delegate
     private var viewDelegate: SplitViewDelegate
@@ -47,9 +48,9 @@ class TabBarCoordinator: BaseCoordinator<Void> {
 
     // MARK: - Lifecycle
 
-    init(window: UIWindow, dataManager: DataManager) {
+    init(window: UIWindow, dependencies: Dependencies) {
         self.window = window
-        self.dataManager = dataManager
+        self.dependencies = dependencies
 
         let detailNavigationController = DetailNavigationController()
         self.viewDelegate = SplitViewDelegate(detailNavigationController: detailNavigationController)
@@ -94,19 +95,19 @@ class TabBarCoordinator: BaseCoordinator<Void> {
             .map { (tab, navCtrl) in
                 switch tab {
                 case .home:
-                    let coordinator = HomeCoordinator(navigationController: navCtrl, dataManager: dataManager)
+                    let coordinator = HomeCoordinator(navigationController: navCtrl, dependencies: dependencies)
                     return coordinate(to: coordinator)
                 case .inventory:
-                    let coordinator = InventoryCoordinator(navigationController: navCtrl, dataManager: self.dataManager)
+                    let coordinator = InventoryCoordinator(navigationController: navCtrl, dependencies: dependencies)
                     return coordinate(to: coordinator)
                 case .order:
-                    let coordinator = OrderCoordinator(navigationController: navCtrl, dataManager: dataManager)
+                    let coordinator = OrderCoordinator(navigationController: navCtrl, dependencies: dependencies)
                     return coordinate(to: coordinator)
                 case .invoice:
-                    let coordinator = InvoiceCoordinator(navigationController: navCtrl, dataManager: dataManager)
+                    let coordinator = InvoiceCoordinator(navigationController: navCtrl, dependencies: dependencies)
                     return coordinate(to: coordinator)
                 case .item:
-                    let coordinator = ItemCoordinator(navigationController: navCtrl, dataManager: dataManager)
+                    let coordinator = ItemCoordinator(navigationController: navCtrl, dependencies: dependencies)
                     return coordinate(to: coordinator)
                 }
             }

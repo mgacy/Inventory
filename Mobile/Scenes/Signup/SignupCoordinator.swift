@@ -14,20 +14,21 @@ enum SignupCoordinationResult {
 }
 
 class SignupCoordinator: BaseCoordinator<SignupCoordinationResult> {
+    typealias Dependencies = HasDataManager
 
     private let rootViewController: UIViewController
-    private let dataManager: DataManager
+    private let dependencies: Dependencies
 
-    init(rootViewController: UIViewController, dataManager: DataManager) {
+    init(rootViewController: UIViewController, dependencies: Dependencies) {
         self.rootViewController = rootViewController
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<CoordinationResult> {
         let viewController = SignUpViewController.instance()
         let navigationController = UINavigationController(rootViewController: viewController)
 
-        let viewModel = SignUpViewModel(dataManager: dataManager)
+        let viewModel = SignUpViewModel(dataManager: dependencies.dataManager)
         viewController.viewModel = viewModel
 
         let cancel = viewController.cancelButton.rx.tap

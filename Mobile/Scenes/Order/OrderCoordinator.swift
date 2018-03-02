@@ -9,18 +9,19 @@
 import RxSwift
 
 class OrderCoordinator: BaseCoordinator<Void> {
+    typealias Dependencies = HasDataManager
 
     fileprivate let navigationController: UINavigationController
-    fileprivate let dataManager: DataManager
+    fileprivate let dependencies: Dependencies
 
-    init(navigationController: UINavigationController, dataManager: DataManager) {
+    init(navigationController: UINavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<Void> {
         let viewController = OrderDateViewController.instance()
-        let viewModel = OrderDateViewModel(dataManager: dataManager,
+        let viewModel = OrderDateViewModel(dataManager: dependencies.dataManager,
                                            rowTaps: viewController.selectedObjects.asObservable())
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
@@ -51,7 +52,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
     fileprivate func configureContainer(with collection: OrderCollection) -> ContainerConfigurationResult {
         // OrderVendorViewController
         let vendorsController = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
-        let vendorsViewModel = OrderVendorViewModel(dataManager: dataManager, parentObject: collection,
+        let vendorsViewModel = OrderVendorViewModel(dataManager: dependencies.dataManager, parentObject: collection,
                                                     rowTaps: vendorsController.selectedObjects.asObservable(),
                                                     completeTaps: vendorsController.completeButtonItem.rx.tap
                                                         .asObservable())
@@ -59,12 +60,12 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
         // OrderLocationViewController
         let locationsController = OrderLocationViewController.instance()
-        let locationsViewModel = OrderLocationViewModel(dataManager: dataManager, collection: collection)
+        let locationsViewModel = OrderLocationViewModel(dataManager: dependencies.dataManager, collection: collection)
         locationsController.viewModel = locationsViewModel
 
         // OrderContainerViewController
         let containerController = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
-        let viewModel = OrderContainerViewModel(dataManager: dataManager, parentObject: collection,
+        let viewModel = OrderContainerViewModel(dataManager: dependencies.dataManager, parentObject: collection,
                                                 completeTaps: containerController.completeButtonItem.rx.tap
                                                     .asObservable())
         containerController.viewModel = viewModel
@@ -76,7 +77,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showContainer(collection: OrderCollection) {
         let (containerController, locationsController, vendorsViewModel) = configureContainer(with: collection)
-        let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
+        let factory = OrderLocationFactory(collection: collection, in: dependencies.dataManager.managedObjectContext)
         navigationController.pushViewController(containerController, animated: true)
 
         /// TODO: replace `.subscribe(onNext: { ... }) in the following with:
@@ -122,7 +123,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showVendorList(collection: OrderCollection) {
         let viewController = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
-        let viewModel = OrderVendorViewModel(dataManager: dataManager, parentObject: collection,
+        let viewModel = OrderVendorViewModel(dataManager: dependencies.dataManager, parentObject: collection,
                                              rowTaps: viewController.selectedObjects.asObservable(),
                                              completeTaps: viewController.completeButtonItem.rx.tap.asObservable())
         viewController.viewModel = viewModel
@@ -142,7 +143,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showItemList(order: Order) {
         let viewController = OrderItemViewController.instance()
-        let viewModel = OrderViewModel(dataManager: dataManager, parentObject: order)
+        let viewModel = OrderViewModel(dataManager: dependencies.dataManager, parentObject: order)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
@@ -158,7 +159,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     func showKeypad(order: Order, atIndex index: Int) {
         let viewController = OrderKeypadViewController.instance()
-        let viewModel = OrderKeypadViewModel(dataManager: dataManager, for: order, atIndex: index)
+        let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, for: order, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
     }
@@ -167,11 +168,11 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationList(collection: OrderCollection) {
         let viewController = OrderLocationViewController.instance()
-        let viewModel = OrderLocationViewModel(dataManager: dataManager, collection: collection)
+        let viewModel = OrderLocationViewModel(dataManager: dependencies.dataManager, collection: collection)
         viewController.viewModel = viewModel
         //navigationController.pushViewController(viewController, animated: true)
 
-        let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
+        let factory = OrderLocationFactory(collection: collection, in: dependencies.dataManager.managedObjectContext)
 
         // Navigation
         viewController.tableView.rx
@@ -190,7 +191,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationCategoryList(location: RemoteLocation, factory: OrderLocationFactory) {
         let viewController = OrderLocCatViewController.instance()
-        let viewModel = OrderLocCatViewModel(dataManager: dataManager, location: location, factory: factory)
+        let viewModel = OrderLocCatViewModel(dataManager: dependencies.dataManager, location: location, factory: factory)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
@@ -208,7 +209,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationItemList(parent: OrderLocItemParent, factory: OrderLocationFactory) {
         let viewController = OrderLocItemViewController.instance()
-        let viewModel = OrderLocItemViewModel(dataManager: dataManager, parent: parent, factory: factory)
+        let viewModel = OrderLocItemViewModel(dataManager: dependencies.dataManager, parent: parent, factory: factory)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
@@ -224,7 +225,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
         let viewController = OrderKeypadViewController.instance()
-        let viewModel = OrderKeypadViewModel(dataManager: dataManager, with: orderItems, atIndex: index)
+        let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, with: orderItems, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
     }
@@ -238,15 +239,15 @@ class ModalOrderCoordinator: OrderCoordinator {
     private let rootViewController: UIViewController
     private let collection: OrderCollection
 
-    init(rootViewController: UIViewController, dataManager: DataManager, collection: OrderCollection) {
+    init(rootViewController: UIViewController, dependencies: Dependencies, collection: OrderCollection) {
         self.rootViewController = rootViewController
         self.collection = collection
-        super.init(navigationController: NavigationController(), dataManager: dataManager)
+        super.init(navigationController: NavigationController(), dependencies: dependencies)
     }
 
     override func start() -> Observable<Void> {
         let (containerController, locationsController, vendorsViewModel) = configureContainer(with: collection)
-        let factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
+        let factory = OrderLocationFactory(collection: collection, in: dependencies.dataManager.managedObjectContext)
 
         navigationController.viewControllers = [containerController]
         rootViewController.present(navigationController, animated: true)
@@ -286,14 +287,14 @@ class ModalOrderCoordinator: OrderCoordinator {
 
     override func showKeypad(order: Order, atIndex index: Int) {
         let viewController = OrderKeypadViewController.instance()
-        let viewModel = OrderKeypadViewModel(dataManager: dataManager, for: order, atIndex: index)
+        let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, for: order, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
     }
 
     override func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
         let viewController = OrderKeypadViewController.instance()
-        let viewModel = OrderKeypadViewModel(dataManager: dataManager, with: orderItems, atIndex: index)
+        let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, with: orderItems, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
     }

@@ -9,20 +9,21 @@
 import RxSwift
 
 class SettingsCoordinator: BaseCoordinator<Void> {
+    typealias Dependencies = HasDataManager
 
     private let rootViewController: UIViewController
-    private let dataManager: DataManager
+    private let dependencies: Dependencies
 
-    init(rootViewController: UIViewController, dataManager: DataManager) {
+    init(rootViewController: UIViewController, dependencies: Dependencies) {
         self.rootViewController = rootViewController
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<CoordinationResult> {
         let viewController = SettingsViewController.initFromStoryboard(name: "SettingsViewController")
         let navigationController = UINavigationController(rootViewController: viewController)
 
-        let viewModel = SettingsViewModel(dataManager: dataManager, rowTaps: viewController.rowTaps.asObservable())
+        let viewModel = SettingsViewModel(dataManager: dependencies.dataManager, rowTaps: viewController.rowTaps.asObservable())
         viewController.viewModel = viewModel
 
         viewModel.showLogin
@@ -45,7 +46,7 @@ class SettingsCoordinator: BaseCoordinator<Void> {
     }
 
     private func showLogin(on rootViewController: UIViewController) -> Observable<Void> {
-        let loginCoordinator = LoginCoordinator(rootViewController: rootViewController, dataManager: dataManager)
+        let loginCoordinator = LoginCoordinator(rootViewController: rootViewController, dependencies: dependencies)
         return coordinate(to: loginCoordinator)
     }
 

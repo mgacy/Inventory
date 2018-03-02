@@ -13,14 +13,12 @@ import RxSwift
 class AppCoordinator: BaseCoordinator<Void> {
 
     private let window: UIWindow
+    private let dependencies: AppDependency
     //private var persistentContainer: NSPersistentContainer!
-    private let userManager: CurrentUserManager
-    private let dataManager: DataManager
 
-    init(window: UIWindow, userManager: CurrentUserManager, dataManager: DataManager) {
+    init(window: UIWindow, container: NSPersistentContainer) {
         self.window = window
-        self.userManager = userManager
-        self.dataManager = dataManager
+        self.dependencies = AppDependency(container: container)
     }
 
     // NOTE: this will return whatever `to.start()` returns
@@ -85,12 +83,12 @@ class AppCoordinator: BaseCoordinator<Void> {
     }
 
     private func showTabBar() -> Observable<Void> {
-        let tabBarCoordinator = TabBarCoordinator(window: self.window, dataManager: self.dataManager)
+        let tabBarCoordinator = TabBarCoordinator(window: self.window, dependencies: dependencies)
         return coordinate(to: tabBarCoordinator)
     }
 
     private func showLogin() -> Observable<Void> {
-        let loginCoordinator = InitialLoginCoordinator(window: window, dataManager: dataManager)
+        let loginCoordinator = InitialLoginCoordinator(window: window, dependencies: dependencies)
         return coordinate(to: loginCoordinator)
     }
 

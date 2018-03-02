@@ -9,19 +9,20 @@
 import RxSwift
 
 class HomeCoordinator: BaseCoordinator<Void> {
+    typealias Dependencies = HasDataManager
 
     private let navigationController: UINavigationController
-    private let dataManager: DataManager
+    private let dependencies: Dependencies
 
-    init(navigationController: UINavigationController, dataManager: DataManager) {
+    init(navigationController: UINavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<Void> {
         var viewController = HomeViewController.instance()
 
-        var avm: Attachable<HomeViewModel> = .detached(HomeViewModel.Dependency(dataManager: dataManager))
+        var avm: Attachable<HomeViewModel> = .detached(dependencies)
         //let viewModel = viewController.bindViewModel(to: &avm)
         viewController.bindViewModel(to: &avm)
         navigationController.viewControllers = [viewController]
@@ -64,19 +65,19 @@ class HomeCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     private func showSettings(on rootViewController: UIViewController) -> Observable<Void> {
-        let settingsCoordinator = SettingsCoordinator(rootViewController: rootViewController, dataManager: dataManager)
+        let settingsCoordinator = SettingsCoordinator(rootViewController: rootViewController, dependencies: dependencies)
         return coordinate(to: settingsCoordinator)
     }
 
     public func showNewInventory(with inventory: Inventory) -> Observable<Void> {
         let newInventoryCoordinator = ModalInventoryCoordinator(rootViewController: navigationController,
-                                                                dataManager: dataManager, inventory: inventory)
+                                                                dependencies: dependencies, inventory: inventory)
         return coordinate(to: newInventoryCoordinator)
     }
 
     private func showNewOrder(with collection: OrderCollection) -> Observable<Void> {
         let newOrderCoordinator = ModalOrderCoordinator(rootViewController: navigationController,
-                                                        dataManager: dataManager, collection: collection)
+                                                        dependencies: dependencies, collection: collection)
         return coordinate(to: newOrderCoordinator)
     }
 

@@ -9,18 +9,19 @@
 import RxSwift
 
 class InitialLoginCoordinator: BaseCoordinator<Void> {
+    typealias Dependencies = HasDataManager & HasUserManager
 
     private let window: UIWindow
-    private let dataManager: DataManager
+    private let dependencies: Dependencies
 
-    init(window: UIWindow, dataManager: DataManager) {
+    init(window: UIWindow, dependencies: Dependencies) {
         self.window = window
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<CoordinationResult> {
         let viewController = LoginViewController.instance()
-        let viewModel = LoginViewModel(dataManager: dataManager)
+        let viewModel = LoginViewModel(dataManager: dependencies.dataManager)
         viewController.viewModel = viewModel
 
         window.rootViewController = viewController
@@ -41,7 +42,7 @@ class InitialLoginCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     private func showSignup(on rootViewController: UIViewController) -> Observable<SignupCoordinationResult> {
-        let signupCoordinator = SignupCoordinator(rootViewController: rootViewController, dataManager: self.dataManager)
+        let signupCoordinator = SignupCoordinator(rootViewController: rootViewController, dependencies: dependencies)
         return coordinate(to: signupCoordinator)
             //.filter { $0 != .cancel }
     }
@@ -57,26 +58,27 @@ enum CoordinatorMode {
 }
 */
 class LoginCoordinator: BaseCoordinator<Void> {
+    typealias Dependencies = HasDataManager
 
     private let window: UIWindow?
     private let rootViewController: UIViewController?
-    private let dataManager: DataManager
+    private let dependencies: Dependencies
 
-    init(window: UIWindow, dataManager: DataManager) {
+    init(window: UIWindow, dependencies: Dependencies) {
         self.window = window
         self.rootViewController = nil
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
-    init(rootViewController: UIViewController, dataManager: DataManager) {
+    init(rootViewController: UIViewController, dependencies: Dependencies) {
         self.window = nil
         self.rootViewController = rootViewController
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<CoordinationResult> {
         let viewController = LoginViewController.instance()
-        let viewModel = LoginViewModel(dataManager: dataManager)
+        let viewModel = LoginViewModel(dataManager: dependencies.dataManager)
         viewController.viewModel = viewModel
 
         if let `window` = window {
@@ -124,7 +126,7 @@ class LoginCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     private func showSignup(on rootViewController: UIViewController) -> Observable<SignupCoordinationResult> {
-        let signupCoordinator = SignupCoordinator(rootViewController: rootViewController, dataManager: self.dataManager)
+        let signupCoordinator = SignupCoordinator(rootViewController: rootViewController, dependencies: dependencies)
         return coordinate(to: signupCoordinator)
         //.filter { $0 != .cancel }
     }

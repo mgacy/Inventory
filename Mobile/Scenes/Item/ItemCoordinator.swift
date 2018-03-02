@@ -9,18 +9,19 @@
 import RxSwift
 
 class ItemCoordinator: BaseCoordinator<Void> {
+    typealias Dependencies = HasDataManager
 
     private let navigationController: UINavigationController
-    private let dataManager: DataManager
+    private let dependencies: Dependencies
 
-    init(navigationController: UINavigationController, dataManager: DataManager) {
+    init(navigationController: UINavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<Void> {
         let viewController = ItemViewController.instance()
-        let viewModel = ItemViewModel(dataManager: dataManager,
+        let viewModel = ItemViewModel(dataManager: dependencies.dataManager,
                                       rowTaps: viewController.rowTaps.asObservable())
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
