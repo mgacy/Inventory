@@ -8,6 +8,10 @@
 
 import RxSwift
 
+/// Type defining possible coordination results of the `SignupCoordinator`.
+///
+/// - signUp: Signup completed successfully.
+/// - cancel: Cancel button was tapped.
 enum SignupCoordinationResult {
     case signedUp
     case cancel

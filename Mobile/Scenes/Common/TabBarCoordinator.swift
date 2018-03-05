@@ -170,8 +170,6 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
 
     // MARK: Collapsing the Interface
 
-    // This method is called when a split view controller is collapsing its children for a transition to a compact-width
-    // size class.
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
         guard
             let tabBarController = splitViewController.viewControllers.first as? UITabBarController,
@@ -185,8 +183,6 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
 
     // MARK: Expanding the Interface
 
-    // This method is called when a split view controller is separating its child into two children for a transition
-    // from a compact-width size class to a regular-width size class.
     func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
         guard
             let tabBarController = primaryViewController as? UITabBarController,
@@ -206,7 +202,6 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
 
     // MARK: Overriding the Presentation Behavior
 
-    // Customize the behavior of `showDetailViewController:` on a split view controller.
     func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
         guard
             let tabBarController = splitViewController.viewControllers.first as? UITabBarController,
