@@ -79,7 +79,7 @@ class TabBarCoordinator: BaseCoordinator<Void> {
     private func configure(tabBarController: UITabBarController, withTabs tabs: [SectionTab]) -> [Observable<Void>] {
         let navControllers = tabs
             .map { tab -> UINavigationController in
-                let navController = NavigationController()
+                let navController = NavigationController(withPopDetailCompletion: viewDelegate.replaceDetail)
                 navController.tabBarItem = UITabBarItem(title: tab.title, image: tab.image, selectedImage: nil)
                 if #available(iOS 11.0, *) {
                     navController.navigationBar.prefersLargeTitles = true
@@ -126,14 +126,20 @@ final class SplitViewDelegate: NSObject {
         super.init()
     }
 
-    // func updateSecondary(withDetailfrom primaryContainer: PrimaryContainerType) {
-    func updateSecondaryWithDetail(from primaryContainer: PrimaryContainerType) {
+    func updateSecondaryWithDetail(from primaryContainer: PrimaryContainerType, animated: Bool = false) {
         switch primaryContainer.detailView {
-        case .visible(let detailViewController):
-            detailNavigationController.setViewControllers([detailViewController], animated: false)
-        case .empty:
-            detailNavigationController.setViewControllers([primaryContainer.makeEmptyViewController()], animated: false)
+        case .collapsed(let detailViewController):
+            detailNavigationController.setViewControllers([detailViewController], animated: animated)
+        case .separated(let detailViewController):
+            detailNavigationController.setViewControllers([detailViewController], animated: animated)
+        case .placeholder:
+            detailNavigationController.setViewControllers([primaryContainer.makePlaceholderViewController()],
+                                                          animated: animated)
         }
+    }
+
+    func replaceDetail(withEmpty viewController: UIViewController & PlaceholderViewControllerType) {
+        detailNavigationController.setViewControllers([viewController], animated: true)
     }
 
 }
@@ -143,11 +149,7 @@ extension SplitViewDelegate: UITabBarControllerDelegate {
 
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         // Prevent selection of the same tab twice (which would reset its navigation controller)
-        if tabBarController.selectedViewController === viewController {
-            return false
-        } else {
-            return true
-        }
+        return tabBarController.selectedViewController === viewController ? false : true
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
@@ -193,7 +195,8 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
 
         navigationControllers.forEach { $0.separateDetail() }
 
-        if case .empty = selectedNavController.detailView {
+        // There is no point in hiding the primary view controller with a placeholder detail view
+        if case .placeholder = selectedNavController.detailView, splitViewController.preferredDisplayMode == .primaryHidden {
             splitViewController.preferredDisplayMode = .allVisible
         }
         updateSecondaryWithDetail(from: selectedNavController)
@@ -215,16 +218,17 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
 
         if splitViewController.isCollapsed {
             selectedNavController.pushViewController(vc, animated: true)
+            selectedNavController.detailView = .collapsed(vc)
         } else {
             switch selectedNavController.detailView {
             // Animate only the initial presentation of the detail vc
-            case .empty:
+            case .placeholder:
                 detailNavigationController.setViewControllers([vc], animated: true)
-            case .visible:
+            default:
                 detailNavigationController.setViewControllers([vc], animated: false)
             }
+            selectedNavController.detailView = .separated(vc)
         }
-        selectedNavController.detailView = .visible(vc)
         return true // Prevent UIKit from performing default behavior
     }
 

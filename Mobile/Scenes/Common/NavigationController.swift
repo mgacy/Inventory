@@ -8,68 +8,43 @@
 
 import UIKit
 
-class NavigationController: UINavigationController {
-
-    var detailView: DetailView<UIViewController> = .empty
+class NavigationController: UINavigationController, PrimaryContainerType {
+    /// TODO: should this be weak var?
+    let detailPopCompletion: (UIViewController & PlaceholderViewControllerType) -> Void
+    var detailView: DetailView = .placeholder
 
     // MARK: - Lifecycle
+
+    init(withPopDetailCompletion completion: @escaping (UIViewController & PlaceholderViewControllerType) -> Void) {
+        self.detailPopCompletion = completion
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar.isTranslucent = false
-        navigationBar.barTintColor = ColorPalette.hintOfRed
     }
 
     override func popViewController(animated: Bool) -> UIViewController? {
-        //log.debug("\(#function) : \(String(describing: topViewController.self))")
-        if case .visible(let detailViewController) = detailView {
-            if topViewController === detailViewController {
-                //log.debug("\(#function) : POPPED DETAIL")
-                detailView = .empty
-            } else {
-                // Set detail view controller to empty to prevent confusion
-                // FIXME: it's really ugly that we are reaching up into splitViewController to get its detail nav controller
-                if
-                    let splitViewController = splitViewController,
-                    splitViewController.viewControllers.count > 1,
-                    let detailNavigationController = splitViewController.viewControllers.last as? UINavigationController
-                {
-                    detailNavigationController.setViewControllers([makeEmptyViewController()], animated: true)
-                    detailView = .empty
-                }
-            }
+        switch detailView {
+        case .collapsed:
+            detailView = .placeholder
+        case .separated:
+            detailView = .placeholder
+            // Set detail view controller to `PlaceholderViewControllerType` to prevent confusion
+            detailPopCompletion(makePlaceholderViewController())
+        case .placeholder:
+            break
         }
         return super.popViewController(animated: animated)
     }
 
-}
-
-// MARK: - PrimaryContainerType
-
-extension NavigationController: PrimaryContainerType {
-
-    /// Add detail view controller to `viewControllers` if it is visible.
-    func collapseDetail() {
-        switch detailView {
-        case .visible(let detailViewController):
-            viewControllers += [detailViewController]
-        case .empty:
-            return
-        }
-    }
-
-    /// Remove detail view controller from `viewControllers` if it is visible.
-    func separateDetail() {
-        switch detailView {
-        case .visible:
-            viewControllers.removeLast()
-        case .empty:
-            return
-        }
-    }
-
-    func makeEmptyViewController() -> UIViewController {
-        return EmptyDetailViewController()
+    func makePlaceholderViewController() -> UIViewController & PlaceholderViewControllerType {
+        return PlaceholderViewController()
     }
 
 }
@@ -90,8 +65,6 @@ class DetailNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar.isTranslucent = false
-        navigationBar.barTintColor = ColorPalette.hintOfRed
-        view.backgroundColor = .white
     }
 
 }
@@ -99,23 +72,21 @@ class DetailNavigationController: UINavigationController {
 // MARK: - UINavigationControllerDelegate
 extension DetailNavigationController: UINavigationControllerDelegate {
 
-    /// TODO: instantiate NavigationControllerAnimation (Animator) just once
-
     public func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-
-        guard operation == .push, toVC is EmptyDetailViewController else {
+        guard operation == .push, toVC is PlaceholderViewController else {
             return nil
         }
 
-        return NavigationControllerAnimator(operation: operation)
-        //return nil
+        return DetailNavigationControllerAnimator(operation: operation)
     }
 
 }
 
+// MARK: - Animator
+
 // https://stackoverflow.com/a/41528045/4472195
 // https://gist.github.com/alanzeino/603293f9da5cd0b7f6b60dc20bc766be
-class NavigationControllerAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+class DetailNavigationControllerAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     let operation: UINavigationControllerOperation
 
     init(operation: UINavigationControllerOperation) {
@@ -135,8 +106,7 @@ class NavigationControllerAnimator: NSObject, UIViewControllerAnimatedTransition
         }
 
         if operation == .push {
-            //animatePush(from: fromViewController, to: toViewController, using: transitionContext)
-            switch toVC is EmptyDetailViewController {
+            switch toVC is PlaceholderViewControllerType {
             case true:
                 animatePushAsPop(from: fromVC, to: toVC, using: transitionContext)
             case false:

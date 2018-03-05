@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EmptyDetailViewController: UIViewController {
+class PlaceholderViewController: UIViewController, PlaceholderViewControllerType {
 
     let backgroundImageView: UIImageView = {
         let view = UIImageView()
