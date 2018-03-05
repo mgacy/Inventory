@@ -191,7 +191,8 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationCategoryList(location: RemoteLocation, factory: OrderLocationFactory) {
         let viewController = OrderLocCatViewController.instance()
-        let viewModel = OrderLocCatViewModel(dataManager: dependencies.dataManager, location: location, factory: factory)
+        let viewModel = OrderLocCatViewModel(dataManager: dependencies.dataManager,
+                                             location: location, factory: factory)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 

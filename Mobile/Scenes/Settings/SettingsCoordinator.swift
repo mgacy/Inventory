@@ -23,7 +23,8 @@ class SettingsCoordinator: BaseCoordinator<Void> {
         let viewController = SettingsViewController.initFromStoryboard(name: "SettingsViewController")
         let navigationController = UINavigationController(rootViewController: viewController)
 
-        let viewModel = SettingsViewModel(dataManager: dependencies.dataManager, rowTaps: viewController.rowTaps.asObservable())
+        let viewModel = SettingsViewModel(dataManager: dependencies.dataManager,
+                                          rowTaps: viewController.rowTaps.asObservable())
         viewController.viewModel = viewModel
 
         viewModel.showLogin
