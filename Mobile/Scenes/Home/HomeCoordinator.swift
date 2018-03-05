@@ -65,7 +65,8 @@ class HomeCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     private func showSettings(on rootViewController: UIViewController) -> Observable<Void> {
-        let settingsCoordinator = SettingsCoordinator(rootViewController: rootViewController, dependencies: dependencies)
+        let settingsCoordinator = SettingsCoordinator(rootViewController: rootViewController,
+                                                      dependencies: dependencies)
         return coordinate(to: settingsCoordinator)
     }
 

@@ -133,7 +133,7 @@ class ModalInventoryCoordinator: InventoryCoordinator {
     init(rootViewController: UIViewController, dependencies: Dependencies, inventory: Inventory) {
         self.rootViewController = rootViewController
         self.inventory = inventory
-        super.init(navigationController: NavigationController(), dependencies: dependencies)
+        super.init(navigationController: UINavigationController(), dependencies: dependencies)
     }
 
     override func start() -> Observable<Void> {
