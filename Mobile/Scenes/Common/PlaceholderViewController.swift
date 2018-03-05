@@ -1,5 +1,5 @@
 //
-//  EmptyDetailViewController.swift
+//  PlaceholderViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 12/12/17.
