@@ -9,12 +9,18 @@
 import Alamofire
 import KeychainAccess
 
+enum AuthenticationState {
+    case signedIn
+    case signedOut
+}
+
 class CurrentUserManager {
 
     typealias CompletionHandlerType = (BackendError?) -> Void
 
     // MARK: - Properties
 
+    var authenticationState: AuthenticationState = .signedOut
     var user: User?
 
     /// TODO: why are we holding on to the AuthenticationHandler instead of simply configuring and passing off to APIManager?
@@ -73,6 +79,7 @@ class CurrentUserManager {
         /// TODO: should we store User as a dict or just retrieve info from the server?
 
         guard let email = email, let password = password else {
+            //authenticationState = .signedOut
             log.warning("CurrentUserManager: unable to get email or password"); return
         }
 
@@ -80,6 +87,7 @@ class CurrentUserManager {
 
         /// TODO: I don't like instantiating a User with a fake id here. Currently, the existence of a user functions to tell AppDelegate whether we need to log in. Should we use `userExists()` to communicate this instead? That way we could wait until successful login to create the User.
 
+        authenticationState = .signedIn
         user = User(id: 1, email: email)
 
         /// TODO: should we always login on init?
@@ -103,6 +111,7 @@ class CurrentUserManager {
         self.email = nil
         self.password = nil
         keychain["authToken"] = nil
+        authenticationState = .signedOut
         user = nil
         authHandler = nil
     }
@@ -140,6 +149,7 @@ class CurrentUserManager {
             self.email = email
             self.password = password
             self.storeID = defaultStoreID
+            self.authenticationState = .signedIn
             self.user = User(id: userID, email: email)
 
             APIManager.sharedInstance.configSession(self.authHandler!)
@@ -181,6 +191,73 @@ class CurrentUserManager {
                 completion(false)
             }
         })
+    }
+
+}
+
+// MARK: -
+
+// MARK: - Persistence
+
+protocol UserStorageManagerType {
+    func store(user: User)
+    func read() -> User?
+    func clear()
+}
+
+class UserStorageManager: UserStorageManagerType {
+    private let encoder: JSONEncoder
+    private let archiveURL: URL
+
+    init() {
+        encoder = JSONEncoder()
+        archiveURL = UserStorageManager.getDocumentsURL().appendingPathComponent("user")
+    }
+
+    func store(user: User) {
+        // should incorporate better error handling
+        do {
+            let data = try encoder.encode(user)
+            guard NSKeyedArchiver.archiveRootObject(data, toFile: archiveURL.path) else {
+                fatalError("Could not store data to url")
+            }
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+
+    func read() -> User? {
+        if let data = NSKeyedUnarchiver.unarchiveObject(withFile: archiveURL.path) as? Data {
+            let decoder = JSONDecoder()
+            do {
+                let user = try decoder.decode(User.self, from: data)
+                return user
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        } else {
+            return nil
+        }
+    }
+
+    func clear() {
+        // should incorporate better error handling
+        do {
+            try FileManager.default.removeItem(at: archiveURL)
+        } catch {
+            fatalError("Could not delete data from url")
+        }
+    }
+
+    // MARK: - Helper Methods
+
+    private static func getDocumentsURL() -> URL {
+        if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            return url
+        } else {
+            // should incorporate better error handling
+            fatalError("Could not retrieve documents directory")
+        }
     }
 
 }
