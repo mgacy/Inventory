@@ -726,6 +726,41 @@
 			name = "Review List";
 			sourceTree = "<group>";
 		};
+		C9A99AF32050970F0000ABC3 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */,
+				C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */,
+				C91C92851EFCDD9000566CEB /* RoundButton.swift */,
+				C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */,
+			);
+			name = Buttons;
+			sourceTree = "<group>";
+		};
+		C9A99AF42050974D0000ABC3 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */,
+				C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		C9A99AF5205097650000ABC3 /* Coordination */ = {
+			isa = PBXGroup;
+			children = (
+				C9045C121FC49EDA00F55FB3 /* BaseCoordinator.swift */,
+				C9045C141FC49F0000F55FB3 /* TabBarCoordinator.swift */,
+				C998A817204DD22E00600F5A /* SplitViewDelegate.swift */,
+				C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */,
+				C998A81B204DD2BE00600F5A /* DetailNavigationController.swift */,
+				C998A819204DD27B00600F5A /* DetailNavigationControllerAnimator.swift */,
+				C9D59C5F1FE0FAE60050A4AB /* PlaceholderViewController.swift */,
+				C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */,
+			);
+			name = Coordination;
+			sourceTree = "<group>";
+		};
 		C9B825E61EB9A0A4009B92F0 /* Core Data Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -817,24 +852,13 @@
 		C9C2DA041F0F3AF7007263FB /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				C9A99AF32050970F0000ABC3 /* Buttons */,
+				C9A99AF42050974D0000ABC3 /* Cells */,
+				C9A99AF5205097650000ABC3 /* Coordination */,
 				C9BB05881F83171000A07529 /* ActivityIndicator.swift */,
 				C937505F202D72050076B65E /* ErrorTracker.swift */,
-				C9045C121FC49EDA00F55FB3 /* BaseCoordinator.swift */,
 				C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */,
 				C902FF2D1DB816EB0063CD02 /* Keypad.swift */,
-				C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */,
-				C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */,
-				C91C92851EFCDD9000566CEB /* RoundButton.swift */,
-				C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */,
-				C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */,
-				C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */,
-				C9045C141FC49F0000F55FB3 /* TabBarCoordinator.swift */,
-				C998A817204DD22E00600F5A /* SplitViewDelegate.swift */,
-				C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */,
-				C998A81B204DD2BE00600F5A /* DetailNavigationController.swift */,
-				C998A819204DD27B00600F5A /* DetailNavigationControllerAnimator.swift */,
-				C9D59C5F1FE0FAE60050A4AB /* PlaceholderViewController.swift */,
-				C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
