@@ -171,4 +171,11 @@ class ModalInventoryCoordinator: InventoryCoordinator {
             .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
     }
 
+    override func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
+        let viewController = InventoryKeypadViewController.instance()
+        let viewModel = InventoryKeypadViewModel(dataManager: dependencies.dataManager, for: parent, atIndex: index)
+        viewController.viewModel = viewModel
+        navigationController.pushViewController(viewController, animated: true)
+    }
+
 }
