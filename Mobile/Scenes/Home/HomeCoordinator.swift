@@ -20,7 +20,7 @@ class HomeCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        var viewController = HomeViewController.instance()
+        let viewController = HomeViewController.instance()
 
         var avm: Attachable<HomeViewModel> = .detached(dependencies)
         //let viewModel = viewController.bindViewModel(to: &avm)

@@ -14,18 +14,17 @@ import UIKit
 import RxSwift
 
 /// TODO: rename ViewModelAttaching?
-protocol AttachableType {
+protocol AttachableType: class {
     associatedtype ViewModel: AttachableViewModelType
-    associatedtype Bindings
 
-    var bindings: Bindings { get }
+    var bindings: ViewModel.Bindings { get }
     var viewModel: ViewModel! { get set }
 
     func bindViewModel()
 }
 
 extension AttachableType where Self: UIViewController {
-    mutating func bindViewModel<T>(to model: inout Attachable<T>) where T == Self.ViewModel, T.Bindings == Self.Bindings {
+    func bindViewModel<T>(to model: inout Attachable<T>) where T == Self.ViewModel {
         loadViewIfNeeded()
         viewModel = model.bind(bindings)
         bindViewModel()
