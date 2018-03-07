@@ -23,7 +23,6 @@ class CurrentUserManager {
 
     var authenticationState: AuthenticationState = .signedOut
     let currentUser = BehaviorSubject<User?>(value: nil)
-    var user: User?
 
     /// TODO: why are we holding on to the AuthenticationHandler instead of simply configuring and passing off to APIManager?
     private var authHandler: AuthenticationHandler?
@@ -90,7 +89,7 @@ class CurrentUserManager {
         /// TODO: I don't like instantiating a User with a fake id here. Currently, the existence of a user functions to tell AppDelegate whether we need to log in. Should we use `userExists()` to communicate this instead? That way we could wait until successful login to create the User.
 
         authenticationState = .signedIn
-        user = User(id: 1, email: email)
+        let user = User(id: 1, email: email)
         currentUser.onNext(user)
 
         /// TODO: should we always login on init?
@@ -104,8 +103,8 @@ class CurrentUserManager {
         self.email = email
         self.password = password
         /// TODO: self.storeID = ?
-        user = User(id: userID, email: email)
         authenticationState = .signedIn
+        let user = User(id: userID, email: email)
         self.currentUser.onNext(user)
 
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
@@ -118,7 +117,6 @@ class CurrentUserManager {
         keychain["authToken"] = nil
         authenticationState = .signedOut
         currentUser.onNext(nil)
-        user = nil
         authHandler = nil
     }
 
@@ -156,8 +154,8 @@ class CurrentUserManager {
             self.password = password
             self.storeID = defaultStoreID
             self.authenticationState = .signedIn
-            self.user = User(id: userID, email: email)
-            self.currentUser.onNext(self.user)
+            let user2 = User(id: userID, email: email)
+            self.currentUser.onNext(user2)
 
             APIManager.sharedInstance.configSession(self.authHandler!)
             completion(nil)
