@@ -21,7 +21,7 @@ class CurrentUserManager {
 
     // MARK: - Properties
     var authenticationState: AuthenticationState = .signedOut
-    let currentUser = BehaviorSubject<User?>(value: nil)
+    let currentUser = BehaviorSubject<RemoteUser?>(value: nil)
     var storeID: Int? {
         get {
             return defaults.integer(forKey: "store")
@@ -64,12 +64,11 @@ class CurrentUserManager {
 
     fileprivate func createUser(email: String, password: String, user: RemoteUser) {
         authenticationState = .signedIn
-        let user2 = User(id: user.remoteID, email: email)
-        currentUser.onNext(user2)
+        currentUser.onNext(user)
         storeID = user.defaultStore.remoteID
 
-        credentialsManager.store(email: email, password: password)
-        storageManager.store(user: user2)
+        credentialsManager.store(password: password)
+        storageManager.store(user: user)
 
         let authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
         APIManager.sharedInstance.configSession(authHandler)
@@ -154,9 +153,9 @@ protocol UserStorageManagerType {
     //associatedtype UserType: Codable
 
     //func store(user: UserType)
-    func store(user: User)
+    func store(user: RemoteUser)
     //func read() -> UserType?
-    func read() -> User?
+    func read() -> RemoteUser?
     func clear()
 }
 
@@ -171,7 +170,7 @@ class UserStorageManager: UserStorageManagerType {
         archiveURL = UserStorageManager.getDocumentsURL().appendingPathComponent("user")
     }
 
-    func store(user: User) {
+    func store(user: RemoteUser) {
         // should incorporate better error handling
         do {
             let data = try encoder.encode(user)
@@ -183,11 +182,11 @@ class UserStorageManager: UserStorageManagerType {
         }
     }
 
-    func read() -> User? {
+    func read() -> RemoteUser? {
         if let data = NSKeyedUnarchiver.unarchiveObject(withFile: archiveURL.path) as? Data {
             let decoder = JSONDecoder()
             do {
-                let user = try decoder.decode(User.self, from: data)
+                let user = try decoder.decode(RemoteUser.self, from: data)
                 return user
             } catch {
                 fatalError(error.localizedDescription)
@@ -223,10 +222,9 @@ class UserStorageManager: UserStorageManagerType {
 
 protocol CredentialsManagerType {
     var accessToken: String? { get set }
-    var email: String? { get set }
     var password: String? { get set }
 
-    func store(email: String, password: String)
+    func store(password: String)
     func clear()
 }
 
@@ -248,20 +246,6 @@ class CredentialsManager: CredentialsManagerType {
             }
         }
     }
-
-    var email: String? {
-        get {
-            return defaults.string(forKey: "email")
-        }
-        set {
-            if let valueToSave = newValue {
-                defaults.set(valueToSave, forKey: "email")
-            } else { // they set it to nil, so delete it
-                defaults.removeObject(forKey: "email")
-            }
-        }
-    }
-
     var password: String? {
         get {
             // try to load from keychain
@@ -281,19 +265,17 @@ class CredentialsManager: CredentialsManagerType {
     }
 
     // MARK: - Private
-
-    private let defaults: UserDefaults
     private let keychain: Keychain
 
     // MARK: - Lifecycle
 
-    init(keychain: Keychain, defaults: UserDefaults = .standard) {
-        self.defaults = defaults
+    init(keychain: Keychain) {
         self.keychain = keychain
     }
 
-    func store(email: String, password: String) {
-        self.email = email
+    // MARK: -
+
+    func store(password: String) {
         self.password = password
     }
 

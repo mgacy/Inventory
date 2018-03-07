@@ -20,7 +20,7 @@ final class LoginViewModel: ViewModelType {
     }
 
     struct Output {
-        let currentUser: Observable<User?>
+        let currentUser: Observable<RemoteUser?>
         let isValid: Observable<Bool>
         let loggingIn: Driver<Bool>
         let loginResults: Observable<Event<Bool>>
