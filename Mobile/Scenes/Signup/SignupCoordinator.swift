@@ -13,7 +13,7 @@ import RxSwift
 /// - signUp: Signup completed successfully.
 /// - cancel: Cancel button was tapped.
 enum SignupCoordinationResult {
-    case signedUp
+    case signUp
     case cancel
 }
 
@@ -38,12 +38,13 @@ class SignupCoordinator: BaseCoordinator<SignupCoordinationResult> {
         let cancel = viewController.cancelButton.rx.tap
             .map { _ in CoordinationResult.cancel }
 
-        let signedUp = viewController.didSignup.asObservable()
-            .map { _ in CoordinationResult.signedUp }
+        let signUp = viewController.didSignup
+            .asObservable()
+            .map { _ in CoordinationResult.signUp }
 
         rootViewController.present(navigationController, animated: true)
 
-        return Observable.merge(cancel, signedUp)
+        return Observable.merge(cancel, signUp)
             .take(1)
             .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
     }
