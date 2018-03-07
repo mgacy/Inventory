@@ -20,44 +20,8 @@ class CurrentUserManager {
     typealias CompletionHandlerType = (BackendError?) -> Void
 
     // MARK: - Properties
-
     var authenticationState: AuthenticationState = .signedOut
     let currentUser = BehaviorSubject<User?>(value: nil)
-
-    /// TODO: why are we holding on to the AuthenticationHandler instead of simply configuring and passing off to APIManager?
-    private var authHandler: AuthenticationHandler?
-    private let defaults: UserDefaults
-    private let keychain: Keychain
-    private var email: String? {
-        get {
-            return defaults.string(forKey: "email")
-        }
-        set {
-            if let valueToSave = newValue {
-                defaults.set(valueToSave, forKey: "email")
-            } else { // they set it to nil, so delete it
-                defaults.removeObject(forKey: "email")
-            }
-        }
-    }
-    private var password: String? {
-        get {
-            // try to load from keychain
-            if let pass = try? keychain.get("password") {
-                return pass
-            } else {
-                return nil
-            }
-        }
-         set {
-            if let valueToSave = newValue {
-                keychain["password"] = valueToSave
-            } else { // they set it to nil, so delete it
-                keychain["password"] = nil
-            }
-        }
-    }
-
     var storeID: Int? {
         get {
             return defaults.integer(forKey: "store")
@@ -71,53 +35,51 @@ class CurrentUserManager {
         }
     }
 
+    // MARK: - Private
+    private var credentialsManager: CredentialsManagerType
+    private let storageManager: UserStorageManagerType
+    private let defaults: UserDefaults
+    private let keychain: Keychain
+
     // MARK: - Lifecycle
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         self.keychain = Keychain(service: "***REMOVED***")
+        self.credentialsManager = CredentialsManager(keychain: self.keychain)
+        self.storageManager = UserStorageManager()
 
-        /// TODO: should we store User as a dict or just retrieve info from the server?
+        if let user = storageManager.read(), let password = credentialsManager.password {
+            self.authenticationState = .signedIn
+            self.currentUser.onNext(user)
 
-        guard let email = email, let password = password else {
-            //authenticationState = .signedOut
-            log.warning("CurrentUserManager: unable to get email or password"); return
+            let authHandler = AuthenticationHandler(keychain: keychain, email: user.email, password: password)
+            APIManager.sharedInstance.configSession(authHandler)
+        } else {
+            self.authenticationState = .signedOut
         }
-
-        // It doesn't make sense to have an authHandler unless we have a corresponding User
-
-        /// TODO: I don't like instantiating a User with a fake id here. Currently, the existence of a user functions to tell AppDelegate whether we need to log in. Should we use `userExists()` to communicate this instead? That way we could wait until successful login to create the User.
-
-        authenticationState = .signedIn
-        let user = User(id: 1, email: email)
-        currentUser.onNext(user)
-
-        /// TODO: should we always login on init?
-        authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
-        APIManager.sharedInstance.configSession(authHandler!)
     }
 
     // MARK: -
 
-    fileprivate func createUser(userID: Int, email: String, password: String) {
-        self.email = email
-        self.password = password
-        /// TODO: self.storeID = ?
+    fileprivate func createUser(email: String, password: String, user: RemoteUser) {
         authenticationState = .signedIn
-        let user = User(id: userID, email: email)
-        self.currentUser.onNext(user)
+        let user2 = User(id: user.remoteID, email: email)
+        currentUser.onNext(user2)
+        storeID = user.defaultStore.remoteID
 
-        authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
-        APIManager.sharedInstance.configSession(authHandler!)
+        credentialsManager.store(email: email, password: password)
+        storageManager.store(user: user2)
+
+        let authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
+        APIManager.sharedInstance.configSession(authHandler)
     }
 
     fileprivate func removeUser() {
-        self.email = nil
-        self.password = nil
-        keychain["authToken"] = nil
+        credentialsManager.clear()
+        storageManager.clear()
         authenticationState = .signedOut
         currentUser.onNext(nil)
-        authHandler = nil
     }
 
     // MARK: - Authentication
@@ -130,34 +92,20 @@ class CurrentUserManager {
         // Something long-lasting like an access token in an OAuth2 scheme should be the
         // responsibility of the same object handling the email and password, while the refresh
         // token could be handled by another one. However, the access token is currently short-lived.
-        authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
+        let authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
 
-        authHandler!.login { remoteUser, error in
+        authHandler.login { remoteUser, error in
             guard error == nil else {
                 log.error("\(#function) FAILED : \(error!)")
-                self.authHandler = nil
                 return completion(BackendError.network(error: error!))
             }
             // AuthenticationHandler.login ensures json != nil, but we need to unwrap json.
             guard let user = remoteUser else {
                 log.error("\(#function) FAILED : unable to get JSON")
-                self.authHandler = nil
                 return completion(BackendError.myError(error: "Unable to get JSON from response."))
             }
 
-            let userID = user.remoteID
-            let defaultStoreID = user.defaultStore.remoteID
-
-            /// TODO: simply call .createUser(userID:email:password:)?
-
-            self.email = email
-            self.password = password
-            self.storeID = defaultStoreID
-            self.authenticationState = .signedIn
-            let user2 = User(id: userID, email: email)
-            self.currentUser.onNext(user2)
-
-            APIManager.sharedInstance.configSession(self.authHandler!)
+            self.createUser(email: email, password: password, user: user)
             completion(nil)
         }
     }
@@ -170,8 +118,7 @@ class CurrentUserManager {
                 switch response.result {
                 case .success(let value):
                     log.verbose("\(#function) - response: \(response)")
-                    let userID = value.remoteID
-                    self.createUser(userID: userID, email: email, password: password)
+                    self.createUser(email: email, password: password, user: value)
                     completion(nil)
                 case .failure(let error):
                     log.error("\(#function) FAILED : \(error)")
@@ -186,9 +133,6 @@ class CurrentUserManager {
         /// TODO: removeUser first, regardless of response.result?
         return APIManager.sharedInstance.logout()
             .do(onNext: { result in
-                //self.authenticationState = .signedOut
-                //self?.storageManager.clear()
-                //self.currentUser.onNext(nil)
                 switch result {
                 case true:
                     APIManager.sharedInstance.configSession(nil)
@@ -207,12 +151,18 @@ class CurrentUserManager {
 // MARK: - Persistence
 
 protocol UserStorageManagerType {
+    //associatedtype UserType: Codable
+
+    //func store(user: UserType)
     func store(user: User)
+    //func read() -> UserType?
     func read() -> User?
     func clear()
 }
 
 class UserStorageManager: UserStorageManagerType {
+    //typealias UserType = User
+
     private let encoder: JSONEncoder
     private let archiveURL: URL
 
@@ -265,6 +215,91 @@ class UserStorageManager: UserStorageManagerType {
             // should incorporate better error handling
             fatalError("Could not retrieve documents directory")
         }
+    }
+
+}
+
+// MARK: - A
+
+protocol CredentialsManagerType {
+    var accessToken: String? { get set }
+    var email: String? { get set }
+    var password: String? { get set }
+
+    func store(email: String, password: String)
+    func clear()
+}
+
+class CredentialsManager: CredentialsManagerType {
+    var accessToken: String? {
+        set {
+            if let valueToSave = newValue {
+                keychain["authToken"] = valueToSave
+            } else { // they set it to nil, so delete it
+                keychain["authToken"] = nil
+            }
+        }
+        get {
+            // try to load from keychain
+            if let token = try? keychain.get("authToken") {
+                return token
+            } else {
+                return nil
+            }
+        }
+    }
+
+    var email: String? {
+        get {
+            return defaults.string(forKey: "email")
+        }
+        set {
+            if let valueToSave = newValue {
+                defaults.set(valueToSave, forKey: "email")
+            } else { // they set it to nil, so delete it
+                defaults.removeObject(forKey: "email")
+            }
+        }
+    }
+
+    var password: String? {
+        get {
+            // try to load from keychain
+            if let pass = try? keychain.get("password") {
+                return pass
+            } else {
+                return nil
+            }
+        }
+        set {
+            if let valueToSave = newValue {
+                keychain["password"] = valueToSave
+            } else { // they set it to nil, so delete it
+                keychain["password"] = nil
+            }
+        }
+    }
+
+    // MARK: - Private
+
+    private let defaults: UserDefaults
+    private let keychain: Keychain
+
+    // MARK: - Lifecycle
+
+    init(keychain: Keychain, defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+        self.keychain = keychain
+    }
+
+    func store(email: String, password: String) {
+        self.email = email
+        self.password = password
+    }
+
+    func clear() {
+        accessToken = nil
+        password = nil
     }
 
 }
