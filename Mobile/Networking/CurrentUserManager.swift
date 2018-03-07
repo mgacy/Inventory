@@ -102,6 +102,7 @@ class CurrentUserManager {
         self.password = password
         /// TODO: self.storeID = ?
         user = User(id: userID, email: email)
+        authenticationState = .signedIn
 
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
         APIManager.sharedInstance.configSession(authHandler!)
