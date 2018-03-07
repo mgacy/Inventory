@@ -21,10 +21,9 @@ class HomeCoordinator: BaseCoordinator<Void> {
 
     override func start() -> Observable<Void> {
         let viewController = HomeViewController.instance()
+        let avm: Attachable<HomeViewModel> = .detached(dependencies)
+        let viewModel = viewController.attach(wrapper: avm)
 
-        var avm: Attachable<HomeViewModel> = .detached(dependencies)
-        //let viewModel = viewController.bindViewModel(to: &avm)
-        viewController.bindViewModel(to: &avm)
         navigationController.viewControllers = [viewController]
 
         viewController.settingsButtonItem.rx.tap
@@ -36,7 +35,7 @@ class HomeCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
 
         // Navigation
-        viewController.viewModel.showInventory
+        viewModel.showInventory
             .flatMap { [weak self] inventory -> Observable<Void> in
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showNewInventory(with: inventory)
@@ -44,7 +43,7 @@ class HomeCoordinator: BaseCoordinator<Void> {
             .subscribe()
             .disposed(by: disposeBag)
 
-        viewController.viewModel.showOrder
+        viewModel.showOrder
             .flatMap { [weak self] orderCollection -> Observable<Void> in
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showNewOrder(with: orderCollection)
@@ -52,7 +51,7 @@ class HomeCoordinator: BaseCoordinator<Void> {
             .subscribe()
             .disposed(by: disposeBag)
 
-        viewController.viewModel.transition
+        viewModel.transition
             .asObservable()
             .subscribe(onNext: { transition in
                 log.warning("We should transition to: \(transition)")

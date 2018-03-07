@@ -59,16 +59,16 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationList(with inventory: Inventory) {
         let viewController = InventoryLocationViewController.instance()
-        var avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
+        let avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
             dataManager: dependencies.dataManager,
             parentObject: inventory
         ))
-        viewController.bindViewModel(to: &avm)
+        let viewModel = viewController.attach(wrapper: avm)
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
         /// TODO: shouldn't this only take one and then complete?
-        viewController.viewModel.showLocation
+        viewModel.showLocation
             //.take(1)
             .subscribe(onNext: { [weak self] selection in
                 switch selection {
@@ -140,16 +140,17 @@ class ModalInventoryCoordinator: InventoryCoordinator {
 
     override func start() -> Observable<Void> {
         let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
-        var avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
+        let avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
             dataManager: dependencies.dataManager,
             parentObject: inventory
         ))
-        viewController.bindViewModel(to: &avm)
+        let viewModel = viewController.attach(wrapper: avm)
+
         navigationController.viewControllers = [viewController]
         rootViewController.present(navigationController, animated: true)
 
         // Selection
-        viewController.viewModel.showLocation
+        viewModel.showLocation
             //.take(1)
             .subscribe(onNext: { [weak self] selection in
                 switch selection {

@@ -60,7 +60,7 @@ class HomeViewController: UIViewController, AttachableType {
             selection: childViewController.tableView.rx.itemSelected.asDriver()
         )
     }
-    var viewModel: HomeViewModel!
+    var viewModel: Attachable<HomeViewModel>!
     let disposeBag = DisposeBag()
 
     // MARK: - Interface
@@ -111,7 +111,7 @@ class HomeViewController: UIViewController, AttachableType {
         add(childViewController, with: constraints)
     }
 
-    func bindViewModel() {
+    func bind(viewModel: HomeViewModel) -> HomeViewModel {
         viewModel.storeName
             .drive(self.rx.title)
             .disposed(by: disposeBag)
@@ -145,6 +145,8 @@ class HomeViewController: UIViewController, AttachableType {
         viewModel.pendingInvoiceCount
             .drive(childViewController.invoiceCell.detailTextLabel!.rx.text)
             .disposed(by: disposeBag)
+
+        return viewModel
     }
 
     private func mapAlert() -> Observable<NewOrderGenerationMethod> {
