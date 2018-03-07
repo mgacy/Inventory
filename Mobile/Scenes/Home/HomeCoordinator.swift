@@ -9,7 +9,7 @@
 import RxSwift
 
 class HomeCoordinator: BaseCoordinator<Void> {
-    typealias Dependencies = HasDataManager
+    typealias Dependencies = HasDataManager & HasUserManager
 
     private let navigationController: UINavigationController
     private let dependencies: Dependencies

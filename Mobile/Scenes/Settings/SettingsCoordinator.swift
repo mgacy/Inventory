@@ -9,7 +9,7 @@
 import RxSwift
 
 class SettingsCoordinator: BaseCoordinator<Void> {
-    typealias Dependencies = HasDataManager
+    typealias Dependencies = HasDataManager & HasUserManager
 
     private let rootViewController: UIViewController
     private let dependencies: Dependencies
