@@ -7,6 +7,7 @@
 //
 
 import Alamofire
+import RxSwift
 import KeychainAccess
 
 enum AuthenticationState {
@@ -21,6 +22,7 @@ class CurrentUserManager {
     // MARK: - Properties
 
     var authenticationState: AuthenticationState = .signedOut
+    let currentUser = BehaviorSubject<User?>(value: nil)
     var user: User?
 
     /// TODO: why are we holding on to the AuthenticationHandler instead of simply configuring and passing off to APIManager?
@@ -89,6 +91,7 @@ class CurrentUserManager {
 
         authenticationState = .signedIn
         user = User(id: 1, email: email)
+        currentUser.onNext(user)
 
         /// TODO: should we always login on init?
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
@@ -103,6 +106,7 @@ class CurrentUserManager {
         /// TODO: self.storeID = ?
         user = User(id: userID, email: email)
         authenticationState = .signedIn
+        self.currentUser.onNext(user)
 
         authHandler = AuthenticationHandler(keychain: keychain, email: email, password: password)
         APIManager.sharedInstance.configSession(authHandler!)
@@ -113,6 +117,7 @@ class CurrentUserManager {
         self.password = nil
         keychain["authToken"] = nil
         authenticationState = .signedOut
+        currentUser.onNext(nil)
         user = nil
         authHandler = nil
     }
@@ -152,6 +157,7 @@ class CurrentUserManager {
             self.storeID = defaultStoreID
             self.authenticationState = .signedIn
             self.user = User(id: userID, email: email)
+            self.currentUser.onNext(self.user)
 
             APIManager.sharedInstance.configSession(self.authHandler!)
             completion(nil)
