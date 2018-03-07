@@ -21,25 +21,13 @@ class AppCoordinator: BaseCoordinator<Void> {
         self.dependencies = AppDependency(container: container)
     }
 
-    // NOTE: this will return whatever `to.start()` returns
     override func start() -> Observable<Void> {
-        //log.debug("\(#function)")
+        coordinateToRoot(basedOn: dependencies.userManager.authenticationState)
+        return .never()
+    }
 
-        // Check if we already have user + credentials
-        if userManager.user != nil {
-            log.debug("Have User")
-            let tabBarCoordinator = TabBarCoordinator(window: window, dataManager: dataManager)
-            return coordinate(to: tabBarCoordinator)
-
-        } else {
-            log.debug("Missing User")
-            return showLogin()
-                .flatMap { [weak self] result -> Observable<Void> in
-                    //log.debug("\(#function) - result: \(result)")
-                    guard let strongSelf = self else { return .empty() }
-                    return strongSelf.showTabBar()
-                }
-        }
+    /*
+    override func start() -> Observable<Void> {
 
         /*
         let defaults = UserDefaults.standard
@@ -66,30 +54,42 @@ class AppCoordinator: BaseCoordinator<Void> {
             let dataManager = DataManager(container: container, userManager: userManager)
             //self.dataManager = dataManager
 
-            // Check if we already have user + credentials
-            if userManager.user != nil {
-                log.debug("Have User")
-                //let tabBarCoordinator = TabBarCoordinator(window: window, dataManager: dataManager)
-                //return coordinate(to: tabBarCoordinator)
-
-            } else {
-                log.debug("Missing User")
-                //let loginCoordinator = LoginCoordinator(window: window, dataManager: dataManager)
-                //return coordinate(to: loginCoordinator)
-            }
-
         }
         */
     }
-
-    private func showTabBar() -> Observable<Void> {
-        let tabBarCoordinator = TabBarCoordinator(window: self.window, dependencies: dependencies)
-        return coordinate(to: tabBarCoordinator)
+    */
+    /// Recursive method that will restart a child coordinator after completion.
+    /// Based on:
+    /// https://github.com/uptechteam/Coordinator-MVVM-Rx-Example/issues/3
+    private func coordinateToRoot(basedOn authState: AuthenticationState) {
+        switch authState {
+        case .signedIn:
+            return showSplitView()
+                .subscribe(onNext: { [weak self] authState in
+                    self?.window.rootViewController = nil
+                    self?.coordinateToRoot(basedOn: authState)
+                })
+                .disposed(by: disposeBag)
+        case .signedOut:
+            return showLogin()
+                .subscribe(onNext: { [weak self] authState in
+                    self?.window.rootViewController = nil
+                    self?.coordinateToRoot(basedOn: authState)
+                })
+                .disposed(by: disposeBag)
+        }
     }
 
-    private func showLogin() -> Observable<Void> {
+    private func showSplitView() -> Observable<AuthenticationState> {
+        let tabBarCoordinator = TabBarCoordinator(window: self.window, dependencies: dependencies)
+        return coordinate(to: tabBarCoordinator)
+            .map { [unowned self] _ in self.dependencies.userManager.authenticationState }
+    }
+
+    private func showLogin() -> Observable<AuthenticationState> {
         let loginCoordinator = InitialLoginCoordinator(window: window, dependencies: dependencies)
         return coordinate(to: loginCoordinator)
+            .map { [unowned self] _ in self.dependencies.userManager.authenticationState }
     }
 
     /*

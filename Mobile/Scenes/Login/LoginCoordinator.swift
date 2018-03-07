@@ -57,7 +57,14 @@ enum CoordinatorMode {
     case modal(UIViewController)
 }
 */
-class LoginCoordinator: BaseCoordinator<Void> {
+
+enum LoginCoordinationResult {
+    //case signup
+    case login
+    case cancel
+}
+
+class LoginCoordinator: BaseCoordinator<LoginCoordinationResult> {
     typealias Dependencies = HasDataManager
 
     private let window: UIWindow?
@@ -92,9 +99,12 @@ class LoginCoordinator: BaseCoordinator<Void> {
                     return self.showSignup(on: viewController)
                 }
                 .filter { $0 != SignupCoordinationResult.cancel }
-                .map { _ in return }
+                .map { _ in return LoginCoordinationResult.login }
 
-            return Observable.merge(viewController.didLogin, signedUp)
+            let loggedIn = viewController.didLogin
+                .map { _ in return LoginCoordinationResult.login }
+
+            return Observable.merge(loggedIn, signedUp)
                 .take(1)
 
         } else {
@@ -104,7 +114,13 @@ class LoginCoordinator: BaseCoordinator<Void> {
                 fatalError("\(#function) FAILED : unable to get expected root view controller")
             }
 
-            let cancelled = viewController.cancelButtonItem.rx.tap.asObservable()
+            let cancelled = viewController.cancelButtonItem.rx.tap
+                .asObservable()
+                .map { _ in return LoginCoordinationResult.cancel }
+
+            let loggedIn = viewController.didLogin
+                .map { _ in return LoginCoordinationResult.login }
+
             /*
             let signedUp = viewController.signupButton.rx.tap
                 .flatMap { _ -> Observable<SignupCoordinationResult> in
@@ -117,7 +133,7 @@ class LoginCoordinator: BaseCoordinator<Void> {
             let navigationController = UINavigationController(rootViewController: viewController)
             rootViewController.present(navigationController, animated: true)
 
-            return Observable.merge(viewController.didLogin, cancelled)
+            return Observable.merge(loggedIn, cancelled)
                 .take(1)
                 .do(onNext: { _ in rootViewController.dismiss(animated: true) })
         }

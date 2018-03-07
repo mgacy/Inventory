@@ -26,14 +26,6 @@ class HomeCoordinator: BaseCoordinator<Void> {
 
         navigationController.viewControllers = [viewController]
 
-        viewController.settingsButtonItem.rx.tap
-            .flatMap { [weak self] _ -> Observable<Void> in
-                guard let strongSelf = self else { return .empty() }
-                return strongSelf.showSettings(on: viewController)
-            }
-            .subscribe()
-            .disposed(by: disposeBag)
-
         // Navigation
         viewModel.showInventory
             .flatMap { [weak self] inventory -> Observable<Void> in
@@ -58,12 +50,18 @@ class HomeCoordinator: BaseCoordinator<Void> {
             })
             .disposed(by: disposeBag)
 
-        return Observable.never()
+        return viewController.settingsButtonItem.rx.tap
+            .flatMap { [weak self] _ -> Observable<SettingsCoordinationResult> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showSettings(on: viewController)
+            }
+            .filter { $0 != .none }
+            .map { _ in return }
     }
 
     // MARK: - Sections
 
-    private func showSettings(on rootViewController: UIViewController) -> Observable<Void> {
+    private func showSettings(on rootViewController: UIViewController) -> Observable<SettingsCoordinationResult> {
         let settingsCoordinator = SettingsCoordinator(rootViewController: rootViewController,
                                                       dependencies: dependencies)
         return coordinate(to: settingsCoordinator)

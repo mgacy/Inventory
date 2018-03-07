@@ -184,20 +184,22 @@ class CurrentUserManager {
 
     /// TODO: public func confirm(withToken token: String) {}
 
-    public func logout(completion: @escaping (Bool) -> Void) {
+    public func logout() -> Observable<Bool> {
         /// TODO: removeUser first, regardless of response.result?
-        APIManager.sharedInstance.logout(completion: {(success: Bool) -> Void in
-            switch success {
-            case true:
-                APIManager.sharedInstance.configSession(nil)
-                self.removeUser()
-                completion(true)
-            case false:
-                APIManager.sharedInstance.configSession(nil)
-                self.removeUser()
-                completion(false)
-            }
-        })
+        return APIManager.sharedInstance.logout()
+            .do(onNext: { result in
+                //self.authenticationState = .signedOut
+                //self?.storageManager.clear()
+                //self.currentUser.onNext(nil)
+                switch result {
+                case true:
+                    APIManager.sharedInstance.configSession(nil)
+                    self.removeUser()
+                case false:
+                    APIManager.sharedInstance.configSession(nil)
+                    self.removeUser()
+                }
+            })
     }
 
 }

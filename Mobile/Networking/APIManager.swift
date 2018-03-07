@@ -76,21 +76,26 @@ class APIManager {
 // MARK: - Authentication
 extension APIManager {
 
-    //func logout() -> Observable<DataResonse> {}
-
-    func logout(completion: @escaping (Bool) -> Void) {
-        sessionManager.request(Router.logout)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success:
-                    log.verbose("\(#function) - response: \(response)")
-                    completion(true)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(false)
-                }
+    func logout() -> Observable<Bool> {
+        return Observable<Bool>.create { [unowned self] observer in
+            let request = self.sessionManager.request(Router.logout)
+            request
+                .validate()
+                .responseJSON { response in
+                    switch response.result {
+                    case .success:
+                        log.verbose("\(#function) - response: \(response)")
+                        observer.onNext(true)
+                    case .failure(let error):
+                        log.warning("\(#function) FAILED : \(error)")
+                        observer.onNext(false)
+                    }
+                    observer.onCompleted()
             }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
     }
 
 }
