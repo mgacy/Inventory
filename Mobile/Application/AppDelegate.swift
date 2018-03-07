@@ -41,20 +41,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 defaults.set(true, forKey: "isPreloaded")
             }
 
-            /// TODO: Should we use a failable initializier with CurrentUserManager?
-            //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
-
-            /// TODO: initialize a SessionManager here and pass to different components
-            let userManager = CurrentUserManager()
-            let dataManager = DataManager(container: container, userManager: userManager)
-
             // View Stuff
             self.window = UIWindow(frame: UIScreen.main.bounds)
             HUD.dimsBackground = false
             HUD.allowsInteraction = false
 
-            self.appCoordinator = AppCoordinator(window: self.window!, userManager: userManager,
-                                                 dataManager: dataManager)
+            self.appCoordinator = AppCoordinator(window: self.window!, container: container)
             self.appCoordinator.start()
                 .subscribe()
                 //.subscribe(onNext: { result in

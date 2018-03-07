@@ -9,33 +9,25 @@
 import RxSwift
 
 class HomeCoordinator: BaseCoordinator<Void> {
+    typealias Dependencies = HasDataManager & HasUserManager
 
     private let navigationController: UINavigationController
-    private let dataManager: DataManager
+    private let dependencies: Dependencies
 
-    init(navigationController: UINavigationController, dataManager: DataManager) {
+    init(navigationController: UINavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<Void> {
-        var viewController = HomeViewController.instance()
+        let viewController = HomeViewController.instance()
+        let avm: Attachable<HomeViewModel> = .detached(dependencies)
+        let viewModel = viewController.attach(wrapper: avm)
 
-        var avm: Attachable<HomeViewModel> = .detached(HomeViewModel.Dependency(dataManager: dataManager))
-        //let viewModel = viewController.bindViewModel(to: &avm)
-        viewController.bindViewModel(to: &avm)
         navigationController.viewControllers = [viewController]
 
-        viewController.settingsButtonItem.rx.tap
-            .flatMap { [weak self] _ -> Observable<Void> in
-                guard let strongSelf = self else { return .empty() }
-                return strongSelf.showSettings(on: viewController)
-            }
-            .subscribe()
-            .disposed(by: disposeBag)
-
         // Navigation
-        viewController.viewModel.showInventory
+        viewModel.showInventory
             .flatMap { [weak self] inventory -> Observable<Void> in
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showNewInventory(with: inventory)
@@ -43,7 +35,7 @@ class HomeCoordinator: BaseCoordinator<Void> {
             .subscribe()
             .disposed(by: disposeBag)
 
-        viewController.viewModel.showOrder
+        viewModel.showOrder
             .flatMap { [weak self] orderCollection -> Observable<Void> in
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showNewOrder(with: orderCollection)
@@ -51,32 +43,39 @@ class HomeCoordinator: BaseCoordinator<Void> {
             .subscribe()
             .disposed(by: disposeBag)
 
-        viewController.viewModel.transition
+        viewModel.transition
             .asObservable()
             .subscribe(onNext: { transition in
                 log.warning("We should transition to: \(transition)")
             })
             .disposed(by: disposeBag)
 
-        return Observable.never()
+        return viewController.settingsButtonItem.rx.tap
+            .flatMap { [weak self] _ -> Observable<SettingsCoordinationResult> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showSettings(on: viewController)
+            }
+            .filter { $0 != .none }
+            .map { _ in return }
     }
 
     // MARK: - Sections
 
-    private func showSettings(on rootViewController: UIViewController) -> Observable<Void> {
-        let settingsCoordinator = SettingsCoordinator(rootViewController: rootViewController, dataManager: dataManager)
+    private func showSettings(on rootViewController: UIViewController) -> Observable<SettingsCoordinationResult> {
+        let settingsCoordinator = SettingsCoordinator(rootViewController: rootViewController,
+                                                      dependencies: dependencies)
         return coordinate(to: settingsCoordinator)
     }
 
     public func showNewInventory(with inventory: Inventory) -> Observable<Void> {
         let newInventoryCoordinator = ModalInventoryCoordinator(rootViewController: navigationController,
-                                                                dataManager: dataManager, inventory: inventory)
+                                                                dependencies: dependencies, inventory: inventory)
         return coordinate(to: newInventoryCoordinator)
     }
 
     private func showNewOrder(with collection: OrderCollection) -> Observable<Void> {
         let newOrderCoordinator = ModalOrderCoordinator(rootViewController: navigationController,
-                                                        dataManager: dataManager, collection: collection)
+                                                        dependencies: dependencies, collection: collection)
         return coordinate(to: newOrderCoordinator)
     }
 

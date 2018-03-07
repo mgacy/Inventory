@@ -23,7 +23,7 @@ class InventoryLocationViewController: UIViewController, AttachableType {
             uploadTaps: uploadButtonItem.rx.tap.asObservable()
         )
     }
-    var viewModel: InventoryLocationViewModel!
+    var viewModel: Attachable<InventoryLocationViewModel>!
     let selectedIndices: Observable<IndexPath>
     let dismissView: Observable<Void>
 
@@ -110,17 +110,9 @@ class InventoryLocationViewController: UIViewController, AttachableType {
         // MessageLabel
     }
 
-    // Compiler fails to recognize this function as added by protocol extension
-    func bindViewModel(to model: inout Attachable<InventoryLocationViewModel>) {
-        loadViewIfNeeded()
-        viewModel = model.bind(bindings)
-        bindViewModel()
-        //return viewModel
-    }
-
-    func bindViewModel() {
+    func bind(viewModel: InventoryLocationViewModel) -> InventoryLocationViewModel {
         // We have to wait until after we set .viewModel since we use viewModel.frc
-        setupTableView()
+        setupTableView(with: viewModel)
 
         // Uploading
         viewModel.isUploading
@@ -145,12 +137,14 @@ class InventoryLocationViewController: UIViewController, AttachableType {
                 }
             })
             .disposed(by: disposeBag)
+
+        return viewModel
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocationViewController>!
 
-    fileprivate func setupTableView() {
+    fileprivate func setupTableView(with viewModel: InventoryLocationViewModel) {
         //tableView.refreshControl = refreshControl
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension

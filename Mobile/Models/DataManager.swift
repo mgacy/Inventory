@@ -571,23 +571,12 @@ extension DataManager {
     public func logout() -> Observable<Bool> {
         /// TODO: check for pending Inventory / Invoice / Order; throw error and use `.materialize()`
         /// TODO: return if already logged out
-        //return Observable.create { observer in
-        self.userManager.logout { success in
-            log.debug("logout result: \(success)")
-            switch success {
-            case true:
-                log.verbose("Logout: Success")
-            case false:
-                log.verbose("Logout: Failure")
+        return self.userManager.logout()
+            //.filter { $0 }
+            .flatMap { result -> Observable<Bool> in
+                log.verbose("Deleting data ...")
+                return self.deleteData(in: self.viewContext)
             }
-            //let deletionResult = self.deleteData(in: self.viewContext)
-        }
-        // NOTE: this currently starts deleting data before we have received a response from server
-        log.verbose("Deleting data ...")
-        return deleteData(in: self.viewContext)
-
-        //return Disposables.create()
-        //}
     }
 
     public func signUp(firstName: String, lastName: String, email: String, password: String) -> Observable<Event<Bool>> {

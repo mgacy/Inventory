@@ -186,12 +186,14 @@ extension RemoteUnit: RemoteRecord {
 struct RemoteUser: Codable {
     let remoteID: Int
     let username: String
+    let email: String
     let defaultStore: RemoteStore
     let stores: [RemoteStore]
 
     private enum CodingKeys: String, CodingKey {
         case remoteID = "id"
         case username
+        case email
         case defaultStore = "default_store"
         case stores
     }

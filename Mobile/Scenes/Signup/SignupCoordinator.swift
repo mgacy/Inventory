@@ -8,37 +8,43 @@
 
 import RxSwift
 
+/// Type defining possible coordination results of the `SignupCoordinator`.
+///
+/// - signUp: Signup completed successfully.
+/// - cancel: Cancel button was tapped.
 enum SignupCoordinationResult {
-    case signedUp
+    case signUp
     case cancel
 }
 
 class SignupCoordinator: BaseCoordinator<SignupCoordinationResult> {
+    typealias Dependencies = HasDataManager
 
     private let rootViewController: UIViewController
-    private let dataManager: DataManager
+    private let dependencies: Dependencies
 
-    init(rootViewController: UIViewController, dataManager: DataManager) {
+    init(rootViewController: UIViewController, dependencies: Dependencies) {
         self.rootViewController = rootViewController
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<CoordinationResult> {
         let viewController = SignUpViewController.instance()
         let navigationController = UINavigationController(rootViewController: viewController)
 
-        let viewModel = SignUpViewModel(dataManager: dataManager)
+        let viewModel = SignUpViewModel(dataManager: dependencies.dataManager)
         viewController.viewModel = viewModel
 
         let cancel = viewController.cancelButton.rx.tap
             .map { _ in CoordinationResult.cancel }
 
-        let signedUp = viewController.didSignup.asObservable()
-            .map { _ in CoordinationResult.signedUp }
+        let signUp = viewController.didSignup
+            .asObservable()
+            .map { _ in CoordinationResult.signUp }
 
         rootViewController.present(navigationController, animated: true)
 
-        return Observable.merge(cancel, signedUp)
+        return Observable.merge(cancel, signUp)
             .take(1)
             .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
     }

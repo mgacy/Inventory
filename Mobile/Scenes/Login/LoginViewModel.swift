@@ -20,7 +20,7 @@ final class LoginViewModel: ViewModelType {
     }
 
     struct Output {
-        let currentUser: Observable<User?>
+        let currentUser: Observable<RemoteUser?>
         let isValid: Observable<Bool>
         let loggingIn: Driver<Bool>
         let loginResults: Observable<Event<Bool>>
@@ -62,7 +62,7 @@ final class LoginViewModel: ViewModelType {
             .share(replay: 1)
 
         return Output(
-            currentUser: Observable.just(dataManager.userManager.user),
+            currentUser: dataManager.userManager.currentUser,
             isValid: isValid,
             loggingIn: loggingIn.asDriver(),
             loginResults: loginResults

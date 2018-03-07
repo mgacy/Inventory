@@ -9,18 +9,19 @@
 import RxSwift
 
 class InventoryCoordinator: BaseCoordinator<Void> {
+    typealias Dependencies = HasDataManager
 
     fileprivate let navigationController: UINavigationController
-    fileprivate let dataManager: DataManager
+    fileprivate let dependencies: Dependencies
 
-    init(navigationController: UINavigationController, dataManager: DataManager) {
+    init(navigationController: UINavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<Void> {
         let viewController = InventoryDateViewController.instance()
-        let viewModel = InventoryDateViewModel(dataManager: dataManager,
+        let viewModel = InventoryDateViewModel(dataManager: dependencies.dataManager,
                                                rowTaps: viewController.selectedObjects.asObservable())
         //let viewModel = InventoryDateViewModel2(dataManager: dataManager)
 
@@ -48,7 +49,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showReviewList(with inventory: Inventory) {
         let viewController = InventoryReviewViewController.instance()
-        let viewModel = InventoryReviewViewModel(dataManager: dataManager, parentObject: inventory,
+        let viewModel = InventoryReviewViewModel(dataManager: dependencies.dataManager, parentObject: inventory,
                                                  rowTaps: viewController.selectedObjects)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
@@ -58,16 +59,16 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationList(with inventory: Inventory) {
         let viewController = InventoryLocationViewController.instance()
-        var avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
-            dataManager: dataManager,
+        let avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
+            dataManager: dependencies.dataManager,
             parentObject: inventory
         ))
-        viewController.bindViewModel(to: &avm)
+        let viewModel = viewController.attach(wrapper: avm)
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
         /// TODO: shouldn't this only take one and then complete?
-        viewController.viewModel.showLocation
+        viewModel.showLocation
             //.take(1)
             .subscribe(onNext: { [weak self] selection in
                 switch selection {
@@ -89,7 +90,8 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showCategoryList(with location: InventoryLocation) {
         let viewController = InventoryLocCatViewController.instance()
-        viewController.viewModel = InventoryLocCatViewModel(dataManager: dataManager, parentObject: location)
+        viewController.viewModel = InventoryLocCatViewModel(dataManager: dependencies.dataManager,
+                                                            parentObject: location)
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
@@ -102,7 +104,8 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationItemList(with parent: LocationItemListParent) {
         let viewController = InventoryLocItemViewController.instance()
-        viewController.viewModel = InventoryLocItemViewModel(dataManager: dataManager, parentObject: parent)
+        viewController.viewModel = InventoryLocItemViewModel(dataManager: dependencies.dataManager,
+                                                             parentObject: parent)
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
@@ -115,7 +118,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
         let viewController = InventoryKeypadViewController.instance()
-        let viewModel = InventoryKeypadViewModel(dataManager: dataManager, for: parent, atIndex: index)
+        let viewModel = InventoryKeypadViewModel(dataManager: dependencies.dataManager, for: parent, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
     }
@@ -129,24 +132,25 @@ class ModalInventoryCoordinator: InventoryCoordinator {
     private let rootViewController: UIViewController
     private let inventory: Inventory
 
-    init(rootViewController: UIViewController, dataManager: DataManager, inventory: Inventory) {
+    init(rootViewController: UIViewController, dependencies: Dependencies, inventory: Inventory) {
         self.rootViewController = rootViewController
         self.inventory = inventory
-        super.init(navigationController: NavigationController(), dataManager: dataManager)
+        super.init(navigationController: UINavigationController(), dependencies: dependencies)
     }
 
     override func start() -> Observable<Void> {
         let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
-        var avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
-            dataManager: dataManager,
+        let avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
+            dataManager: dependencies.dataManager,
             parentObject: inventory
         ))
-        viewController.bindViewModel(to: &avm)
+        let viewModel = viewController.attach(wrapper: avm)
+
         navigationController.viewControllers = [viewController]
         rootViewController.present(navigationController, animated: true)
 
         // Selection
-        viewController.viewModel.showLocation
+        viewModel.showLocation
             //.take(1)
             .subscribe(onNext: { [weak self] selection in
                 switch selection {
@@ -165,6 +169,13 @@ class ModalInventoryCoordinator: InventoryCoordinator {
             )
             .take(1)
             .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
+    }
+
+    override func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
+        let viewController = InventoryKeypadViewController.instance()
+        let viewModel = InventoryKeypadViewModel(dataManager: dependencies.dataManager, for: parent, atIndex: index)
+        viewController.viewModel = viewModel
+        navigationController.pushViewController(viewController, animated: true)
     }
 
 }

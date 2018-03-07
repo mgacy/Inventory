@@ -9,18 +9,19 @@
 import RxSwift
 
 class InvoiceCoordinator: BaseCoordinator<Void> {
+    typealias Dependencies = HasDataManager
 
     private let navigationController: UINavigationController
-    private let dataManager: DataManager
+    private let dependencies: Dependencies
 
-    init(navigationController: UINavigationController, dataManager: DataManager) {
+    init(navigationController: UINavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
-        self.dataManager = dataManager
+        self.dependencies = dependencies
     }
 
     override func start() -> Observable<Void> {
         let viewController = InvoiceDateViewController.instance()
-        let viewModel = InvoiceDateViewModel(dataManager: dataManager,
+        let viewModel = InvoiceDateViewModel(dataManager: dependencies.dataManager,
                                              rowTaps: viewController.selectedObjects.asObservable())
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
@@ -40,7 +41,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
 
     private func showVendorList(collection: InvoiceCollection) {
         let viewController = InvoiceVendorViewController.initFromStoryboard(name: "InvoiceVendorViewController")
-        let viewModel = InvoiceVendorViewModel(dataManager: dataManager, parentObject: collection)
+        let viewModel = InvoiceVendorViewModel(dataManager: dependencies.dataManager, parentObject: collection)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
@@ -54,7 +55,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
 
     private func showItemList(invoice: Invoice) {
         let viewController = InvoiceItemViewController.initFromStoryboard(name: "InvoiceItemViewController")
-        let viewModel = InvoiceItemViewModel(dataManager: dataManager, parentObject: invoice,
+        let viewModel = InvoiceItemViewModel(dataManager: dependencies.dataManager, parentObject: invoice,
                                              uploadTaps: viewController.uploadButtonItem.rx.tap.asObservable())
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
@@ -71,7 +72,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
 
     private func showKeypad(invoice: Invoice, atIndex index: Int) {
         let viewController = InvoiceKeypadViewController.instance()
-        let viewModel = InvoiceKeypadViewModel(dataManager: dataManager, for: invoice, atIndex: index)
+        let viewModel = InvoiceKeypadViewModel(dataManager: dependencies.dataManager, for: invoice, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
     }

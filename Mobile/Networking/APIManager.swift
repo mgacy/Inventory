@@ -49,34 +49,14 @@ class APIManager {
         //decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
 
+    // MARK: Public
+
     func configSession(_ authHandler: AuthenticationHandler?) {
         sessionManager.adapter = authHandler
         sessionManager.retrier = authHandler
     }
 
-    // MARK: - Authentication
-
-    //func logout() -> Observable<DataResonse> {}
-
-    func logout(completion: @escaping (Bool) -> Void) {
-        sessionManager.request(Router.logout)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success:
-                    log.verbose("\(#function) - response: \(response)")
-                    completion(true)
-                case .failure(let error):
-                    log.warning("\(#function) FAILED : \(error)")
-                    completion(false)
-                }
-        }
-    }
-
-    // MARK: Private
-    /// TODO: pass `sessionManager: SessionManager, decoder: JSONDecoder`?
-
-    private func requestOne<M: Codable>(_ endpoint: Router) -> Observable<DataResponse<M>> {
+    func request<M: Codable>(_ endpoint: URLRequestConvertible) -> Observable<DataResponse<M>> {
         return Observable<DataResponse<M>>.create { [unowned self] observer in
             let request = self.sessionManager.request(endpoint)
             request
@@ -91,13 +71,25 @@ class APIManager {
         }
     }
 
-    private func requestList<M: Codable>(_ route: Router) -> Observable<DataResponse<[M]>> {
-        return Observable<DataResponse<[M]>>.create { [unowned self] observer in
-            let request = self.sessionManager.request(route)
+}
+
+// MARK: - Authentication
+extension APIManager {
+
+    func logout() -> Observable<Bool> {
+        return Observable<Bool>.create { [unowned self] observer in
+            let request = self.sessionManager.request(Router.logout)
             request
                 .validate()
-                .responseDecodableObject(queue: self.queue, decoder: self.decoder) { (response: DataResponse<[M]>) in
-                    observer.onNext(response)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success:
+                        log.verbose("\(#function) - response: \(response)")
+                        observer.onNext(true)
+                    case .failure(let error):
+                        log.warning("\(#function) FAILED : \(error)")
+                        observer.onNext(false)
+                    }
                     observer.onCompleted()
             }
             return Disposables.create {
@@ -112,20 +104,20 @@ class APIManager {
 extension APIManager {
 
     func getItems(storeID: Int) -> Observable<DataResponse<[RemoteItem]>> {
-        return requestList(Router.getItems(storeID: storeID))
+        return request(Router.getItems(storeID: storeID))
     }
     /*
     func getItemCategories(storeID: Int) -> Observable<DataResponse<[RemoteItemCategory]>> {
-        return requestList(Router.getItemCategories(storeID: storeID))
+        return request(Router.getItemCategories(storeID: storeID))
     }
      */
 
     func getLocations(storeID: Int) -> Observable<DataResponse<[RemoteLocation]>> {
-        return requestList(Router.getLocations(storeID: storeID))
+        return request(Router.getLocations(storeID: storeID))
     }
 
     func getVendors(storeID: Int) -> Observable<DataResponse<[RemoteVendor]>> {
-        return requestList(Router.getVendors(storeID: storeID))
+        return request(Router.getVendors(storeID: storeID))
     }
 
 }
@@ -134,27 +126,27 @@ extension APIManager {
 extension APIManager {
 
     func getInventories(storeID: Int) -> Observable<DataResponse<[RemoteInventory]>> {
-        return requestList(Router.getInventories(storeID: storeID))
+        return request(Router.getInventories(storeID: storeID))
     }
 
     func getInventory(remoteID: Int) -> Observable<DataResponse<RemoteExistingInventory>> {
         /// TODO: just accept `Inventory` so DataManager doesn't need to know anything about endpoint params?
-        return requestOne(Router.getInventory(remoteID: remoteID))
+        return request(Router.getInventory(remoteID: remoteID))
     }
 
     /// NOTE: I am designing this in accordance with how things should work, not how they currently do
     func postInventory(storeID: Int) -> Observable<DataResponse<RemoteNewInventory>> {
         /// TODO: update to actually use POST
-        //return requestOne(Router.postInventory)
+        //return request(Router.postInventory)
         let isActive = true
         let typeID = 1
-        return requestOne(Router.getNewInventory(isActive: isActive, typeID: typeID, storeID: storeID))
+        return request(Router.getNewInventory(isActive: isActive, typeID: typeID, storeID: storeID))
     }
 
     /// NOTE: I am designing this in accordance with how things should work, not how they currently do
     func putInventory(_ inventory: [String: Any]) -> Observable<DataResponse<RemoteExistingInventory>> {
         //let serializedInventory = inventory.serialize()
-        return requestOne(Router.postInventory(inventory))
+        return request(Router.postInventory(inventory))
     }
 
 }
@@ -163,23 +155,23 @@ extension APIManager {
 extension APIManager {
 
     func getInvoiceCollections(storeID: Int) -> Observable<DataResponse<[RemoteInvoiceCollection]>> {
-        return requestList(Router.getInvoiceCollections(storeID: storeID))
+        return request(Router.getInvoiceCollections(storeID: storeID))
     }
 
     func getInvoiceCollection(storeID: Int, invoiceDate: String) -> Observable<DataResponse<RemoteInvoiceCollection>> {
-        return requestOne(Router.getInvoiceCollection(storeID: storeID, forDate: invoiceDate))
+        return request(Router.getInvoiceCollection(storeID: storeID, forDate: invoiceDate))
     }
 
     func putInvoice(remoteID: Int, invoice: [String: Any]) -> Observable<DataResponse<RemoteInvoice>> {
-        return requestOne(Router.putInvoice(remoteID: remoteID, parameters: invoice))
+        return request(Router.putInvoice(remoteID: remoteID, parameters: invoice))
     }
     /*
     func postInvoice(_ invoice: [String: Any]) -> Observable<DataResponse<RemoteInvoice>> {
-        return requestOne(Router.postInvoice(invoice))
+        return request(Router.postInvoice(invoice))
     }
 
     func putInvoiceItem(remoteID: Int, invoiceItem: [String:Any]) -> Observable<DataResponse<RemoteInvoiceItem>> {
-        return requestOne(Router.putInvoiceItem(remoteID: remoteID, parameters: invoiceItem))
+        return request(Router.putInvoiceItem(remoteID: remoteID, parameters: invoiceItem))
     }
     */
 }
@@ -188,22 +180,22 @@ extension APIManager {
 extension APIManager {
 
     func getOrderCollections(storeID: Int) -> Observable<DataResponse<[RemoteOrderCollection]>> {
-        return requestList(Router.getOrderCollections(storeID: storeID))
+        return request(Router.getOrderCollections(storeID: storeID))
     }
 
     func getOrderCollection(storeID: Int, orderDate: String) -> Observable<DataResponse<RemoteOrderCollection>> {
-        return requestOne(Router.getOrderCollection(storeID: storeID, forDate: orderDate))
+        return request(Router.getOrderCollection(storeID: storeID, forDate: orderDate))
     }
 
     func postOrderCollection(storeID: Int, generationMethod: NewOrderGenerationMethod, returnUsage: Bool, periodLength: Int?) -> Observable<DataResponse<RemoteOrderCollection>> {
-        return requestOne(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
+        return request(Router.postOrderCollection(storeID: storeID, generationMethod: generationMethod,
                                                      returnUsage: returnUsage, periodLength: periodLength))
     }
 
     /// NOTE: I am designing this in accordance with how things should work, not how they currently do
     /// TODO: should remoteID be a separate argument?
     func putOrder(_ order: [String: Any]) -> Observable<DataResponse<RemoteOrder>> {
-        return requestOne(Router.postOrder(order))
+        return request(Router.postOrder(order))
     }
 
 }

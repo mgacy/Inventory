@@ -8,80 +8,43 @@
 
 import UIKit
 
-// MARK: - Protocols
-
-protocol DetailViewControllerType where Self: UIViewController {}
-
-// MARK: - Supporting
-
-enum DetailView<T: UIViewController> {
-    case visible(T)
-    case empty
-}
-
-// MARK: - Class
-
-class NavigationController: UINavigationController {
-
-    var detailView: DetailView<UIViewController> = .empty
+class NavigationController: UINavigationController, PrimaryContainerType {
+    /// TODO: should this be weak var?
+    let detailPopCompletion: (UIViewController & PlaceholderViewControllerType) -> Void
+    var detailView: DetailView = .placeholder
 
     // MARK: - Lifecycle
+
+    init(withPopDetailCompletion completion: @escaping (UIViewController & PlaceholderViewControllerType) -> Void) {
+        self.detailPopCompletion = completion
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar.isTranslucent = false
-        navigationBar.barTintColor = ColorPalette.hintOfRed
     }
 
-    // MARK: - A
-    /*
-    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        log.debug("\(#function) : \(String(describing: viewController.self))")
-        super.pushViewController(viewController, animated: animated)
-    }
-    */
     override func popViewController(animated: Bool) -> UIViewController? {
-        //log.debug("\(#function) : \(String(describing: topViewController.self))")
-        if case .visible(let detailViewController) = detailView {
-            if topViewController === detailViewController {
-                //log.debug("\(#function) : POPPED DETAIL")
-                detailView = .empty
-            } else {
-                // Set detail view controller to empty to prevent confusion
-                if
-                    let splitViewController = splitViewController,
-                    splitViewController.viewControllers.count > 1,
-                    let detailViewController = splitViewController.viewControllers.last as? UINavigationController
-                {
-                    let emptyDetailViewController = EmptyDetailViewController()
-                    detailViewController.setViewControllers([emptyDetailViewController], animated: false)
-                    detailView = .empty
-                }
-            }
+        switch detailView {
+        case .collapsed:
+            detailView = .placeholder
+        case .separated:
+            detailView = .placeholder
+            // Set detail view controller to `PlaceholderViewControllerType` to prevent confusion
+            detailPopCompletion(makePlaceholderViewController())
+        case .placeholder:
+            break
         }
         return super.popViewController(animated: animated)
     }
 
-    // MARK: - B
-
-    func separate() {
-        //log.debug("\(#function)")
-        switch detailView {
-        case .visible:
-            viewControllers = Array(viewControllers.dropLast())
-        case .empty:
-            return
-        }
-    }
-
-    func collapse() {
-        //log.debug("\(#function)")
-        switch detailView {
-        case .visible(let detailViewController):
-            viewControllers += [detailViewController]
-        case .empty:
-            return
-        }
+    func makePlaceholderViewController() -> UIViewController & PlaceholderViewControllerType {
+        return PlaceholderViewController()
     }
 
 }

@@ -52,6 +52,8 @@ public struct ColorPalette {
 
     // MARK: - Additions
     public static let hintOfRed = UIColor(red: 0.98, green: 0.98, blue: 0.98, alpha: 1.00)  // NavigationBar
+    public static let starDust = UIColor(red: 0.63, green: 0.63, blue: 0.63, alpha: 1.00)
+    public static let athensGray = UIColor(red: 0.94, green: 0.94, blue: 0.96, alpha: 1.00)
 
     private init() {}
 }

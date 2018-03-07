@@ -14,9 +14,7 @@ import RxSwiftExt
 
 final class HomeViewModel: AttachableViewModelType {
 
-    struct Dependency {
-        let dataManager: DataManager
-    }
+    typealias Dependency = HasDataManager
 
     struct Bindings {
         let addInventoryTaps: Observable<Void>
