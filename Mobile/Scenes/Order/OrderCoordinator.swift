@@ -253,7 +253,7 @@ class ModalOrderCoordinator: OrderCoordinator {
         navigationController.viewControllers = [containerController]
         rootViewController.present(navigationController, animated: true)
 
-        // Selction - Vendor
+        // Selection - Vendor
         vendorsViewModel.showNext
             .subscribe(onNext: { [weak self] segue in
                 switch segue {

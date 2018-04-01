@@ -118,7 +118,8 @@ class MGStepper: UIControl {
         let x = 64.0
         let y = 8.0
         let length = 8.0
-        let rectanglePath = UIBezierPath(roundedRect: CGRect(x: x, y: y, width: length, height: length), cornerRadius: 1)
+        let rectanglePath = UIBezierPath(roundedRect: CGRect(x: x, y: y, width: length, height: length),
+                                         cornerRadius: 1)
 
         // Stroke
         rectanglePath.lineWidth = 1
@@ -288,7 +289,7 @@ extension MGStepper {
 // MARK: Animations
 extension MGStepper {
 
-    func animateLimitHitForButton(button: UIButton){
+    func animateLimitHitForButton(button: UIButton) {
         UIView.animate(withDuration: limitHitAnimationDuration) {
             button.backgroundColor = self.limitHitAnimationColor
         }
@@ -307,7 +308,8 @@ extension MGStepper {
     }
 
     func scheduleTimer() {
-        timer = Timer.scheduledTimer(timeInterval: timerInterval, target: self, selector: #selector(MGStepper.handleTimerFire), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: timerInterval, target: self,
+                                     selector: #selector(MGStepper.handleTimerFire), userInfo: nil, repeats: true)
     }
 
     func resetTimer() {
@@ -503,8 +505,6 @@ extension ItemState: Equatable {
     }
 
 }
-
-
 
 // MARK: - View
 /*
