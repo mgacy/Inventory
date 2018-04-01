@@ -114,6 +114,7 @@
 		C98A4FB51DCB0329002BB076 /* Vendor+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */; };
 		C98A64F61FCB47A4008F02F9 /* AttachableViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A64F51FCB47A4008F02F9 /* AttachableViewModelType.swift */; };
 		C98A90881F97E97400644548 /* InventoryKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A90871F97E97400644548 /* InventoryKeypadViewModel.swift */; };
+		C98B25FC2071860C00F1D157 /* ChevronButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98B25FB2071860C00F1D157 /* ChevronButton.swift */; };
 		C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */; };
 		C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */; };
 		C99568CA1FBB809C00AE6949 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99568C91FBB809C00AE6949 /* ViewModelType.swift */; };
@@ -308,6 +309,7 @@
 		C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Vendor+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A64F51FCB47A4008F02F9 /* AttachableViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachableViewModelType.swift; sourceTree = "<group>"; };
 		C98A90871F97E97400644548 /* InventoryKeypadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryKeypadViewModel.swift; sourceTree = "<group>"; };
+		C98B25FB2071860C00F1D157 /* ChevronButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChevronButton.swift; sourceTree = "<group>"; };
 		C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadViewModel.swift; sourceTree = "<group>"; };
 		C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+MyStuff.swift"; sourceTree = "<group>"; };
 		C99568C91FBB809C00AE6949 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
@@ -743,6 +745,7 @@
 			isa = PBXGroup;
 			children = (
 				C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */,
+				C98B25FB2071860C00F1D157 /* ChevronButton.swift */,
 				C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */,
 				C91C92851EFCDD9000566CEB /* RoundButton.swift */,
 				C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */,
@@ -1440,6 +1443,7 @@
 				C98A64F61FCB47A4008F02F9 /* AttachableViewModelType.swift in Sources */,
 				C9F3564B1FA04536007ED98C /* OrderLocationViewController.swift in Sources */,
 				C9CC04DF1F84C13C00180120 /* RemoteInvoice.swift in Sources */,
+				C98B25FC2071860C00F1D157 /* ChevronButton.swift in Sources */,
 				C93203EC1FC6AA3000ACFC1D /* SettingsCoordinator.swift in Sources */,
 				C998A81C204DD2BE00600F5A /* DetailNavigationController.swift in Sources */,
 				C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */,
