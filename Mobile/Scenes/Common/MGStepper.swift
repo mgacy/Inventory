@@ -394,27 +394,23 @@ extension ItemState {
         case (_, .stabilize):
             return state.mutateOne { $0.stepperState = .stable }
 
+        // Change StepperState
         // A1
         case (.stable, .increment(let stepSize)):
-            /// TODO: verify not at maximum?
             return ItemState.reduce(state: state.mutateOne { $0.stepperState = .shouldIncrement(stepSize) },
                                     command: .increment(stepSize))
         case (.stable, .decrement(let stepSize)):
-            /// TODO: verify not at minimum?
             return ItemState.reduce(state: state.mutateOne { $0.stepperState = .shouldDecrement(stepSize) },
                                     command: .decrement(stepSize))
         // A2
         case (.shouldDecrement, .increment(let stepSize)):
-            /// TODO: verify not at maximum?
             return ItemState.reduce(state: state.mutateOne { $0.stepperState = .shouldIncrement(stepSize) },
                                     command: .increment(stepSize))
-
         case (.shouldIncrement, .decrement(let stepSize)):
-            /// TODO: verify not at minimum?
             return ItemState.reduce(state: state.mutateOne { $0.stepperState = .shouldDecrement(stepSize) },
                                     command: .decrement(stepSize))
 
-        // B
+        // Command: Increment / Decrement
         case (.shouldIncrement, .increment(let stepSize)):
             switch state.currentUnit {
             case .singleUnit:
@@ -451,7 +447,7 @@ extension ItemState {
                 return state.mutateOne { $0.value -= stepSize }
             }
 
-        // C
+        // Command: Switch Unit
         case (.shouldIncrement, .switchToPackUnit):
             /// TODO: verify .currentUnit == .singleUnit?
             return state.mutate {
