@@ -340,12 +340,12 @@ extension StepperState: Equatable {
         switch (lhs, rhs) {
         case (.stable, .stable):
             return true
-        case (let .shouldIncrement(stepSize1), let .shouldIncrement(stepSize2)):
-            return stepSize1 == stepSize2
+        case (let .shouldIncrement(lhsStepSize), let .shouldIncrement(rhsStepSize)):
+            return lhsStepSize == rhsStepSize
         case (.maximum, .maximum):
             return true
-        case (let .shouldDecrement(stepSize1), let .shouldDecrement(stepSize2)):
-            return stepSize1 == stepSize2
+        case (let .shouldDecrement(lhsStepSize), let .shouldDecrement(rhsStepSize)):
+            return lhsStepSize == rhsStepSize
         case (.minimum, .minimum):
             return true
         default:
@@ -419,7 +419,7 @@ extension ItemState {
                 guard Double(state.value) > threshold * Double(state.packSize) else {
                     return state.mutateOne { $0.value += stepSize }
                 }
-                print("Changing to case")
+                print("Changing to case ...")
                 return ItemState.reduce(state: state, command: .switchToPackUnit)
 
             default:
@@ -437,7 +437,7 @@ extension ItemState {
                     return state.mutateOne { $0.value -= stepSize }
                 }
 
-                print("Changing to bottle")
+                print("Changing to bottle ...")
                 return ItemState.reduce(state: state, command: .switchToSingleUnit)
 
             default:
@@ -461,6 +461,8 @@ extension ItemState {
                 $0.value = $0.packSize - stepSize
                 $0.currentUnit = .singleUnit
             }
+
+        /// TODO: add support for (.stable, .switchToPackUnit) / (.stable, .switchToSingleUnit)?
 
         // E
         case (.minimum, .decrement):
