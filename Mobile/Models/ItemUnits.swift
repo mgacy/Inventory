@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Units
 
-/// TODO: use abbreviation as associated value?
+/// TODO: use Unit as associated value?
 enum CurrentUnit {
     case packUnit
     case singleUnit
@@ -44,6 +44,10 @@ struct ItemUnits {
         }
     }
 
+    /// TODO: add new method which returns Bool?
+
+    /// TODO: rename `switchUnit(to newUnitCase: CurrentUnit) -> Unit
+    /// TODO: should this throw?
     public mutating func switchUnit(_ newUnitCase: CurrentUnit) -> Unit? {
         guard newUnitCase != currentUnit else {
             log.debug("\(#function) FAILED : tried to switchUnit to currentUnit")
