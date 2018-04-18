@@ -85,6 +85,7 @@
 		C95E446E1FB2C26200820067 /* ItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */; };
 		C95F52F01F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */; };
 		C964D2131FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C964D2121FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard */; };
+		C96751C42086EDB100212278 /* ModalOrderKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96751C32086EDB100212278 /* ModalOrderKeypadViewController.swift */; };
 		C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */; };
 		C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */; };
 		C96870E61DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */; };
@@ -279,6 +280,7 @@
 		C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCellViewModel.swift; sourceTree = "<group>"; };
 		C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertControllerStyle+Adaptive.swift"; sourceTree = "<group>"; };
 		C964D2121FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InvoiceVendorViewController.storyboard; sourceTree = "<group>"; };
+		C96751C32086EDB100212278 /* ModalOrderKeypadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalOrderKeypadViewController.swift; sourceTree = "<group>"; };
 		C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InvoiceCollection+MyStuff.swift"; path = "Models/InvoiceCollection+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Invoice+MyStuff.swift"; path = "Models/Invoice+MyStuff.swift"; sourceTree = "<group>"; };
 		C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InvoiceItem+MyStuff.swift"; path = "Models/InvoiceItem+MyStuff.swift"; sourceTree = "<group>"; };
@@ -557,6 +559,7 @@
 				C9045C181FC4AD1000F55FB3 /* OrderCoordinator.swift */,
 				C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */,
 				C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */,
+				C96751C32086EDB100212278 /* ModalOrderKeypadViewController.swift */,
 				C97A712A1F8EC06B00F2F1CD /* Date List */,
 				C9208A2C1FAB89B200D7C830 /* Container */,
 				C97A712B1F8EC07900F2F1CD /* Vendor List */,
@@ -1431,6 +1434,7 @@
 				C92FB7EE20523794002AE490 /* Mutable.swift in Sources */,
 				C91E72982050CE4600D42B79 /* MGStepper.swift in Sources */,
 				C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */,
+				C96751C42086EDB100212278 /* ModalOrderKeypadViewController.swift in Sources */,
 				C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */,
 				C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */,
 				C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */,
