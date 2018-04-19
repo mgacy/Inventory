@@ -40,7 +40,7 @@ class ModalOrderKeypadCoordinator: BaseCoordinator<Void> {
         }
         splitViewController.present(modalViewController, animated: true)
 
-        let backgroundTap = modalViewController.gestureRecognizer.rx.event
+        let backgroundTap = modalViewController.tapGestureRecognizer.rx.event
             .mapToVoid()
 
         let dismissChevronTap = modalViewController.barView.dismissChevron.rx.tap

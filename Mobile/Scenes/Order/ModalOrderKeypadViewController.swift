@@ -18,8 +18,8 @@ protocol ModalKeypadPresenting: class {
 
 class ModalOrderKeypadViewController: UIViewController {
 
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
     let disposeBag = DisposeBag()
-    let gestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
     /*
     // ?
     lazy var dismissTaps: Observable<Void> = {
@@ -70,7 +70,7 @@ class ModalOrderKeypadViewController: UIViewController {
 
         view.addSubview(barView)
         view.addSubview(dimmerView)
-        dimmerView.addGestureRecognizer(gestureRecognizer)
+        dimmerView.addGestureRecognizer(tapGestureRecognizer)
         dimmerView.isUserInteractionEnabled = true
 
         embedViewController()
