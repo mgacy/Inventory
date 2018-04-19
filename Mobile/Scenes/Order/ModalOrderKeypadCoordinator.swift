@@ -31,10 +31,6 @@ class ModalOrderKeypadCoordinator: BaseCoordinator<Void> {
 
         /// TODO: use rootViewController dimensions to configure modalViewController constraints
         let modalViewController = ModalOrderKeypadViewController(keypadViewController: viewController)
-        modalViewController.modalPresentationStyle = .overFullScreen
-        //modalViewController.modalPresentationStyle = .overCurrentContext
-        //modalViewController.modalPresentationStyle = .pageSheet
-
         guard let splitViewController = rootViewController.splitViewController else {
             log.error("\(#function) : unable to get splitViewController"); return Observable.just(())
         }
@@ -42,7 +38,6 @@ class ModalOrderKeypadCoordinator: BaseCoordinator<Void> {
 
         let backgroundTap = modalViewController.tapGestureRecognizer.rx.event
             .mapToVoid()
-
         let dismissChevronTap = modalViewController.barView.dismissChevron.rx.tap
             .mapToVoid()
 

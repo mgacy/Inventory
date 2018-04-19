@@ -51,6 +51,7 @@ class ModalOrderKeypadViewController: UIViewController {
     init(keypadViewController: OrderKeypadViewController) {
         self.keypadViewController = keypadViewController
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .custom
     }
 
     required init?(coder aDecoder: NSCoder) {
