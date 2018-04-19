@@ -31,10 +31,7 @@ class ModalOrderKeypadCoordinator: BaseCoordinator<Void> {
 
         /// TODO: use rootViewController dimensions to configure modalViewController constraints
         let modalViewController = ModalOrderKeypadViewController(keypadViewController: viewController)
-        guard let splitViewController = rootViewController.splitViewController else {
-            log.error("\(#function) : unable to get splitViewController"); return Observable.just(())
-        }
-        splitViewController.present(modalViewController, animated: true)
+        rootViewController.present(modalViewController, animated: true)
 
         let backgroundTap = modalViewController.tapGestureRecognizer.rx.event
             .mapToVoid()
