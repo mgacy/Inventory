@@ -32,7 +32,8 @@ class ChevronButton: UIButton {
     }
 
     override func draw(_ rect: CGRect) {
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: frame.width, height: frame.height), false, 0.0) // false — not opaque; 0.0 — no scaling
+        // In init, false - not opaque; 0.0 — no scaling
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: frame.width, height: frame.height), false, 0.0)
         //let ctx = UIGraphicsGetCurrentContext() // iOS
 
         let path = UIBezierPath()
