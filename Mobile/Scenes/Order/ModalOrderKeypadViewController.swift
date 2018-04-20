@@ -17,7 +17,7 @@ protocol ModalKeypadPresenting: class {
     var frame: CGRect { get }
 }
 
-class ModalOrderKeypadViewController: UIViewController {
+final class ModalOrderKeypadViewController: UIViewController {
 
     let disposeBag = DisposeBag()
     // swiftlint:disable:next weak_delegate

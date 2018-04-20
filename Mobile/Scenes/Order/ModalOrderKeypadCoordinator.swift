@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-class ModalOrderKeypadCoordinator: BaseCoordinator<Void> {
+final class ModalOrderKeypadCoordinator: BaseCoordinator<Void> {
     typealias Dependencies = HasDataManager
 
     private let rootViewController: UIViewController
