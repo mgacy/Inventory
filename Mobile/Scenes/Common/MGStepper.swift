@@ -31,14 +31,14 @@ class MGStepper: UIControl {
 
     // MARK: - A
 
+    /// Output
     public var commandProp: StepperCommand {
         didSet {
-            //if oldValue != value {
             sendActions(for: .valueChanged)
-            //}
         }
     }
 
+    /// Input (kinda) / Bindable sink for x.
     var itemState: Binder<ItemState> {
         return Binder(self) { control, state in
             //print("UPDATE: \(state)")
@@ -50,8 +50,8 @@ class MGStepper: UIControl {
 
     let buttonTextColor: UIColor = .black
     let buttonBackgroundColor: UIColor = .gray
-    let leftButtonText: String = "-"
-    let rightButtonText: String = "+"
+    let decrementButtonText: String = "-"
+    let incrementButtonText: String = "+"
 
     let labelTextColor: UIColor = .black
     let labelBackgroundColor: UIColor = .white
@@ -62,24 +62,24 @@ class MGStepper: UIControl {
     let borderWidth: CGFloat = 0.0
     let borderColor: UIColor = .clear
 
-    lazy var leftButton: UIButton = {
+    lazy var decrementButton: UIButton = {
         let button = UIButton()
-        button.setTitle(self.leftButtonText, for: .normal)
+        button.setTitle(self.decrementButtonText, for: .normal)
         button.setTitleColor(self.buttonTextColor, for: .normal)
         button.backgroundColor = self.buttonBackgroundColor
-        button.addTarget(self, action: #selector(MGStepper.leftButtonTouchDown), for: .touchDown)
+        button.addTarget(self, action: #selector(MGStepper.decrementButtonTouchDown), for: .touchDown)
         button.addTarget(self, action: #selector(MGStepper.buttonTouchUp), for: .touchUpInside)
         button.addTarget(self, action: #selector(MGStepper.buttonTouchUp), for: .touchUpOutside)
         button.addTarget(self, action: #selector(MGStepper.buttonTouchUp), for: .touchCancel)
         return button
     }()
 
-    lazy var rightButton: UIButton = {
+    lazy var incrementButton: UIButton = {
         let button = UIButton()
-        button.setTitle(self.rightButtonText, for: .normal)
+        button.setTitle(self.incrementButtonText, for: .normal)
         button.setTitleColor(self.buttonTextColor, for: .normal)
         button.backgroundColor = self.buttonBackgroundColor
-        button.addTarget(self, action: #selector(MGStepper.rightButtonTouchDown), for: .touchDown)
+        button.addTarget(self, action: #selector(MGStepper.incrementButtonTouchDown), for: .touchDown)
         button.addTarget(self, action: #selector(MGStepper.buttonTouchUp), for: .touchUpInside)
         button.addTarget(self, action: #selector(MGStepper.buttonTouchUp), for: .touchUpOutside)
         button.addTarget(self, action: #selector(MGStepper.buttonTouchUp), for: .touchCancel)
@@ -188,9 +188,9 @@ class MGStepper: UIControl {
     // MARK: - D
 
     func setup() {
-        addSubview(leftButton)
-        addSubview(rightButton)
         addSubview(label)
+        addSubview(decrementButton)
+        addSubview(incrementButton)
 
         // B
         layer.addSublayer(singleUnit)
@@ -206,9 +206,9 @@ class MGStepper: UIControl {
         let buttonWidth = bounds.size.width * ((1 - labelWidthWeight) / 2)
         let labelWidth = bounds.size.width * labelWidthWeight
 
-        leftButton.frame = CGRect(x: 0, y: 0, width: buttonWidth, height: bounds.size.height)
+        decrementButton.frame = CGRect(x: 0, y: 0, width: buttonWidth, height: bounds.size.height)
         label.frame = CGRect(x: buttonWidth, y: 0, width: labelWidth, height: bounds.size.height)
-        rightButton.frame = CGRect(x: labelWidth + buttonWidth, y: 0, width: buttonWidth, height: bounds.size.height)
+        incrementButton.frame = CGRect(x: labelWidth + buttonWidth, y: 0, width: buttonWidth, height: bounds.size.height)
     }
 
     // MARK: - E
@@ -229,9 +229,9 @@ class MGStepper: UIControl {
         }
 
         if itemState.stepperState == .minimum {
-            animateLimitHitForButton(button: leftButton)
+            animateLimitHitForButton(button: decrementButton)
         } else if itemState.stepperState == .maximum {
-            animateLimitHitForButton(button: rightButton)
+            animateLimitHitForButton(button: incrementButton)
         }
 
     }
@@ -248,13 +248,12 @@ extension MGStepper {
     @objc func reset() {
         updateValue(command: .stabilize)
         resetTimer()
-        leftButton.isEnabled = true
-        rightButton.isEnabled = true
+        decrementButton.isEnabled = true
+        incrementButton.isEnabled = true
 
         UIView.animate(withDuration: self.limitHitAnimationDuration, animations: {
-            //self.label.center = self.labelOriginalCenter
-            self.rightButton.backgroundColor = self.buttonBackgroundColor
-            self.leftButton.backgroundColor = self.buttonBackgroundColor
+            self.decrementButton.backgroundColor = self.buttonBackgroundColor
+            self.incrementButton.backgroundColor = self.buttonBackgroundColor
         })
     }
 
@@ -263,8 +262,8 @@ extension MGStepper {
 // MARK: Button Events
 extension MGStepper {
 
-    @objc func leftButtonTouchDown(button: UIButton) {
-        rightButton.isEnabled = false
+    @objc func decrementButtonTouchDown(button: UIButton) {
+        incrementButton.isEnabled = false
         resetTimer()
         updateValue(command: .decrement(stepValue))
         if autorepeat {
@@ -272,8 +271,8 @@ extension MGStepper {
         }
     }
 
-    @objc func rightButtonTouchDown(button: UIButton) {
-        leftButton.isEnabled = false
+    @objc func incrementButtonTouchDown(button: UIButton) {
+        decrementButton.isEnabled = false
         resetTimer()
         updateValue(command: .increment(stepValue))
         if autorepeat {
@@ -325,8 +324,7 @@ extension MGStepper {
 
 // MARK: - A
 
-//let stepSize = 1
-
+/// TODO: rename `InternalStepperState`
 enum StepperState {
     case stable
     case shouldIncrement(Int)
@@ -366,6 +364,7 @@ enum StepperCommand {
     case switchToSingleUnit
 }
 
+/// TODO: rename `StepperState`
 struct ItemState {
     var stepperState: StepperState
     var value: Int
@@ -396,14 +395,14 @@ extension ItemState {
             return state.mutateOne { $0.stepperState = .stable }
 
         // Change StepperState
-        // A1
+        // Stable ->
         case (.stable, .increment(let stepSize)):
             return ItemState.reduce(state: state.mutateOne { $0.stepperState = .shouldIncrement(stepSize) },
                                     command: .increment(stepSize))
         case (.stable, .decrement(let stepSize)):
             return ItemState.reduce(state: state.mutateOne { $0.stepperState = .shouldDecrement(stepSize) },
                                     command: .decrement(stepSize))
-        // A2
+        // Increment / Decrement) ->
         case (.shouldDecrement, .increment(let stepSize)):
             return ItemState.reduce(state: state.mutateOne { $0.stepperState = .shouldIncrement(stepSize) },
                                     command: .increment(stepSize))
