@@ -6,6 +6,7 @@
 //  Copyright © 2018 Mathew Gacy. All rights reserved.
 //
 
+import UIKit
 import RxSwift
 import RxCocoa
 
@@ -18,8 +19,14 @@ protocol ModalKeypadPresenting: class {
 
 class ModalOrderKeypadViewController: UIViewController {
 
+    // swiftlint:disable:next weak_delegate
+    let customTransitionDelegate = SheetTransitioningDelegate()
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
     let disposeBag = DisposeBag()
+
+    // pan down transitions back to the presenting view controller
+    var interactionController: UIPercentDrivenInteractiveTransition?
+
     var dismissalEvents: Observable<Void> {
         return Observable.of(
             barView.dismissChevron.rx.tap.mapToVoid(),
@@ -50,6 +57,7 @@ class ModalOrderKeypadViewController: UIViewController {
         self.keypadViewController = keypadViewController
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
+        transitioningDelegate = customTransitionDelegate
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -72,6 +80,10 @@ class ModalOrderKeypadViewController: UIViewController {
         backgroundView.addGestureRecognizer(tapGestureRecognizer)
         backgroundView.isUserInteractionEnabled = true
 
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleGesture(_:)))
+        panGestureRecognizer.delegate = self
+        keypadViewController.view.addGestureRecognizer(panGestureRecognizer)
+
         embedViewController()
     }
 
@@ -84,13 +96,13 @@ class ModalOrderKeypadViewController: UIViewController {
         }
 
         let constraints = [
-            // Navbar
-            barView.topAnchor.constraint(equalTo: guide.topAnchor),
+            // barView
+            barView.topAnchor.constraint(equalTo: view.topAnchor),
             /// TODO: is this the best way to set the height?
             barView.heightAnchor.constraint(equalToConstant: 44),
             barView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.62),
             barView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            // Keypad
+            // keypad
             keypadViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.62),
             keypadViewController.view.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
             keypadViewController.view.topAnchor.constraint(equalTo: barView.bottomAnchor),
@@ -104,6 +116,53 @@ class ModalOrderKeypadViewController: UIViewController {
         add(keypadViewController, with: constraints)
     }
 
+    // MARK: - B
+
+    @objc func handleGesture(_ gesture: UIPanGestureRecognizer) {
+        let translate = gesture.translation(in: gesture.view)
+        let percent   = translate.y / gesture.view!.bounds.size.height
+
+        switch gesture.state {
+        case .began:
+            interactionController = UIPercentDrivenInteractiveTransition()
+            customTransitionDelegate.interactionController = interactionController
+            /// FIXME: emit event for coordinator
+            dismiss(animated: true)
+        case .changed:
+            interactionController?.update(percent)
+        case .ended:
+            let velocity = gesture.velocity(in: gesture.view)
+            interactionController?.completionSpeed = 0.999  // https://stackoverflow.com/a/42972283/1271826
+            if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
+                interactionController?.finish()
+            } else {
+                interactionController?.cancel()
+            }
+            interactionController = nil
+        default:
+            if translate != .zero {
+                let angle = atan2(translate.y, translate.x)
+                print(angle)
+            }
+        }
+    }
+
+}
+
+extension ModalOrderKeypadViewController: UIGestureRecognizerDelegate {
+
+    // Recognize downward gestures only
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let pan = gestureRecognizer as? UIPanGestureRecognizer {
+            let translation = pan.translation(in: pan.view)
+            let angle = atan2(translation.y, translation.x)
+            return abs(angle - .pi / 2.0) < (.pi / 8.0)
+            // ALT
+            //let angle = abs(atan2(translation.x, translation.y) - .pi / 2)
+            //return angle < .pi / 8.0
+        }
+        return false
+    }
 }
 
 // MARK: - Navigation Bar-Like SubView

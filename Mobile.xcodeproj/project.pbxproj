@@ -158,6 +158,7 @@
 		C9D59C601FE0FAE60050A4AB /* PlaceholderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5F1FE0FAE60050A4AB /* PlaceholderViewController.swift */; };
 		C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */; };
 		C9DE2CF12087CBCA0090109A /* ModalOrderKeypadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF02087CBCA0090109A /* ModalOrderKeypadCoordinator.swift */; };
+		C9DE2CF3208969D00090109A /* SheetTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */; };
 		C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DEC1051F805CF6004602EB /* DateFacade.swift */; };
 		C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */; };
 		C9DF81D61FEA158500C86A75 /* InvoiceDateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81D51FEA158500C86A75 /* InvoiceDateViewController.storyboard */; };
@@ -355,6 +356,7 @@
 		C9D59C5F1FE0FAE60050A4AB /* PlaceholderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderViewController.swift; sourceTree = "<group>"; };
 		C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+MyStuff.swift"; sourceTree = "<group>"; };
 		C9DE2CF02087CBCA0090109A /* ModalOrderKeypadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalOrderKeypadCoordinator.swift; sourceTree = "<group>"; };
+		C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetTransitioningDelegate.swift; sourceTree = "<group>"; };
 		C9DEC1051F805CF6004602EB /* DateFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFacade.swift; sourceTree = "<group>"; };
 		C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Managed.swift"; sourceTree = "<group>"; };
 		C9DF81D51FEA158500C86A75 /* InvoiceDateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InvoiceDateViewController.storyboard; sourceTree = "<group>"; };
@@ -563,6 +565,7 @@
 				C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */,
 				C9DE2CF02087CBCA0090109A /* ModalOrderKeypadCoordinator.swift */,
 				C96751C32086EDB100212278 /* ModalOrderKeypadViewController.swift */,
+				C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */,
 				C97A712A1F8EC06B00F2F1CD /* Date List */,
 				C9208A2C1FAB89B200D7C830 /* Container */,
 				C97A712B1F8EC07900F2F1CD /* Vendor List */,
@@ -1472,6 +1475,7 @@
 				C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */,
 				C9045C1B1FC4D1F200F55FB3 /* HomeCoordinator.swift in Sources */,
 				C98A4FB31DCB0233002BB076 /* Unit+MyStuff.swift in Sources */,
+				C9DE2CF3208969D00090109A /* SheetTransitioningDelegate.swift in Sources */,
 				C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
