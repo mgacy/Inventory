@@ -94,42 +94,11 @@ class MGStepper: UIControl {
         return label
     }()
 
-    lazy var singleUnit: CAShapeLayer = {
-        let layer = CAShapeLayer()
-
-        let x = 60.0
-        let y = 12.0
-        let length = 8.0
-        let rectanglePath = UIBezierPath(roundedRect: CGRect(x: x, y: y, width: length, height: length),
-                                         cornerRadius: 1)
-
-        // Stroke
-        rectanglePath.lineWidth = 1
-        rectanglePath.lineJoinStyle = .round
-
-        layer.path = rectanglePath.cgPath
-        layer.fillColor = UIColor.white.cgColor
-        layer.strokeColor = UIColor.black.cgColor
-        return layer
-    }()
-
-    lazy var packUnit: CAShapeLayer = {
-        let layer = CAShapeLayer()
-
-        let x = 64.0
-        let y = 8.0
-        let length = 8.0
-        let rectanglePath = UIBezierPath(roundedRect: CGRect(x: x, y: y, width: length, height: length),
-                                         cornerRadius: 1)
-
-        // Stroke
-        rectanglePath.lineWidth = 1
-        rectanglePath.lineJoinStyle = .round
-
-        layer.path = rectanglePath.cgPath
-        layer.fillColor = UIColor.white.cgColor
-        layer.strokeColor = UIColor.black.cgColor
-        return layer
+    lazy var unitView: UnitView = {
+        let view = UnitView()
+        //view.backgroundColor = .red
+        //view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
     // MARK: - Animation
@@ -175,7 +144,7 @@ class MGStepper: UIControl {
 
     public init() {
         self.commandProp = .stabilize
-        super.init(frame: CGRect (x: 0, y: 0, width: 100, height: 30))
+        super.init(frame: CGRect (x: 0, y: 0, width: 120, height: 30))
         setup()
     }
 
@@ -189,26 +158,39 @@ class MGStepper: UIControl {
 
     func setup() {
         addSubview(label)
+        addSubview(unitView)
         addSubview(decrementButton)
         addSubview(incrementButton)
-
-        // B
-        layer.addSublayer(singleUnit)
-        layer.addSublayer(packUnit)
 
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
     }
 
     override func layoutSubviews() {
+        super.layoutSubviews()
+
+        // View
+        let stepperWidth = bounds.size.width
+        let stepperHeight = bounds.size.height
+        let centerX = stepperWidth / 2.0
+        let centerY = stepperHeight / 2.0
+
+        let labelWidth: CGFloat = 24.0
         let labelWidthWeight: CGFloat = 0.5
+        let buttonWidth = stepperWidth * ((1 - labelWidthWeight) / 2)
 
-        let buttonWidth = bounds.size.width * ((1 - labelWidthWeight) / 2)
-        let labelWidth = bounds.size.width * labelWidthWeight
+        // Label
+        let labelX: CGFloat = centerX - (labelWidth / 2.0)
+        label.frame = CGRect(x: labelX, y: 0, width: labelWidth, height: stepperHeight)
 
-        decrementButton.frame = CGRect(x: 0, y: 0, width: buttonWidth, height: bounds.size.height)
-        label.frame = CGRect(x: buttonWidth, y: 0, width: labelWidth, height: bounds.size.height)
-        incrementButton.frame = CGRect(x: labelWidth + buttonWidth, y: 0, width: buttonWidth, height: bounds.size.height)
+        // UnitView
+        let unitViewWidth: CGFloat = 18.0
+        let unitY = centerY - (unitViewWidth / 2)
+        unitView.frame = CGRect(x: labelX + labelWidth, y: unitY, width: unitViewWidth, height: unitViewWidth)
+
+        // Buttons
+        decrementButton.frame = CGRect(x: 0, y: 0, width: buttonWidth, height: stepperHeight)
+        incrementButton.frame = CGRect(x: stepperWidth - buttonWidth, y: 0, width: buttonWidth, height: stepperHeight)
     }
 
     // MARK: - E

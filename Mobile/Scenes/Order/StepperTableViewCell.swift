@@ -91,7 +91,7 @@ class StepperTableViewCell: UITableViewCell {
         packTextLabel.numberOfLines = 1
 
         // Stepper
-        stepper.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        stepper.widthAnchor.constraint(equalToConstant: 120).isActive = true
         stepper.heightAnchor.constraint(equalToConstant: 30).isActive = true
         stepper.topAnchor.constraint(equalTo: marginGuide.topAnchor).isActive = true
         stepper.trailingAnchor.constraint(equalTo: marginGuide.trailingAnchor).isActive = true
