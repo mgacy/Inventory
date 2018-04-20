@@ -23,12 +23,14 @@ class ModalOrderKeypadViewController: UIViewController {
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
     private let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
+    private let panGestureDissmissalEvent = PublishSubject<Void>()
 
     // pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
 
     var dismissalEvents: Observable<Void> {
         return Observable.of(
+            panGestureDissmissalEvent.asObservable(),
             barView.dismissChevron.rx.tap.mapToVoid(),
             tapGestureRecognizer.rx.event.mapToVoid()
         )
@@ -126,7 +128,6 @@ class ModalOrderKeypadViewController: UIViewController {
         case .began:
             interactionController = UIPercentDrivenInteractiveTransition()
             customTransitionDelegate.interactionController = interactionController
-            /// FIXME: emit event for coordinator
             dismiss(animated: true)
         case .changed:
             interactionController?.update(percent)
@@ -135,6 +136,8 @@ class ModalOrderKeypadViewController: UIViewController {
             interactionController?.completionSpeed = 0.999  // https://stackoverflow.com/a/42972283/1271826
             if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
                 interactionController?.finish()
+                /// ensure we return event from coordinator when dismissing view with pan gesture
+                panGestureDissmissalEvent.onNext(())
             } else {
                 interactionController?.cancel()
             }
