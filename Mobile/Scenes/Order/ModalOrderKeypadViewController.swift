@@ -35,10 +35,11 @@ class ModalOrderKeypadViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    private lazy var dimmerView: UIView = {
+    private lazy var backgroundView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        view.backgroundColor = UIColor.clear
+        view.isOpaque = false
         return view
     }()
 
@@ -67,9 +68,9 @@ class ModalOrderKeypadViewController: UIViewController {
         view.isOpaque = false
 
         view.addSubview(barView)
-        view.addSubview(dimmerView)
-        dimmerView.addGestureRecognizer(tapGestureRecognizer)
-        dimmerView.isUserInteractionEnabled = true
+        view.addSubview(backgroundView)
+        backgroundView.addGestureRecognizer(tapGestureRecognizer)
+        backgroundView.isUserInteractionEnabled = true
 
         embedViewController()
     }
@@ -94,11 +95,11 @@ class ModalOrderKeypadViewController: UIViewController {
             keypadViewController.view.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
             keypadViewController.view.topAnchor.constraint(equalTo: barView.bottomAnchor),
             keypadViewController.view.bottomAnchor.constraint(equalTo: guide.bottomAnchor),
-            // dimmerView
-            dimmerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-            dimmerView.trailingAnchor.constraint(equalTo: keypadViewController.view.leadingAnchor, constant: 0),
-            dimmerView.topAnchor.constraint(equalTo: guide.topAnchor),
-            dimmerView.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
+            // backgroundView
+            backgroundView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: keypadViewController.view.leadingAnchor, constant: 0),
+            backgroundView.topAnchor.constraint(equalTo: guide.topAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
         ]
         add(keypadViewController, with: constraints)
     }
