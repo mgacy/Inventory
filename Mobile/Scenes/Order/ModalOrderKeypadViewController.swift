@@ -20,20 +20,17 @@ class ModalOrderKeypadViewController: UIViewController {
 
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
     let disposeBag = DisposeBag()
-    /*
-    // ?
-    lazy var dismissTaps: Observable<Void> = {
-        //return barView.dismissChevron.rx.tap
+    var dismissalEvents: Observable<Void> {
         return Observable.of(
-            barView.dismissChevron.rx.tap,
-            gestureRecognizer.rx.event
+            barView.dismissChevron.rx.tap.mapToVoid(),
+            tapGestureRecognizer.rx.event.mapToVoid()
         )
             .merge()
-            .asDriver()
     }
-    */
+
+    // MARK: Subviews
     private var keypadViewController: OrderKeypadViewController!
-    lazy var barView: ModalOrderBarView = {
+    private lazy var barView: ModalOrderBarView = {
         let view = ModalOrderBarView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

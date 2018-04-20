@@ -33,12 +33,7 @@ class ModalOrderKeypadCoordinator: BaseCoordinator<Void> {
         let modalViewController = ModalOrderKeypadViewController(keypadViewController: viewController)
         rootViewController.present(modalViewController, animated: true)
 
-        let backgroundTap = modalViewController.tapGestureRecognizer.rx.event
-            .mapToVoid()
-        let dismissChevronTap = modalViewController.barView.dismissChevron.rx.tap
-            .mapToVoid()
-
-        return Observable.merge(dismissChevronTap, backgroundTap)
+        return modalViewController.dismissalEvents
             .take(1)
             .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
     }
