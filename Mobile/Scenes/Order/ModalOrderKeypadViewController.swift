@@ -19,10 +19,10 @@ protocol ModalKeypadPresenting: class {
 
 class ModalOrderKeypadViewController: UIViewController {
 
-    // swiftlint:disable:next weak_delegate
-    let customTransitionDelegate = SheetTransitioningDelegate()
-    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
     let disposeBag = DisposeBag()
+    // swiftlint:disable:next weak_delegate
+    private let customTransitionDelegate = SheetTransitioningDelegate()
+    private let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
 
     // pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
@@ -119,8 +119,8 @@ class ModalOrderKeypadViewController: UIViewController {
     // MARK: - B
 
     @objc func handleGesture(_ gesture: UIPanGestureRecognizer) {
-        let translate = gesture.translation(in: gesture.view)
-        let percent   = translate.y / gesture.view!.bounds.size.height
+        let translation = gesture.translation(in: gesture.view)
+        let percent = translation.y / gesture.view!.bounds.size.height
 
         switch gesture.state {
         case .began:
@@ -140,8 +140,8 @@ class ModalOrderKeypadViewController: UIViewController {
             }
             interactionController = nil
         default:
-            if translate != .zero {
-                let angle = atan2(translate.y, translate.x)
+            if translation != .zero {
+                let angle = atan2(translation.y, translation.x)
                 print(angle)
             }
         }
