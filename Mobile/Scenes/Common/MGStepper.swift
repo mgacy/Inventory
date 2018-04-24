@@ -19,9 +19,9 @@ extension Reactive where Base: MGStepper {
             self.base,
             getter: { customControl in
                 customControl.commandProp
-        }, setter: { customControl, value in
-            customControl.commandProp = value
-        }
+            }, setter: { customControl, value in
+                customControl.commandProp = value
+            }
         )
     }
 
@@ -215,7 +215,6 @@ class MGStepper: UIControl {
         } else if itemState.stepperState == .maximum {
             animateLimitHitForButton(button: incrementButton)
         }
-
     }
 
     deinit {
@@ -315,6 +314,23 @@ enum StepperState {
     case minimum
 }
 
+extension StepperState: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .stable:
+            return "<StepperState: STABLE)>"
+        case .shouldIncrement(let stepSize):
+            return "<StepperState: + \(stepSize)>"
+        case .maximum:
+            return "<StepperState: MAX)>"
+        case .shouldDecrement(let stepSize):
+            return "<StepperState: - \(stepSize)>"
+        case .minimum:
+            return "<StepperState: MIN)>"
+        }
+    }
+}
+
 extension StepperState: Equatable {
 
     static func == (lhs: StepperState, rhs: StepperState) -> Bool {
@@ -405,7 +421,7 @@ extension ItemState {
                 return ItemState.reduce(state: state, command: .switchToPackUnit)
 
             default:
-                guard state.value < maximiumValue else {
+                guard state.value < maximumValue else {
                     return state.mutateOne { $0.stepperState = .maximum }
                 }
                 return state.mutateOne { $0.value += stepSize }

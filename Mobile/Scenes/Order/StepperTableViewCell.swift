@@ -67,6 +67,7 @@ class StepperTableViewCell: UITableViewCell {
         // Pack
         contentView.addSubview(packTextLabel)
         packTextLabel.font = UIFont.systemFont(ofSize: 12)
+        packTextLabel.textColor = .lightGray
 
         // Stepper
         contentView.addSubview(stepper)
