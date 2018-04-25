@@ -56,12 +56,14 @@ class MGStepper: UIControl {
     // MARK: - Appearance
 
     let buttonTextColor: UIColor = .black
-    let buttonBackgroundColor: UIColor = .gray
+    let buttonBackgroundColor: UIColor = .clear
+    let buttonBorderColor: CGColor = UIColor.black.cgColor
+    let buttonBorderWidth: CGFloat = 1.0
     let decrementButtonText: String = "-"
     let incrementButtonText: String = "+"
 
     let labelTextColor: UIColor = .black
-    let labelBackgroundColor: UIColor = .white
+    let labelBackgroundColor: UIColor = .clear
     let labelWidthWeight: CGFloat = 0.5
 
     let cornerRadius: CGFloat = 4.0
@@ -74,6 +76,9 @@ class MGStepper: UIControl {
         button.setTitle(self.decrementButtonText, for: .normal)
         button.setTitleColor(self.buttonTextColor, for: .normal)
         button.backgroundColor = self.buttonBackgroundColor
+        button.layer.borderColor = buttonBorderColor
+        button.layer.borderWidth = buttonBorderWidth
+
         button.addTarget(self, action: #selector(MGStepper.decrementButtonTouchDown), for: .touchDown)
         button.addTarget(self, action: #selector(MGStepper.buttonTouchUp), for: .touchUpInside)
         button.addTarget(self, action: #selector(MGStepper.buttonTouchUp), for: .touchUpOutside)
@@ -86,6 +91,9 @@ class MGStepper: UIControl {
         button.setTitle(self.incrementButtonText, for: .normal)
         button.setTitleColor(self.buttonTextColor, for: .normal)
         button.backgroundColor = self.buttonBackgroundColor
+        button.layer.borderColor = buttonBorderColor
+        button.layer.borderWidth = buttonBorderWidth
+
         button.addTarget(self, action: #selector(MGStepper.incrementButtonTouchDown), for: .touchDown)
         button.addTarget(self, action: #selector(MGStepper.buttonTouchUp), for: .touchUpInside)
         button.addTarget(self, action: #selector(MGStepper.buttonTouchUp), for: .touchUpOutside)
