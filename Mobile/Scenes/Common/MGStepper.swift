@@ -41,7 +41,6 @@ class MGStepper: UIControl {
     /// Input (kinda) / Bindable sink for x.
     var itemState: Binder<ItemState> {
         return Binder(self) { control, state in
-            //print("UPDATE: \(state)")
             control.updateView(for: state)
         }
     }
@@ -96,7 +95,6 @@ class MGStepper: UIControl {
 
     lazy var unitView: UnitView = {
         let view = UnitView()
-        //view.backgroundColor = .red
         //view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -382,7 +380,7 @@ struct ItemState {
     // B
     private static let threshold: Double = 0.5
     private static let minimumValue: Int = 0
-    private static let maximiumValue: Int = 99
+    private static let maximumValue: Int = 99
 
     init(value: Int, packSize: Int, currentUnit: CurrentUnit) {
         self.value = value
@@ -405,7 +403,7 @@ struct ItemState {
 extension ItemState {
 
     static func reduce(state: ItemState, command: StepperCommand) -> ItemState {
-        //print("command: \(command) | state: \(state)")
+        //log.verbose("command: \(command) | state: \(state)")
         switch (state.stepperState, command) {
         case (_, .stabilize):
             return state.mutateOne { $0.stepperState = .stable }
@@ -442,6 +440,7 @@ extension ItemState {
                 return ItemState.reduce(state: state, command: .switchToPackUnit)
 
             default:
+                /// TODO: should we distinguish .packUnit from .invalidUnit?
                 guard state.value < maximumValue else {
                     return state.mutateOne { $0.stepperState = .maximum }
                 }
@@ -500,7 +499,7 @@ extension ItemState {
             return ItemState.reduce(state: state, command: .decrement(stepSize))
         */
         default:
-            print("Uncaptured command: \(command) - \(state.stepperState)")
+            log.error("Uncaptured command: \(command) - \(state.stepperState)")
             return state
         }
     }
