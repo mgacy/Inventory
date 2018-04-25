@@ -58,19 +58,6 @@ class UnitView: UIView {
 
     private func configure() {
         backgroundColor = UIColor.white
-
-        // layoutSubviews()
-        switch currentUnit {
-        case .singleUnit:
-            singleUnitLayer.path = (makePath >>> configurePath)(.single).cgPath
-            packUnitLayer.path = (makePath >>> configurePath)(.single).cgPath
-        case .packUnit:
-            singleUnitLayer.path = (makePath >>> configurePath)(.bottomPack).cgPath
-            packUnitLayer.path = (makePath >>> configurePath)(.topPack).cgPath
-        case .invalidUnit:
-            print("PROBLEM")
-            //packUnitLayer.path = (makePath >>> configurePath)(.packUnit).cgPath
-        }
         (configureLayer >>> layer.addSublayer)(singleUnitLayer)
         (configureLayer >>> layer.addSublayer)(packUnitLayer)
     }
@@ -91,18 +78,43 @@ class UnitView: UIView {
 
     // MARK: - A
 
-    func toggleUnit() {
+    func toggleUnit(animated: Bool = true) {
         switch currentUnit {
         case .singleUnit:
+            updateUnit(.packUnit)
+        case .packUnit:
+            updateUnit(.singleUnit)
+        case .invalidUnit:
+            updateUnit(.packUnit)
+        }
+    }
+
+    func updateUnit(_ newUnit: CurrentUnit, animated: Bool = true) {
+        if newUnit == currentUnit {
+            return
+        }
+        switch (currentUnit, newUnit) {
+        case (.singleUnit, .packUnit):
             print("Switching to pack ...")
             currentUnit = .packUnit
-            animatePackUnit()
-        case .packUnit:
+            if animated {
+                animatePackUnit()
+            } else {
+                packUnitLayer.path = (makePath >>> configurePath)(.topPack).cgPath
+                singleUnitLayer.path = (makePath >>> configurePath)(.bottomPack).cgPath
+            }
+        case (.packUnit, .singleUnit):
             print("Switching to single ...")
             currentUnit = .singleUnit
-            animateSingleUnit()
-        case .invalidUnit:
-            print("C")
+            if animated {
+                animateSingleUnit()
+            } else {
+                let endPath = (makePath >>> configurePath)(.single).cgPath
+                packUnitLayer.path = endPath
+                singleUnitLayer.path = endPath
+            }
+        default:
+            log.warning("Unable to handle transition: \(currentUnit) -> \(newUnit)")
         }
     }
 
