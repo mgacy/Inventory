@@ -57,7 +57,6 @@ class UnitView: UIView {
     // MARK: - View Methods
 
     private func configure() {
-        backgroundColor = UIColor.white
         (configureLayer >>> layer.addSublayer)(singleUnitLayer)
         (configureLayer >>> layer.addSublayer)(packUnitLayer)
     }
@@ -95,7 +94,6 @@ class UnitView: UIView {
         }
         switch (currentUnit, newUnit) {
         case (.singleUnit, .packUnit):
-            print("Switching to pack ...")
             currentUnit = .packUnit
             if animated {
                 animatePackUnit()
@@ -104,7 +102,6 @@ class UnitView: UIView {
                 singleUnitLayer.path = (makePath >>> configurePath)(.bottomPack).cgPath
             }
         case (.packUnit, .singleUnit):
-            print("Switching to single ...")
             currentUnit = .singleUnit
             if animated {
                 animateSingleUnit()
