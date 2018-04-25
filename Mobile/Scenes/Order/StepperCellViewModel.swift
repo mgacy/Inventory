@@ -79,24 +79,10 @@ final class StepperCellViewModel {
 
         self.packText = Driver.just(item.packDisplay)
 
-        let state0 = ItemState(value: Int(truncating: orderItem.quantity ?? 0.0),
-                               //packSize: Int(item.packSize ?? Int16(0)),
-                               packSize: Int(item.packSize),
-                               currentUnit: .packUnit)
-
-        self.state = bindings.commands.scan(state0, accumulator: ItemState.reduce)
+        let initialState = ItemState(item: orderItem)
+        self.state = bindings.commands.scan(initialState, accumulator: ItemState.reduce)
             //.distinctUntilChanged()
-            .filter { $0.stepperState != StepperState.stable }
-            .do(onNext: { state in
-                print("\n\(state)")
-                guard state.stepperState != .maximum, state.stepperState != .minimum else {
-                    return
-                }
-                //print("BEFORE: \(orderItem.quantity)")
-                orderItem.quantity = state.value as NSNumber
-                //print("AFTER: \(orderItem.quantity)")
-            })
-            .startWith(state0)
+            .startWith(initialState)
     }
 
     // MARK: -

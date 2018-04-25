@@ -45,6 +45,14 @@ class MGStepper: UIControl {
         }
     }
 
+    private var currentUnit: NewCurrentUnit = .invalidUnit {
+        didSet {
+            if currentUnit != oldValue {
+                unitView.updateUnit(currentUnit.converted())
+            }
+        }
+    }
+
     // MARK: - Appearance
 
     let buttonTextColor: UIColor = .black
@@ -198,18 +206,9 @@ class MGStepper: UIControl {
     }
 
     func updateView(for itemState: ItemState) {
-        label.text = String(itemState.value)
-        switch itemState.currentUnit {
-        case .singleUnit:
-            packUnit.isHidden = true
-        case .packUnit:
-            packUnit.isHidden = false
-        case .invalidUnit:
-            print("INVALID")
-        }
-
+        label.text = itemState.valueString
         switch itemState.stepperState {
-        case .initial(let stepperState):
+        case .initial:
             unitView.updateUnit(itemState.currentUnit.converted(), animated: false)
             /// TODO: disable increment / decrement button if .maximumValue / minimumValue
             return
@@ -220,6 +219,7 @@ class MGStepper: UIControl {
         default:
             break
         }
+        currentUnit = itemState.currentUnit
     }
 
     deinit {
@@ -372,21 +372,43 @@ enum StepperCommand {
 /// TODO: rename `StepperState`
 struct ItemState {
     var stepperState: StepperState
-    var value: Int
-    var currentUnit: CurrentUnit
-    //var units: ItemUnits
 
+    var valueString: String {
+        return String(describing: value)
+        //return item.quantity != nil ? String(describing: item.quantity!) : "?"
+    }
+
+    private var item: UnitToggleable
     private var packSize: Int
+    //private var packSize: Int {
+    //    return something.associatedItem.packSize
+    //}
+
+    var currentUnit: NewCurrentUnit {
+        return item.currentUnit
+    }
+
+    private var value: Int {
+        get {
+            //return Int(truncating: something.quantity)
+            return item.quantity != nil ? Int(truncating: item.quantity!) : 0
+        }
+        set {
+            item.quantity = newValue as NSNumber
+        }
+    }
+
     // B
     private static let threshold: Double = 0.5
     private static let minimumValue: Int = 0
     private static let maximumValue: Int = 99
 
-    init(value: Int, packSize: Int, currentUnit: CurrentUnit) {
-        self.value = value
-        self.packSize = packSize
-        self.currentUnit = currentUnit
+    init(item: UnitToggleable) {
+        self.item = item
+        self.packSize = Int(item.associatedItem.packSize)
+
         let initialState: StepperState
+        // https://stackoverflow.com/a/44474754/4472195
         switch Int(truncating: item.quantity ?? -1 as NSNumber) {
         case Int.min ... ItemState.minimumValue:
             initialState = .minimum
@@ -431,14 +453,17 @@ extension ItemState {
         case (.shouldIncrement, .increment(let stepSize)):
             switch state.currentUnit {
             case .singleUnit:
-                /// TODO: verify state.units.packUnit != nil,
-                /// TODO: is this use of guard really the best way to express our intent?
-                guard Double(state.value) > threshold * Double(state.packSize) else {
+                // See if we can change unit
+                if
+                    state.packSize > 1,
+                    Double(state.value) > threshold * Double(state.packSize),
+                    state.item.associatedItem.purchaseUnit != nil
+                {
+                    log.debug("Changing to case ...")
+                    return ItemState.reduce(state: state, command: .switchToPackUnit)
+                } else {
                     return state.mutateOne { $0.value += stepSize }
                 }
-                print("Changing to case ...")
-                return ItemState.reduce(state: state, command: .switchToPackUnit)
-
             default:
                 /// TODO: should we distinguish .packUnit from .invalidUnit?
                 guard state.value < maximumValue else {
@@ -449,15 +474,16 @@ extension ItemState {
         case (.shouldDecrement, .decrement(let stepSize)):
             switch state.currentUnit {
             case .packUnit:
-                /// TODO: verify state.units.singleUnit != nil,
-                /// TODO: is this use of guard really the best way to express our intent?
-                guard state.value == 1 else {
-                    return state.mutateOne { $0.value -= stepSize }
+                // Requirements to switchUnit
+                if state.value == 1, state.packSize > 1, state.item.associatedItem.purchaseSubUnit != nil {
+                    log.debug("Changing to bottle ...")
+                    return ItemState.reduce(state: state, command: .switchToSingleUnit)
                 }
 
-                print("Changing to bottle ...")
-                return ItemState.reduce(state: state, command: .switchToSingleUnit)
-
+                guard state.value > minimumValue else {
+                    return state.mutateOne { $0.stepperState = .minimum }
+                }
+                return state.mutateOne { $0.value -= stepSize }
             default:
                 guard state.value > minimumValue else {
                     return state.mutateOne { $0.stepperState = .minimum }
@@ -470,14 +496,15 @@ extension ItemState {
             /// TODO: verify .currentUnit == .singleUnit?
             return state.mutate {
                 $0.value = 1
-                $0.currentUnit = .packUnit
+                $0.item.switchToPackUnit()
             }
 
         case (.shouldDecrement(let stepSize), .switchToSingleUnit):
             /// TODO: verify .currentUnit == .packUnit?
+             /// TODO: include check that packSize > 0?
             return state.mutate {
                 $0.value = $0.packSize - stepSize
-                $0.currentUnit = .singleUnit
+                $0.item.switchToSingleUnit()
             }
 
         /// TODO: add support for (.stable, .switchToPackUnit) / (.stable, .switchToSingleUnit)?

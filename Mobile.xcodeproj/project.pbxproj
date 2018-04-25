@@ -74,6 +74,7 @@
 		C945DAC31FEA2EAD009D0EB0 /* LoginViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */; };
 		C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */; };
 		C949C20E1F160719008A5EC4 /* InvoiceItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */; };
+		C94AC872209005B400CBBCB2 /* UnitToggleable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94AC871209005B400CBBCB2 /* UnitToggleable.swift */; };
 		C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9564F311F840276007D84F6 /* RemoteInventory.swift */; };
 		C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */; };
 		C95DE42C1F9587580079B43B /* InventoryLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C95DE42B1F9587580079B43B /* InventoryLocationViewController.storyboard */; };
@@ -273,6 +274,7 @@
 		C945DAC41FEA37E5009D0EB0 /* Mobile 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 4.xcdatamodel"; sourceTree = "<group>"; };
 		C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = InvoiceKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemCellViewModel.swift; sourceTree = "<group>"; };
+		C94AC871209005B400CBBCB2 /* UnitToggleable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitToggleable.swift; sourceTree = "<group>"; };
 		C9564F311F840276007D84F6 /* RemoteInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInventory.swift; path = Models/RemoteInventory.swift; sourceTree = "<group>"; };
 		C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+MyStuff.swift"; sourceTree = "<group>"; };
 		C95DE42B1F9587580079B43B /* InventoryLocationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryLocationViewController.storyboard; sourceTree = "<group>"; };
@@ -491,6 +493,7 @@
 				C92FB7ED20523794002AE490 /* Mutable.swift */,
 				C9375065202D75390076B65E /* PrimaryContainerType.swift */,
 				C9EDFD2B1F842F2300C07CB8 /* StoryboardInitializable.swift */,
+				C94AC871209005B400CBBCB2 /* UnitToggleable.swift */,
 				C99568C91FBB809C00AE6949 /* ViewModelType.swift */,
 			);
 			path = Protocols;
@@ -1339,6 +1342,7 @@
 				C92EC6321F84C80300B47C23 /* RemoteOrder.swift in Sources */,
 				C95F52F01F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift in Sources */,
 				C92D75BF1DC7A7E500AA1A02 /* InvoiceItemViewController.swift in Sources */,
+				C94AC872209005B400CBBCB2 /* UnitToggleable.swift in Sources */,
 				C90459131F93E31400E517C7 /* InventoryReviewItemViewModel.swift in Sources */,
 				C9DE2CF12087CBCA0090109A /* ModalOrderKeypadCoordinator.swift in Sources */,
 				C98165021F915E7F006EC785 /* SubItemCellViewModelType.swift in Sources */,
