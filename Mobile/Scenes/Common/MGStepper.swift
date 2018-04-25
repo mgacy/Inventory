@@ -210,10 +210,17 @@ class MGStepper: UIControl {
             print("INVALID")
         }
 
-        if itemState.stepperState == .minimum {
+        switch itemState.stepperState {
+        case .initial(let stepperState):
+            unitView.updateUnit(itemState.currentUnit.converted(), animated: false)
+            /// TODO: disable increment / decrement button if .maximumValue / minimumValue
+            return
+        case .minimum:
             animateLimitHitForButton(button: decrementButton)
-        } else if itemState.stepperState == .maximum {
+        case .maximum:
             animateLimitHitForButton(button: incrementButton)
+        default:
+            break
         }
     }
 
@@ -307,6 +314,7 @@ extension MGStepper {
 
 /// TODO: rename `InternalStepperState`
 enum StepperState {
+    indirect case initial(StepperState)
     case stable
     case shouldIncrement(Int)
     case maximum
@@ -317,6 +325,8 @@ enum StepperState {
 extension StepperState: CustomStringConvertible {
     public var description: String {
         switch self {
+        case .initial(let initialState):
+            return "<StepperState: INITIAL: \(initialState)>"
         case .stable:
             return "<StepperState: STABLE)>"
         case .shouldIncrement(let stepSize):
@@ -353,7 +363,6 @@ extension StepperState: Equatable {
 }
 
 enum StepperCommand {
-    //case reset(Int, Int, CurrentUnit)  // quantity, packSize, currentUnit
     case increment(Int)
     case decrement(Int)
     //case repeated
@@ -376,10 +385,19 @@ struct ItemState {
     private static let maximiumValue: Int = 99
 
     init(value: Int, packSize: Int, currentUnit: CurrentUnit) {
-        self.stepperState = .stable
         self.value = value
         self.packSize = packSize
         self.currentUnit = currentUnit
+        let initialState: StepperState
+        switch Int(truncating: item.quantity ?? -1 as NSNumber) {
+        case Int.min ... ItemState.minimumValue:
+            initialState = .minimum
+        case ItemState.maximumValue ... Int.max:
+            initialState = .maximum
+        default:
+            initialState = .stable
+        }
+        self.stepperState = .initial(initialState)
     }
 
 }
@@ -393,6 +411,9 @@ extension ItemState {
             return state.mutateOne { $0.stepperState = .stable }
 
         // Change StepperState
+        // Initial ->
+        case (.initial(let initialState), _):
+            return ItemState.reduce(state: state.mutateOne { $0.stepperState = initialState }, command: command)
         // Stable ->
         case (.stable, .increment(let stepSize)):
             return ItemState.reduce(state: state.mutateOne { $0.stepperState = .shouldIncrement(stepSize) },
