@@ -98,7 +98,7 @@ final class HomeViewModel: AttachableViewModelType {
             fatalError("\(#function) FAILED : no storeID")
         }
         let predicate1 = NSPredicate(format: "storeID == \(currentStoreID)")
-        let predicate2 = NSPredicate(format: "uploaded == %@", NSNumber(value: true))
+        let predicate2 = NSPredicate(format: "uploaded == %@", NSNumber(value: false))
         let fetchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate1, predicate2])
         let sortDescriptors = [NSSortDescriptor(key: "dateTimeInterval", ascending: false)]
 
