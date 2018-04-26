@@ -162,3 +162,7 @@ extension Item {
     }
 
 }
+
+// MARK: - ItemProtocol
+
+extension Item: ItemProtocol {}

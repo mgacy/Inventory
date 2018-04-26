@@ -86,7 +86,12 @@ class OrderKeypadViewController: UIViewController {
         case true:
             updateDisplay()
         case false:
-            navigationController!.popViewController(animated: true)
+            /// TODO: emit event so coordinator can dismiss
+            if let navController = navigationController {
+                navController.popViewController(animated: true)
+            } else {
+                dismiss(animated: true)
+            }
         }
     }
 
@@ -95,7 +100,12 @@ class OrderKeypadViewController: UIViewController {
         case true:
             updateDisplay()
         case false:
-            navigationController!.popViewController(animated: true)
+            /// TODO: emit event so coordinator can dismiss
+            if let navController = navigationController {
+                navController.popViewController(animated: true)
+            } else {
+                dismiss(animated: true)
+            }
         }
     }
 

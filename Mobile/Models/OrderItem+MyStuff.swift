@@ -90,3 +90,22 @@ extension OrderItem {
     }
 
 }
+
+// MARK: - UnitToggleable
+
+extension OrderItem: UnitToggleable {
+
+    var associatedItem: ItemProtocol {
+        return item! as ItemProtocol
+    }
+
+    var unit: Unit? {
+        get {
+            return orderUnit
+        }
+        set {
+            orderUnit = newValue
+        }
+    }
+
+}

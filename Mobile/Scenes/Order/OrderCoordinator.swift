@@ -212,14 +212,39 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let viewController = OrderLocItemViewController.instance()
         let viewModel = OrderLocItemViewModel(dataManager: dependencies.dataManager, parent: parent, factory: factory)
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
+
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            navigationController.pushViewController(viewController, animated: true)
+        case .pad:
+            navigationController.showDetailViewController(viewController, sender: nil)
+        default:
+            fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
+        }
 
         // Navigation
         viewController.tableView.rx
             .itemSelected
             .subscribe(onNext: { [weak self] indexPath in
                 log.debug("We selected: \(indexPath)")
-                self?.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
+
+                switch UIDevice.current.userInterfaceIdiom {
+                case .phone:
+                    self?.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
+                case .pad:
+                    guard let strongSelf = self else { return }
+                    strongSelf.showKeypadForIpad(on: strongSelf.navigationController, with: viewModel.orderItems,
+                                            atIndex: indexPath.row)
+                        .subscribe()
+                        .disposed(by: viewController.disposeBag)
+                default:
+                    fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
+                }
+
+                // Deselect
+                if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
+                    viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -229,6 +254,13 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, with: orderItems, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
+     }
+
+    func showKeypadForIpad(on rootViewController: UIViewController, with orderItems: [OrderItem], atIndex index: Int) -> Observable<Void> {
+        let keypadCoordinator = ModalOrderKeypadCoordinator(rootViewController: rootViewController,
+                                                            dependencies: dependencies, orderItems: orderItems,
+                                                            atIndex: index)
+        return coordinate(to: keypadCoordinator)
     }
 
 }
@@ -253,7 +285,7 @@ class ModalOrderCoordinator: OrderCoordinator {
         navigationController.viewControllers = [containerController]
         rootViewController.present(navigationController, animated: true)
 
-        // Selction - Vendor
+        // Selection - Vendor
         vendorsViewModel.showNext
             .subscribe(onNext: { [weak self] segue in
                 switch segue {

@@ -39,7 +39,16 @@ class OrderLocItemViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        setupBindings()
+
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            setupBindings()
+        case .pad:
+            setupBindingsForIpad()
+        default:
+            fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
+        }
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -55,7 +64,16 @@ class OrderLocItemViewController: UIViewController {
         title = viewModel.navTitle
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
-        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        case .pad:
+            tableView.register(StepperTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        default:
+            fatalError("Device is neither phone nor pad")
+        }
+
         self.view.addSubview(tableView)
     }
 
@@ -76,6 +94,33 @@ class OrderLocItemViewController: UIViewController {
                     fatalError("\(#function) FAILED : unable to init view model for \(element)")
                 }
                 cell.configure(withViewModel: cellViewModel)
+            }
+            .disposed(by: disposeBag)
+
+        // Other Delegate Methods
+        tableView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
+    }
+
+    // MARK: iPad
+    private func setupBindingsForIpad() {
+
+        // Setup numberFormatter
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.roundingMode = .halfUp
+        numberFormatter.maximumFractionDigits = 2
+
+        // TableView
+        viewModel.items
+            // closure args are row (IndexPath), element, cell
+            // swiftlint:disable:next line_length
+            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier, cellType: StepperTableViewCell.self)) { (_, element, cell: StepperTableViewCell) in
+                guard let cellViewModel = StepperCellViewModel(forOrderItem: element, bindings: cell.bindings, numberFormatter: numberFormatter) else {
+                    fatalError("\(#function) FAILED : unable to init view model for \(element)")
+                }
+                cell.bind(to: cellViewModel)
             }
             .disposed(by: disposeBag)
 

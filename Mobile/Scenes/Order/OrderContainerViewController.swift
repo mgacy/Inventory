@@ -34,7 +34,7 @@ class OrderContainerViewController: UIViewController {
     let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneBarButton"), style: .done, target: nil, action: nil)
 
     private lazy var segmentedControl: UISegmentedControl = {
-        let items = ["Vendors", "Locations"]
+        let items = ["Locations", "Vendors"]
         let control = UISegmentedControl(items: items)
         control.addTarget(self, action: #selector(selectionDidChange(_:)), for: .valueChanged)
         control.selectedSegmentIndex = 0
@@ -77,15 +77,15 @@ class OrderContainerViewController: UIViewController {
 
     private func updateView() {
         if segmentedControl.selectedSegmentIndex == 0 {
-            remove(asChildViewController: locationsViewController)
-            add(asChildViewController: vendorsViewControlller)
-            title = Strings.vendorsNavTitle
-            completeButtonItem.isEnabled = true
-        } else {
             remove(asChildViewController: vendorsViewControlller)
             add(asChildViewController: locationsViewController)
             title = Strings.locationsNavTitle
             completeButtonItem.isEnabled = false
+        } else {
+            remove(asChildViewController: locationsViewController)
+            add(asChildViewController: vendorsViewControlller)
+            title = Strings.vendorsNavTitle
+            completeButtonItem.isEnabled = true
         }
     }
 
