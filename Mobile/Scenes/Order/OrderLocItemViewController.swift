@@ -105,12 +105,19 @@ class OrderLocItemViewController: UIViewController {
 
     // MARK: iPad
     private func setupBindingsForIpad() {
+
+        // Setup numberFormatter
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.roundingMode = .halfUp
+        numberFormatter.maximumFractionDigits = 2
+
         // TableView
         viewModel.items
             // closure args are row (IndexPath), element, cell
             // swiftlint:disable:next line_length
             .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier, cellType: StepperTableViewCell.self)) { (_, element, cell: StepperTableViewCell) in
-                guard let cellViewModel = StepperCellViewModel(forOrderItem: element, bindings: cell.bindings) else {
+                guard let cellViewModel = StepperCellViewModel(forOrderItem: element, bindings: cell.bindings, numberFormatter: numberFormatter) else {
                     fatalError("\(#function) FAILED : unable to init view model for \(element)")
                 }
                 cell.bind(to: cellViewModel)

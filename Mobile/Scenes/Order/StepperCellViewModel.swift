@@ -15,6 +15,7 @@ final class StepperCellViewModel {
     // MARK: - Properties
 
     // MARK: Private
+    private let numberFormatter: NumberFormatter
     private let orderItem: OrderItem
     private let item: Item
     private var status: ItemStatus {
@@ -33,8 +34,11 @@ final class StepperCellViewModel {
     let nameColor: Driver<UIColor>
     let nameText: Driver<String>
     let packText: Driver<String>
-    //let quantityColor: Driver<String>
-    //let quantityText: Driver<String>
+    //
+    let parText: String
+    let parUnit: CurrentUnit
+    let recommendedText: String
+    let recommendedUnit: CurrentUnit
     /*
     var nameText: String { return item.name ?? "Error" }
     var nameColor: UIColor { return self.status.associatedColor }
@@ -52,24 +56,11 @@ final class StepperCellViewModel {
         }
         return "\(quantity)"
     }
-
-    var unitColor: UIColor { return self.status.associatedColor }
-    var unitText: String {
-        switch status {
-        case .inactive:
-            return ""
-        case .normal:
-            return orderItem.orderUnit?.abbreviation ?? ""
-        case .pending:
-            return orderItem.orderUnit?.abbreviation ?? ""
-        case .warning:
-            return ""
-        }
-    }
     */
     // MARK: - Lifecycle
 
-    init?(forOrderItem orderItem: OrderItem, bindings: Bindings) {
+    init?(forOrderItem orderItem: OrderItem, bindings: Bindings, numberFormatter: NumberFormatter) {
+        self.numberFormatter = numberFormatter
         self.orderItem = orderItem
         guard let item = orderItem.item else { return nil }
         self.item = item
@@ -78,6 +69,12 @@ final class StepperCellViewModel {
         self.nameText = Driver.just(item.name ?? "Error")
 
         self.packText = Driver.just(item.packDisplay)
+
+        self.parText = numberFormatter.string(from: NSNumber(value: orderItem.par)) ?? "Error"
+        self.parUnit = CurrentUnit(for: item, from: orderItem.parUnit)
+
+        self.recommendedText = numberFormatter.string(from: NSNumber(value: orderItem.minOrder)) ?? "Error"
+        self.recommendedUnit = CurrentUnit(for: item, from: orderItem.minOrderUnit)
 
         let initialState = ItemState(item: orderItem)
         self.state = bindings.commands.scan(initialState, accumulator: ItemState.reduce)
@@ -93,7 +90,6 @@ final class StepperCellViewModel {
 
     struct Bindings {
         let commands: Driver<StepperCommand>
-        //let stepperState: Driver<ItemState>
     }
 
 }

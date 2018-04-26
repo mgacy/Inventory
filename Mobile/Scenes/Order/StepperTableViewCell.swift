@@ -10,26 +10,140 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-// MARK: - OrderItemCell
-
 class StepperTableViewCell: UITableViewCell {
 
     var bindings: StepperCellViewModel.Bindings {
         return StepperCellViewModel.Bindings(
             commands: stepper.rx.commandProp.asDriver(onErrorJustReturn: .stabilize)
-            //stepperState: stepper.rx.itemState.asDriver()
         )
     }
 
-    let nameTextLabel = UILabel()
-    let packTextLabel = UILabel()
-    let quantityTextLabel = UILabel()
-    let unitTextLabel = UILabel()
+    // MARK: - Interface
 
     let stepper: MGStepper = {
         let stepper = MGStepper()
         stepper.translatesAutoresizingMaskIntoConstraints = false
         return stepper
+    }()
+
+    lazy var nameTextLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textAlignment = .left
+        //label.font = UIFont.preferredFont(forTextStyle: .title2)
+        //label.font = UIFont.boldSystemFont(ofSize: 20.0)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    lazy var packTextLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.textAlignment = .left
+        label.font = UIFont.preferredFont(forTextStyle: .caption1)
+        //label.font = UIFont.systemFont(ofSize: UIFont.smallSystemFontSize)
+        //label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = .lightGray
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    // Par
+    lazy var parLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.font = UIFont.systemFont(ofSize: 10)
+        //label.font = UIFont.preferredFont(forTextStyle: .caption2)
+        label.textColor = .lightGray
+        label.text = "par"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    lazy var parTextLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    lazy var parUnitView: UnitView = {
+        let view = UnitView(currentUnit: .singleUnit)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    lazy var parQuantityStackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [parTextLabel, parUnitView])
+        view.axis = .horizontal
+        view.distribution = .fill
+        view.alignment = .center
+        view.spacing = 1
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var parStackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [parLabel, parQuantityStackView])
+        view.axis = .vertical
+        view.distribution = .fill
+        view.alignment = .leading
+        view.spacing = 1
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    // Recommended
+    lazy var recommendedLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.textColor = .lightGray
+        label.text = "suggested"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    lazy var recommendedTextLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    lazy var recommendedUnitView: UnitView = {
+        let view = UnitView(currentUnit: .singleUnit)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    lazy var recommendedQuantityStackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [recommendedTextLabel, recommendedUnitView])
+        view.axis = .horizontal
+        view.distribution = .fill
+        view.alignment = .center
+        view.spacing = 1
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var recommendedStackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [recommendedLabel, recommendedQuantityStackView])
+        view.axis = .vertical
+        view.distribution = .fill
+        view.alignment = .leading
+        view.spacing = 1
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    // Bottom Stack
+    lazy var bottomStackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [parStackView, recommendedStackView])
+        view.axis = .horizontal
+        view.distribution = .equalSpacing
+        view.alignment = .fill
+        view.spacing = 5
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
     private(set) var disposeBag = DisposeBag()
@@ -41,6 +155,7 @@ class StepperTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initViews()
         setupConstraints()
+        //colorSubViewBackgrounds()
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -54,52 +169,77 @@ class StepperTableViewCell: UITableViewCell {
 
     // MARK: - View Methods
 
-    func initViews() {
-        /// TESTING: backgroundColor
-        //nameTextLabel.backgroundColor = UIColor.red
-        //packTextLabel.backgroundColor = UIColor.yellow
-        //quantityTextLabel.backgroundColor = UIColor.cyan
-        //unitTextLabel.backgroundColor = UIColor.brown
-
-        // Name
+    private func initViews() {
         contentView.addSubview(nameTextLabel)
-
-        // Pack
         contentView.addSubview(packTextLabel)
-        packTextLabel.font = UIFont.systemFont(ofSize: 12)
-        packTextLabel.textColor = .lightGray
-
-        // Stepper
         contentView.addSubview(stepper)
+        contentView.addSubview(bottomStackView)
     }
 
     func setupConstraints() {
         let marginGuide = contentView.layoutMarginsGuide
 
         // Name
-        nameTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameTextLabel.leadingAnchor.constraint(equalTo: marginGuide.leadingAnchor).isActive = true
-        nameTextLabel.topAnchor.constraint(equalTo: marginGuide.topAnchor).isActive = true
-        nameTextLabel.trailingAnchor.constraint(equalTo: stepper.leadingAnchor).isActive = true
-        nameTextLabel.numberOfLines = 0
+        let nameConstraints = [
+            nameTextLabel.leadingAnchor.constraint(equalTo: marginGuide.leadingAnchor),
+            nameTextLabel.topAnchor.constraint(equalTo: marginGuide.topAnchor),
+            nameTextLabel.trailingAnchor.constraint(equalTo: stepper.leadingAnchor)
+        ]
 
         // Pack
-        packTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        packTextLabel.leadingAnchor.constraint(equalTo: marginGuide.leadingAnchor).isActive = true
-        packTextLabel.topAnchor.constraint(equalTo: nameTextLabel.bottomAnchor).isActive = true
-        packTextLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        packTextLabel.bottomAnchor.constraint(equalTo: marginGuide.bottomAnchor).isActive = true
-        packTextLabel.numberOfLines = 1
+        let packConstraints = [
+            packTextLabel.leadingAnchor.constraint(equalTo: nameTextLabel.leadingAnchor),
+            packTextLabel.topAnchor.constraint(equalTo: nameTextLabel.bottomAnchor),
+            packTextLabel.trailingAnchor.constraint(equalTo: nameTextLabel.trailingAnchor)
+        ]
 
         // Stepper
-        stepper.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        stepper.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        stepper.topAnchor.constraint(equalTo: marginGuide.topAnchor).isActive = true
-        stepper.trailingAnchor.constraint(equalTo: marginGuide.trailingAnchor).isActive = true
-        //stepper.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        //stepper.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-    }
+        let stepperConstraints = [
+            stepper.topAnchor.constraint(equalTo: marginGuide.topAnchor),
+            stepper.widthAnchor.constraint(equalToConstant: 120),
+            stepper.trailingAnchor.constraint(equalTo: marginGuide.trailingAnchor),
+            stepper.bottomAnchor.constraint(equalTo: marginGuide.bottomAnchor)
+        ]
 
+        // UnitViews
+        let unitConstraints = [
+            parUnitView.widthAnchor.constraint(equalToConstant: 10.0),
+            parUnitView.heightAnchor.constraint(equalToConstant: 10.0),
+            recommendedUnitView.widthAnchor.constraint(equalToConstant: 10.0),
+            recommendedUnitView.heightAnchor.constraint(equalToConstant: 10.0)
+        ]
+
+        // StackView
+        let stackViewConstraints = [
+            bottomStackView.leadingAnchor.constraint(equalTo: marginGuide.leadingAnchor),
+            bottomStackView.topAnchor.constraint(equalTo: packTextLabel.bottomAnchor, constant: 10.0),
+            bottomStackView.trailingAnchor.constraint(equalTo: contentView.centerXAnchor),
+            //bottomStackView.widthAnchor.constraint(equalToConstant: 200.0),
+            bottomStackView.bottomAnchor.constraint(equalTo: marginGuide.bottomAnchor)
+        ]
+
+        for constraints in [nameConstraints, packConstraints, stepperConstraints, unitConstraints,
+                            stackViewConstraints] {
+            NSLayoutConstraint.activate(constraints)
+        }
+    }
+    /*
+    private func colorSubViewBackgrounds() {
+        nameTextLabel.backgroundColor = UIColor.red
+        packTextLabel.backgroundColor = UIColor.yellow
+
+        parLabel.backgroundColor = UIColor.cyan
+        parTextLabel.backgroundColor = UIColor.magenta
+        parUnitView.backgroundColor = UIColor.yellow
+
+        //recommendedLabel.backgroundColor = UIColor.cyan
+        //recommendedTextLabel.backgroundColor = UIColor.brown
+        //recommendedUnitView.backgroundColor = UIColor.yellow
+
+        //stepper.backgroundColor = .blue
+        //bottomStackView.backgroundColor = UIColor.magenta
+    }
+    */
 }
 
 // MARK: -
@@ -107,22 +247,22 @@ class StepperTableViewCell: UITableViewCell {
 extension StepperTableViewCell {
 
     func bind(to viewModel: StepperCellViewModel) {
-        /// TODO: simply replace with String properties
         //nameTextLabel.text = viewModel.nameText
-        //packTextLabel.text = viewModel.packText
-
+        //nameTextLabel.textColor = viewModel.nameColor
         viewModel.nameText
             .drive(nameTextLabel.rx.text)
             .disposed(by: disposeBag)
 
-        //nameTextLabel.textColor = viewModel.nameColor
-        //viewModel.nameColor
-        //    .drive(nameTextLabel.rx.textColor)
-        //    .disposed(by: disposeBag)
-
+        //packTextLabel.text = viewModel.packText
         viewModel.packText
             .drive(packTextLabel.rx.text)
             .disposed(by: disposeBag)
+
+        parTextLabel.text = viewModel.parText
+        parUnitView.updateUnit(viewModel.parUnit, animated: false)
+
+        recommendedTextLabel.text = viewModel.recommendedText
+        recommendedUnitView.updateUnit(viewModel.recommendedUnit, animated: false)
 
         viewModel.state
             .drive(stepper.itemState)
