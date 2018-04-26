@@ -15,6 +15,31 @@ enum CurrentUnit {
     case packUnit
     case singleUnit
     case invalidUnit
+
+    init(for item: Item, from unit: Unit) {
+        if let pUnit = item.purchaseUnit, pUnit == unit {
+            self = .packUnit
+        } else if let sUnit = item.purchaseSubUnit, sUnit == unit {
+            self = .singleUnit
+        } else {
+            self = .invalidUnit
+        }
+    }
+
+    init(for item: Item, from unit: Unit?) {
+        guard let `unit` = unit else {
+            self = .invalidUnit
+            return
+        }
+        if let pUnit = item.purchaseUnit, pUnit == unit {
+            self = .packUnit
+        } else if let sUnit = item.purchaseSubUnit, sUnit == unit {
+            self = .singleUnit
+        } else {
+            self = .invalidUnit
+        }
+    }
+
 }
 
 struct ItemUnits {
