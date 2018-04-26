@@ -38,7 +38,7 @@ class MGStepper: UIControl {
         }
     }
 
-    /// Input (kinda) / Bindable sink for x.
+    /// Bindable sink for ItemState.
     var itemState: Binder<ItemState> {
         return Binder(self) { control, state in
             control.updateView(for: state)
@@ -59,6 +59,7 @@ class MGStepper: UIControl {
     let buttonBackgroundColor: UIColor = .clear
     let buttonBorderColor: CGColor = UIColor.black.cgColor
     let buttonBorderWidth: CGFloat = 1.0
+
     let decrementButtonText: String = "-"
     let incrementButtonText: String = "+"
 
@@ -66,7 +67,7 @@ class MGStepper: UIControl {
     let labelBackgroundColor: UIColor = .clear
     let labelWidthWeight: CGFloat = 0.5
 
-    let cornerRadius: CGFloat = 4.0
+    let cornerRadius: CGFloat = 0.0
 
     let borderWidth: CGFloat = 0.0
     let borderColor: UIColor = .clear
@@ -131,7 +132,7 @@ class MGStepper: UIControl {
     /// The same as UIStepper's autorepeat. If true, holding on the buttons alters the value repeatedly. Defaults to true.
     let autorepeat: Bool = true
 
-    /// Timer used for autorepeat option
+    /// Timer used for autorepeat option.
     var timer: Timer?
 
     /** When UIStepper reaches its top speed, it alters the value with a time interval of ~0.05 sec.
@@ -168,7 +169,7 @@ class MGStepper: UIControl {
         setup()
     }
 
-    // MARK: - D
+    // MARK: - View Methods
 
     func setup() {
         addSubview(label)
@@ -417,7 +418,7 @@ struct ItemState {
 
         let initialState: StepperState
         // https://stackoverflow.com/a/44474754/4472195
-        switch Int(truncating: item.quantity ?? -1 as NSNumber) {
+        switch Int(truncating: item.quantity ?? ItemState.minimumValue as NSNumber) {
         case Int.min ... ItemState.minimumValue:
             initialState = .minimum
         case ItemState.maximumValue ... Int.max:
