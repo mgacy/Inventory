@@ -202,10 +202,19 @@ class MGStepper: UIControl {
         let unitViewWidth: CGFloat = 18.0
         let unitY = centerY - (unitViewWidth / 2)
         unitView.frame = CGRect(x: labelX + labelWidth, y: unitY, width: unitViewWidth, height: unitViewWidth)
-
-        // Buttons
+        /*
+        // Buttons (Rectangular)
         decrementButton.frame = CGRect(x: 0, y: 0, width: buttonWidth, height: stepperHeight)
         incrementButton.frame = CGRect(x: stepperWidth - buttonWidth, y: 0, width: buttonWidth, height: stepperHeight)
+        */
+
+        // Buttons (Round)
+        let buttonY = centerY - (buttonWidth / 2.0)
+        decrementButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonWidth)
+        decrementButton.layer.cornerRadius = buttonWidth / 2.0
+        incrementButton.frame = CGRect(x: stepperWidth - buttonWidth, y: buttonY, width: buttonWidth,
+                                       height: buttonWidth)
+        incrementButton.layer.cornerRadius = buttonWidth / 2.0
     }
 
     // MARK: - E
