@@ -185,7 +185,7 @@ extension LoginViewController {
             completion: { (loginDictionary, error) -> Void in
                 if loginDictionary == nil {
                     if error!._code == Int(AppExtensionErrorCodeCancelledByUser) {
-                        print("Error invoking 1Password App Extension for find login: \(String(describing: error))")
+                        log.error("Error invoking 1Password App Extension for find login: \(String(describing: error))")
                     }
                     return
                 }
