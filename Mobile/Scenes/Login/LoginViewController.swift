@@ -60,6 +60,7 @@ class LoginViewController: UIViewController {
         loginTextField.delegate = self
         passwordTextField.delegate = self
 
+        // FIXME: should I disable this check?
         if self.presentingViewController != nil {
             // We are being presented from settings (or somewhere else within rather than during startup)
             /// TODO: should we hide the 'Sign Up' button?
