@@ -130,6 +130,7 @@ class KeypadSheetAnimationController: NSObject, UIViewControllerAnimatedTransiti
 
 // [robertmryan](https://github.com/robertmryan)
 // [robertmryan/SwiftCustomTransitions](https://github.com/robertmryan/SwiftCustomTransitions/tree/rightside)
+// FIXME: the above are under a Creative Commons License
 // https://stackoverflow.com/a/42213998/4472195
 class SheetPresentationController: UIPresentationController {
     override var shouldRemovePresentersView: Bool { return false }
