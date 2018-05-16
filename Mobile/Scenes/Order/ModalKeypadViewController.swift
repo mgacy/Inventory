@@ -1,5 +1,5 @@
 //
-//  ModalOrderKeypadViewController.swift
+//  ModalKeypadViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 4/17/18.
@@ -17,7 +17,7 @@ protocol ModalKeypadPresenting: class {
     var frame: CGRect { get }
 }
 
-final class ModalOrderKeypadViewController: UIViewController {
+final class ModalKeypadViewController: UIViewController {
 
     let disposeBag = DisposeBag()
     // swiftlint:disable:next weak_delegate
@@ -152,7 +152,7 @@ final class ModalOrderKeypadViewController: UIViewController {
 
 }
 
-extension ModalOrderKeypadViewController: UIGestureRecognizerDelegate {
+extension ModalKeypadViewController: UIGestureRecognizerDelegate {
 
     // Recognize downward gestures only
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

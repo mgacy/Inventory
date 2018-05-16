@@ -30,7 +30,7 @@ final class ModalOrderKeypadCoordinator: BaseCoordinator<Void> {
         viewController.viewModel = viewModel
 
         /// TODO: use rootViewController dimensions to configure modalViewController constraints
-        let modalViewController = ModalOrderKeypadViewController(keypadViewController: viewController)
+        let modalViewController = ModalKeypadViewController(keypadViewController: viewController)
         rootViewController.present(modalViewController, animated: true)
 
         return modalViewController.dismissalEvents
