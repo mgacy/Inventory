@@ -75,12 +75,14 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     var itemName: String {
         return currentItem.item?.name ?? "Error (1)"
     }
+    var itemPack: String {
+        return currentItem.item?.packDisplay ?? "Error (2)"
+    }
     var itemCost: String {
         return currencyFormatter.string(from: NSNumber(value: currentItem.cost)) ?? " "
     }
     var itemQuantity: String {
-        return formDisplayLine(quantity: currentItem.quantity,
-                               abbreviation: currentItem.unit?.abbreviation)
+        return formDisplayLine(quantity: currentItem.quantity, abbreviation: currentItem.unit?.abbreviation)
     }
     var itemStatus: String {
         return InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
