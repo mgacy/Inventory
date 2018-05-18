@@ -26,14 +26,11 @@ class InvoiceKeypadViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-    //override func viewDidLoad() {}
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDisplay()
     }
-
-    //override func didReceiveMemoryWarning() {}
 
     // MARK: - Keypad
 

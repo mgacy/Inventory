@@ -25,7 +25,7 @@ final class ModalKeypadViewController: UIViewController {
     private let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
     private let panGestureDissmissalEvent = PublishSubject<Void>()
 
-    // pan down transitions back to the presenting view controller
+    // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
 
     var dismissalEvents: Observable<Void> {
@@ -136,7 +136,7 @@ final class ModalKeypadViewController: UIViewController {
             interactionController?.completionSpeed = 0.999  // https://stackoverflow.com/a/42972283/1271826
             if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
                 interactionController?.finish()
-                /// ensure we return event from coordinator when dismissing view with pan gesture
+                /// Ensure we return event from coordinator when dismissing view with pan gesture
                 panGestureDissmissalEvent.onNext(())
             } else {
                 interactionController?.cancel()

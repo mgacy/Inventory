@@ -242,6 +242,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
                 }
 
                 // Deselect
+                /// TODO: apply to .pad case only?
                 if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
                     viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
@@ -254,7 +255,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, with: orderItems, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
-     }
+    }
 
     func showKeypadForIpad(on rootViewController: UIViewController, with orderItems: [OrderItem], atIndex index: Int) -> Observable<Void> {
         let keypadCoordinator = ModalOrderKeypadCoordinator(rootViewController: rootViewController,
