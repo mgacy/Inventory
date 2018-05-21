@@ -91,22 +91,9 @@ class DisplayItemView: UIView {
 
     private func configure() {
         backgroundColor = .white
-
-        /// TESTING:
-        let useStackView = false
-
-        switch useStackView {
-        case true:
-            addSubview(stackView)
-            setupConstraints2()
-        case false:
-            addSubview(dismissChevron)
-            addSubview(stackView)
-            setupConstraints3()
-            //addSubview(itemName)
-            //addSubview(itemPack)
-            //setupConstraints()
-        }
+        addSubview(dismissChevron)
+        addSubview(stackView)
+        setupConstraints()
     }
 
     // MARK: - View Methods
@@ -118,49 +105,6 @@ class DisplayItemView: UIView {
     }
 
     func setupConstraints() {
-        let guide: UILayoutGuide
-        if #available(iOS 11, *) {
-            guide = safeAreaLayoutGuide
-        } else {
-            guide = layoutMarginsGuide
-        }
-        let constraints = [
-            // DismissChevron
-            dismissChevron.centerXAnchor.constraint(equalTo: centerXAnchor),
-            dismissChevron.topAnchor.constraint(equalTo: guide.topAnchor, constant: 10.0),
-            dismissChevron.heightAnchor.constraint(equalToConstant: 15.0),
-            dismissChevron.widthAnchor.constraint(equalToConstant: 38.0),
-            // Name
-            itemName.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12.0),
-            itemName.topAnchor.constraint(equalTo: dismissChevron.bottomAnchor, constant: 20.0),
-            itemName.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12.0),
-            // Pack
-            itemPack.leadingAnchor.constraint(equalTo: itemName.leadingAnchor),
-            itemPack.topAnchor.constraint(equalTo: itemName.bottomAnchor),
-            itemPack.trailingAnchor.constraint(equalTo: itemName.trailingAnchor)
-        ]
-        NSLayoutConstraint.activate(constraints)
-    }
-
-    /// For use with UIStackView
-    func setupConstraints2() {
-        let guide: UILayoutGuide
-        if #available(iOS 11, *) {
-            guide = safeAreaLayoutGuide
-        } else {
-            guide = layoutMarginsGuide
-        }
-        let constraints = [
-            dismissChevron.centerXAnchor.constraint(equalTo: centerXAnchor),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.topAnchor.constraint(equalTo: guide.topAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ]
-        NSLayoutConstraint.activate(constraints)
-    }
-
-    func setupConstraints3() {
         let guide: UILayoutGuide
         if #available(iOS 11, *) {
             guide = safeAreaLayoutGuide
