@@ -17,6 +17,10 @@ protocol ModalKeypadPresenting: class {
     var frame: CGRect { get }
 }
 
+protocol ModalKeypadDismissing: class {
+    var dismissalEvents: Observable<Void> { get }
+}
+
 final class ModalKeypadViewController: UIViewController {
 
     let disposeBag = DisposeBag()
@@ -38,7 +42,7 @@ final class ModalKeypadViewController: UIViewController {
     }
 
     // MARK: Subviews
-    private var keypadViewController: OrderKeypadViewController!
+    private let keypadViewController: UIViewController & ModalKeypadDismissing
     private lazy var barView: ModalOrderBarView = {
         let view = ModalOrderBarView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +59,7 @@ final class ModalKeypadViewController: UIViewController {
     // MARK: - Lifecycle
 
     /// TODO: pass primary view controller (or its constraints) to configure widths?
-    init(keypadViewController: OrderKeypadViewController) {
+    init(keypadViewController: UIViewController & ModalKeypadDismissing) {
         self.keypadViewController = keypadViewController
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
@@ -145,7 +149,7 @@ final class ModalKeypadViewController: UIViewController {
         default:
             if translation != .zero {
                 let angle = atan2(translation.y, translation.x)
-                print(angle)
+                log.debug("Angle: \(angle)")
             }
         }
     }
@@ -167,6 +171,8 @@ extension ModalKeypadViewController: UIGestureRecognizerDelegate {
         return false
     }
 }
+
+extension ModalKeypadViewController: ModalKeypadDismissing {}
 
 // MARK: - Navigation Bar-Like SubView
 

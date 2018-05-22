@@ -26,7 +26,6 @@ class InvoiceKeypadViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDisplay()
