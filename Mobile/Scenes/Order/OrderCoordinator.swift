@@ -225,6 +225,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Navigation
         viewController.tableView.rx
             .itemSelected
+            //.debug("itemSelected")
             .subscribe(onNext: { [weak self] indexPath in
                 log.debug("We selected: \(indexPath)")
 
@@ -235,6 +236,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
                     guard let strongSelf = self else { return }
                     strongSelf.showKeypadForIpad(on: strongSelf.navigationController, with: viewModel.orderItems,
                                             atIndex: indexPath.row)
+                        //.debug()
                         .subscribe()
                         .disposed(by: viewController.disposeBag)
                 default:
