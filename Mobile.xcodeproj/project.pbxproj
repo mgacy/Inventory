@@ -35,6 +35,7 @@
 		C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */; };
 		C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9090FFD1EB92D8B0035A1DA /* Managed.swift */; };
 		C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */; };
+		C90DBB5820B3D364006F7097 /* InvoiceDisplaySubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90DBB5720B3D364006F7097 /* InvoiceDisplaySubview.swift */; };
 		C91194741F9D426200B65CF9 /* InvoiceItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91194731F9D426200B65CF9 /* InvoiceItemViewModel.swift */; };
 		C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F741DF0D61E00166A08 /* CoreDataStack.swift */; };
 		C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */; };
@@ -238,6 +239,7 @@
 		C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VendorRep+MyStuff.swift"; sourceTree = "<group>"; };
 		C9090FFD1EB92D8B0035A1DA /* Managed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Managed.swift; sourceTree = "<group>"; };
 		C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+setBackgroundColor.swift"; sourceTree = "<group>"; };
+		C90DBB5720B3D364006F7097 /* InvoiceDisplaySubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceDisplaySubview.swift; sourceTree = "<group>"; };
 		C91194731F9D426200B65CF9 /* InvoiceItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceItemViewModel.swift; sourceTree = "<group>"; };
 		C9124F741DF0D61E00166A08 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataImporter.swift; sourceTree = "<group>"; };
@@ -630,6 +632,8 @@
 				C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */,
 				C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */,
 				C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */,
+				C925909720AEA2F900F15634 /* InvoiceKeypadDisplayView.swift */,
+				C90DBB5720B3D364006F7097 /* InvoiceDisplaySubview.swift */,
 			);
 			name = Keypad;
 			sourceTree = "<group>";
@@ -1383,6 +1387,7 @@
 				C901A50F1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift in Sources */,
 				C9D59C5E1FE0FA870050A4AB /* NavigationController.swift in Sources */,
 				C9DE2CF72089C8B50090109A /* UnitView.swift in Sources */,
+				C90DBB5820B3D364006F7097 /* InvoiceDisplaySubview.swift in Sources */,
 				C9045C1D1FC4D20500F55FB3 /* InvoiceCoordinator.swift in Sources */,
 				C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */,
 				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,
