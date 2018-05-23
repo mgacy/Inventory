@@ -82,7 +82,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         return currencyFormatter.string(from: NSNumber(value: currentItem.cost)) ?? " "
     }
     var itemQuantity: String {
-        return formDisplayLine(quantity: currentItem.quantity, abbreviation: currentItem.unit?.abbreviation)
+        return numberFormatter.string(from: NSNumber(value: currentItem.quantity)) ?? "Error (3)"
     }
     var itemStatus: String {
         return InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
@@ -232,6 +232,8 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     }
 
 }
+
+extension InvoiceKeypadViewModel: DisplayItemViewModelType {}
 
 // MARK: - Keypad
 extension InvoiceKeypadViewModel: KeypadProxy {

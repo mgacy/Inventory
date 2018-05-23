@@ -15,6 +15,13 @@ class InvoiceDisplaySubview: UIView {
     typealias KeypadMode = InvoiceKeypadViewModel.KeypadState
 
     var viewModel: InvoiceKeypadViewModel!
+    weak var viewController: InvoiceKeypadViewController?
+
+    // Rx
+    //private let _modeTapped = PulishSubject<KeypadMode>()
+    //var modeTapped: Observable<KeypadMode> {
+    //    return _modeTapped.asObservable()
+    //}
 
     // MARK: - Appearance
 
@@ -191,17 +198,6 @@ class InvoiceDisplaySubview: UIView {
         statusTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(switchToStatus))
         statusTextLabel.addGestureRecognizer(statusTapGestureRecognizer)
         statusTextLabel.isUserInteractionEnabled = true
-        /*
-        // Disable gesture for current mode
-        switch currentMode {
-        case .cost:
-            costTapGestureRecognizer.isEnabled = false
-        case .quantity:
-            quantityTapGestureRecognizer.isEnabled = false
-        case.status:
-            statusTapGestureRecognizer.isEnabled = false
-        }
-        */
     }
 
     private func setupConstraints() {
@@ -270,17 +266,20 @@ class InvoiceDisplaySubview: UIView {
     // MARK: - Actions
 
     @objc private func switchToCost() {
-        viewModel.switchMode(.cost)
+        //viewModel.switchMode(.cost)
+        viewController?.switchMode(to: .cost)
         switchMode(to: .cost, animated: true)
     }
 
     @objc private func switchToQuantity() {
-        viewModel.switchMode(.quantity)
+        //viewModel.switchMode(.quantity)
+        viewController?.switchMode(to: .quantity)
         switchMode(to: .quantity, animated: true)
     }
 
     @objc private func switchToStatus() {
-        viewModel.switchMode(.status)
+        //viewModel.switchMode(.status)
+        viewController?.switchMode(to: .status)
         switchMode(to: .status, animated: true)
     }
 
