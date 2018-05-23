@@ -53,6 +53,7 @@
 		C91C928A1EFCE65800566CEB /* OrderKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91C92891EFCE65800566CEB /* OrderKeypadViewController.storyboard */; };
 		C91E72982050CE4600D42B79 /* MGStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91E72972050CE4600D42B79 /* MGStepper.swift */; };
 		C9208A2E1FAB8BFA00D7C830 /* ItemUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9208A2D1FAB8BFA00D7C830 /* ItemUnits.swift */; };
+		C925909A20AEA3FA00F15634 /* KeypadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C925909920AEA3FA00F15634 /* KeypadView.swift */; };
 		C925909C20AEA7FF00F15634 /* DisplayItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C925909B20AEA7FF00F15634 /* DisplayItemView.swift */; };
 		C925909E20AEAAF500F15634 /* NSLayoutAnchor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C925909D20AEAAF500F15634 /* NSLayoutAnchor+Ext.swift */; };
 		C92C2F8D1F9FE3E500B69CF5 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92C2F8C1F9FE3E500B69CF5 /* SettingsViewModel.swift */; };
@@ -254,6 +255,7 @@
 		C91C92891EFCE65800566CEB /* OrderKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OrderKeypadViewController.storyboard; sourceTree = "<group>"; };
 		C91E72972050CE4600D42B79 /* MGStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGStepper.swift; sourceTree = "<group>"; };
 		C9208A2D1FAB8BFA00D7C830 /* ItemUnits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemUnits.swift; sourceTree = "<group>"; };
+		C925909920AEA3FA00F15634 /* KeypadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypadView.swift; sourceTree = "<group>"; };
 		C925909B20AEA7FF00F15634 /* DisplayItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayItemView.swift; sourceTree = "<group>"; };
 		C925909D20AEAAF500F15634 /* NSLayoutAnchor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutAnchor+Ext.swift"; sourceTree = "<group>"; };
 		C92C2F8C1F9FE3E500B69CF5 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -900,6 +902,7 @@
 				C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */,
 				C902FF2D1DB816EB0063CD02 /* Keypad.swift */,
 				C925909B20AEA7FF00F15634 /* DisplayItemView.swift */,
+				C925909920AEA3FA00F15634 /* KeypadView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1343,6 +1346,7 @@
 				C9AA8DC01F9F0D2D00147F07 /* InventoryLocItemViewModel.swift in Sources */,
 				C91856951F8D881D001B08A0 /* InventoriesFactory.swift in Sources */,
 				C901A50D1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift in Sources */,
+				C925909A20AEA3FA00F15634 /* KeypadView.swift in Sources */,
 				C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */,
 				C9DE2CF52089A3450090109A /* Operators.swift in Sources */,
 				C92EC6321F84C80300B47C23 /* RemoteOrder.swift in Sources */,
