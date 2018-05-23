@@ -10,6 +10,8 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+// swiftlint:disable file_length
+
 // MARK: - Protocol
 
 protocol KeypadViewControllerType: class {
