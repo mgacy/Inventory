@@ -578,12 +578,9 @@
 			isa = PBXGroup;
 			children = (
 				C9045C181FC4AD1000F55FB3 /* OrderCoordinator.swift */,
+				C9DE2CF02087CBCA0090109A /* ModalOrderKeypadCoordinator.swift */,
 				C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */,
 				C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */,
-				C9DE2CF02087CBCA0090109A /* ModalOrderKeypadCoordinator.swift */,
-				C96751C32086EDB100212278 /* ModalKeypadViewController.swift */,
-				C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */,
-				C9DE2CF62089C8B50090109A /* UnitView.swift */,
 				C97A712A1F8EC06B00F2F1CD /* Date List */,
 				C9208A2C1FAB89B200D7C830 /* Container */,
 				C97A712B1F8EC07900F2F1CD /* Vendor List */,
@@ -909,6 +906,9 @@
 				C902FF2D1DB816EB0063CD02 /* Keypad.swift */,
 				C925909B20AEA7FF00F15634 /* DisplayItemView.swift */,
 				C925909920AEA3FA00F15634 /* KeypadView.swift */,
+				C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */,
+				C96751C32086EDB100212278 /* ModalKeypadViewController.swift */,
+				C9DE2CF62089C8B50090109A /* UnitView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
