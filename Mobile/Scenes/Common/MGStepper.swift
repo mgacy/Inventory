@@ -442,6 +442,7 @@ struct ItemState {
 
 extension ItemState {
 
+    // swiftlint:disable:next function_body_length
     static func reduce(state: ItemState, command: StepperCommand) -> ItemState {
         //log.verbose("command: \(command) | state: \(state)")
         switch (state.stepperState, command) {

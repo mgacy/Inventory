@@ -240,6 +240,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
                         .subscribe()
                         .disposed(by: viewController.disposeBag)
                 default:
+                    // swiftlint:disable:next line_length
                     fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
                 }
 

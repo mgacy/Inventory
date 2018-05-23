@@ -47,6 +47,7 @@ final class HomeViewModel: AttachableViewModelType {
 
     // MARK: - Lifecycle
 
+    // swiftlint:disable:next function_body_length
     required init(dependency: Dependency, bindings: Bindings) {
         //self.dataManager = model.dataManager
 
