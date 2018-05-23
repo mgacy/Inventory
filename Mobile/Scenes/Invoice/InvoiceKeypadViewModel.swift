@@ -61,16 +61,11 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         return [InvoiceItem]()
     }
 
-    public var currentUnit: CurrentUnit? {
-        return currentItemUnits.currentUnit
-    }
-
     var currentMode: KeypadState = .cost
 
     // MARK: - X
 
     // Display
-    var displayQuantity: String = ""
 
     var itemName: String {
         return currentItem.item?.name ?? "Error (1)"
@@ -84,30 +79,15 @@ class InvoiceKeypadViewModel: KeypadViewModel {
     var itemQuantity: String {
         return numberFormatter.string(from: NSNumber(value: currentItem.quantity)) ?? "Error (3)"
     }
+    public var currentUnit: CurrentUnit? {
+        return currentItemUnits.currentUnit
+    }
     var itemStatus: String {
         return InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
     }
 
     // Keypad
-    var softButtonTitle: String = "m"
     var unitButtonTitle: String = ""
-
-    /*
-    var unitButtonTitle: String {
-        guard let currentUnit = currentUnit else {
-            /// TODO: is there a better way to handle this?
-            return "ERR"
-        }
-        switch currentUnit {
-        case .singleUnit:
-            return currentItemUnits.packUnit?.abbreviation ?? ""
-        case .packUnit:
-            return currentItemUnits.singleUnit?.abbreviation ?? ""
-        case .invalidUnit:
-            return "ERR"
-        }
-    }
-    */
 
     // MARK: - Lifecycle
 
@@ -147,13 +127,10 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         switch newMode {
         case .cost:
             keypad.updateNumber(currentItem.cost as NSNumber)
-            displayQuantity = "$\(keypad.displayValue)"
         case .quantity:
             keypad.updateNumber(currentItem.quantity as NSNumber)
-            displayQuantity = formDisplayLine(quantity: keypad.displayValue,
-                                              abbreviation: currentItem.unit?.abbreviation)
         case .status:
-            displayQuantity =  InvoiceItemStatus(rawValue: currentItem.status)?.description ?? ""
+            break
         }
     }
 
@@ -163,8 +140,6 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         }
         currentItem.unit = newUnit
         /// TODO: save context?
-
-        displayQuantity = itemQuantity
 
         guard let currentUnit = currentItemUnits.currentUnit else {
             /// TODO: what should the label be in this situation?
@@ -210,27 +185,6 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         switchMode(.cost)
     }
 
-    // MARK: - Formatting
-
-    func formDisplayLine(quantity: String, abbreviation: String?) -> String {
-        if let abbreviation = abbreviation {
-            return "\(quantity) \(abbreviation)"
-        } else {
-            return quantity
-        }
-    }
-
-    func formDisplayLine(quantity: Double?, abbreviation: String?) -> String {
-        guard let quantity = quantity else { return "ERROR 4" }
-
-        let quantityString = numberFormatter.string(from: NSNumber(value: quantity)) ?? ""
-        if let abbreviation = abbreviation {
-            return "\(quantityString) \(abbreviation)"
-        } else {
-            return quantityString
-        }
-    }
-
 }
 
 extension InvoiceKeypadViewModel: DisplayItemViewModelType {}
@@ -266,7 +220,6 @@ extension InvoiceKeypadViewModel: KeypadDelegate {
             } else {
                 currentItem.cost = 0
             }
-            displayQuantity = "$\(keypad.displayValue)"
         case .quantity:
             if let newValue = newValue {
                 currentItem.quantity = newValue.doubleValue
@@ -274,9 +227,6 @@ extension InvoiceKeypadViewModel: KeypadDelegate {
             } else {
                 currentItem.quantity = 0
             }
-            displayQuantity = formDisplayLine(
-                quantity: keypad.displayValue,
-                abbreviation: currentItem.unit?.abbreviation ?? " ")
         case .status:
             log.verbose("update - status")
         }
