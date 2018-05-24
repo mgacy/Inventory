@@ -84,7 +84,7 @@ final class InvoiceKeypadDisplayView: UIView {
         let guide: UILayoutGuide
         if #available(iOS 11, *) {
             guide = safeAreaLayoutGuide
-            stackView.setCustomSpacing(16.0, after: itemDisplayView)
+            stackView.setCustomSpacing(24.0, after: itemDisplayView)
         } else {
             guide = layoutMarginsGuide
         }
@@ -92,7 +92,8 @@ final class InvoiceKeypadDisplayView: UIView {
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.topAnchor.constraint(equalTo: guide.topAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16.0)
+            //stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -1.0)
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0.0)
         ]
         NSLayoutConstraint.activate(constraints)
     }
