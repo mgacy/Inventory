@@ -15,11 +15,13 @@ class ChevronButton: UIButton {
     //    case up, down, left, right
     //}
     //public var direction: Direction = Direction.down
-    public var lineColor: UIColor = .black
+    public var lineColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.35) // InvoiceDisplayHighlightView.indicatorColor
     public var lineWidth: CGFloat = 3
 
+    private let inset: CGFloat = 2.0
+
     init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: 38, height: 15))
+        super.init(frame: CGRect(x: 0, y: 0, width: 38, height: 10))
     }
 
     override init(frame: CGRect) {
@@ -37,10 +39,10 @@ class ChevronButton: UIButton {
         //let ctx = UIGraphicsGetCurrentContext() // iOS
 
         let path = UIBezierPath()
-        path.move(to: CGPoint(x: 1, y: 1))
-        path.addLine(to: CGPoint(x: 19, y: 13))
-        path.addLine(to: CGPoint(x: 37, y: 1))
-        UIColor.black.setStroke()
+        path.move(to: CGPoint(x: inset, y: inset))
+        path.addLine(to: CGPoint(x: frame.width / 2.0, y: frame.height - inset))
+        path.addLine(to: CGPoint(x: frame.width - inset, y: inset))
+        lineColor.setStroke()
 
         path.lineWidth = lineWidth
         path.lineCapStyle = .round

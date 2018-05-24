@@ -7,64 +7,137 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
 
-class InvoiceKeypadViewController: UIViewController {
+final class InvoiceKeypadViewController: UIViewController {
 
     // MARK: - Properties
 
+    let disposeBag = DisposeBag()
     var viewModel: InvoiceKeypadViewModel!
 
-    // MARK: - Display Outlets
-    @IBOutlet weak var itemName: UILabel!
-    @IBOutlet weak var itemQuantity: UILabel!
-    @IBOutlet weak var itemCost: UILabel!
-    @IBOutlet weak var itemStatus: UILabel!
-    @IBOutlet weak var displayQuantity: UILabel!
+    // swiftlint:disable:next weak_delegate
+    private let customTransitionDelegate = SheetTransitioningDelegate()
+    private let panGestureDissmissalEvent = PublishSubject<Void>()
 
-    // MARK: - Keypad Outlets
-    @IBOutlet weak var softButton: OperationKeypadButton!
+    // Pan down transitions back to the presenting view controller
+    var interactionController: UIPercentDrivenInteractiveTransition?
+
+    var dismissalEvents: Observable<Void> {
+        return Observable.of(panGestureDissmissalEvent.asObservable(), displayView.dismissalEvents.asObservable())
+            .merge()
+    }
+
+    // View
+
+    lazy var displayView: InvoiceKeypadDisplayView = {
+        let view = InvoiceKeypadDisplayView()
+        view.invoiceDisplayView.viewController = self
+        view.backgroundColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var keypadView: KeypadView = {
+        let view = KeypadView()
+        view.viewController = self
+        view.backgroundColor = ColorPalette.lightGray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var stackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [displayView, keypadView])
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.axis = .vertical
+        view.alignment = .fill
+        view.distribution = .fill
+        view.spacing = 0.0
+        return view
+    }()
 
     // MARK: - Lifecycle
 
-    //override func viewDidLoad() {}
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .custom
+        transitioningDelegate = customTransitionDelegate
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDisplay()
     }
 
-    //override func didReceiveMemoryWarning() {}
+    // MARK: - View Methods
+
+    private func setupView() {
+        // Handle swipe down gesture
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleGesture(_:)))
+        panGestureRecognizer.delegate = self
+        view.addGestureRecognizer(panGestureRecognizer)
+
+        view.addSubview(stackView)
+
+        setupConstraints()
+    }
+
+    private func setupConstraints() {
+        //let guide: UILayoutGuide
+        //if #available(iOS 11, *) {
+        //    guide = view.safeAreaLayoutGuide
+        //} else {
+        //    guide = view.layoutMarginsGuide
+        //}
+        let constraints = [
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.topAnchor.constraint(equalTo: view.topAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            keypadView.heightAnchor.constraint(equalTo: displayView.heightAnchor, multiplier: 1.5)
+        ]
+        NSLayoutConstraint.activate(constraints)
+    }
 
     // MARK: - Keypad
 
-    @IBAction func numberTapped(_ sender: AnyObject) {
-        guard let digit = sender.currentTitle else { return }
-        guard let number = Int(digit!) else { return }
+    @objc func numberTapped(sender: UIButton) {
+        guard let title = sender.currentTitle, let number = Int(title) else { return }
         //if viewModel.currentMode == .status { return }
         viewModel.pushDigit(value: number)
         updateDisplay()
     }
 
-    @IBAction func clearTapped(_ sender: AnyObject) {
+    @objc func clearTapped(sender: UIButton) {
         viewModel.popItem()
         updateDisplay()
     }
 
-    @IBAction func decimalTapped(_ sender: AnyObject) {
+    @objc func decimalTapped(_ sender: UIButton) {
         viewModel.pushDecimal()
         updateDisplay()
     }
 
     // MARK: Units
 
-    @IBAction func softButtonTapped(_ sender: AnyObject) {
+    @objc func softButton1Tapped(sender: UIButton) {
         switch viewModel.currentMode {
         // Toggle currentItem.unit
         case .quantity:
             log.verbose("currentMode: quantity")
             if viewModel.toggleUnit() {
                 updateDisplay()
-                softButton.setTitle(viewModel.unitButtonTitle, for: .normal)
+                keypadView.softButton1.setTitle(viewModel.unitButtonTitle, for: .normal)
             } else {
                 log.error("\(#function) FAILED: unable to update InvoiceItem Unit")
             }
@@ -84,93 +157,138 @@ class InvoiceKeypadViewController: UIViewController {
             }
             softButton.setTitle("s", for: .normal)
             update()
-            */
+             */
         }
+    }
+
+    @objc func softButton2Tapped(sender: UIButton) {
+        return
     }
 
     // MARK: Item Navigation
 
-    @IBAction func nextItemTapped(_ sender: AnyObject) {
+    @objc func nextItemTapped(_ sender: UIButton) {
         switch viewModel.nextItem() {
         case true:
             updateDisplay()
         case false:
-            navigationController!.popViewController(animated: true)
+            /// TODO: emit event so coordinator can dismiss
+            if let navController = navigationController {
+                navController.popViewController(animated: true)
+            } else {
+                dismiss(animated: true)
+            }
         }
     }
 
-    @IBAction func previousItemTapped(_ sender: AnyObject) {
+    @objc func previousItemTapped(_ sender: UIButton) {
         switch viewModel.previousItem() {
         case true:
             updateDisplay()
         case false:
-            navigationController!.popViewController(animated: true)
+            /// TODO: emit event so coordinator can dismiss
+            if let navController = navigationController {
+                navController.popViewController(animated: true)
+            } else {
+                dismiss(animated: true)
+            }
         }
     }
 
     // MARK: Mode
 
-    @IBAction func modeTapped(_ sender: AnyObject) {
-        switch viewModel.currentMode {
-        case .cost:
-            // -> status
-            viewModel.switchMode(.status)
-            updateDisplay()
-        case .quantity:
-            // -> cost
-            viewModel.switchMode(.cost)
-            updateDisplay()
-        case .status:
-            // -> quantity
-            viewModel.switchMode(.quantity)
-            updateDisplay()
-        }
+    func switchMode(to newMode: InvoiceKeypadViewModel.KeypadState) {
+        viewModel.switchMode(newMode)
+        updateDisplay()
     }
 
     // MARK: - C
 
     func updateDisplay() {
-        itemName.text = viewModel.itemName
-        itemQuantity.text = viewModel.itemQuantity
-        itemCost.text = viewModel.itemCost
-        itemStatus.text = viewModel.itemStatus
-        displayQuantity.text = viewModel.displayQuantity
-
+        displayView.bind(to: viewModel)
         updateDisplayForCurrentMode()
     }
 
     func updateDisplayForCurrentMode() {
         switch viewModel.currentMode {
         case .cost:
-            itemCost.textColor = UIColor.black
-            itemQuantity.textColor = UIColor.lightGray
-            itemStatus.textColor = UIColor.lightGray
-            softButton.setTitle("", for: .normal)
-            softButton.isEnabled = false
+            print("cost")
+            keypadView.softButton1.setTitle("", for: .normal)
+            keypadView.softButton1.isEnabled = false
         case .quantity:
-            itemCost.textColor = UIColor.lightGray
-            itemQuantity.textColor = UIColor.black
-            itemStatus.textColor = UIColor.lightGray
-            softButton.setTitle(viewModel.unitButtonTitle, for: .normal)
+            print("quantity")
+            keypadView.softButton1.setTitle(viewModel.unitButtonTitle, for: .normal)
             /// TODO: only enable if we are able to choose an alternate unit for CurrentItem?
-            softButton.isEnabled = true
+            keypadView.softButton1.isEnabled = true
             /*
-             // Should inactiveUnit simply return currentItem.unit instead of nil?
-             if let altUnit = inactiveUnit {
-             softButton.setTitle(altUnit.abbreviation, for: .normal)
-             softButton.isEnabled = true
-             } else {
-             softButton.setTitle(currentItem.unit?.abbreviation, for: .normal)
-             softButton.isEnabled = false
-             }
+            // Should inactiveUnit simply return currentItem.unit instead of nil?
+            if let altUnit = inactiveUnit {
+                softButton1.setTitle(altUnit.abbreviation, for: .normal)
+                softButton1.isEnabled = true
+            } else {
+                softButton1.setTitle(currentItem.unit?.abbreviation, for: .normal)
+                softButton1.isEnabled = false
+            }
              */
         case .status:
-            itemCost.textColor = UIColor.lightGray
-            itemQuantity.textColor = UIColor.lightGray
-            itemStatus.textColor = UIColor.black
-            softButton.setTitle("", for: .normal)
-            softButton.isEnabled = true
+            print("status")
+            keypadView.softButton1.setTitle("", for: .normal)
+            keypadView.softButton1.isEnabled = true
+        }
+    }
+
+    // MARK: - B
+
+    @objc func handleGesture(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: gesture.view)
+        let percent = translation.y / gesture.view!.bounds.size.height
+        //log.debug("%: \(percent)")
+        switch gesture.state {
+        case .began:
+            interactionController = UIPercentDrivenInteractiveTransition()
+            customTransitionDelegate.interactionController = interactionController
+            dismiss(animated: true)
+        case .changed:
+            //log.debug("changed: \(percent)")
+            interactionController?.update(percent)
+        case .ended:
+            let velocity = gesture.velocity(in: gesture.view)
+            //log.debug("velocity: \(velocity)")
+            interactionController?.completionSpeed = 0.999  // https://stackoverflow.com/a/42972283/1271826
+            if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
+                interactionController?.finish()
+                /// Ensure we return event from coordinator when dismissing view with pan gesture
+                panGestureDissmissalEvent.onNext(())
+            } else {
+                interactionController?.cancel()
+            }
+            interactionController = nil
+        default:
+            if translation != .zero {
+                let angle = atan2(translation.y, translation.x)
+                log.debug("Angle: \(angle)")
+            }
         }
     }
 
 }
+
+extension InvoiceKeypadViewController: UIGestureRecognizerDelegate {
+
+    // Recognize downward gestures only
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let pan = gestureRecognizer as? UIPanGestureRecognizer {
+            let translation = pan.translation(in: pan.view)
+            let angle = atan2(translation.y, translation.x)
+            return abs(angle - .pi / 2.0) < (.pi / 8.0)
+            // ALT
+            //let angle = abs(atan2(translation.x, translation.y) - .pi / 2)
+            //return angle < .pi / 8.0
+        }
+        return false
+    }
+}
+
+extension InvoiceKeypadViewController: KeypadViewControllerType {}
+
+extension InvoiceKeypadViewController: ModalKeypadDismissing {}

@@ -7,12 +7,17 @@
 //
 
 import UIKit
+import RxSwift
 
 class OrderKeypadViewController: UIViewController {
 
     // MARK: - Properties
 
     var viewModel: OrderKeypadViewModel!
+
+    var dismissalEvents: Observable<Void> {
+        return Observable.never()
+    }
 
     // MARK: - Display Outlets
 
@@ -165,3 +170,5 @@ class OrderKeypadViewController: UIViewController {
     }
 
 }
+
+extension OrderKeypadViewController: ModalKeypadDismissing {}

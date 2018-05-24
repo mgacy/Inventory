@@ -13,6 +13,20 @@ class UnitView: UIView {
     var currentUnit: CurrentUnit
     var lineWidth: CGFloat = 1
 
+    public var unitBackgroundColor: UIColor = UIColor.white {
+        didSet {
+            singleUnitLayer.fillColor = unitBackgroundColor.cgColor
+            packUnitLayer.fillColor = unitBackgroundColor.cgColor
+        }
+    }
+
+    public var unitBorderColor: UIColor = UIColor.black {
+        didSet {
+            singleUnitLayer.strokeColor = unitBorderColor.cgColor
+            packUnitLayer.strokeColor = unitBorderColor.cgColor
+        }
+    }
+
     private var baseUnit: Double {
         return Double(bounds.height / 5)
     }
@@ -184,8 +198,8 @@ class UnitView: UIView {
     }
 
     private func configureLayer(_ layer: CAShapeLayer) -> CAShapeLayer {
-        layer.fillColor = UIColor.white.cgColor
-        layer.strokeColor = UIColor.black.cgColor
+        layer.fillColor = unitBackgroundColor.cgColor
+        layer.strokeColor = unitBorderColor.cgColor
         return layer
     }
 

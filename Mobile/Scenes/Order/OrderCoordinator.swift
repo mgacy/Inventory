@@ -225,6 +225,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Navigation
         viewController.tableView.rx
             .itemSelected
+            //.debug("itemSelected")
             .subscribe(onNext: { [weak self] indexPath in
                 log.debug("We selected: \(indexPath)")
 
@@ -235,13 +236,16 @@ class OrderCoordinator: BaseCoordinator<Void> {
                     guard let strongSelf = self else { return }
                     strongSelf.showKeypadForIpad(on: strongSelf.navigationController, with: viewModel.orderItems,
                                             atIndex: indexPath.row)
+                        //.debug()
                         .subscribe()
                         .disposed(by: viewController.disposeBag)
                 default:
+                    // swiftlint:disable:next line_length
                     fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
                 }
 
                 // Deselect
+                /// TODO: apply to .pad case only?
                 if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
                     viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
@@ -254,7 +258,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, with: orderItems, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
-     }
+    }
 
     func showKeypadForIpad(on rootViewController: UIViewController, with orderItems: [OrderItem], atIndex index: Int) -> Observable<Void> {
         let keypadCoordinator = ModalOrderKeypadCoordinator(rootViewController: rootViewController,

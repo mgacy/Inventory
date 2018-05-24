@@ -1,5 +1,5 @@
 //
-//  ModalOrderKeypadViewController.swift
+//  ModalKeypadViewController.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 4/17/18.
@@ -17,7 +17,11 @@ protocol ModalKeypadPresenting: class {
     var frame: CGRect { get }
 }
 
-final class ModalOrderKeypadViewController: UIViewController {
+protocol ModalKeypadDismissing: class {
+    var dismissalEvents: Observable<Void> { get }
+}
+
+final class ModalKeypadViewController: UIViewController {
 
     let disposeBag = DisposeBag()
     // swiftlint:disable:next weak_delegate
@@ -25,7 +29,7 @@ final class ModalOrderKeypadViewController: UIViewController {
     private let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
     private let panGestureDissmissalEvent = PublishSubject<Void>()
 
-    // pan down transitions back to the presenting view controller
+    // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
 
     var dismissalEvents: Observable<Void> {
@@ -38,7 +42,7 @@ final class ModalOrderKeypadViewController: UIViewController {
     }
 
     // MARK: Subviews
-    private var keypadViewController: OrderKeypadViewController!
+    private let keypadViewController: UIViewController & ModalKeypadDismissing
     private lazy var barView: ModalOrderBarView = {
         let view = ModalOrderBarView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +59,7 @@ final class ModalOrderKeypadViewController: UIViewController {
     // MARK: - Lifecycle
 
     /// TODO: pass primary view controller (or its constraints) to configure widths?
-    init(keypadViewController: OrderKeypadViewController) {
+    init(keypadViewController: UIViewController & ModalKeypadDismissing) {
         self.keypadViewController = keypadViewController
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
@@ -123,20 +127,22 @@ final class ModalOrderKeypadViewController: UIViewController {
     @objc func handleGesture(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: gesture.view)
         let percent = translation.y / gesture.view!.bounds.size.height
-
+        //log.debug("%: \(percent)");
         switch gesture.state {
         case .began:
             interactionController = UIPercentDrivenInteractiveTransition()
             customTransitionDelegate.interactionController = interactionController
             dismiss(animated: true)
         case .changed:
+            //log.debug("changed: \(percent)")
             interactionController?.update(percent)
         case .ended:
             let velocity = gesture.velocity(in: gesture.view)
+            //log.debug("velocity: \(velocity)")
             interactionController?.completionSpeed = 0.999  // https://stackoverflow.com/a/42972283/1271826
             if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
                 interactionController?.finish()
-                /// ensure we return event from coordinator when dismissing view with pan gesture
+                /// Ensure we return event from coordinator when dismissing view with pan gesture
                 panGestureDissmissalEvent.onNext(())
             } else {
                 interactionController?.cancel()
@@ -145,14 +151,14 @@ final class ModalOrderKeypadViewController: UIViewController {
         default:
             if translation != .zero {
                 let angle = atan2(translation.y, translation.x)
-                print(angle)
+                log.debug("Angle: \(angle)")
             }
         }
     }
 
 }
 
-extension ModalOrderKeypadViewController: UIGestureRecognizerDelegate {
+extension ModalKeypadViewController: UIGestureRecognizerDelegate {
 
     // Recognize downward gestures only
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -167,6 +173,8 @@ extension ModalOrderKeypadViewController: UIGestureRecognizerDelegate {
         return false
     }
 }
+
+extension ModalKeypadViewController: ModalKeypadDismissing {}
 
 // MARK: - Navigation Bar-Like SubView
 

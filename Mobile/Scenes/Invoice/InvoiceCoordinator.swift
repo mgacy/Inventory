@@ -58,23 +58,34 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
         let viewModel = InvoiceItemViewModel(dataManager: dependencies.dataManager, parentObject: invoice,
                                              uploadTaps: viewController.uploadButtonItem.rx.tap.asObservable())
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
+        navigationController.showDetailViewController(viewController, sender: nil)
 
-        /// TODO: handle pop on uploadResults?
-
-        // Selection
-        viewController.selectedIndices
-            .subscribe(onNext: { [weak self] indexPath in
-                self?.showKeypad(invoice: invoice, atIndex: indexPath.row)
+        let itemSelection = viewController.tableView.rx
+            .itemSelected
+            .map { [weak self] indexPath -> Observable<Void> in
+                log.debug("We selected: \(indexPath)")
+                //return self?.showKeypad(invoice: invoice, atIndex: indexPath.row)
+                guard let strongSelf = self else { return .just(()) }
+                return strongSelf.showKeypad(invoice: invoice, atIndex: indexPath.row)
+            }
+            .do(onNext: { _ in
+                // Deselect
+                if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
+                    viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                }
             })
-            .disposed(by: disposeBag)
+
+        itemSelection
+            //.debug()
+            .subscribe()
+            .disposed(by: viewController.disposeBag)
     }
 
-    private func showKeypad(invoice: Invoice, atIndex index: Int) {
-        let viewController = InvoiceKeypadViewController.instance()
-        let viewModel = InvoiceKeypadViewModel(dataManager: dependencies.dataManager, for: invoice, atIndex: index)
-        viewController.viewModel = viewModel
-        navigationController.showDetailViewController(viewController, sender: nil)
+    private func showKeypad(invoice: Invoice, atIndex index: Int) -> Observable<Void> {
+        let keypadCoordinator = ModalInvoiceKeypadCoordinator(rootViewController: navigationController,
+                                                              dependencies: dependencies, invoice: invoice,
+                                                              atIndex: index)
+        return coordinate(to: keypadCoordinator)
     }
 
 }

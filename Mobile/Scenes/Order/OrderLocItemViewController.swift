@@ -117,6 +117,7 @@ class OrderLocItemViewController: UIViewController {
             // closure args are row (IndexPath), element, cell
             // swiftlint:disable:next line_length
             .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier, cellType: StepperTableViewCell.self)) { (_, element, cell: StepperTableViewCell) in
+                // swiftlint:disable:next line_length
                 guard let cellViewModel = StepperCellViewModel(forOrderItem: element, bindings: cell.bindings, numberFormatter: numberFormatter) else {
                     fatalError("\(#function) FAILED : unable to init view model for \(element)")
                 }
