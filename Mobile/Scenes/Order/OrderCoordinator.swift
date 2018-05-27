@@ -263,11 +263,19 @@ class ModalOrderCoordinator: OrderCoordinator {
 
     private let rootViewController: UIViewController
     private let collection: OrderCollection
+    // swiftlint:disable:next weak_delegate
+    private var viewDelegate: ModalSplitViewDelegate
 
     init(rootViewController: UIViewController, dependencies: Dependencies, collection: OrderCollection) {
         self.rootViewController = rootViewController
         self.collection = collection
-        super.init(navigationController: UINavigationController(), dependencies: dependencies)
+
+        let detailNavigationController = DetailNavigationController()
+        self.viewDelegate = ModalSplitViewDelegate(detailNavigationController: detailNavigationController)
+        let masterNavigationController = NavigationController(withPopDetailCompletion: viewDelegate.replaceDetail)
+        viewDelegate.updateSecondaryWithDetail(from: masterNavigationController)
+
+        super.init(navigationController: masterNavigationController, dependencies: dependencies)
     }
 
     override func start() -> Observable<Void> {
@@ -275,7 +283,15 @@ class ModalOrderCoordinator: OrderCoordinator {
         let factory = OrderLocationFactory(collection: collection, in: dependencies.dataManager.managedObjectContext)
 
         navigationController.viewControllers = [containerController]
-        rootViewController.present(navigationController, animated: true)
+
+        let splitViewController = UISplitViewController()
+        splitViewController.delegate = viewDelegate
+        splitViewController.viewControllers = [navigationController, viewDelegate.detailNavigationController]
+        splitViewController.preferredDisplayMode = .allVisible
+
+        // Configure cancel button and present
+        containerController.navigationItem.leftBarButtonItem = containerController.cancelButtonItem
+        rootViewController.present(splitViewController, animated: true)
 
         // Selection - Vendor
         vendorsViewModel.showNext

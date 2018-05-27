@@ -74,6 +74,7 @@
 		C9375062202D72B50076B65E /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9375061202D72B50076B65E /* Coordinator.swift */; };
 		C9375064202D738D0076B65E /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9375063202D738D0076B65E /* Observable+Extensions.swift */; };
 		C9375066202D75390076B65E /* PrimaryContainerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9375065202D75390076B65E /* PrimaryContainerType.swift */; };
+		C93BD19C20BB3F48002E23DC /* ModalSplitViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93BD19B20BB3F48002E23DC /* ModalSplitViewDelegate.swift */; };
 		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
 		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
 		C945DAC31FEA2EAD009D0EB0 /* LoginViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */; };
@@ -279,6 +280,7 @@
 		C9375061202D72B50076B65E /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		C9375063202D738D0076B65E /* Observable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
 		C9375065202D75390076B65E /* PrimaryContainerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryContainerType.swift; sourceTree = "<group>"; };
+		C93BD19B20BB3F48002E23DC /* ModalSplitViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalSplitViewDelegate.swift; sourceTree = "<group>"; };
 		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Syncable.swift; sourceTree = "<group>"; };
 		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
 		C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginViewController.storyboard; sourceTree = "<group>"; };
@@ -798,6 +800,7 @@
 				C9045C121FC49EDA00F55FB3 /* BaseCoordinator.swift */,
 				C9045C141FC49F0000F55FB3 /* TabBarCoordinator.swift */,
 				C998A817204DD22E00600F5A /* SplitViewDelegate.swift */,
+				C93BD19B20BB3F48002E23DC /* ModalSplitViewDelegate.swift */,
 				C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */,
 				C998A81B204DD2BE00600F5A /* DetailNavigationController.swift */,
 				C998A819204DD27B00600F5A /* DetailNavigationControllerAnimator.swift */,
@@ -1449,6 +1452,7 @@
 				C96A89A01FAA5DB400CDDC59 /* OrderContainerViewController.swift in Sources */,
 				C98364401FA675F400DFAC6C /* OrderLocationFactory.swift in Sources */,
 				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,
+				C93BD19C20BB3F48002E23DC /* ModalSplitViewDelegate.swift in Sources */,
 				C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */,
 				C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */,
 				C95E44631FB2581400820067 /* HomeViewController.swift in Sources */,
