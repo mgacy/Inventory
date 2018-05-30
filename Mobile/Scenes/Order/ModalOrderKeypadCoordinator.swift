@@ -60,7 +60,7 @@ final class ModalOrderKeypadCoordinator: BaseCoordinator<Void> {
 
         rootViewController.present(presentedViewController, animated: true)
         return presentedViewController.dismissalEvents
-            .debug()
+            .debug("KeypadCoordinator: dismissalEvents")
             .take(1)
             .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
     }

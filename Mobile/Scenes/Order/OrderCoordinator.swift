@@ -243,7 +243,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             })
 
         itemSelection
-            //.debug()
+            //.debug("Coordinator: itemSelection")
             .subscribe()
             .disposed(by: viewController.disposeBag)
     }

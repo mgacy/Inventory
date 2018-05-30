@@ -28,6 +28,7 @@ class OrderKeypadViewController: UIViewController {
 
     var dismissalEvents: Observable<Void> {
         //return Observable.never()
+        //return displayView.itemDisplayView.dismissChevron.rx.tap.asObservable()
         //return panGestureDissmissalEvent.asObservable()
         return Observable.of(
             displayView.dismissalEvents.asObservable(),
