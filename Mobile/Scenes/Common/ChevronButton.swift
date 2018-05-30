@@ -15,7 +15,8 @@ class ChevronButton: UIButton {
     //    case up, down, left, right
     //}
     //public var direction: Direction = Direction.down
-    public var lineColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.35) // InvoiceDisplayHighlightView.indicatorColor
+    public var lineColor: UIColor = UIColor(red: 0.5, green: 0.5,
+                                            blue: 0.5, alpha: 0.35) // InvoiceDisplayHighlightView.indicatorColor
     public var lineWidth: CGFloat = 3
 
     private let inset: CGFloat = 2.0

@@ -125,7 +125,8 @@ class UnitView: UIView {
                 singleUnitLayer.path = endPath
             }
         default:
-            log.warning("Unable to handle transition: \(currentUnit) -> \(newUnit)")
+            break
+            //log.warning("Unable to handle transition: \(currentUnit) -> \(newUnit)")
         }
     }
 

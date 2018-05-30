@@ -29,7 +29,7 @@ final class InvoiceKeypadViewController: UIViewController {
             .merge()
     }
 
-    // View
+    // MARK: View
 
     lazy var displayView: InvoiceKeypadDisplayView = {
         let view = InvoiceKeypadDisplayView()
