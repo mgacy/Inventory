@@ -37,7 +37,7 @@ final class ModalOrderKeypadCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = OrderKeypadViewController.instance()
+        let viewController = OrderKeypadViewController()
         let viewModel: OrderKeypadViewModel
         switch displayType {
         case .location(let orderItems):
