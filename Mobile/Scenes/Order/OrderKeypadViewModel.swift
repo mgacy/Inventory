@@ -43,6 +43,12 @@ class OrderKeypadViewModel {
     var name: String {
         return currentItem.item?.name ?? "Error (2)"
     }
+    var itemName: String {
+        return currentItem.item?.name ?? "Error (1)"
+    }
+    var itemPack: String {
+        return currentItem.item?.packDisplay ?? "Error (2)"
+    }
     var orderUnit: String {
         return currentItem.orderUnit?.abbreviation ?? ""
     }
@@ -226,6 +232,9 @@ extension OrderKeypadViewModel: KeypadDelegate {
     }
 
 }
+
+extension OrderKeypadViewModel: DisplayItemViewModelType {}
+
 /*
 // MARK: - Alternative Approach
 
