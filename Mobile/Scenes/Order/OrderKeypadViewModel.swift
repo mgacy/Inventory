@@ -39,9 +39,6 @@ class OrderKeypadViewModel {
     // MARK: - X
 
     // Display
-    var name: String {
-        return currentItem.item?.name ?? "Error (2)"
-    }
     var itemName: String {
         return currentItem.item?.name ?? "Error (1)"
     }
