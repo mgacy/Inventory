@@ -109,9 +109,10 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
-        viewController.selectedIndices
-            .subscribe(onNext: { [weak self] index in
-                self?.showKeypad(for: parent, atIndex: index.row)
+        viewController.tableView.rx
+            .itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                self?.showKeypad(for: parent, atIndex: indexPath.row)
             })
             .disposed(by: disposeBag)
     }

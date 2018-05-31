@@ -31,18 +31,10 @@ class InventoryLocItemViewController: UITableViewController {
     var viewModel: InventoryLocItemViewModel!
     let disposeBag = DisposeBag()
 
-    let selectedIndices: Observable<IndexPath>
-    fileprivate let _selectedIndices = PublishSubject<IndexPath>()
-
     // TableViewCell
     let cellIdentifier = "InventoryItemCell"
 
     // MARK: - Lifecycle
-
-    required init?(coder aDecoder: NSCoder) {
-        self.selectedIndices = _selectedIndices.asObservable()
-        super.init(coder: aDecoder)
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +63,6 @@ class InventoryLocItemViewController: UITableViewController {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        _selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
