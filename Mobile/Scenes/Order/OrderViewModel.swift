@@ -10,24 +10,14 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-class OrderViewModel {
+final class OrderViewModel {
 
-    // MARK: - Properties
-
+    // MARK: Dependencies
+    //private let dependencies: Dependency
     private let dataManager: DataManager
     private let order: Order
 
-    // CoreData
-    private let filter: NSPredicate
-    private let sortDescriptors = [NSSortDescriptor(key: "item.name", ascending: true)]
-    //private let cacheName: String? = nil
-    //private let sectionNameKeyPath: String? = nil
-    private let fetchBatchSize = 20 // 0 = No Limit
-
-    // MARK: - Input
-    let placedOrder: AnyObserver<Void>
-
-    // MARK: - Output
+    // MARK: Properties
     let frc: NSFetchedResultsController<OrderItem>
     let isUploading: Driver<Bool>
     let uploadResults: Observable<Event<Order>>
@@ -75,38 +65,45 @@ class OrderViewModel {
         return message
     }
 
+    // CoreData
+    private let filter: NSPredicate
+    private let sortDescriptors = [NSSortDescriptor(key: "item.name", ascending: true)]
+    //private let cacheName: String? = nil
+    //private let sectionNameKeyPath: String? = nil
+    private let fetchBatchSize = 20 // 0 = No Limit
+
     // MARK: - Lifecycle
 
-    required init(dataManager: DataManager, parentObject: Order) {
-        self.dataManager = dataManager
-        self.order = parentObject
-
-        let _placedOrder = PublishSubject<Void>()
-        self.placedOrder = _placedOrder.asObserver()
+    init(dependency: Dependency, bindings: Bindings) {
+        self.dataManager = dependency.dataManager
+        self.order = dependency.parentObject
 
         // Upload
         let isUploading = ActivityIndicator()
         self.isUploading = isUploading.asDriver()
 
-        self.uploadResults = _placedOrder.asObservable()
+        self.uploadResults = bindings.placedOrder
             .flatMap { _ -> Observable<Event<Order>> in
                 log.info("POSTing Order ...")
-                parentObject.status = OrderStatus.placed.rawValue
-                return dataManager.updateOrder(parentObject)
+                dependency.parentObject.status = OrderStatus.placed.rawValue
+                return dependency.dataManager.updateOrder(dependency.parentObject)
                     .trackActivity(isUploading)
             }
             /// TODO: save context?
             .share()
 
         // FetchRequest
-        self.filter = NSPredicate(format: "order == %@", parentObject)
+        self.filter = NSPredicate(format: "order == %@", dependency.parentObject)
 
         let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
         request.sortDescriptors = sortDescriptors
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        self.frc = dependency.dataManager.createFetchedResultsController(fetchRequest: request)
+
+        // Selection
+        // ...
     }
 
     // MARK: - Actions
@@ -129,4 +126,18 @@ class OrderViewModel {
         _ = dataManager.saveOrRollback()
     }
 
+    // MARK: -
+
+    struct Dependency {
+        let dataManager: DataManager
+        let parentObject: Order
+    }
+
+    struct Bindings {
+        let rowTaps: Observable<IndexPath>
+        let placedOrder: Observable<Void>
+    }
+
 }
+
+// extension OrderViewModel: AttachableViewModelType {}

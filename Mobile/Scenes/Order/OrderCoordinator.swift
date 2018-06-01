@@ -143,16 +143,18 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showItemList(order: Order) {
-        let viewController = OrderItemViewController.instance()
-        let viewModel = OrderViewModel(dataManager: dependencies.dataManager, parentObject: order)
+        let viewController = OrderItemViewController()
+        let viewModel = OrderViewModel(
+            dependency: OrderViewModel.Dependency(dataManager: dependencies.dataManager, parentObject: order),
+            bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
 
         // Pop on uploadResults?
 
         // Navigation
-        /// TODO: use more standard `viewController.tableView.rx.itemSelected`
-        let itemSelection = viewController.selectedIndices
+        let itemSelection = viewController.tableView.rx
+            .itemSelected
             .map { [weak self] indexPath -> Observable<Void>? in
                 log.debug("We selected: \(indexPath)")
                 return self?.showKeypad(order: order, atIndex: indexPath.row)

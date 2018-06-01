@@ -16,12 +16,17 @@ class OrderItemViewController: UIViewController {
 
     // MARK: - Properties
 
+    var bindings: OrderViewModel.Bindings {
+        return OrderViewModel.Bindings(
+            rowTaps: tableView.rx.itemSelected.asObservable(),
+            placedOrder: placedOrder.asObservable()
+        )
+    }
+
     var viewModel: OrderViewModel!
     let disposeBag = DisposeBag()
 
     let placedOrder = PublishSubject<Void>()
-    let selectedIndices: Observable<IndexPath>
-    fileprivate let _selectedIndices = PublishSubject<IndexPath>()
 
     // Create a MessageComposer
     /// TODO: should I instantiate this here or only in `.setupView()`?
@@ -31,25 +36,46 @@ class OrderItemViewController: UIViewController {
     // TableView
     let cellIdentifier = "OrderItemCell"
 
-    // MARK: - Display Outlets
-    @IBOutlet weak var repNameTextLabel: UILabel!
-    @IBOutlet weak var messageButton: RoundButton!
-    @IBOutlet weak var emailButton: RoundButton!
-    @IBOutlet weak var callButton: RoundButton!
-    @IBOutlet weak var tableView: UITableView!
+    // MARK: - Views
+
+    lazy var headerView: OrderItemHeaderView = {
+        let view = OrderItemHeaderView()
+        view.backgroundColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.backgroundColor = .white
+        tv.delegate = self
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        return tv
+    }()
+
+    //lazy var footerView: OrderItemFooterView = {
+    //    let view = OrderItemFooterView()
+    //    view.backgroundColor = .white
+    //    view.translatesAutoresizingMaskIntoConstraints = false
+    //    return view
+    //}()
 
     // MARK: - Lifecycle
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
     required init?(coder aDecoder: NSCoder) {
-        self.selectedIndices = _selectedIndices.asObservable()
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = viewModel.vendorName
-        setupBindings()
-        setupTableView()
+        //title = viewModel.vendorName
+        //setupBindings()
+        //setupTableView()
+        setupView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -57,42 +83,77 @@ class OrderItemViewController: UIViewController {
         self.tableView.reloadData()
         // Update in case we have returned from the keypad where we updated the quantity of an OrderItem
         viewModel.updateOrderStatus()
-        setupView()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        //setupView()
     }
 
     // MARK: - View Methods
 
-    func setupView() {
-        repNameTextLabel.text = viewModel.repName
+    private func setupView() {
+        title = viewModel.vendorName
 
-        callButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
-        emailButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
-        messageButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
+        view.addSubview(headerView)
+        view.addSubview(tableView)
+        //view.addSubview(footerView)
 
-        callButton.isEnabled = false
-        emailButton.isEnabled = false
+        setupConstraints()
+        setupBindings()
+
+        // Subviews
+        setupTableView()
+        //setupTableView(with: viewModel)
+        setupHeaderView()
+        //setupFooterView()
+    }
+
+    private func setupHeaderView() {
+        headerView.repNameTextLabel.text = viewModel.repName
+
+        headerView.messageButton.addTarget(self, action: #selector(tappedMessageButton(_:)), for: .touchDown)
+        headerView.emailButton.addTarget(self, action: #selector(tappedEmailButton(_:)), for: .touchDown)
+        headerView.callButton.addTarget(self, action: #selector(tappedCallButton(_:)), for: .touchDown)
 
         #if !(arch(i386) || arch(x86_64)) && os(iOS)
             guard messageComposer.canSendText() else {
-                messageButton.isEnabled = false
+                headerView.messageButton.isEnabled = false
                 return
             }
         #endif
 
         /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
-        messageButton.isEnabled = viewModel.canMessageOrder
+        headerView.messageButton.isEnabled = viewModel.canMessageOrder
+    }
+
+    //private func setupFooterView() {}
+
+    private func setupConstraints() {
+        let guide: UILayoutGuide
+        if #available(iOS 11, *) {
+            guide = view.safeAreaLayoutGuide
+        } else {
+            guide = view.layoutMarginsGuide
+        }
+        let constraints = [
+            // headerView
+            headerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            headerView.topAnchor.constraint(equalTo: guide.topAnchor),
+            headerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            headerView.heightAnchor.constraint(equalToConstant: 120.0),
+            // footerView
+            //footerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            //footerView.bottomAnchor.constraint(equalTo: guide.bottomAnchor),
+            //footerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            //footerView.heightAnchor.constraint(equalToConstant: 50.0),
+            // tableView
+            tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
+            tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            //tableView.bottomAnchor.constraint(equalTo: footerView.topAnchor)
+            tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
+        ]
+        NSLayoutConstraint.activate(constraints)
     }
 
     private func setupBindings() {
-
-        placedOrder.asObservable()
-            .bind(to: viewModel.placedOrder)
-            .disposed(by: disposeBag)
 
         // Uploading
         viewModel.isUploading
@@ -125,9 +186,9 @@ class OrderItemViewController: UIViewController {
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<OrderItemViewController>!
 
+    /// TODO: pass `(with viewModel: OrderItemViewModel)`?
     fileprivate func setupTableView() {
-        tableView.delegate = self
-        //tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 80
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
@@ -136,7 +197,7 @@ class OrderItemViewController: UIViewController {
 
     // MARK: - User Actions
 
-    @IBAction func tappedMessageButton(_ sender: Any) {
+    @objc func tappedMessageButton(_ sender: UIButton) {
         log.debug("Send message ...")
 
         // Simply POST the order if we already sent the message but were unable to POST it previously
@@ -154,10 +215,15 @@ class OrderItemViewController: UIViewController {
         #else
             completedPlaceOrder(.sent)
         #endif
+
     }
 
-    @IBAction func tappedEmailButton(_ sender: Any) {
+    @objc func tappedEmailButton(_ sender: UIButton) {
         log.debug("Email message ...")
+    }
+
+    @objc func tappedCallButton(_ sender: UIButton) {
+        log.debug("Call representative ...")
     }
 
 }
@@ -184,7 +250,6 @@ extension OrderItemViewController {
 extension OrderItemViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        _selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -227,10 +292,11 @@ extension OrderItemViewController: TableViewDataSourceDelegate {
         }
     }
 
-    func configure(_ cell: OrderItemTableViewCell, for orderItem: OrderItem) {
-        cell.configure(forOrderItem: orderItem)
-        //let viewModel = OrderItemCellViewModel(forOrderItem: orderItem)
-        //cell.configure(withViewModel: viewModel)
+    func configure(_ cell: SubItemTableViewCell, for orderItem: OrderItem) {
+        /// TODO: simply add extension on SubItemTableViewCell passing OrderItem as arg?
+        //cell.configure(forOrderItem: orderItem)
+        let viewModel = OrderItemCellViewModel(forOrderItem: orderItem)!
+        cell.configure(withViewModel: viewModel)
     }
 
 }

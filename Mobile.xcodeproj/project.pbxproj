@@ -127,6 +127,7 @@
 		C98B25FC2071860C00F1D157 /* ChevronButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98B25FB2071860C00F1D157 /* ChevronButton.swift */; };
 		C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */; };
 		C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */; };
+		C98FDED420C1E414005ED2AE /* OrderItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98FDED320C1E414005ED2AE /* OrderItemView.swift */; };
 		C99568CA1FBB809C00AE6949 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99568C91FBB809C00AE6949 /* ViewModelType.swift */; };
 		C998A818204DD22E00600F5A /* SplitViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C998A817204DD22E00600F5A /* SplitViewDelegate.swift */; };
 		C998A81A204DD27B00600F5A /* DetailNavigationControllerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C998A819204DD27B00600F5A /* DetailNavigationControllerAnimator.swift */; };
@@ -337,6 +338,7 @@
 		C98B25FB2071860C00F1D157 /* ChevronButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChevronButton.swift; sourceTree = "<group>"; };
 		C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadViewModel.swift; sourceTree = "<group>"; };
 		C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+MyStuff.swift"; sourceTree = "<group>"; };
+		C98FDED320C1E414005ED2AE /* OrderItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemView.swift; sourceTree = "<group>"; };
 		C99568C91FBB809C00AE6949 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		C998A817204DD22E00600F5A /* SplitViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewDelegate.swift; sourceTree = "<group>"; };
 		C998A819204DD27B00600F5A /* DetailNavigationControllerAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNavigationControllerAnimator.swift; sourceTree = "<group>"; };
@@ -887,6 +889,7 @@
 				C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */,
 				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
 				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
+				C98FDED320C1E414005ED2AE /* OrderItemView.swift */,
 				C9EB7D891EE7910000515429 /* MailComposer.swift */,
 				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
 				C91C92831EFCDBE400566CEB /* OrderItemTableViewCell.swift */,
@@ -1505,6 +1508,7 @@
 				C93203EC1FC6AA3000ACFC1D /* SettingsCoordinator.swift in Sources */,
 				C998A81C204DD2BE00600F5A /* DetailNavigationController.swift in Sources */,
 				C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */,
+				C98FDED420C1E414005ED2AE /* OrderItemView.swift in Sources */,
 				C998A818204DD22E00600F5A /* SplitViewDelegate.swift in Sources */,
 				C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */,
 				C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */,
