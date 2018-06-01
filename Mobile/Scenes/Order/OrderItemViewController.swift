@@ -20,9 +20,8 @@ class OrderItemViewController: UIViewController {
     let disposeBag = DisposeBag()
 
     let placedOrder = PublishSubject<Void>()
-    let selectedIndices = PublishSubject<IndexPath>()
-    //let selectedIndices: Observable<IndexPath>
-    //fileprivate let _selectedIndices = PublishSubject<IndexPath>()
+    let selectedIndices: Observable<IndexPath>
+    fileprivate let _selectedIndices = PublishSubject<IndexPath>()
 
     // Create a MessageComposer
     /// TODO: should I instantiate this here or only in `.setupView()`?
@@ -41,10 +40,10 @@ class OrderItemViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-    //required init?(coder aDecoder: NSCoder) {
-    //    self.selectedIndices = _selectedIndices.asObservable()
-    //    super.init(coder: aDecoder)
-    //}
+    required init?(coder aDecoder: NSCoder) {
+        self.selectedIndices = _selectedIndices.asObservable()
+        super.init(coder: aDecoder)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -185,8 +184,7 @@ extension OrderItemViewController {
 extension OrderItemViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //_selectedIndices.onNext(indexPath)
-        selectedIndices.onNext(indexPath)
+        _selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
