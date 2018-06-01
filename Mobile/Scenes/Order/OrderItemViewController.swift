@@ -67,6 +67,27 @@ class OrderItemViewController: UIViewController {
 
     // MARK: - View Methods
 
+    func setupView() {
+        repNameTextLabel.text = viewModel.repName
+
+        callButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
+        emailButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
+        messageButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
+
+        callButton.isEnabled = false
+        emailButton.isEnabled = false
+
+        #if !(arch(i386) || arch(x86_64)) && os(iOS)
+            guard messageComposer.canSendText() else {
+                messageButton.isEnabled = false
+                return
+            }
+        #endif
+
+        /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
+        messageButton.isEnabled = viewModel.canMessageOrder
+    }
+
     private func setupBindings() {
 
         placedOrder.asObservable()
@@ -111,27 +132,6 @@ class OrderItemViewController: UIViewController {
         //tableView.estimatedRowHeight = 80
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
                                          fetchedResultsController: viewModel.frc, delegate: self)
-    }
-
-    func setupView() {
-        repNameTextLabel.text = viewModel.repName
-
-        callButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
-        emailButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
-        messageButton.setBackgroundColor(color: UIColor.lightGray, forState: .disabled)
-
-        callButton.isEnabled = false
-        emailButton.isEnabled = false
-
-        #if !(arch(i386) || arch(x86_64)) && os(iOS)
-            guard messageComposer.canSendText() else {
-                messageButton.isEnabled = false
-                return
-            }
-        #endif
-
-        /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
-        messageButton.isEnabled = viewModel.canMessageOrder
     }
 
     // MARK: - User Actions
