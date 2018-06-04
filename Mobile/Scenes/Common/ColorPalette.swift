@@ -55,5 +55,9 @@ public struct ColorPalette {
     public static let starDust = UIColor(red: 0.63, green: 0.63, blue: 0.63, alpha: 1.00)
     public static let athensGray = UIColor(red: 0.94, green: 0.94, blue: 0.96, alpha: 1.00)
 
+    // MARK: - Interface Elements
+    public static let dividerColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.0)    // Major divisions
+    public static let separatorColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.0)  // Minor divisions
+
     private init() {}
 }
