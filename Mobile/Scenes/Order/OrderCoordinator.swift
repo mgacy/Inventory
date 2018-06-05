@@ -272,8 +272,7 @@ class ModalOrderCoordinator: OrderCoordinator {
         self.rootViewController = rootViewController
         self.collection = collection
 
-        let detailNavigationController = DetailNavigationController()
-        self.viewDelegate = ModalSplitViewDelegate(detailNavigationController: detailNavigationController)
+        self.viewDelegate = ModalSplitViewDelegate(detailNavigationController: DetailNavigationController())
         let masterNavigationController = NavigationController(withPopDetailCompletion: viewDelegate.replaceDetail)
         viewDelegate.updateSecondaryWithDetail(from: masterNavigationController)
 
@@ -283,7 +282,6 @@ class ModalOrderCoordinator: OrderCoordinator {
     override func start() -> Observable<Void> {
         let (containerController, locationsController, vendorsViewModel) = configureContainer(with: collection)
         let factory = OrderLocationFactory(collection: collection, in: dependencies.dataManager.managedObjectContext)
-
         navigationController.viewControllers = [containerController]
 
         let splitViewController = UISplitViewController()
