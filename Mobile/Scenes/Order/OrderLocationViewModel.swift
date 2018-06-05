@@ -26,12 +26,13 @@ struct OrderLocationViewModel {
     let showTable: Driver<Bool>
     let locations: Observable<[RemoteLocation]>
     let errorMessages: Driver<String>
+    //let selectedLocation: Observable<RemoteLocation>
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, collection: OrderCollection) {
-        self.dataManager = dataManager
-        self.collection = collection
+    init(dependency: Dependency) {
+        self.dataManager = dependency.dataManager
+        self.collection = dependency.collection
         self.factory = OrderLocationFactory(collection: collection, in: dataManager.managedObjectContext)
 
         // Activity
@@ -64,5 +65,16 @@ struct OrderLocationViewModel {
 
         self.locations = locationResults.elements()
     }
+
+    // MARK: -
+
+    struct Dependency {
+        let dataManager: DataManager
+        let collection: OrderCollection
+    }
+
+    //struct Bindings {
+    //    let rowTaps: Observable<IndexPath>
+    //}
 
 }

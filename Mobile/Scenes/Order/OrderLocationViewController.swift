@@ -16,7 +16,16 @@ class OrderLocationViewController: UIViewController {
         static let navTitle = "Locations"
         static let errorAlertTitle = "Error"
     }
-
+    /*
+    var bindings: OrderLocationViewModel.Bindings {
+        return OrderLocationViewModel.Bindings(
+            //cancelTaps: cancelButtonItem.rx.tap.asObservable(),
+            //rowTaps: tableView.rx.itemSelected.asDriver()
+            rowTaps: tableView.rx.itemSelected.asObservable()
+            //uploadTaps: uploadButtonItem.rx.tap.asObservable()
+        )
+    }
+    */
     // MARK: - Properties
 
     var viewModel: OrderLocationViewModel!

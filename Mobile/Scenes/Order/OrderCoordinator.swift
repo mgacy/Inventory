@@ -60,7 +60,9 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
         // OrderLocationViewController
         let locationsController = OrderLocationViewController.instance()
-        let locationsViewModel = OrderLocationViewModel(dataManager: dependencies.dataManager, collection: collection)
+        let locationsViewModel = OrderLocationViewModel(dependency: OrderLocationViewModel.Dependency(
+            dataManager: dependencies.dataManager, collection: collection))
+
         locationsController.viewModel = locationsViewModel
 
         // OrderContainerViewController
@@ -185,7 +187,9 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationList(collection: OrderCollection) {
         let viewController = OrderLocationViewController.instance()
-        let viewModel = OrderLocationViewModel(dataManager: dependencies.dataManager, collection: collection)
+        let viewModel = OrderLocationViewModel(dependency: OrderLocationViewModel.Dependency(
+            dataManager: dependencies.dataManager, collection: collection))
+
         viewController.viewModel = viewModel
         //navigationController.pushViewController(viewController, animated: true)
 
