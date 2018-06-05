@@ -99,6 +99,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Selection - Location
         locationsController.tableView.rx
             .modelSelected(RemoteLocation.self)
+            //.debug("Selection")
             .subscribe(onNext: { [weak self] location in
                 guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
                 switch location.locationType {
@@ -216,8 +217,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         viewController.tableView.rx
             .modelSelected(RemoteItemCategory.self)
             .subscribe(onNext: { [weak self] category in
-                log.debug("We selected: \(category)")
-
+                //log.debug("We selected: \(category)")
                 let parent = OrderLocItemParent.category(category)
                 self?.showLocationItemList(parent: parent, factory: factory)
             })
@@ -234,7 +234,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let itemSelection = viewController.tableView.rx
             .itemSelected
             .map { [weak self] indexPath -> Observable<Void>? in
-                log.debug("We selected: \(indexPath)")
+                //log.debug("We selected: \(indexPath)")
                 return self?.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
             }
             .do(onNext: { _ in
