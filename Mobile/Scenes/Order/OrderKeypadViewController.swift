@@ -20,6 +20,7 @@ class OrderKeypadViewController: UIViewController {
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
     private let panGestureDissmissalEvent = PublishSubject<Void>()
+    //private let changeItemDissmissalEvent = PublishSubject<Void>()
 
     // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
@@ -170,6 +171,7 @@ class OrderKeypadViewController: UIViewController {
             updateDisplay()
         case false:
             /// TODO: emit event so coordinator can dismiss
+            //changeItemDissmissalEvent.onNext(())
             if let navController = navigationController {
                 navController.popViewController(animated: true)
             } else {
@@ -184,6 +186,7 @@ class OrderKeypadViewController: UIViewController {
             updateDisplay()
         case false:
             /// TODO: emit event so coordinator can dismiss
+            //changeItemDissmissalEvent.onNext(())
             if let navController = navigationController {
                 navController.popViewController(animated: true)
             } else {
