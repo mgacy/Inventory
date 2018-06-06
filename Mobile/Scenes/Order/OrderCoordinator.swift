@@ -158,9 +158,9 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Navigation
         let itemSelection = viewController.tableView.rx
             .itemSelected
-            .map { [weak self] indexPath -> Observable<Void>? in
-                log.debug("We selected: \(indexPath)")
-                return self?.showKeypad(order: order, atIndex: indexPath.row)
+            .map { [weak self] indexPath -> Observable<Void> in
+                guard let strongSelf = self else { fatalError("Unable to get self") }
+                return strongSelf.showKeypad(order: order, atIndex: indexPath.row)
             }
             .do(onNext: { _ in
                 // Deselect
@@ -237,9 +237,10 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Navigation
         let itemSelection = viewController.tableView.rx
             .itemSelected
-            .map { [weak self] indexPath -> Observable<Void>? in
+            .map { [weak self] indexPath -> Observable<Void> in
                 //log.debug("We selected: \(indexPath)")
-                return self?.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
             }
             .do(onNext: { _ in
                 // Deselect
