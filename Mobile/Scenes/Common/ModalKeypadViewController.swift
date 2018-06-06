@@ -23,6 +23,7 @@ protocol ModalKeypadDismissing: class {
 
 final class ModalKeypadViewController: UIViewController {
 
+    let dismissalEvents: Observable<Void>
     let disposeBag = DisposeBag()
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
@@ -32,14 +33,6 @@ final class ModalKeypadViewController: UIViewController {
     // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
 
-    var dismissalEvents: Observable<Void> {
-        return Observable.of(
-            panGestureDissmissalEvent.asObservable(),
-            tapGestureRecognizer.rx.event.mapToVoid()
-        )
-            .merge()
-    }
-
     // MARK: Subviews
     private let keypadViewController: UIViewController & ModalKeypadDismissing
 
@@ -48,6 +41,7 @@ final class ModalKeypadViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor.clear
         view.isOpaque = false
+        view.isUserInteractionEnabled = true
         return view
     }()
 
@@ -56,6 +50,13 @@ final class ModalKeypadViewController: UIViewController {
     /// TODO: pass primary view controller (or its constraints) to configure widths?
     init(keypadViewController: UIViewController & ModalKeypadDismissing) {
         self.keypadViewController = keypadViewController
+        self.dismissalEvents = Observable.of(
+            keypadViewController.dismissalEvents,
+            panGestureDissmissalEvent.asObservable(),
+            tapGestureRecognizer.rx.event.mapToVoid()
+        )
+        .merge()
+
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
         transitioningDelegate = customTransitionDelegate
