@@ -105,6 +105,9 @@ class OrderLocationViewController: UIViewController {
 
         viewModel.showTable
             .map { !$0 }
+            .do(onNext: { [weak self] _ in
+                self?.tableView.reloadData()
+            })
             .drive(tableView.rx.isHidden)
             .disposed(by: disposeBag)
 
