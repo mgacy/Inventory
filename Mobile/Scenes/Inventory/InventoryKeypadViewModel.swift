@@ -48,10 +48,10 @@ class InventoryKeypadViewModel: KeypadViewModel {
 
     // Display
     let itemName = Variable<String>("")
+    let itemPack = Variable<String>("")
     let itemValue = Variable<String>("")
     let itemValueColor = Variable<UIColor>(.black)
     let itemHistory = Variable<String>("")
-    let itemPack = Variable<String>("")
     let itemUnit = Variable<String>("")
     /// TODO: add Observable to pop controller
 
