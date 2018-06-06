@@ -134,3 +134,26 @@ class DisplayItemView: UIView {
     }
 
 }
+
+// MARK: - Rx
+
+public protocol ReactiveDisplayItemViewModelType {
+    var itemName: Observable<String> { get }
+    var itemPack: Observable<String> { get }
+}
+
+extension Reactive where Base: DisplayItemView {
+
+    var itemName: Binder<String?> {
+        return Binder(self.base) { (view, string) -> Void in
+            view.itemName.text = string
+        }
+    }
+
+    var itemPack: Binder<String?> {
+        return Binder(self.base) { (view, string) -> Void in
+            view.itemPack.text = string
+        }
+    }
+
+}
