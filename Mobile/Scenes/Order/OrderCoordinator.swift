@@ -158,7 +158,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Navigation
         let itemSelection = viewController.tableView.rx
             .itemSelected
-            .map { [weak self] indexPath -> Observable<Void> in
+            .flatMap { [weak self] indexPath -> Observable<Void> in
                 guard let strongSelf = self else { fatalError("Unable to get self") }
                 return strongSelf.showKeypad(order: order, atIndex: indexPath.row)
             }
@@ -170,7 +170,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             })
 
         itemSelection
-            //.debug("itemSelection")
+            //.debug("itemSelection (from Coordinator")
             .subscribe()
             .disposed(by: viewController.disposeBag)
 
@@ -189,7 +189,6 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let viewController = OrderLocationViewController.instance()
         let viewModel = OrderLocationViewModel(dependency: OrderLocationViewModel.Dependency(
             dataManager: dependencies.dataManager, collection: collection))
-
         viewController.viewModel = viewModel
         //navigationController.pushViewController(viewController, animated: true)
 
@@ -237,7 +236,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Navigation
         let itemSelection = viewController.tableView.rx
             .itemSelected
-            .map { [weak self] indexPath -> Observable<Void> in
+            .flatMap { [weak self] indexPath -> Observable<Void> in
                 //log.debug("We selected: \(indexPath)")
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
@@ -250,7 +249,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             })
 
         itemSelection
-            //.debug("Coordinator: itemSelection")
+            .debug("itemSelection (from Coordinator")
             .subscribe()
             .disposed(by: viewController.disposeBag)
     }

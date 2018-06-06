@@ -115,6 +115,26 @@ class InventoryCoordinator: BaseCoordinator<Void> {
                 self?.showKeypad(for: parent, atIndex: indexPath.row)
             })
             .disposed(by: disposeBag)
+
+        // Selection
+        let itemSelection = viewController.tableView.rx
+            .itemSelected
+            .flatMap { [weak self] indexPath -> Observable<Void> in
+                //log.debug("We selected: \(indexPath)")
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showModalKeypad(for: parent, atIndex: indexPath.row)
+            }
+            .do(onNext: { _ in
+                // Deselect
+                if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
+                    viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                }
+            })
+
+        itemSelection
+            //.debug("itemSelection (from Coordinator")
+            .subscribe()
+            .disposed(by: viewController.disposeBag)
     }
 
     fileprivate func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
