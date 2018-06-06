@@ -124,6 +124,12 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         navigationController.showDetailViewController(viewController, sender: nil)
     }
 
+    fileprivate func showModalKeypad(for parent: LocationItemListParent, atIndex index: Int) -> Observable<Void> {
+        let keypadCoordinator = InventoryKeypadCoordinator(rootViewController: navigationController,
+                                                           dependencies: dependencies, parent: parent, atIndex: index)
+        return coordinate(to: keypadCoordinator)
+    }
+
 }
 
 // MARK: - Modal Display from Home
