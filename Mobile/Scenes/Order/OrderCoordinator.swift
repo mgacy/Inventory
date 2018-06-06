@@ -167,11 +167,15 @@ class OrderCoordinator: BaseCoordinator<Void> {
                 if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
                     viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
+                // Update
+                viewModel.updateOrderStatus()
+                viewController.headerView.messageButton.isEnabled = viewModel.canMessageOrder
             })
 
         itemSelection
             //.debug("itemSelection (from Coordinator")
             .subscribe()
+            //.disposed(by: disposeBag)
             .disposed(by: viewController.disposeBag)
 
     }
