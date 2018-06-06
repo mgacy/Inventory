@@ -118,7 +118,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
-        let viewController = InventoryKeypadViewController.instance()
+        let viewController = InventoryKeypadViewController()
         let viewModel = InventoryKeypadViewModel(dataManager: dependencies.dataManager, for: parent, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
@@ -173,7 +173,7 @@ class ModalInventoryCoordinator: InventoryCoordinator {
     }
 
     override func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
-        let viewController = InventoryKeypadViewController.instance()
+        let viewController = InventoryKeypadViewController()
         let viewModel = InventoryKeypadViewModel(dataManager: dependencies.dataManager, for: parent, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
