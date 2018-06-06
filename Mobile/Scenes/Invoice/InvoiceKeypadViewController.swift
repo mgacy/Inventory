@@ -19,14 +19,19 @@ final class InvoiceKeypadViewController: UIViewController {
 
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
+    private let changeItemDissmissalEvent = PublishSubject<Void>()
     private let panGestureDissmissalEvent = PublishSubject<Void>()
 
     // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
 
     var dismissalEvents: Observable<Void> {
-        return Observable.of(panGestureDissmissalEvent.asObservable(), displayView.dismissalEvents.asObservable())
-            .merge()
+        return Observable.of(
+            displayView.dismissalEvents.asObservable(),
+            changeItemDissmissalEvent.asObservable(),
+            panGestureDissmissalEvent.asObservable()
+        )
+        .merge()
     }
 
     // MARK: View
@@ -88,7 +93,6 @@ final class InvoiceKeypadViewController: UIViewController {
         view.addGestureRecognizer(panGestureRecognizer)
 
         view.addSubview(stackView)
-
         setupConstraints()
     }
 
@@ -172,12 +176,12 @@ final class InvoiceKeypadViewController: UIViewController {
         case true:
             updateDisplay()
         case false:
-            /// TODO: emit event so coordinator can dismiss
-            if let navController = navigationController {
-                navController.popViewController(animated: true)
-            } else {
-                dismiss(animated: true)
-            }
+            changeItemDissmissalEvent.onNext(())
+            //if let navController = navigationController {
+            //    navController.popViewController(animated: true)
+            //} else {
+            //    dismiss(animated: true)
+            //}
         }
     }
 
@@ -186,12 +190,12 @@ final class InvoiceKeypadViewController: UIViewController {
         case true:
             updateDisplay()
         case false:
-            /// TODO: emit event so coordinator can dismiss
-            if let navController = navigationController {
-                navController.popViewController(animated: true)
-            } else {
-                dismiss(animated: true)
-            }
+            changeItemDissmissalEvent.onNext(())
+            //if let navController = navigationController {
+            //    navController.popViewController(animated: true)
+            //} else {
+            //    dismiss(animated: true)
+            //}
         }
     }
 
@@ -202,7 +206,7 @@ final class InvoiceKeypadViewController: UIViewController {
         updateDisplay()
     }
 
-    // MARK: - C
+    // MARK: - Display
 
     func updateDisplay() {
         displayView.bind(to: viewModel)

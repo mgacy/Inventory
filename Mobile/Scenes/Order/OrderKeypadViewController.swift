@@ -20,8 +20,8 @@ class OrderKeypadViewController: UIViewController {
 
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
+    private let changeItemDissmissalEvent = PublishSubject<Void>()
     private let panGestureDissmissalEvent = PublishSubject<Void>()
-    //private let changeItemDissmissalEvent = PublishSubject<Void>()
 
     // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
@@ -31,6 +31,7 @@ class OrderKeypadViewController: UIViewController {
     var dismissalEvents: Observable<Void> {
         return Observable.of(
             displayView.dismissalEvents.asObservable(),
+            changeItemDissmissalEvent.asObservable(),
             panGestureDissmissalEvent.asObservable()
         )
         .merge()
@@ -168,13 +169,12 @@ class OrderKeypadViewController: UIViewController {
         case true:
             updateDisplay()
         case false:
-            /// TODO: emit event so coordinator can dismiss
-            //changeItemDissmissalEvent.onNext(())
-            if let navController = navigationController {
-                navController.popViewController(animated: true)
-            } else {
-                dismiss(animated: true)
-            }
+            changeItemDissmissalEvent.onNext(())
+            //if let navController = navigationController {
+            //    navController.popViewController(animated: true)
+            //} else {
+            //    dismiss(animated: true)
+            //}
         }
     }
 
@@ -183,13 +183,12 @@ class OrderKeypadViewController: UIViewController {
         case true:
             updateDisplay()
         case false:
-            /// TODO: emit event so coordinator can dismiss
-            //changeItemDissmissalEvent.onNext(())
-            if let navController = navigationController {
-                navController.popViewController(animated: true)
-            } else {
-                dismiss(animated: true)
-            }
+            changeItemDissmissalEvent.onNext(())
+            //if let navController = navigationController {
+            //    navController.popViewController(animated: true)
+            //} else {
+            //    dismiss(animated: true)
+            //}
         }
     }
 
