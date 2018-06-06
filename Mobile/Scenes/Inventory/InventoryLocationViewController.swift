@@ -74,11 +74,7 @@ class InventoryLocationViewController: UIViewController, AttachableType {
         self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        log.warning("\(#function)")
-        // Dispose of any resources that can be recreated.
-    }
+    //override func didReceiveMemoryWarning() {}
 
     // MARK: - View Methods
 
