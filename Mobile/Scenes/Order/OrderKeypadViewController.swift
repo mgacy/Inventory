@@ -15,6 +15,7 @@ class OrderKeypadViewController: UIViewController {
     // MARK: - Properties
 
     let disposeBag = DisposeBag()
+    let dismissalEvents: Observable<Void>
     var viewModel: OrderKeypadViewModel!
 
     // swiftlint:disable:next weak_delegate
@@ -27,17 +28,13 @@ class OrderKeypadViewController: UIViewController {
 
     let panGestureRecognizer: UIPanGestureRecognizer
 
-    var dismissalEvents: Observable<Void> {
-        //return Observable.never()
-        //return displayView.itemDisplayView.dismissChevron.rx.tap.asObservable()
-        //return panGestureDissmissalEvent.asObservable()
-        return Observable.of(
-            displayView.dismissalEvents.asObservable(),
-            //panGestureDissmissalEvent.asObservable(),
-            panGestureRecognizer.rx.event.mapToVoid()
-        )
-        .merge()
-    }
+//    var dismissalEvents: Observable<Void> {
+//        return Observable.of(
+//            displayView.dismissalEvents.asObservable(),
+//            panGestureDissmissalEvent.asObservable()
+//        )
+//        .merge()
+//    }
 
     // MARK: View
 
@@ -70,6 +67,11 @@ class OrderKeypadViewController: UIViewController {
 
     init() {
         panGestureRecognizer = UIPanGestureRecognizer()
+        self.dismissalEvents = Observable.of(
+            //displayView.dismissalEvents.asObservable(),
+            panGestureDissmissalEvent.asObservable()
+        ).merge()
+
         super.init(nibName: nil, bundle: nil)
         panGestureRecognizer.addTarget(self, action: #selector(handleGesture(_:)))
         modalPresentationStyle = .custom
