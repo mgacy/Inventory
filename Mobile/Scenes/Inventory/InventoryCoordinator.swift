@@ -117,7 +117,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
 
         // Selection
-        let itemSelection = viewController.tableView.rx
+        viewController.tableView.rx
             .itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
                 //log.debug("We selected: \(indexPath)")
@@ -130,9 +130,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
                     viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
-
-        itemSelection
-            //.debug("itemSelection (from Coordinator")
+            //.debug("itemSelection - \(viewController)")
             .subscribe()
             .disposed(by: viewController.disposeBag)
     }

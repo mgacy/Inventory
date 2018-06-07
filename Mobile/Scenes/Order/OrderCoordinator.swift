@@ -156,7 +156,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Pop on uploadResults?
 
         // Navigation
-        let itemSelection = viewController.tableView.rx
+        viewController.tableView.rx
             .itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
                 guard let strongSelf = self else { fatalError("Unable to get self") }
@@ -171,13 +171,10 @@ class OrderCoordinator: BaseCoordinator<Void> {
                 viewModel.updateOrderStatus()
                 viewController.headerView.messageButton.isEnabled = viewModel.canMessageOrder
             })
-
-        itemSelection
-            //.debug("itemSelection (from Coordinator")
+            //.debug("itemSelection - \(viewController)")
             .subscribe()
             //.disposed(by: disposeBag)
             .disposed(by: viewController.disposeBag)
-
     }
 
     func showKeypad(order: Order, atIndex index: Int) -> Observable<Void> {
@@ -238,7 +235,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         navigationController.showDetailViewController(viewController, sender: nil)
 
         // Navigation
-        let itemSelection = viewController.tableView.rx
+        viewController.tableView.rx
             .itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
                 //log.debug("We selected: \(indexPath)")
@@ -251,9 +248,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
                     viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
-
-        itemSelection
-            .debug("itemSelection (from Coordinator")
+            .debug("itemSelection - \(viewController)")
             .subscribe()
             .disposed(by: viewController.disposeBag)
     }
