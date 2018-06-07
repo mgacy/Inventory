@@ -26,7 +26,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
 
-        // Selction
+        // Selection
         viewModel.showCollection
             .subscribe(onNext: { [weak self] selection in
                 log.debug("\(#function) SELECTED / CREATED: \(selection)")

@@ -103,7 +103,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .modelSelected(RemoteLocation.self)
             //.debug("Selection")
             .subscribe(onNext: { [weak self] location in
-                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
+                guard let strongSelf = self else { return .empty() }
                 switch location.locationType {
                 case .category:
                     strongSelf.showLocationCategoryList(location: location, factory: factory)
