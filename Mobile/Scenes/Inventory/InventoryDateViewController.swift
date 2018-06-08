@@ -122,16 +122,19 @@ class InventoryDateViewController: UIViewController {
 
         // Refresh
         refreshControl.rx.controlEvent(.valueChanged)
+            //.debug("refreshControl")
             .bind(to: viewModel.refresh)
             .disposed(by: disposeBag)
 
         // Activity Indicator
 
         viewModel.isRefreshing
+            //.debug("isRefreshing")
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
         viewModel.hasRefreshed
+            //.debug("hasRefreshed")
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })
