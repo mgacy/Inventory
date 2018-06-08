@@ -82,33 +82,18 @@ class InventoryDateViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        let guide: UILayoutGuide
-        if #available(iOS 11, *) {
-            guide = view.safeAreaLayoutGuide
-        } else {
-            guide = view.layoutMarginsGuide
-        }
-
-        // TableView (1)
-        if #available(iOS 11, *) {
-            let guide = view.safeAreaLayoutGuide
-            NSLayoutConstraint.activate([
-                tableView.topAnchor.constraintEqualToSystemSpacingBelow(guide.topAnchor, multiplier: 1.0),
-                guide.bottomAnchor.constraintEqualToSystemSpacingBelow(tableView.bottomAnchor, multiplier: 1.0)
-                ])
-        } else {
-            //let marginGuide = view.layoutMarginsGuide
-            let standardSpacing: CGFloat = 8.0
-            NSLayoutConstraint.activate([
-                tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: standardSpacing),
-                bottomLayoutGuide.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: standardSpacing)
-                ])
-        }
-
+        //let guide: UILayoutGuide
+        //if #available(iOS 11, *) {
+        //    guide = view.safeAreaLayoutGuide
+        //} else {
+        //    guide = view.layoutMarginsGuide
+        //}
         let constraints = [
-            // TableView (2)
-            tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            // TableView
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             // ActivityIndicator
             activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
             activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor),
