@@ -95,10 +95,10 @@ class InventoryDateViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             // ActivityIndicator
-            activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
-            activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor),
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             // MessageLabel
-            messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
+            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             messageLabel.topAnchor.constraint(equalTo: activityIndicatorView.bottomAnchor, constant: 5.0)
         ]
         NSLayoutConstraint.activate(constraints)
