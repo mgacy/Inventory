@@ -29,9 +29,21 @@ class InventoryDateViewController: UIViewController {
     let cellIdentifier = "InventoryDateTableViewCell"
 
     // MARK: - Interface
-    private let refreshControl = UIRefreshControl()
+    //private let refreshControl = UIRefreshControl()
     let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
-    let activityIndicatorView = UIActivityIndicatorView()
+    //let activityIndicatorView = UIActivityIndicatorView()
+    //let messageLabel = UILabel()
+
+    lazy var activityIndicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        return control
+    }()
 
     lazy var messageLabel: UILabel = {
         let view = UILabel()
@@ -73,7 +85,7 @@ class InventoryDateViewController: UIViewController {
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButtonItem
 
-        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         //messageLabel.translatesAutoresizingMaskIntoConstraints = false
 
         self.view.addSubview(tableView)
