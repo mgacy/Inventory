@@ -81,9 +81,8 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
     }
 
     private func showKeypad(invoice: Invoice, atIndex index: Int) -> Observable<Void> {
-        let keypadCoordinator = ModalInvoiceKeypadCoordinator(rootViewController: navigationController,
-                                                              dependencies: dependencies, invoice: invoice,
-                                                              atIndex: index)
+        let keypadCoordinator = InvoiceKeypadCoordinator(rootViewController: navigationController,
+                                                         dependencies: dependencies, invoice: invoice, atIndex: index)
         return coordinate(to: keypadCoordinator)
     }
 

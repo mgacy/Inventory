@@ -172,7 +172,7 @@
 		C9D59C5E1FE0FA870050A4AB /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */; };
 		C9D59C601FE0FAE60050A4AB /* PlaceholderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5F1FE0FAE60050A4AB /* PlaceholderViewController.swift */; };
 		C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */; };
-		C9DE2CF12087CBCA0090109A /* ModalOrderKeypadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF02087CBCA0090109A /* ModalOrderKeypadCoordinator.swift */; };
+		C9DE2CF12087CBCA0090109A /* OrderKeypadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF02087CBCA0090109A /* OrderKeypadCoordinator.swift */; };
 		C9DE2CF3208969D00090109A /* SheetTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */; };
 		C9DE2CF52089A3450090109A /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF42089A3440090109A /* Operators.swift */; };
 		C9DE2CF72089C8B50090109A /* UnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF62089C8B50090109A /* UnitView.swift */; };
@@ -185,7 +185,7 @@
 		C9DF81DE1FEA1B6300C86A75 /* InventoryLocCatViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81DD1FEA1B6300C86A75 /* InventoryLocCatViewController.storyboard */; };
 		C9DF81E01FEA1BDE00C86A75 /* InventoryLocItemViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81DF1FEA1BDE00C86A75 /* InventoryLocItemViewController.storyboard */; };
 		C9DF81E31FEA1FB000C86A75 /* SignUpViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81E21FEA1FB000C86A75 /* SignUpViewController.storyboard */; };
-		C9E0F85D20B530B900B64A55 /* ModalInvoiceKeypadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E0F85C20B530B800B64A55 /* ModalInvoiceKeypadCoordinator.swift */; };
+		C9E0F85D20B530B900B64A55 /* InvoiceKeypadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E0F85C20B530B800B64A55 /* InvoiceKeypadCoordinator.swift */; };
 		C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */; };
 		C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB7D891EE7910000515429 /* MailComposer.swift */; };
 		C9EC6E5D1FCCF7E000A3860E /* AttachableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EC6E5C1FCCF7E000A3860E /* AttachableType.swift */; };
@@ -389,7 +389,7 @@
 		C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		C9D59C5F1FE0FAE60050A4AB /* PlaceholderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderViewController.swift; sourceTree = "<group>"; };
 		C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+MyStuff.swift"; sourceTree = "<group>"; };
-		C9DE2CF02087CBCA0090109A /* ModalOrderKeypadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalOrderKeypadCoordinator.swift; sourceTree = "<group>"; };
+		C9DE2CF02087CBCA0090109A /* OrderKeypadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderKeypadCoordinator.swift; sourceTree = "<group>"; };
 		C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetTransitioningDelegate.swift; sourceTree = "<group>"; };
 		C9DE2CF42089A3440090109A /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		C9DE2CF62089C8B50090109A /* UnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitView.swift; sourceTree = "<group>"; };
@@ -402,7 +402,7 @@
 		C9DF81DD1FEA1B6300C86A75 /* InventoryLocCatViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryLocCatViewController.storyboard; sourceTree = "<group>"; };
 		C9DF81DF1FEA1BDE00C86A75 /* InventoryLocItemViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryLocItemViewController.storyboard; sourceTree = "<group>"; };
 		C9DF81E21FEA1FB000C86A75 /* SignUpViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SignUpViewController.storyboard; sourceTree = "<group>"; };
-		C9E0F85C20B530B800B64A55 /* ModalInvoiceKeypadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalInvoiceKeypadCoordinator.swift; sourceTree = "<group>"; };
+		C9E0F85C20B530B800B64A55 /* InvoiceKeypadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadCoordinator.swift; sourceTree = "<group>"; };
 		C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderDateViewController.swift; sourceTree = "<group>"; };
 		C9EB7D891EE7910000515429 /* MailComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
 		C9EC6E5C1FCCF7E000A3860E /* AttachableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachableType.swift; sourceTree = "<group>"; };
@@ -490,7 +490,7 @@
 			isa = PBXGroup;
 			children = (
 				C9045C1C1FC4D20500F55FB3 /* InvoiceCoordinator.swift */,
-				C9E0F85C20B530B800B64A55 /* ModalInvoiceKeypadCoordinator.swift */,
+				C9E0F85C20B530B800B64A55 /* InvoiceKeypadCoordinator.swift */,
 				C97A71281F8EC03D00F2F1CD /* Date List */,
 				C97A71291F8EC04F00F2F1CD /* Vendor List */,
 				C949C20C1F1606E6008A5EC4 /* Item List */,
@@ -600,7 +600,7 @@
 			isa = PBXGroup;
 			children = (
 				C9045C181FC4AD1000F55FB3 /* OrderCoordinator.swift */,
-				C9DE2CF02087CBCA0090109A /* ModalOrderKeypadCoordinator.swift */,
+				C9DE2CF02087CBCA0090109A /* OrderKeypadCoordinator.swift */,
 				C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */,
 				C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */,
 				C97A712A1F8EC06B00F2F1CD /* Date List */,
@@ -1391,7 +1391,7 @@
 				C92D75BF1DC7A7E500AA1A02 /* InvoiceItemViewController.swift in Sources */,
 				C94AC872209005B400CBBCB2 /* UnitToggleable.swift in Sources */,
 				C90459131F93E31400E517C7 /* InventoryReviewItemViewModel.swift in Sources */,
-				C9DE2CF12087CBCA0090109A /* ModalOrderKeypadCoordinator.swift in Sources */,
+				C9DE2CF12087CBCA0090109A /* OrderKeypadCoordinator.swift in Sources */,
 				C98165021F915E7F006EC785 /* SubItemCellViewModelType.swift in Sources */,
 				C93BD19420B6699F002E23DC /* OrderLocation+Ext.swift in Sources */,
 				C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */,
@@ -1540,7 +1540,7 @@
 				C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */,
 				C91C92861EFCDD9000566CEB /* RoundButton.swift in Sources */,
 				C9F5160F1DB7F133004C10E6 /* InventoryKeypadViewController.swift in Sources */,
-				C9E0F85D20B530B900B64A55 /* ModalInvoiceKeypadCoordinator.swift in Sources */,
+				C9E0F85D20B530B900B64A55 /* InvoiceKeypadCoordinator.swift in Sources */,
 				C9045C211FC5122800F55FB3 /* LoginCoordinator.swift in Sources */,
 				C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */,
 				C97A71341F8EC94A00F2F1CD /* InventoryLocationViewModel.swift in Sources */,

@@ -178,9 +178,8 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     func showKeypad(order: Order, atIndex index: Int) -> Observable<Void> {
-        let keypadCoordinator = ModalOrderKeypadCoordinator(rootViewController: navigationController,
-                                                            dependencies: dependencies, order: order,
-                                                            atIndex: index)
+        let keypadCoordinator = OrderKeypadCoordinator(rootViewController: navigationController,
+                                                       dependencies: dependencies, order: order, atIndex: index)
         return coordinate(to: keypadCoordinator)
     }
 
@@ -254,9 +253,9 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     func showKeypad(orderItems: [OrderItem], atIndex index: Int) -> Observable<Void> {
-        let keypadCoordinator = ModalOrderKeypadCoordinator(rootViewController: navigationController,
-                                                            dependencies: dependencies, orderItems: orderItems,
-                                                            atIndex: index)
+        let keypadCoordinator = OrderKeypadCoordinator(rootViewController: navigationController,
+                                                       dependencies: dependencies, orderItems: orderItems,
+                                                       atIndex: index)
         return coordinate(to: keypadCoordinator)
     }
 
