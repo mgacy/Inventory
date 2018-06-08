@@ -101,9 +101,9 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Selection - Location
         locationsController.tableView.rx
             .modelSelected(RemoteLocation.self)
-            //.debug("Selection")
+            //.debug("locationSelection - \(locationsController)")
             .subscribe(onNext: { [weak self] location in
-                guard let strongSelf = self else { return .empty() }
+                guard let strongSelf = self else { return }
                 switch location.locationType {
                 case .category:
                     strongSelf.showLocationCategoryList(location: location, factory: factory)
@@ -113,6 +113,30 @@ class OrderCoordinator: BaseCoordinator<Void> {
             })
             .disposed(by: disposeBag)
 
+        /*
+        // Selection - Location
+        locationsController.tableView.rx
+            .modelSelected(RemoteLocation.self)
+            //.debug("Selection")
+            .map { [weak self] location in
+                guard let strongSelf = self else { return }
+                switch location.locationType {
+                case .category:
+                    strongSelf.showLocationCategoryList(location: location, factory: factory)
+                case .item:
+                    strongSelf.showLocationItemList(parent: OrderLocItemParent.location(location), factory: factory)
+                }
+            }
+            .do(onNext: { _ in
+                // Deselect
+                if let selectedRowIndexPath = locationsController.tableView.indexPathForSelectedRow {
+                    locationsController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                }
+            })
+            .debug("locationSelection - \(locationsController)")
+            .subscribe()
+            .disposed(by: disposeBag)
+        */
         // Completion
         containerController.viewModel.popView
             .subscribe(onNext: { [weak self] _ in
