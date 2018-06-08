@@ -82,23 +82,20 @@ class InventoryDateViewController: UIViewController {
     }
 
     private func setupConstraints() {
+        let guide: UILayoutGuide
+        if #available(iOS 11, *) {
+            guide = view.safeAreaLayoutGuide
+        } else {
+            guide = view.layoutMarginsGuide
+        }
 
-        // TableView
-        //tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        //tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        // TableView (1)
         if #available(iOS 11, *) {
             let guide = view.safeAreaLayoutGuide
-
-            tableView.topAnchor.constraintEqualToSystemSpacingBelow(guide.topAnchor, multiplier: 1.0).isActive = true
-            tableView.bottomAnchor.constraintEqualToSystemSpacingBelow(guide.bottomAnchor,
-                                                                       multiplier: 1.0).isActive = true
-            //NSLayoutConstraint.activate([
-            //    tableView.topAnchor.constraintEqualToSystemSpacingBelow(guide.topAnchor, multiplier: 1.0),
-            //    guide.bottomAnchor.constraintEqualToSystemSpacingBelow(tableView.bottomAnchor, multiplier: 1.0)
-            //    ])
-
+            NSLayoutConstraint.activate([
+                tableView.topAnchor.constraintEqualToSystemSpacingBelow(guide.topAnchor, multiplier: 1.0),
+                guide.bottomAnchor.constraintEqualToSystemSpacingBelow(tableView.bottomAnchor, multiplier: 1.0)
+                ])
         } else {
             //let marginGuide = view.layoutMarginsGuide
             let standardSpacing: CGFloat = 8.0
@@ -106,18 +103,20 @@ class InventoryDateViewController: UIViewController {
                 tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: standardSpacing),
                 bottomLayoutGuide.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: standardSpacing)
                 ])
-
-            //tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-            //tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         }
 
-        // ActivityIndicator
-        activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-
-        // MessageLabel
-        messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        //messageLabel.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
+        let constraints = [
+            // TableView (2)
+            tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            // ActivityIndicator
+            activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor),
+            // MessageLabel
+            messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
+            messageLabel.topAnchor.constraint(equalTo: activityIndicatorView.bottomAnchor, constant: 5.0)
+        ]
+        NSLayoutConstraint.activate(constraints)
     }
 
     private func setupBindings() {
