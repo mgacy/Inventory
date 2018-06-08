@@ -118,6 +118,7 @@ class InvoiceItemViewController: UIViewController {
         tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 80
+        tableView.tableFooterView = UIView()
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
                                          fetchedResultsController: viewModel.frc, delegate: self)
     }

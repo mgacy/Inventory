@@ -70,6 +70,7 @@ class OrderLocationViewController: UIViewController {
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.tableFooterView = UIView()
         self.view.addSubview(tableView)
     }
 

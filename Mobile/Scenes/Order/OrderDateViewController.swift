@@ -197,6 +197,7 @@ class OrderDateViewController: UIViewController {
         tableView.refreshControl = refreshControl
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.tableFooterView = UIView()
         tableView.estimatedRowHeight = 100
 
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,

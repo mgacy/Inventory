@@ -73,7 +73,7 @@ class OrderLocItemViewController: UIViewController {
         default:
             fatalError("Device is neither phone nor pad")
         }
-
+        tableView.tableFooterView = UIView()
         self.view.addSubview(tableView)
     }
 
