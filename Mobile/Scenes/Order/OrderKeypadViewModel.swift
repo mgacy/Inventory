@@ -39,15 +39,15 @@ class OrderKeypadViewModel {
     // MARK: - X
 
     // Display
-    var orderQuantity: String = ""
-    var name: String {
-        return currentItem.item?.name ?? "Error (2)"
+    var itemName: String {
+        return currentItem.item?.name ?? "Error (1)"
     }
+    var itemPack: String {
+        return currentItem.item?.packDisplay ?? "Error (2)"
+    }
+    var orderQuantity: String = ""
     var orderUnit: String {
         return currentItem.orderUnit?.abbreviation ?? ""
-    }
-    var pack: String {
-        return currentItem.item?.packDisplay ?? ""
     }
     var par: String {
         guard currentItem.par >= 0 else {
@@ -226,6 +226,9 @@ extension OrderKeypadViewModel: KeypadDelegate {
     }
 
 }
+
+extension OrderKeypadViewModel: DisplayItemViewModelType {}
+
 /*
 // MARK: - Alternative Approach
 

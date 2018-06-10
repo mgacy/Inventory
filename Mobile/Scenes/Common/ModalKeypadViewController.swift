@@ -23,6 +23,7 @@ protocol ModalKeypadDismissing: class {
 
 final class ModalKeypadViewController: UIViewController {
 
+    let dismissalEvents: Observable<Void>
     let disposeBag = DisposeBag()
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
@@ -32,27 +33,15 @@ final class ModalKeypadViewController: UIViewController {
     // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
 
-    var dismissalEvents: Observable<Void> {
-        return Observable.of(
-            panGestureDissmissalEvent.asObservable(),
-            barView.dismissChevron.rx.tap.mapToVoid(),
-            tapGestureRecognizer.rx.event.mapToVoid()
-        )
-            .merge()
-    }
-
     // MARK: Subviews
     private let keypadViewController: UIViewController & ModalKeypadDismissing
-    private lazy var barView: ModalOrderBarView = {
-        let view = ModalOrderBarView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+
     private lazy var backgroundView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor.clear
         view.isOpaque = false
+        view.isUserInteractionEnabled = true
         return view
     }()
 
@@ -61,6 +50,13 @@ final class ModalKeypadViewController: UIViewController {
     /// TODO: pass primary view controller (or its constraints) to configure widths?
     init(keypadViewController: UIViewController & ModalKeypadDismissing) {
         self.keypadViewController = keypadViewController
+        self.dismissalEvents = Observable.of(
+            keypadViewController.dismissalEvents,
+            panGestureDissmissalEvent.asObservable(),
+            tapGestureRecognizer.rx.event.mapToVoid()
+        )
+        .merge()
+
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
         transitioningDelegate = customTransitionDelegate
@@ -81,7 +77,6 @@ final class ModalKeypadViewController: UIViewController {
         view.backgroundColor = UIColor.clear
         view.isOpaque = false
 
-        view.addSubview(barView)
         view.addSubview(backgroundView)
         backgroundView.addGestureRecognizer(tapGestureRecognizer)
         backgroundView.isUserInteractionEnabled = true
@@ -102,16 +97,10 @@ final class ModalKeypadViewController: UIViewController {
         }
 
         let constraints = [
-            // barView
-            barView.topAnchor.constraint(equalTo: view.topAnchor),
-            /// TODO: is this the best way to set the height?
-            barView.heightAnchor.constraint(equalToConstant: 44),
-            barView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.62),
-            barView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
             // keypad
             keypadViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.62),
             keypadViewController.view.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            keypadViewController.view.topAnchor.constraint(equalTo: barView.bottomAnchor),
+            keypadViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
             keypadViewController.view.bottomAnchor.constraint(equalTo: guide.bottomAnchor),
             // backgroundView
             backgroundView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
@@ -175,53 +164,3 @@ extension ModalKeypadViewController: UIGestureRecognizerDelegate {
 }
 
 extension ModalKeypadViewController: ModalKeypadDismissing {}
-
-// MARK: - Navigation Bar-Like SubView
-
-class ModalOrderBarView: UIView {
-
-    var dismissChevron: ChevronButton = {
-        let button = ChevronButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-
-    // MARK: - Lifecycle
-
-    init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: 38, height: 15))
-        setupView()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Methods
-
-    private func setupView() {
-        backgroundColor = .white
-        addSubview(dismissChevron)
-        setupConstraints()
-    }
-
-    private func setupConstraints() {
-        /*
-        let guide: UILayoutGuide
-        if #available(iOS 11, *) {
-            guide = safeAreaLayoutGuide
-        } else {
-            guide = layoutMarginsGuide
-        }
-        */
-        let constraints = [
-            dismissChevron.widthAnchor.constraint(equalToConstant: 38),
-            dismissChevron.heightAnchor.constraint(equalToConstant: 15),
-            dismissChevron.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0),
-            dismissChevron.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 0)
-            //dismissChevron.topAnchor.constraint(equalTo: guide.topAnchor, constant: 10)
-        ]
-        NSLayoutConstraint.activate(constraints)
-    }
-
-}

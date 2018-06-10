@@ -1,50 +1,32 @@
 //
-//  OrderKeypadCoordinator.swift
+//  InventoryKeypadCoordinator.swift
 //  Mobile
 //
-//  Created by Mathew Gacy on 4/18/18.
+//  Created by Mathew Gacy on 5/29/18.
 //  Copyright © 2018 Mathew Gacy. All rights reserved.
 //
 
 import RxSwift
 import RxCocoa
 
-final class OrderKeypadCoordinator: BaseCoordinator<Void> {
+final class InventoryKeypadCoordinator: BaseCoordinator<Void> {
     typealias Dependencies = HasDataManager
-
-    enum OrderDisplayType {
-        case location([OrderItem])
-        case vendor(Order)
-    }
 
     private let rootViewController: UIViewController
     private let dependencies: Dependencies
-    private let displayType: OrderDisplayType
+    private let parent: LocationItemListParent
     private let index: Int
 
-    init(rootViewController: UIViewController, dependencies: Dependencies, orderItems: [OrderItem], atIndex index: Int) {
+    init(rootViewController: UIViewController, dependencies: Dependencies, parent: LocationItemListParent, atIndex index: Int) {
         self.rootViewController = rootViewController
         self.dependencies = dependencies
-        self.displayType = .location(orderItems)
-        self.index = index
-    }
-
-    init(rootViewController: UIViewController, dependencies: Dependencies, order: Order, atIndex index: Int) {
-        self.rootViewController = rootViewController
-        self.dependencies = dependencies
-        self.displayType = .vendor(order)
+        self.parent = parent
         self.index = index
     }
 
     override func start() -> Observable<Void> {
-        let viewController = OrderKeypadViewController()
-        let viewModel: OrderKeypadViewModel
-        switch displayType {
-        case .location(let orderItems):
-            viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, with: orderItems, atIndex: index)
-        case .vendor(let order):
-            viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, for: order, atIndex: index)
-        }
+        let viewController = InventoryKeypadViewController()
+        let viewModel = InventoryKeypadViewModel(dataManager: dependencies.dataManager, for: parent, atIndex: index)
         viewController.viewModel = viewModel
 
         let presentedViewController: UIViewController & ModalKeypadDismissing

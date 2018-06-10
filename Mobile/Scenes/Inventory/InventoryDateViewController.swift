@@ -29,9 +29,21 @@ class InventoryDateViewController: UIViewController {
     let cellIdentifier = "InventoryDateTableViewCell"
 
     // MARK: - Interface
-    private let refreshControl = UIRefreshControl()
+    //private let refreshControl = UIRefreshControl()
     let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
-    let activityIndicatorView = UIActivityIndicatorView()
+    //let activityIndicatorView = UIActivityIndicatorView()
+    //let messageLabel = UILabel()
+
+    lazy var activityIndicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        return control
+    }()
 
     lazy var messageLabel: UILabel = {
         let view = UILabel()
@@ -73,7 +85,7 @@ class InventoryDateViewController: UIViewController {
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButtonItem
 
-        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         //messageLabel.translatesAutoresizingMaskIntoConstraints = false
 
         self.view.addSubview(tableView)
@@ -82,42 +94,26 @@ class InventoryDateViewController: UIViewController {
     }
 
     private func setupConstraints() {
-
-        // TableView
-        //tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        //tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        if #available(iOS 11, *) {
-            let guide = view.safeAreaLayoutGuide
-
-            tableView.topAnchor.constraintEqualToSystemSpacingBelow(guide.topAnchor, multiplier: 1.0).isActive = true
-            tableView.bottomAnchor.constraintEqualToSystemSpacingBelow(guide.bottomAnchor,
-                                                                       multiplier: 1.0).isActive = true
-            //NSLayoutConstraint.activate([
-            //    tableView.topAnchor.constraintEqualToSystemSpacingBelow(guide.topAnchor, multiplier: 1.0),
-            //    guide.bottomAnchor.constraintEqualToSystemSpacingBelow(tableView.bottomAnchor, multiplier: 1.0)
-            //    ])
-
-        } else {
-            //let marginGuide = view.layoutMarginsGuide
-            let standardSpacing: CGFloat = 8.0
-            NSLayoutConstraint.activate([
-                tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: standardSpacing),
-                bottomLayoutGuide.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: standardSpacing)
-                ])
-
-            //tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-            //tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        }
-
-        // ActivityIndicator
-        activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-
-        // MessageLabel
-        messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        //messageLabel.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
+        //let guide: UILayoutGuide
+        //if #available(iOS 11, *) {
+        //    guide = view.safeAreaLayoutGuide
+        //} else {
+        //    guide = view.layoutMarginsGuide
+        //}
+        let constraints = [
+            // TableView
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            // ActivityIndicator
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            // MessageLabel
+            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            messageLabel.topAnchor.constraint(equalTo: activityIndicatorView.bottomAnchor, constant: 5.0)
+        ]
+        NSLayoutConstraint.activate(constraints)
     }
 
     private func setupBindings() {
@@ -138,16 +134,19 @@ class InventoryDateViewController: UIViewController {
 
         // Refresh
         refreshControl.rx.controlEvent(.valueChanged)
+            //.debug("refreshControl")
             .bind(to: viewModel.refresh)
             .disposed(by: disposeBag)
 
         // Activity Indicator
 
         viewModel.isRefreshing
+            //.debug("isRefreshing")
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
         viewModel.hasRefreshed
+            //.debug("hasRefreshed")
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })
@@ -169,6 +168,7 @@ class InventoryDateViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
+        tableView.tableFooterView = UIView()
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
                                          fetchedResultsController: viewModel.frc, delegate: self)
     }

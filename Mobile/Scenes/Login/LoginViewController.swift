@@ -50,7 +50,7 @@ class LoginViewController: UIViewController {
         bindViewModel()
     }
 
-    // override func didReceiveMemoryWarning() {}
+    //override func didReceiveMemoryWarning() {}
 
     // MARK: - View Methods
 

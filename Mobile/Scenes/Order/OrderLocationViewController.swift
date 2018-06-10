@@ -16,7 +16,16 @@ class OrderLocationViewController: UIViewController {
         static let navTitle = "Locations"
         static let errorAlertTitle = "Error"
     }
-
+    /*
+    var bindings: OrderLocationViewModel.Bindings {
+        return OrderLocationViewModel.Bindings(
+            //cancelTaps: cancelButtonItem.rx.tap.asObservable(),
+            //rowTaps: tableView.rx.itemSelected.asDriver()
+            rowTaps: tableView.rx.itemSelected.asObservable()
+            //uploadTaps: uploadButtonItem.rx.tap.asObservable()
+        )
+    }
+    */
     // MARK: - Properties
 
     var viewModel: OrderLocationViewModel!
@@ -61,6 +70,7 @@ class OrderLocationViewController: UIViewController {
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.tableFooterView = UIView()
         self.view.addSubview(tableView)
     }
 
@@ -96,6 +106,9 @@ class OrderLocationViewController: UIViewController {
 
         viewModel.showTable
             .map { !$0 }
+            .do(onNext: { [weak self] _ in
+                self?.tableView.reloadData()
+            })
             .drive(tableView.rx.isHidden)
             .disposed(by: disposeBag)
 

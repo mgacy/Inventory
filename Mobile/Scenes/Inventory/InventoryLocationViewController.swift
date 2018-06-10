@@ -19,16 +19,14 @@ class InventoryLocationViewController: UIViewController, AttachableType {
     var bindings: InventoryLocationViewModel.Bindings {
         return InventoryLocationViewModel.Bindings(
             cancelTaps: cancelButtonItem.rx.tap.asObservable(),
-            rowTaps: selectedIndices,
+            rowTaps: tableView.rx.itemSelected.asObservable(),
             uploadTaps: uploadButtonItem.rx.tap.asObservable()
         )
     }
     var viewModel: Attachable<InventoryLocationViewModel>!
-    let selectedIndices: Observable<IndexPath>
     let dismissView: Observable<Void>
 
     private let disposeBag = DisposeBag()
-    private let _selectedIndices = PublishSubject<IndexPath>()
     private let _dismissView = PublishSubject<Void>()
 
     // TableViewCell
@@ -58,7 +56,6 @@ class InventoryLocationViewController: UIViewController, AttachableType {
     // MARK: - Lifecycle
 
     required init?(coder aDecoder: NSCoder) {
-        selectedIndices = _selectedIndices.asObservable()
         dismissView = _dismissView.asObservable()
         super.init(coder: aDecoder)
     }
@@ -77,11 +74,7 @@ class InventoryLocationViewController: UIViewController, AttachableType {
         self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        log.warning("\(#function)")
-        // Dispose of any resources that can be recreated.
-    }
+    //override func didReceiveMemoryWarning() {}
 
     // MARK: - View Methods
 
@@ -149,6 +142,7 @@ class InventoryLocationViewController: UIViewController, AttachableType {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
+        tableView.tableFooterView = UIView()
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
                                          fetchedResultsController: viewModel.frc, delegate: self)
     }
@@ -159,7 +153,6 @@ class InventoryLocationViewController: UIViewController, AttachableType {
 extension InventoryLocationViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        _selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

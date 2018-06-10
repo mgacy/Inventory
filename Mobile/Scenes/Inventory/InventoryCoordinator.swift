@@ -109,18 +109,43 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
-        viewController.selectedIndices
-            .subscribe(onNext: { [weak self] index in
-                self?.showKeypad(for: parent, atIndex: index.row)
+        viewController.tableView.rx
+            .itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                self?.showKeypad(for: parent, atIndex: indexPath.row)
             })
             .disposed(by: disposeBag)
+
+        // Selection
+        viewController.tableView.rx
+            .itemSelected
+            .flatMap { [weak self] indexPath -> Observable<Void> in
+                //log.debug("We selected: \(indexPath)")
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showModalKeypad(for: parent, atIndex: indexPath.row)
+            }
+            .do(onNext: { _ in
+                // Deselect
+                if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
+                    viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                }
+            })
+            //.debug("itemSelection - \(viewController)")
+            .subscribe()
+            .disposed(by: viewController.disposeBag)
     }
 
     fileprivate func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
-        let viewController = InventoryKeypadViewController.instance()
+        let viewController = InventoryKeypadViewController()
         let viewModel = InventoryKeypadViewModel(dataManager: dependencies.dataManager, for: parent, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
+    }
+
+    fileprivate func showModalKeypad(for parent: LocationItemListParent, atIndex index: Int) -> Observable<Void> {
+        let keypadCoordinator = InventoryKeypadCoordinator(rootViewController: navigationController,
+                                                           dependencies: dependencies, parent: parent, atIndex: index)
+        return coordinate(to: keypadCoordinator)
     }
 
 }
@@ -172,7 +197,7 @@ class ModalInventoryCoordinator: InventoryCoordinator {
     }
 
     override func showKeypad(for parent: LocationItemListParent, atIndex index: Int) {
-        let viewController = InventoryKeypadViewController.instance()
+        let viewController = InventoryKeypadViewController()
         let viewModel = InventoryKeypadViewModel(dataManager: dependencies.dataManager, for: parent, atIndex: index)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)

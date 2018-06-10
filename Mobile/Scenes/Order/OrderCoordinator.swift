@@ -60,7 +60,9 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
         // OrderLocationViewController
         let locationsController = OrderLocationViewController.instance()
-        let locationsViewModel = OrderLocationViewModel(dataManager: dependencies.dataManager, collection: collection)
+        let locationsViewModel = OrderLocationViewModel(dependency: OrderLocationViewModel.Dependency(
+            dataManager: dependencies.dataManager, collection: collection))
+
         locationsController.viewModel = locationsViewModel
 
         // OrderContainerViewController
@@ -99,8 +101,9 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Selection - Location
         locationsController.tableView.rx
             .modelSelected(RemoteLocation.self)
+            //.debug("locationSelection - \(locationsController)")
             .subscribe(onNext: { [weak self] location in
-                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
+                guard let strongSelf = self else { return }
                 switch location.locationType {
                 case .category:
                     strongSelf.showLocationCategoryList(location: location, factory: factory)
@@ -110,6 +113,30 @@ class OrderCoordinator: BaseCoordinator<Void> {
             })
             .disposed(by: disposeBag)
 
+        /*
+        // Selection - Location
+        locationsController.tableView.rx
+            .modelSelected(RemoteLocation.self)
+            //.debug("Selection")
+            .map { [weak self] location in
+                guard let strongSelf = self else { return }
+                switch location.locationType {
+                case .category:
+                    strongSelf.showLocationCategoryList(location: location, factory: factory)
+                case .item:
+                    strongSelf.showLocationItemList(parent: OrderLocItemParent.location(location), factory: factory)
+                }
+            }
+            .do(onNext: { _ in
+                // Deselect
+                if let selectedRowIndexPath = locationsController.tableView.indexPathForSelectedRow {
+                    locationsController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                }
+            })
+            .debug("locationSelection - \(locationsController)")
+            .subscribe()
+            .disposed(by: disposeBag)
+        */
         // Completion
         containerController.viewModel.popView
             .subscribe(onNext: { [weak self] _ in
@@ -121,6 +148,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     // MARK: Vendor
 
+    /// Used when showing uploaded OrderCollections
     fileprivate func showVendorList(collection: OrderCollection) {
         let viewController = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
         let viewModel = OrderVendorViewModel(dataManager: dependencies.dataManager, parentObject: collection,
@@ -142,33 +170,49 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showItemList(order: Order) {
-        let viewController = OrderItemViewController.instance()
-        let viewModel = OrderViewModel(dataManager: dependencies.dataManager, parentObject: order)
+        let viewController = OrderItemViewController()
+        let viewModel = OrderViewModel(
+            dependency: OrderViewModel.Dependency(dataManager: dependencies.dataManager, parentObject: order),
+            bindings: viewController.bindings)
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
+        navigationController.showDetailViewController(viewController, sender: nil)
 
         // Pop on uploadResults?
 
-        // Selection
-        viewController.selectedIndices
-            .subscribe(onNext: { [weak self] index in
-                self?.showKeypad(order: order, atIndex: index.row)
+        // Navigation
+        viewController.tableView.rx
+            .itemSelected
+            .flatMap { [weak self] indexPath -> Observable<Void> in
+                guard let strongSelf = self else { fatalError("Unable to get self") }
+                return strongSelf.showKeypad(order: order, atIndex: indexPath.row)
+            }
+            .do(onNext: { _ in
+                // Deselect
+                if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
+                    viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                }
+                // Update
+                viewModel.updateOrderStatus()
+                viewController.headerView.messageButton.isEnabled = viewModel.canMessageOrder
             })
-            .disposed(by: disposeBag)
+            //.debug("itemSelection - \(viewController)")
+            .subscribe()
+            //.disposed(by: disposeBag)
+            .disposed(by: viewController.disposeBag)
     }
 
-    func showKeypad(order: Order, atIndex index: Int) {
-        let viewController = OrderKeypadViewController.instance()
-        let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, for: order, atIndex: index)
-        viewController.viewModel = viewModel
-        navigationController.showDetailViewController(viewController, sender: nil)
+    func showKeypad(order: Order, atIndex index: Int) -> Observable<Void> {
+        let keypadCoordinator = OrderKeypadCoordinator(rootViewController: navigationController,
+                                                       dependencies: dependencies, order: order, atIndex: index)
+        return coordinate(to: keypadCoordinator)
     }
 
     // MARK: Location
 
     fileprivate func showLocationList(collection: OrderCollection) {
         let viewController = OrderLocationViewController.instance()
-        let viewModel = OrderLocationViewModel(dataManager: dependencies.dataManager, collection: collection)
+        let viewModel = OrderLocationViewModel(dependency: OrderLocationViewModel.Dependency(
+            dataManager: dependencies.dataManager, collection: collection))
         viewController.viewModel = viewModel
         //navigationController.pushViewController(viewController, animated: true)
 
@@ -200,8 +244,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         viewController.tableView.rx
             .modelSelected(RemoteItemCategory.self)
             .subscribe(onNext: { [weak self] category in
-                log.debug("We selected: \(category)")
-
+                //log.debug("We selected: \(category)")
                 let parent = OrderLocItemParent.category(category)
                 self?.showLocationItemList(parent: parent, factory: factory)
             })
@@ -212,58 +255,31 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let viewController = OrderLocItemViewController.instance()
         let viewModel = OrderLocItemViewModel(dataManager: dependencies.dataManager, parent: parent, factory: factory)
         viewController.viewModel = viewModel
-
-        switch UIDevice.current.userInterfaceIdiom {
-        case .phone:
-            navigationController.pushViewController(viewController, animated: true)
-        case .pad:
-            navigationController.showDetailViewController(viewController, sender: nil)
-        default:
-            fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
-        }
+        navigationController.showDetailViewController(viewController, sender: nil)
 
         // Navigation
         viewController.tableView.rx
             .itemSelected
-            //.debug("itemSelected")
-            .subscribe(onNext: { [weak self] indexPath in
-                log.debug("We selected: \(indexPath)")
-
-                switch UIDevice.current.userInterfaceIdiom {
-                case .phone:
-                    self?.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
-                case .pad:
-                    guard let strongSelf = self else { return }
-                    strongSelf.showKeypadForIpad(on: strongSelf.navigationController, with: viewModel.orderItems,
-                                            atIndex: indexPath.row)
-                        //.debug()
-                        .subscribe()
-                        .disposed(by: viewController.disposeBag)
-                default:
-                    // swiftlint:disable:next line_length
-                    fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
-                }
-
+            .flatMap { [weak self] indexPath -> Observable<Void> in
+                //log.debug("We selected: \(indexPath)")
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
+            }
+            .do(onNext: { _ in
                 // Deselect
-                /// TODO: apply to .pad case only?
                 if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
                     viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
-            .disposed(by: disposeBag)
+            .debug("itemSelection - \(viewController)")
+            .subscribe()
+            .disposed(by: viewController.disposeBag)
     }
 
-    func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
-        let viewController = OrderKeypadViewController.instance()
-        let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, with: orderItems, atIndex: index)
-        viewController.viewModel = viewModel
-        navigationController.showDetailViewController(viewController, sender: nil)
-    }
-
-    func showKeypadForIpad(on rootViewController: UIViewController, with orderItems: [OrderItem], atIndex index: Int) -> Observable<Void> {
-        let keypadCoordinator = ModalOrderKeypadCoordinator(rootViewController: rootViewController,
-                                                            dependencies: dependencies, orderItems: orderItems,
-                                                            atIndex: index)
+    func showKeypad(orderItems: [OrderItem], atIndex index: Int) -> Observable<Void> {
+        let keypadCoordinator = OrderKeypadCoordinator(rootViewController: navigationController,
+                                                       dependencies: dependencies, orderItems: orderItems,
+                                                       atIndex: index)
         return coordinate(to: keypadCoordinator)
     }
 
@@ -275,19 +291,33 @@ class ModalOrderCoordinator: OrderCoordinator {
 
     private let rootViewController: UIViewController
     private let collection: OrderCollection
+    // swiftlint:disable:next weak_delegate
+    private var viewDelegate: ModalSplitViewDelegate
 
     init(rootViewController: UIViewController, dependencies: Dependencies, collection: OrderCollection) {
         self.rootViewController = rootViewController
         self.collection = collection
-        super.init(navigationController: UINavigationController(), dependencies: dependencies)
+
+        self.viewDelegate = ModalSplitViewDelegate(detailNavigationController: DetailNavigationController())
+        let masterNavigationController = NavigationController(withPopDetailCompletion: viewDelegate.replaceDetail)
+        viewDelegate.updateSecondaryWithDetail(from: masterNavigationController)
+
+        super.init(navigationController: masterNavigationController, dependencies: dependencies)
     }
 
     override func start() -> Observable<Void> {
         let (containerController, locationsController, vendorsViewModel) = configureContainer(with: collection)
         let factory = OrderLocationFactory(collection: collection, in: dependencies.dataManager.managedObjectContext)
-
         navigationController.viewControllers = [containerController]
-        rootViewController.present(navigationController, animated: true)
+
+        let splitViewController = UISplitViewController()
+        splitViewController.delegate = viewDelegate
+        splitViewController.viewControllers = [navigationController, viewDelegate.detailNavigationController]
+        splitViewController.preferredDisplayMode = .allVisible
+
+        // Configure cancel button and present
+        containerController.navigationItem.leftBarButtonItem = containerController.cancelButtonItem
+        rootViewController.present(splitViewController, animated: true)
 
         // Selection - Vendor
         vendorsViewModel.showNext
@@ -320,20 +350,6 @@ class ModalOrderCoordinator: OrderCoordinator {
         return Observable.merge(cancelTaps, containerController.viewModel.popView)
             .take(1)
             .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
-    }
-
-    override func showKeypad(order: Order, atIndex index: Int) {
-        let viewController = OrderKeypadViewController.instance()
-        let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, for: order, atIndex: index)
-        viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
-    }
-
-    override func showKeypad(orderItems: [OrderItem], atIndex index: Int) {
-        let viewController = OrderKeypadViewController.instance()
-        let viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, with: orderItems, atIndex: index)
-        viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
     }
 
 }

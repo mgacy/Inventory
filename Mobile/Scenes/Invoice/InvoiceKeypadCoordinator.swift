@@ -1,5 +1,5 @@
 //
-//  ModalInvoiceKeypadCoordinator.swift
+//  InvoiceKeypadCoordinator.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 5/22/18.
@@ -9,7 +9,7 @@
 import RxCocoa
 import RxSwift
 
-final class ModalInvoiceKeypadCoordinator: BaseCoordinator<Void> {
+final class InvoiceKeypadCoordinator: BaseCoordinator<Void> {
     typealias Dependencies = HasDataManager
 
     private let rootViewController: UIViewController

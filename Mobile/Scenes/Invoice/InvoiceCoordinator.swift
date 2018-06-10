@@ -26,7 +26,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
 
-        // Selction
+        // Selection
         viewModel.showCollection
             .subscribe(onNext: { [weak self] selection in
                 log.debug("\(#function) SELECTED / CREATED: \(selection)")
@@ -62,10 +62,9 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
 
         let itemSelection = viewController.tableView.rx
             .itemSelected
-            .map { [weak self] indexPath -> Observable<Void> in
-                log.debug("We selected: \(indexPath)")
-                //return self?.showKeypad(invoice: invoice, atIndex: indexPath.row)
-                guard let strongSelf = self else { return .just(()) }
+            .flatMap { [weak self] indexPath -> Observable<Void> in
+                //log.debug("We selected: \(indexPath)")
+                guard let strongSelf = self else { return .empty() }
                 return strongSelf.showKeypad(invoice: invoice, atIndex: indexPath.row)
             }
             .do(onNext: { _ in
@@ -76,15 +75,14 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
             })
 
         itemSelection
-            //.debug()
+            //.debug("itemSelection (from Coordinator")
             .subscribe()
             .disposed(by: viewController.disposeBag)
     }
 
     private func showKeypad(invoice: Invoice, atIndex index: Int) -> Observable<Void> {
-        let keypadCoordinator = ModalInvoiceKeypadCoordinator(rootViewController: navigationController,
-                                                              dependencies: dependencies, invoice: invoice,
-                                                              atIndex: index)
+        let keypadCoordinator = InvoiceKeypadCoordinator(rootViewController: navigationController,
+                                                         dependencies: dependencies, invoice: invoice, atIndex: index)
         return coordinate(to: keypadCoordinator)
     }
 

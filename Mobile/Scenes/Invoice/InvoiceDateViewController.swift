@@ -120,16 +120,19 @@ class InvoiceDateViewController: UIViewController {
 
         // Refresh
         refreshControl.rx.controlEvent(.valueChanged)
+            //.debug("refreshControl")
             .bind(to: viewModel.refresh)
             .disposed(by: disposeBag)
 
         // Activity Indicator
         viewModel.isRefreshing
+            //.debug("isRefreshing")
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
         viewModel.hasRefreshed
             /// TODO: use weak or unowned self?
+            //.debug("hasRefreshed")
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })
@@ -151,6 +154,7 @@ class InvoiceDateViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
+        tableView.tableFooterView = UIView()
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
                                          fetchedResultsController: viewModel.frc, delegate: self)
     }
