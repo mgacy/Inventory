@@ -28,7 +28,7 @@ extension SyncableParent where ChildType: NSManagedObject {
             guard let objectDict: [I: ChildType] = fetchChildDict(in: context) else {
                 log.error("\(#function) FAILED : unable to create dictionary for \(ChildType.self)"); return
             }
-            log.debug("\(ChildType.self) - objectDict: \(objectDict)")
+            //log.debug("\(ChildType.self) - objectDict: \(objectDict)")
 
             let localIDs: Set<I> = Set(objectDict.keys)
             var remoteIDs = Set<I>()
@@ -58,7 +58,7 @@ extension SyncableParent where ChildType: NSManagedObject {
                 }
 
             }
-            log.debug("\(ChildType.self) - remote: \(remoteIDs) - local: \(localIDs)")
+            //log.debug("\(ChildType.self) - remote: \(remoteIDs) - local: \(localIDs)")
 
             // Delete objects that were deleted from server.
 
@@ -74,7 +74,7 @@ extension SyncableParent where ChildType: NSManagedObject {
         let deletedIDs: Set<I> = localIDs.subtracting(remoteIDs)
 
         guard !deletedIDs.isEmpty else { return }
-        log.debug("We need to delete: \(deletedIDs)")
+        //log.debug("We need to delete: \(deletedIDs)")
         let fetchPredicate = NSPredicate(format: "\(ChildType.remoteIdentifierName) IN %@", deletedIDs)
         do {
             try context.deleteEntities(ChildType.self, filter: fetchPredicate)
@@ -87,7 +87,7 @@ extension SyncableParent where ChildType: NSManagedObject {
 
     func deleteChildren(deletedIDs: Set<ChildType.RemoteIdentifierType>, in context: NSManagedObjectContext) {
         guard !deletedIDs.isEmpty else { return }
-        log.debug("We need to delete: \(deletedIDs)")
+        //log.debug("We need to delete: \(deletedIDs)")
         let fetchPredicate = NSPredicate(format: "\(ChildType.remoteIdentifierName) IN %@", deletedIDs)
         do {
             try context.deleteEntities(ChildType.self, filter: fetchPredicate)
