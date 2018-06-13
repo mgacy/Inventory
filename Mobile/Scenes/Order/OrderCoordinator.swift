@@ -51,7 +51,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     fileprivate func configureContainer(with collection: OrderCollection) -> ContainerConfigurationResult {
         // OrderVendorViewController
-        let vendorsController = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
+        let vendorsController = OrderVendorViewController.instance()
         let vendorsViewModel = OrderVendorViewModel(dataManager: dependencies.dataManager, parentObject: collection,
                                                     rowTaps: vendorsController.selectedObjects.asObservable(),
                                                     completeTaps: vendorsController.completeButtonItem.rx.tap
@@ -66,7 +66,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         locationsController.viewModel = locationsViewModel
 
         // OrderContainerViewController
-        let containerController = OrderContainerViewController.initFromStoryboard(name: "OrderContainerViewController")
+        let containerController = OrderContainerViewController.instance()
         let viewModel = OrderContainerViewModel(dataManager: dependencies.dataManager, parentObject: collection,
                                                 completeTaps: containerController.completeButtonItem.rx.tap
                                                     .asObservable())
@@ -150,7 +150,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     /// Used when showing uploaded OrderCollections
     fileprivate func showVendorList(collection: OrderCollection) {
-        let viewController = OrderVendorViewController.initFromStoryboard(name: "OrderVendorViewController")
+        let viewController = OrderVendorViewController.instance()
         let viewModel = OrderVendorViewModel(dataManager: dependencies.dataManager, parentObject: collection,
                                              rowTaps: viewController.selectedObjects.asObservable(),
                                              completeTaps: viewController.completeButtonItem.rx.tap.asObservable())

@@ -158,7 +158,6 @@
 		C9BB058D1F831B0F00A07529 /* InvoiceDateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB058C1F831B0F00A07529 /* InvoiceDateViewModel.swift */; };
 		C9BB058F1F831B2200A07529 /* OrderDateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB058E1F831B2200A07529 /* OrderDateViewModel.swift */; };
 		C9BB05911F831D6600A07529 /* InventoryDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05901F831D6600A07529 /* InventoryDateViewController.swift */; };
-		C9C221191EFCD424009C7D01 /* UIViewController+Instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C221181EFCD423009C7D01 /* UIViewController+Instance.swift */; };
 		C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */; };
 		C9C2DA081F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA071F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift */; };
 		C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */; };
@@ -189,7 +188,6 @@
 		C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */; };
 		C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB7D891EE7910000515429 /* MailComposer.swift */; };
 		C9EC6E5D1FCCF7E000A3860E /* AttachableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EC6E5C1FCCF7E000A3860E /* AttachableType.swift */; };
-		C9EDFD2C1F842F2300C07CB8 /* StoryboardInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EDFD2B1F842F2300C07CB8 /* StoryboardInitializable.swift */; };
 		C9F3564B1FA04536007ED98C /* OrderLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */; };
 		C9F3564D1FA0554C007ED98C /* OrderLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */; };
 		C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */; };
@@ -206,6 +204,7 @@
 		C9F516151DB7F158004C10E6 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516111DB7F158004C10E6 /* Router.swift */; };
 		C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516121DB7F158004C10E6 /* APIManager.swift */; };
 		C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516141DB7F158004C10E6 /* AuthenticationHandler.swift */; };
+		C9F5459E20D0B17900458548 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5459D20D0B17900458548 /* Reusable.swift */; };
 		C9F645591EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -375,7 +374,6 @@
 		C9BB058C1F831B0F00A07529 /* InvoiceDateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceDateViewModel.swift; sourceTree = "<group>"; };
 		C9BB058E1F831B2200A07529 /* OrderDateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDateViewModel.swift; sourceTree = "<group>"; };
 		C9BB05901F831D6600A07529 /* InventoryDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryDateViewController.swift; sourceTree = "<group>"; };
-		C9C221181EFCD423009C7D01 /* UIViewController+Instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Instance.swift"; sourceTree = "<group>"; };
 		C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubItemTableViewCell.swift; sourceTree = "<group>"; };
 		C9C2DA071F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocItemCellViewModel.swift; sourceTree = "<group>"; };
 		C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+MyStuff.swift"; sourceTree = "<group>"; };
@@ -407,7 +405,6 @@
 		C9EB7D891EE7910000515429 /* MailComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
 		C9EC6E5C1FCCF7E000A3860E /* AttachableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachableType.swift; sourceTree = "<group>"; };
 		C9ECDB271F214DB9002AA99E /* Mobile 3a.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 3a.xcdatamodel"; sourceTree = "<group>"; };
-		C9EDFD2B1F842F2300C07CB8 /* StoryboardInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardInitializable.swift; sourceTree = "<group>"; };
 		C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationViewController.swift; sourceTree = "<group>"; };
 		C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationViewModel.swift; sourceTree = "<group>"; };
 		C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderLocationViewController.storyboard; sourceTree = "<group>"; };
@@ -429,6 +426,7 @@
 		C9F516111DB7F158004C10E6 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		C9F516121DB7F158004C10E6 /* APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		C9F516141DB7F158004C10E6 /* AuthenticationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationHandler.swift; sourceTree = "<group>"; };
+		C9F5459D20D0B17900458548 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadViewModel.swift; sourceTree = "<group>"; };
 		D430FB7BCEC8764AA38D8E28 /* Pods-MobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileTests/Pods-MobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E7E121BAFBB6D4F072EDD6C3 /* Pods-Mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mobile/Pods-Mobile.release.xcconfig"; sourceTree = "<group>"; };
@@ -524,7 +522,7 @@
 				C90477201EEE30D60082D894 /* KeypadViewModel.swift */,
 				C92FB7ED20523794002AE490 /* Mutable.swift */,
 				C9375065202D75390076B65E /* PrimaryContainerType.swift */,
-				C9EDFD2B1F842F2300C07CB8 /* StoryboardInitializable.swift */,
+				C9F5459D20D0B17900458548 /* Reusable.swift */,
 				C94AC871209005B400CBBCB2 /* UnitToggleable.swift */,
 				C99568C91FBB809C00AE6949 /* ViewModelType.swift */,
 			);
@@ -876,7 +874,6 @@
 				C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */,
 				C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */,
 				C9D38DB1202D5F6800B8B381 /* UIViewController+Extensions.swift */,
-				C9C221181EFCD423009C7D01 /* UIViewController+Instance.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -1390,6 +1387,7 @@
 				C95F52F01F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift in Sources */,
 				C92D75BF1DC7A7E500AA1A02 /* InvoiceItemViewController.swift in Sources */,
 				C94AC872209005B400CBBCB2 /* UnitToggleable.swift in Sources */,
+				C9F5459E20D0B17900458548 /* Reusable.swift in Sources */,
 				C90459131F93E31400E517C7 /* InventoryReviewItemViewModel.swift in Sources */,
 				C9DE2CF12087CBCA0090109A /* OrderKeypadCoordinator.swift in Sources */,
 				C98165021F915E7F006EC785 /* SubItemCellViewModelType.swift in Sources */,
@@ -1433,7 +1431,6 @@
 				C9F645591EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift in Sources */,
 				C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */,
 				C9BB058B1F831AF900A07529 /* InventoryDateViewModel.swift in Sources */,
-				C9C221191EFCD424009C7D01 /* UIViewController+Instance.swift in Sources */,
 				C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */,
 				C983643E1FA6744200DFAC6C /* OrderItemCellViewModel.swift in Sources */,
 				C9CE65E020BE461400A194F5 /* InventoryKeypadCoordinator.swift in Sources */,
@@ -1514,7 +1511,6 @@
 				C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */,
 				C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */,
 				C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */,
-				C9EDFD2C1F842F2300C07CB8 /* StoryboardInitializable.swift in Sources */,
 				C9F5160D1DB7F133004C10E6 /* InventoryLocCatViewController.swift in Sources */,
 				C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */,
 				C9045C1F1FC4D21E00F55FB3 /* ItemCoordinator.swift in Sources */,

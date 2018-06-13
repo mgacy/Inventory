@@ -40,7 +40,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     private func showVendorList(collection: InvoiceCollection) {
-        let viewController = InvoiceVendorViewController.initFromStoryboard(name: "InvoiceVendorViewController")
+        let viewController = InvoiceVendorViewController.instance()
         let viewModel = InvoiceVendorViewModel(dataManager: dependencies.dataManager, parentObject: collection)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
@@ -54,7 +54,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
     }
 
     private func showItemList(invoice: Invoice) {
-        let viewController = InvoiceItemViewController.initFromStoryboard(name: "InvoiceItemViewController")
+        let viewController = InvoiceItemViewController.instance()
         let viewModel = InvoiceItemViewModel(dataManager: dependencies.dataManager, parentObject: invoice,
                                              uploadTaps: viewController.uploadButtonItem.rx.tap.asObservable())
         viewController.viewModel = viewModel

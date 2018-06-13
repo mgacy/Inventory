@@ -161,7 +161,7 @@ class InventoryReviewViewController: UIViewController {
                     log.error("\(#function) FAILED : unable to get reference to self"); return
                 }
                  */
-                //let viewController = InvoiceVendorViewController.initFromStoryboard(name: "Main")
+                //let viewController = InvoiceVendorViewController.instance()
                 //let viewModel = InvoiceVendorViewModel(dataManager: viewModel.dataManager)
                 //viewController = viewModel = viewModel
                 //strongSelf.navigationController?.pushViewController(viewController, animated: true)
