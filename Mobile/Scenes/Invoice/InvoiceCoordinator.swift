@@ -40,8 +40,11 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     private func showVendorList(collection: InvoiceCollection) {
-        let viewController = InvoiceVendorViewController.instance()
-        let viewModel = InvoiceVendorViewModel(dataManager: dependencies.dataManager, parentObject: collection)
+        let viewController = InvoiceVendorViewController()
+        let viewModel = InvoiceVendorViewModel(
+            dependency: InvoiceVendorViewModel.Dependency(dataManager: dependencies.dataManager,
+                                                          parentObject: collection),
+            bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 

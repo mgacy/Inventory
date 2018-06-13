@@ -10,12 +10,12 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-struct InvoiceVendorViewModel {
+/// TODO: make class?
+struct InvoiceVendorViewModel: AttachableViewModelType {
 
     // MARK: - Properties
-
-    private let dataManager: DataManager
-    private let parentObject: InvoiceCollection
+    let frc: NSFetchedResultsController<Invoice>
+    let selectedItem: Driver<Invoice>
 
     // CoreData
     private let filter: NSPredicate?
@@ -24,37 +24,33 @@ struct InvoiceVendorViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
-
-    // MARK: - Output
-    let frc: NSFetchedResultsController<Invoice>
-    //let isRefreshing: Driver<Bool>
-    //let hasRefreshed: Driver<Bool>
-    //let showSelection: Observable<Invoice>
-    //let errorMessages: Driver<String>
-
-    init(dataManager: DataManager, parentObject: InvoiceCollection) {
-        self.dataManager = dataManager
-        self.parentObject = parentObject
-
-        // Activity
-
-        // Selection
-
-        // Navigation
-        //showSelection =
-
-        // Errors
-        //errorMessages =
+    init(dependency: Dependency, bindings: Bindings) {
 
         // FetchRequest
-        filter = NSPredicate(format: "collection == %@", parentObject)
+        filter = NSPredicate(format: "collection == %@", dependency.parentObject)
         let request: NSFetchRequest<Invoice> = Invoice.fetchRequest()
         request.sortDescriptors = sortDescriptors
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        let frc = dependency.dataManager.createFetchedResultsController(fetchRequest: request)
+
+        // Navigation
+        self.selectedItem = bindings.rowTaps
+            .map { frc.object(at: $0) }
+
+        self.frc = frc
+    }
+
+    // MARK: - AttachableViewModelType
+
+    struct Dependency {
+        let dataManager: DataManager
+        let parentObject: InvoiceCollection
+    }
+
+    struct Bindings {
+        let rowTaps: Driver<IndexPath>
     }
 
 }

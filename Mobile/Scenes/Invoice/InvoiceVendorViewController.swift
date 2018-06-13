@@ -19,11 +19,14 @@ class InvoiceVendorViewController: UIViewController {
 
     // MARK: - Properties
 
+    var bindings: InvoiceVendorViewModel.Bindings {
+        return InvoiceVendorViewModel.Bindings(rowTaps: tableView.rx.itemSelected.asDriver())
+    }
+
     var viewModel: InvoiceVendorViewModel!
     let disposeBag = DisposeBag()
-    let selectedObjects = PublishSubject<Invoice>()
-    //let selectedObjects: Observable<Invoice>
-    //fileprivate let _selectedObjects = PublishSubject<Invoice>()
+    let wasPopped: Observable<Void>
+    private let wasPoppedSubject = PublishSubject<Void>()
 
     // TableViewCell
     let cellIdentifier = "Cell"
@@ -40,10 +43,16 @@ class InvoiceVendorViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-    //required init?(coder aDecoder: NSCoder) {
-    //    self.selectedObjects = _selectedObjects.asObservable()
-    //    super.init(coder: aDecoder)
-    //}
+    init() {
+        self.wasPopped = wasPoppedSubject.asObservable()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        //fatalError("init(coder:) has not been implemented")
+        self.wasPopped = wasPoppedSubject.asObservable()
+        super.init(coder: aDecoder)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,7 +109,6 @@ class InvoiceVendorViewController: UIViewController {
 extension InvoiceVendorViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -126,4 +134,11 @@ extension InvoiceVendorViewController: TableViewDataSourceDelegate {
         }
     }
 
+}
+
+// MARK: - PoppedObservable
+extension InvoiceVendorViewController: PoppedObservable {
+    func viewWasPopped() {
+        wasPoppedSubject.onNext(())
+    }
 }
