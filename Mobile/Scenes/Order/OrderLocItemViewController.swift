@@ -22,9 +22,6 @@ class OrderLocItemViewController: UIViewController {
     var viewModel: OrderLocItemViewModel!
     let disposeBag = DisposeBag()
 
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
     // MARK: - Interface
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
@@ -67,9 +64,9 @@ class OrderLocItemViewController: UIViewController {
 
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
-            tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+            tableView.register(cellType: SubItemTableViewCell.self)
         case .pad:
-            tableView.register(StepperTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+            tableView.register(cellType: StepperTableViewCell.self)
         default:
             fatalError("Device is neither phone nor pad")
         }
@@ -89,7 +86,7 @@ class OrderLocItemViewController: UIViewController {
         viewModel.items
             // closure args are row (IndexPath), element, cell
             // swiftlint:disable:next line_length
-            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier, cellType: SubItemTableViewCell.self)) { (_, element, cell: SubItemTableViewCell) in
+            .bind(to: tableView.rx.items(cellIdentifier: SubItemTableViewCell.reuseID, cellType: SubItemTableViewCell.self)) { (_, element, cell: SubItemTableViewCell) in
                 guard let cellViewModel = OrderItemCellViewModel(forOrderItem: element) else {
                     fatalError("\(#function) FAILED : unable to init view model for \(element)")
                 }
@@ -116,7 +113,7 @@ class OrderLocItemViewController: UIViewController {
         viewModel.items
             // closure args are row (IndexPath), element, cell
             // swiftlint:disable:next line_length
-            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier, cellType: StepperTableViewCell.self)) { (_, element, cell: StepperTableViewCell) in
+            .bind(to: tableView.rx.items(cellIdentifier: StepperTableViewCell.reuseID, cellType: StepperTableViewCell.self)) { (_, element, cell: StepperTableViewCell) in
                 // swiftlint:disable:next line_length
                 guard let cellViewModel = StepperCellViewModel(forOrderItem: element, bindings: cell.bindings, numberFormatter: numberFormatter) else {
                     fatalError("\(#function) FAILED : unable to init view model for \(element)")

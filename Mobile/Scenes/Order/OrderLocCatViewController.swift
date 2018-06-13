@@ -22,9 +22,6 @@ class OrderLocCatViewController: UIViewController {
     var viewModel: OrderLocCatViewModel!
     let disposeBag = DisposeBag()
 
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
     // MARK: - Interface
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
@@ -55,7 +52,7 @@ class OrderLocCatViewController: UIViewController {
         title = viewModel.navTitle
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         tableView.tableFooterView = UIView()
         self.view.addSubview(tableView)
     }
@@ -71,7 +68,7 @@ class OrderLocCatViewController: UIViewController {
         // TableView
         viewModel.categories
             // closure args are row (IndexPath), element, cell
-            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier)) { _, element, cell in
+            .bind(to: tableView.rx.items(cellIdentifier: UITableViewCell.reuseID)) { _, element, cell in
                 cell.textLabel?.text = element.name
             }
             .disposed(by: disposeBag)

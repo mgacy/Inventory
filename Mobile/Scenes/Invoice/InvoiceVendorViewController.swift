@@ -28,9 +28,6 @@ class InvoiceVendorViewController: UIViewController {
     let wasPopped: Observable<Void>
     private let wasPoppedSubject = PublishSubject<Void>()
 
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
     // MARK: - Interface
 
     lazy var tableView: UITableView = {
@@ -95,12 +92,11 @@ class InvoiceVendorViewController: UIViewController {
     fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
 
     fileprivate func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }

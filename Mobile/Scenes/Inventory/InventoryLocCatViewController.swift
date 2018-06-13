@@ -19,9 +19,6 @@ class InventoryLocCatViewController: UITableViewController {
     let selectedObjects: Observable<InventoryLocationCategory>
     fileprivate let _selectedObjects = PublishSubject<InventoryLocationCategory>()
 
-    // TableViewCell
-    let cellIdentifier = "InventoryLocationCategoryTableViewCell"
-
     // MARK: - Lifecycle
 
     required init?(coder aDecoder: NSCoder) {
@@ -46,12 +43,11 @@ class InventoryLocCatViewController: UITableViewController {
     fileprivate var dataSource: TableViewDataSource<InventoryLocCatViewController>!
 
     fileprivate func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate

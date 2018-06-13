@@ -49,9 +49,6 @@ class OrderDateViewController: UIViewController {
 
     let selectedObjects = PublishSubject<OrderCollection>()
 
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
     /// TODO: provide interface to control these
     let orderTypeID = 1
 
@@ -195,13 +192,12 @@ class OrderDateViewController: UIViewController {
 
     fileprivate func setupTableView() {
         tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.tableFooterView = UIView()
         tableView.estimatedRowHeight = 100
 
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }

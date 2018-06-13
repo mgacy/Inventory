@@ -25,9 +25,6 @@ class InventoryDateViewController: UIViewController {
 
     let selectedObjects = PublishSubject<Inventory>()
 
-    // TableViewCell
-    let cellIdentifier = "InventoryDateTableViewCell"
-
     // MARK: - Interface
     //private let refreshControl = UIRefreshControl()
     let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
@@ -165,12 +162,11 @@ class InventoryDateViewController: UIViewController {
 
     fileprivate func setupTableView() {
         tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }

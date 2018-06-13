@@ -31,9 +31,6 @@ class OrderLocationViewController: UIViewController {
     var viewModel: OrderLocationViewModel!
     let disposeBag = DisposeBag()
 
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
     // MARK: - Interface
 
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
@@ -69,7 +66,7 @@ class OrderLocationViewController: UIViewController {
         title = Strings.navTitle
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         tableView.tableFooterView = UIView()
         self.view.addSubview(tableView)
     }
@@ -122,7 +119,7 @@ class OrderLocationViewController: UIViewController {
         // Basic RxCocoa
         viewModel.locations
             // closure args are row (IndexPath), element, cell
-            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier)) { _, element, cell in
+            .bind(to: tableView.rx.items(cellIdentifier: UITableViewCell.reuseID)) { _, element, cell in
                 cell.textLabel?.text = element.name
             }
             .disposed(by: disposeBag)

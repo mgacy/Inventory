@@ -21,9 +21,6 @@ class OrderVendorViewController: UIViewController {
     let selectedObjects = PublishSubject<Order>()
     let confirmComplete = PublishSubject<Void>()
 
-    // TableView
-    var cellIdentifier = "Cell"
-
     // MARK: - Interface
 
     let completeButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "DoneBarButton"), style: .done, target: nil, action: nil)
@@ -110,12 +107,11 @@ class OrderVendorViewController: UIViewController {
     fileprivate var dataSource: TableViewDataSource<OrderVendorViewController>!
 
     fileprivate func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }

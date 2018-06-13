@@ -33,9 +33,6 @@ class OrderItemViewController: UIViewController {
     // var mailComposer: MailComposer? = nil
     let messageComposer = MessageComposer()
 
-    // TableView
-    let cellIdentifier = "OrderItemCell"
-
     // MARK: - Views
 
     lazy var headerView: OrderItemHeaderView = {
@@ -188,12 +185,11 @@ class OrderItemViewController: UIViewController {
 
     /// TODO: pass `(with viewModel: OrderItemViewModel)`?
     fileprivate func setupTableView() {
-        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: SubItemTableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 80
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
     // MARK: - User Actions

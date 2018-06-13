@@ -24,9 +24,6 @@ class ItemViewController: UIViewController {
 
     let rowTaps = PublishSubject<IndexPath>()
 
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
     // MARK: - Interface
     private let refreshControl = UIRefreshControl()
     @IBOutlet weak var tableView: UITableView!
@@ -109,12 +106,11 @@ class ItemViewController: UIViewController {
     fileprivate func setupTableView() {
         tableView.delegate = self
         tableView.refreshControl = refreshControl
-        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: SubItemTableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }

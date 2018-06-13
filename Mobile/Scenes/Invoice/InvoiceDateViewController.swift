@@ -26,9 +26,6 @@ class InvoiceDateViewController: UIViewController {
 
     let selectedObjects = PublishSubject<InvoiceCollection>()
 
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
     // MARK: - Interface
     private let refreshControl = UIRefreshControl()
     //let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
@@ -151,12 +148,11 @@ class InvoiceDateViewController: UIViewController {
 
     fileprivate func setupTableView() {
         tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }

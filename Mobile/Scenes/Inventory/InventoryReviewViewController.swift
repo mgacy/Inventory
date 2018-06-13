@@ -26,9 +26,6 @@ class InventoryReviewViewController: UIViewController {
     // TODO: could we use a lazy var returning selectedObjects.asObservable()?
     let selectedObjects = PublishSubject<InventoryItem>()
 
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
     // MARK: - Interface
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var messageLabel: UILabel!
@@ -174,12 +171,11 @@ class InventoryReviewViewController: UIViewController {
 
     fileprivate func setupTableView() {
         //tableView.refreshControl = refreshControl
-        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: SubItemTableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }

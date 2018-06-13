@@ -29,9 +29,6 @@ class InventoryLocationViewController: UIViewController, AttachableType {
     private let disposeBag = DisposeBag()
     private let _dismissView = PublishSubject<Void>()
 
-    // TableViewCell
-    let cellIdentifier = "InventoryLocationTableViewCell"
-
     // MARK: - Interface
 
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
@@ -139,12 +136,11 @@ class InventoryLocationViewController: UIViewController, AttachableType {
 
     fileprivate func setupTableView(with viewModel: InventoryLocationViewModel) {
         //tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }

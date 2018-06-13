@@ -31,9 +31,6 @@ class InventoryLocItemViewController: UITableViewController {
     var viewModel: InventoryLocItemViewModel!
     let disposeBag = DisposeBag()
 
-    // TableViewCell
-    let cellIdentifier = "InventoryItemCell"
-
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -53,12 +50,11 @@ class InventoryLocItemViewController: UITableViewController {
     fileprivate var dataSource: TableViewDataSource<InventoryLocItemViewController>!
 
     fileprivate func setupTableView() {
-        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: SubItemTableViewCell.self)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 80
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
     // MARK: - UITableViewDelegate

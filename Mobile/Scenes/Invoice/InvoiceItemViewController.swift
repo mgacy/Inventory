@@ -40,9 +40,6 @@ class InvoiceItemViewController: UIViewController {
     let wasPopped: Observable<Void>
     let wasPoppedSubject = PublishSubject<Void>()
 
-    // TableView
-    var cellIdentifier = "InvoiceItemCell"
-
     // MARK: - Interface
     let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
 
@@ -135,12 +132,11 @@ class InvoiceItemViewController: UIViewController {
     fileprivate var dataSource: TableViewDataSource<InvoiceItemViewController>!
 
     fileprivate func setupTableView() {
-        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: SubItemTableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 80
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }
