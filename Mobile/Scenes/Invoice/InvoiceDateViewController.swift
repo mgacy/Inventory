@@ -81,26 +81,30 @@ class InvoiceDateViewController: UIViewController {
         //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         //messageLabel.translatesAutoresizingMaskIntoConstraints = false
 
+        //edgesForExtendedLayout = .top
+
         self.view.addSubview(tableView)
         self.view.addSubview(activityIndicatorView)
         self.view.addSubview(messageLabel)
     }
 
     private func setupConstraints() {
-        // TableView
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-
-        // ActivityIndicator
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-
-        // MessageLabel
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+
+        let constraints = [
+            // TableView
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            // ActivityIndicator
+            activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor),
+            // MessageLabel
+            messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor)
+        ]
+        NSLayoutConstraint.activate(constraints)
     }
 
     private func setupBindings() {
