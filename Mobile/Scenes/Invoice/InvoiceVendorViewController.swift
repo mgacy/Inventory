@@ -59,6 +59,10 @@ class InvoiceVendorViewController: UIViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit {
+        log.debug("\(#function)")
+    }
+
     // MARK: - View Methods
 
     private func setupView() {
@@ -67,10 +71,13 @@ class InvoiceVendorViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        let constraints = [
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ]
+        NSLayoutConstraint.activate(constraints)
     }
 
     //private func setupBindings() {}
@@ -99,11 +106,11 @@ extension InvoiceVendorViewController: UITableViewDelegate {
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension InvoiceVendorViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for invoice: Invoice) {
-       cell.textLabel?.text = invoice.vendor?.name
+        cell.textLabel?.text = invoice.vendor?.name
         switch invoice.status {
         case InvoiceStatus.pending.rawValue:
             cell.textLabel?.textColor = ColorPalette.yellow

@@ -66,6 +66,10 @@ class InvoiceItemViewController: UIViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit {
+        log.debug("\(#function)")
+    }
+
     // MARK: - View Methods
 
     func setupView() {
@@ -163,7 +167,7 @@ extension InvoiceItemViewController: UITableViewDelegate {
 
 }
 
-// MARK: - Alert Controller Extension
+// MARK: - Alert Controller
 extension InvoiceItemViewController {
 
     func showNotReceivedAlert(forItemAt indexPath: IndexPath, with statusList: [InvoiceItemStatus], handler: @escaping (IndexPath, InvoiceItemStatus) -> Void) {
@@ -189,7 +193,7 @@ extension InvoiceItemViewController {
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension InvoiceItemViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ item: InvoiceItem) -> Bool {
