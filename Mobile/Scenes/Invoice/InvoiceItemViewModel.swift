@@ -10,9 +10,15 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-struct InvoiceItemViewModel {
+struct InvoiceItemViewModel: AttachableViewModelType {
 
     // MARK: - Properties
+    let frc: NSFetchedResultsController<InvoiceItem>
+    let vendorName: String
+    let isUploading: Driver<Bool>
+    let uploadResults: Observable<Event<Invoice>>
+    /// TODO: add uploadIsEnabled: Driver<Bool>
+    let itemSelected: Observable<IndexPath>
 
     private let dataManager: DataManager
     private let parentObject: Invoice
@@ -24,41 +30,32 @@ struct InvoiceItemViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
-    // let uploadTaps:
-
-    // MARK: - Output
-    let frc: NSFetchedResultsController<InvoiceItem>
-    let vendorName: String
-    let isUploading: Driver<Bool>
-    let uploadResults: Observable<Event<Invoice>>
-    /// TODO: add uploadIsEnabled: Driver<Bool>
-
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, parentObject: Invoice, uploadTaps: Observable<Void>) {
-        self.dataManager = dataManager
-        self.parentObject = parentObject
+    init(dependency: Dependency, bindings: Bindings) {
+        self.dataManager = dependency.dataManager
+        self.parentObject = dependency.parentObject
 
         /// TODO: use computed property instead?
-        self.vendorName = parentObject.vendor?.name ?? "Error"
+        self.vendorName = dependency.parentObject.vendor?.name ?? "Error"
 
         // Upload
         let isUploading = ActivityIndicator()
         self.isUploading = isUploading.asDriver()
 
-        self.uploadResults = uploadTaps
+        self.uploadResults = bindings.uploadTaps
             .flatMap { _ -> Observable<Event<Invoice>> in
                 log.debug("Starting to upload")
-                return dataManager.updateInvoice(parentObject)
+                return dependency.dataManager.updateInvoice(dependency.parentObject)
                     .trackActivity(isUploading)
             }
             .share()
 
         // Navigation
+        self.itemSelected = bindings.rowTaps
 
         // FetchRequest
-        let predicate = NSPredicate(format: "invoice == %@", parentObject)
+        let predicate = NSPredicate(format: "invoice == %@", dependency.parentObject)
         let request: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
         request.sortDescriptors = sortDescriptors
         request.predicate = predicate
@@ -77,6 +74,18 @@ struct InvoiceItemViewModel {
         /// TODO: dataManager.updateInvoiceItem?
         dataManager.saveOrRollback()
         log.info("Updated InvoiceItem: \(invoiceItem)")
+    }
+
+    // MARK: - AttachableViewModelType
+
+    struct Dependency {
+        let dataManager: DataManager
+        let parentObject: Invoice
+    }
+
+    struct Bindings {
+        let rowTaps: Observable<IndexPath>
+        let uploadTaps: Observable<Void>
     }
 
 }

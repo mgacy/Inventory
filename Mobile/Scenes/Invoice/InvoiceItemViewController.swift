@@ -27,13 +27,18 @@ class InvoiceItemViewController: UIViewController {
         //static let cancelActionTitle = "Cancel"
     }
 
+    var bindings: InvoiceItemViewModel.Bindings {
+        return InvoiceItemViewModel.Bindings(
+            rowTaps: tableView.rx.itemSelected.asObservable(),
+            uploadTaps: uploadButtonItem.rx.tap.asObservable())
+    }
+
     // MARK: - Properties
 
     var viewModel: InvoiceItemViewModel!
     let disposeBag = DisposeBag()
-
-    /// TODO: make PublishSubject fileprivate and expose observable
-    let selectedIndices = PublishSubject<IndexPath>()
+    let wasPopped: Observable<Void>
+    let wasPoppedSubject = PublishSubject<Void>()
 
     // TableView
     var cellIdentifier = "InvoiceItemCell"
@@ -50,6 +55,17 @@ class InvoiceItemViewController: UIViewController {
     }()
 
     // MARK: - Lifecycle
+
+    init() {
+        self.wasPopped = wasPoppedSubject.asObservable()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        //fatalError("init(coder:) has not been implemented")
+        self.wasPopped = wasPoppedSubject.asObservable()
+        super.init(coder: aDecoder)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,7 +149,6 @@ class InvoiceItemViewController: UIViewController {
 extension InvoiceItemViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -211,4 +226,11 @@ extension InvoiceItemViewController: TableViewDataSourceDelegate {
         cell.configure(withViewModel: viewModel)
     }
 
+}
+
+// MARK: - PoppedObservable
+extension InvoiceItemViewController: PoppedObservable {
+    func viewWasPopped() {
+        wasPoppedSubject.onNext(())
+    }
 }

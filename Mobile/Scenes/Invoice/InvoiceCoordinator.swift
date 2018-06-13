@@ -57,12 +57,14 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
     }
 
     private func showItemList(invoice: Invoice) {
-        let viewController = InvoiceItemViewController.instance()
-        let viewModel = InvoiceItemViewModel(dataManager: dependencies.dataManager, parentObject: invoice,
-                                             uploadTaps: viewController.uploadButtonItem.rx.tap.asObservable())
+        let viewController = InvoiceItemViewController()
+        let viewModel = InvoiceItemViewModel(
+            dependency: InvoiceItemViewModel.Dependency(dataManager: dependencies.dataManager, parentObject: invoice),
+            bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
 
+        // Selection
         let itemSelection = viewController.tableView.rx
             .itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
