@@ -13,6 +13,7 @@
 		C901A50D1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A50C1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift */; };
 		C901A50F1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A50E1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift */; };
 		C902F04520CDBD2E0044BB3A /* PoppedObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902F04420CDBD2E0044BB3A /* PoppedObservable.swift */; };
+		C902F04720CF41E80044BB3A /* MGViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902F04620CF41E80044BB3A /* MGViewController.swift */; };
 		C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF2D1DB816EB0063CD02 /* Keypad.swift */; };
 		C902FF3E1DBD8B3F0063CD02 /* NumberKeypadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */; };
 		C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */; };
@@ -205,6 +206,7 @@
 		C9F516151DB7F158004C10E6 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516111DB7F158004C10E6 /* Router.swift */; };
 		C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516121DB7F158004C10E6 /* APIManager.swift */; };
 		C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516141DB7F158004C10E6 /* AuthenticationHandler.swift */; };
+		C9F5459C20D0B0C500458548 /* MGTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5459B20D0B0C500458548 /* MGTableViewController.swift */; };
 		C9F5459E20D0B17900458548 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5459D20D0B17900458548 /* Reusable.swift */; };
 		C9F645591EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -227,6 +229,7 @@
 		C901A50C1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemViewController.swift; sourceTree = "<group>"; };
 		C901A50E1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemViewModel.swift; sourceTree = "<group>"; };
 		C902F04420CDBD2E0044BB3A /* PoppedObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoppedObservable.swift; sourceTree = "<group>"; };
+		C902F04620CF41E80044BB3A /* MGViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGViewController.swift; sourceTree = "<group>"; };
 		C902FF2D1DB816EB0063CD02 /* Keypad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keypad.swift; sourceTree = "<group>"; };
 		C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberKeypadButton.swift; sourceTree = "<group>"; };
 		C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationKeypadButton.swift; sourceTree = "<group>"; };
@@ -428,6 +431,7 @@
 		C9F516111DB7F158004C10E6 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		C9F516121DB7F158004C10E6 /* APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		C9F516141DB7F158004C10E6 /* AuthenticationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationHandler.swift; sourceTree = "<group>"; };
+		C9F5459B20D0B0C500458548 /* MGTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGTableViewController.swift; sourceTree = "<group>"; };
 		C9F5459D20D0B17900458548 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadViewModel.swift; sourceTree = "<group>"; };
 		D430FB7BCEC8764AA38D8E28 /* Pods-MobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileTests/Pods-MobileTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -934,6 +938,8 @@
 				C925909920AEA3FA00F15634 /* KeypadView.swift */,
 				C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */,
 				C96751C32086EDB100212278 /* ModalKeypadViewController.swift */,
+				C9F5459B20D0B0C500458548 /* MGTableViewController.swift */,
+				C902F04620CF41E80044BB3A /* MGViewController.swift */,
 				C9DE2CF62089C8B50090109A /* UnitView.swift */,
 			);
 			path = Common;
@@ -1441,6 +1447,7 @@
 				C9BB058D1F831B0F00A07529 /* InvoiceDateViewModel.swift in Sources */,
 				C97A713A1F8ECADD00F2F1CD /* InventoryReviewViewModel.swift in Sources */,
 				C9D38DB2202D5F6800B8B381 /* UIViewController+Extensions.swift in Sources */,
+				C9F5459C20D0B0C500458548 /* MGTableViewController.swift in Sources */,
 				C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */,
 				C9045C111FC49EB400F55FB3 /* AppCoordinator.swift in Sources */,
 				C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */,
@@ -1456,6 +1463,7 @@
 				C9D59C5C1FE0FA280050A4AB /* TabBarController.swift in Sources */,
 				C95E446E1FB2C26200820067 /* ItemCellViewModel.swift in Sources */,
 				C92C2F8D1F9FE3E500B69CF5 /* SettingsViewModel.swift in Sources */,
+				C902F04720CF41E80044BB3A /* MGViewController.swift in Sources */,
 				C93BD1A020BC8824002E23DC /* OrderDisplaySubview.swift in Sources */,
 				C9045C191FC4AD1000F55FB3 /* OrderCoordinator.swift in Sources */,
 				C9F5160C1DB7F133004C10E6 /* InventoryLocationViewController.swift in Sources */,
