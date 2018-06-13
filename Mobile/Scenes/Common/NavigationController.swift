@@ -48,3 +48,21 @@ class NavigationController: UINavigationController, PrimaryContainerType {
     }
 
 }
+
+// MARK: - UINavigationControllerDelegate
+extension NavigationController: UINavigationControllerDelegate {
+
+    public func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        // Ensure the view controller is popping
+        guard
+            let poppedViewController = navigationController.transitionCoordinator?.viewController(forKey: .from),
+            !navigationController.viewControllers.contains(poppedViewController),
+            let poppedVC = poppedViewController as? PoppedObservable else {
+                //log.debug("\(poppedViewController) is not Dismissable")
+                return
+        }
+        /// TODO: simply call `.onNext(())` on PublishSubject?
+        poppedVC.viewWasPopped()
+    }
+
+}
