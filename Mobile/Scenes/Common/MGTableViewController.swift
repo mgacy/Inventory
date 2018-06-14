@@ -21,6 +21,7 @@ class MGTableViewController: UIViewController {
 
     // MARK: UI
 
+    /// TODO: omit refreshControl?
     let refreshControl = UIRefreshControl()
     /*
     lazy var refreshControl: UIRefreshControl = {
@@ -45,13 +46,11 @@ class MGTableViewController: UIViewController {
 
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
         tv.backgroundColor = .white
         tv.tableFooterView = UIView() // Prevent empty rows
-        //
-        //tv.delegate = self
-        //tv.dataSource = ?
-        /// TODO: handle everything from setupTableView() here?
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        //tv.delegate = nil
+        //tv.dataSource = nil
         return tv
     }()
 
@@ -84,7 +83,7 @@ class MGTableViewController: UIViewController {
         view.addSubview(tableView)
         view.addSubview(activityIndicatorView)
         view.addSubview(messageLabel)
-
+        /// TODO: set messageLabel.text?
         setupConstraints()
         setupBindings()
         setupTableView()
@@ -121,11 +120,9 @@ class MGTableViewController: UIViewController {
     func setupTableView() {
         //tableView.delegate = self
         //tableView.dataSource = self
-
-        //tableView.tableFooterView = UIView() // Prevent empty rows
         //tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.reuseID)
     }
 
-    // MARK: - C
+}
 
 }
