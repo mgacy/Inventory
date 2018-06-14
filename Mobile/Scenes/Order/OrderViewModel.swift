@@ -10,7 +10,7 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-final class OrderViewModel {
+final class OrderViewModel: AttachableViewModelType {
 
     // MARK: Dependencies
     //private let dependencies: Dependency
@@ -126,7 +126,7 @@ final class OrderViewModel {
         _ = dataManager.saveOrRollback()
     }
 
-    // MARK: -
+    // MARK: - AttachableViewModelType
 
     struct Dependency {
         let dataManager: DataManager
