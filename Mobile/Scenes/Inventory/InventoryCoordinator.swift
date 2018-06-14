@@ -120,7 +120,6 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         viewController.tableView.rx
             .itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
-                //log.debug("We selected: \(indexPath)")
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showModalKeypad(for: parent, atIndex: indexPath.row)
             }

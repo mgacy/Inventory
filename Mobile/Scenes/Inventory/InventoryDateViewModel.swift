@@ -56,12 +56,12 @@ struct InventoryDateViewModel {
 
         self.hasRefreshed = _refresh.asObservable()
             .flatMapLatest { _ -> Observable<Bool> in
-                log.debug("\(#function) : Refreshing (1) ...")
+                //log.debug("\(#function) : Refreshing (1) ...")
                 return dataManager.refreshStuff()
                     .catchErrorJustReturn(false)
             }
             .flatMapLatest { _ -> Observable<Bool> in
-                log.debug("\(#function) : Refreshing (2) ...")
+                //log.debug("\(#function) : Refreshing (2) ...")
                 return dataManager.refreshInventories()
                     .dematerialize()
                     .catchErrorJustReturn(false)
@@ -74,7 +74,7 @@ struct InventoryDateViewModel {
         self.addTaps = _add.asObserver()
         let showNewResults = _add.asObservable()
             .flatMap { _ -> Observable<Event<Inventory>> in
-                log.debug("Tapped ADD")
+                //log.debug("Tapped ADD")
                 return dataManager.createInventory()
             }
             /// TODO: .map { InventorySelection.new($0) }
@@ -89,7 +89,7 @@ struct InventoryDateViewModel {
             // next scene
             /// TODO: .map { InventorySelection.existing($0) }
             .flatMap { selection -> Observable<Event<Inventory>> in
-                log.debug("Tapped: \(selection)")
+                //log.debug("Tapped: \(selection)")
                 return Observable.just(selection).materialize()
                 /*
                 switch selection.uploaded {

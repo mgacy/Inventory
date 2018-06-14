@@ -62,19 +62,19 @@ extension InventoryItem {
                 let newObject = InventoryItem(with: record, in: context)
                 configure(newObject, record)
                 /// TODO: add newObject to localIDs?
-                log.debug("newObject: \(newObject)")
+                //log.debug("newObject: \(newObject)")
             }
 
         }
 
-        log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
+        //log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
         let deletedIDs = localIDs.subtracting(remoteIDs)
         deleteItems(withIDs: deletedIDs, in: context)
     }
 
     static func deleteItems(withIDs deletionIDs: Set<Int32>, in context: NSManagedObjectContext) {
         guard !deletionIDs.isEmpty else { return }
-        log.debug("We need to delete: \(deletionIDs)")
+        //log.debug("We need to delete: \(deletionIDs)")
         /// TODO: remove hard-coded predicate string
         let fetchPredicate = NSPredicate(format: "\(self.remoteIdentifierName) IN %@", deletionIDs)
         do {
