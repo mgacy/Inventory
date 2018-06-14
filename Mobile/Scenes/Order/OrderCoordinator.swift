@@ -244,7 +244,6 @@ class OrderCoordinator: BaseCoordinator<Void> {
         viewController.tableView.rx
             .modelSelected(RemoteItemCategory.self)
             .subscribe(onNext: { [weak self] category in
-                //log.debug("We selected: \(category)")
                 let parent = OrderLocItemParent.category(category)
                 self?.showLocationItemList(parent: parent, factory: factory)
             })
@@ -261,7 +260,6 @@ class OrderCoordinator: BaseCoordinator<Void> {
         viewController.tableView.rx
             .itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
-                //log.debug("We selected: \(indexPath)")
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
             }

@@ -56,7 +56,7 @@ struct InventoryReviewViewModel {
         self.showTable = refreshResults
             .elements()
             .map { inventory -> Bool in
-                log.debug("\(#function) : \(inventory)")
+                //log.debug("\(#function) : \(inventory)")
                 if let itemCount = inventory.items?.count {
                     return itemCount > 0
                 }

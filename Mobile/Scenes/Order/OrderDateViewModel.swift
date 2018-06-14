@@ -52,12 +52,12 @@ struct OrderDateViewModel {
 
         self.hasRefreshed = _refresh.asObservable()
             .flatMapLatest { _ -> Observable<Bool> in
-                log.debug("\(#function) : Refreshing (1) ...")
+                //log.debug("\(#function) : Refreshing (1) ...")
                 return dataManager.refreshStuff()
                     .catchErrorJustReturn(false)
             }
             .flatMapLatest { _ -> Observable<Bool> in
-                log.debug("\(#function) : Refreshing (2) ...")
+                //log.debug("\(#function) : Refreshing (2) ...")
                 return dataManager.refreshOrderCollections()
                     .dematerialize()
                     .catchErrorJustReturn(false)
@@ -79,7 +79,7 @@ struct OrderDateViewModel {
         let showSelectionResults = rowTaps
             //.throttle(0.5, scheduler: MainScheduler.instance)
             .flatMap { selection -> Observable<Event<OrderCollection>> in
-                log.debug("Tapped: \(selection)")
+                //log.debug("Tapped: \(selection)")
                 switch selection.uploaded {
                 case true:
                     /// TODO: show PKHUD progress

@@ -91,7 +91,7 @@ class OrderVendorViewModel {
             )
             .merge()
             .map { _ -> OrderVendorSegue in
-                log.debug("Going back ...")
+                //log.debug("Going back ...")
                 /// TODO: refresh OrderDateViewController
                 parentObject.uploaded = true
                 return OrderVendorSegue.back
@@ -99,7 +99,7 @@ class OrderVendorViewModel {
 
         let orderTransition = rowTaps
             .map { order -> OrderVendorSegue in
-                log.debug("Selected Order: \(order)")
+                //log.debug("Selected Order: \(order)")
                 return OrderVendorSegue.item(order)
             }
 

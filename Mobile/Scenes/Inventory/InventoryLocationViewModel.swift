@@ -81,7 +81,7 @@ final class InventoryLocationViewModel: AttachableViewModelType {
         self.showLocation = bindings.rowTaps
             .map { frc.object(at: $0) }
             .map { selection in
-                log.debug("Selected: \(selection)")
+                //log.debug("Selected: \(selection)")
                 switch selection.locationType {
                 case "category"?:
                     return InventoryLocationSegue.category(selection)
