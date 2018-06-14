@@ -22,8 +22,6 @@ class ItemViewController: UIViewController {
     var viewModel: ItemViewModel!
     let disposeBag = DisposeBag()
 
-    let rowTaps = PublishSubject<IndexPath>()
-
     // MARK: - Interface
     private let refreshControl = UIRefreshControl()
     @IBOutlet weak var tableView: UITableView!
@@ -87,7 +85,6 @@ class ItemViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })
@@ -122,7 +119,6 @@ class ItemViewController: UIViewController {
 extension ItemViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //rowTaps.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -130,11 +126,10 @@ extension ItemViewController: UITableViewDelegate {
 
 // MARK: - TableViewDataSourceDelegate Extension
 extension ItemViewController: TableViewDataSourceDelegate {
-
     /*
-     func canEdit(_ model: IndexPath) -> Bool {
-     return true
-     }
+    func canEdit(_ model: IndexPath) -> Bool {
+        return true
+    }
      */
     func configure(_ cell: SubItemTableViewCell, for item: Item) {
         let viewModel = ItemCellViewModel(forItem: item)
