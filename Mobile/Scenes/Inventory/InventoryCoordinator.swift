@@ -123,10 +123,10 @@ class InventoryCoordinator: BaseCoordinator<Void> {
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showModalKeypad(for: parent, atIndex: indexPath.row)
             }
-            .do(onNext: { _ in
+            .do(onNext: { [tableView = viewController.tableView] _ in
                 // Deselect
-                if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
-                    viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                if let selectedRowIndexPath = tableView?.indexPathForSelectedRow {
+                    tableView?.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
             //.debug("itemSelection - \(viewController)")
