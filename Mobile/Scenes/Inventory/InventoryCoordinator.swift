@@ -30,6 +30,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
         // Selection
         viewModel.showInventory
+            .debug("itemSelection - InventoryDateVC")
             .subscribe(onNext: { [weak self] transition in
                 switch transition {
                 case .existing(let inventory):
@@ -130,7 +131,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
                     tableView?.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
-            //.debug("itemSelection - \(viewController)")
+            .debug("itemSelection - InventoryLocItemVC")
             .subscribe()
             .disposed(by: viewController.disposeBag)
     }

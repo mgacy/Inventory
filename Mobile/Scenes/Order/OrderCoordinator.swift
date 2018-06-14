@@ -88,6 +88,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
         // Selection - Vendor
         vendorsViewModel.showNext
+            .debug("vendorSelection - OrderContainerVC")
             .subscribe(onNext: { [weak self] segue in
                 switch segue {
                 case .back:
@@ -101,7 +102,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Selection - Location
         locationsController.tableView.rx
             .modelSelected(RemoteLocation.self)
-            //.debug("locationSelection - \(locationsController)")
+            .debug("locationSelection - OrderContainerVC")
             .subscribe(onNext: { [weak self] location in
                 guard let strongSelf = self else { return }
                 switch location.locationType {
@@ -158,6 +159,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
 
         viewModel.showNext
+            .debug("itemSelection - OrderVendorVC")
             .subscribe(onNext: { [weak self] segue in
                 switch segue {
                 case .back:
@@ -195,7 +197,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
                 viewModel.updateOrderStatus()
                 viewController.headerView.messageButton.isEnabled = viewModel.canMessageOrder
             })
-            //.debug("itemSelection - \(viewController)")
+            .debug("itemSelection - OrderItemVC")
             .subscribe()
             //.disposed(by: disposeBag)
             .disposed(by: viewController.disposeBag)
@@ -221,6 +223,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Navigation
         viewController.tableView.rx
             .modelSelected(RemoteLocation.self)
+            .debug("itemSelection - OrderLocationVC")
             .subscribe(onNext: { [weak self] location in
                 switch location.locationType {
                 case .category:
@@ -243,6 +246,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         // Navigation
         viewController.tableView.rx
             .modelSelected(RemoteItemCategory.self)
+            .debug("itemSelection - OrderLocCatVC")
             .subscribe(onNext: { [weak self] category in
                 let parent = OrderLocItemParent.category(category)
                 self?.showLocationItemList(parent: parent, factory: factory)
@@ -269,7 +273,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
                     viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
-            .debug("itemSelection - \(viewController)")
+            .debug("itemSelection - OrderLocItemVC")
             .subscribe()
             .disposed(by: viewController.disposeBag)
     }
