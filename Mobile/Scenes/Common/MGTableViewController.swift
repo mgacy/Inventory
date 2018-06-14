@@ -22,24 +22,25 @@ class MGTableViewController: UIViewController {
     // MARK: UI
 
     let refreshControl = UIRefreshControl()
-    let activityIndicatorView = UIActivityIndicatorView()
-
     /*
-    private lazy var refreshControl: UIRefreshControl = {
+    lazy var refreshControl: UIRefreshControl = {
         let control = UIRefreshControl()
         return control
     }()
-
-    private lazy var activityIndicatorView: UIActivityIndicatorView = {
+    */
+    lazy var activityIndicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
+        view.activityIndicatorViewStyle = .gray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-     */
+
     lazy var messageLabel: UILabel = {
-        let view = UILabel()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 12.0)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
     lazy var tableView: UITableView = {
@@ -79,10 +80,10 @@ class MGTableViewController: UIViewController {
     // MARK: - View Methods
 
     func setupView() {
-        // ...
+        view.backgroundColor = .white
+        view.addSubview(tableView)
         view.addSubview(activityIndicatorView)
         view.addSubview(messageLabel)
-        view.addSubview(tableView)
 
         setupConstraints()
         setupBindings()
@@ -90,12 +91,12 @@ class MGTableViewController: UIViewController {
     }
 
     func setupConstraints() {
-        //let guide: UILayoutGuide
-        //if #available(iOS 11, *) {
-        //    guide = view.safeAreaLayoutGuide
-        //} else {
-        //    guide = view.layoutMarginsGuide
-        //}
+        let guide: UILayoutGuide
+        if #available(iOS 11, *) {
+            guide = view.safeAreaLayoutGuide
+        } else {
+            guide = view.layoutMarginsGuide
+        }
         let constraints = [
             // TableView
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -103,11 +104,12 @@ class MGTableViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             // ActivityIndicator
-            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            activityIndicatorView.centerXAnchor.constraint(equalTo: guide.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: guide.centerYAnchor),
             // MessageLabel
-            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            messageLabel.topAnchor.constraint(equalTo: activityIndicatorView.bottomAnchor, constant: 5.0)
+            messageLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 12.0),
+            messageLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -12.0),
+            messageLabel.topAnchor.constraint(equalTo: activityIndicatorView.bottomAnchor, constant: 8.0)
         ]
         NSLayoutConstraint.activate(constraints)
     }
