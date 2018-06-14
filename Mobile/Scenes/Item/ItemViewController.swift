@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class ItemViewController: UIViewController {
+class ItemViewController: MGTableViewController {
 
     private enum Strings {
         static let navTitle = "Items"
@@ -27,62 +27,33 @@ class ItemViewController: UIViewController {
     }
 
     var viewModel: ItemViewModel!
-    let disposeBag = DisposeBag()
 
     // MARK: - Interface
-    private let refreshControl = UIRefreshControl()
-    @IBOutlet weak var tableView: UITableView!
-    /*
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        tv.delegate = self
-        return tv
-    }()
-    */
+
     // MARK: - Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        //setupConstraints()
-        setupBindings()
-        setupTableView()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tableView.reloadData()
-    }
+    //override func viewWillAppear(_ animated: Bool) {
+    //    super.viewWillAppear(animated)
+    //    self.tableView.reloadData()
+    //}
 
     //override func didReceiveMemoryWarning() {}
 
     // MARK: - View Methods
 
-    private func setupView() {
+    override func setupView() {
+        super.setupView()
         title = Strings.navTitle
+        extendedLayoutIncludesOpaqueBars = true
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
+    }
 
-        //self.view.addSubview(tableView)
-    }
-    /*
-    private func setupConstraints() {
-        let constraints = [
-            // TableView
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ]
-        NSLayoutConstraint.activate(constraints)
-    }
-    */
-    private func setupBindings() {
+    override func setupBindings() {
 
         // Activity Indicator
         viewModel.isRefreshing
+            .debug("isRefreshing")
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
@@ -99,19 +70,17 @@ class ItemViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         */
-        // Navigation
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<ItemViewController>!
 
-    fileprivate func setupTableView() {
+    override func setupTableView() {
         tableView.delegate = self
         tableView.refreshControl = refreshControl
         tableView.register(cellType: SubItemTableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-        tableView.tableFooterView = UIView()
         dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
