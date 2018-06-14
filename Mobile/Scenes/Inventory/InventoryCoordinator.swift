@@ -23,8 +23,6 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         let viewController = InventoryDateViewController.instance()
         let viewModel = InventoryDateViewModel(dataManager: dependencies.dataManager,
                                                rowTaps: viewController.selectedObjects.asObservable())
-        //let viewModel = InventoryDateViewModel2(dataManager: dataManager)
-
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
 
@@ -178,7 +176,6 @@ class ModalInventoryCoordinator: InventoryCoordinator {
 
         // Selection
         viewModel.showLocation
-            //.take(1)
             .subscribe(onNext: { [weak self] selection in
                 switch selection {
                 case .category(let location):
