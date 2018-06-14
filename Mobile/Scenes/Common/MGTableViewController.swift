@@ -16,13 +16,13 @@ class MGTableViewController: UIViewController {
 
     let wasPopped: Observable<Void>
 
-    private let disposeBag = DisposeBag()
-    private let wasPoppedSubject = PublishSubject<Void>()
+    let disposeBag = DisposeBag()
+    let wasPoppedSubject = PublishSubject<Void>()
 
     // MARK: UI
 
-    private let refreshControl = UIRefreshControl()
-    private let activityIndicatorView = UIActivityIndicatorView()
+    let refreshControl = UIRefreshControl()
+    let activityIndicatorView = UIActivityIndicatorView()
 
     /*
     private lazy var refreshControl: UIRefreshControl = {
@@ -36,7 +36,7 @@ class MGTableViewController: UIViewController {
         return view
     }()
      */
-    private lazy var messageLabel: UILabel = {
+    lazy var messageLabel: UILabel = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -78,18 +78,18 @@ class MGTableViewController: UIViewController {
 
     // MARK: - View Methods
 
-    private func setupView() {
+    func setupView() {
         // ...
         view.addSubview(activityIndicatorView)
         view.addSubview(messageLabel)
         view.addSubview(tableView)
 
         setupConstraints()
-        //setupBindings()
-        //setupTableView()
+        setupBindings()
+        setupTableView()
     }
 
-    private func setupConstraints() {
+    func setupConstraints() {
         //let guide: UILayoutGuide
         //if #available(iOS 11, *) {
         //    guide = view.safeAreaLayoutGuide
@@ -112,7 +112,7 @@ class MGTableViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
 
-    private func setupBindings() {
+    func setupBindings() {
         // ...
     }
 
