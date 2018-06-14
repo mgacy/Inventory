@@ -72,6 +72,22 @@ class OrderLocationFactory {
         }
     }
 
+    // MARK: - New
+    /*
+    func makeOrderLocations(forLocations locations: [RemoteLocation]) {
+        for location in locations {
+            let newLocation = OrderLocation(with: location, in: context)
+
+            switch location.locationType {
+            case .category:
+                print("a")
+                //let newLocCategory = OrderLocationCategory(
+            case .item:
+                print("b")
+            }
+        }
+    }
+    */
     // MARK: - Generation
 
     func getOrderItems(forCategoryType category: RemoteItemCategory) -> [OrderItem]? {
