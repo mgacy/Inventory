@@ -125,4 +125,11 @@ class MGTableViewController: UIViewController {
 
 }
 
+// MARK: - PoppedObservable
+extension MGTableViewController: PoppedObservable {
+
+    func viewWasPopped() {
+        wasPoppedSubject.onNext(())
+    }
+
 }
