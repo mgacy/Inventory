@@ -67,9 +67,8 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
-        /// TODO: shouldn't this only take one and then complete?
         viewModel.showLocation
-            //.take(1)
+            .debug("itemSelection - InventoryLocationVC")
             .subscribe(onNext: { [weak self] selection in
                 switch selection {
                 case .category(let location):
@@ -96,6 +95,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
         // Selection
         viewController.selectedObjects
+            .debug("itemSelection - InventoryLocCatVC")
             .subscribe(onNext: { [weak self] selection in
                 self?.showLocationItemList(with: LocationItemListParent.category(selection))
             })
@@ -111,6 +111,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         // Selection
         viewController.tableView.rx
             .itemSelected
+            .debug("itemSelection - InventoryLocItemVC")
             .subscribe(onNext: { [weak self] indexPath in
                 self?.showKeypad(for: parent, atIndex: indexPath.row)
             })
