@@ -72,7 +72,6 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
             .subscribe()
         */
         return viewController.wasPopped
-            //.debug("wasPoppedSubject - \(viewController)")
             .take(1)
             //.do(onNext: { _ in selectionDisposable.dispose() })
     }
@@ -102,27 +101,19 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
             .subscribe()
 
         return viewController.wasPopped
-            //.debug("wasPoppedSubject - \(viewController)")
             .take(1)
             .do(onNext: { _ in selectionDisposable.dispose() })
         */
 
         // Selection (B)
-        /// NOTE: neither of the following (tableView.rx / viewModel.itemSelected) dispose when VC is popped w/o capture list for .do()
         //viewController.tableView.rx.itemSelected
         viewModel.itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showKeypad(invoice: invoice, atIndex: indexPath.row)
             }
-//            .do(onNext: { [weak viewController] in
-//                // Deselect; subscription won't dispose w/o the capture list
-//                if let selectedRowIndexPath = viewController?.tableView.indexPathForSelectedRow {
-//                    viewController?.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
-//                }
-//            })
             .do(onNext: { [tableView = viewController.tableView] in
-                // Deselect; subscription won't dispose w/o the above capture list
+                // Deselect; subscription won't dispose and VC won't deinit w/o the above capture list
                 // see: https://www.objc.io/blog/2018/04/03/caputure-lists/
                 if let selectedRowIndexPath = tableView.indexPathForSelectedRow {
                     tableView.deselectRow(at: selectedRowIndexPath, animated: true)
@@ -133,7 +124,6 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
             .disposed(by: viewController.disposeBag)
 
         return viewController.wasPopped
-            .debug("wasPoppedSubject - \(viewController)")
             .take(1)
     }
 
