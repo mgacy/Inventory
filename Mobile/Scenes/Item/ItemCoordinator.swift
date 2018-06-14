@@ -21,8 +21,7 @@ class ItemCoordinator: BaseCoordinator<Void> {
 
     override func start() -> Observable<Void> {
         let viewController = ItemViewController.instance()
-        let viewModel = ItemViewModel(dataManager: dependencies.dataManager,
-                                      rowTaps: viewController.rowTaps.asObservable())
+        let viewModel = ItemViewModel(dependency: dependencies, bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
 

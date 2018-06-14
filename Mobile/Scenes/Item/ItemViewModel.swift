@@ -10,11 +10,18 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-struct ItemViewModel {
+struct ItemViewModel: AttachableViewModelType {
 
     // MARK: Properties
+    let frc: NSFetchedResultsController<Item>
+    let isRefreshing: Driver<Bool>
+    let hasRefreshed: Driver<Bool>
+    //let errorMessages: Driver<String>
+    // ALT
+    //let fetching: Driver<Bool>
+    //let errors: Driver<Error>
 
-    private let dataManager: DataManager
+    //private let dataManager: DataManager
 
     // CoreData
     private let sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -22,36 +29,28 @@ struct ItemViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
-    let refresh: AnyObserver<Void>
-    // let addTaps: AnyObserver<Void>
-
-    // MARK: - Output
-    let frc: NSFetchedResultsController<Item>
-    let isRefreshing: Driver<Bool>
-    let hasRefreshed: Driver<Bool>
-    //let errorMessages: Driver<String>
-
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, rowTaps: Observable<IndexPath>) {
-        self.dataManager = dataManager
+    init(dependency: Dependency, bindings: Bindings) {
+        //self.dataManager = dependency.dataManager
 
-        // Refresh
-        let _refresh = PublishSubject<Void>()
-        self.refresh = _refresh.asObserver()
+        let activityIndicator = ActivityIndicator()
+        //let errorTracker = ErrorTracker()
 
-        let isRefreshing = ActivityIndicator()
-        self.isRefreshing = isRefreshing.asDriver()
-
-        self.hasRefreshed = _refresh.asObservable()
+        self.hasRefreshed = bindings.fetchTrigger
+            .asObservable()
             .flatMapLatest { _ -> Observable<Bool> in
-                log.debug("\(#function) : Refreshing (1) ...")
-                return dataManager.refreshItems()
+                //log.debug("\(#function) : Refreshing (1) ...")
+                return dependency.dataManager.refreshItems()
                     .catchErrorJustReturn(false)
-                    .trackActivity(isRefreshing)
+                    .trackActivity(activityIndicator)
+                    //.trackError(errorTracker)
             }
             .asDriver(onErrorJustReturn: false)
+
+        self.isRefreshing = activityIndicator.asDriver()
+        //fetching = activityIndicator.asDriver()
+        //errors = errorTracker.asDriver()
 
         // Errors
         //self.errorMessages = refreshResults.errors().map { error in
@@ -63,7 +62,18 @@ struct ItemViewModel {
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
 
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        self.frc = dependency.dataManager.createFetchedResultsController(fetchRequest: request)
+    }
+
+    // MARK: - AttachableViewModelType
+
+    typealias Dependency = HasDataManager
+
+    struct Bindings {
+        let fetchTrigger: Driver<Void>
+        //let addTaps: Driver<Void>
+        //let editTaps: Driver<Void>
+        let rowTaps: Driver<IndexPath>
     }
 
 }

@@ -19,6 +19,13 @@ class ItemViewController: UIViewController {
 
     // MARK: - Properties
 
+    var bindings: ItemViewModel.Bindings {
+        //let viewWillAppear =
+        let refresh = refreshControl.rx.controlEvent(.valueChanged).asDriver()
+        return ItemViewModel.Bindings(fetchTrigger: refresh,
+                                      rowTaps: tableView.rx.itemSelected.asDriver())
+    }
+
     var viewModel: ItemViewModel!
     let disposeBag = DisposeBag()
 
@@ -73,11 +80,6 @@ class ItemViewController: UIViewController {
     }
     */
     private func setupBindings() {
-
-        // Refresh
-        refreshControl.rx.controlEvent(.valueChanged)
-            .bind(to: viewModel.refresh)
-            .disposed(by: disposeBag)
 
         // Activity Indicator
         viewModel.isRefreshing
