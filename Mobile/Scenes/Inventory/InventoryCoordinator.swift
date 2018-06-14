@@ -49,9 +49,10 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     fileprivate func showReviewList(with inventory: Inventory) {
-        let viewController = InventoryReviewViewController.instance()
-        let viewModel = InventoryReviewViewModel(dataManager: dependencies.dataManager, parentObject: inventory,
-                                                 rowTaps: viewController.selectedObjects)
+        let viewController = InventoryReviewViewController()
+        let viewModel = InventoryReviewViewModel(
+            dependency: InventoryReviewViewModel.Dependency(dataManager: dependencies.dataManager, parent: inventory),
+            bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
