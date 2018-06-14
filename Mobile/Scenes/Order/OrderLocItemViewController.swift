@@ -55,6 +55,8 @@ class OrderLocItemViewController: UIViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit { log.debug("\(#function)") }
+
     // MARK: - View Methods
 
     private func setupView() {

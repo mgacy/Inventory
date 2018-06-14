@@ -39,6 +39,8 @@ class InventoryLocCatViewController: UITableViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit { log.debug("\(#function)") }
+
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocCatViewController>!
 
