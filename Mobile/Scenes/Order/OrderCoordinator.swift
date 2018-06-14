@@ -128,10 +128,10 @@ class OrderCoordinator: BaseCoordinator<Void> {
                     strongSelf.showLocationItemList(parent: OrderLocItemParent.location(location), factory: factory)
                 }
             }
-            .do(onNext: { _ in
+            .do(onNext: { [tableView = locationsController.tableView] _ in
                 // Deselect
-                if let selectedRowIndexPath = locationsController.tableView.indexPathForSelectedRow {
-                    locationsController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                if let selectedRowIndexPath = tableView.indexPathForSelectedRow {
+                    tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
             .debug("locationSelection - \(locationsController)")
@@ -188,10 +188,10 @@ class OrderCoordinator: BaseCoordinator<Void> {
                 guard let strongSelf = self else { fatalError("Unable to get self") }
                 return strongSelf.showKeypad(order: order, atIndex: indexPath.row)
             }
-            .do(onNext: { _ in
+            .do(onNext: { [tableView = viewController.tableView] _ in
                 // Deselect
-                if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
-                    viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                if let selectedRowIndexPath = tableView.indexPathForSelectedRow {
+                    tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
                 // Update
                 viewModel.updateOrderStatus()
@@ -267,10 +267,10 @@ class OrderCoordinator: BaseCoordinator<Void> {
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
             }
-            .do(onNext: { _ in
+            .do(onNext: { [tableView = viewController.tableView] _ in
                 // Deselect
-                if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
-                    viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                if let selectedRowIndexPath = tableView.indexPathForSelectedRow {
+                    tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
             .debug("itemSelection - OrderLocItemVC")
