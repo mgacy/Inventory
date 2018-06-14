@@ -120,7 +120,7 @@ class DisplayItemView: UIView {
             // StackView
             stackView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 12.0),
             stackView.topAnchor.constraint(equalTo: dismissChevron.bottomAnchor, constant: 16.0),
-            stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: 16.0),
+            stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -12.0),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
         NSLayoutConstraint.activate(constraints)

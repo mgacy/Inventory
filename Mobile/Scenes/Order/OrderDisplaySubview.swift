@@ -248,7 +248,7 @@ class OrderDisplaySubview: UIView {
             // Stack
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12.0),
             stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 12.0),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12.0),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
         NSLayoutConstraint.activate(constraints)
