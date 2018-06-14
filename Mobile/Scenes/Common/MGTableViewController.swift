@@ -17,7 +17,7 @@ class MGTableViewController: UIViewController {
     let wasPopped: Observable<Void>
 
     let disposeBag = DisposeBag()
-    let wasPoppedSubject = PublishSubject<Void>()
+    private let wasPoppedSubject = PublishSubject<Void>()
 
     // MARK: UI
 
@@ -85,8 +85,8 @@ class MGTableViewController: UIViewController {
         view.addSubview(messageLabel)
         /// TODO: set messageLabel.text?
         setupConstraints()
-        setupBindings()
         setupTableView()
+        setupBindings()
     }
 
     func setupConstraints() {
