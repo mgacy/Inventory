@@ -28,18 +28,20 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
 
         // Selection
         viewModel.showCollection
-            .subscribe(onNext: { [weak self] selection in
-                log.debug("\(#function) SELECTED / CREATED: \(selection)")
-                self?.showVendorList(collection: selection)
-            })
-            .disposed(by: disposeBag)
+            .flatMap { [weak self] selection -> Observable<Void> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showVendorList(collection: selection)
+            }
+            //.debug("itemSelection - \(viewController)")
+            .subscribe()
+            .disposed(by: viewController.disposeBag)
 
         return Observable.never()
     }
 
     // MARK: - Sections
 
-    private func showVendorList(collection: InvoiceCollection) {
+    private func showVendorList(collection: InvoiceCollection) -> Observable<Void> {
         let viewController = InvoiceVendorViewController()
         let viewModel = InvoiceVendorViewModel(
             dependency: InvoiceVendorViewModel.Dependency(dataManager: dependencies.dataManager,
@@ -49,26 +51,44 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
-        viewController.selectedObjects
-            .subscribe(onNext: { [weak self] invoice in
-                self?.showItemList(invoice: invoice)
-            })
-            .disposed(by: disposeBag)
+        viewModel.selectedItem
+            .asObservable()
+            .flatMap { [weak self] invoice -> Observable<Void> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showItemList(invoice: invoice)
+            }
+            //.debug("itemSelection - \(viewController)")
+            .subscribe()
+            .disposed(by: viewController.disposeBag)
+
+        /*
+        // Selection
+        let selectionDisposable = viewModel.selectedItem
+            .flatMap { [weak self] invoice -> Observable<Void> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showItemList(invoice: invoice)
+            }
+            .debug("itemSelection - \(viewController)")
+            .subscribe()
+        */
+        return viewController.wasPopped
+            //.debug("wasPoppedSubject - \(viewController)")
+            .take(1)
+            //.do(onNext: { _ in selectionDisposable.dispose() })
     }
 
-    private func showItemList(invoice: Invoice) {
+    private func showItemList(invoice: Invoice) -> Observable<Void> {
         let viewController = InvoiceItemViewController()
         let viewModel = InvoiceItemViewModel(
             dependency: InvoiceItemViewModel.Dependency(dataManager: dependencies.dataManager, parentObject: invoice),
             bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
-
-        // Selection
-        let itemSelection = viewController.tableView.rx
-            .itemSelected
+        /*
+        // Selection (A)
+        //let selectionDisposable = viewController.tableView.rx.itemSelected
+        let selectionDisposable = viewModel.itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
-                //log.debug("We selected: \(indexPath)")
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showKeypad(invoice: invoice, atIndex: indexPath.row)
             }
@@ -78,11 +98,43 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
                     viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
+            //.debug("itemSelection - \(viewController)")
+            .subscribe()
 
-        itemSelection
-            //.debug("itemSelection (from Coordinator")
+        return viewController.wasPopped
+            //.debug("wasPoppedSubject - \(viewController)")
+            .take(1)
+            .do(onNext: { _ in selectionDisposable.dispose() })
+        */
+
+        // Selection (B)
+        /// NOTE: neither of the following (tableView.rx / viewModel.itemSelected) dispose when VC is popped w/o capture list for .do()
+        //viewController.tableView.rx.itemSelected
+        viewModel.itemSelected
+            .flatMap { [weak self] indexPath -> Observable<Void> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showKeypad(invoice: invoice, atIndex: indexPath.row)
+            }
+//            .do(onNext: { [weak viewController] in
+//                // Deselect; subscription won't dispose w/o the capture list
+//                if let selectedRowIndexPath = viewController?.tableView.indexPathForSelectedRow {
+//                    viewController?.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+//                }
+//            })
+            .do(onNext: { [tableView = viewController.tableView] in
+                // Deselect; subscription won't dispose w/o the above capture list
+                // see: https://www.objc.io/blog/2018/04/03/caputure-lists/
+                if let selectedRowIndexPath = tableView.indexPathForSelectedRow {
+                    tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                }
+            })
+            .debug("itemSelection - \(viewController)")
             .subscribe()
             .disposed(by: viewController.disposeBag)
+
+        return viewController.wasPopped
+            .debug("wasPoppedSubject - \(viewController)")
+            .take(1)
     }
 
     private func showKeypad(invoice: Invoice, atIndex index: Int) -> Observable<Void> {
