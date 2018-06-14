@@ -99,7 +99,6 @@ class InventoryReviewViewController: MGTableViewController {
         tableView.register(cellType: SubItemTableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-        tableView.tableFooterView = UIView()
         dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
