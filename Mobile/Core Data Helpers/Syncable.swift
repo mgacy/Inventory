@@ -101,7 +101,7 @@ extension Syncable where Self: NSManagedObject {
                 } else {
                     let newObject = Self(with: record, in: context)
                     /// TODO: add newObject to localIDs?
-                    log.debug("newObject: \(newObject)")
+                    log.verbose("newObject: \(newObject)")
                 }
                 /*
                 let object = objectDict[objectID] ?? Self.init(context: context)
@@ -109,7 +109,7 @@ extension Syncable where Self: NSManagedObject {
                  */
             }
 
-            log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
+            //log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
 
             // Delete objects that were deleted from server. We filter remoteID 0
             // since that is the default value for new objects
@@ -125,7 +125,7 @@ extension Syncable where Self: NSManagedObject {
             }
 
             if !deletedObjects.isEmpty {
-                log.debug("We need to delete: \(deletedObjects)")
+                //log.debug("We need to delete: \(deletedObjects)")
                 let fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", deletedObjects)
                 do {
                     try context.deleteEntities(self, filter: fetchPredicate)

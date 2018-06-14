@@ -77,7 +77,7 @@ struct InvoiceDateViewModel {
          */
         let showSelectionResults = rowTaps
             .flatMap { selection -> Observable<Event<InvoiceCollection>> in
-                log.debug("Tapped: \(selection)")
+                //log.debug("Tapped: \(selection)")
                 return dataManager.refreshInvoiceCollection(selection)
             }
             .share(replay: 1)
