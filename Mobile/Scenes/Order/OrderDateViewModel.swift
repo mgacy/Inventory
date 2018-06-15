@@ -33,7 +33,6 @@ struct OrderDateViewModel {
     // MARK: - Output
     let frc: NSFetchedResultsController<OrderCollection>
     let isRefreshing: Driver<Bool>
-    let hasRefreshed: Driver<Bool>
     let errorMessages: Driver<String>
     let showCollection: Observable<OrderCollection>
 
@@ -47,23 +46,21 @@ struct OrderDateViewModel {
         let _refresh = PublishSubject<Void>()
         self.refresh = _refresh.asObserver()
 
-        let isRefreshing = ActivityIndicator()
-        self.isRefreshing = isRefreshing.asDriver()
+        let activityIndicator = ActivityIndicator()
+        self.isRefreshing = activityIndicator.asDriver()
 
-        self.hasRefreshed = _refresh.asObservable()
-            .flatMapLatest { _ -> Observable<Bool> in
+        let refreshResults = _refresh.asObservable()
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
                 //log.debug("\(#function) : Refreshing (1) ...")
                 return dataManager.refreshStuff()
-                    .catchErrorJustReturn(false)
+                    .materialize()
             }
-            .flatMapLatest { _ -> Observable<Bool> in
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
                 //log.debug("\(#function) : Refreshing (2) ...")
                 return dataManager.refreshOrderCollections()
-                    .dematerialize()
-                    .catchErrorJustReturn(false)
-                    .trackActivity(isRefreshing)
+                    .trackActivity(activityIndicator)
             }
-            .asDriver(onErrorJustReturn: false)
+            .share()
 
         // Add
         let _add = PublishSubject<NewOrderGenerationMethod>()
@@ -94,7 +91,9 @@ struct OrderDateViewModel {
             .merge()
 
         // Errors
-        self.errorMessages = Observable.of(showNewResults.errors(), showSelectionResults.errors())
+        self.errorMessages = Observable.of(
+                showNewResults.errors(), showSelectionResults.errors(), refreshResults.errors()
+            )
             .merge()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")

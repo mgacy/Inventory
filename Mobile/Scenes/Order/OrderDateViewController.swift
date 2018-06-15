@@ -170,14 +170,14 @@ class OrderDateViewController: UIViewController {
         viewModel.isRefreshing
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
-
+        /*
         viewModel.hasRefreshed
             /// TODO: use weak or unowned self?
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })
             .disposed(by: disposeBag)
-
+        */
         // Errors
         viewModel.errorMessages
             .drive(onNext: { [weak self] message in

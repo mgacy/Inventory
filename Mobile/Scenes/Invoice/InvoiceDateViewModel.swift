@@ -16,7 +16,6 @@ struct InvoiceDateViewModel: AttachableViewModelType {
     // MARK: Properties
     let frc: NSFetchedResultsController<InvoiceCollection>
     let isRefreshing: Driver<Bool>
-    let hasRefreshed: Driver<Bool>
     let errorMessages: Driver<String>
     let showCollection: Observable<InvoiceCollection>
     //private let dataManager: DataManager
@@ -38,21 +37,19 @@ struct InvoiceDateViewModel: AttachableViewModelType {
         //let errorTracker = ErrorTracker()
         //self.errors = errorTracker.asDriver()
 
-        self.hasRefreshed = bindings.fetchTrigger
+        let refreshResults = bindings.fetchTrigger
             .asObservable()
-            .flatMapLatest { _ -> Observable<Bool> in
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
                 log.debug("\(#function) : Refreshing (1) ...")
                 return dependency.dataManager.refreshStuff()
-                    .catchErrorJustReturn(false)
+                    .materialize()
             }
-            .flatMapLatest { _ -> Observable<Bool> in
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
                 log.debug("\(#function) : Refreshing (2) ...")
                 return dependency.dataManager.refreshInvoiceCollections()
-                    .dematerialize()
-                    .catchErrorJustReturn(false)
                     .trackActivity(activityIndicator)
             }
-            .asDriver(onErrorJustReturn: false)
+            .share()
 
         // FetchRequest
         let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
@@ -72,8 +69,8 @@ struct InvoiceDateViewModel: AttachableViewModelType {
             .share(replay: 1)
 
         // Errors
-        self.errorMessages = showSelectionResults
-            .errors()
+        self.errorMessages = Observable.of(showSelectionResults.errors(), refreshResults.errors())
+            .merge()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
                 /// TEMP:

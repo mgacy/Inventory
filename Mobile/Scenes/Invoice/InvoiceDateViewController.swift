@@ -128,12 +128,12 @@ class InvoiceDateViewController: UIViewController {
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
-        viewModel.hasRefreshed
-            //.debug("hasRefreshed")
-            .drive(onNext: { [weak self] _ in
-                self?.tableView.reloadData()
-            })
-            .disposed(by: disposeBag)
+//        viewModel.hasRefreshed
+//            //.debug("hasRefreshed")
+//            .drive(onNext: { [weak self] _ in
+//                self?.tableView.reloadData()
+//            })
+//            .disposed(by: disposeBag)
 
         // Errors
         viewModel.errorMessages
