@@ -74,7 +74,7 @@ class MGTableViewController: UIViewController {
 
     //override func didReceiveMemoryWarning() {}
 
-    deinit { log.debug("\(#function)") }
+    //deinit { log.debug("\(#function)") }
 
     // MARK: - View Methods
 
@@ -84,6 +84,10 @@ class MGTableViewController: UIViewController {
         view.addSubview(activityIndicatorView)
         view.addSubview(messageLabel)
         /// TODO: set messageLabel.text?
+
+        // Uncomment the following line to preserve selection between presentations.
+        // self.clearsSelectionOnViewWillAppear = false
+
         setupConstraints()
         setupTableView()
         setupBindings()
@@ -118,9 +122,12 @@ class MGTableViewController: UIViewController {
     }
 
     func setupTableView() {
+        // ...
+        //tableView.refreshControl = refreshControl
         //tableView.delegate = self
         //tableView.dataSource = self
         //tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.reuseID)
+        //dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }

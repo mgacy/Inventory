@@ -100,7 +100,7 @@ struct InventoryReviewViewModel: AttachableViewModelType {
             //.throttle(0.5, scheduler: MainScheduler.instance)
             .map { indexPath in
                 return frc.object(at: indexPath)
-        }
+            }
 
         self.frc = frc
     }
