@@ -23,20 +23,24 @@ class ItemViewController: MGTableViewController {
         //let viewWillAppear =
         let refresh = refreshControl.rx.controlEvent(.valueChanged).asDriver()
         return ItemViewModel.Bindings(fetchTrigger: refresh,
+                                      //addTaps: addButtonItem.rx.tap.asDriver(),
+                                      //editTaps: editButtonItem.rx.tap.asDriver(),
                                       rowTaps: tableView.rx.itemSelected.asDriver())
     }
 
     var viewModel: ItemViewModel!
 
     // MARK: - Interface
+    //let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+    //let editButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
 
     // MARK: - Lifecycle
-
-    //override func viewWillAppear(_ animated: Bool) {
-    //    super.viewWillAppear(animated)
-    //    self.tableView.reloadData()
-    //}
-
+    /*
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+    }
+    */
     //override func didReceiveMemoryWarning() {}
 
     // MARK: - View Methods
@@ -46,14 +50,13 @@ class ItemViewController: MGTableViewController {
         title = Strings.navTitle
         extendedLayoutIncludesOpaqueBars = true
         //self.navigationItem.leftBarButtonItem =
-        //self.navigationItem.rightBarButtonItem =
+        //self.navigationItem.rightBarButtonItem = addButtonItem
     }
 
     override func setupBindings() {
-
         // Activity Indicator
         viewModel.isRefreshing
-            .debug("isRefreshing")
+            //.debug("isRefreshing")
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
         /*
