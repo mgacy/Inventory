@@ -31,12 +31,12 @@ struct InvoiceDateViewModel: AttachableViewModelType {
     // MARK: - Lifecycle
 
     init(dependency: Dependency, bindings: Bindings) {
-        //self.dataManager = dependency.dataManager
 
         // Refresh
-        let isRefreshing = ActivityIndicator()
-        self.isRefreshing = isRefreshing.asDriver()
-        /// TODO: add error tracker
+        let activityIndicator = ActivityIndicator()
+        self.isRefreshing = activityIndicator.asDriver()
+        //let errorTracker = ErrorTracker()
+        //self.errors = errorTracker.asDriver()
 
         self.hasRefreshed = bindings.fetchTrigger
             .asObservable()
@@ -50,7 +50,7 @@ struct InvoiceDateViewModel: AttachableViewModelType {
                 return dependency.dataManager.refreshInvoiceCollections()
                     .dematerialize()
                     .catchErrorJustReturn(false)
-                    .trackActivity(isRefreshing)
+                    .trackActivity(activityIndicator)
             }
             .asDriver(onErrorJustReturn: false)
 
@@ -67,11 +67,9 @@ struct InvoiceDateViewModel: AttachableViewModelType {
             .asObservable()
             .map { frc.object(at: $0) }
             .flatMap { selection -> Observable<Event<InvoiceCollection>> in
-                //log.debug("Tapped: \(selection)")
                 return dependency.dataManager.refreshInvoiceCollection(selection)
             }
             .share(replay: 1)
-            //.shareReplay(1)
 
         // Errors
         self.errorMessages = showSelectionResults
