@@ -21,8 +21,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     override func start() -> Observable<Void> {
         let viewController = OrderDateViewController.instance()
-        let viewModel = OrderDateViewModel(dataManager: dependencies.dataManager,
-                                           rowTaps: viewController.selectedObjects.asObservable())
+        let viewModel = OrderDateViewModel(dependency: dependencies, bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
 

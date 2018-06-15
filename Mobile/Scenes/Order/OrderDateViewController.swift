@@ -20,34 +20,45 @@ class OrderDateViewController: UIViewController {
         static let newOrderMessage = "Set order quantities from the most recent inventory or simply use pars?"
     }
 
-    // MARK: Alert
-
-    private enum GenerationMethod: CustomStringConvertible {
-        //case count(method: NewOrderGenerationMethod)
-        //case par(method: NewOrderGenerationMethod)
-        case count
-        case par
-        //case sales
-        case cancel
-
-        var description: String {
-            switch self {
-            case .count:
-                return "From Count"
-            case .par:
-                return "From Par"
-            case .cancel:
-                return "Cancel"
-            }
-        }
-    }
-
     // MARK: - Properties
 
+    var bindings: OrderDateViewModel.Bindings {
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
+            .mapToVoid()
+            .asDriverOnErrorJustComplete()
+        let refresh = refreshControl.rx
+            .controlEvent(.valueChanged)
+            .asDriver()
+
+        // MARK: Alert
+        let addTaps = addButtonItem.rx.tap
+            .flatMap { [weak self] _ -> Observable<OrderDateViewModel.GenerationMethod> in
+                guard let `self` = self else { return Observable.just(.cancel) }
+                let actions: [OrderDateViewModel.GenerationMethod] = [.count, .par]
+                return self.promptFor(title: Strings.newOrderTitle, message: Strings.newOrderMessage,
+                                      cancelAction: .cancel, actions: actions)
+            }
+            .filter { $0 != .cancel }
+            .map { method -> NewOrderGenerationMethod in
+                switch method {
+                case .count:
+                    return NewOrderGenerationMethod.count
+                case .par:
+                    return NewOrderGenerationMethod.par
+                default:
+                    return NewOrderGenerationMethod.par
+                }
+            }
+
+        return OrderDateViewModel.Bindings(
+            fetchTrigger: Driver.merge(viewWillAppear, refresh),
+            addTaps: addTaps.asDriver(onErrorDriveWith: .empty()),
+            //editTaps = editButtonItem.rx.tap.asDriver(),
+            rowTaps: tableView.rx.itemSelected.asDriver()
+        )
+    }
     var viewModel: OrderDateViewModel!
     let disposeBag = DisposeBag()
-
-    let selectedObjects = PublishSubject<OrderCollection>()
 
     /// TODO: provide interface to control these
     let orderTypeID = 1
@@ -138,34 +149,6 @@ class OrderDateViewController: UIViewController {
     }
 
     private func setupBindings() {
-
-        // Add Button
-        addButtonItem.rx.tap
-            .flatMap { [weak self] _ -> Observable<GenerationMethod> in
-                guard let `self` = self else { return Observable.just(.cancel) }
-                let actions: [GenerationMethod] = [.count, .par]
-                return self.promptFor(title: Strings.newOrderTitle, message: Strings.newOrderMessage,
-                                      cancelAction: .cancel, actions: actions)
-            }
-            .filter { $0 != .cancel }
-            .map { method -> NewOrderGenerationMethod in
-                switch method {
-                case .count:
-                    return NewOrderGenerationMethod.count
-                case .par:
-                    return NewOrderGenerationMethod.par
-                default:
-                    return NewOrderGenerationMethod.par
-                }
-            }
-            .bind(to: viewModel.addTaps)
-            .disposed(by: disposeBag)
-
-        // Refresh
-        refreshControl.rx.controlEvent(.valueChanged)
-            .bind(to: viewModel.refresh)
-            .disposed(by: disposeBag)
-
         // Activity Indicator
         viewModel.isRefreshing
             .drive(refreshControl.rx.isRefreshing)
@@ -205,7 +188,6 @@ class OrderDateViewController: UIViewController {
 extension OrderDateViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
