@@ -65,6 +65,9 @@ class MGViewController: UIViewController {
 
 }
 
+// MARK: - ErrorAlertDisplayable
+extension MGViewController: ErrorAlertDisplayable {}
+
 // MARK: - PoppedObservable
 extension MGViewController: PoppedObservable {
 

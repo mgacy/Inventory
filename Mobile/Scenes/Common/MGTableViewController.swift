@@ -132,6 +132,9 @@ class MGTableViewController: UIViewController {
 
 }
 
+// MARK: - ErrorAlertDisplayable
+extension MGTableViewController: ErrorAlertDisplayable {}
+
 // MARK: - PoppedObservable
 extension MGTableViewController: PoppedObservable {
 

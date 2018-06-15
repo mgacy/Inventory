@@ -152,6 +152,7 @@
 		C9AA8DC21F9F191000147F07 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DC11F9F191000147F07 /* SignUpViewModel.swift */; };
 		C9AA8DC41F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */; };
 		C9B66FAC20D45B0800B8DB72 /* BackendError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B66FAB20D45B0800B8DB72 /* BackendError.swift */; };
+		C9B66FAE20D4619C00B8DB72 /* ErrorAlertDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B66FAD20D4619C00B8DB72 /* ErrorAlertDisplayable.swift */; };
 		C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */; };
 		C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */; };
 		C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB057F1F8315B000A07529 /* RemoteItem.swift */; };
@@ -372,6 +373,7 @@
 		C9AA8DC11F9F191000147F07 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnePasswordExtension+MyStuff.swift"; sourceTree = "<group>"; };
 		C9B66FAB20D45B0800B8DB72 /* BackendError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendError.swift; sourceTree = "<group>"; };
+		C9B66FAD20D4619C00B8DB72 /* ErrorAlertDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertDisplayable.swift; sourceTree = "<group>"; };
 		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Magic.swift"; sourceTree = "<group>"; };
 		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Magic.swift"; sourceTree = "<group>"; };
 		C9BB057F1F8315B000A07529 /* RemoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteItem.swift; sourceTree = "<group>"; };
@@ -527,6 +529,7 @@
 				C98A64F51FCB47A4008F02F9 /* AttachableViewModelType.swift */,
 				C9375061202D72B50076B65E /* Coordinator.swift */,
 				C9DEC1051F805CF6004602EB /* DateFacade.swift */,
+				C9B66FAD20D4619C00B8DB72 /* ErrorAlertDisplayable.swift */,
 				C90477201EEE30D60082D894 /* KeypadViewModel.swift */,
 				C92FB7ED20523794002AE490 /* Mutable.swift */,
 				C902F04420CDBD2E0044BB3A /* PoppedObservable.swift */,
@@ -1533,6 +1536,7 @@
 				C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */,
 				C98A64F61FCB47A4008F02F9 /* AttachableViewModelType.swift in Sources */,
 				C9F3564B1FA04536007ED98C /* OrderLocationViewController.swift in Sources */,
+				C9B66FAE20D4619C00B8DB72 /* ErrorAlertDisplayable.swift in Sources */,
 				C9CC04DF1F84C13C00180120 /* RemoteInvoice.swift in Sources */,
 				C98B25FC2071860C00F1D157 /* ChevronButton.swift in Sources */,
 				C93203EC1FC6AA3000ACFC1D /* SettingsCoordinator.swift in Sources */,
