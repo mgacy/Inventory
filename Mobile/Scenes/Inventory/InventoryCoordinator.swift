@@ -32,10 +32,10 @@ class InventoryCoordinator: BaseCoordinator<Void> {
             .subscribe(onNext: { [weak self] transition in
                 switch transition {
                 case .existing(let inventory):
-                    log.verbose("GET selectedInventory from server - \(inventory.remoteID) ...")
+                    //log.verbose("GET selectedInventory from server - \(inventory.remoteID) ...")
                     self?.showReviewList(with: inventory)
                 case .new(let inventory):
-                    log.verbose("LOAD NEW selectedInventory from disk ...")
+                    //log.verbose("LOAD NEW selectedInventory from disk ...")
                     self?.showLocationList(with: inventory)
                 }
             })
