@@ -20,13 +20,30 @@ class InvoiceDateViewController: UIViewController {
 
     // MARK: - Properties
 
+    var bindings: InvoiceDateViewModel.Bindings {
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
+            .mapToVoid()
+            .asDriverOnErrorJustComplete()
+        let refresh = refreshControl.rx
+            .controlEvent(.valueChanged)
+            .asDriver()
+
+        return InvoiceDateViewModel.Bindings(
+            fetchTrigger: Driver.merge(viewWillAppear, refresh),
+            //addTaps = addButtonItem.rx.tap,
+            //editTaps = editButtonItem.rx.tap,
+            rowTaps: tableView.rx.itemSelected.asDriver()
+        )
+    }
     var viewModel: InvoiceDateViewModel!
     let disposeBag = DisposeBag()
 
-    let selectedObjects = PublishSubject<InvoiceCollection>()
-
     // MARK: - Interface
-    private let refreshControl = UIRefreshControl()
+    lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        return control
+    }()
+
     //let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
     //let editButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
     let activityIndicatorView = UIActivityIndicatorView()
@@ -95,12 +112,6 @@ class InvoiceDateViewController: UIViewController {
 
     private func setupBindings() {
 
-        // Refresh
-        refreshControl.rx.controlEvent(.valueChanged)
-            //.debug("refreshControl")
-            .bind(to: viewModel.refresh)
-            .disposed(by: disposeBag)
-
         // Activity Indicator
         viewModel.isRefreshing
             //.debug("isRefreshing")
@@ -140,7 +151,6 @@ class InvoiceDateViewController: UIViewController {
 extension InvoiceDateViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

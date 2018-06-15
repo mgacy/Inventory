@@ -21,8 +21,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
 
     override func start() -> Observable<Void> {
         let viewController = InvoiceDateViewController.instance()
-        let viewModel = InvoiceDateViewModel(dataManager: dependencies.dataManager,
-                                             rowTaps: viewController.selectedObjects.asObservable())
+        let viewModel = InvoiceDateViewModel(dependency: dependencies, bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
 
