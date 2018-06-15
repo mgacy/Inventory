@@ -56,20 +56,19 @@ class ItemViewController: MGTableViewController {
             .debug("isRefreshing")
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
-
+        /*
         viewModel.hasRefreshed
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })
             .disposed(by: disposeBag)
-        /*
+        */
         // Errors
         viewModel.errorMessages
-            .drive(onNext: { [weak self] message in
-                self?.showAlert(title: Strings.errorAlertTitle, message: message)
-            })
+            .delay(0.1)
+            //.map { $0.localizedDescription }
+            .drive(errorAlert)
             .disposed(by: disposeBag)
-        */
     }
 
     // MARK: - TableViewDataSource
