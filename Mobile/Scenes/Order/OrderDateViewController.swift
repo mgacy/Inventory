@@ -81,15 +81,6 @@ class OrderDateViewController: UIViewController {
         setupConstraints()
         setupBindings()
         setupTableView()
-        /*
-        guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED : unable to get storeID"); return
-        }
-
-        HUD.show(.progress)
-        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
-                                                            completion: self.completedGetListOfOrderCollections)
-     */
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -151,16 +142,6 @@ class OrderDateViewController: UIViewController {
             }
             .bind(to: viewModel.addTaps)
             .disposed(by: disposeBag)
-
-        // Edit Button
-        //editButtonItem.rx.tap
-        //    .bind(to: viewModel.editTaps)
-        //    .disposed(by: disposeBag)
-
-        // Row selection
-        //selectedObjects.asObservable()
-        //    .bind(to: viewModel.rowTaps)
-        //    .disposed(by: disposeBag)
 
         // Refresh
         refreshControl.rx.controlEvent(.valueChanged)
