@@ -20,10 +20,17 @@ class InventoryDateViewController: UIViewController {
 
     // MARK: - Properties
 
+    var bindings: InventoryDateViewModel.Bindings {
+        //let viewWillAppear = ...
+        let refresh = refreshControl.rx.controlEvent(.valueChanged).asDriver()
+        return InventoryDateViewModel.Bindings(
+            fetchTrigger: refresh,
+            addTaps: addButtonItem.rx.tap.asDriver(),
+            rowTaps: tableView.rx.itemSelected.asObservable()
+        )
+    }
     var viewModel: InventoryDateViewModel!
     let disposeBag = DisposeBag()
-
-    let selectedObjects = PublishSubject<Inventory>()
 
     // MARK: - Interface
     let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
@@ -108,19 +115,8 @@ class InventoryDateViewController: UIViewController {
     }
 
     private func setupBindings() {
-        // Add Button
-        addButtonItem.rx.tap
-            .bind(to: viewModel.addTaps)
-            .disposed(by: disposeBag)
-
-        // Refresh
-        refreshControl.rx.controlEvent(.valueChanged)
-            //.debug("refreshControl")
-            .bind(to: viewModel.refresh)
-            .disposed(by: disposeBag)
 
         // Activity Indicator
-
         viewModel.isRefreshing
             //.debug("isRefreshing")
             .drive(refreshControl.rx.isRefreshing)
@@ -159,7 +155,6 @@ class InventoryDateViewController: UIViewController {
 extension InventoryDateViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
