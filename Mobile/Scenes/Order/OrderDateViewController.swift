@@ -53,15 +53,20 @@ class OrderDateViewController: UIViewController {
     let orderTypeID = 1
 
     // MARK: - Interface
-    private let refreshControl = UIRefreshControl()
     let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
-    let activityIndicatorView = UIActivityIndicatorView()
-    let messageLabel = UILabel()
-    //lazy var messageLabel: UILabel = {
-    //    let view = UILabel()
-    //    view.translatesAutoresizingMaskIntoConstraints = false
-    //    return view
-    //}()
+    //let editButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+
+    lazy var activityIndicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var messageLabel: UILabel = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
@@ -71,16 +76,16 @@ class OrderDateViewController: UIViewController {
         return tv
     }()
 
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        return control
+    }()
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
         setupView()
-        setupConstraints()
-        setupBindings()
-        setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -97,26 +102,39 @@ class OrderDateViewController: UIViewController {
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButtonItem
 
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
         self.view.addSubview(tableView)
         self.view.addSubview(activityIndicatorView)
         self.view.addSubview(messageLabel)
+
+        setupConstraints()
+        setupBindings()
+        setupTableView()
     }
 
     private func setupConstraints() {
-        // TableView
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-
-        // ActivityIndicator
-        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-
-        // MessageLabel
-        messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+        //let guide: UILayoutGuide
+        //if #available(iOS 11, *) {
+        //    guide = view.safeAreaLayoutGuide
+        //} else {
+        //    guide = view.layoutMarginsGuide
+        //}
+        let constraints = [
+            // TableView
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            // ActivityIndicator
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            // MessageLabel
+            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            messageLabel.topAnchor.constraint(equalTo: activityIndicatorView.bottomAnchor, constant: 5.0)
+        ]
+        NSLayoutConstraint.activate(constraints)
     }
 
     private func setupBindings() {

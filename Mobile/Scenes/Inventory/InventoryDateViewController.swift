@@ -34,16 +34,12 @@ class InventoryDateViewController: UIViewController {
 
     // MARK: - Interface
     let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+    //let editButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
 
     lazy var activityIndicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
-    }()
-
-    private lazy var refreshControl: UIRefreshControl = {
-        let control = UIRefreshControl()
-        return control
     }()
 
     lazy var messageLabel: UILabel = {
@@ -60,16 +56,16 @@ class InventoryDateViewController: UIViewController {
         return tv
     }()
 
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        return control
+    }()
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Uncomment the following line to preserve selection between presentations.
-        // self.clearsSelectionOnViewWillAppear = false
         setupView()
-        setupConstraints()
-        setupBindings()
-        setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -86,9 +82,16 @@ class InventoryDateViewController: UIViewController {
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButtonItem
 
+        // Uncomment the following line to preserve selection between presentations.
+        // self.clearsSelectionOnViewWillAppear = false
+
         self.view.addSubview(tableView)
         self.view.addSubview(activityIndicatorView)
         self.view.addSubview(messageLabel)
+
+        setupConstraints()
+        setupBindings()
+        setupTableView()
     }
 
     private func setupConstraints() {

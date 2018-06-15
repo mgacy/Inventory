@@ -30,8 +30,8 @@ class InvoiceDateViewController: UIViewController {
 
         return InvoiceDateViewModel.Bindings(
             fetchTrigger: Driver.merge(viewWillAppear, refresh),
-            //addTaps = addButtonItem.rx.tap,
-            //editTaps = editButtonItem.rx.tap,
+            //addTaps = addButtonItem.rx.tap.asDriver(),
+            //editTaps = editButtonItem.rx.tap.asDriver(),
             rowTaps: tableView.rx.itemSelected.asDriver()
         )
     }
@@ -39,20 +39,21 @@ class InvoiceDateViewController: UIViewController {
     let disposeBag = DisposeBag()
 
     // MARK: - Interface
-    lazy var refreshControl: UIRefreshControl = {
-        let control = UIRefreshControl()
-        return control
-    }()
 
     //let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
     //let editButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
-    let activityIndicatorView = UIActivityIndicatorView()
-    let messageLabel = UILabel()
-    //lazy var messageLabel: UILabel = {
-    //    let view = UILabel()
-    //    view.translatesAutoresizingMaskIntoConstraints = false
-    //    return view
-    //}()
+
+    lazy var activityIndicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var messageLabel: UILabel = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
@@ -62,14 +63,16 @@ class InvoiceDateViewController: UIViewController {
         return tv
     }()
 
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        return control
+    }()
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupConstraints()
-        setupBindings()
-        setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -86,15 +89,22 @@ class InvoiceDateViewController: UIViewController {
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         //self.navigationItem.rightBarButtonItem = addButtonItem
 
-        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.translatesAutoresizingMaskIntoConstraints = false
-
         self.view.addSubview(tableView)
         self.view.addSubview(activityIndicatorView)
         self.view.addSubview(messageLabel)
+
+        setupConstraints()
+        setupBindings()
+        setupTableView()
     }
 
     private func setupConstraints() {
+        //let guide: UILayoutGuide
+        //if #available(iOS 11, *) {
+        //    guide = view.safeAreaLayoutGuide
+        //} else {
+        //    guide = view.layoutMarginsGuide
+        //}
         let constraints = [
             // TableView
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
