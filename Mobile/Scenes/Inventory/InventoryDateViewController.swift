@@ -26,10 +26,7 @@ class InventoryDateViewController: UIViewController {
     let selectedObjects = PublishSubject<Inventory>()
 
     // MARK: - Interface
-    //private let refreshControl = UIRefreshControl()
     let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
-    //let activityIndicatorView = UIActivityIndicatorView()
-    //let messageLabel = UILabel()
 
     lazy var activityIndicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
@@ -82,9 +79,6 @@ class InventoryDateViewController: UIViewController {
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButtonItem
 
-        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        //messageLabel.translatesAutoresizingMaskIntoConstraints = false
-
         self.view.addSubview(tableView)
         self.view.addSubview(activityIndicatorView)
         self.view.addSubview(messageLabel)
@@ -118,16 +112,6 @@ class InventoryDateViewController: UIViewController {
         addButtonItem.rx.tap
             .bind(to: viewModel.addTaps)
             .disposed(by: disposeBag)
-
-        // Edit Button
-        //editButtonItem.rx.tap
-        //    .bind(to: viewModel.editTaps)
-        //    .disposed(by: disposeBag)
-
-        // Row selection
-        //selectedObjects.asObservable()
-        //    .bind(to: viewModel.rowTaps)
-        //    .disposed(by: disposeBag)
 
         // Refresh
         refreshControl.rx.controlEvent(.valueChanged)

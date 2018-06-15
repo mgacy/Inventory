@@ -31,8 +31,6 @@ struct InventoryDateViewModel {
     // MARK: - Input
     let refresh: AnyObserver<Void>
     let addTaps: AnyObserver<Void>
-    //let editTaps: AnyObserver<Void>
-    //let rowTaps: AnyObserver<Inventory>
 
     // MARK: - Output
     let frc: NSFetchedResultsController<Inventory>
@@ -81,25 +79,12 @@ struct InventoryDateViewModel {
             .share()
 
         // Selection
-        //let _selectedObjects = PublishSubject<Inventory>()
-        //self.rowTaps = _selectedObjects.asObserver()
-        //let showSelectionResults = _selectedObjects.asObservable()
         let showSelectionResults = rowTaps
             // Currently, new Inventories only exist locally while updating of existing Inventories is handled in the
             // next scene
             /// TODO: .map { InventorySelection.existing($0) }
             .flatMap { selection -> Observable<Event<Inventory>> in
-                //log.debug("Tapped: \(selection)")
                 return Observable.just(selection).materialize()
-                /*
-                switch selection.uploaded {
-                case true:
-                    //return dataManager.refreshInventory(selection)
-                    return Observable.just(selection).materialize()
-                case false:
-                    return Observable.just(selection).materialize()
-                }
-                 */
             }
             .share()
 
