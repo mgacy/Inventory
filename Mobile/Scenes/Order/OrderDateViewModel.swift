@@ -94,13 +94,9 @@ struct OrderDateViewModel: AttachableViewModelType {
             .merge()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
-                switch error {
-                default:
-                    return "There was a problem"
-                }
+                return error.localizedDescription
             }
-            .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .empty())
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
 
         self.frc = frc
     }

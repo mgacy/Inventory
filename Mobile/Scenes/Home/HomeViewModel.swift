@@ -85,12 +85,9 @@ final class HomeViewModel: AttachableViewModelType {
             .merge()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
-                switch error {
-                default:
-                    return "There was a problem"
-                }
+                return error.localizedDescription
             }
-            .asDriver(onErrorJustReturn: "Other Error")
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
 
         // MARK: TableView
         /// TODO: check local or remote for pending?

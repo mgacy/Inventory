@@ -73,11 +73,9 @@ struct InvoiceDateViewModel: AttachableViewModelType {
             .merge()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
-                /// TEMP:
-                return "There was an error"
+                return error.localizedDescription
             }
-            .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .empty())
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
 
         // Navigation
         self.showCollection = showSelectionResults.elements()

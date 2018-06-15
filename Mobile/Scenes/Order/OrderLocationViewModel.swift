@@ -56,12 +56,9 @@ struct OrderLocationViewModel {
         self.errorMessages = locationResults.errors()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
-                switch error {
-                default:
-                    return "There was a problem"
-                }
+                return error.localizedDescription
             }
-            .asDriver(onErrorJustReturn: "Other Error")
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
 
         self.locations = locationResults.elements()
     }

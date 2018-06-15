@@ -104,9 +104,9 @@ struct InventoryDateViewModel: AttachableViewModelType {
             .merge()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
-                return "There was an error"
+                return error.localizedDescription
             }
-            .asDriver(onErrorJustReturn: "Other Error")
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
 
         self.frc = frc
     }
