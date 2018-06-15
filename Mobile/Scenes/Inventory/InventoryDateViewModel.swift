@@ -21,7 +21,7 @@ struct InventoryDateViewModel: AttachableViewModelType {
     // MARK: Properties
     let frc: NSFetchedResultsController<Inventory>
     let isRefreshing: Driver<Bool>
-    let hasRefreshed: Driver<Bool>
+    //let hasRefreshed: Driver<Bool>
     let errorMessages: Driver<String>
     //let errors: Driver<Error>
     let showInventory: Observable<InventorySelection>
@@ -42,23 +42,24 @@ struct InventoryDateViewModel: AttachableViewModelType {
         //let errorTracker = ErrorTracker()
 
         // Refresh
-        self.hasRefreshed = bindings.fetchTrigger
+        let refreshResults = bindings.fetchTrigger
             .asObservable()
-            //.flatMapLatest { _ -> Observable<Bool> in
             .flatMapLatest { _ -> Observable<Event<Bool>> in
                 //log.debug("\(#function) : Refreshing (1) ...")
                 return dependency.dataManager.refreshStuff()
-                    //.catchErrorJustReturn(false)
                     .materialize()
             }
-            .flatMapLatest { _ -> Observable<Bool> in
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
                 //log.debug("\(#function) : Refreshing (2) ...")
                 return dependency.dataManager.refreshInventories()
-                    .dematerialize()
-                    .catchErrorJustReturn(false)
                     .trackActivity(activityIndicator)
             }
+            .share()
+        /*
+        self.hasRefreshed = refreshResults
+            .elements()
             .asDriver(onErrorJustReturn: false)
+        */
         self.isRefreshing = activityIndicator.asDriver()
         //self.errors = errorTracker.asDriver()
 
@@ -99,14 +100,13 @@ struct InventoryDateViewModel: AttachableViewModelType {
             }
 
         // Errors
-        /// TODO: include errors from `hasRefreshed`
-        self.errorMessages = showNewResults.errors()
+        self.errorMessages = Observable.of(showNewResults.errors(), refreshResults.errors())
+            .merge()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
                 return "There was an error"
             }
             .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .empty())
 
         self.frc = frc
     }
