@@ -84,11 +84,6 @@ class InventoryLocationViewController: UIViewController, AttachableType {
 
         self.navigationItem.rightBarButtonItem = uploadButtonItem
 
-        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        //messageLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        //self.view.addSubview(activityIndicatorView)
-        //self.view.addSubview(messageLabel)
         self.view.addSubview(tableView)
     }
 
