@@ -20,7 +20,6 @@ class InvoiceDateViewController: UIViewController {
 
     // MARK: - Properties
 
-    //var viewModel: InvoiceDateViewModelType!
     var viewModel: InvoiceDateViewModel!
     let disposeBag = DisposeBag()
 
@@ -29,6 +28,7 @@ class InvoiceDateViewController: UIViewController {
     // MARK: - Interface
     private let refreshControl = UIRefreshControl()
     //let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+    //let editButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
     let activityIndicatorView = UIActivityIndicatorView()
     let messageLabel = UILabel()
     //lazy var messageLabel: UILabel = {
@@ -53,15 +53,6 @@ class InvoiceDateViewController: UIViewController {
         setupConstraints()
         setupBindings()
         setupTableView()
-        /*
-        guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: unable to get storeID"); return
-        }
-
-        HUD.show(.progress)
-        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
-                                                              completion: self.completedGetListOfInvoiceCollections)
-         */
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -78,10 +69,8 @@ class InvoiceDateViewController: UIViewController {
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         //self.navigationItem.rightBarButtonItem = addButtonItem
 
-        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        //messageLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        //edgesForExtendedLayout = .top
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
 
         self.view.addSubview(tableView)
         self.view.addSubview(activityIndicatorView)
@@ -89,9 +78,6 @@ class InvoiceDateViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.translatesAutoresizingMaskIntoConstraints = false
-
         let constraints = [
             // TableView
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -109,16 +95,6 @@ class InvoiceDateViewController: UIViewController {
 
     private func setupBindings() {
 
-        // Edit Button
-        //editButtonItem.rx.tap
-        //    .bind(to: viewModel.editTaps)
-        //    .disposed(by: disposeBag)
-
-        // Row selection
-        //selectedObjects.asObservable()
-        //    .bind(to: viewModel.rowTaps)
-        //    .disposed(by: disposeBag)
-
         // Refresh
         refreshControl.rx.controlEvent(.valueChanged)
             //.debug("refreshControl")
@@ -132,7 +108,6 @@ class InvoiceDateViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
             //.debug("hasRefreshed")
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
@@ -171,7 +146,7 @@ extension InvoiceDateViewController: UITableViewDelegate {
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension InvoiceDateViewController: TableViewDataSourceDelegate {
     /*
     func canEdit(_ collection: InvoiceCollection) -> Bool {
