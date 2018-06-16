@@ -19,6 +19,7 @@ class InventoryKeypadViewController: UIViewController {
 
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
+    private let changeItemDissmissalEvent = PublishSubject<Void>()
     private let panGestureDissmissalEvent = PublishSubject<Void>()
 
     // Pan down transitions back to the presenting view controller
@@ -185,6 +186,7 @@ class InventoryKeypadViewController: UIViewController {
         case true:
             return
         case false:
+            changeItemDissmissalEvent.onNext(())
             /// TODO: emit event so coordinator can dismiss
             if let navController = navigationController {
                 navController.popViewController(animated: true)
@@ -199,6 +201,7 @@ class InventoryKeypadViewController: UIViewController {
         case true:
             return
         case false:
+            changeItemDissmissalEvent.onNext(())
             /// TODO: emit event so coordinator can dismiss
             if let navController = navigationController {
                 navController.popViewController(animated: true)
