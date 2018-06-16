@@ -89,6 +89,10 @@ class InvoiceItemViewController: UIViewController {
         title = viewModel.vendorName
         self.navigationItem.rightBarButtonItem = uploadButtonItem
         self.view.addSubview(tableView)
+
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
     }
 
     private func setupConstraints() {

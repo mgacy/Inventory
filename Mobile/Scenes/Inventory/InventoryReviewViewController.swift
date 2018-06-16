@@ -47,6 +47,9 @@ class InventoryReviewViewController: MGTableViewController {
 
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         //self.navigationItem.rightBarButtonItem = addButtonItem
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
     }
 
     override func setupBindings() {
