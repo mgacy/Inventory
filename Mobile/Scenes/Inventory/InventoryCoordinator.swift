@@ -163,7 +163,7 @@ class ModalInventoryCoordinator: InventoryCoordinator {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = InventoryLocationViewController.instance()
+        let viewController = InventoryLocationViewController()
         let avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
             dataManager: dependencies.dataManager,
             parentObject: inventory
