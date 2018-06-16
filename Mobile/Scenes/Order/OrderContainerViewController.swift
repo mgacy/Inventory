@@ -59,6 +59,8 @@ class OrderContainerViewController: UIViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit { log.debug("\(#function)") }
+
     // MARK: - View Methods
 
     func configureChildControllers(vendorsController: OrderVendorViewController, locationsController: OrderLocationViewController) {
