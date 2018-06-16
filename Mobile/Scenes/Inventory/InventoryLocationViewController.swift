@@ -12,7 +12,7 @@ import RxCocoa
 import RxSwift
 
 // swiftlint:disable:next type_name
-class InventoryLocationViewController: UIViewController, AttachableType {
+class InventoryLocationViewController: MGTableViewController, AttachableType {
 
     // MARK: - Properties
 
@@ -23,27 +23,16 @@ class InventoryLocationViewController: UIViewController, AttachableType {
             uploadTaps: uploadButtonItem.rx.tap.asObservable()
         )
     }
+    //var viewModel: InventoryLocationViewModel!
     var viewModel: Attachable<InventoryLocationViewModel>!
     let dismissView: Observable<Void>
 
-    private let disposeBag = DisposeBag()
     private let _dismissView = PublishSubject<Void>()
 
     // MARK: - Interface
 
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet weak var messageLabel: UILabel!
-
     let cancelButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: nil, action: nil)
     let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        tv.delegate = self
-        return tv
-    }()
 
     private enum Strings {
         static let navTitle = "Locations"
@@ -52,15 +41,13 @@ class InventoryLocationViewController: UIViewController, AttachableType {
 
     // MARK: - Lifecycle
 
-    required init?(coder aDecoder: NSCoder) {
+    override init() {
         dismissView = _dismissView.asObservable()
-        super.init(coder: aDecoder)
+        super.init()
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupConstraints()
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -77,26 +64,48 @@ class InventoryLocationViewController: UIViewController, AttachableType {
 
     // MARK: - View Methods
 
-    private func setupView() {
+    override func setupView() {
+        //super.setupView()
         title = Strings.navTitle
         /// TODO: add `messageLabel` output to viewModel?
         //messageLabel.text = "You do not have any Items yet."
 
         self.navigationItem.rightBarButtonItem = uploadButtonItem
-
-        self.view.addSubview(tableView)
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .always
+        }
+        super.setupView()
     }
+    /*
+    override func setupBindings() {
+        // We have to wait until after we set .viewModel since we use viewModel.frc
+        setupTableView(with: viewModel)
 
-    private func setupConstraints() {
-        // TableView
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        // ActivityIndicator
-        // MessageLabel
+        // Uploading
+        viewModel.isUploading
+            .filter { $0 }
+            .drive(onNext: { _ in
+                HUD.show(.progress)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.uploadResults
+            .subscribe(onNext: { [weak self] result in
+                switch result.event {
+                case .next:
+                    HUD.flash(.success, delay: 0.5) { _ in
+                        self?._dismissView.onNext(())
+                    }
+                case .error:
+                    /// TODO: `case.error(let error):; switch error {}`
+                    UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
+                case .completed:
+                    log.warning("\(#function) : not sure how to handle completion")
+                }
+            })
+            .disposed(by: disposeBag)
     }
-
+    */
     func bind(viewModel: InventoryLocationViewModel) -> InventoryLocationViewModel {
         // We have to wait until after we set .viewModel since we use viewModel.frc
         setupTableView(with: viewModel)

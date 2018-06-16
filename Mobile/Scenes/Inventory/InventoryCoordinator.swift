@@ -20,7 +20,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = InventoryDateViewController.instance()
+        let viewController = InventoryDateViewController()
         let viewModel = InventoryDateViewModel(dependency: dependencies, bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
@@ -57,7 +57,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showLocationList(with inventory: Inventory) {
-        let viewController = InventoryLocationViewController.instance()
+        let viewController = InventoryLocationViewController()
         let avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
             dataManager: dependencies.dataManager,
             parentObject: inventory

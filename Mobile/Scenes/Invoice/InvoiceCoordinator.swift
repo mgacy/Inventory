@@ -20,7 +20,7 @@ class InvoiceCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = InvoiceDateViewController.instance()
+        let viewController = InvoiceDateViewController()
         let viewModel = InvoiceDateViewModel(dependency: dependencies, bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]

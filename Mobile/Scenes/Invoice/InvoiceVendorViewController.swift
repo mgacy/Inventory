@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class InvoiceVendorViewController: UIViewController {
+class InvoiceVendorViewController: MGTableViewController {
 
     private enum Strings {
         static let navTitle = "Vendors"
@@ -22,41 +22,11 @@ class InvoiceVendorViewController: UIViewController {
     var bindings: InvoiceVendorViewModel.Bindings {
         return InvoiceVendorViewModel.Bindings(rowTaps: tableView.rx.itemSelected.asDriver())
     }
-
     var viewModel: InvoiceVendorViewModel!
-    let disposeBag = DisposeBag()
-    let wasPopped: Observable<Void>
-    private let wasPoppedSubject = PublishSubject<Void>()
 
     // MARK: - Interface
 
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        tv.delegate = self
-        return tv
-    }()
-
     // MARK: - Lifecycle
-
-    init() {
-        self.wasPopped = wasPoppedSubject.asObservable()
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        //fatalError("init(coder:) has not been implemented")
-        self.wasPopped = wasPoppedSubject.asObservable()
-        super.init(coder: aDecoder)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupConstraints()
-        setupTableView()
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -71,31 +41,57 @@ class InvoiceVendorViewController: UIViewController {
 
     // MARK: - View Methods
 
-    private func setupView() {
+    override func setupView() {
         title = Strings.navTitle
-        self.view.addSubview(tableView)
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
+        super.setupView()
     }
+    /*
+    override func setupBindings() {
+        // Activity Indicator
+        viewModel.fetching
+            .drive(activityIndicatorView.rx.isAnimating)
+            .disposed(by: disposeBag)
 
-    private func setupConstraints() {
-        let constraints = [
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ]
-        NSLayoutConstraint.activate(constraints)
+        viewModel.fetching
+            .map { !$0 }
+            .drive(activityIndicatorView.rx.isHidden)
+            .disposed(by: disposeBag)
+
+        viewModel.fetching
+            .map { !$0 }
+            .drive(messageLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        /*
+        viewModel.hasRefreshed
+            /// TODO: use weak or unowned self?
+            .drive(onNext: { [weak self] event in
+                self?.tableView.reloadData()
+            })
+            .disposed(by: disposeBag)
+         */
+        viewModel.showTable
+            .map { !$0 }
+            .drive(tableView.rx.isHidden)
+            .disposed(by: disposeBag)
+
+        // Errors
+        viewModel.errors
+            .drive(onNext: { [weak self] error in
+                self?.showAlert(title: Strings.errorAlertTitle, message: error.localizedDescription)
+            })
+            .disposed(by: disposeBag)
     }
-
-    //private func setupBindings() {}
-
+    */
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
 
-    fileprivate func setupTableView() {
+    override func setupTableView() {
         tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-        tableView.tableFooterView = UIView()
         dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
@@ -130,11 +126,4 @@ extension InvoiceVendorViewController: TableViewDataSourceDelegate {
         }
     }
 
-}
-
-// MARK: - PoppedObservable
-extension InvoiceVendorViewController: PoppedObservable {
-    func viewWasPopped() {
-        wasPoppedSubject.onNext(())
-    }
 }
