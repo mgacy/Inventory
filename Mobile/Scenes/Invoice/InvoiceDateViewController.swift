@@ -21,15 +21,17 @@ class InvoiceDateViewController: UIViewController {
     // MARK: - Properties
 
     var bindings: InvoiceDateViewModel.Bindings {
+        /*
         let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
             .mapToVoid()
             .asDriverOnErrorJustComplete()
         let refresh = refreshControl.rx
             .controlEvent(.valueChanged)
             .asDriver()
-
+        */
         return InvoiceDateViewModel.Bindings(
-            fetchTrigger: Driver.merge(viewWillAppear, refresh),
+            fetchTrigger: refreshControl.rx.controlEvent(.valueChanged).asDriver(),
+            //fetchTrigger: Driver.merge(viewWillAppear, refresh),
             //addTaps = addButtonItem.rx.tap.asDriver(),
             //editTaps = editButtonItem.rx.tap.asDriver(),
             rowTaps: tableView.rx.itemSelected.asDriver()

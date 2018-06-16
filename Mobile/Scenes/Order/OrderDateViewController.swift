@@ -23,13 +23,14 @@ class OrderDateViewController: UIViewController {
     // MARK: - Properties
 
     var bindings: OrderDateViewModel.Bindings {
+        /*
         let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
             .mapToVoid()
             .asDriverOnErrorJustComplete()
         let refresh = refreshControl.rx
             .controlEvent(.valueChanged)
             .asDriver()
-
+        */
         // MARK: Alert
         let addTaps = addButtonItem.rx.tap
             .flatMap { [weak self] _ -> Observable<OrderDateViewModel.GenerationMethod> in
@@ -51,7 +52,8 @@ class OrderDateViewController: UIViewController {
             }
 
         return OrderDateViewModel.Bindings(
-            fetchTrigger: Driver.merge(viewWillAppear, refresh),
+            //fetchTrigger: Driver.merge(viewWillAppear, refresh),
+            fetchTrigger: refreshControl.rx.controlEvent(.valueChanged).asDriver(),
             addTaps: addTaps.asDriver(onErrorDriveWith: .empty()),
             //editTaps = editButtonItem.rx.tap.asDriver(),
             rowTaps: tableView.rx.itemSelected.asDriver()
