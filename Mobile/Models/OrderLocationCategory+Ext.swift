@@ -30,3 +30,5 @@ extension OrderLocationCategory {
     }
 
 }
+
+extension OrderLocationCategory: Managed {}

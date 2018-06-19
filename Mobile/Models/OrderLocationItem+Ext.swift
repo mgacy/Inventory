@@ -29,3 +29,5 @@ extension OrderLocationItem {
     }
 
 }
+
+extension OrderLocationItem: Managed {}
