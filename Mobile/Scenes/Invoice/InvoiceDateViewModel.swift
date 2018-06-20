@@ -58,18 +58,9 @@ struct InvoiceDateViewModel: AttachableViewModelType {
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
         let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
-        // Selection
-        let showSelectionResults = bindings.rowTaps
-            .asObservable()
-            .map { frc.object(at: $0) }
-            .flatMap { selection -> Observable<Event<InvoiceCollection>> in
-                return dependency.dataManager.refreshInvoiceCollection(selection)
-            }
-            .share(replay: 1)
 
         // Errors
-        self.errorMessages = Observable.of(showSelectionResults.errors(), refreshResults.errors())
-            .merge()
+        self.errorMessages = refreshResults.errors()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
                 return error.localizedDescription
@@ -77,7 +68,10 @@ struct InvoiceDateViewModel: AttachableViewModelType {
             .asDriver(onErrorJustReturn: "Unrecognized Error")
 
         // Navigation
-        self.showCollection = showSelectionResults.elements()
+        self.showCollection = bindings.rowTaps
+            .asObservable()
+            .map { frc.object(at: $0) }
+            .share(replay: 1)
 
         self.frc = frc
     }

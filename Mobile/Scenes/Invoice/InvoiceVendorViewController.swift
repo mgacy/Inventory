@@ -48,7 +48,7 @@ class InvoiceVendorViewController: MGTableViewController {
         }
         super.setupView()
     }
-    /*
+
     override func setupBindings() {
         // Activity Indicator
         viewModel.fetching
@@ -64,27 +64,31 @@ class InvoiceVendorViewController: MGTableViewController {
             .map { !$0 }
             .drive(messageLabel.rx.isHidden)
             .disposed(by: disposeBag)
-        /*
-        viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
-            .drive(onNext: { [weak self] event in
-                self?.tableView.reloadData()
-            })
-            .disposed(by: disposeBag)
-         */
+
         viewModel.showTable
             .map { !$0 }
             .drive(tableView.rx.isHidden)
             .disposed(by: disposeBag)
-
+        /*
         // Errors
         viewModel.errors
-            .drive(onNext: { [weak self] error in
-                self?.showAlert(title: Strings.errorAlertTitle, message: error.localizedDescription)
-            })
+            //.debug("Error:")
+            .delay(0.1)
+            .map { $0.localizedDescription }
+            .drive(errorAlert)
+            .disposed(by: disposeBag)
+        */
+        // Errors
+        viewModel.errorMessages
+            //.debug("Error:")
+            .delay(0.1)
+            .drive(errorAlert)
+            //.drive(onNext: { [weak self] message in
+            //    self?.showAlert(title: Strings.errorAlertTitle, message: message)
+            //})
             .disposed(by: disposeBag)
     }
-    */
+
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
 
