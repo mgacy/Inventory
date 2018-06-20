@@ -67,7 +67,7 @@ class OrderVendorViewModel {
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        self.frc = dataManager.makeFetchedResultsController(fetchRequest: request)
 
         // Check collection status
         let safeToComplete = completeTaps

@@ -100,7 +100,7 @@ final class OrderViewModel: AttachableViewModelType {
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dependency.dataManager.createFetchedResultsController(fetchRequest: request)
+        self.frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
 
         // Selection
         // ...

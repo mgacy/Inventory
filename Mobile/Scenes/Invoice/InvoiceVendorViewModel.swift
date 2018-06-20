@@ -33,7 +33,7 @@ struct InvoiceVendorViewModel: AttachableViewModelType {
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = dependency.dataManager.createFetchedResultsController(fetchRequest: request)
+        let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
 
         // Navigation
         self.selectedItem = bindings.rowTaps

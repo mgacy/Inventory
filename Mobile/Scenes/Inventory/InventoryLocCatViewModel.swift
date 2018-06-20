@@ -42,7 +42,7 @@ struct InventoryLocCatViewModel {
         request.predicate = NSPredicate(format: "location == %@", parentObject)
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        self.frc = dataManager.makeFetchedResultsController(fetchRequest: request)
     }
 
 }

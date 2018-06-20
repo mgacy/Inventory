@@ -91,7 +91,7 @@ struct InventoryReviewViewModel: AttachableViewModelType {
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        let frc = dataManager.makeFetchedResultsController(fetchRequest: request)
 
         // Navigation
         showSelection = bindings.rowTaps

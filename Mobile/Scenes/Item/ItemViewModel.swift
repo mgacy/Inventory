@@ -61,7 +61,7 @@ struct ItemViewModel: AttachableViewModelType {
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
 
-        self.frc = dependency.dataManager.createFetchedResultsController(fetchRequest: request)
+        self.frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
     }
 
     // MARK: - AttachableViewModelType
