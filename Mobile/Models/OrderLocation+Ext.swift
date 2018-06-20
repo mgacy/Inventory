@@ -26,9 +26,10 @@ extension OrderLocation: Syncable {
         //remoteID
         //locationID
         name = record.name
-        locationType = record.locationType.rawValue
+        locationType = record.locationType.converted().rawValue
 
         // Relationships
+        // collection
         switch record.locationType {
         case .category:
             print("Type: category")

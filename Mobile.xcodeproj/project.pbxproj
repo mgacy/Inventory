@@ -113,6 +113,7 @@
 		C96BB8AB206C8147009D9F7B /* StepperTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */; };
 		C96BB8AD206C81D2009D9F7B /* StepperCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */; };
 		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
+		C979BEE620D9A4A400D8DFC0 /* Location+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C979BEE520D9A4A400D8DFC0 /* Location+MyStuff.swift */; };
 		C97A71301F8EC4A100F2F1CD /* OrderVendorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A712F1F8EC4A100F2F1CD /* OrderVendorViewModel.swift */; };
 		C97A71321F8EC83700F2F1CD /* InvoiceVendorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71311F8EC83700F2F1CD /* InvoiceVendorViewModel.swift */; };
 		C97A71341F8EC94A00F2F1CD /* InventoryLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71331F8EC94A00F2F1CD /* InventoryLocationViewModel.swift */; };
@@ -334,6 +335,7 @@
 		C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperTableViewCell.swift; sourceTree = "<group>"; };
 		C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperCellViewModel.swift; sourceTree = "<group>"; };
 		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
+		C979BEE520D9A4A400D8DFC0 /* Location+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+MyStuff.swift"; sourceTree = "<group>"; };
 		C97A712F1F8EC4A100F2F1CD /* OrderVendorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderVendorViewModel.swift; sourceTree = "<group>"; };
 		C97A71311F8EC83700F2F1CD /* InvoiceVendorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceVendorViewModel.swift; sourceTree = "<group>"; };
 		C97A71331F8EC94A00F2F1CD /* InventoryLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryLocationViewModel.swift; sourceTree = "<group>"; };
@@ -636,6 +638,7 @@
 				C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */,
 				C9208A2D1FAB8BFA00D7C830 /* ItemUnits.swift */,
 				C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */,
+				C979BEE520D9A4A400D8DFC0 /* Location+MyStuff.swift */,
 				C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */,
 				C91B4EDB1E5C2863002DA2A5 /* User.swift */,
 				C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */,
@@ -1518,6 +1521,7 @@
 				C95E44651FB2582400820067 /* HomeViewModel.swift in Sources */,
 				C9AA8DC41F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift in Sources */,
 				C9BB05891F83171000A07529 /* ActivityIndicator.swift in Sources */,
+				C979BEE620D9A4A400D8DFC0 /* Location+MyStuff.swift in Sources */,
 				C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */,
 				C9A14ABC1DC6742700ACDE69 /* OrderVendorViewController.swift in Sources */,
 				C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */,
