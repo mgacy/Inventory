@@ -27,8 +27,7 @@ extension OrderItem: Syncable {
         // Required
 
         // Optional
-        // itemID = Int32(record.item.remoteID)
-        // remoteID = record.syncIdentifier
+        itemID = Int32(record.item.remoteID)
         minOrder = record.minOrder ?? -1
         onHand = record.inventory ?? -1
         par = record.par ?? -1
