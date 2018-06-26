@@ -11,6 +11,7 @@ import CoreData
 
 class OrderKeypadViewModel {
 
+    // MARK: - Properties
     private let dataManager: DataManager
     private let numberFormatter: NumberFormatter
     private var currentItemUnits: ItemUnits
@@ -101,7 +102,6 @@ class OrderKeypadViewModel {
 
     private init(dataManager: DataManager, atIndex index: Int) {
         self.dataManager = dataManager
-        //self.managedObjectContext = context
         self.currentItemUnits = ItemUnits(item: nil, currentUnit: nil)
         self.currentIndex = index
 

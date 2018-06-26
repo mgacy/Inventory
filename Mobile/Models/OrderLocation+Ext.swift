@@ -23,13 +23,16 @@ extension OrderLocation: Syncable {
     }
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
-        //remoteID
-        //locationID
+        // remoteID
+        // locationID - Not included in response from /inventory_locations
         name = record.name
         locationType = record.locationType.converted().rawValue
 
-        // Relationships
+        /// Relationships
         // collection
+        // categories?
+        // items?
+
         switch record.locationType {
         case .category:
             print("Type: category")

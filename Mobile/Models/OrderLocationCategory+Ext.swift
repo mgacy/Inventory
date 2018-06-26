@@ -8,7 +8,7 @@
 
 import CoreData
 
-extension OrderLocationCategory {
+extension OrderLocationCategory: Managed {
     typealias RemoteType = RemoteItemCategory
     //typealias RemoteIdentifierType = Int32
 
@@ -16,19 +16,20 @@ extension OrderLocationCategory {
 
     convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
-        //remoteID = record.syncIdentifier
+        /// FIXME: InventoryLocationCategory does have .id, but response from /inventory_locations returns id of ItemCategory
+        // remoteID = record.syncIdentifier
         update(with: record, in: context)
     }
 
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
-        //remoteID
+        // remoteID
         name = record.name
-        //locationType
+        categoryID = record.syncIdentifier
 
-        // Relationships
-        //items?
+        /// Relationships
+        // location
+        // items?
     }
 
 }
 
-extension OrderLocationCategory: Managed {}

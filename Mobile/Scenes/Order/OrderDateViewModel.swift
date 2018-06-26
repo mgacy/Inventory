@@ -75,6 +75,7 @@ struct OrderDateViewModel: AttachableViewModelType {
             .flatMap { selection -> Observable<Event<OrderCollection>> in
                 switch selection.uploaded {
                 case true:
+                    /// FIXME: simply push view; refresh on next scene
                     /// TODO: show PKHUD progress
                     return dependency.dataManager.refreshOrderCollection(selection)
                 case false:

@@ -37,7 +37,7 @@ extension OrderCollection: Syncable {
 
         /// TODO: handle `uploaded`
 
-        // Relationships
+        /// Relationships
         if let orders = record.orders {
             syncChildren(with: orders, in: context)
         }
