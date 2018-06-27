@@ -203,8 +203,10 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     func showKeypad(order: Order, atIndex index: Int) -> Observable<Void> {
+        let keypadDependencies = OrderKeypadViewModel.Dependency(dataManager: dependencies.dataManager,
+                                                                 displayType: .vendor(order), index: index)
         let keypadCoordinator = OrderKeypadCoordinator(rootViewController: navigationController,
-                                                       dependencies: dependencies, order: order, atIndex: index)
+                                                       dependencies: keypadDependencies)
         return coordinate(to: keypadCoordinator)
     }
 
@@ -277,10 +279,11 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .disposed(by: viewController.disposeBag)
     }
 
-    func showKeypad(orderItems: [OrderItem], atIndex index: Int) -> Observable<Void> {
+    func showKeypad(parent: OrderLocItemParent, atIndex index: Int) -> Observable<Void> {
+        let keypadDependencies = OrderKeypadViewModel.Dependency(dataManager: dependencies.dataManager,
+                                                                 displayType: .location(parent), index: index)
         let keypadCoordinator = OrderKeypadCoordinator(rootViewController: navigationController,
-                                                       dependencies: dependencies, orderItems: orderItems,
-                                                       atIndex: index)
+                                                       dependencies: keypadDependencies)
         return coordinate(to: keypadCoordinator)
     }
 

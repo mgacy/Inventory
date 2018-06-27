@@ -10,41 +10,19 @@ import RxSwift
 import RxCocoa
 
 final class OrderKeypadCoordinator: BaseCoordinator<Void> {
-    typealias Dependencies = HasDataManager
-
-    enum OrderDisplayType {
-        case location([OrderItem])
-        case vendor(Order)
-    }
+    typealias Dependencies = OrderKeypadViewModel.Dependency
 
     private let rootViewController: UIViewController
     private let dependencies: Dependencies
-    private let displayType: OrderDisplayType
-    private let index: Int
 
-    init(rootViewController: UIViewController, dependencies: Dependencies, orderItems: [OrderItem], atIndex index: Int) {
+    init(rootViewController: UIViewController, dependencies: Dependencies) {
         self.rootViewController = rootViewController
         self.dependencies = dependencies
-        self.displayType = .location(orderItems)
-        self.index = index
-    }
-
-    init(rootViewController: UIViewController, dependencies: Dependencies, order: Order, atIndex index: Int) {
-        self.rootViewController = rootViewController
-        self.dependencies = dependencies
-        self.displayType = .vendor(order)
-        self.index = index
     }
 
     override func start() -> Observable<Void> {
         let viewController = OrderKeypadViewController()
-        let viewModel: OrderKeypadViewController.KeypadViewModelType
-        switch displayType {
-        case .location(let orderItems):
-            viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, with: orderItems, atIndex: index)
-        case .vendor(let order):
-            viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, for: order, atIndex: index)
-        }
+        let viewModel = OrderKeypadViewModel(dependency: dependencies)
         viewController.viewModel = viewModel
 
         let presentedViewController: UIViewController & ModalKeypadDismissing
