@@ -12,16 +12,11 @@ import RxSwift
 struct OrderLocCatViewModel {
 
     // MARK: - Properties
-
+    let navTitle: String
+    let categories: Observable<[RemoteItemCategory]>
     private let dataManager: DataManager
     private let location: RemoteLocation
     private let factory: OrderLocationFactory
-
-    // MARK: - Input
-
-    // MARK: - Output
-    let navTitle: String
-    let categories: Observable<[RemoteItemCategory]>
 
     // MARK: - Lifecycle
 
@@ -29,7 +24,6 @@ struct OrderLocCatViewModel {
         guard location.locationType == .category else {
             fatalError("\(#function) FAILED : wrong RemoteLocation type: \(location)")
         }
-
         self.dataManager = dataManager
         self.location = location
         self.factory = factory

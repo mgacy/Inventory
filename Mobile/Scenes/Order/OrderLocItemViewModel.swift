@@ -17,17 +17,12 @@ enum OrderLocItemParent {
 struct OrderLocItemViewModel {
 
     // MARK: - Properties
-
+    let navTitle: String
+    let items: Observable<[OrderItem]>
+    let orderItems: [OrderItem]
     private let dataManager: DataManager
     private let parent: OrderLocItemParent
     private let factory: OrderLocationFactory
-    let orderItems: [OrderItem]
-
-    // MARK: - Input
-
-    // MARK: - Output
-    let navTitle: String
-    let items: Observable<[OrderItem]>
 
     // MARK: - Lifecycle
 

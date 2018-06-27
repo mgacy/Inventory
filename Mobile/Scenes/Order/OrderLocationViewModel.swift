@@ -14,19 +14,15 @@ import RxSwiftExt
 struct OrderLocationViewModel {
 
     // MARK: - Properties
-
-    private let dataManager: DataManager
-    private let collection: OrderCollection
-    private let factory: OrderLocationFactory
-
-    // MARK: - Input
-
-    // MARK: - Output
     let isRefreshing: Driver<Bool>
     let showTable: Driver<Bool>
     let locations: Observable<[RemoteLocation]>
     let errorMessages: Driver<String>
     //let selectedLocation: Observable<RemoteLocation>
+
+    private let dataManager: DataManager
+    private let collection: OrderCollection
+    private let factory: OrderLocationFactory
 
     // MARK: - Lifecycle
 
@@ -63,7 +59,7 @@ struct OrderLocationViewModel {
         self.locations = locationResults.elements()
     }
 
-    // MARK: -
+    // MARK: - AttachableViewModelType
 
     struct Dependency {
         let dataManager: DataManager
