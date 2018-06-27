@@ -67,6 +67,7 @@ struct OrderLocationViewModel {
     }
 
     //struct Bindings {
+    //    let fetchTrigger: Driver<Void>
     //    let rowTaps: Observable<IndexPath>
     //}
 

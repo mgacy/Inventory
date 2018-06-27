@@ -32,4 +32,16 @@ struct OrderLocCatViewModel {
         self.categories = Observable.just(location.categories)
     }
 
+    // MARK: - AttachableViewModelType
+
+    struct Dependency {
+        let dataManager: DataManager
+        let location: RemoteLocation
+        let factory: OrderLocationFactory
+    }
+
+    //struct Bindings {
+    //    let rowTaps: Observable<IndexPath>
+    //}
+
 }

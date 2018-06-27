@@ -91,4 +91,16 @@ struct OrderLocItemViewModel {
         return true
     }
 
+    // MARK: - AttachableViewModelType
+
+    struct Dependency {
+        let dataManager: DataManager
+        let parent: OrderLocItemParent
+        let factory: OrderLocationFactory
+    }
+
+    //struct Bindings {
+    //    let rowTaps: Observable<IndexPath>
+    //}
+
 }
