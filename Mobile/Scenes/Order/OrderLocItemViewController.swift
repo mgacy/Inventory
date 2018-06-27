@@ -70,7 +70,7 @@ class OrderLocItemViewController: UIViewController {
         case .pad:
             tableView.register(cellType: StepperTableViewCell.self)
         default:
-            fatalError("Device is neither phone nor pad")
+            fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
         }
         tableView.tableFooterView = UIView()
         self.view.addSubview(tableView)

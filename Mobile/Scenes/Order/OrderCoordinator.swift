@@ -108,7 +108,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
                 case .category:
                     strongSelf.showLocationCategoryList(location: location, factory: factory)
                 case .item:
-                    strongSelf.showLocationItemList(parent: OrderLocItemParent.location(location), factory: factory)
+                    strongSelf.showLocationItemList(parent: .location(location), factory: factory)
                 }
             })
             .disposed(by: disposeBag)
@@ -227,11 +227,13 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .debug("itemSelection - OrderLocationVC")
             .subscribe(onNext: { [weak self] location in
                 switch location.locationType {
+                guard let strongSelf = self else {
+                    return
+                }
                 case .category:
-                    self?.showLocationItemList(parent: OrderLocItemParent.location(location), factory: factory)
+                    strongSelf.showLocationItemList(parent: .location(location), factory: factory)
                 case .item:
-                    let parent = OrderLocItemParent.location(location)
-                    self?.showLocationItemList(parent: parent, factory: factory)
+                    strongSelf.showLocationItemList(parent: .location(location), factory: factory)
                 }
             })
             .disposed(by: disposeBag)
@@ -249,8 +251,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .modelSelected(RemoteItemCategory.self)
             .debug("itemSelection - OrderLocCatVC")
             .subscribe(onNext: { [weak self] category in
-                let parent = OrderLocItemParent.category(category)
-                self?.showLocationItemList(parent: parent, factory: factory)
+                self?.showLocationItemList(parent: .category(category), factory: factory)
             })
             .disposed(by: disposeBag)
     }
@@ -345,7 +346,7 @@ class ModalOrderCoordinator: OrderCoordinator {
                 case .category:
                     strongSelf.showLocationCategoryList(location: location, factory: factory)
                 case .item:
-                    strongSelf.showLocationItemList(parent: OrderLocItemParent.location(location), factory: factory)
+                    strongSelf.showLocationItemList(parent: .location(location), factory: factory)
                 }
             })
             .disposed(by: disposeBag)

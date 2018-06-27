@@ -13,7 +13,7 @@ import RxSwift
 class OrderLocCatViewController: UIViewController {
 
     private enum Strings {
-        static let navTitle = "NAME"
+        static let navTitle = "Categories"
         static let errorAlertTitle = "Error"
     }
 
