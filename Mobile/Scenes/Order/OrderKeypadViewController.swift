@@ -11,12 +11,13 @@ import RxCocoa
 import RxSwift
 
 class OrderKeypadViewController: UIViewController {
+    typealias KeypadViewModelType = OrderKeypadViewModelType & KeypadProxy & DisplayItemViewModelType
 
     // MARK: - Properties
 
     let disposeBag = DisposeBag()
     //let dismissalEvents: Observable<Void>
-    var viewModel: OrderKeypadViewModel!
+    var viewModel: KeypadViewModelType!
 
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()

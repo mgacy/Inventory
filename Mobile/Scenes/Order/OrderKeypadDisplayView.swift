@@ -101,7 +101,7 @@ final class OrderKeypadDisplayView: UIView {
 
     // MARK: - B
 
-    func bind(to viewModel: OrderKeypadViewModel) {
+    func bind(to viewModel: OrderKeypadViewModelType & DisplayItemViewModelType) {
         itemDisplayView.bind(to: viewModel)
         orderDisplayView.bind(to: viewModel)
     }

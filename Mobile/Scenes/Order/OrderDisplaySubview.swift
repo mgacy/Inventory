@@ -9,7 +9,7 @@
 import UIKit
 
 class OrderDisplaySubview: UIView {
-    var viewModel: OrderKeypadViewModel!
+    var viewModel: OrderKeypadViewModelType!
     //weak var viewController: OrderKeypadViewController?
 
     // Rx
@@ -269,7 +269,7 @@ class OrderDisplaySubview: UIView {
 
     // MARK: - B
 
-    func bind(to viewModel: OrderKeypadViewModel) {
+    func bind(to viewModel: OrderKeypadViewModelType) {
         self.viewModel = viewModel
         parTextLabel.text = viewModel.par
         onHandTextLabel.text = viewModel.onHand

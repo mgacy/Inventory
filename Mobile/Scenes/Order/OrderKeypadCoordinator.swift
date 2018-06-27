@@ -38,7 +38,7 @@ final class OrderKeypadCoordinator: BaseCoordinator<Void> {
 
     override func start() -> Observable<Void> {
         let viewController = OrderKeypadViewController()
-        let viewModel: OrderKeypadViewModel
+        let viewModel: OrderKeypadViewController.KeypadViewModelType
         switch displayType {
         case .location(let orderItems):
             viewModel = OrderKeypadViewModel(dataManager: dependencies.dataManager, with: orderItems, atIndex: index)

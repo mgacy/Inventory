@@ -9,7 +9,35 @@
 import Foundation
 import CoreData
 
-class OrderKeypadViewModel {
+// MARK: - Protocol
+
+protocol OrderKeypadViewModelType: class {
+    var currentItem: OrderItem { get }
+    var currentUnit: CurrentUnit? { get }
+    /// Display
+    var itemName: String { get }
+    var itemPack: String { get }
+    var orderQuantity: String { get }
+    var orderUnit: String { get }
+    var par: String { get }
+    var onHand: String { get }
+    var suggestedOrder: String { get }
+    /// Keypad
+    var singleUnitLabel: String { get }
+    var singleUnitIsEnabled: Bool { get }
+    var singleUnitIsActive: Bool { get }
+    var packUnitLabel: String { get }
+    var packUnitIsEnabled: Bool { get }
+    var packUnitIsActive: Bool { get }
+    /// Actions from View Controller
+    func switchUnit(_ newUnit: CurrentUnit) -> Bool
+    func nextItem() -> Bool
+    func previousItem() -> Bool
+}
+
+// MARK: - ViewModel
+
+class OrderKeypadViewModel: OrderKeypadViewModelType {
 
     // MARK: - Properties
     private let dataManager: DataManager
