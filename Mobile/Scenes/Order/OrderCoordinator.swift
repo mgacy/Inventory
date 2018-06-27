@@ -269,6 +269,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
                 return strongSelf.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
             }
             .do(onNext: { [tableView = viewController.tableView] _ in
+                tableView.reloadData()
                 // Deselect
                 if let selectedRowIndexPath = tableView.indexPathForSelectedRow {
                     tableView.deselectRow(at: selectedRowIndexPath, animated: true)
