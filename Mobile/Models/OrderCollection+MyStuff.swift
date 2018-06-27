@@ -68,6 +68,18 @@ extension OrderCollection: SyncableParent {
 
 }
 
+// MARK: - Location Sync
+
+extension OrderCollection {
+
+    /// TODO: return Observable<Void>?
+    func syncOrderLocations(with records: [RemoteLocation], in context: NSManagedObjectContext) -> [OrderLocation] {
+        let syncedLocations = OrderLocation.syncLocations(belongingTo: self, with: records, in: context)
+        return syncedLocations
+    }
+
+}
+
 // MARK: - Serialization
 
 extension OrderCollection {

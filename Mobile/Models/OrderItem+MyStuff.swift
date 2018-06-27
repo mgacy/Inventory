@@ -70,6 +70,37 @@ extension OrderItem: Syncable {
 
 }
 
+// MARK: - Location Sync
+
+extension OrderItem {
+
+    /// TODO: see more general `OrderLocationItem.fetchEntityDict(in: matching: prefetchingRelationships: returningAsFaults: withKey:)`
+    static func fetchOrderItemDict(for collection: OrderCollection, in context: NSManagedObjectContext) -> [Int32: OrderItem]? {
+        /// TODO: simply fetch Orders and prefetch "item" (and "item.item")?
+        guard let orders = collection.orders else { return nil }
+
+        let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
+        request.predicate = NSPredicate(format: "order IN %@", orders)
+        request.relationshipKeyPathsForPrefetching = ["item"]
+
+        /// TODO: complete (some of) the following
+        //request.sortDescriptors = []
+        //request.includesSubentities = true
+        //request.propertiesToFetch = ["item"]
+        //request.propertiesToGroupBy = []
+
+        do {
+            let fetchResults = try context.fetch(request)
+            //return fetchResults.toDictionary { $0.item?.remoteID ?? 0 }
+            return fetchResults.toDictionary { $0.itemID }
+        } catch let error {
+            log.error("\(#function) FAILED : \(error)")
+            return nil
+        }
+    }
+
+}
+
 // MARK: - Serialization
 
 extension OrderItem {
