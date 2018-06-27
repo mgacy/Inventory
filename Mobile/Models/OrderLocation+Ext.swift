@@ -148,7 +148,7 @@ extension OrderLocation {
                 in: context, matching: predicate, prefetchingRelationships: ["categories", "items"]) else {
                     log.error("\(#function) FAILED : unable to create dictionary for \(self)"); return []
             }
-            let locationItemDict = OrderItem.fetchOrderItemDict(for: parent, in: context) ?? [Int32: OrderItem]()
+            let orderItemDict = OrderItem.fetchOrderItemDict(for: parent, in: context) ?? [Int32: OrderItem]()
 
             let localIDs: Set<RemoteIdentifierType> = Set(locationDict.keys)
             var remoteIDs = Set<RemoteIdentifierType>()
@@ -160,14 +160,20 @@ extension OrderLocation {
                 // Find + update / create Items
                 if let existingObject = locationDict[objectID] {
                     existingObject.update(with: record, in: context) { locationItem, locationItemRecord in
-                        locationItem.item = locationItemDict[locationItemRecord.syncIdentifier]
+                        guard let orderItem = orderItemDict[locationItemRecord.syncIdentifier] else {
+                            context.delete(locationItem); return
+                        }
+                        locationItem.item = orderItem
                         //log.debug("Item: \(locationItem)")
                     }
                     returnValue.append(existingObject)
                     //log.debug("Updated Location: \(existingObject)")
                 } else {
                     let newObject = OrderLocation(with: record, in: context) { locationItem, locationItemRecord in
-                        locationItem.item = locationItemDict[locationItemRecord.syncIdentifier]
+                        guard let orderItem = orderItemDict[locationItemRecord.syncIdentifier] else {
+                            context.delete(locationItem); return
+                        }
+                        locationItem.item = orderItem
                         //log.debug("Item: \(locationItem)")
                     }
                     newObject.collection = parent
