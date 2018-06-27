@@ -45,8 +45,8 @@ class OrderCoordinator: BaseCoordinator<Void> {
 
     // MARK: Container
 
-    fileprivate typealias ContainerConfigurationResult = (OrderContainerViewController, OrderLocationViewController,
-                                                          OrderVendorViewModel)
+    fileprivate typealias ContainerConfigurationResult = (OrderContainerViewController, OrderLocationViewModel,
+        OrderVendorViewModel)
 
     fileprivate func configureContainer(with collection: OrderCollection) -> ContainerConfigurationResult {
         // OrderVendorViewController
@@ -58,14 +58,16 @@ class OrderCoordinator: BaseCoordinator<Void> {
         vendorsController.viewModel = vendorsViewModel
 
         // OrderLocationViewController
-        let locationsController = OrderLocationViewController.instance()
-        let locationsViewModel = OrderLocationViewModel(dependency: OrderLocationViewModel.Dependency(
-            dataManager: dependencies.dataManager, collection: collection))
-
+        let locationsController = OrderLocationViewController()
+        let locationsViewModel = OrderLocationViewModel(
+            dependency: OrderLocationViewModel.Dependency(dataManager: dependencies.dataManager,
+                                                          collection: collection),
+            bindings: locationsController.bindings
+        )
         locationsController.viewModel = locationsViewModel
 
         // OrderContainerViewController
-        let containerController = OrderContainerViewController.instance()
+        let containerController = OrderContainerViewController()
         let viewModel = OrderContainerViewModel(dataManager: dependencies.dataManager, parentObject: collection,
                                                 completeTaps: containerController.completeButtonItem.rx.tap
                                                     .asObservable())
@@ -73,12 +75,11 @@ class OrderCoordinator: BaseCoordinator<Void> {
         containerController.configureChildControllers(vendorsController: vendorsController,
                                                       locationsController: locationsController)
 
-        return (containerController, locationsController, vendorsViewModel)
+        return (containerController, locationsViewModel, vendorsViewModel)
     }
 
     fileprivate func showContainer(collection: OrderCollection) {
-        let (containerController, locationsController, vendorsViewModel) = configureContainer(with: collection)
-        let factory = OrderLocationFactory(collection: collection, in: dependencies.dataManager.managedObjectContext)
+        let (containerController, locationsViewModel, vendorsViewModel) = configureContainer(with: collection)
         navigationController.pushViewController(containerController, animated: true)
 
         /// TODO: replace `.subscribe(onNext: { ... }) in the following with:
@@ -99,16 +100,17 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
 
         // Selection - Location
-        locationsController.tableView.rx
-            .modelSelected(RemoteLocation.self)
+        locationsViewModel.selectedLocation
             .debug("locationSelection - OrderContainerVC")
             .subscribe(onNext: { [weak self] location in
-                guard let strongSelf = self else { return }
-                switch location.locationType {
+                guard let strongSelf = self, let locationType = LocationType(rawValue: location.locationType) else {
+                    return
+                }
+                switch locationType {
                 case .category:
-                    strongSelf.showLocationCategoryList(location: location, factory: factory)
+                    strongSelf.showLocationCategoryList(location: location)
                 case .item:
-                    strongSelf.showLocationItemList(parent: .location(location), factory: factory)
+                    strongSelf.showLocationItemList(parent: .location(location))
                 }
             })
             .disposed(by: disposeBag)
@@ -122,9 +124,9 @@ class OrderCoordinator: BaseCoordinator<Void> {
                 guard let strongSelf = self else { return }
                 switch location.locationType {
                 case .category:
-                    strongSelf.showLocationCategoryList(location: location, factory: factory)
+                    strongSelf.showLocationCategoryList(location: location)
                 case .item:
-                    strongSelf.showLocationItemList(parent: OrderLocItemParent.location(location), factory: factory)
+                    strongSelf.showLocationItemList(parent: OrderLocItemParent.location(location))
                 }
             }
             .do(onNext: { [tableView = locationsController.tableView] _ in
@@ -211,54 +213,56 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     // MARK: Location
-
+    /*
     fileprivate func showLocationList(collection: OrderCollection) {
-        let viewController = OrderLocationViewController.instance()
-        let viewModel = OrderLocationViewModel(dependency: OrderLocationViewModel.Dependency(
-            dataManager: dependencies.dataManager, collection: collection))
+        let viewController = OrderLocationViewController()
+        let viewModel = OrderLocationViewModel(
+            dependency: OrderLocationViewModel.Dependency(dataManager: dependencies.dataManager,
+                                                           collection: collection),
+            bindings: viewController.bindings)
         viewController.viewModel = viewModel
         //navigationController.pushViewController(viewController, animated: true)
 
-        let factory = OrderLocationFactory(collection: collection, in: dependencies.dataManager.managedObjectContext)
-
         // Navigation
-        viewController.tableView.rx
-            .modelSelected(RemoteLocation.self)
+        viewModel.selectedLocation
             .debug("itemSelection - OrderLocationVC")
             .subscribe(onNext: { [weak self] location in
-                switch location.locationType {
-                guard let strongSelf = self else {
+                guard let strongSelf = self, let locationType = LocationType(rawValue: location.locationType) else {
                     return
                 }
+                switch locationType {
                 case .category:
-                    strongSelf.showLocationItemList(parent: .location(location), factory: factory)
+                    strongSelf.showLocationItemList(parent: .location(location))
                 case .item:
-                    strongSelf.showLocationItemList(parent: .location(location), factory: factory)
+                    strongSelf.showLocationItemList(parent: .location(location))
                 }
             })
             .disposed(by: disposeBag)
     }
-
-    fileprivate func showLocationCategoryList(location: RemoteLocation, factory: OrderLocationFactory) {
-        let viewController = OrderLocCatViewController.instance()
-        let viewModel = OrderLocCatViewModel(dataManager: dependencies.dataManager,
-                                             location: location, factory: factory)
+    */
+    fileprivate func showLocationCategoryList(location: OrderLocation) {
+        let viewController = OrderLocCatViewController()
+        let viewModel = OrderLocCatViewModel(
+            dependency: OrderLocCatViewModel.Dependency(dataManager: dependencies.dataManager, location: location),
+            bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
         // Navigation
-        viewController.tableView.rx
-            .modelSelected(RemoteItemCategory.self)
+        viewModel.selectedCategory
             .debug("itemSelection - OrderLocCatVC")
             .subscribe(onNext: { [weak self] category in
-                self?.showLocationItemList(parent: .category(category), factory: factory)
+                self?.showLocationItemList(parent: .category(category))
             })
             .disposed(by: disposeBag)
     }
 
-    fileprivate func showLocationItemList(parent: OrderLocItemParent, factory: OrderLocationFactory) {
-        let viewController = OrderLocItemViewController.instance()
-        let viewModel = OrderLocItemViewModel(dataManager: dependencies.dataManager, parent: parent, factory: factory)
+    fileprivate func showLocationItemList(parent: OrderLocItemParent) {
+        let viewController = OrderLocItemViewController()
+        let viewModel = OrderLocItemViewModel(
+            dependency: OrderLocItemViewModel.Dependency(dataManager: dependencies.dataManager, parent: parent),
+            bindings: viewController.bindings)
+
         viewController.viewModel = viewModel
         navigationController.showDetailViewController(viewController, sender: nil)
 
@@ -267,7 +271,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
             .itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
                 guard let strongSelf = self else { return .empty() }
-                return strongSelf.showKeypad(orderItems: viewModel.orderItems, atIndex: indexPath.row)
+                return strongSelf.showKeypad(parent: parent, atIndex: indexPath.row)
             }
             .do(onNext: { [tableView = viewController.tableView] _ in
                 tableView.reloadData()
@@ -312,8 +316,7 @@ class ModalOrderCoordinator: OrderCoordinator {
     }
 
     override func start() -> Observable<Void> {
-        let (containerController, locationsController, vendorsViewModel) = configureContainer(with: collection)
-        let factory = OrderLocationFactory(collection: collection, in: dependencies.dataManager.managedObjectContext)
+        let (containerController, locationsViewModel, vendorsViewModel) = configureContainer(with: collection)
         navigationController.viewControllers = [containerController]
 
         let splitViewController = UISplitViewController()
@@ -338,15 +341,18 @@ class ModalOrderCoordinator: OrderCoordinator {
             .disposed(by: disposeBag)
 
         // Selection - Location
-        locationsController.tableView.rx
-            .modelSelected(RemoteLocation.self)
+        locationsViewModel.selectedLocation
+            .debug("locationSelection - OrderContainerVC")
             .subscribe(onNext: { [weak self] location in
-                guard let strongSelf = self else { fatalError("\(#function) FAILED : unable to get self") }
-                switch location.locationType {
+                log.debug("Selected: \(location)")
+                guard let strongSelf = self, let locationType = LocationType(rawValue: location.locationType) else {
+                    return
+                }
+                switch locationType {
                 case .category:
-                    strongSelf.showLocationCategoryList(location: location, factory: factory)
+                    strongSelf.showLocationCategoryList(location: location)
                 case .item:
-                    strongSelf.showLocationItemList(parent: .location(location), factory: factory)
+                    strongSelf.showLocationItemList(parent: .location(location))
                 }
             })
             .disposed(by: disposeBag)

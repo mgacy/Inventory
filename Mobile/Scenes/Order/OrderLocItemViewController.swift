@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class OrderLocItemViewController: UIViewController {
+class OrderLocItemViewController: MGTableViewController {
     /*
     private enum Strings {
         static let navTitle = "NAME"
@@ -19,34 +19,27 @@ class OrderLocItemViewController: UIViewController {
     */
     // MARK: - Properties
 
+    var bindings: OrderLocItemViewModel.Bindings {
+        /*
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
+            .mapToVoid()
+            .asDriverOnErrorJustComplete()
+        let refresh = refreshControl.rx
+            .controlEvent(.valueChanged)
+            .asDriver()
+        */
+        return OrderLocItemViewModel.Bindings(
+            //fetchTrigger: Driver.merge(viewWillAppear, refresh),
+            fetchTrigger: refreshControl.rx.controlEvent(.valueChanged).asDriver(),
+            //rowTaps: tableView.rx.itemSelected.asDriver()
+            rowTaps: tableView.rx.itemSelected.asObservable()
+        )
+    }
     var viewModel: OrderLocItemViewModel!
-    let disposeBag = DisposeBag()
 
     // MARK: - Interface
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        return tv
-    }()
 
     // MARK: - Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupConstraints()
-
-        switch UIDevice.current.userInterfaceIdiom {
-        case .phone:
-            setupBindings()
-        case .pad:
-            setupBindingsForIpad()
-        default:
-            fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
-        }
-
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -59,35 +52,58 @@ class OrderLocItemViewController: UIViewController {
 
     // MARK: - View Methods
 
-    private func setupView() {
+    override func setupView() {
         title = viewModel.navTitle
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
+        super.setupView()
+    }
 
+    override func setupBindings() {
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
-            tableView.register(cellType: SubItemTableViewCell.self)
+            setupBindingsForPhone()
         case .pad:
-            tableView.register(cellType: StepperTableViewCell.self)
+            setupBindingsForPad()
         default:
             fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
         }
-        tableView.tableFooterView = UIView()
-        self.view.addSubview(tableView)
     }
 
-    private func setupConstraints() {
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
+    // MARK: iPad
+    private func setupBindingsForPad() {
 
-    private func setupBindings() {
+        // Setup numberFormatter
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.roundingMode = .halfUp
+        numberFormatter.maximumFractionDigits = 2
+        /*
         // TableView
         viewModel.items
             // closure args are row (IndexPath), element, cell
-            // swiftlint:disable:next line_length
+            // wiftlint:disable:next line_length
+            .bind(to: tableView.rx.items(cellIdentifier: StepperTableViewCell.reuseID, cellType: StepperTableViewCell.self)) { (_, element, cell: StepperTableViewCell) in
+                // wiftlint:disable:next line_length
+                guard let cellViewModel = StepperCellViewModel(forOrderItem: element, bindings: cell.bindings, numberFormatter: numberFormatter) else {
+                    fatalError("\(#function) FAILED : unable to init view model for \(element)")
+                }
+                cell.bind(to: cellViewModel)
+            }
+            .disposed(by: disposeBag)
+        */
+        // Other Delegate Methods
+        //tableView.rx
+        //    .setDelegate(self)
+        //    .disposed(by: disposeBag)
+    }
+
+    private func setupBindingsForPhone() {
+        /*
+        // TableView
+        viewModel.items
+            // closure args are row (IndexPath), element, cell
+            // wiftlint:disable:next line_length
             .bind(to: tableView.rx.items(cellIdentifier: SubItemTableViewCell.reuseID, cellType: SubItemTableViewCell.self)) { (_, element, cell: SubItemTableViewCell) in
                 guard let cellViewModel = OrderItemCellViewModel(forOrderItem: element) else {
                     fatalError("\(#function) FAILED : unable to init view model for \(element)")
@@ -95,47 +111,49 @@ class OrderLocItemViewController: UIViewController {
                 cell.configure(withViewModel: cellViewModel)
             }
             .disposed(by: disposeBag)
-
+        */
         // Other Delegate Methods
-        tableView.rx
-            .setDelegate(self)
-            .disposed(by: disposeBag)
+        //tableView.rx
+        //    .setDelegate(self)
+        //    .disposed(by: disposeBag)
     }
 
-    // MARK: iPad
-    private func setupBindingsForIpad() {
+    // MARK: - TableViewDataSource
+    fileprivate var dataSource: TableViewDataSource<OrderLocItemViewController>!
 
-        // Setup numberFormatter
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .decimal
-        numberFormatter.roundingMode = .halfUp
-        numberFormatter.maximumFractionDigits = 2
+    override func setupTableView() {
+        //tableView.refreshControl = refreshControl
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            setupTableViewForPhone()
+        case .pad:
+            setupTableViewForPad()
+        default:
+            fatalError("Device is neither phone nor pad")
+        }
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
+    }
 
-        // TableView
-        viewModel.items
-            // closure args are row (IndexPath), element, cell
-            // swiftlint:disable:next line_length
-            .bind(to: tableView.rx.items(cellIdentifier: StepperTableViewCell.reuseID, cellType: StepperTableViewCell.self)) { (_, element, cell: StepperTableViewCell) in
-                // swiftlint:disable:next line_length
-                guard let cellViewModel = StepperCellViewModel(forOrderItem: element, bindings: cell.bindings, numberFormatter: numberFormatter) else {
-                    fatalError("\(#function) FAILED : unable to init view model for \(element)")
-                }
-                cell.bind(to: cellViewModel)
-            }
-            .disposed(by: disposeBag)
+    private func setupTableViewForPad() {
+        tableView.register(cellType: StepperTableViewCell.self)
+    }
 
-        // Other Delegate Methods
-        tableView.rx
-            .setDelegate(self)
-            .disposed(by: disposeBag)
+    private func setupTableViewForPhone() {
+        tableView.register(cellType: SubItemTableViewCell.self)
     }
 
 }
 
-// MARK: - UITableViewDelegate (Swipe Actions)
-@available(iOS 11.0, *)
+// MARK: - TableViewDelegate
 extension OrderLocItemViewController: UITableViewDelegate {
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    // MARK: - UITableViewDelegate (Swipe Actions)
+
+    @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let setToZeroAction = contextualSetToZeroAction(forRowAtIndexPath: indexPath)
         let setToParAction = contextualSetToParAction(forRowAtIndexPath: indexPath)
@@ -143,6 +161,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
         return swipeConfig
     }
 
+    @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let incrementAction = contextualIncrementAction(forRowAtIndexPath: indexPath)
         let decrementAction = contextualDecrementAction(forRowAtIndexPath: indexPath)
@@ -152,6 +171,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
 
     // MARK: - Contextual Actions
 
+    @available(iOS 11.0, *)
     func contextualDecrementAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal, title: "- 1") { [weak self] _, _, completionHandler in
             let result = self?.viewModel.decrementOrder(forRowAtIndexPath: indexPath) ?? false
@@ -165,6 +185,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
         return action
     }
 
+    @available(iOS 11.0, *)
     func contextualIncrementAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal, title: "+ 1") { [weak self] _, _, completionHandler in
             let result = self?.viewModel.incrementOrder(forRowAtIndexPath: indexPath) ?? false
@@ -178,6 +199,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
         return action
     }
 
+    @available(iOS 11.0, *)
     func contextualSetToZeroAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal, title: "0") { [weak self] _, _, completionHandler in
             let result = self?.viewModel.setOrderToZero(forRowAtIndexPath: indexPath) ?? false
@@ -191,6 +213,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
         return action
     }
 
+    @available(iOS 11.0, *)
     func contextualSetToParAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal, title: "Par") { [weak self] _, _, completionHandler in
             let result = self?.viewModel.setOrderToPar(forRowAtIndexPath: indexPath) ?? false
@@ -204,4 +227,47 @@ extension OrderLocItemViewController: UITableViewDelegate {
         return action
     }
 
+}
+
+// MARK: - TableViewDataSourceDelegate
+extension OrderLocItemViewController: TableViewDataSourceDelegate {
+    /*
+    func canEdit(_ collection: InvoiceCollection) -> Bool {
+        switch collection.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+    */
+    func configure(_ cell: SubItemTableViewCell, for location: OrderLocationItem) {
+        guard let orderItem = location.item else {
+            log.error("Unable to get .orderItem for: \(location)")
+            return
+        }
+        guard let cellViewModel = OrderItemCellViewModel(forOrderItem: orderItem) else {
+            fatalError("\(#function) FAILED : unable to init view model for \(orderItem)")
+        }
+        cell.configure(withViewModel: cellViewModel)
+    }
+    /*
+    func configure(_ cell: StepperTableViewCell, for location: OrderLocationItem) {
+        //cell.textLabel?.text = location.name ?? "MISSING"
+        guard let orderItem = location.item else {
+            return
+        }
+
+        // Setup numberFormatter
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.roundingMode = .halfUp
+        numberFormatter.maximumFractionDigits = 2
+
+        guard let cellViewModel = StepperCellViewModel(forOrderItem: orderItem, bindings: cell.bindings, numberFormatter: numberFormatter) else {
+            fatalError("\(#function) FAILED : unable to init view model for \(location)")
+        }
+        cell.bind(to: cellViewModel)
+    }
+    */
 }

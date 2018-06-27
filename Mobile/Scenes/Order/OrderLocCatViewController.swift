@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class OrderLocCatViewController: UIViewController {
+class OrderLocCatViewController: MGTableViewController {
 
     private enum Strings {
         static let navTitle = "Categories"
@@ -19,25 +19,16 @@ class OrderLocCatViewController: UIViewController {
 
     // MARK: - Properties
 
+    var bindings: OrderLocCatViewModel.Bindings {
+        return OrderLocCatViewModel.Bindings(
+            rowTaps: tableView.rx.itemSelected.asObservable()
+        )
+    }
     var viewModel: OrderLocCatViewModel!
-    let disposeBag = DisposeBag()
 
     // MARK: - Interface
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        return tv
-    }()
 
     // MARK: - Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupConstraints()
-        setupBindings()
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -50,30 +41,53 @@ class OrderLocCatViewController: UIViewController {
 
     // MARK: - View Methods
 
-    private func setupView() {
-        title = viewModel.navTitle
+    override func setupView() {
+        super.setupView()
+        title = Strings.navTitle
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
+    }
+
+    //override func setupBindings() {}
+
+    // MARK: - TableViewDataSource
+    fileprivate var dataSource: TableViewDataSource<OrderLocCatViewController>!
+
+    override func setupTableView() {
         tableView.register(cellType: UITableViewCell.self)
-        tableView.tableFooterView = UIView()
-        self.view.addSubview(tableView)
+        //tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.estimatedRowHeight = 100
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    private func setupConstraints() {
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+}
+
+// MARK: - TableViewDelegate
+extension OrderLocCatViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    private func setupBindings() {
-        // TableView
-        viewModel.categories
-            // closure args are row (IndexPath), element, cell
-            .bind(to: tableView.rx.items(cellIdentifier: UITableViewCell.reuseID)) { _, element, cell in
-                cell.textLabel?.text = element.name
-            }
-            .disposed(by: disposeBag)
+}
+
+// MARK: - TableViewDataSourceDelegate
+extension OrderLocCatViewController: TableViewDataSourceDelegate {
+    /*
+    func canEdit(_ collection: InvoiceCollection) -> Bool {
+        switch collection.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+    */
+    func configure(_ cell: UITableViewCell, for location: OrderLocationCategory) {
+        cell.textLabel?.text = location.name ?? "MISSING"
     }
 
 }
