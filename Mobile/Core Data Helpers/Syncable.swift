@@ -124,18 +124,21 @@ extension Syncable where Self: NSManagedObject {
                 deletedObjects = localIDs.subtracting(remoteIDs)
             }
 
-            if !deletedObjects.isEmpty {
-                //log.debug("We need to delete: \(deletedObjects)")
-                let fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", deletedObjects)
-                do {
-                    try context.deleteEntities(self, filter: fetchPredicate)
-                } catch {
-                    /// TODO: deleteEntities(_:filter) already logs the error
-                    let updateError = error as NSError
-                    log.error("\(updateError), \(updateError.userInfo)")
-                    //throw updateError?
-                }
-            }
+            delete(withIdentifiers: deletedObjects, in: context)
+    }
+
+    private static func delete(withIdentifiers identifiers: Set<RemoteIdentifierType>, in context: NSManagedObjectContext) {
+        //log.debug("We need to delete: \(identifiers)")
+        guard !identifiers.isEmpty else { return }
+        let fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", identifiers)
+        do {
+            try context.deleteEntities(self, filter: fetchPredicate)
+        } catch {
+            /// TODO: deleteEntities(_:filter) already logs the error
+            let updateError = error as NSError
+            log.error("\(updateError), \(updateError.userInfo)")
+            //throw updateError?
+        }
     }
 
 }
