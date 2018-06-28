@@ -86,6 +86,7 @@ final class StepperCellViewModel {
 
     struct Dependency {
         let orderItem: OrderItem
+        let numberFormatter: NumberFormatter
     }
 
     struct Bindings {
