@@ -69,22 +69,22 @@ class KeypadView: UIView {
 
     var buttonTaps: Observable<KeypadCommands> {
         return Observable.of(
-            button0.rx.tap.map { _ in return .number(0) },
-            button1.rx.tap.map { _ in return .number(1) },
-            button2.rx.tap.map { _ in return .number(2) },
-            button3.rx.tap.map { _ in return .number(3) },
-            button4.rx.tap.map { _ in return .number(4) },
-            button5.rx.tap.map { _ in return .number(5) },
-            button6.rx.tap.map { _ in return .number(6) },
-            button7.rx.tap.map { _ in return .number(7) },
-            button8.rx.tap.map { _ in return .number(8) },
-            button9.rx.tap.map { _ in return .number(9) },
-            decimalButton.rx.tap.map { _ in return .decimal },
-            previousButton.rx.tap.map { _ in return .previous },
-            nextButton.rx.tap.map { _ in return .next },
-            deleteButton.rx.tap.map { _ in return .clear },
-            softButton1.rx.tap.map { _ in return .soft1 },
-            softButton2.rx.tap.map { _ in return .soft2 }
+            button0.rx.tap.map { _ in .number(0) },
+            button1.rx.tap.map { _ in .number(1) },
+            button2.rx.tap.map { _ in .number(2) },
+            button3.rx.tap.map { _ in .number(3) },
+            button4.rx.tap.map { _ in .number(4) },
+            button5.rx.tap.map { _ in .number(5) },
+            button6.rx.tap.map { _ in .number(6) },
+            button7.rx.tap.map { _ in .number(7) },
+            button8.rx.tap.map { _ in .number(8) },
+            button9.rx.tap.map { _ in .number(9) },
+            decimalButton.rx.tap.map { _ in .decimal },
+            previousButton.rx.tap.map { _ in .previous },
+            nextButton.rx.tap.map { _ in .next },
+            deleteButton.rx.tap.map { _ in .clear },
+            softButton1.rx.tap.map { _ in .soft1 },
+            softButton2.rx.tap.map { _ in .soft2 }
         )
             .merge()
     }
