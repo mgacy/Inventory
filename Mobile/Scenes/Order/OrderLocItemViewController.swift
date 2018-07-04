@@ -155,24 +155,24 @@ extension OrderLocItemViewController: UITableViewDelegate {
 
     @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let setToZeroAction = contextualSetToZeroAction(forRowAtIndexPath: indexPath)
-        let setToParAction = contextualSetToParAction(forRowAtIndexPath: indexPath)
+        let setToZeroAction = makeSetToZeroAction(forRowAtIndexPath: indexPath)
+        let setToParAction = makeSetToParAction(forRowAtIndexPath: indexPath)
         let swipeConfig = UISwipeActionsConfiguration(actions: [setToZeroAction, setToParAction])
         return swipeConfig
     }
 
     @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let incrementAction = contextualIncrementAction(forRowAtIndexPath: indexPath)
-        let decrementAction = contextualDecrementAction(forRowAtIndexPath: indexPath)
+        let incrementAction = makeIncrementAction(forRowAtIndexPath: indexPath)
+        let decrementAction = makeDecrementAction(forRowAtIndexPath: indexPath)
         let swipeConfig = UISwipeActionsConfiguration(actions: [incrementAction, decrementAction])
         return swipeConfig
     }
 
-    // MARK: - Contextual Actions
+    // MARK: - Contextual Action Factory Methods
 
     @available(iOS 11.0, *)
-    func contextualDecrementAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+    func makeDecrementAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal, title: "- 1") { [weak self] _, _, completionHandler in
             let result = self?.viewModel.decrementOrder(forRowAtIndexPath: indexPath) ?? false
             if result {
@@ -186,7 +186,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
     }
 
     @available(iOS 11.0, *)
-    func contextualIncrementAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+    func makeIncrementAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal, title: "+ 1") { [weak self] _, _, completionHandler in
             let result = self?.viewModel.incrementOrder(forRowAtIndexPath: indexPath) ?? false
             if result {
@@ -200,7 +200,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
     }
 
     @available(iOS 11.0, *)
-    func contextualSetToZeroAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+    func makeSetToZeroAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal, title: "0") { [weak self] _, _, completionHandler in
             let result = self?.viewModel.setOrderToZero(forRowAtIndexPath: indexPath) ?? false
             if result {
@@ -214,7 +214,7 @@ extension OrderLocItemViewController: UITableViewDelegate {
     }
 
     @available(iOS 11.0, *)
-    func contextualSetToParAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+    func makeSetToParAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal, title: "Par") { [weak self] _, _, completionHandler in
             let result = self?.viewModel.setOrderToPar(forRowAtIndexPath: indexPath) ?? false
             if result {
