@@ -72,7 +72,7 @@ class InventoryLocationViewController: MGTableViewController, AttachableType {
 
         self.navigationItem.rightBarButtonItem = uploadButtonItem
         if #available(iOS 11, *) {
-            navigationItem.largeTitleDisplayMode = .always
+            navigationItem.largeTitleDisplayMode = .never
         }
         super.setupView()
     }
@@ -123,6 +123,7 @@ class InventoryLocationViewController: MGTableViewController, AttachableType {
                 switch result.event {
                 case .next:
                     HUD.flash(.success, delay: 0.5) { _ in
+                        /// TODO: simply call `viewWasPopped()`?
                         self?._dismissView.onNext(())
                     }
                 case .error:
@@ -145,7 +146,6 @@ class InventoryLocationViewController: MGTableViewController, AttachableType {
         tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-        tableView.tableFooterView = UIView()
         dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
