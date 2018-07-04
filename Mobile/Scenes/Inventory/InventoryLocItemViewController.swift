@@ -9,21 +9,6 @@
 import UIKit
 import RxSwift
 
-enum LocationItemListParent {
-    case category(InventoryLocationCategory)
-    case location(InventoryLocation)
-
-    var fetchPredicate: NSPredicate? {
-        switch self {
-        case .category(let category):
-            return NSPredicate(format: "category == %@", category)
-        case .location(let location):
-            return NSPredicate(format: "location == %@", location)
-        }
-    }
-
-}
-
 class InventoryLocItemViewController: UITableViewController {
 
     // MARK: Properties
