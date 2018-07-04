@@ -87,16 +87,17 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showCategoryList(with location: InventoryLocation) {
-        let viewController = InventoryLocCatViewController.instance()
-        viewController.viewModel = InventoryLocCatViewModel(dataManager: dependencies.dataManager,
-                                                            parentObject: location)
+        let viewController = InventoryLocCatViewController()
+        let viewModel = InventoryLocCatViewModel(dependency: dependencies, bindings: viewController.bindings,
+                                                 parent: location)
+        viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
-        viewController.selectedObjects
+        viewModel.modelSelected
             .debug("itemSelection - InventoryLocCatVC")
-            .subscribe(onNext: { [weak self] selection in
-                self?.showLocationItemList(with: LocationItemListParent.category(selection))
+            .drive(onNext: { [weak self] selection in
+                self?.showLocationItemList(with: .category(selection))
             })
             .disposed(by: disposeBag)
     }

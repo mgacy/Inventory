@@ -7,14 +7,18 @@
 //
 
 import CoreData
-//import RxCocoa
-//import RxSwift
+import RxCocoa
+import RxSwift
 
 struct InventoryLocCatViewModel {
+    //typealias Parent = InventoryLocation
+    //typealias Model = InventoryLocationCategory
 
     // MARK: - Properties
 
-    private let dataManager: DataManager
+    let frc: NSFetchedResultsController<InventoryLocationCategory>
+    var locationName: String { return parentObject.name ?? "Error" }
+    let modelSelected: Driver<InventoryLocationCategory>
     private let parentObject: InventoryLocation
 
     // CoreData
@@ -24,25 +28,32 @@ struct InventoryLocCatViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
-
-    // MARK: - Output
-    let frc: NSFetchedResultsController<InventoryLocationCategory>
-    var locationName: String { return parentObject.name ?? "Error" }
-
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, parentObject: InventoryLocation) {
-        self.dataManager = dataManager
-        self.parentObject = parentObject
+    init(dependency: Dependency, bindings: Bindings, parent: InventoryLocation) {
+        self.parentObject = parent
 
         // FetchRequest
         let request: NSFetchRequest<InventoryLocationCategory> = InventoryLocationCategory.fetchRequest()
         request.sortDescriptors = sortDescriptors
-        request.predicate = NSPredicate(format: "location == %@", parentObject)
+        request.predicate = NSPredicate(format: "location == %@", parent)
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dataManager.makeFetchedResultsController(fetchRequest: request)
+        let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
+
+        // Selection
+        self.modelSelected = bindings.rowTaps
+            .map { frc.object(at: $0) }
+
+        self.frc = frc
+    }
+
+    // MARK: - AttachableViewModelType
+
+    typealias Dependency = HasDataManager
+
+    struct Bindings {
+        let rowTaps: Driver<IndexPath>
     }
 
 }
