@@ -20,17 +20,7 @@ class OrderLocItemViewController: MGTableViewController {
     // MARK: - Properties
 
     var bindings: OrderLocItemViewModel.Bindings {
-        /*
-        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
-            .mapToVoid()
-            .asDriverOnErrorJustComplete()
-        let refresh = refreshControl.rx
-            .controlEvent(.valueChanged)
-            .asDriver()
-        */
         return OrderLocItemViewModel.Bindings(
-            //fetchTrigger: Driver.merge(viewWillAppear, refresh),
-            fetchTrigger: refreshControl.rx.controlEvent(.valueChanged).asDriver(),
             //rowTaps: tableView.rx.itemSelected.asDriver()
             rowTaps: tableView.rx.itemSelected.asObservable()
         )
