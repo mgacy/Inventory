@@ -103,7 +103,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showLocationItemList(with parent: LocationItemListParent) {
-        let viewController = InventoryLocItemViewController.instance()
+        let viewController = InventoryLocItemViewController()
         viewController.viewModel = InventoryLocItemViewModel(dependency: dependencies, parent: parent)
         navigationController.pushViewController(viewController, animated: true)
 
@@ -125,8 +125,8 @@ class InventoryCoordinator: BaseCoordinator<Void> {
             }
             .do(onNext: { [tableView = viewController.tableView] _ in
                 // Deselect
-                if let selectedRowIndexPath = tableView?.indexPathForSelectedRow {
-                    tableView?.deselectRow(at: selectedRowIndexPath, animated: true)
+                if let selectedRowIndexPath = tableView.indexPathForSelectedRow {
+                    tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
             .debug("itemSelection - InventoryLocItemVC")

@@ -9,20 +9,13 @@
 import UIKit
 import RxSwift
 
-class InventoryLocItemViewController: UITableViewController {
+class InventoryLocItemViewController: MGTableViewController {
 
     // MARK: Properties
 
     var viewModel: InventoryLocItemViewModel!
-    let disposeBag = DisposeBag()
 
     // MARK: - Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = viewModel.windowTitle
-        setupTableView()
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -33,20 +26,29 @@ class InventoryLocItemViewController: UITableViewController {
 
     deinit { log.debug("\(#function)") }
 
+    // MARK: - View Methods
+
+    override func setupView() {
+        title = viewModel.windowTitle
+        super.setupView()
+    }
+
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocItemViewController>!
 
-    fileprivate func setupTableView() {
+    override func setupTableView() {
         tableView.register(cellType: SubItemTableViewCell.self)
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 80
-        tableView.tableFooterView = UIView()
+        //tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.estimatedRowHeight = 80
         dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    // MARK: - UITableViewDelegate
+}
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+// MARK: - UITableViewDelegate Extension
+extension InventoryLocItemViewController {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

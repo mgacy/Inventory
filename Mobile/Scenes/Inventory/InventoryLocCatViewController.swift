@@ -49,7 +49,10 @@ class InventoryLocCatViewController: MGTableViewController {
         dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    // MARK: - UITableViewDelegate
+}
+
+// MARK: - UITableViewDelegate Extension
+extension InventoryLocCatViewController {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
