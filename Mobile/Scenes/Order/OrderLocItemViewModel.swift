@@ -15,6 +15,16 @@ enum OrderLocItemParent {
     case category(OrderLocationCategory)
     //case remoteLocation(RemoteLocation)
     //case remoteCategory(RemoteItemCategory)
+
+    var fetchPredicate: NSPredicate? {
+        switch self {
+        case .category(let category):
+            return NSPredicate(format: "category == %@", category)
+        case .location(let location):
+            return NSPredicate(format: "location == %@", location)
+        }
+    }
+
 }
 
 struct OrderLocItemViewModel: AttachableViewModelType {
@@ -25,8 +35,8 @@ struct OrderLocItemViewModel: AttachableViewModelType {
     //let selectedItem: Observable<OrderLocationItem>
 
     // CoreData
-    private let filter: NSPredicate?
-    private let sortDescriptors: [NSSortDescriptor]
+    /// NOTE: for InventoryLocItemViewModel we use both position and item.name
+    private let sortDescriptors = [NSSortDescriptor(key: "position", ascending: true)]
     //private let cacheName: String? = nil
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
@@ -37,18 +47,14 @@ struct OrderLocItemViewModel: AttachableViewModelType {
         switch dependency.parent {
         case .category(let category):
             self.navTitle = category.name ?? "Error"
-            self.filter = NSPredicate(format: "category == %@", category)
-            self.sortDescriptors = [NSSortDescriptor(key: "position", ascending: true)]
         case .location(let location):
             self.navTitle = location.name ?? "Error"
-            self.filter = NSPredicate(format: "location == %@", location)
-            self.sortDescriptors = [NSSortDescriptor(key: "position", ascending: true)]
         }
 
         // FetchRequest
         let request: NSFetchRequest<OrderLocationItem> = OrderLocationItem.fetchRequest()
         request.sortDescriptors = sortDescriptors
-        request.predicate = filter
+        request.predicate = dependency.parent.fetchPredicate
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
         let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
