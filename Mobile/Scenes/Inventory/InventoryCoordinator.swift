@@ -103,8 +103,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
     fileprivate func showLocationItemList(with parent: LocationItemListParent) {
         let viewController = InventoryLocItemViewController.instance()
-        viewController.viewModel = InventoryLocItemViewModel(dataManager: dependencies.dataManager,
-                                                             parentObject: parent)
+        viewController.viewModel = InventoryLocItemViewModel(dependency: dependencies, parent: parent)
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
