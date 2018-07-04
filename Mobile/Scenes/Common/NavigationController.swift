@@ -35,7 +35,7 @@ class NavigationController: UINavigationController, PrimaryContainerType {
             detailView = .placeholder
         case .separated:
             detailView = .placeholder
-            // Set detail view controller to `PlaceholderViewControllerType` to prevent confusion
+            /// Set detail view controller to `PlaceholderViewControllerType` to prevent confusion
             detailPopCompletion(makePlaceholderViewController())
         case .placeholder:
             break
@@ -43,6 +43,7 @@ class NavigationController: UINavigationController, PrimaryContainerType {
         return super.popViewController(animated: animated)
     }
 
+    /// TODO: make this static?
     func makePlaceholderViewController() -> UIViewController & PlaceholderViewControllerType {
         return PlaceholderViewController()
     }
@@ -53,7 +54,7 @@ class NavigationController: UINavigationController, PrimaryContainerType {
 extension NavigationController: UINavigationControllerDelegate {
 
     public func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        // Ensure the view controller is popping
+        /// Ensure the view controller is popping
         guard
             let poppedViewController = navigationController.transitionCoordinator?.viewController(forKey: .from),
             !navigationController.viewControllers.contains(poppedViewController),
