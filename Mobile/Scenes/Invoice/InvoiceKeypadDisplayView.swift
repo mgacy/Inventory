@@ -12,7 +12,7 @@ import RxSwift
 
 final class InvoiceKeypadDisplayView: UIView {
 
-    var dismissalEvents: ControlEvent<Void> {
+    var dismissalEvents: Observable<DismissalEvent> {
         return itemDisplayView.dismissalEvents
     }
 

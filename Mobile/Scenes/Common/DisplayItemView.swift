@@ -23,8 +23,8 @@ class DisplayItemView: UIView {
 
     // MARK: - Properties
 
-    var dismissalEvents: ControlEvent<Void> {
-        return dismissChevron.rx.tap
+    var dismissalEvents: Observable<DismissalEvent> {
+        return dismissChevron.rx.tap.map { _ in .shouldDismiss }
     }
 
     // Appearance

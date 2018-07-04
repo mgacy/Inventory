@@ -17,18 +17,23 @@ protocol ModalKeypadPresenting: class {
     var frame: CGRect { get }
 }
 
+enum DismissalEvent {
+    case shouldDismiss
+    case wasDismissed
+}
+
 protocol ModalKeypadDismissing: class {
-    var dismissalEvents: Observable<Void> { get }
+    var dismissalEvents: Observable<DismissalEvent> { get }
 }
 
 final class ModalKeypadViewController: UIViewController {
 
-    let dismissalEvents: Observable<Void>
+    let dismissalEvents: Observable<DismissalEvent>
     let disposeBag = DisposeBag()
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
     private let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
-    private let panGestureDissmissalEvent = PublishSubject<Void>()
+    private let panGestureDissmissalEvent = PublishSubject<DismissalEvent>()
 
     // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
@@ -53,7 +58,7 @@ final class ModalKeypadViewController: UIViewController {
         self.dismissalEvents = Observable.of(
             keypadViewController.dismissalEvents,
             panGestureDissmissalEvent.asObservable(),
-            tapGestureRecognizer.rx.event.mapToVoid()
+            tapGestureRecognizer.rx.event.map { _ in .shouldDismiss }
         )
         .merge()
 
@@ -132,7 +137,7 @@ final class ModalKeypadViewController: UIViewController {
             if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
                 interactionController?.finish()
                 /// Ensure we return event from coordinator when dismissing view with pan gesture
-                panGestureDissmissalEvent.onNext(())
+                panGestureDissmissalEvent.onNext(.wasDismissed)
             } else {
                 interactionController?.cancel()
             }
