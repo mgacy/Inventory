@@ -64,14 +64,15 @@ final class StepperCellViewModel {
         self.orderItem = orderItem
         guard let item = orderItem.item else { return nil }
         self.item = item
-
+        /// Name
         self.nameColor = Driver.just(UIColor.black)
         self.nameText = Driver.just(item.name ?? "Error")
-
+        /// Pack
         self.packText = Driver.just(item.packDisplay)
-
+        /// Par
         self.parText = numberFormatter.string(from: NSNumber(value: orderItem.par)) ?? "Error"
         self.parUnit = CurrentUnit(for: item, from: orderItem.parUnit)
+        /// Recommended
 
         self.recommendedText = numberFormatter.string(from: NSNumber(value: orderItem.minOrder)) ?? "Error"
         self.recommendedUnit = CurrentUnit(for: item, from: orderItem.minOrderUnit)

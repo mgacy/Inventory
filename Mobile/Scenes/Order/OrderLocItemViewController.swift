@@ -112,7 +112,6 @@ class OrderLocItemViewController: MGTableViewController {
     fileprivate var dataSource: TableViewDataSource<OrderLocItemViewController>!
 
     override func setupTableView() {
-        //tableView.refreshControl = refreshControl
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
             setupTableViewForPhone()
