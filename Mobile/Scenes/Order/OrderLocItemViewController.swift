@@ -120,7 +120,13 @@ class OrderLocItemViewController: MGTableViewController {
         default:
             fatalError("Device is neither phone nor pad")
         }
+
         dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
+
+        // Other Delegate Methods
+        tableView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
     }
 
     private func setupTableViewForPad() {
@@ -220,16 +226,10 @@ extension OrderLocItemViewController: UITableViewDelegate {
 
 // MARK: - TableViewDataSourceDelegate
 extension OrderLocItemViewController: TableViewDataSourceDelegate {
-    /*
-    func canEdit(_ collection: InvoiceCollection) -> Bool {
-        switch collection.uploaded {
-        case true:
-            return false
-        case false:
-            return true
-        }
+
+    func canEdit(_ item: OrderLocationItem) -> Bool {
+        return true
     }
-    */
     func configure(_ cell: SubItemTableViewCell, for location: OrderLocationItem) {
         guard let orderItem = location.item else {
             log.error("Unable to get .orderItem for: \(location)")
