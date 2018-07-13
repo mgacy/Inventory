@@ -21,7 +21,6 @@ final class StepperCellViewModel {
     //var nameColor: UIColor { return self.status.associatedColor }
     //var nameText: String { return item.name ?? "Error" }
     //var packText: String { return item.packDisplay }
-    //
     let parText: String
     let parUnit: CurrentUnit
     let recommendedText: String
@@ -70,13 +69,30 @@ final class StepperCellViewModel {
 
     // MARK: -
 
-    struct Dependency {
-        let orderItem: OrderItem
-        let numberFormatter: NumberFormatter
-    }
-
     struct Bindings {
         let commands: Driver<StepperCommand>
+    }
+
+}
+
+// MARK: - Swipe Actions
+extension StepperCellViewModel {
+
+    func setOrderToPar() -> Bool {
+        guard let parUnit = orderItem.parUnit else {
+            return false
+        }
+        /// TODO: should we return false if orderItem.par == 0?
+        let newQuantity = orderItem.par.rounded(.awayFromZero)
+
+        orderItem.quantity = newQuantity as NSNumber
+        orderItem.orderUnit = parUnit
+        return true
+    }
+
+    func setOrderToZero() -> Bool {
+        orderItem.quantity = 0
+        return true
     }
 
 }

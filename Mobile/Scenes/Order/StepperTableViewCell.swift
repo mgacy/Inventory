@@ -14,9 +14,11 @@ class StepperTableViewCell: UITableViewCell {
 
     var bindings: StepperCellViewModel.Bindings {
         return StepperCellViewModel.Bindings(
-            commands: stepper.rx.commandProp.asDriver(onErrorJustReturn: .stabilize)
+            commands: Driver.of(contextualActionSubject.asDriver(onErrorJustReturn: .stabilize),
+                                stepper.rx.commandProp.asDriver(onErrorJustReturn: .stabilize)).merge()
         )
     }
+    var viewModel: StepperCellViewModel?
 
     // MARK: - Interface
 
@@ -147,11 +149,13 @@ class StepperTableViewCell: UITableViewCell {
     }()
 
     private(set) var disposeBag = DisposeBag()
+    private let contextualActionSubject: PublishSubject<StepperCommand>
 
     // MARK: - Lifecycle
 
     /// TODO: init with initial state (or view model)?
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        contextualActionSubject = PublishSubject<StepperCommand>()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initViews()
         setupConstraints()
@@ -165,6 +169,7 @@ class StepperTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag() // because life cycle of every cell ends on prepare for reuse
+        self.viewModel = nil
     }
     /*
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -257,6 +262,7 @@ class StepperTableViewCell: UITableViewCell {
 extension StepperTableViewCell {
 
     func bind(to viewModel: StepperCellViewModel) {
+        self.viewModel = viewModel
         //nameTextLabel.text = viewModel.nameText
         //nameTextLabel.textColor = viewModel.nameColor
         //packTextLabel.text = viewModel.packText
@@ -277,6 +283,41 @@ extension StepperTableViewCell {
         viewModel.state
             .drive(stepper.itemState)
             .disposed(by: disposeBag)
+    }
+
+}
+
+// MARK: - Swipe Actions
+extension StepperTableViewCell: OrderLocItemActionable {
+
+    func decrement() -> Bool {
+        contextualActionSubject.onNext(.decrement(1))
+        //contextualActionSubject.onNext(.stabilize)
+        return true
+    }
+
+    func increment() -> Bool {
+        contextualActionSubject.onNext(.increment(1))
+        //contextualActionSubject.onNext(.stabilize)
+        return true
+    }
+
+    func setToPar() -> Bool {
+        guard let vm = viewModel, vm.setOrderToPar() else {
+            return false
+        }
+        // FIXME: this is kinda hackish
+        contextualActionSubject.onNext(.stabilize)
+        return true
+    }
+
+    func setToZero() -> Bool {
+        guard let vm = viewModel, vm.setOrderToZero() else {
+            return false
+        }
+        // FIXME: this is kinda hackish
+        contextualActionSubject.onNext(.stabilize)
+        return true
     }
 
 }
