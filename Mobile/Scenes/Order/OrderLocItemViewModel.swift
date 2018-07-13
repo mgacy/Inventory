@@ -32,7 +32,7 @@ struct OrderLocItemViewModel: AttachableViewModelType {
     // MARK: - Properties
     let frc: NSFetchedResultsController<OrderLocationItem>
     let navTitle: String
-    //let selectedItem: Observable<OrderLocationItem>
+    //let itemSelected: Observable<IndexPath>
 
     // CoreData
     /// NOTE: for InventoryLocItemViewModel we use both position and item.name
@@ -59,57 +59,7 @@ struct OrderLocItemViewModel: AttachableViewModelType {
         request.returnsObjectsAsFaults = false
         self.frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
 
-    }
-
-    // MARK: - Swipe Actions
-
-    func decrementOrder(forRowAtIndexPath indexPath: IndexPath) -> Bool {
-        guard let orderItem = frc.object(at: indexPath).item, let currentQuantity = orderItem.quantity else {
-            return false
-        }
-        //guard let currentQuantity = orderItem.quantity else {
-        //    /// TODO: should we simply set .quantity to 0?
-        //    //orderItem.quantity = 0.0
-        //}
-        if currentQuantity.doubleValue >= 1.0 {
-            orderItem.quantity = NSNumber(value: currentQuantity.doubleValue - 1.0)
-        } else {
-            orderItem.quantity = 0.0
-        }
-        return true
-    }
-
-    func incrementOrder(forRowAtIndexPath indexPath: IndexPath) -> Bool {
-        guard let orderItem = frc.object(at: indexPath).item, let currentQuantity: NSNumber = orderItem.quantity else {
-            return false
-        }
-        //guard let currentQuantity: NSNumber = orderItem.quantity else {
-        //    /// TODO: should we simply increment by 1 if .quantity is nil?
-        //    //orderItem.quantity = 1.0
-        //    return false
-        //}
-        orderItem.quantity = NSNumber(value: currentQuantity.doubleValue + 1.0)
-        return true
-    }
-
-    func setOrderToPar(forRowAtIndexPath indexPath: IndexPath) -> Bool {
-        guard let orderItem = frc.object(at: indexPath).item, let parUnit = orderItem.parUnit else {
-            return false
-        }
-        /// TODO: should we return false if orderItem.par == 0?
-        let newQuantity = orderItem.par.rounded(.awayFromZero)
-
-        orderItem.quantity = newQuantity as NSNumber
-        orderItem.orderUnit = parUnit
-        return true
-    }
-
-    func setOrderToZero(forRowAtIndexPath indexPath: IndexPath) -> Bool {
-        guard let orderItem = frc.object(at: indexPath).item else {
-            return false
-        }
-        orderItem.quantity = 0
-        return true
+        //self.itemSelected = bindings.rowTaps
     }
 
     // MARK: - AttachableViewModelType

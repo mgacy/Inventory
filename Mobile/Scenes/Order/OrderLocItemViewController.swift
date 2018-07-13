@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class OrderLocItemViewController: MGTableViewController, OrderLocItemViewControllerType {
+class OrderLocItemViewController: MGTableViewController, OrderLocItemViewControllerType, OrderLocItemActionFactory {
     /*
     private enum Strings {
         static let navTitle = "NAME"
@@ -77,76 +77,27 @@ extension OrderLocItemViewController: UITableViewDelegate {
 
     @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let setToZeroAction = makeSetToZeroAction(forRowAtIndexPath: indexPath)
-        let setToParAction = makeSetToParAction(forRowAtIndexPath: indexPath)
+        guard let cell = tableView.cellForRow(at: indexPath) as? OrderLocItemActionable else {
+            return nil
+        }
+
+        let setToZeroAction = makeSetToZeroAction(forCell: cell)
+        let setToParAction = makeSetToParAction(forCell: cell)
+
         let swipeConfig = UISwipeActionsConfiguration(actions: [setToZeroAction, setToParAction])
         return swipeConfig
     }
 
     @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let incrementAction = makeIncrementAction(forRowAtIndexPath: indexPath)
-        let decrementAction = makeDecrementAction(forRowAtIndexPath: indexPath)
+        guard let cell = tableView.cellForRow(at: indexPath) as? OrderLocItemActionable else {
+            return nil
+        }
+        let decrementAction = makeDecrementAction(forCell: cell)
+        let incrementAction = makeIncrementAction(forCell: cell)
+
         let swipeConfig = UISwipeActionsConfiguration(actions: [incrementAction, decrementAction])
         return swipeConfig
-    }
-
-    // MARK: - Contextual Action Factory Methods
-
-    @available(iOS 11.0, *)
-    func makeDecrementAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
-        let action = UIContextualAction(style: .normal, title: "- 1") { [weak self] _, _, completionHandler in
-            let result = self?.viewModel.decrementOrder(forRowAtIndexPath: indexPath) ?? false
-            if result {
-                self?.tableView.reloadRows(at: [indexPath], with: .fade)
-            }
-            completionHandler(result)
-        }
-        //action.image = UIImage(named: "")
-        action.backgroundColor = ColorPalette.blue
-        return action
-    }
-
-    @available(iOS 11.0, *)
-    func makeIncrementAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
-        let action = UIContextualAction(style: .normal, title: "+ 1") { [weak self] _, _, completionHandler in
-            let result = self?.viewModel.incrementOrder(forRowAtIndexPath: indexPath) ?? false
-            if result {
-                self?.tableView.reloadRows(at: [indexPath], with: .fade)
-            }
-            completionHandler(result)
-        }
-        //action.image = UIImage(named: "")
-        action.backgroundColor = ColorPalette.lazur
-        return action
-    }
-
-    @available(iOS 11.0, *)
-    func makeSetToZeroAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
-        let action = UIContextualAction(style: .normal, title: "0") { [weak self] _, _, completionHandler in
-            let result = self?.viewModel.setOrderToZero(forRowAtIndexPath: indexPath) ?? false
-            if result {
-                self?.tableView.reloadRows(at: [indexPath], with: .fade)
-            }
-            completionHandler(result)
-        }
-        //action.image = UIImage(named: "")
-        action.backgroundColor = ColorPalette.blue
-        return action
-    }
-
-    @available(iOS 11.0, *)
-    func makeSetToParAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
-        let action = UIContextualAction(style: .normal, title: "Par") { [weak self] _, _, completionHandler in
-            let result = self?.viewModel.setOrderToPar(forRowAtIndexPath: indexPath) ?? false
-            if result {
-                self?.tableView.reloadRows(at: [indexPath], with: .fade)
-            }
-            completionHandler(result)
-        }
-        //action.image = UIImage(named: "")
-        action.backgroundColor = ColorPalette.navy
-        return action
     }
 
 }
@@ -158,7 +109,7 @@ extension OrderLocItemViewController: TableViewDataSourceDelegate {
         return true
     }
 
-    func configure(_ cell: SubItemTableViewCell, for location: OrderLocationItem) {
+    func configure(_ cell: OrderLocItemPhoneCell, for location: OrderLocationItem) {
         guard let orderItem = location.item else {
             log.error("Unable to get .orderItem for: \(location)")
             return
@@ -166,6 +117,7 @@ extension OrderLocItemViewController: TableViewDataSourceDelegate {
         guard let cellViewModel = OrderItemCellViewModel(forOrderItem: orderItem) else {
             fatalError("\(#function) FAILED : unable to init view model for \(orderItem)")
         }
+        cell.viewModel = cellViewModel
         cell.configure(withViewModel: cellViewModel)
     }
 
