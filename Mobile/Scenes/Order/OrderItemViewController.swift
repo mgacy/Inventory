@@ -294,7 +294,7 @@ extension OrderItemViewController: TableViewDataSourceDelegate {
     func configure(_ cell: SubItemTableViewCell, for orderItem: OrderItem) {
         /// TODO: simply add extension on SubItemTableViewCell passing OrderItem as arg?
         //cell.configure(forOrderItem: orderItem)
-        let viewModel = OrderItemCellViewModel(forOrderItem: orderItem)!
+        let viewModel = OrderItemPhoneCellViewModel(forOrderItem: orderItem)!
         cell.configure(withViewModel: viewModel)
     }
 

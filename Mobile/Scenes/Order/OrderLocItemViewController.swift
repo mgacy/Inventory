@@ -55,7 +55,7 @@ class OrderLocItemViewController: MGTableViewController, OrderLocItemViewControl
     fileprivate var dataSource: TableViewDataSource<OrderLocItemViewController>!
 
     override func setupTableView() {
-        tableView.register(cellType: OrderLocItemPhoneCell.self)
+        tableView.register(cellType: OrderItemPhoneCell.self)
         dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
 
         // Other Delegate Methods
@@ -109,12 +109,12 @@ extension OrderLocItemViewController: TableViewDataSourceDelegate {
         return true
     }
 
-    func configure(_ cell: OrderLocItemPhoneCell, for location: OrderLocationItem) {
+    func configure(_ cell: OrderItemPhoneCell, for location: OrderLocationItem) {
         guard let orderItem = location.item else {
             log.error("Unable to get .orderItem for: \(location)")
             return
         }
-        guard let cellViewModel = OrderItemCellViewModel(forOrderItem: orderItem) else {
+        guard let cellViewModel = OrderItemPhoneCellViewModel(forOrderItem: orderItem) else {
             fatalError("\(#function) FAILED : unable to init view model for \(orderItem)")
         }
         cell.viewModel = cellViewModel

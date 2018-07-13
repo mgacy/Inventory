@@ -1,5 +1,5 @@
 //
-//  OrderLocItemPhoneCell.swift
+//  OrderItemPhoneCell.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 7/12/18.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-final class OrderLocItemPhoneCell: SubItemTableViewCell {
-    var viewModel: OrderItemCellViewModel!
+final class OrderItemPhoneCell: SubItemTableViewCell {
+    var viewModel: OrderItemPhoneCellViewModel!
 }
 
-extension OrderLocItemPhoneCell: OrderLocItemActionable {
+extension OrderItemPhoneCell: OrderLocItemActionable {
 
     func increment() -> Bool {
         let result = viewModel.incrementOrder()

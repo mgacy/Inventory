@@ -1,5 +1,5 @@
 //
-//  OrderItemCellViewModel.swift
+//  OrderItemPhoneCellViewModel.swift
 //  Mobile
 //
 //  Created by Mathew Gacy on 10/29/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct OrderItemCellViewModel: SubItemCellViewModelType {
+struct OrderItemPhoneCellViewModel: SubItemCellViewModelType {
 
     // MARK: - Properties
 
@@ -70,7 +70,7 @@ struct OrderItemCellViewModel: SubItemCellViewModelType {
 
 // MARK: - OrderLocItemActionable
 
-extension OrderItemCellViewModel {
+extension OrderItemPhoneCellViewModel {
 
     // MARK: - Swipe Actions
 

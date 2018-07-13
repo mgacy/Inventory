@@ -123,7 +123,7 @@
 		C97A713D1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */; };
 		C97B7C471FAB908000117D29 /* OrderContainerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97B7C461FAB908000117D29 /* OrderContainerViewModel.swift */; };
 		C98165021F915E7F006EC785 /* SubItemCellViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */; };
-		C983643E1FA6744200DFAC6C /* OrderItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C983643D1FA6744200DFAC6C /* OrderItemCellViewModel.swift */; };
+		C983643E1FA6744200DFAC6C /* OrderItemPhoneCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C983643D1FA6744200DFAC6C /* OrderItemPhoneCellViewModel.swift */; };
 		C98364401FA675F400DFAC6C /* OrderLocationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C983643F1FA675F400DFAC6C /* OrderLocationFactory.swift */; };
 		C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988CE701DF5050D00A8028B /* Array+MyStuff.swift */; };
 		C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */; };
@@ -198,7 +198,7 @@
 		C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */; };
 		C9F374AD20F7E6390020BD2E /* OrderLocItemPadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */; };
 		C9F374B120F7E9010020BD2E /* OrderLocItemProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F374B020F7E9010020BD2E /* OrderLocItemProtocols.swift */; };
-		C9F374B320F867E10020BD2E /* OrderLocItemPhoneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F374B220F867E00020BD2E /* OrderLocItemPhoneCell.swift */; };
+		C9F374B320F867E10020BD2E /* OrderItemPhoneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F374B220F867E00020BD2E /* OrderItemPhoneCell.swift */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
 		C9F515E61DB7EF98004C10E6 /* HomeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */; };
 		C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */; };
@@ -348,7 +348,7 @@
 		C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryReviewViewController.storyboard; sourceTree = "<group>"; };
 		C97B7C461FAB908000117D29 /* OrderContainerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderContainerViewModel.swift; sourceTree = "<group>"; };
 		C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubItemCellViewModelType.swift; sourceTree = "<group>"; };
-		C983643D1FA6744200DFAC6C /* OrderItemCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemCellViewModel.swift; sourceTree = "<group>"; };
+		C983643D1FA6744200DFAC6C /* OrderItemPhoneCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemPhoneCellViewModel.swift; sourceTree = "<group>"; };
 		C983643F1FA675F400DFAC6C /* OrderLocationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationFactory.swift; sourceTree = "<group>"; };
 		C988CE701DF5050D00A8028B /* Array+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+MyStuff.swift"; sourceTree = "<group>"; };
 		C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+MyStuff.swift"; sourceTree = "<group>"; };
@@ -424,7 +424,7 @@
 		C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderLocationViewController.storyboard; sourceTree = "<group>"; };
 		C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemPadViewController.swift; sourceTree = "<group>"; };
 		C9F374B020F7E9010020BD2E /* OrderLocItemProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemProtocols.swift; sourceTree = "<group>"; };
-		C9F374B220F867E00020BD2E /* OrderLocItemPhoneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemPhoneCell.swift; sourceTree = "<group>"; };
+		C9F374B220F867E00020BD2E /* OrderItemPhoneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemPhoneCell.swift; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9F515E51DB7EF98004C10E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/HomeViewController.storyboard; sourceTree = "<group>"; };
@@ -564,8 +564,8 @@
 			isa = PBXGroup;
 			children = (
 				C901A50C1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift */,
-				C9F374B220F867E00020BD2E /* OrderLocItemPhoneCell.swift */,
-				C983643D1FA6744200DFAC6C /* OrderItemCellViewModel.swift */,
+				C9F374B220F867E00020BD2E /* OrderItemPhoneCell.swift */,
+				C983643D1FA6744200DFAC6C /* OrderItemPhoneCellViewModel.swift */,
 			);
 			name = Phone;
 			sourceTree = "<group>";
@@ -574,6 +574,8 @@
 			isa = PBXGroup;
 			children = (
 				C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */,
+				C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */,
+				C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */,
 			);
 			name = Pad;
 			sourceTree = "<group>";
@@ -639,8 +641,6 @@
 			children = (
 				C9045C181FC4AD1000F55FB3 /* OrderCoordinator.swift */,
 				C9DE2CF02087CBCA0090109A /* OrderKeypadCoordinator.swift */,
-				C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */,
-				C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */,
 				C97A712A1F8EC06B00F2F1CD /* Date List */,
 				C9208A2C1FAB89B200D7C830 /* Container */,
 				C97A712B1F8EC07900F2F1CD /* Vendor List */,
@@ -1477,7 +1477,7 @@
 				C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */,
 				C9BB058B1F831AF900A07529 /* InventoryDateViewModel.swift in Sources */,
 				C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */,
-				C983643E1FA6744200DFAC6C /* OrderItemCellViewModel.swift in Sources */,
+				C983643E1FA6744200DFAC6C /* OrderItemPhoneCellViewModel.swift in Sources */,
 				C9CE65E020BE461400A194F5 /* InventoryKeypadCoordinator.swift in Sources */,
 				C9BB058D1F831B0F00A07529 /* InvoiceDateViewModel.swift in Sources */,
 				C97A713A1F8ECADD00F2F1CD /* InventoryReviewViewModel.swift in Sources */,
@@ -1491,7 +1491,7 @@
 				C93BD19E20BC87AC002E23DC /* OrderKeypadDisplayView.swift in Sources */,
 				C97A71321F8EC83700F2F1CD /* InvoiceVendorViewModel.swift in Sources */,
 				C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */,
-				C9F374B320F867E10020BD2E /* OrderLocItemPhoneCell.swift in Sources */,
+				C9F374B320F867E10020BD2E /* OrderItemPhoneCell.swift in Sources */,
 				C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */,
 				C93565361FCDF77D00CAFB16 /* RoundRectButton.swift in Sources */,
 				C9BB058F1F831B2200A07529 /* OrderDateViewModel.swift in Sources */,
