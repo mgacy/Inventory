@@ -484,12 +484,10 @@
 			isa = PBXGroup;
 			children = (
 				C901A50A1FA2BC3900BC7BD2 /* OrderLocItemViewController.storyboard */,
-				C901A50C1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift */,
 				C9F374B020F7E9010020BD2E /* OrderLocItemProtocols.swift */,
 				C901A50E1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift */,
-				C983643D1FA6744200DFAC6C /* OrderItemCellViewModel.swift */,
-				C9F374B220F867E00020BD2E /* OrderLocItemPhoneCell.swift */,
-				C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */,
+				C9194CC820F94A530068B74C /* Pad */,
+				C9194CC720F94A440068B74C /* Phone */,
 			);
 			name = LocationItemList;
 			sourceTree = "<group>";
@@ -560,6 +558,24 @@
 				C91417EF1FA8F64B00168064 /* OrderLocCatViewModel.swift */,
 			);
 			name = "LocationCategory List";
+			sourceTree = "<group>";
+		};
+		C9194CC720F94A440068B74C /* Phone */ = {
+			isa = PBXGroup;
+			children = (
+				C901A50C1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift */,
+				C9F374B220F867E00020BD2E /* OrderLocItemPhoneCell.swift */,
+				C983643D1FA6744200DFAC6C /* OrderItemCellViewModel.swift */,
+			);
+			name = Phone;
+			sourceTree = "<group>";
+		};
+		C9194CC820F94A530068B74C /* Pad */ = {
+			isa = PBXGroup;
+			children = (
+				C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */,
+			);
+			name = Pad;
 			sourceTree = "<group>";
 		};
 		C9208A2C1FAB89B200D7C830 /* Container */ = {
