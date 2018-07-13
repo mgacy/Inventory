@@ -275,10 +275,6 @@ class OrderCoordinator: BaseCoordinator<Void> {
             }
             .do(onNext: { [tableView = viewController.tableView] _ in
                 tableView.reloadData()
-                // Deselect
-                if let selectedRowIndexPath = tableView.indexPathForSelectedRow {
-                    tableView.deselectRow(at: selectedRowIndexPath, animated: true)
-                }
             })
             .debug("itemSelection - OrderLocItemVC")
             .subscribe()

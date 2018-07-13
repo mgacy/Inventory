@@ -26,19 +26,7 @@ final class StepperCellViewModel {
     let parUnit: CurrentUnit
     let recommendedText: String
     let recommendedUnit: CurrentUnit
-    /*
-    var quantityColor: UIColor { return self.status.associatedColor }
-    var quantityText: String {
-        /// TODO: simply use `switch status {}`?
-        guard self.status != .inactive else {
-            return ""
-        }
-        guard let quantity = orderItem.quantity else {
-            return "Error"
-        }
-        return "\(quantity)"
-    }
-    */
+    //var quantityColor: UIColor { return self.status.associatedColor }
 
     // MARK: Private
     private let numberFormatter: NumberFormatter

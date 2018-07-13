@@ -166,7 +166,17 @@ class StepperTableViewCell: UITableViewCell {
         super.prepareForReuse()
         disposeBag = DisposeBag() // because life cycle of every cell ends on prepare for reuse
     }
-
+    /*
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        switch selected {
+        case true:
+        // ...
+        case false:
+            // ...
+        }
+        super.setSelected(selected, animated: animated)
+    }
+    */
     // MARK: - View Methods
 
     private func initViews() {
@@ -249,11 +259,11 @@ extension StepperTableViewCell {
     func bind(to viewModel: StepperCellViewModel) {
         //nameTextLabel.text = viewModel.nameText
         //nameTextLabel.textColor = viewModel.nameColor
+        //packTextLabel.text = viewModel.packText
         viewModel.nameText
             .drive(nameTextLabel.rx.text)
             .disposed(by: disposeBag)
 
-        //packTextLabel.text = viewModel.packText
         viewModel.packText
             .drive(packTextLabel.rx.text)
             .disposed(by: disposeBag)
