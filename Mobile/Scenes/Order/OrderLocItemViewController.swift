@@ -230,6 +230,7 @@ extension OrderLocItemViewController: TableViewDataSourceDelegate {
     func canEdit(_ item: OrderLocationItem) -> Bool {
         return true
     }
+
     func configure(_ cell: SubItemTableViewCell, for location: OrderLocationItem) {
         guard let orderItem = location.item else {
             log.error("Unable to get .orderItem for: \(location)")

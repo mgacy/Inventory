@@ -14,6 +14,32 @@ final class StepperCellViewModel {
 
     // MARK: - Properties
 
+    let state: Driver<ItemState>
+    let nameColor: Driver<UIColor>
+    //var nameColor: UIColor { return self.status.associatedColor }
+    let nameText: Driver<String>
+    //var nameText: String { return item.name ?? "Error" }
+    let packText: Driver<String>
+    //var packText: String { return item.packDisplay }
+    //
+    let parText: String
+    let parUnit: CurrentUnit
+    let recommendedText: String
+    let recommendedUnit: CurrentUnit
+    /*
+    var quantityColor: UIColor { return self.status.associatedColor }
+    var quantityText: String {
+        /// TODO: simply use `switch status {}`?
+        guard self.status != .inactive else {
+            return ""
+        }
+        guard let quantity = orderItem.quantity else {
+            return "Error"
+        }
+        return "\(quantity)"
+    }
+    */
+
     // MARK: Private
     private let numberFormatter: NumberFormatter
     private let orderItem: OrderItem
@@ -29,34 +55,6 @@ final class StepperCellViewModel {
         }
     }
 
-    // MARK: Public
-    let state: Driver<ItemState>
-    let nameColor: Driver<UIColor>
-    let nameText: Driver<String>
-    let packText: Driver<String>
-    //
-    let parText: String
-    let parUnit: CurrentUnit
-    let recommendedText: String
-    let recommendedUnit: CurrentUnit
-    /*
-    var nameText: String { return item.name ?? "Error" }
-    var nameColor: UIColor { return self.status.associatedColor }
-
-    var packText: String { return item.packDisplay }
-
-    var quantityColor: UIColor { return self.status.associatedColor }
-    var quantityText: String {
-        /// TODO: simply use `switch status {}`?
-        guard self.status != .inactive else {
-            return ""
-        }
-        guard let quantity = orderItem.quantity else {
-            return "Error"
-        }
-        return "\(quantity)"
-    }
-    */
     // MARK: - Lifecycle
 
     init?(forOrderItem orderItem: OrderItem, bindings: Bindings, numberFormatter: NumberFormatter) {
@@ -73,7 +71,6 @@ final class StepperCellViewModel {
         self.parText = numberFormatter.string(from: NSNumber(value: orderItem.par)) ?? "Error"
         self.parUnit = CurrentUnit(for: item, from: orderItem.parUnit)
         /// Recommended
-
         self.recommendedText = numberFormatter.string(from: NSNumber(value: orderItem.minOrder)) ?? "Error"
         self.recommendedUnit = CurrentUnit(for: item, from: orderItem.minOrderUnit)
 

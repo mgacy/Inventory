@@ -164,7 +164,7 @@ class StepperTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        disposeBag = DisposeBag() // because life cicle of every cell ends on prepare for reuse
+        disposeBag = DisposeBag() // because life cycle of every cell ends on prepare for reuse
     }
 
     // MARK: - View Methods

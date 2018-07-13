@@ -57,9 +57,8 @@ struct OrderLocItemViewModel: AttachableViewModelType {
         request.predicate = dependency.parent.fetchPredicate
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
+        self.frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
 
-        self.frc = frc
     }
 
     // MARK: - Swipe Actions
