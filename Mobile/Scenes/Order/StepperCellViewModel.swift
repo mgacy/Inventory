@@ -16,10 +16,10 @@ final class StepperCellViewModel {
 
     let state: Driver<ItemState>
     let nameColor: Driver<UIColor>
-    //var nameColor: UIColor { return self.status.associatedColor }
     let nameText: Driver<String>
-    //var nameText: String { return item.name ?? "Error" }
     let packText: Driver<String>
+    //var nameColor: UIColor { return self.status.associatedColor }
+    //var nameText: String { return item.name ?? "Error" }
     //var packText: String { return item.packDisplay }
     //
     let parText: String
