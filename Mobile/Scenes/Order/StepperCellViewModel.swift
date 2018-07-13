@@ -15,9 +15,9 @@ final class StepperCellViewModel {
     // MARK: - Properties
 
     let state: Driver<ItemState>
-    let nameColor: Driver<UIColor>
-    let nameText: Driver<String>
-    let packText: Driver<String>
+    let nameColor: UIColor
+    let nameText: String
+    let packText: String
     //var nameColor: UIColor { return self.status.associatedColor }
     //var nameText: String { return item.name ?? "Error" }
     //var packText: String { return item.packDisplay }
@@ -50,10 +50,10 @@ final class StepperCellViewModel {
         guard let item = orderItem.item else { return nil }
         self.item = item
         /// Name
-        self.nameColor = Driver.just(UIColor.black)
-        self.nameText = Driver.just(item.name ?? "Error")
+        self.nameColor = UIColor.black
+        self.nameText = item.name ?? "Error"
         /// Pack
-        self.packText = Driver.just(item.packDisplay)
+        self.packText = item.packDisplay
         /// Par
         self.parText = numberFormatter.string(from: NSNumber(value: orderItem.par)) ?? "Error"
         self.parUnit = CurrentUnit(for: item, from: orderItem.parUnit)

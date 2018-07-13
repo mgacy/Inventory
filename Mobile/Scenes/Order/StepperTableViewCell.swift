@@ -263,20 +263,15 @@ extension StepperTableViewCell {
 
     func bind(to viewModel: StepperCellViewModel) {
         self.viewModel = viewModel
-        //nameTextLabel.text = viewModel.nameText
-        //nameTextLabel.textColor = viewModel.nameColor
-        //packTextLabel.text = viewModel.packText
-        viewModel.nameText
-            .drive(nameTextLabel.rx.text)
-            .disposed(by: disposeBag)
-
-        viewModel.packText
-            .drive(packTextLabel.rx.text)
-            .disposed(by: disposeBag)
-
+        // Name
+        nameTextLabel.text = viewModel.nameText
+        nameTextLabel.textColor = viewModel.nameColor
+        // Pack
+        packTextLabel.text = viewModel.packText
+        // Par
         parTextLabel.text = viewModel.parText
         parUnitView.updateUnit(viewModel.parUnit, animated: false)
-
+        // Recommended
         recommendedTextLabel.text = viewModel.recommendedText
         recommendedUnitView.updateUnit(viewModel.recommendedUnit, animated: false)
 
