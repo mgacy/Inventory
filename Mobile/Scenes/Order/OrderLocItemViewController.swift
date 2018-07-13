@@ -55,7 +55,7 @@ class OrderLocItemViewController: MGTableViewController, OrderLocItemViewControl
     fileprivate var dataSource: TableViewDataSource<OrderLocItemViewController>!
 
     override func setupTableView() {
-        tableView.register(cellType: SubItemTableViewCell.self)
+        tableView.register(cellType: OrderLocItemPhoneCell.self)
         dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
 
         // Other Delegate Methods
