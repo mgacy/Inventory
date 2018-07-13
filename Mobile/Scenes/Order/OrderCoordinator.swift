@@ -258,7 +258,15 @@ class OrderCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showLocationItemList(parent: OrderLocItemParent) {
-        let viewController = OrderLocItemViewController()
+        var viewController: MGTableViewController & OrderLocItemViewControllerType
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            viewController = OrderLocItemViewController()
+        case .pad:
+            viewController = OrderLocItemPadViewController()
+        default:
+            fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")
+        }
         let viewModel = OrderLocItemViewModel(
             dependency: OrderLocItemViewModel.Dependency(dataManager: dependencies.dataManager, parent: parent),
             bindings: viewController.bindings)

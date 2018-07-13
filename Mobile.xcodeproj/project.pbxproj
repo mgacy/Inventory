@@ -196,6 +196,7 @@
 		C9F3564B1FA04536007ED98C /* OrderLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */; };
 		C9F3564D1FA0554C007ED98C /* OrderLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */; };
 		C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */; };
+		C9F374AD20F7E6390020BD2E /* OrderLocItemPadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */; };
 		C9F374B120F7E9010020BD2E /* OrderLocItemProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F374B020F7E9010020BD2E /* OrderLocItemProtocols.swift */; };
 		C9F374B320F867E10020BD2E /* OrderLocItemPhoneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F374B220F867E00020BD2E /* OrderLocItemPhoneCell.swift */; };
 		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
@@ -421,6 +422,7 @@
 		C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationViewController.swift; sourceTree = "<group>"; };
 		C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationViewModel.swift; sourceTree = "<group>"; };
 		C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderLocationViewController.storyboard; sourceTree = "<group>"; };
+		C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemPadViewController.swift; sourceTree = "<group>"; };
 		C9F374B020F7E9010020BD2E /* OrderLocItemProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemProtocols.swift; sourceTree = "<group>"; };
 		C9F374B220F867E00020BD2E /* OrderLocItemPhoneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemPhoneCell.swift; sourceTree = "<group>"; };
 		C9F515DD1DB7EF98004C10E6 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -487,6 +489,7 @@
 				C901A50E1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift */,
 				C983643D1FA6744200DFAC6C /* OrderItemCellViewModel.swift */,
 				C9F374B220F867E00020BD2E /* OrderLocItemPhoneCell.swift */,
+				C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */,
 			);
 			name = LocationItemList;
 			sourceTree = "<group>";
@@ -1508,6 +1511,7 @@
 				C98364401FA675F400DFAC6C /* OrderLocationFactory.swift in Sources */,
 				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,
 				C93BD19C20BB3F48002E23DC /* ModalSplitViewDelegate.swift in Sources */,
+				C9F374AD20F7E6390020BD2E /* OrderLocItemPadViewController.swift in Sources */,
 				C91F52FE20C77EFD00B1B7AA /* InventoryKeypadDisplayView.swift in Sources */,
 				C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */,
 				C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */,
