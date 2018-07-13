@@ -20,6 +20,32 @@ class StepperTableViewCell: UITableViewCell {
     }
     var viewModel: StepperCellViewModel?
 
+    /*
+    var viewModel: StepperCellViewModel? {
+        didSet {
+            let disposeBag = DisposeBag()
+            guard let viewModel = viewModel else {
+                return
+            }
+
+            nameTextLabel.text = viewModel.nameText
+            packTextLabel.text = viewModel.packText
+            parTextLabel.text = viewModel.parText
+            parUnitView.updateUnit(viewModel.parUnit, animated: false)
+            recommendedTextLabel.text = viewModel.recommendedText
+            recommendedUnitView.updateUnit(viewModel.recommendedUnit, animated: false)
+
+            let commands = Driver.of(contextualActionSubject.asDriver(onErrorJustReturn: .stabilize),
+                                     stepper.rx.commandProp.asDriver(onErrorJustReturn: .stabilize)).merge()
+
+            viewModel.transform(input: commands)
+                .drive(stepper.itemState)
+                .disposed(by: disposeBag)
+
+            self.disposeBag = disposeBag
+        }
+    }
+    */
     // MARK: - Interface
 
     let stepper: MGStepper = {
@@ -148,6 +174,7 @@ class StepperTableViewCell: UITableViewCell {
         return view
     }()
 
+    //private(set) var disposeBag: DisposeBag?
     private(set) var disposeBag = DisposeBag()
     private let contextualActionSubject: PublishSubject<StepperCommand>
 
@@ -170,6 +197,7 @@ class StepperTableViewCell: UITableViewCell {
         super.prepareForReuse()
         disposeBag = DisposeBag() // because life cycle of every cell ends on prepare for reuse
         self.viewModel = nil
+        //self.disposeBag = nil
     }
     /*
     override func setSelected(_ selected: Bool, animated: Bool) {

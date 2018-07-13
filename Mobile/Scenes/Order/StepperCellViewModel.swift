@@ -73,6 +73,44 @@ final class StepperCellViewModel {
         let commands: Driver<StepperCommand>
     }
 
+    /*
+    init?(forOrderItem orderItem: OrderItem, numberFormatter: NumberFormatter) {
+        self.numberFormatter = numberFormatter
+        self.orderItem = orderItem
+        guard let item = orderItem.item else { return nil }
+        self.item = item
+        /// Name
+        //self.nameColor = Driver.just(UIColor.black)
+        //self.nameText = Driver.just(item.name ?? "Error")
+        /// Pack
+        //self.packText = Driver.just(item.packDisplay)
+        /// Par
+        self.parText = numberFormatter.string(from: NSNumber(value: orderItem.par)) ?? "Error"
+        self.parUnit = CurrentUnit(for: item, from: orderItem.parUnit)
+        /// Recommended
+        self.recommendedText = numberFormatter.string(from: NSNumber(value: orderItem.minOrder)) ?? "Error"
+        self.recommendedUnit = CurrentUnit(for: item, from: orderItem.minOrderUnit)
+
+        /*
+        let initialState = ItemState(item: orderItem)
+        self.state = bindings.commands.scan(initialState, accumulator: ItemState.reduce)
+            //.distinctUntilChanged()
+            .startWith(initialState)
+        */
+    }
+
+    func transform(input: Input) -> Output {
+        let initialState = ItemState(item: orderItem)
+        return input.scan(initialState, accumulator: ItemState.reduce)
+            //.distinctUntilChanged()
+            .startWith(initialState)
+    }
+
+    // MARK: -
+
+    typealias Input = Driver<StepperCommand>
+    typealias Output = Driver<ItemState>
+    */
 }
 
 // MARK: - Swipe Actions
