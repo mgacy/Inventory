@@ -56,6 +56,7 @@ class ItemViewController: MGTableViewController {
     override func setupBindings() {
         // Activity Indicator
         viewModel.isRefreshing
+            .delay(0.01)
             //.debug("isRefreshing")
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)

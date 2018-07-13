@@ -153,6 +153,7 @@ class OrderDateViewController: UIViewController {
     private func setupBindings() {
         // Activity Indicator
         viewModel.isRefreshing
+            .delay(0.01)
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
         /*
