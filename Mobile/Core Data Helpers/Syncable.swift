@@ -18,7 +18,7 @@ protocol Syncable: Managed {
 
     /// TODO: should these all throw?
     //static func updateOrCreate(with: RemoteType, in: NSManageObjectContext) -> Self
-    static func sync(with: [RemoteType], in: NSManagedObjectContext)
+    static func sync(with: [RemoteType], in: NSManagedObjectContext, matching: NSPredicate?)
     func update(with: RemoteType, in: NSManagedObjectContext)
 }
 
@@ -80,10 +80,10 @@ extension Syncable where Self: NSManagedObject {
     }
 
     /// TODO: add `throws`?
-    /// TODO: add predicate and configuration block `configure: () -> Void = { _ in }`; this could cover most of SyncableParent
-    static func sync<R>(with records: [RemoteType], in context: NSManagedObjectContext)
+    /// TODO: configuration block `configure: (Self) -> Void = { _ in }`; this could cover most of SyncableParent
+    static func sync<R>(with records: [RemoteType], in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil)
         where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
-            guard let objectDict: [R: Self] = try? fetchEntityDict(in: context) else {
+            guard let objectDict: [R: Self] = try? fetchEntityDict(in: context, matching: predicate) else {
                 log.error("\(#function) FAILED : unable to create dictionary for \(self)"); return
             }
 
@@ -124,13 +124,21 @@ extension Syncable where Self: NSManagedObject {
                 deletedObjects = localIDs.subtracting(remoteIDs)
             }
 
-            delete(withIdentifiers: deletedObjects, in: context)
+            delete(withIdentifiers: deletedObjects, in: context, matching: predicate)
     }
 
-    private static func delete(withIdentifiers identifiers: Set<RemoteIdentifierType>, in context: NSManagedObjectContext) {
+    private static func delete(withIdentifiers identifiers: Set<RemoteIdentifierType>, in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil) {
         //log.debug("We need to delete: \(identifiers)")
         guard !identifiers.isEmpty else { return }
-        let fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", identifiers)
+
+        let fetchPredicate: NSPredicate
+        if let additionalPredicate = predicate {
+            fetchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", identifiers), additionalPredicate])
+        } else {
+            fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", identifiers)
+        }
+
         do {
             try context.deleteEntities(self, filter: fetchPredicate)
         } catch {
