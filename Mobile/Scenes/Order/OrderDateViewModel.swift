@@ -11,11 +11,13 @@ import RxCocoa
 import RxSwift
 import RxSwiftExt
 
-struct OrderDateViewModel {
+struct OrderDateViewModel: AttachableViewModelType {
 
     // MARK: - Properties
-
-    private let dataManager: DataManager
+    let frc: NSFetchedResultsController<OrderCollection>
+    let isRefreshing: Driver<Bool>
+    let errorMessages: Driver<String>
+    let showCollection: Observable<OrderCollection>
 
     // CoreData
     private let filter: NSPredicate? = nil
@@ -24,89 +26,38 @@ struct OrderDateViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
-    let refresh: AnyObserver<Void>
-    let addTaps: AnyObserver<NewOrderGenerationMethod>
-    //let editTaps: AnyObserver<Void>
-    //let rowTaps: AnyObserver<InvoiceCollection>
-
-    // MARK: - Output
-    let frc: NSFetchedResultsController<OrderCollection>
-    let isRefreshing: Driver<Bool>
-    let hasRefreshed: Driver<Bool>
-    let errorMessages: Driver<String>
-    let showCollection: Observable<OrderCollection>
-
     // MARK: - Lifecycle
 
     // swiftlint:disable:next function_body_length
-    init(dataManager: DataManager, rowTaps: Observable<OrderCollection>) {
-        self.dataManager = dataManager
+    init(dependency: Dependency, bindings: Bindings) {
 
         // Refresh
-        let _refresh = PublishSubject<Void>()
-        self.refresh = _refresh.asObserver()
+        let activityIndicator = ActivityIndicator()
+        self.isRefreshing = activityIndicator.asDriver()
+        //let errorTracker = ErrorTracker()
+        //self.errors = errorTracker.asDriver()
 
-        let isRefreshing = ActivityIndicator()
-        self.isRefreshing = isRefreshing.asDriver()
-
-        self.hasRefreshed = _refresh.asObservable()
-            .flatMapLatest { _ -> Observable<Bool> in
-                log.debug("\(#function) : Refreshing (1) ...")
-                return dataManager.refreshStuff()
-                    .catchErrorJustReturn(false)
+        let refreshResults = bindings.fetchTrigger
+            .asObservable()
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
+                //log.debug("\(#function) : Refreshing (1) ...")
+                return dependency.dataManager.refreshStuff()
+                    .materialize()
             }
-            .flatMapLatest { _ -> Observable<Bool> in
-                log.debug("\(#function) : Refreshing (2) ...")
-                return dataManager.refreshOrderCollections()
-                    .dematerialize()
-                    .catchErrorJustReturn(false)
-                    .trackActivity(isRefreshing)
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
+                //log.debug("\(#function) : Refreshing (2) ...")
+                return dependency.dataManager.refreshOrderCollections()
+                    .trackActivity(activityIndicator)
             }
-            .asDriver(onErrorJustReturn: false)
+            .share()
 
         // Add
-        let _add = PublishSubject<NewOrderGenerationMethod>()
-        self.addTaps = _add.asObserver()
-        let showNewResults = _add.asObservable()
+        let showNewResults = bindings.addTaps.asObservable()
             .flatMap { method -> Observable<Event<OrderCollection>> in
-                return dataManager.createOrderCollection(generationMethod: method, returnUsage: false,
+                return dependency.dataManager.createOrderCollection(generationMethod: method, returnUsage: false,
                                                          periodLength: nil)
             }
             .share()
-
-        // Selection
-        let showSelectionResults = rowTaps
-            //.throttle(0.5, scheduler: MainScheduler.instance)
-            .flatMap { selection -> Observable<Event<OrderCollection>> in
-                log.debug("Tapped: \(selection)")
-                switch selection.uploaded {
-                case true:
-                    /// TODO: show PKHUD progress
-                    return dataManager.refreshOrderCollection(selection)
-                case false:
-                    return Observable.just(selection).materialize()
-                }
-            }
-            .share()
-            //.shareReplay(1)
-
-        // Navigation
-        self.showCollection = Observable.of(showNewResults.elements(), showSelectionResults.elements())
-            .merge()
-
-        // Errors
-        self.errorMessages = Observable.of(showNewResults.errors(), showSelectionResults.errors())
-            .merge()
-            .map { error in
-                log.debug("\(#function) ERROR : \(error)")
-                switch error {
-                default:
-                    return "There was a problem"
-                }
-            }
-            .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .empty())
 
         // FetchRequest
         let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
@@ -114,7 +65,72 @@ struct OrderDateViewModel {
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
+
+        // Selection
+        let showSelectionResults = bindings.rowTaps
+            //.throttle(0.5, scheduler: MainScheduler.instance)
+            .asObservable()
+            .map { frc.object(at: $0) }
+            .flatMap { selection -> Observable<Event<OrderCollection>> in
+                switch selection.uploaded {
+                case true:
+                    /// FIXME: simply push view; refresh on next scene
+                    /// TODO: show PKHUD progress
+                    return dependency.dataManager.refreshOrderCollection(selection)
+                case false:
+                    return Observable.just(selection).materialize()
+                }
+            }
+            .share()
+
+        // Navigation
+        self.showCollection = Observable.of(showNewResults.elements(), showSelectionResults.elements())
+            .merge()
+
+        // Errors
+        self.errorMessages = Observable.of(
+                showNewResults.errors(), showSelectionResults.errors(), refreshResults.errors()
+            )
+            .merge()
+            .map { error in
+                log.debug("\(#function) ERROR : \(error)")
+                return error.localizedDescription
+            }
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
+
+        self.frc = frc
+    }
+
+    // MARK: - AttachableViewModelType
+
+    typealias Dependency = HasDataManager
+
+    struct Bindings {
+        let fetchTrigger: Driver<Void>
+        let addTaps: Driver<NewOrderGenerationMethod>
+        //let editTaps: Driver<Void>
+        let rowTaps: Driver<IndexPath>
+    }
+
+    enum GenerationMethod: CustomStringConvertible {
+        //case count(method: NewOrderGenerationMethod)
+        //case par(method: NewOrderGenerationMethod)
+        case count
+        case par
+        //case sales
+        case cancel
+
+        var description: String {
+            switch self {
+            case .count:
+                return "From Count"
+            case .par:
+                return "From Par"
+            case .cancel:
+                return "Cancel"
+            }
+        }
     }
 
 }

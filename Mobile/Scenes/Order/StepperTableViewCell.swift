@@ -14,10 +14,38 @@ class StepperTableViewCell: UITableViewCell {
 
     var bindings: StepperCellViewModel.Bindings {
         return StepperCellViewModel.Bindings(
-            commands: stepper.rx.commandProp.asDriver(onErrorJustReturn: .stabilize)
+            commands: Driver.of(contextualActionSubject.asDriver(onErrorJustReturn: .stabilize),
+                                stepper.rx.commandProp.asDriver(onErrorJustReturn: .stabilize)).merge()
         )
     }
+    var viewModel: StepperCellViewModel?
 
+    /*
+    var viewModel: StepperCellViewModel? {
+        didSet {
+            let disposeBag = DisposeBag()
+            guard let viewModel = viewModel else {
+                return
+            }
+
+            nameTextLabel.text = viewModel.nameText
+            packTextLabel.text = viewModel.packText
+            parTextLabel.text = viewModel.parText
+            parUnitView.updateUnit(viewModel.parUnit, animated: false)
+            recommendedTextLabel.text = viewModel.recommendedText
+            recommendedUnitView.updateUnit(viewModel.recommendedUnit, animated: false)
+
+            let commands = Driver.of(contextualActionSubject.asDriver(onErrorJustReturn: .stabilize),
+                                     stepper.rx.commandProp.asDriver(onErrorJustReturn: .stabilize)).merge()
+
+            viewModel.transform(input: commands)
+                .drive(stepper.itemState)
+                .disposed(by: disposeBag)
+
+            self.disposeBag = disposeBag
+        }
+    }
+    */
     // MARK: - Interface
 
     let stepper: MGStepper = {
@@ -146,12 +174,15 @@ class StepperTableViewCell: UITableViewCell {
         return view
     }()
 
+    //private(set) var disposeBag: DisposeBag?
     private(set) var disposeBag = DisposeBag()
+    private let contextualActionSubject: PublishSubject<StepperCommand>
 
     // MARK: - Lifecycle
 
     /// TODO: init with initial state (or view model)?
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        contextualActionSubject = PublishSubject<StepperCommand>()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initViews()
         setupConstraints()
@@ -164,9 +195,21 @@ class StepperTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        disposeBag = DisposeBag() // because life cicle of every cell ends on prepare for reuse
+        disposeBag = DisposeBag() // because life cycle of every cell ends on prepare for reuse
+        self.viewModel = nil
+        //self.disposeBag = nil
     }
-
+    /*
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        switch selected {
+        case true:
+        // ...
+        case false:
+            // ...
+        }
+        super.setSelected(selected, animated: animated)
+    }
+    */
     // MARK: - View Methods
 
     private func initViews() {
@@ -247,26 +290,57 @@ class StepperTableViewCell: UITableViewCell {
 extension StepperTableViewCell {
 
     func bind(to viewModel: StepperCellViewModel) {
-        //nameTextLabel.text = viewModel.nameText
-        //nameTextLabel.textColor = viewModel.nameColor
-        viewModel.nameText
-            .drive(nameTextLabel.rx.text)
-            .disposed(by: disposeBag)
-
-        //packTextLabel.text = viewModel.packText
-        viewModel.packText
-            .drive(packTextLabel.rx.text)
-            .disposed(by: disposeBag)
-
+        self.viewModel = viewModel
+        // Name
+        nameTextLabel.text = viewModel.nameText
+        nameTextLabel.textColor = viewModel.nameColor
+        // Pack
+        packTextLabel.text = viewModel.packText
+        // Par
         parTextLabel.text = viewModel.parText
         parUnitView.updateUnit(viewModel.parUnit, animated: false)
-
+        // Recommended
         recommendedTextLabel.text = viewModel.recommendedText
         recommendedUnitView.updateUnit(viewModel.recommendedUnit, animated: false)
 
         viewModel.state
             .drive(stepper.itemState)
             .disposed(by: disposeBag)
+    }
+
+}
+
+// MARK: - Swipe Actions
+extension StepperTableViewCell: OrderLocItemActionable {
+
+    func decrement() -> Bool {
+        contextualActionSubject.onNext(.decrement(1))
+        //contextualActionSubject.onNext(.stabilize)
+        return true
+    }
+
+    func increment() -> Bool {
+        contextualActionSubject.onNext(.increment(1))
+        //contextualActionSubject.onNext(.stabilize)
+        return true
+    }
+
+    func setToPar() -> Bool {
+        guard let vm = viewModel, vm.setOrderToPar() else {
+            return false
+        }
+        // FIXME: this is kinda hackish
+        contextualActionSubject.onNext(.stabilize)
+        return true
+    }
+
+    func setToZero() -> Bool {
+        guard let vm = viewModel, vm.setOrderToZero() else {
+            return false
+        }
+        // FIXME: this is kinda hackish
+        contextualActionSubject.onNext(.stabilize)
+        return true
     }
 
 }

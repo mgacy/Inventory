@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="16G1314" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="16G1408" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Base" representedClassName="Base" syncable="YES" codeGenerationType="class">
         <attribute name="dateTimeInterval" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="storeID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
@@ -149,7 +149,7 @@
         <attribute name="inventoryID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="storeID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="uploaded" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="locations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="OrderLocation" inverseName="order" inverseEntity="OrderLocation" syncable="YES"/>
+        <relationship name="locations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="OrderLocation" inverseName="collection" inverseEntity="OrderLocation" syncable="YES"/>
         <relationship name="orders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Order" inverseName="collection" inverseEntity="Order" syncable="YES"/>
         <fetchIndex name="byDateIndex">
             <fetchIndexElement property="dateTimeInterval" type="Binary" order="ascending"/>
@@ -174,12 +174,12 @@
     </entity>
     <entity name="OrderLocation" representedClassName="OrderLocation" syncable="YES" codeGenerationType="class">
         <attribute name="locationID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="locationType" attributeType="String" syncable="YES"/>
+        <attribute name="locationType" attributeType="Integer 16" minValueString="0" maxValueString="1" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="OrderLocationCategory" inverseName="location" inverseEntity="OrderLocationCategory" syncable="YES"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="OrderLocationCategory" inverseName="location" inverseEntity="OrderLocationCategory" syncable="YES"/>
+        <relationship name="collection" maxCount="1" deletionRule="Nullify" destinationEntity="OrderCollection" inverseName="locations" inverseEntity="OrderCollection" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="OrderLocationItem" inverseName="location" inverseEntity="OrderLocationItem" syncable="YES"/>
-        <relationship name="order" maxCount="1" deletionRule="Nullify" destinationEntity="OrderCollection" inverseName="locations" inverseEntity="OrderCollection" syncable="YES"/>
     </entity>
     <entity name="OrderLocationCategory" representedClassName="OrderLocationCategory" syncable="YES" codeGenerationType="class">
         <attribute name="categoryID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -260,12 +260,12 @@
         <element name="Order" positionX="-549" positionY="477" width="128" height="180"/>
         <element name="OrderCollection" positionX="-1091" positionY="510" width="128" height="135"/>
         <element name="OrderItem" positionX="-92" positionY="447" width="128" height="225"/>
+        <element name="OrderLocation" positionX="-1575" positionY="-189" width="128" height="150"/>
+        <element name="OrderLocationCategory" positionX="-1566" positionY="-180" width="128" height="120"/>
+        <element name="OrderLocationItem" positionX="-1557" positionY="-171" width="128" height="120"/>
         <element name="Store" positionX="-1784" positionY="159" width="128" height="120"/>
         <element name="Unit" positionX="-1278" positionY="201" width="128" height="240"/>
         <element name="Vendor" positionX="-1278" positionY="51" width="128" height="135"/>
         <element name="VendorRep" positionX="-1575" positionY="-189" width="128" height="135"/>
-        <element name="OrderLocation" positionX="-1575" positionY="-189" width="128" height="150"/>
-        <element name="OrderLocationCategory" positionX="-1566" positionY="-180" width="128" height="120"/>
-        <element name="OrderLocationItem" positionX="-1557" positionY="-171" width="128" height="120"/>
     </elements>
 </model>

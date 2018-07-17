@@ -80,6 +80,7 @@ class TabBarCoordinator: BaseCoordinator<Void> {
         let navControllers = tabs
             .map { tab -> UINavigationController in
                 let navController = NavigationController(withPopDetailCompletion: viewDelegate.replaceDetail)
+                navController.delegate = navController
                 navController.tabBarItem = UITabBarItem(title: tab.title, image: tab.image, selectedImage: nil)
                 if #available(iOS 11.0, *) {
                     navController.navigationBar.prefersLargeTitles = true

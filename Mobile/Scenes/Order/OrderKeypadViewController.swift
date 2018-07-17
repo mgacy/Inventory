@@ -11,24 +11,25 @@ import RxCocoa
 import RxSwift
 
 class OrderKeypadViewController: UIViewController {
+    typealias KeypadViewModelType = OrderKeypadViewModelType & KeypadProxy & DisplayItemViewModelType
 
     // MARK: - Properties
 
     let disposeBag = DisposeBag()
     //let dismissalEvents: Observable<Void>
-    var viewModel: OrderKeypadViewModel!
+    var viewModel: KeypadViewModelType!
 
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
-    private let changeItemDissmissalEvent = PublishSubject<Void>()
-    private let panGestureDissmissalEvent = PublishSubject<Void>()
+    private let changeItemDissmissalEvent = PublishSubject<DismissalEvent>()
+    private let panGestureDissmissalEvent = PublishSubject<DismissalEvent>()
 
     // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
 
     let panGestureRecognizer: UIPanGestureRecognizer
 
-    var dismissalEvents: Observable<Void> {
+    var dismissalEvents: Observable<DismissalEvent> {
         return Observable.of(
             displayView.dismissalEvents.asObservable(),
             changeItemDissmissalEvent.asObservable(),
@@ -93,6 +94,8 @@ class OrderKeypadViewController: UIViewController {
     }
 
     //override func didReceiveMemoryWarning() {}
+
+    deinit { log.debug("\(#function)") }
 
     // MARK: - View Methods
 
@@ -169,7 +172,7 @@ class OrderKeypadViewController: UIViewController {
         case true:
             updateDisplay()
         case false:
-            changeItemDissmissalEvent.onNext(())
+            changeItemDissmissalEvent.onNext(.shouldDismiss)
             //if let navController = navigationController {
             //    navController.popViewController(animated: true)
             //} else {
@@ -183,7 +186,7 @@ class OrderKeypadViewController: UIViewController {
         case true:
             updateDisplay()
         case false:
-            changeItemDissmissalEvent.onNext(())
+            changeItemDissmissalEvent.onNext(.shouldDismiss)
             //if let navController = navigationController {
             //    navController.popViewController(animated: true)
             //} else {
@@ -247,7 +250,7 @@ class OrderKeypadViewController: UIViewController {
             if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
                 interactionController?.finish()
                 /// Ensure we return event from coordinator when dismissing view with pan gesture
-                panGestureDissmissalEvent.onNext(())
+                panGestureDissmissalEvent.onNext(.wasDismissed)
             } else {
                 interactionController?.cancel()
             }

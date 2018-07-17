@@ -16,11 +16,16 @@ enum InventorySelection {
     case existing(Inventory)
 }
 
-struct InventoryDateViewModel {
+struct InventoryDateViewModel: AttachableViewModelType {
 
     // MARK: Properties
-
-    private let dataManager: DataManager
+    let frc: NSFetchedResultsController<Inventory>
+    let isRefreshing: Driver<Bool>
+    //let hasRefreshed: Driver<Bool>
+    let errorMessages: Driver<String>
+    //let errors: Driver<Error>
+    let showInventory: Observable<InventorySelection>
+    //private let dataManager: DataManager
 
     // CoreData
     private let sortDescriptors = [NSSortDescriptor(key: "dateTimeInterval", ascending: false)]
@@ -28,83 +33,62 @@ struct InventoryDateViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
-    let refresh: AnyObserver<Void>
-    let addTaps: AnyObserver<Void>
-    //let editTaps: AnyObserver<Void>
-    //let rowTaps: AnyObserver<Inventory>
-
-    // MARK: - Output
-    let frc: NSFetchedResultsController<Inventory>
-    let isRefreshing: Driver<Bool>
-    let hasRefreshed: Driver<Bool>
-    let errorMessages: Driver<String>
-    let showInventory: Observable<InventorySelection>
-
     // MARK: - Lifecycle
 
-    // swiftlint:disable:next function_body_length
-    init(dataManager: DataManager, rowTaps: Observable<Inventory>) {
-        self.dataManager = dataManager
+    init(dependency: Dependency, bindings: Bindings) {
+        //self.dataManager = dependency.dataManager
+
+        let activityIndicator = ActivityIndicator()
+        //let errorTracker = ErrorTracker()
 
         // Refresh
-        let _refresh = PublishSubject<Void>()
-        self.refresh = _refresh.asObserver()
-
-        let isRefreshing = ActivityIndicator()
-        self.isRefreshing = isRefreshing.asDriver()
-
-        self.hasRefreshed = _refresh.asObservable()
-            .flatMapLatest { _ -> Observable<Bool> in
-                log.debug("\(#function) : Refreshing (1) ...")
-                return dataManager.refreshStuff()
-                    .catchErrorJustReturn(false)
+        let refreshResults = bindings.fetchTrigger
+            .asObservable()
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
+                //log.debug("\(#function) : Refreshing (1) ...")
+                return dependency.dataManager.refreshStuff()
+                    .materialize()
             }
-            .flatMapLatest { _ -> Observable<Bool> in
-                log.debug("\(#function) : Refreshing (2) ...")
-                return dataManager.refreshInventories()
-                    .dematerialize()
-                    .catchErrorJustReturn(false)
-                    .trackActivity(isRefreshing)
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
+                //log.debug("\(#function) : Refreshing (2) ...")
+                return dependency.dataManager.refreshInventories()
+                    .trackActivity(activityIndicator)
             }
+            .share()
+        /*
+        self.hasRefreshed = refreshResults
+            .elements()
             .asDriver(onErrorJustReturn: false)
+        */
+        self.isRefreshing = activityIndicator.asDriver()
+        //self.errors = errorTracker.asDriver()
 
         // Add
-        let _add = PublishSubject<Void>()
-        self.addTaps = _add.asObserver()
-        let showNewResults = _add.asObservable()
+        /// TODO: go ahead and push new view controller and have that be responsible for POST?
+        let showNewResults = bindings.addTaps
+            .asObservable()
             .flatMap { _ -> Observable<Event<Inventory>> in
-                log.debug("Tapped ADD")
-                return dataManager.createInventory()
+                return dependency.dataManager.createInventory()
             }
             /// TODO: .map { InventorySelection.new($0) }
             .share()
 
+        // FetchRequest
+        let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
+        //request.predicate = filter
+        request.sortDescriptors = sortDescriptors
+        request.fetchBatchSize = fetchBatchSize
+        request.returnsObjectsAsFaults = false
+        let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
+
         // Selection
-        //let _selectedObjects = PublishSubject<Inventory>()
-        //self.rowTaps = _selectedObjects.asObserver()
-        //let showSelectionResults = _selectedObjects.asObservable()
-        let showSelectionResults = rowTaps
-            // Currently, new Inventories only exist locally while updating of existing Inventories is handled in the
-            // next scene
+        let showSelection = bindings.rowTaps
             /// TODO: .map { InventorySelection.existing($0) }
-            .flatMap { selection -> Observable<Event<Inventory>> in
-                log.debug("Tapped: \(selection)")
-                return Observable.just(selection).materialize()
-                /*
-                switch selection.uploaded {
-                case true:
-                    //return dataManager.refreshInventory(selection)
-                    return Observable.just(selection).materialize()
-                case false:
-                    return Observable.just(selection).materialize()
-                }
-                 */
-            }
+            .map { frc.object(at: $0) }
             .share()
 
         // Navigation
-        self.showInventory = Observable.of(showNewResults.elements(), showSelectionResults.elements())
+        self.showInventory = Observable.of(showNewResults.elements(), showSelection)
             .merge()
             .map { inventory in
                 switch inventory.uploaded {
@@ -116,24 +100,26 @@ struct InventoryDateViewModel {
             }
 
         // Errors
-        /// TODO: include errors from `hasRefreshed`
-        self.errorMessages = Observable.of(showNewResults.errors(), showSelectionResults.errors())
+        self.errorMessages = Observable.of(showNewResults.errors(), refreshResults.errors())
             .merge()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
-                return "There was an error"
+                return error.localizedDescription
             }
-            .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .empty())
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
 
-        // FetchRequest
-        let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-        //request.predicate = filter
-        request.sortDescriptors = sortDescriptors
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
+        self.frc = frc
+    }
 
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+    // MARK: - AttachableViewModelType
+
+    typealias Dependency = HasDataManager
+
+    struct Bindings {
+        let fetchTrigger: Driver<Void>
+        let addTaps: Driver<Void>
+        //let editTaps: Observable<Void>
+        let rowTaps: Observable<IndexPath>
     }
 
 }

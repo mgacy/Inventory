@@ -6,36 +6,56 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
+import CoreData
 import RxCocoa
 import RxSwift
 
-struct OrderLocCatViewModel {
+final class OrderLocCatViewModel: AttachableViewModelType {
 
     // MARK: - Properties
+    let frc: NSFetchedResultsController<OrderLocationCategory>
+    let selectedCategory: Observable<OrderLocationCategory>
 
-    private let dataManager: DataManager
-    private let location: RemoteLocation
-    private let factory: OrderLocationFactory
-
-    // MARK: - Input
-
-    // MARK: - Output
-    let navTitle: String
-    let categories: Observable<[RemoteItemCategory]>
+    // CoreData
+    private let filter: NSPredicate? = nil
+    private let sortDescriptors = [NSSortDescriptor(key: "position", ascending: false)]
+    //private let sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
+    //private let cacheName: String? = nil
+    //private let sectionNameKeyPath: String? = nil
+    private let fetchBatchSize = 20 // 0 = No Limit
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, location: RemoteLocation, factory: OrderLocationFactory) {
-        guard location.locationType == .category else {
-            fatalError("\(#function) FAILED : wrong RemoteLocation type: \(location)")
-        }
+    init(dependency: Dependency, bindings: Bindings) {
 
-        self.dataManager = dataManager
-        self.location = location
-        self.factory = factory
+        // FetchRequest
+        let request: NSFetchRequest<OrderLocationCategory> = OrderLocationCategory.fetchRequest()
+        request.sortDescriptors = sortDescriptors
+        request.predicate = NSPredicate(format: "location == %@", dependency.location)
+        request.fetchBatchSize = fetchBatchSize
+        request.returnsObjectsAsFaults = false
+        let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
 
-        self.navTitle = location.name
-        self.categories = Observable.just(location.categories)
+        // Navigation
+        self.selectedCategory = bindings.rowTaps
+            .debug("Selection (1)")
+            .asObservable()
+            .map { frc.object(at: $0) }
+            .debug("Selection (2)")
+            .share(replay: 1)
+
+        self.frc = frc
+    }
+
+    // MARK: - AttachableViewModelType
+
+    struct Dependency {
+        let dataManager: DataManager
+        let location: OrderLocation
+    }
+
+    struct Bindings {
+        let rowTaps: Observable<IndexPath>
     }
 
 }

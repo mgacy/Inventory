@@ -74,14 +74,14 @@ final class InventoryLocationViewModel: AttachableViewModelType {
         request.sortDescriptors = sortDescriptors
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        let frc = dependency.dataManager.createFetchedResultsController(fetchRequest: request)
+        let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
         self.frc = frc
 
         // Navigation
         self.showLocation = bindings.rowTaps
             .map { frc.object(at: $0) }
             .map { selection in
-                log.debug("Selected: \(selection)")
+                //log.debug("Selected: \(selection)")
                 switch selection.locationType {
                 case "category"?:
                     return InventoryLocationSegue.category(selection)

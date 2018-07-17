@@ -56,7 +56,7 @@ class DataManager {
         return Observable.just(viewContext.saveOrRollback())
     }
 
-    func createFetchedResultsController<T: NSManagedObject>(fetchRequest: NSFetchRequest<T>, sectionNameKeyPath: String? = nil, cacheName: String? = nil) -> NSFetchedResultsController<T> {
+    func makeFetchedResultsController<T: NSManagedObject>(fetchRequest: NSFetchRequest<T>, sectionNameKeyPath: String? = nil, cacheName: String? = nil) -> NSFetchedResultsController<T> {
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: viewContext,
                                           sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
     }

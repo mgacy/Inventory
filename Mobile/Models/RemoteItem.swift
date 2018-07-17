@@ -103,6 +103,14 @@ extension RemoteItemCategory: RemoteRecord {
 enum RemoteLocationType: String, Codable {
     case category
     case item
+
+    func converted() -> LocationType {
+        switch self {
+        case .category: return .category
+        case .item: return .item
+        }
+    }
+
 }
 
 struct RemoteLocation: Codable {

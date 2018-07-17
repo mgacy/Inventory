@@ -67,7 +67,7 @@ class InventoriesFactory {
     }
 
     public func updateInventory(_ inventory: Inventory, with record: RemoteExistingInventory, in context: NSManagedObjectContext) -> Inventory? {
-        log.debug("Updating Inventory: \(inventory) with: \(record)")
+        //log.debug("Updating Inventory: \(inventory) with: \(record)")
 
         // Get / create default location
         //let defaultLocation = InventoryLocation(context: context)

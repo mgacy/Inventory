@@ -10,12 +10,16 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-struct InvoiceVendorViewModel {
+/// TODO: make class?
+struct InvoiceVendorViewModel: AttachableViewModelType {
 
     // MARK: - Properties
-
-    private let dataManager: DataManager
-    private let parentObject: InvoiceCollection
+    let frc: NSFetchedResultsController<Invoice>
+    let fetching: Driver<Bool>
+    let showTable: Driver<Bool>
+    //let errors: Driver<Error>
+    let errorMessages: Driver<String>
+    let selectedItem: Driver<Invoice>
 
     // CoreData
     private let filter: NSPredicate?
@@ -24,37 +28,59 @@ struct InvoiceVendorViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
+    init(dependency: Dependency, bindings: Bindings) {
 
-    // MARK: - Output
-    let frc: NSFetchedResultsController<Invoice>
-    //let isRefreshing: Driver<Bool>
-    //let hasRefreshed: Driver<Bool>
-    //let showSelection: Observable<Invoice>
-    //let errorMessages: Driver<String>
+        let activityIndicator = ActivityIndicator()
+        //let errorTracker = ErrorTracker()
 
-    init(dataManager: DataManager, parentObject: InvoiceCollection) {
-        self.dataManager = dataManager
-        self.parentObject = parentObject
+        let refreshResults = dependency.dataManager.refreshInvoiceCollection(dependency.parentObject)
+            .trackActivity(activityIndicator)
+            //.trackError(errorTracker)
+            .share()
 
-        // Activity
+        self.showTable = refreshResults
+            .elements()
+            .map { collection -> Bool in
+                log.debug("\(#function) : \(collection)")
+                if let itemCount = collection.invoices?.count {
+                    return itemCount > 0
+                }
+                return false
+            }
+            .startWith(false)
+            .asDriver(onErrorJustReturn: false)
 
-        // Selection
-
-        // Navigation
-        //showSelection =
-
-        // Errors
-        //errorMessages =
+        fetching = activityIndicator.asDriver()
+        //errors = errorTracker.asDriver()
+        errorMessages = refreshResults.errors()
+            .map { $0.localizedDescription }
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
 
         // FetchRequest
-        filter = NSPredicate(format: "collection == %@", parentObject)
+        filter = NSPredicate(format: "collection == %@", dependency.parentObject)
         let request: NSFetchRequest<Invoice> = Invoice.fetchRequest()
         request.sortDescriptors = sortDescriptors
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
+
+        // Navigation
+        self.selectedItem = bindings.rowTaps
+            .map { frc.object(at: $0) }
+
+        self.frc = frc
+    }
+
+    // MARK: - AttachableViewModelType
+
+    struct Dependency {
+        let dataManager: DataManager
+        let parentObject: InvoiceCollection
+    }
+
+    struct Bindings {
+        let rowTaps: Driver<IndexPath>
     }
 
 }

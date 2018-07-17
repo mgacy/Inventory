@@ -9,38 +9,13 @@
 import UIKit
 import RxSwift
 
-enum LocationItemListParent {
-    case category(InventoryLocationCategory)
-    case location(InventoryLocation)
-
-    var fetchPredicate: NSPredicate? {
-        switch self {
-        case .category(let category):
-            return NSPredicate(format: "category == %@", category)
-        case .location(let location):
-            return NSPredicate(format: "location == %@", location)
-        }
-    }
-
-}
-
-class InventoryLocItemViewController: UITableViewController {
+class InventoryLocItemViewController: MGTableViewController {
 
     // MARK: Properties
 
     var viewModel: InventoryLocItemViewModel!
-    let disposeBag = DisposeBag()
-
-    // TableViewCell
-    let cellIdentifier = "InventoryItemCell"
 
     // MARK: - Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = viewModel.windowTitle
-        setupTableView()
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -49,21 +24,31 @@ class InventoryLocItemViewController: UITableViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit { log.debug("\(#function)") }
+
+    // MARK: - View Methods
+
+    override func setupView() {
+        title = viewModel.windowTitle
+        super.setupView()
+    }
+
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryLocItemViewController>!
 
-    fileprivate func setupTableView() {
-        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 80
-        tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+    override func setupTableView() {
+        tableView.register(cellType: SubItemTableViewCell.self)
+        //tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.estimatedRowHeight = 80
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    // MARK: - UITableViewDelegate
+}
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+// MARK: - UITableViewDelegate Extension
+extension InventoryLocItemViewController {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

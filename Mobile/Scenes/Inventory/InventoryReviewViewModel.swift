@@ -11,9 +11,17 @@ import RxCocoa
 import RxSwift
 import RxSwiftExt
 
-struct InventoryReviewViewModel {
+struct InventoryReviewViewModel: AttachableViewModelType {
 
     // MARK: Properties
+
+    let frc: NSFetchedResultsController<InventoryItem>
+    let isRefreshing: Driver<Bool>
+    //let hasRefreshed: Driver<Bool>
+    let showTable: Driver<Bool>
+    //let messageLabel: Driver<String>
+    let errorMessages: Driver<String>
+    let showSelection: Observable<InventoryItem>
 
     private let dataManager: DataManager
     private let parentObject: Inventory
@@ -25,29 +33,15 @@ struct InventoryReviewViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
-    //let refresh: AnyObserver<Void>
-    //let editTaps: AnyObserver<Void>
-    //let rowTaps: AnyObserver<InvoiceCollection>
-
-    // MARK: - Output
-    let frc: NSFetchedResultsController<InventoryItem>
-    let isRefreshing: Driver<Bool>
-    //let hasRefreshed: Driver<Bool>
-    let showTable: Driver<Bool>
-    //let messageLabel: Driver<String>
-    let errorMessages: Driver<String>
-    let showSelection: Observable<InventoryItem>
-
-    init(dataManager: DataManager, parentObject: Inventory, rowTaps: Observable<InventoryItem>) {
-        self.dataManager = dataManager
-        self.parentObject = parentObject
+    init(dependency: Dependency, bindings: Bindings) {
+        self.dataManager = dependency.dataManager
+        self.parentObject = dependency.parent
 
         // Activity
         let isRefreshing = ActivityIndicator()
         self.isRefreshing = isRefreshing.asDriver()
 
-        let refreshResults = dataManager.refreshInventory(parentObject)
+        let refreshResults = dataManager.refreshInventory(dependency.parent)
             .trackActivity(isRefreshing)
             .share()
 
@@ -56,7 +50,7 @@ struct InventoryReviewViewModel {
         self.showTable = refreshResults
             .elements()
             .map { inventory -> Bool in
-                log.debug("\(#function) : \(inventory)")
+                //log.debug("\(#function) : \(inventory)")
                 if let itemCount = inventory.items?.count {
                     return itemCount > 0
                 }
@@ -80,26 +74,15 @@ struct InventoryReviewViewModel {
             .startWith(false)
             .asDriver(onErrorJustReturn: false)
          */
-        // Selection
-
-        // Navigation
-        showSelection = rowTaps
-            //.throttle(0.5, scheduler: MainScheduler.instance)
-            .map { selection in
-                log.debug("Tapped: \(selection)")
-                return selection
-            }
 
         // Errors
         errorMessages = refreshResults
             .errors()
             .map { error in
                 log.debug("\(#function) ERROR : \(error)")
-                /// TEMP:
-                return "There was an error"
+                return error.localizedDescription
             }
-            .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .empty())
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
 
         // FetchRequest
         self.filter = NSPredicate(format: "inventory == %@", parentObject)
@@ -108,7 +91,28 @@ struct InventoryReviewViewModel {
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        let frc = dataManager.makeFetchedResultsController(fetchRequest: request)
+
+        // Navigation
+        showSelection = bindings.rowTaps
+            //.throttle(0.5, scheduler: MainScheduler.instance)
+            .map { indexPath in
+                return frc.object(at: indexPath)
+            }
+
+        self.frc = frc
+    }
+
+    // MARK: - AttachableViewModelType
+
+    struct Dependency {
+        let dataManager: DataManager
+        let parent: Inventory
+    }
+
+    struct Bindings {
+        let rowTaps: Observable<IndexPath>
+        //let uploadTaps: Observable<Void>
     }
 
 }

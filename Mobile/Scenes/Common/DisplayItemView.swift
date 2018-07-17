@@ -23,8 +23,8 @@ class DisplayItemView: UIView {
 
     // MARK: - Properties
 
-    var dismissalEvents: ControlEvent<Void> {
-        return dismissChevron.rx.tap
+    var dismissalEvents: Observable<DismissalEvent> {
+        return dismissChevron.rx.tap.map { _ in .shouldDismiss }
     }
 
     // Appearance
@@ -120,7 +120,7 @@ class DisplayItemView: UIView {
             // StackView
             stackView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 12.0),
             stackView.topAnchor.constraint(equalTo: dismissChevron.bottomAnchor, constant: 16.0),
-            stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: 16.0),
+            stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -12.0),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
         NSLayoutConstraint.activate(constraints)

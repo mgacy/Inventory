@@ -10,7 +10,7 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-final class OrderViewModel {
+final class OrderViewModel: AttachableViewModelType {
 
     // MARK: Dependencies
     //private let dependencies: Dependency
@@ -61,7 +61,7 @@ final class OrderViewModel {
         messageItems.sort()
         // swiftlint:disable:next line_length
         let message = "Order for \(order.collection?.date.stringFromDate() ?? ""):\n\(messageItems.joined(separator: ""))"
-        log.debug("Order Message: \(message)")
+        //log.debug("Order Message: \(message)")
         return message
     }
 
@@ -84,7 +84,7 @@ final class OrderViewModel {
 
         self.uploadResults = bindings.placedOrder
             .flatMap { _ -> Observable<Event<Order>> in
-                log.info("POSTing Order ...")
+                //log.info("POSTing Order ...")
                 dependency.parentObject.status = OrderStatus.placed.rawValue
                 return dependency.dataManager.updateOrder(dependency.parentObject)
                     .trackActivity(isUploading)
@@ -100,7 +100,7 @@ final class OrderViewModel {
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dependency.dataManager.createFetchedResultsController(fetchRequest: request)
+        self.frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
 
         // Selection
         // ...
@@ -126,7 +126,7 @@ final class OrderViewModel {
         _ = dataManager.saveOrRollback()
     }
 
-    // MARK: -
+    // MARK: - AttachableViewModelType
 
     struct Dependency {
         let dataManager: DataManager

@@ -9,8 +9,49 @@
 import Foundation
 import CoreData
 
-class OrderKeypadViewModel {
+// MARK: - Protocol
 
+protocol OrderKeypadViewModelType: class {
+    var currentItem: OrderItem { get }
+    var currentUnit: CurrentUnit? { get }
+    /// Display
+    var itemName: String { get }
+    var itemPack: String { get }
+    var orderQuantity: String { get }
+    var orderUnit: String { get }
+    var par: String { get }
+    var onHand: String { get }
+    var suggestedOrder: String { get }
+    /// Keypad
+    var singleUnitLabel: String { get }
+    var singleUnitIsEnabled: Bool { get }
+    var singleUnitIsActive: Bool { get }
+    var packUnitLabel: String { get }
+    var packUnitIsEnabled: Bool { get }
+    var packUnitIsActive: Bool { get }
+    /// Actions from View Controller
+    func switchUnit(_ newUnit: CurrentUnit) -> Bool
+    func nextItem() -> Bool
+    func previousItem() -> Bool
+}
+
+// MARK: - ViewModel
+
+class OrderKeypadViewModel: OrderKeypadViewModelType {
+
+    struct Dependency {
+        let dataManager: DataManager
+        let displayType: OrderDisplayType
+        let index: Int
+    }
+
+    enum OrderDisplayType {
+        case factory([OrderItem])
+        case location(OrderLocItemParent)
+        case vendor(Order)
+    }
+
+    // MARK: - Properties
     private let dataManager: DataManager
     private let numberFormatter: NumberFormatter
     private var currentItemUnits: ItemUnits
@@ -85,25 +126,10 @@ class OrderKeypadViewModel {
 
     // MARK: - Lifecycle
 
-    convenience init(dataManager: DataManager, for order: Order, atIndex index: Int) {
-        self.init(dataManager: dataManager, atIndex: index)
-        self.items = self.getItems(for: order, in: dataManager.managedObjectContext)
-        //self.dataSource = CDOrderItemDataSource(for: order, inContext: context)
-        self.didChangeItem(self.currentItem)
-    }
-
-    convenience init(dataManager: DataManager, with items: [OrderItem], atIndex index: Int) {
-        self.init(dataManager: dataManager, atIndex: index)
-        self.items = items
-        //self.dataSource = RROrderItemDataSource(for: parent, factory: factory)
-        self.didChangeItem(self.currentItem)
-    }
-
-    private init(dataManager: DataManager, atIndex index: Int) {
-        self.dataManager = dataManager
-        //self.managedObjectContext = context
+    init(dependency: Dependency) {
+        self.dataManager = dependency.dataManager
         self.currentItemUnits = ItemUnits(item: nil, currentUnit: nil)
-        self.currentIndex = index
+        self.currentIndex = dependency.index
 
         // Setup numberFormatter
         let numberFormatter = NumberFormatter()
@@ -114,9 +140,25 @@ class OrderKeypadViewModel {
 
         // Keypad
         self.keypad = Keypad(formatter: numberFormatter, delegate: nil)
-        // We can only set the keypad's delegate after we have set all required attrs for self
+
+        // Items
+        //self.dataSource = CDOrderItemDataSource(for: order, inContext: context)
+        //self.dataSource = RROrderItemDataSource(for: parent, factory: factory)
+        switch dependency.displayType {
+        case .factory(let orderItems):
+            self.items = orderItems
+        case .location(let parent):
+            self.items = getItems(forParent: parent, in: dependency.dataManager.managedObjectContext)
+        case .vendor(let order):
+            self.items = getItems(for: order, in: dependency.dataManager.managedObjectContext)
+        }
+
+        /// We can only set the keypad's delegate after we have set all required attrs for self
         keypad.delegate = self
+        self.didChangeItem(self.currentItem)
     }
+
+    // MARK: - Build OrderItem List
 
     private func getItems(for order: Order, in managedObjectContext: NSManagedObjectContext) -> [OrderItem] {
         let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
@@ -128,6 +170,27 @@ class OrderKeypadViewModel {
         do {
             let searchResults = try managedObjectContext.fetch(request)
             return searchResults
+        } catch {
+            log.error("Error with request: \(error)")
+        }
+        return [OrderItem]()
+    }
+
+    private func getItems(forParent parent: OrderLocItemParent, in context: NSManagedObjectContext) -> [OrderItem] {
+        let request: NSFetchRequest<OrderLocationItem> = OrderLocationItem.fetchRequest()
+
+        switch parent {
+        case .category(let category):
+            request.predicate = NSPredicate(format: "category == %@", category)
+            request.sortDescriptors = [NSSortDescriptor(key: "position", ascending: true)]
+        case .location(let location):
+            request.predicate = NSPredicate(format: "location == %@", location)
+            request.sortDescriptors = [NSSortDescriptor(key: "position", ascending: true)]
+        }
+
+        do {
+            let searchResults = try context.fetch(request)
+            return searchResults.flatMap { $0.item }
         } catch {
             log.error("Error with request: \(error)")
         }

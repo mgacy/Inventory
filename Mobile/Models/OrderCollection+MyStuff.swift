@@ -37,7 +37,7 @@ extension OrderCollection: Syncable {
 
         /// TODO: handle `uploaded`
 
-        // Relationships
+        /// Relationships
         if let orders = record.orders {
             syncChildren(with: orders, in: context)
         }
@@ -64,6 +64,18 @@ extension OrderCollection: SyncableParent {
     func updateParent(of entity: ChildType) {
         entity.collection = self
         entity.date = self.dateTimeInterval
+    }
+
+}
+
+// MARK: - Location Sync
+
+extension OrderCollection {
+
+    /// TODO: return Observable<Void>?
+    func syncOrderLocations(with records: [RemoteLocation], in context: NSManagedObjectContext) -> [OrderLocation] {
+        let syncedLocations = OrderLocation.syncLocations(belongingTo: self, with: records, in: context)
+        return syncedLocations
     }
 
 }

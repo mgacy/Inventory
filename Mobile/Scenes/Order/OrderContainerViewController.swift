@@ -46,6 +46,15 @@ class OrderContainerViewController: UIViewController {
 
     // MARK: - Lifecycle
 
+    init() {
+        //wasPopped = wasPoppedSubject.asObservable()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -59,6 +68,8 @@ class OrderContainerViewController: UIViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit { log.debug("\(#function)") }
+
     // MARK: - View Methods
 
     func configureChildControllers(vendorsController: OrderVendorViewController, locationsController: OrderLocationViewController) {
@@ -67,6 +78,9 @@ class OrderContainerViewController: UIViewController {
     }
 
     private func setupView() {
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
         navigationItem.titleView = segmentedControl
         navigationItem.rightBarButtonItem = completeButtonItem
         if self.presentingViewController != nil {

@@ -27,16 +27,18 @@ class InvoiceItemViewController: UIViewController {
         //static let cancelActionTitle = "Cancel"
     }
 
+    var bindings: InvoiceItemViewModel.Bindings {
+        return InvoiceItemViewModel.Bindings(
+            rowTaps: tableView.rx.itemSelected.asObservable(),
+            uploadTaps: uploadButtonItem.rx.tap.asObservable())
+    }
+
     // MARK: - Properties
 
     var viewModel: InvoiceItemViewModel!
     let disposeBag = DisposeBag()
-
-    /// TODO: make PublishSubject fileprivate and expose observable
-    let selectedIndices = PublishSubject<IndexPath>()
-
-    // TableView
-    var cellIdentifier = "InvoiceItemCell"
+    let wasPopped: Observable<Void>
+    let wasPoppedSubject = PublishSubject<Void>()
 
     // MARK: - Interface
     let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
@@ -50,6 +52,17 @@ class InvoiceItemViewController: UIViewController {
     }()
 
     // MARK: - Lifecycle
+
+    init() {
+        self.wasPopped = wasPoppedSubject.asObservable()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        //fatalError("init(coder:) has not been implemented")
+        self.wasPopped = wasPoppedSubject.asObservable()
+        super.init(coder: aDecoder)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,12 +79,20 @@ class InvoiceItemViewController: UIViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit {
+        log.debug("\(#function)")
+    }
+
     // MARK: - View Methods
 
     func setupView() {
         title = viewModel.vendorName
         self.navigationItem.rightBarButtonItem = uploadButtonItem
         self.view.addSubview(tableView)
+
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
     }
 
     private func setupConstraints() {
@@ -115,12 +136,11 @@ class InvoiceItemViewController: UIViewController {
     fileprivate var dataSource: TableViewDataSource<InvoiceItemViewController>!
 
     fileprivate func setupTableView() {
-        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: SubItemTableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 80
         tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }
@@ -129,7 +149,6 @@ class InvoiceItemViewController: UIViewController {
 extension InvoiceItemViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedIndices.onNext(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -163,7 +182,7 @@ extension InvoiceItemViewController: UITableViewDelegate {
 
 }
 
-// MARK: - Alert Controller Extension
+// MARK: - Alert Controller
 extension InvoiceItemViewController {
 
     func showNotReceivedAlert(forItemAt indexPath: IndexPath, with statusList: [InvoiceItemStatus], handler: @escaping (IndexPath, InvoiceItemStatus) -> Void) {
@@ -189,7 +208,7 @@ extension InvoiceItemViewController {
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension InvoiceItemViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ item: InvoiceItem) -> Bool {
@@ -207,4 +226,11 @@ extension InvoiceItemViewController: TableViewDataSourceDelegate {
         cell.configure(withViewModel: viewModel)
     }
 
+}
+
+// MARK: - PoppedObservable
+extension InvoiceItemViewController: PoppedObservable {
+    func viewWasPopped() {
+        wasPoppedSubject.onNext(())
+    }
 }

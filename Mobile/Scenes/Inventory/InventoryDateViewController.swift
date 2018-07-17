@@ -11,7 +11,7 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-class InventoryDateViewController: UIViewController {
+class InventoryDateViewController: MGTableViewController {
 
     private enum Strings {
         static let navTitle = "Inventories"
@@ -20,56 +20,21 @@ class InventoryDateViewController: UIViewController {
 
     // MARK: - Properties
 
+    var bindings: InventoryDateViewModel.Bindings {
+        //let viewWillAppear = ...
+        let refresh = refreshControl.rx.controlEvent(.valueChanged).asDriver()
+        return InventoryDateViewModel.Bindings(
+            fetchTrigger: refresh,
+            addTaps: addButtonItem.rx.tap.asDriver(),
+            rowTaps: tableView.rx.itemSelected.asObservable()
+        )
+    }
     var viewModel: InventoryDateViewModel!
-    let disposeBag = DisposeBag()
-
-    let selectedObjects = PublishSubject<Inventory>()
-
-    // TableViewCell
-    let cellIdentifier = "InventoryDateTableViewCell"
 
     // MARK: - Interface
-    //private let refreshControl = UIRefreshControl()
     let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
-    //let activityIndicatorView = UIActivityIndicatorView()
-    //let messageLabel = UILabel()
-
-    lazy var activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    private lazy var refreshControl: UIRefreshControl = {
-        let control = UIRefreshControl()
-        return control
-    }()
-
-    lazy var messageLabel: UILabel = {
-        let view = UILabel()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        tv.delegate = self
-        return tv
-    }()
 
     // MARK: - Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Uncomment the following line to preserve selection between presentations.
-        // self.clearsSelectionOnViewWillAppear = false
-        setupView()
-        setupConstraints()
-        setupBindings()
-        setupTableView()
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -80,80 +45,37 @@ class InventoryDateViewController: UIViewController {
 
     // MARK: - View Methods
 
-    private func setupView() {
+    override func setupView() {
         title = Strings.navTitle
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButtonItem
+        extendedLayoutIncludesOpaqueBars = true
 
-        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        //messageLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        self.view.addSubview(tableView)
-        self.view.addSubview(activityIndicatorView)
-        self.view.addSubview(messageLabel)
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .always
+        }
+        super.setupView()
     }
 
-    private func setupConstraints() {
-        //let guide: UILayoutGuide
-        //if #available(iOS 11, *) {
-        //    guide = view.safeAreaLayoutGuide
-        //} else {
-        //    guide = view.layoutMarginsGuide
-        //}
-        let constraints = [
-            // TableView
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            // ActivityIndicator
-            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            // MessageLabel
-            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            messageLabel.topAnchor.constraint(equalTo: activityIndicatorView.bottomAnchor, constant: 5.0)
-        ]
-        NSLayoutConstraint.activate(constraints)
-    }
-
-    private func setupBindings() {
-        // Add Button
-        addButtonItem.rx.tap
-            .bind(to: viewModel.addTaps)
-            .disposed(by: disposeBag)
-
-        // Edit Button
-        //editButtonItem.rx.tap
-        //    .bind(to: viewModel.editTaps)
-        //    .disposed(by: disposeBag)
-
-        // Row selection
-        //selectedObjects.asObservable()
-        //    .bind(to: viewModel.rowTaps)
-        //    .disposed(by: disposeBag)
-
-        // Refresh
-        refreshControl.rx.controlEvent(.valueChanged)
-            //.debug("refreshControl")
-            .bind(to: viewModel.refresh)
-            .disposed(by: disposeBag)
+    override func setupBindings() {
 
         // Activity Indicator
-
         viewModel.isRefreshing
             //.debug("isRefreshing")
+            .delay(0.01)
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
-
+        /*
         viewModel.hasRefreshed
             //.debug("hasRefreshed")
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })
             .disposed(by: disposeBag)
-
+        */
         // Errors
         viewModel.errorMessages
+            .delay(0.1)
             .drive(onNext: { [weak self] message in
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
             })
@@ -163,14 +85,12 @@ class InventoryDateViewController: UIViewController {
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryDateViewController>!
 
-    fileprivate func setupTableView() {
+    override func setupTableView() {
         tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 100
-        tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        tableView.register(cellType: UITableViewCell.self)
+        //tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.estimatedRowHeight = 100
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }
@@ -179,13 +99,12 @@ class InventoryDateViewController: UIViewController {
 extension InventoryDateViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension InventoryDateViewController: TableViewDataSourceDelegate {
 
     func canEdit(_ inventory: Inventory) -> Bool {

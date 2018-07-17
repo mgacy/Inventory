@@ -10,11 +10,15 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-struct ItemViewModel {
+struct ItemViewModel: AttachableViewModelType {
 
     // MARK: Properties
-
-    private let dataManager: DataManager
+    let frc: NSFetchedResultsController<Item>
+    let isRefreshing: Driver<Bool>
+    let errorMessages: Driver<String>
+    // ALT
+    //let fetching: Driver<Bool>
+    //let errors: Driver<Error>
 
     // CoreData
     private let sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -22,39 +26,33 @@ struct ItemViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
-    let refresh: AnyObserver<Void>
-    // let addTaps: AnyObserver<Void>
-
-    // MARK: - Output
-    let frc: NSFetchedResultsController<Item>
-    let isRefreshing: Driver<Bool>
-    let hasRefreshed: Driver<Bool>
-    //let errorMessages: Driver<String>
-
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, rowTaps: Observable<IndexPath>) {
-        self.dataManager = dataManager
+    init(dependency: Dependency, bindings: Bindings) {
+        let activityIndicator = ActivityIndicator()
+        //let errorTracker = ErrorTracker()
 
-        // Refresh
-        let _refresh = PublishSubject<Void>()
-        self.refresh = _refresh.asObserver()
-
-        let isRefreshing = ActivityIndicator()
-        self.isRefreshing = isRefreshing.asDriver()
-
-        self.hasRefreshed = _refresh.asObservable()
-            .flatMapLatest { _ -> Observable<Bool> in
-                log.debug("\(#function) : Refreshing (1) ...")
-                return dataManager.refreshItems()
-                    .catchErrorJustReturn(false)
-                    .trackActivity(isRefreshing)
+        let refreshResults = bindings.fetchTrigger
+            .asObservable()
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
+                //log.debug("\(#function) : Refreshing (1) ...")
+                return dependency.dataManager.refreshItems()
+                    .materialize()
+                    .trackActivity(activityIndicator)
+                    //.trackError(errorTracker)
             }
-            .asDriver(onErrorJustReturn: false)
+
+        self.isRefreshing = activityIndicator.asDriver()
+        //fetching = activityIndicator.asDriver()
+        //errors = errorTracker.asDriver()
 
         // Errors
-        //self.errorMessages = refreshResults.errors().map { error in
+        self.errorMessages = refreshResults.errors()
+            .map { error in
+                log.debug("\(#function) ERROR : \(error)")
+                return error.localizedDescription
+            }
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
 
         // FetchRequest
         let request: NSFetchRequest<Item> = Item.fetchRequest()
@@ -63,7 +61,18 @@ struct ItemViewModel {
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
 
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        self.frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
+    }
+
+    // MARK: - AttachableViewModelType
+
+    typealias Dependency = HasDataManager
+
+    struct Bindings {
+        let fetchTrigger: Driver<Void>
+        //let addTaps: Driver<Void>
+        //let editTaps: Driver<Void>
+        let rowTaps: Driver<IndexPath>
     }
 
 }

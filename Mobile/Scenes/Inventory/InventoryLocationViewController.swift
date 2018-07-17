@@ -12,7 +12,7 @@ import RxCocoa
 import RxSwift
 
 // swiftlint:disable:next type_name
-class InventoryLocationViewController: UIViewController, AttachableType {
+class InventoryLocationViewController: MGTableViewController, AttachableType {
 
     // MARK: - Properties
 
@@ -23,30 +23,16 @@ class InventoryLocationViewController: UIViewController, AttachableType {
             uploadTaps: uploadButtonItem.rx.tap.asObservable()
         )
     }
+    //var viewModel: InventoryLocationViewModel!
     var viewModel: Attachable<InventoryLocationViewModel>!
     let dismissView: Observable<Void>
 
-    private let disposeBag = DisposeBag()
     private let _dismissView = PublishSubject<Void>()
-
-    // TableViewCell
-    let cellIdentifier = "InventoryLocationTableViewCell"
 
     // MARK: - Interface
 
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet weak var messageLabel: UILabel!
-
     let cancelButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: nil, action: nil)
     let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        tv.delegate = self
-        return tv
-    }()
 
     private enum Strings {
         static let navTitle = "Locations"
@@ -55,15 +41,13 @@ class InventoryLocationViewController: UIViewController, AttachableType {
 
     // MARK: - Lifecycle
 
-    required init?(coder aDecoder: NSCoder) {
+    override init() {
         dismissView = _dismissView.asObservable()
-        super.init(coder: aDecoder)
+        super.init()
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupConstraints()
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -76,34 +60,24 @@ class InventoryLocationViewController: UIViewController, AttachableType {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit { log.debug("\(#function)") }
+
     // MARK: - View Methods
 
-    private func setupView() {
+    override func setupView() {
+        //super.setupView()
         title = Strings.navTitle
         /// TODO: add `messageLabel` output to viewModel?
         //messageLabel.text = "You do not have any Items yet."
 
         self.navigationItem.rightBarButtonItem = uploadButtonItem
-
-        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        //messageLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        //self.view.addSubview(activityIndicatorView)
-        //self.view.addSubview(messageLabel)
-        self.view.addSubview(tableView)
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
+        super.setupView()
     }
-
-    private func setupConstraints() {
-        // TableView
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        // ActivityIndicator
-        // MessageLabel
-    }
-
-    func bind(viewModel: InventoryLocationViewModel) -> InventoryLocationViewModel {
+    /*
+    override func setupBindings() {
         // We have to wait until after we set .viewModel since we use viewModel.frc
         setupTableView(with: viewModel)
 
@@ -130,6 +104,36 @@ class InventoryLocationViewController: UIViewController, AttachableType {
                 }
             })
             .disposed(by: disposeBag)
+    }
+    */
+    func bind(viewModel: InventoryLocationViewModel) -> InventoryLocationViewModel {
+        // We have to wait until after we set .viewModel since we use viewModel.frc
+        setupTableView(with: viewModel)
+
+        // Uploading
+        viewModel.isUploading
+            .filter { $0 }
+            .drive(onNext: { _ in
+                HUD.show(.progress)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.uploadResults
+            .subscribe(onNext: { [weak self] result in
+                switch result.event {
+                case .next:
+                    HUD.flash(.success, delay: 0.5) { _ in
+                        /// TODO: simply call `viewWasPopped()`?
+                        self?._dismissView.onNext(())
+                    }
+                case .error:
+                    /// TODO: `case.error(let error):; switch error {}`
+                    UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
+                case .completed:
+                    log.warning("\(#function) : not sure how to handle completion")
+                }
+            })
+            .disposed(by: disposeBag)
 
         return viewModel
     }
@@ -139,12 +143,10 @@ class InventoryLocationViewController: UIViewController, AttachableType {
 
     fileprivate func setupTableView(with viewModel: InventoryLocationViewModel) {
         //tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-        tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }

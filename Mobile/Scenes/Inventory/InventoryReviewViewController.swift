@@ -7,113 +7,56 @@
 //
 
 import UIKit
-//import PKHUD
 import RxCocoa
 import RxSwift
 
-class InventoryReviewViewController: UIViewController {
+class InventoryReviewViewController: MGTableViewController {
 
     private enum Strings {
         static let navTitle = "Items"
+        static let messageLabelText = "LOADING"
         static let errorAlertTitle = "Error"
     }
 
     // MARK: - Properties
 
+    var bindings: InventoryReviewViewModel.Bindings {
+        return InventoryReviewViewModel.Bindings(rowTaps: tableView.rx.itemSelected.asObservable())
+    }
+
     var viewModel: InventoryReviewViewModel!
-    let disposeBag = DisposeBag()
-
-    // TODO: could we use a lazy var returning selectedObjects.asObservable()?
-    let selectedObjects = PublishSubject<InventoryItem>()
-
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
-    // MARK: - Interface
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet weak var messageLabel: UILabel!
-    /*
-    let activityIndicatorView = UIActivityIndicatorView()
-    //let messageLabel = UILabel()
-    lazy var messageLabel: UILabel = {
-        let view = UILabel()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .red
-        return view
-    }()
-     */
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        tv.delegate = self
-        return tv
-    }()
 
     // MARK: - Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupConstraints()
-        setupBindings()
-        setupTableView()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tableView.reloadData()
-    }
+    //override func viewWillAppear(_ animated: Bool) {
+    //    super.viewWillAppear(animated)
+    //    self.tableView.reloadData()
+    //}
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit { log.debug("\(#function)") }
+
     // MARK: - View Methods
 
-    private func setupView() {
+    override func setupView() {
+        super.setupView()
         title = Strings.navTitle
         /// TODO: add `messageLabel` output to viewModel?
-        messageLabel.text = "Loading"
+        messageLabel.text = Strings.messageLabelText
 
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         //self.navigationItem.rightBarButtonItem = addButtonItem
-
-        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        //messageLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        //self.view.addSubview(activityIndicatorView)
-        //self.view.addSubview(messageLabel)
-        self.view.addSubview(tableView)
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
     }
 
-    private func setupConstraints() {
-        // TableView
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        /*
-        // ActivityIndicator
-        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-
-        // MessageLabel
-        //messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        messageLabel.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-         */
-    }
-
-    private func setupBindings() {
+    override func setupBindings() {
 
         // Edit Button
         //editButtonItem.rx.tap
         //    .bind(to: viewModel.editTaps)
-        //    .disposed(by: disposeBag)
-
-        // Row selection
-        //selectedObjects.asObservable()
-        //    .bind(to: viewModel.rowTaps)
         //    .disposed(by: disposeBag)
 
         // Activity Indicator
@@ -130,7 +73,6 @@ class InventoryReviewViewController: UIViewController {
             .map { !$0 }
             .drive(messageLabel.rx.isHidden)
             .disposed(by: disposeBag)
-
         /*
         viewModel.hasRefreshed
             /// TODO: use weak or unowned self?
@@ -139,7 +81,6 @@ class InventoryReviewViewController: UIViewController {
             })
             .disposed(by: disposeBag)
          */
-
         viewModel.showTable
             .map { !$0 }
             .drive(tableView.rx.isHidden)
@@ -151,35 +92,17 @@ class InventoryReviewViewController: UIViewController {
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
             })
             .disposed(by: disposeBag)
-
-        // Selection
-        viewModel.showSelection
-            .subscribe(onNext: { selection in
-                log.debug("\(#function) SELECTED: \(selection)")
-                /*
-                guard let strongSelf = self else {
-                    log.error("\(#function) FAILED : unable to get reference to self"); return
-                }
-                 */
-                //let viewController = InvoiceVendorViewController.initFromStoryboard(name: "Main")
-                //let viewModel = InvoiceVendorViewModel(dataManager: viewModel.dataManager)
-                //viewController = viewModel = viewModel
-                //strongSelf.navigationController?.pushViewController(viewController, animated: true)
-            })
-            .disposed(by: disposeBag)
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InventoryReviewViewController>!
 
-    fileprivate func setupTableView() {
+    override func setupTableView() {
         //tableView.refreshControl = refreshControl
-        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: SubItemTableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-        tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }
@@ -188,7 +111,6 @@ class InventoryReviewViewController: UIViewController {
 extension InventoryReviewViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class InvoiceVendorViewController: UIViewController {
+class InvoiceVendorViewController: MGTableViewController {
 
     private enum Strings {
         static let navTitle = "Vendors"
@@ -19,38 +19,14 @@ class InvoiceVendorViewController: UIViewController {
 
     // MARK: - Properties
 
+    var bindings: InvoiceVendorViewModel.Bindings {
+        return InvoiceVendorViewModel.Bindings(rowTaps: tableView.rx.itemSelected.asDriver())
+    }
     var viewModel: InvoiceVendorViewModel!
-    let disposeBag = DisposeBag()
-    let selectedObjects = PublishSubject<Invoice>()
-    //let selectedObjects: Observable<Invoice>
-    //fileprivate let _selectedObjects = PublishSubject<Invoice>()
-
-    // TableViewCell
-    let cellIdentifier = "Cell"
 
     // MARK: - Interface
 
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        tv.delegate = self
-        return tv
-    }()
-
     // MARK: - Lifecycle
-
-    //required init?(coder aDecoder: NSCoder) {
-    //    self.selectedObjects = _selectedObjects.asObservable()
-    //    super.init(coder: aDecoder)
-    //}
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupConstraints()
-        setupTableView()
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -59,32 +35,68 @@ class InvoiceVendorViewController: UIViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit {
+        log.debug("\(#function)")
+    }
+
     // MARK: - View Methods
 
-    private func setupView() {
+    override func setupView() {
         title = Strings.navTitle
-        self.view.addSubview(tableView)
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
+        super.setupView()
     }
 
-    private func setupConstraints() {
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
+    override func setupBindings() {
+        // Activity Indicator
+        viewModel.fetching
+            .drive(activityIndicatorView.rx.isAnimating)
+            .disposed(by: disposeBag)
 
-    //private func setupBindings() {}
+        viewModel.fetching
+            .map { !$0 }
+            .drive(activityIndicatorView.rx.isHidden)
+            .disposed(by: disposeBag)
+
+        viewModel.fetching
+            .map { !$0 }
+            .drive(messageLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+
+        viewModel.showTable
+            .map { !$0 }
+            .drive(tableView.rx.isHidden)
+            .disposed(by: disposeBag)
+        /*
+        // Errors
+        viewModel.errors
+            //.debug("Error:")
+            .delay(0.1)
+            .map { $0.localizedDescription }
+            .drive(errorAlert)
+            .disposed(by: disposeBag)
+        */
+        // Errors
+        viewModel.errorMessages
+            //.debug("Error:")
+            .delay(0.1)
+            .drive(errorAlert)
+            //.drive(onNext: { [weak self] message in
+            //    self?.showAlert(title: Strings.errorAlertTitle, message: message)
+            //})
+            .disposed(by: disposeBag)
+    }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
 
-    fileprivate func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+    override func setupTableView() {
+        tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-        tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }
@@ -93,17 +105,16 @@ class InvoiceVendorViewController: UIViewController {
 extension InvoiceVendorViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension InvoiceVendorViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for invoice: Invoice) {
-       cell.textLabel?.text = invoice.vendor?.name
+        cell.textLabel?.text = invoice.vendor?.name
         switch invoice.status {
         case InvoiceStatus.pending.rawValue:
             cell.textLabel?.textColor = ColorPalette.yellow

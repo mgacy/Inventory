@@ -18,7 +18,7 @@ protocol Syncable: Managed {
 
     /// TODO: should these all throw?
     //static func updateOrCreate(with: RemoteType, in: NSManageObjectContext) -> Self
-    static func sync(with: [RemoteType], in: NSManagedObjectContext)
+    static func sync(with: [RemoteType], in: NSManagedObjectContext, matching: NSPredicate?)
     func update(with: RemoteType, in: NSManagedObjectContext)
 }
 
@@ -80,10 +80,10 @@ extension Syncable where Self: NSManagedObject {
     }
 
     /// TODO: add `throws`?
-    /// TODO: add predicate and configuration block `configure: () -> Void = { _ in }`; this could cover most of SyncableParent
-    static func sync<R>(with records: [RemoteType], in context: NSManagedObjectContext)
+    /// TODO: configuration block `configure: (Self) -> Void = { _ in }`; this could cover most of SyncableParent
+    static func sync<R>(with records: [RemoteType], in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil)
         where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
-            guard let objectDict: [R: Self] = try? fetchEntityDict(in: context) else {
+            guard let objectDict: [R: Self] = try? fetchEntityDict(in: context, matching: predicate) else {
                 log.error("\(#function) FAILED : unable to create dictionary for \(self)"); return
             }
 
@@ -101,7 +101,7 @@ extension Syncable where Self: NSManagedObject {
                 } else {
                     let newObject = Self(with: record, in: context)
                     /// TODO: add newObject to localIDs?
-                    log.debug("newObject: \(newObject)")
+                    log.verbose("newObject: \(newObject)")
                 }
                 /*
                 let object = objectDict[objectID] ?? Self.init(context: context)
@@ -109,7 +109,7 @@ extension Syncable where Self: NSManagedObject {
                  */
             }
 
-            log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
+            //log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
 
             // Delete objects that were deleted from server. We filter remoteID 0
             // since that is the default value for new objects
@@ -124,18 +124,29 @@ extension Syncable where Self: NSManagedObject {
                 deletedObjects = localIDs.subtracting(remoteIDs)
             }
 
-            if !deletedObjects.isEmpty {
-                log.debug("We need to delete: \(deletedObjects)")
-                let fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", deletedObjects)
-                do {
-                    try context.deleteEntities(self, filter: fetchPredicate)
-                } catch {
-                    /// TODO: deleteEntities(_:filter) already logs the error
-                    let updateError = error as NSError
-                    log.error("\(updateError), \(updateError.userInfo)")
-                    //throw updateError?
-                }
-            }
+            delete(withIdentifiers: deletedObjects, in: context, matching: predicate)
+    }
+
+    private static func delete(withIdentifiers identifiers: Set<RemoteIdentifierType>, in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil) {
+        //log.debug("We need to delete: \(identifiers)")
+        guard !identifiers.isEmpty else { return }
+
+        let fetchPredicate: NSPredicate
+        if let additionalPredicate = predicate {
+            fetchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", identifiers), additionalPredicate])
+        } else {
+            fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", identifiers)
+        }
+
+        do {
+            try context.deleteEntities(self, filter: fetchPredicate)
+        } catch {
+            /// TODO: deleteEntities(_:filter) already logs the error
+            let updateError = error as NSError
+            log.error("\(updateError), \(updateError.userInfo)")
+            //throw updateError?
+        }
     }
 
 }

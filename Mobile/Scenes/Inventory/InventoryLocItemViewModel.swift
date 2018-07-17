@@ -7,15 +7,31 @@
 //
 
 import CoreData
-//import RxCocoa
-//import RxSwift
+import RxCocoa
+import RxSwift
+
+enum LocationItemListParent {
+    case category(InventoryLocationCategory)
+    case location(InventoryLocation)
+
+    var fetchPredicate: NSPredicate? {
+        switch self {
+        case .category(let category):
+            return NSPredicate(format: "category == %@", category)
+        case .location(let location):
+            return NSPredicate(format: "location == %@", location)
+        }
+    }
+
+}
 
 struct InventoryLocItemViewModel {
+    //typealias Parent = LocationItemListParent
+    //typealias Model = InventoryLocationItem
 
     // MARK: - Properties
-
-    private let dataManager: DataManager
-    private let parentObject: LocationItemListParent
+    let frc: NSFetchedResultsController<InventoryLocationItem>
+    let windowTitle: String
 
     // CoreData
     private let sortDescriptors = [NSSortDescriptor(key: "position", ascending: true),
@@ -24,20 +40,11 @@ struct InventoryLocItemViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
-
-    // MARK: - Output
-    let frc: NSFetchedResultsController<InventoryLocationItem>
-    let windowTitle: String
-
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, parentObject: LocationItemListParent) {
-        self.dataManager = dataManager
-        self.parentObject = parentObject
-
+    init(dependency: Dependency, parent: LocationItemListParent) {
         // Title
-        switch self.parentObject {
+        switch parent {
         case .category(let parentCategory):
             self.windowTitle = parentCategory.name ?? "Error"
         case .location(let parentLocation):
@@ -46,11 +53,19 @@ struct InventoryLocItemViewModel {
 
         // FetchRequest
         let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
-        request.predicate = parentObject.fetchPredicate
+        request.predicate = parent.fetchPredicate
         request.sortDescriptors = sortDescriptors
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        self.frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
     }
+
+    // MARK: - AttachableViewModelType
+
+    typealias Dependency = HasDataManager
+
+    //struct Bindings {
+    //    let rowTaps: Driver<IndexPath>
+    //}
 
 }

@@ -11,7 +11,7 @@ import PKHUD
 import RxCocoa
 import RxSwift
 
-class InvoiceDateViewController: UIViewController {
+class InvoiceDateViewController: MGTableViewController {
 
     private enum Strings {
         static let navTitle = "Invoices"
@@ -20,53 +20,36 @@ class InvoiceDateViewController: UIViewController {
 
     // MARK: - Properties
 
-    //var viewModel: InvoiceDateViewModelType!
+    var bindings: InvoiceDateViewModel.Bindings {
+        /*
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
+            .mapToVoid()
+            .asDriverOnErrorJustComplete()
+        let refresh = refreshControl.rx
+            .controlEvent(.valueChanged)
+            .asDriver()
+        */
+        return InvoiceDateViewModel.Bindings(
+            fetchTrigger: refreshControl.rx.controlEvent(.valueChanged).asDriver(),
+            //fetchTrigger: Driver.merge(viewWillAppear, refresh),
+            //addTaps = addButtonItem.rx.tap.asDriver(),
+            //editTaps = editButtonItem.rx.tap.asDriver(),
+            rowTaps: tableView.rx.itemSelected.asDriver()
+        )
+    }
     var viewModel: InvoiceDateViewModel!
-    let disposeBag = DisposeBag()
-
-    let selectedObjects = PublishSubject<InvoiceCollection>()
-
-    // TableViewCell
-    let cellIdentifier = "Cell"
 
     // MARK: - Interface
-    private let refreshControl = UIRefreshControl()
     //let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
-    let activityIndicatorView = UIActivityIndicatorView()
-    let messageLabel = UILabel()
-    //lazy var messageLabel: UILabel = {
-    //    let view = UILabel()
-    //    view.translatesAutoresizingMaskIntoConstraints = false
-    //    return view
-    //}()
-
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        tv.delegate = self
-        return tv
-    }()
+    //let editButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
 
     // MARK: - Lifecycle
-
+    /*
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupConstraints()
-        setupBindings()
-        setupTableView()
-        /*
-        guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED: unable to get storeID"); return
-        }
-
-        HUD.show(.progress)
-        APIManager.sharedInstance.getListOfInvoiceCollections(storeID: storeID,
-                                                              completion: self.completedGetListOfInvoiceCollections)
-         */
     }
-
+    */
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
@@ -76,68 +59,34 @@ class InvoiceDateViewController: UIViewController {
 
     // MARK: - View Methods
 
-    private func setupView() {
+    override func setupView() {
+        extendedLayoutIncludesOpaqueBars = true
         title = Strings.navTitle
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .always
+        }
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         //self.navigationItem.rightBarButtonItem = addButtonItem
 
-        //activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        //messageLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        self.view.addSubview(tableView)
-        self.view.addSubview(activityIndicatorView)
-        self.view.addSubview(messageLabel)
+        super.setupView()
     }
 
-    private func setupConstraints() {
-        // TableView
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-
-        // ActivityIndicator
-        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicatorView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        activityIndicatorView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-
-        // MessageLabel
-        messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-    }
-
-    private func setupBindings() {
-
-        // Edit Button
-        //editButtonItem.rx.tap
-        //    .bind(to: viewModel.editTaps)
-        //    .disposed(by: disposeBag)
-
-        // Row selection
-        //selectedObjects.asObservable()
-        //    .bind(to: viewModel.rowTaps)
-        //    .disposed(by: disposeBag)
-
-        // Refresh
-        refreshControl.rx.controlEvent(.valueChanged)
-            //.debug("refreshControl")
-            .bind(to: viewModel.refresh)
-            .disposed(by: disposeBag)
+    override func setupBindings() {
 
         // Activity Indicator
         viewModel.isRefreshing
             //.debug("isRefreshing")
+            .delay(0.01)
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
-
+        /*
         viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
             //.debug("hasRefreshed")
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })
             .disposed(by: disposeBag)
-
+        */
         // Errors
         viewModel.errorMessages
             .drive(onNext: { [weak self] message in
@@ -149,14 +98,12 @@ class InvoiceDateViewController: UIViewController {
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceDateViewController>!
 
-    fileprivate func setupTableView() {
+    override func setupTableView() {
         tableView.refreshControl = refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-        tableView.tableFooterView = UIView()
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: viewModel.frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
 }
@@ -165,13 +112,12 @@ class InvoiceDateViewController: UIViewController {
 extension InvoiceDateViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObjects.onNext(dataSource.objectAtIndexPath(indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension InvoiceDateViewController: TableViewDataSourceDelegate {
     /*
     func canEdit(_ collection: InvoiceCollection) -> Bool {
@@ -182,7 +128,7 @@ extension InvoiceDateViewController: TableViewDataSourceDelegate {
             return true
         }
     }
-    */
+     */
     func configure(_ cell: UITableViewCell, for collection: InvoiceCollection) {
         cell.textLabel?.text = collection.date.altStringFromDate()
         switch collection.uploaded {

@@ -44,7 +44,12 @@ final class InvoiceKeypadCoordinator: BaseCoordinator<Void> {
 
         return presentedViewController.dismissalEvents
             .take(1)
-            .do(onNext: { [weak self] _ in self?.rootViewController.dismiss(animated: true) })
+            .do(onNext: { [weak self] dismissalEvent in
+                if case .shouldDismiss = dismissalEvent {
+                    self?.rootViewController.dismiss(animated: true)
+                }
+            })
+            .mapToVoid()
     }
 
 }

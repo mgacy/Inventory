@@ -11,11 +11,14 @@ import RxCocoa
 import RxSwift
 import RxSwiftExt
 
-struct InvoiceDateViewModel {
+struct InvoiceDateViewModel: AttachableViewModelType {
 
     // MARK: Properties
-
-    private let dataManager: DataManager
+    let frc: NSFetchedResultsController<InvoiceCollection>
+    let isRefreshing: Driver<Bool>
+    let errorMessages: Driver<String>
+    let showCollection: Observable<InvoiceCollection>
+    //private let dataManager: DataManager
 
     // CoreData
     private let filter: NSPredicate? = nil
@@ -24,78 +27,29 @@ struct InvoiceDateViewModel {
     //private let sectionNameKeyPath: String? = nil
     private let fetchBatchSize = 20 // 0 = No Limit
 
-    // MARK: - Input
-    let refresh: AnyObserver<Void>
-    //let editTaps: AnyObserver<Void>
-    //let rowTaps: AnyObserver<InvoiceCollection>
-
-    // MARK: - Output
-    let frc: NSFetchedResultsController<InvoiceCollection>
-    let isRefreshing: Driver<Bool>
-    let hasRefreshed: Driver<Bool>
-    let errorMessages: Driver<String>
-    let showCollection: Observable<InvoiceCollection>
-
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, rowTaps: Observable<InvoiceCollection>) {
-        self.dataManager = dataManager
+    init(dependency: Dependency, bindings: Bindings) {
 
         // Refresh
-        let _refresh = PublishSubject<Void>()
-        self.refresh = _refresh.asObserver()
+        let activityIndicator = ActivityIndicator()
+        self.isRefreshing = activityIndicator.asDriver()
+        //let errorTracker = ErrorTracker()
+        //self.errors = errorTracker.asDriver()
 
-        let isRefreshing = ActivityIndicator()
-        self.isRefreshing = isRefreshing.asDriver()
-
-        self.hasRefreshed = _refresh.asObservable()
-            .flatMapLatest { _ -> Observable<Bool> in
+        let refreshResults = bindings.fetchTrigger
+            .asObservable()
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
                 log.debug("\(#function) : Refreshing (1) ...")
-                return dataManager.refreshStuff()
-                    .catchErrorJustReturn(false)
+                return dependency.dataManager.refreshStuff()
+                    .materialize()
             }
-            .flatMapLatest { _ -> Observable<Bool> in
+            .flatMapLatest { _ -> Observable<Event<Bool>> in
                 log.debug("\(#function) : Refreshing (2) ...")
-                return dataManager.refreshInvoiceCollections()
-                    .dematerialize()
-                    .catchErrorJustReturn(false)
-                    .trackActivity(isRefreshing)
+                return dependency.dataManager.refreshInvoiceCollections()
+                    .trackActivity(activityIndicator)
             }
-            .asDriver(onErrorJustReturn: false)
-
-        // Selection
-        /*
-        let _selectedObjects = PublishSubject<InvoiceCollection>()
-        self.rowTaps = _selectedObjects.asObserver()
-        self.showSelection = _selectedObjects.asObservable()
-            .flatMap { selection -> Observable<InvoiceCollection> in
-                log.debug("Tapped: \(selection)")
-                return dataManager.refreshInvoiceCollection(selection)
-            }
-            .shareReplay(1)
-            //.asDriver(onErrorJustReturn: InvoiceCollection())
-         */
-        let showSelectionResults = rowTaps
-            .flatMap { selection -> Observable<Event<InvoiceCollection>> in
-                log.debug("Tapped: \(selection)")
-                return dataManager.refreshInvoiceCollection(selection)
-            }
-            .share(replay: 1)
-            //.shareReplay(1)
-
-        // Errors
-        self.errorMessages = showSelectionResults
-            .errors()
-            .map { error in
-                log.debug("\(#function) ERROR : \(error)")
-                /// TEMP:
-                return "There was an error"
-            }
-            .asDriver(onErrorJustReturn: "Other Error")
-            //.asDriver(onErrorDriveWith: .empty())
-
-        // Navigation
-        self.showCollection = showSelectionResults.elements()
+            .share()
 
         // FetchRequest
         let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
@@ -103,7 +57,32 @@ struct InvoiceDateViewModel {
         request.predicate = filter
         request.fetchBatchSize = fetchBatchSize
         request.returnsObjectsAsFaults = false
-        self.frc = dataManager.createFetchedResultsController(fetchRequest: request)
+        let frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
+
+        // Errors
+        self.errorMessages = refreshResults.errors()
+            .map { error in
+                log.debug("\(#function) ERROR : \(error)")
+                return error.localizedDescription
+            }
+            .asDriver(onErrorJustReturn: "Unrecognized Error")
+
+        // Navigation
+        self.showCollection = bindings.rowTaps
+            .asObservable()
+            .map { frc.object(at: $0) }
+            .share(replay: 1)
+
+        self.frc = frc
+    }
+
+    // MARK: - AttachableViewModelType
+
+    typealias Dependency = HasDataManager
+
+    struct Bindings {
+        let fetchTrigger: Driver<Void>
+        let rowTaps: Driver<IndexPath>
     }
 
 }

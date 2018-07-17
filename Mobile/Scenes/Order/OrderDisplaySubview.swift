@@ -9,7 +9,7 @@
 import UIKit
 
 class OrderDisplaySubview: UIView {
-    var viewModel: OrderKeypadViewModel!
+    var viewModel: OrderKeypadViewModelType!
     //weak var viewController: OrderKeypadViewController?
 
     // Rx
@@ -248,7 +248,7 @@ class OrderDisplaySubview: UIView {
             // Stack
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12.0),
             stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 12.0),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12.0),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
         NSLayoutConstraint.activate(constraints)
@@ -269,7 +269,7 @@ class OrderDisplaySubview: UIView {
 
     // MARK: - B
 
-    func bind(to viewModel: OrderKeypadViewModel) {
+    func bind(to viewModel: OrderKeypadViewModelType) {
         self.viewModel = viewModel
         parTextLabel.text = viewModel.par
         onHandTextLabel.text = viewModel.onHand

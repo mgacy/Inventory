@@ -10,51 +10,36 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class OrderLocationViewController: UIViewController {
+class OrderLocationViewController: MGTableViewController {
 
     private enum Strings {
         static let navTitle = "Locations"
         static let errorAlertTitle = "Error"
     }
-    /*
-    var bindings: OrderLocationViewModel.Bindings {
-        return OrderLocationViewModel.Bindings(
-            //cancelTaps: cancelButtonItem.rx.tap.asObservable(),
-            //rowTaps: tableView.rx.itemSelected.asDriver()
-            rowTaps: tableView.rx.itemSelected.asObservable()
-            //uploadTaps: uploadButtonItem.rx.tap.asObservable()
-        )
-    }
-    */
+
     // MARK: - Properties
 
+    var bindings: OrderLocationViewModel.Bindings {
+        /*
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
+            .mapToVoid()
+            .asDriverOnErrorJustComplete()
+        let refresh = refreshControl.rx
+            .controlEvent(.valueChanged)
+            .asDriver()
+        */
+        return OrderLocationViewModel.Bindings(
+            //fetchTrigger: Driver.merge(viewWillAppear, refresh),
+            fetchTrigger: refreshControl.rx.controlEvent(.valueChanged).asDriver(),
+            //rowTaps: tableView.rx.itemSelected.asDriver()
+            rowTaps: tableView.rx.itemSelected.asObservable()
+        )
+    }
     var viewModel: OrderLocationViewModel!
-    let disposeBag = DisposeBag()
-
-    // TableViewCell
-    let cellIdentifier = "Cell"
 
     // MARK: - Interface
 
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet weak var messageLabel: UILabel!
-
-    private let refreshControl = UIRefreshControl()
-    lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .white
-        return tv
-    }()
-
     // MARK: - Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupConstraints()
-        setupBindings()
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -63,31 +48,22 @@ class OrderLocationViewController: UIViewController {
 
     //override func didReceiveMemoryWarning() {}
 
+    deinit { log.debug("\(#function)") }
+
     // MARK: - View Methods
 
-    private func setupView() {
+    override func setupView() {
+        super.setupView()
         title = Strings.navTitle
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
         //self.navigationItem.leftBarButtonItem =
         //self.navigationItem.rightBarButtonItem =
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.tableFooterView = UIView()
-        self.view.addSubview(tableView)
     }
 
-    private func setupConstraints() {
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
+    override func setupBindings() {
 
-    private func setupBindings() {
-        /*
-        // Refresh
-        refreshControl.rx.controlEvent(.valueChanged)
-            .bind(to: viewModel.refresh)
-            .disposed(by: disposeBag)
-         */
         // Activity Indicator
         viewModel.isRefreshing
             .drive(refreshControl.rx.isRefreshing)
@@ -118,14 +94,44 @@ class OrderLocationViewController: UIViewController {
                 self?.showAlert(title: Strings.errorAlertTitle, message: message)
             })
             .disposed(by: disposeBag)
+    }
 
-        // Basic RxCocoa
-        viewModel.locations
-            // closure args are row (IndexPath), element, cell
-            .bind(to: tableView.rx.items(cellIdentifier: cellIdentifier)) { _, element, cell in
-                cell.textLabel?.text = element.name
-            }
-            .disposed(by: disposeBag)
+    // MARK: - TableViewDataSource
+    fileprivate var dataSource: TableViewDataSource<OrderLocationViewController>!
+
+    override func setupTableView() {
+        tableView.refreshControl = refreshControl
+        tableView.register(cellType: UITableViewCell.self)
+        //tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.estimatedRowHeight = 100
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
+    }
+
+}
+
+// MARK: - TableViewDelegate
+extension OrderLocationViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+}
+
+// MARK: - TableViewDataSourceDelegate
+extension OrderLocationViewController: TableViewDataSourceDelegate {
+    /*
+    func canEdit(_ collection: InvoiceCollection) -> Bool {
+        switch collection.uploaded {
+        case true:
+            return false
+        case false:
+            return true
+        }
+    }
+    */
+    func configure(_ cell: UITableViewCell, for location: OrderLocation) {
+        cell.textLabel?.text = location.name ?? "MISSING"
     }
 
 }

@@ -6,94 +6,71 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
+import CoreData
 import RxCocoa
 import RxSwift
 
 enum OrderLocItemParent {
-    case location(RemoteLocation)
-    case category(RemoteItemCategory)
+    case location(OrderLocation)
+    case category(OrderLocationCategory)
+    //case remoteLocation(RemoteLocation)
+    //case remoteCategory(RemoteItemCategory)
+
+    var fetchPredicate: NSPredicate? {
+        switch self {
+        case .category(let category):
+            return NSPredicate(format: "category == %@", category)
+        case .location(let location):
+            return NSPredicate(format: "location == %@", location)
+        }
+    }
+
 }
 
-struct OrderLocItemViewModel {
+struct OrderLocItemViewModel: AttachableViewModelType {
 
     // MARK: - Properties
-
-    private let dataManager: DataManager
-    private let parent: OrderLocItemParent
-    private let factory: OrderLocationFactory
-    let orderItems: [OrderItem]
-
-    // MARK: - Input
-
-    // MARK: - Output
+    let frc: NSFetchedResultsController<OrderLocationItem>
     let navTitle: String
-    let items: Observable<[OrderItem]>
+    //let itemSelected: Observable<IndexPath>
+
+    // CoreData
+    /// NOTE: for InventoryLocItemViewModel we use both position and item.name
+    private let sortDescriptors = [NSSortDescriptor(key: "position", ascending: true)]
+    //private let cacheName: String? = nil
+    //private let sectionNameKeyPath: String? = nil
+    private let fetchBatchSize = 20 // 0 = No Limit
 
     // MARK: - Lifecycle
 
-    init(dataManager: DataManager, parent: OrderLocItemParent, factory: OrderLocationFactory) {
-        self.dataManager = dataManager
-        self.parent = parent
-        self.factory = factory
-
-        switch parent {
+    init(dependency: Dependency, bindings: Bindings) {
+        switch dependency.parent {
         case .category(let category):
-            self.navTitle = category.name
-            self.orderItems = factory.getOrderItems(forCategoryType: category) ?? []
-            self.items = Observable.just(orderItems)
+            self.navTitle = category.name ?? "Error"
         case .location(let location):
-            self.navTitle = location.name
-            self.orderItems = factory.getOrderItems(forItemType: location) ?? []
-            self.items = Observable.just(orderItems)
+            self.navTitle = location.name ?? "Error"
         }
+
+        // FetchRequest
+        let request: NSFetchRequest<OrderLocationItem> = OrderLocationItem.fetchRequest()
+        request.sortDescriptors = sortDescriptors
+        request.predicate = dependency.parent.fetchPredicate
+        request.fetchBatchSize = fetchBatchSize
+        request.returnsObjectsAsFaults = false
+        self.frc = dependency.dataManager.makeFetchedResultsController(fetchRequest: request)
+
+        //self.itemSelected = bindings.rowTaps
     }
 
-    // MARK: - Swipe Actions
+    // MARK: - AttachableViewModelType
 
-    func decrementOrder(forRowAtIndexPath indexPath: IndexPath) -> Bool {
-        let orderItem = orderItems[indexPath.row]
-        guard let currentQuantity = orderItem.quantity else {
-            /// TODO: should we simply set .quantity to 0?
-            //orderItem.quantity = 0.0
-            return false
-        }
-
-        if currentQuantity.doubleValue >= 1.0 {
-            orderItem.quantity = NSNumber(value: currentQuantity.doubleValue - 1.0)
-        } else {
-            orderItem.quantity = 0.0
-        }
-        return true
+    struct Dependency {
+        let dataManager: DataManager
+        let parent: OrderLocItemParent
     }
 
-    func incrementOrder(forRowAtIndexPath indexPath: IndexPath) -> Bool {
-        let orderItem = orderItems[indexPath.row]
-        guard let currentQuantity: NSNumber = orderItem.quantity else {
-            /// TODO: should we simply increment by 1 if .quantity is nil?
-            //orderItem.quantity = 1.0
-            return false
-        }
-        orderItem.quantity = NSNumber(value: currentQuantity.doubleValue + 1.0)
-        return true
-    }
-
-    func setOrderToPar(forRowAtIndexPath indexPath: IndexPath) -> Bool {
-        let orderItem = orderItems[indexPath.row]
-        guard let parUnit = orderItem.parUnit else {
-            return false
-        }
-        /// TODO: should we return false if orderItem.par == 0?
-        let newQuantity = orderItem.par.rounded(.awayFromZero)
-
-        orderItem.quantity = newQuantity as NSNumber
-        orderItem.orderUnit = parUnit
-        return true
-    }
-
-    func setOrderToZero(forRowAtIndexPath indexPath: IndexPath) -> Bool {
-        let orderItem = orderItems[indexPath.row]
-        orderItem.quantity = 0
-        return true
+    struct Bindings {
+        let rowTaps: Observable<IndexPath>
     }
 
 }

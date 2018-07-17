@@ -20,27 +20,42 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = InventoryDateViewController.instance()
-        let viewModel = InventoryDateViewModel(dataManager: dependencies.dataManager,
-                                               rowTaps: viewController.selectedObjects.asObservable())
-        //let viewModel = InventoryDateViewModel2(dataManager: dataManager)
-
+        let viewController = InventoryDateViewController()
+        let viewModel = InventoryDateViewModel(dependency: dependencies, bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.viewControllers = [viewController]
 
         // Selection
         viewModel.showInventory
+            .debug("itemSelection - InventoryDateVC")
             .subscribe(onNext: { [weak self] transition in
                 switch transition {
                 case .existing(let inventory):
-                    log.verbose("GET selectedInventory from server - \(inventory.remoteID) ...")
+                    //log.verbose("GET selectedInventory from server - \(inventory.remoteID) ...")
                     self?.showReviewList(with: inventory)
                 case .new(let inventory):
-                    log.verbose("LOAD NEW selectedInventory from disk ...")
+                    //log.verbose("LOAD NEW selectedInventory from disk ...")
                     self?.showLocationList(with: inventory)
                 }
             })
             .disposed(by: disposeBag)
+
+//        // Selection (B)
+//        viewModel.showInventory
+//            .flatMap { [weak self] transition -> Observable<Void> in
+//                guard let strongSelf = self else { return .empty() }
+//                switch transition {
+//                case .existing(let inventory):
+//                    //log.verbose("GET selectedInventory from server - \(inventory.remoteID) ...")
+//                    return strongSelf.showReviewList2(with: inventory)
+//                case .new(let inventory):
+//                    //log.verbose("LOAD NEW selectedInventory from disk ...")
+//                    return strongSelf.showLocationList2(with: inventory)
+//                }
+//            }
+//            .debug("itemSelection - InventoryDateVC")
+//            .subscribe()
+//            .disposed(by: disposeBag)
 
         return Observable.never()
     }
@@ -48,9 +63,10 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     // MARK: - Sections
 
     fileprivate func showReviewList(with inventory: Inventory) {
-        let viewController = InventoryReviewViewController.instance()
-        let viewModel = InventoryReviewViewModel(dataManager: dependencies.dataManager, parentObject: inventory,
-                                                 rowTaps: viewController.selectedObjects)
+        let viewController = InventoryReviewViewController()
+        let viewModel = InventoryReviewViewModel(
+            dependency: InventoryReviewViewModel.Dependency(dataManager: dependencies.dataManager, parent: inventory),
+            bindings: viewController.bindings)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
@@ -58,7 +74,7 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showLocationList(with inventory: Inventory) {
-        let viewController = InventoryLocationViewController.instance()
+        let viewController = InventoryLocationViewController()
         let avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
             dataManager: dependencies.dataManager,
             parentObject: inventory
@@ -67,9 +83,8 @@ class InventoryCoordinator: BaseCoordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
-        /// TODO: shouldn't this only take one and then complete?
         viewModel.showLocation
-            //.take(1)
+            .debug("itemSelection - InventoryLocationVC")
             .subscribe(onNext: { [weak self] selection in
                 switch selection {
                 case .category(let location):
@@ -89,48 +104,49 @@ class InventoryCoordinator: BaseCoordinator<Void> {
     }
 
     fileprivate func showCategoryList(with location: InventoryLocation) {
-        let viewController = InventoryLocCatViewController.instance()
-        viewController.viewModel = InventoryLocCatViewModel(dataManager: dependencies.dataManager,
-                                                            parentObject: location)
+        let viewController = InventoryLocCatViewController()
+        let viewModel = InventoryLocCatViewModel(dependency: dependencies, bindings: viewController.bindings,
+                                                 parent: location)
+        viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
 
         // Selection
-        viewController.selectedObjects
-            .subscribe(onNext: { [weak self] selection in
-                self?.showLocationItemList(with: LocationItemListParent.category(selection))
+        viewModel.modelSelected
+            .debug("itemSelection - InventoryLocCatVC")
+            .drive(onNext: { [weak self] selection in
+                self?.showLocationItemList(with: .category(selection))
             })
             .disposed(by: disposeBag)
     }
 
     fileprivate func showLocationItemList(with parent: LocationItemListParent) {
-        let viewController = InventoryLocItemViewController.instance()
-        viewController.viewModel = InventoryLocItemViewModel(dataManager: dependencies.dataManager,
-                                                             parentObject: parent)
+        let viewController = InventoryLocItemViewController()
+        viewController.viewModel = InventoryLocItemViewModel(dependency: dependencies, parent: parent)
         navigationController.pushViewController(viewController, animated: true)
-
+        /*
         // Selection
         viewController.tableView.rx
             .itemSelected
+            .debug("itemSelection - InventoryLocItemVC")
             .subscribe(onNext: { [weak self] indexPath in
                 self?.showKeypad(for: parent, atIndex: indexPath.row)
             })
             .disposed(by: disposeBag)
-
+        */
         // Selection
         viewController.tableView.rx
             .itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
-                //log.debug("We selected: \(indexPath)")
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showModalKeypad(for: parent, atIndex: indexPath.row)
             }
-            .do(onNext: { _ in
+            .do(onNext: { [tableView = viewController.tableView] _ in
                 // Deselect
-                if let selectedRowIndexPath = viewController.tableView.indexPathForSelectedRow {
-                    viewController.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                if let selectedRowIndexPath = tableView.indexPathForSelectedRow {
+                    tableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 }
             })
-            //.debug("itemSelection - \(viewController)")
+            .debug("itemSelection - InventoryLocItemVC")
             .subscribe()
             .disposed(by: viewController.disposeBag)
     }
@@ -150,6 +166,122 @@ class InventoryCoordinator: BaseCoordinator<Void> {
 
 }
 
+// MARK: - NEW -
+/*
+extension InventoryCoordinator {
+
+    fileprivate func showReviewList2(with inventory: Inventory) -> Observable<Void> {
+        let viewController = InventoryReviewViewController()
+        let viewModel = InventoryReviewViewModel(
+            dependency: InventoryReviewViewModel.Dependency(dataManager: dependencies.dataManager, parent: inventory),
+            bindings: viewController.bindings)
+        viewController.viewModel = viewModel
+        navigationController.pushViewController(viewController, animated: true)
+
+        // Selection?
+
+        return viewController.wasPopped
+            .take(1)
+    }
+
+    fileprivate func showLocationList2(with inventory: Inventory) -> Observable<Void> {
+        let viewController = InventoryLocationViewController()
+        let avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
+            dataManager: dependencies.dataManager,
+            parentObject: inventory
+        ))
+        let viewModel = viewController.attach(wrapper: avm)
+//        let viewModel = InventoryLocationViewModel(
+//            dependency: InventoryLocationViewModel.Dependency(
+//                dataManager: dependencies.dataManager, parentObject: inventory),
+//            bindings: viewController.bindings)
+//        viewController.viewModel = viewModel
+
+        navigationController.pushViewController(viewController, animated: true)
+
+        // Selection
+        viewModel.showLocation
+            .flatMap { [weak self] selection -> Observable<Void> in
+                guard let strongSelf = self else { return .empty() }
+                switch selection {
+                case .category(let location):
+                    return strongSelf.showCategoryList2(with: location)
+                case .item(let location):
+                    return strongSelf.showLocationItemList2(with: .location(location))
+                }
+            }
+            .debug("itemSelection - InventoryLocationVC")
+            .subscribe()
+            .disposed(by: disposeBag)
+
+        // Dismiss
+        return viewController.dismissView
+            .take(1)
+            .do(onNext: { [weak self] _ in
+                self?.navigationController.popViewController(animated: true)
+            })
+    }
+
+    fileprivate func showCategoryList2(with location: InventoryLocation) -> Observable<Void> {
+        let viewController = InventoryLocCatViewController()
+        let viewModel = InventoryLocCatViewModel(dependency: dependencies, bindings: viewController.bindings,
+                                                 parent: location)
+        viewController.viewModel = viewModel
+        navigationController.pushViewController(viewController, animated: true)
+
+        // Selection
+        viewModel.modelSelected
+            .asObservable()
+            .flatMap { [weak self] selection -> Observable<Void> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showLocationItemList2(with: .category(selection))
+            }
+            .debug("itemSelection - InventoryLocCatVC")
+            .subscribe()
+            .disposed(by: disposeBag)
+
+        // Dismissal
+        return viewController.wasPopped
+            .take(1)
+    }
+
+    fileprivate func showLocationItemList2(with parent: LocationItemListParent) -> Observable<Void> {
+        let viewController = InventoryLocItemViewController()
+        viewController.viewModel = InventoryLocItemViewModel(dependency: dependencies, parent: parent)
+        navigationController.pushViewController(viewController, animated: true)
+        /*
+        // Selection
+        viewController.tableView.rx
+            .itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                self?.showKeypad(for: parent, atIndex: indexPath.row)
+            })
+            .disposed(by: disposeBag)
+         */
+        // Selection
+        viewController.tableView.rx
+            .itemSelected
+            .flatMap { [weak self] indexPath -> Observable<Void> in
+                guard let strongSelf = self else { return .empty() }
+                return strongSelf.showModalKeypad(for: parent, atIndex: indexPath.row)
+            }
+            .do(onNext: { [tableView = viewController.tableView] _ in
+                // Deselect
+                if let selectedRowIndexPath = tableView.indexPathForSelectedRow {
+                    tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                }
+            })
+            .debug("itemSelection - InventoryLocItemVC")
+            .subscribe()
+            .disposed(by: viewController.disposeBag)
+
+        // Dismiss
+        return viewController.wasPopped
+            .take(1)
+    }
+
+}
+*/
 // MARK: - Modal Display from Home
 
 class ModalInventoryCoordinator: InventoryCoordinator {
@@ -164,7 +296,7 @@ class ModalInventoryCoordinator: InventoryCoordinator {
     }
 
     override func start() -> Observable<Void> {
-        let viewController = InventoryLocationViewController.initFromStoryboard(name: "InventoryLocationViewController")
+        let viewController = InventoryLocationViewController()
         let avm: Attachable<InventoryLocationViewModel> = .detached(InventoryLocationViewModel.Dependency(
             dataManager: dependencies.dataManager,
             parentObject: inventory
@@ -176,7 +308,6 @@ class ModalInventoryCoordinator: InventoryCoordinator {
 
         // Selection
         viewModel.showLocation
-            //.take(1)
             .subscribe(onNext: { [weak self] selection in
                 switch selection {
                 case .category(let location):

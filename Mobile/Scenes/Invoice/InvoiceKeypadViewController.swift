@@ -19,13 +19,13 @@ final class InvoiceKeypadViewController: UIViewController {
 
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
-    private let changeItemDissmissalEvent = PublishSubject<Void>()
-    private let panGestureDissmissalEvent = PublishSubject<Void>()
+    private let changeItemDissmissalEvent = PublishSubject<DismissalEvent>()
+    private let panGestureDissmissalEvent = PublishSubject<DismissalEvent>()
 
     // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
 
-    var dismissalEvents: Observable<Void> {
+    var dismissalEvents: Observable<DismissalEvent> {
         return Observable.of(
             displayView.dismissalEvents.asObservable(),
             changeItemDissmissalEvent.asObservable(),
@@ -176,7 +176,7 @@ final class InvoiceKeypadViewController: UIViewController {
         case true:
             updateDisplay()
         case false:
-            changeItemDissmissalEvent.onNext(())
+            changeItemDissmissalEvent.onNext(.shouldDismiss)
             //if let navController = navigationController {
             //    navController.popViewController(animated: true)
             //} else {
@@ -190,7 +190,7 @@ final class InvoiceKeypadViewController: UIViewController {
         case true:
             updateDisplay()
         case false:
-            changeItemDissmissalEvent.onNext(())
+            changeItemDissmissalEvent.onNext(.shouldDismiss)
             //if let navController = navigationController {
             //    navController.popViewController(animated: true)
             //} else {
@@ -262,7 +262,7 @@ final class InvoiceKeypadViewController: UIViewController {
             if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
                 interactionController?.finish()
                 /// Ensure we return event from coordinator when dismissing view with pan gesture
-                panGestureDissmissalEvent.onNext(())
+                panGestureDissmissalEvent.onNext(.wasDismissed)
             } else {
                 interactionController?.cancel()
             }

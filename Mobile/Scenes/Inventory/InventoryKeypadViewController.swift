@@ -19,14 +19,15 @@ class InventoryKeypadViewController: UIViewController {
 
     // swiftlint:disable:next weak_delegate
     private let customTransitionDelegate = SheetTransitioningDelegate()
-    private let panGestureDissmissalEvent = PublishSubject<Void>()
+    private let changeItemDissmissalEvent = PublishSubject<DismissalEvent>()
+    private let panGestureDissmissalEvent = PublishSubject<DismissalEvent>()
 
     // Pan down transitions back to the presenting view controller
     var interactionController: UIPercentDrivenInteractiveTransition?
 
     let panGestureRecognizer: UIPanGestureRecognizer
 
-    var dismissalEvents: Observable<Void> {
+    var dismissalEvents: Observable<DismissalEvent> {
         return Observable.never()
     }
 
@@ -185,6 +186,7 @@ class InventoryKeypadViewController: UIViewController {
         case true:
             return
         case false:
+            changeItemDissmissalEvent.onNext(.wasDismissed)
             /// TODO: emit event so coordinator can dismiss
             if let navController = navigationController {
                 navController.popViewController(animated: true)
@@ -199,6 +201,7 @@ class InventoryKeypadViewController: UIViewController {
         case true:
             return
         case false:
+            changeItemDissmissalEvent.onNext(.wasDismissed)
             /// TODO: emit event so coordinator can dismiss
             if let navController = navigationController {
                 navController.popViewController(animated: true)
@@ -229,7 +232,7 @@ class InventoryKeypadViewController: UIViewController {
             if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
                 interactionController?.finish()
                 /// Ensure we return event from coordinator when dismissing view with pan gesture
-                panGestureDissmissalEvent.onNext(())
+                panGestureDissmissalEvent.onNext(.wasDismissed)
             } else {
                 interactionController?.cancel()
             }
