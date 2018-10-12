@@ -94,6 +94,7 @@ extension UnitToggleable {
 
     var currentUnit: NewCurrentUnit {
         get {
+            // swiftlint:disable:next identifier_name
             guard let _unit = unit else {
                 return .invalidUnit
             }

@@ -32,12 +32,14 @@ class Keypad: KeypadType {
 
     /// TODO: rename `currentDisplay` to better differentiate purpose from currentValue?
     public var displayValue: String {
+        // swiftlint:disable:next identifier_name
         guard let _currentNumber = currentNumber else {
             return "?"
         }
         return _currentNumber
     }
     public var currentValue: NSNumber? {
+        // swiftlint:disable:next identifier_name
         guard let _currentNumber = currentNumber else {
             return nil
         }
@@ -136,6 +138,7 @@ class Keypad: KeypadType {
     /// Essentially, reset currentNumber with newNumber
     public func updateNumber(_ newNumber: NSNumber?) {
         isEditingNumber = false
+        // swiftlint:disable:next identifier_name
         guard let _newNumber = newNumber else {
             currentNumber = nil
             return
@@ -302,6 +305,7 @@ class KeypadWithHistory: KeypadWithHistoryType {
         /// TODO: look at how KeypadWithHistory calls `.pushOperator()` if newNumber != nil after calling `super.updateNumber(newNumber)`
         stack = []
         isEditingNumber = false
+        // swiftlint:disable:next identifier_name
         guard let _newNumber = newNumber else {
             currentNumber = nil
             return

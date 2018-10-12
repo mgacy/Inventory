@@ -47,6 +47,7 @@ class OrderVendorViewModel {
         self.parentObject = parentObject
 
         // Refresh
+        // swiftlint:disable:next identifier_name
         let _refresh = PublishSubject<Void>()
         self.refresh = _refresh.asObserver()
         self.hasRefreshed = _refresh.asObservable()
@@ -57,6 +58,7 @@ class OrderVendorViewModel {
             .asDriver(onErrorJustReturn: false)
 
         // Prompt Confirmation
+        // swiftlint:disable:next identifier_name
         let _confirmComplete = PublishSubject<Void>()
         self.confirmComplete = _confirmComplete.asObserver()
 

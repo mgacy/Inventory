@@ -33,6 +33,7 @@ class OrderContainerViewModel {
         self.parentObject = parentObject
 
         // Prompt Confirmation
+        // swiftlint:disable:next identifier_name
         let _confirmComplete = PublishSubject<Void>()
         self.confirmComplete = _confirmComplete.asObserver()
 
