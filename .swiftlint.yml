@@ -14,11 +14,16 @@ force_try:
 # naming rules can set warnings/errors for min_length and max_length
 # additionally they can set excluded names
 identifier_name:
+  # allowed_symbols: "_"
   excluded:
+    - dx
+    - dy
     - id
     - in
     - of
+    - tv
     - vc
+    - vm
     - x
     - y
 
