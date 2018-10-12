@@ -275,18 +275,19 @@ class OrderCoordinator: BaseCoordinator<Void> {
         navigationController.showDetailViewController(viewController, sender: nil)
 
         // Navigation
-        viewController.tableView.rx
+        let tablewViewController = viewController as MGTableViewController
+        tablewViewController.tableView.rx
             .itemSelected
             .flatMap { [weak self] indexPath -> Observable<Void> in
                 guard let strongSelf = self else { return .empty() }
                 return strongSelf.showKeypad(parent: parent, atIndex: indexPath.row)
             }
-            .do(onNext: { [tableView = viewController.tableView] _ in
+            .do(onNext: { [tableView = tablewViewController.tableView] _ in
                 tableView.reloadData()
             })
             .debug("itemSelection - OrderLocItemVC")
             .subscribe()
-            .disposed(by: viewController.disposeBag)
+            .disposed(by: tablewViewController.disposeBag)
     }
 
     func showKeypad(parent: OrderLocItemParent, atIndex index: Int) -> Observable<Void> {
