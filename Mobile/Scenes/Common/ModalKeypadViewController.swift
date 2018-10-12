@@ -127,6 +127,11 @@ final class ModalKeypadViewController: UIViewController {
             interactionController = UIPercentDrivenInteractiveTransition()
             customTransitionDelegate.interactionController = interactionController
             dismiss(animated: true)
+
+            /// https://stackoverflow.com/a/50238562/4472195
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
+                self.interactionController?.update(percent)
+            }
         case .changed:
             //log.debug("changed: \(percent)")
             interactionController?.update(percent)
