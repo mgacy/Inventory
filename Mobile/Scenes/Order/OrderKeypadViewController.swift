@@ -7,73 +7,158 @@
 //
 
 import UIKit
-import CoreData
+import RxCocoa
+import RxSwift
 
 class OrderKeypadViewController: UIViewController {
+    typealias KeypadViewModelType = OrderKeypadViewModelType & KeypadProxy & DisplayItemViewModelType
 
     // MARK: - Properties
 
-    var viewModel: OrderKeypadViewModel!
+    let disposeBag = DisposeBag()
+    //let dismissalEvents: Observable<Void>
+    var viewModel: KeypadViewModelType!
 
-    // MARK: - Display Outlets
+    // swiftlint:disable:next weak_delegate
+    private let customTransitionDelegate = SheetTransitioningDelegate()
+    private let changeItemDissmissalEvent = PublishSubject<DismissalEvent>()
+    private let panGestureDissmissalEvent = PublishSubject<DismissalEvent>()
 
-    @IBOutlet weak var itemName: UILabel!
-    @IBOutlet weak var par: UILabel!
-    @IBOutlet weak var onHand: UILabel!
-    @IBOutlet weak var minOrder: UILabel!
-    @IBOutlet weak var caseSize: UILabel!
-    @IBOutlet weak var order: UILabel!
-    @IBOutlet weak var orderUnit: UILabel!
+    // Pan down transitions back to the presenting view controller
+    var interactionController: UIPercentDrivenInteractiveTransition?
 
-    // MARK: - Keypad Outlets
+    let panGestureRecognizer: UIPanGestureRecognizer
 
-    @IBOutlet weak var caseButton: OperationKeypadButton!
-    @IBOutlet weak var bottleButton: OperationKeypadButton!
+    var dismissalEvents: Observable<DismissalEvent> {
+        return Observable.of(
+            displayView.dismissalEvents.asObservable(),
+            changeItemDissmissalEvent.asObservable(),
+            panGestureDissmissalEvent.asObservable()
+        )
+        .merge()
+    }
+
+    // MARK: View
+
+    lazy var displayView: OrderKeypadDisplayView = {
+        let view = OrderKeypadDisplayView()
+        view.backgroundColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var keypadView: KeypadView = {
+        let view = KeypadView()
+        view.viewController = self
+        view.backgroundColor = ColorPalette.lightGray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var stackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [displayView, keypadView])
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.axis = .vertical
+        view.alignment = .fill
+        view.distribution = .fill
+        view.spacing = 0.0
+        return view
+    }()
 
     // MARK: - Lifecycle
 
-    //override func viewDidLoad() {}
+    init() {
+        panGestureRecognizer = UIPanGestureRecognizer()
+        //self.dismissalEvents = Observable.of(
+        //    //displayView.dismissalEvents.asObservable(),
+        //    panGestureDissmissalEvent.asObservable()
+        //).merge()
+        super.init(nibName: nil, bundle: nil)
+        panGestureRecognizer.addTarget(self, action: #selector(handleGesture(_:)))
+        modalPresentationStyle = .custom
+        transitioningDelegate = customTransitionDelegate
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDisplay()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    //override func didReceiveMemoryWarning() {}
+
+    deinit { log.debug("\(#function)") }
+
+    // MARK: - View Methods
+
+    private func setupView() {
+        // Handle swipe down gesture
+        //let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleGesture(_:)))
+        panGestureRecognizer.delegate = self
+        view.addGestureRecognizer(panGestureRecognizer)
+
+        view.addSubview(stackView)
+        setupConstraints()
+    }
+
+    private func setupConstraints() {
+        //let guide: UILayoutGuide
+        //if #available(iOS 11, *) {
+        //    guide = view.safeAreaLayoutGuide
+        //} else {
+        //    guide = view.layoutMarginsGuide
+        //}
+        let constraints = [
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.topAnchor.constraint(equalTo: view.topAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            keypadView.heightAnchor.constraint(equalTo: displayView.heightAnchor, multiplier: 1.5)
+        ]
+        NSLayoutConstraint.activate(constraints)
     }
 
     // MARK: - Keypad
 
-    @IBAction func numberTapped(_ sender: AnyObject) {
-        guard let digit = sender.currentTitle else { return }
-        guard let number = Int(digit!) else { return }
+    @objc func numberTapped(sender: UIButton) {
+        guard let title = sender.currentTitle, let number = Int(title) else { return }
         viewModel.pushDigit(value: number)
-        order.text = viewModel.orderQuantity
+        updateDisplay()
+        //order.text = viewModel.orderQuantity
     }
 
-    @IBAction func clearTapped(_ sender: AnyObject) {
+    @objc func clearTapped(sender: UIButton) {
         viewModel.popItem()
-        order.text = viewModel.orderQuantity
+        updateDisplay()
+        //order.text = viewModel.orderQuantity
     }
 
-    @IBAction func decimalTapped(_ sender: AnyObject) {
+    @objc func decimalTapped(_ sender: UIButton) {
         viewModel.pushDecimal()
-        order.text = viewModel.orderQuantity
+        updateDisplay()
+        //order.text = viewModel.orderQuantity
     }
 
     // MARK: Units
 
-    @IBAction func packTapped(_ sender: AnyObject) {
+    /// Pack Button
+    @objc func softButton1Tapped(sender: UIButton) {
         guard viewModel.switchUnit(.packUnit) == true else {
             return
         }
         updateDisplay()
     }
 
-    /// TODO: rename `individualTapped`?
-    @IBAction func unitTapped(_ sender: AnyObject) {
+    /// Unit Button
+    @objc func softButton2Tapped(sender: UIButton) {
         guard viewModel.switchUnit(.singleUnit) == true else {
             return
         }
@@ -82,77 +167,120 @@ class OrderKeypadViewController: UIViewController {
 
     // MARK: Item Navigation
 
-    @IBAction func nextItemTapped(_ sender: AnyObject) {
+    @objc func nextItemTapped(_ sender: UIButton) {
         switch viewModel.nextItem() {
         case true:
             updateDisplay()
         case false:
-            navigationController!.popViewController(animated: true)
+            changeItemDissmissalEvent.onNext(.shouldDismiss)
+            //if let navController = navigationController {
+            //    navController.popViewController(animated: true)
+            //} else {
+            //    dismiss(animated: true)
+            //}
         }
     }
 
-    @IBAction func previousItemTapped(_ sender: AnyObject) {
+    @objc func previousItemTapped(_ sender: UIButton) {
         switch viewModel.previousItem() {
         case true:
             updateDisplay()
         case false:
-            navigationController!.popViewController(animated: true)
+            changeItemDissmissalEvent.onNext(.shouldDismiss)
+            //if let navController = navigationController {
+            //    navController.popViewController(animated: true)
+            //} else {
+            //    dismiss(animated: true)
+            //}
         }
     }
 
     // MARK: - Display
 
-    func updateDisplay() {
-        itemName.text = viewModel.name
-
-        caseSize.text = viewModel.pack
-        par.text = viewModel.par
-        onHand.text = viewModel.onHand
-        minOrder.text = viewModel.suggestedOrder
-
-        order.text = viewModel.orderQuantity
-        orderUnit.text = viewModel.orderUnit
-        /*
-        switch keypadOutput.total {
-        case nil:
-            order.textColor = UIColor.lightGray
-            orderUnit.textColor = UIColor.lightGray
-        case 0.0?:
-            order.textColor = UIColor.lightGray
-            orderUnit.textColor = UIColor.lightGray
-        default:
-            order.textColor = UIColor.black
-            orderUnit.textColor = UIColor.black
-        }
-        */
+    func updateDisplay(animated: Bool = true) {
+        displayView.bind(to: viewModel)
         updateKeypad()
     }
 
     /// TODO: rename `updateUnitButtons`?
-    func updateKeypad() {
-        caseButton.setTitle(viewModel.packUnitLabel, for: .normal)
-        caseButton.isEnabled = viewModel.singleUnitIsEnabled
+    func updateKeypad(animated: Bool = true) {
+        keypadView.softButton1.setTitle(viewModel.packUnitLabel, for: .normal)
+        keypadView.softButton1.isEnabled = viewModel.singleUnitIsEnabled
 
-        bottleButton.setTitle(viewModel.singleUnitLabel, for: .normal)
-        bottleButton.isEnabled = viewModel.packUnitIsEnabled
+        keypadView.softButton2.setTitle(viewModel.singleUnitLabel, for: .normal)
+        keypadView.softButton2.isEnabled = viewModel.packUnitIsEnabled
 
         guard let currentUnit = viewModel.currentUnit else {
-            caseButton.backgroundColor = ColorPalette.secondaryColor
-            bottleButton.backgroundColor = ColorPalette.secondaryColor
+            keypadView.softButton1.backgroundColor = ColorPalette.secondary
+            keypadView.softButton2.backgroundColor = ColorPalette.secondary
             return
         }
 
         switch currentUnit {
         case .singleUnit:
-            caseButton.backgroundColor = ColorPalette.secondaryColor
-            bottleButton.backgroundColor = ColorPalette.navyColor
+            keypadView.softButton1.backgroundColor = ColorPalette.secondary
+            keypadView.softButton2.backgroundColor = ColorPalette.navy
         case .packUnit:
-            caseButton.backgroundColor = ColorPalette.navyColor
-            bottleButton.backgroundColor = ColorPalette.secondaryColor
+            keypadView.softButton1.backgroundColor = ColorPalette.navy
+            keypadView.softButton2.backgroundColor = ColorPalette.secondary
         case .invalidUnit:
-            caseButton.backgroundColor = ColorPalette.secondaryColor
-            bottleButton.backgroundColor = ColorPalette.secondaryColor
+            keypadView.softButton1.backgroundColor = ColorPalette.secondary
+            keypadView.softButton2.backgroundColor = ColorPalette.secondary
+        }
+    }
+
+    // MARK: - B
+
+    @objc func handleGesture(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: gesture.view)
+        let percent = translation.y / gesture.view!.bounds.size.height
+        //log.debug("%: \(percent)")
+        switch gesture.state {
+        case .began:
+            interactionController = UIPercentDrivenInteractiveTransition()
+            customTransitionDelegate.interactionController = interactionController
+            dismiss(animated: true)
+        case .changed:
+            //log.debug("changed: \(percent)")
+            interactionController?.update(percent)
+        case .ended:
+            let velocity = gesture.velocity(in: gesture.view)
+            //log.debug("velocity: \(velocity)")
+            interactionController?.completionSpeed = 0.999  // https://stackoverflow.com/a/42972283/1271826
+            if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
+                interactionController?.finish()
+                /// Ensure we return event from coordinator when dismissing view with pan gesture
+                panGestureDissmissalEvent.onNext(.wasDismissed)
+            } else {
+                interactionController?.cancel()
+            }
+            interactionController = nil
+        default:
+            if translation != .zero {
+                let angle = atan2(translation.y, translation.x)
+                log.debug("Angle: \(angle)")
+            }
         }
     }
 
 }
+
+extension OrderKeypadViewController: UIGestureRecognizerDelegate {
+
+    // Recognize downward gestures only
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let pan = gestureRecognizer as? UIPanGestureRecognizer {
+            let translation = pan.translation(in: pan.view)
+            let angle = atan2(translation.y, translation.x)
+            return abs(angle - .pi / 2.0) < (.pi / 8.0)
+            // ALT
+            //let angle = abs(atan2(translation.x, translation.y) - .pi / 2)
+            //return angle < .pi / 8.0
+        }
+        return false
+    }
+}
+
+extension OrderKeypadViewController: KeypadViewControllerType {}
+
+extension OrderKeypadViewController: ModalKeypadDismissing {}

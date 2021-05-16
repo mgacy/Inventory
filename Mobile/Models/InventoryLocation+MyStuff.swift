@@ -6,9 +6,7 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
 
 enum InventoryLocationType: String {
     case category
@@ -22,107 +20,28 @@ enum InventoryStatus {
     case complete
 }
 
-extension InventoryLocation {
+// MARK: - Syncable
 
-    // MARK: - Lifecycle
+extension InventoryLocation: Syncable {
+    typealias RemoteType = RemoteInventoryLocation
+    typealias RemoteIdentifierType = Int32
 
-    convenience init(context: NSManagedObjectContext, json: JSON,
-                     inventory: Inventory) {
+    var remoteIdentifier: Int32 { return self.remoteID }
+
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
-
-        // Properties
-        /// TODO: name and locationType are required and lack default values
-        if let name = json["name"].string {
-            self.name = name
-        }
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let locationType = json["loc_type"].string {
-            self.locationType = locationType
-        }
-
-        // Relationship
-        self.inventory = inventory
-
-        // Add children based on Location type
-        switch self.locationType {
-        case "item"?:
-            if let itemIDs = json["items"].array {
-                addLocationItems(context: context, json: itemIDs)
-            }
-        case "category"?:
-            if let categories = json["categories"].array {
-                addLocationCategories(context: context, json: categories)
-            }
-        default:
-            fatalError("Unrecognied locationType")
-        }
+        remoteID = record.syncIdentifier
+        update(with: record, in: context)
     }
 
-    convenience init(context: NSManagedObjectContext, name: String, remoteID: Int, type: InventoryLocationType, inventory: Inventory) {
-        self.init(context: context)
-
-        // Properties
-        self.name = name
-        self.remoteID = Int32(remoteID)
-        self.locationType = type.rawValue
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        //remoteID
+        name = record.name
+        //locationType
 
         // Relationships
-        self.inventory = inventory
-    }
-
-    // MARK: - Handle New
-
-    private func addLocationCategories(context: NSManagedObjectContext, json: [JSON]) {
-        for (position, category) in json.enumerated() {
-            _ = InventoryLocationCategory(context: context, json: category, location: self,
-                                          position: position + 1)
-        }
-    }
-
-    private func addLocationItems(context: NSManagedObjectContext, json: [JSON]) {
-        for (position, itemID) in json.enumerated() {
-            if let itemID = itemID.int {
-                _ = InventoryLocationItem(context: context, itemID: itemID, location: self,
-                                          position: position + 1)
-            }
-        }
-    }
-
-    // MARK: - Handle existing
-
-    func findOrCreateCategory(context: NSManagedObjectContext, json: JSON,
-                              for locationItem: InventoryLocationItem) {
-
-        // Handle ItemCategory and InventoryLocationCategory
-        guard let categoryName = json["item"]["category"]["name"].string else { return }
-        guard let id = json["item"]["category"]["id"].int else { return }
-
-        // Try to fetch corresponding InventoryLocationCategory
-        if let locationCategory = fetchCategory(context: context, id: id) {
-            locationItem.category = locationCategory
-
-        } else {
-            // If one does not already exist, create one
-            /// TODO: handle position
-            let locationCategory = InventoryLocationCategory(context: context, id: id,
-                                                             name: categoryName, location: self)
-            locationCategory.location = self
-            locationItem.category = locationCategory
-        }
-
-    }
-
-    private func fetchCategory(context: NSManagedObjectContext, id: Int) -> InventoryLocationCategory? {
-        // TODO: add check for self.locationType?
-        let _id = Int32(id)
-        // swiftlint:disable:next force_cast line_length
-        if let locationCategory = self.categories?.filter({ ($0 as! InventoryLocationCategory).categoryID == _id }).first {
-            return locationCategory as? InventoryLocationCategory
-        } else {
-            return nil
-        }
+        //categories?
+        //items?
     }
 
 }
@@ -182,7 +101,12 @@ extension InventoryLocation {
                 status = InventoryStatus.complete
             }
         case false:
-            status = InventoryStatus.notStarted
+            switch hasIncompleted {
+            case true:
+                status = .incomplete
+            case false:
+                status = .notStarted
+            }
         }
 
         return status

@@ -12,7 +12,7 @@ import CoreData
 protocol TableViewDataSourceDelegate: class {
     associatedtype Object: NSFetchRequestResult
     associatedtype Cell: UITableViewCell
-    /// TODO: pass object or just indexPath?
+    /// TODO: pass Object or just IndexPath?
     func canEdit(_ object: Object) -> Bool
     func configure(_ cell: Cell, for object: Object)
 }
@@ -32,9 +32,9 @@ class TableViewDataSource<Delegate: TableViewDataSourceDelegate>: NSObject, UITa
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
 
-    required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Object>, delegate: Delegate) {
+    required init(tableView: UITableView, fetchedResultsController: NSFetchedResultsController<Object>, delegate: Delegate) {
         self.tableView = tableView
-        self.cellIdentifier = cellIdentifier
+        self.cellIdentifier = Cell.reuseID
         self.fetchedResultsController = fetchedResultsController
         self.delegate = delegate
         super.init()
@@ -43,6 +43,18 @@ class TableViewDataSource<Delegate: TableViewDataSourceDelegate>: NSObject, UITa
         tableView.dataSource = self
         tableView.reloadData()
     }
+
+//    required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Object>, delegate: Delegate) {
+//        self.tableView = tableView
+//        self.cellIdentifier = cellIdentifier
+//        self.fetchedResultsController = fetchedResultsController
+//        self.delegate = delegate
+//        super.init()
+//        fetchedResultsController.delegate = self
+//        try! fetchedResultsController.performFetch()
+//        tableView.dataSource = self
+//        tableView.reloadData()
+//    }
 
     var selectedObject: Object? {
         guard let indexPath = tableView.indexPathForSelectedRow else { return nil }

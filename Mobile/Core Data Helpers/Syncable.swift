@@ -6,82 +6,147 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
 
-// MARK: - Syncable
-@objc public protocol Syncable {
+protocol Syncable: Managed {
+    /// TODO: rename `RemoteType` as `RemoteRecordType`?
+    associatedtype RemoteType: RemoteRecord
+    associatedtype RemoteIdentifierType: Hashable
 
-    // https://gist.github.com/capttaco/adb38e0d37fbaf9c004e
-    //associatedtype SyncableType: NSManagedObject = Self
+    static var remoteIdentifierName: String { get }
+    var remoteIdentifier: RemoteIdentifierType { get }
 
-    var remoteID: Int32 { get set }
-
-    //convenience init(context: NSManagedObjectContext, representation: Any)
-    //func update(with json: Any, in context: NSManagedObjectContext)
-    func update(context: NSManagedObjectContext, withJSON json: Any)
+    /// TODO: should these all throw?
+    //static func updateOrCreate(with: RemoteType, in: NSManageObjectContext) -> Self
+    static func sync(with: [RemoteType], in: NSManagedObjectContext, matching: NSPredicate?)
+    func update(with: RemoteType, in: NSManagedObjectContext)
 }
 
-// MARK: - ManagedSyncable
-protocol ManagedSyncable: Managed, Syncable {}
+extension Syncable where Self: NSManagedObject {
 
-extension ManagedSyncable where Self: NSManagedObject {
+    static var remoteIdentifierName: String { return "remoteID" }
 
-    static func findOrCreate(withID id: Int32, withJSON json: Any, in context: NSManagedObjectContext) -> Self {
-        let predicate = NSPredicate(format: "remoteID == \(id)")
+    init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.setValue(record.syncIdentifier, forKey: Self.remoteIdentifierName)
+        self.update(with: record, in: context)
+    }
 
-        /// TODO: improve this ugly mess
+    static func updateOrCreate<R>(with record: RemoteType, in context: NSManagedObjectContext) -> Self
+        where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
+
+            let remoteIdentifier = record.syncIdentifier
+            let predicate = NSPredicate(format: "\(remoteIdentifierName) == \(remoteIdentifier)")
+            if let existingObject = findOrFetch(in: context, matching: predicate) {
+                existingObject.update(with: record, in: context)
+                return existingObject
+            } else {
+                let newObject = Self(with: record, in: context)
+                /*
+                let newObject: Self = context.insertObject()
+                newObject.setValue(record.syncIdentifier, forKey: remoteIdentifierName)
+                newObject.update(with: record, in: context)
+                 */
+                return newObject
+            }
+    }
+
+    static func fetchEntityDict<T>(in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil, prefetchingRelationships relationships: [String]? = nil, returningAsFaults asFaults: Bool = false) throws -> [T: Self] where T == Self.RemoteIdentifierType {
+
+        let request = NSFetchRequest<Self>(entityName: Self.entityName)
+
         /*
-         if let object: Self = findOrFetch(in: context, matching: predicate) {
-         object.update(context: context, withJSON: json)
-         } else {
-         let object: Self = context.insertObject()
-         object.update(context: context, withJSON: json)
-         }
-         return object
+         Set returnsObjectsAsFaults to false to gain a performance benefit if you know
+         you will need to access the property values from the returned objects.
          */
+        request.returnsObjectsAsFaults = asFaults
+        request.predicate = predicate
+        request.relationshipKeyPathsForPrefetching = relationships
 
-        guard let obj: Self = findOrFetch(in: context, matching: predicate) else {
-            //log.debug("Creating \(Self.self) \(id)")
-            let newObj: Self = context.insertObject()
-            newObj.update(context: context, withJSON: json)
-            return newObj
+        do {
+            let fetchedResult = try context.fetch(request)
+            return fetchedResult.toDictionary { $0.remoteIdentifier }
+        } catch let error {
+            log.error(error.localizedDescription)
+            throw error
         }
-        //log.debug("Updating \(Self.self) \(id)")
-        obj.update(context: context, withJSON: json)
-        return obj
     }
 
-}
-
-// MARK: - SyncableCollection
-@objc public protocol SyncableCollection {
-    var date: String? { get set }
-    var storeID: Int32 { get set }
-    var uploaded: Bool { get set }
-}
-
-extension SyncableCollection where Self : NSManagedObject {
-
-    func update(context: NSManagedObjectContext, withJSON json: JSON) {
-        if let date = json["date"].string {
-            self.date = date
-        }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
-        //self.uploaded = uploaded
+    static func fetchWithRemoteIdentifier<T>(_ identifier: T, in context: NSManagedObjectContext) -> Self?
+        where T == Self.RemoteIdentifierType {
+            let predicate = NSPredicate(format: "\(Self.remoteIdentifierName) == \(identifier)")
+            // NOTE: this doesn't produce an error for multiple matches
+            return findOrFetch(in: context, matching: predicate)
     }
 
-    func update(context: NSManagedObjectContext, withJSON json: JSON, uploaded: Bool) {
-        if let date = json["date"].string {
-            self.date = date
+    /// TODO: add `throws`?
+    /// TODO: configuration block `configure: (Self) -> Void = { _ in }`; this could cover most of SyncableParent
+    static func sync<R>(with records: [RemoteType], in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil)
+        where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
+            guard let objectDict: [R: Self] = try? fetchEntityDict(in: context, matching: predicate) else {
+                log.error("\(#function) FAILED : unable to create dictionary for \(self)"); return
+            }
+
+            let localIDs: Set<R> = Set(objectDict.keys)
+            var remoteIDs = Set<R>()
+
+            for record in records {
+                let objectID = record.syncIdentifier
+                remoteIDs.insert(objectID)
+
+                // Find + update / create Items
+                if let existingObject = objectDict[objectID] {
+                    existingObject.update(with: record, in: context)
+                    //log.debug("existingObject: \(existingObject)")
+                } else {
+                    let newObject = Self(with: record, in: context)
+                    /// TODO: add newObject to localIDs?
+                    log.verbose("newObject: \(newObject)")
+                }
+                /*
+                let object = objectDict[objectID] ?? Self.init(context: context)
+                object.update(with: record, in: managedObjectContext)
+                 */
+            }
+
+            //log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
+
+            // Delete objects that were deleted from server. We filter remoteID 0
+            // since that is the default value for new objects
+            /// TODO: switch based on remoteIdentifierName instead?
+            let deletedObjects: Set<R>
+            switch R.self {
+            case is Int32.Type:
+                deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 as? Int32 != 0 }
+            case is Int.Type:
+                deletedObjects = localIDs.subtracting(remoteIDs).filter { $0 as? Int != 0 }
+            default:
+                deletedObjects = localIDs.subtracting(remoteIDs)
+            }
+
+            delete(withIdentifiers: deletedObjects, in: context, matching: predicate)
+    }
+
+    private static func delete(withIdentifiers identifiers: Set<RemoteIdentifierType>, in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil) {
+        //log.debug("We need to delete: \(identifiers)")
+        guard !identifiers.isEmpty else { return }
+
+        let fetchPredicate: NSPredicate
+        if let additionalPredicate = predicate {
+            fetchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", identifiers), additionalPredicate])
+        } else {
+            fetchPredicate = NSPredicate(format: "\(Self.remoteIdentifierName) IN %@", identifiers)
         }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
+
+        do {
+            try context.deleteEntities(self, filter: fetchPredicate)
+        } catch {
+            /// TODO: deleteEntities(_:filter) already logs the error
+            let updateError = error as NSError
+            log.error("\(updateError), \(updateError.userInfo)")
+            //throw updateError?
         }
-        self.uploaded = uploaded
     }
 
 }

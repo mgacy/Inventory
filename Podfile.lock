@@ -1,37 +1,57 @@
 PODS:
-  - 1PasswordExtension (1.8.4)
-  - Alamofire (4.5.0)
-  - KeychainAccess (3.0.2)
-  - PKHUD (4.2.3)
-  - SwiftyBeaver (1.2.2)
+  - 1PasswordExtension (1.8.5)
+  - Alamofire (4.6.0)
+  - CodableAlamofire (1.1.0):
+    - Alamofire (~> 4.0)
+  - Differentiator (3.0.2)
+  - KeychainAccess (3.1.0)
+  - PKHUD (5.0.0)
+  - RxCocoa (4.1.2):
+    - RxSwift (~> 4.0)
+  - RxCoreData (0.4.0):
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
+  - RxDataSources (3.0.2):
+    - Differentiator (~> 3.0)
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
+  - RxSwift (4.1.2)
+  - RxSwiftExt (3.1.0):
+    - RxSwiftExt/Core (= 3.1.0)
+  - RxSwiftExt/Core (3.1.0):
+    - RxSwift (~> 4.0)
+  - SwiftyBeaver (1.5.1)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
-  - 1PasswordExtension (from `https://github.com/AgileBits/onepassword-app-extension.git`, branch `new/ios10`)
+  - 1PasswordExtension (~> 1.8.5)
   - Alamofire (~> 4.4)
+  - CodableAlamofire
   - KeychainAccess
-  - PKHUD (~> 4.2)
+  - PKHUD (~> 5.0)
+  - RxCocoa (~> 4.0)
+  - RxCoreData (~> 0.4.0)
+  - RxDataSources (~> 3.0)
+  - RxSwift (~> 4.0)
+  - RxSwiftExt (~> 3.0)
   - SwiftyBeaver
   - SwiftyJSON
 
-EXTERNAL SOURCES:
-  1PasswordExtension:
-    :branch: new/ios10
-    :git: https://github.com/AgileBits/onepassword-app-extension.git
-
-CHECKOUT OPTIONS:
-  1PasswordExtension:
-    :commit: 0fc27b2bf4af2978e9a1b8e1008003335d53e72e
-    :git: https://github.com/AgileBits/onepassword-app-extension.git
-
 SPEC CHECKSUMS:
-  1PasswordExtension: e775a29310c65851e5a6cec1afc349ab4e334e47
-  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
-  KeychainAccess: a986406022dfc7c634c691ad3bec670cc6a32002
-  PKHUD: c7692163a09875cbf15827dc581df3c5cf7f1015
-  SwiftyBeaver: 90a39e3dc5136b7285f2e4c870b107e3933b8b84
+  1PasswordExtension: 0e95bdea64ec8ff2f4f693be5467a09fac42a83d
+  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  CodableAlamofire: e2d2edcec7cf413f7862c30c8fa98eded27a83f9
+  Differentiator: a87be69eba49ec4ab460c7671143ee3a9eececfd
+  KeychainAccess: 94c5540b32eabf7bc32bfb976a268e8ea05fd6da
+  PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
+  RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
+  RxCoreData: 3717ff29afb7261f8cff4b893ffb0650367d0fe6
+  RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
+  RxSwift: e49536837d9901277638493ea537394d4b55f570
+  RxSwiftExt: a9b9c8e94be009146707f9fcb16eaf3cc1f3910c
+  SwiftyBeaver: 4f74563624b2c1e821c522c54142b5dd5ebb0f30
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: bcd47642376676c96d910b5e67337e25a3bb37d1
+PODFILE CHECKSUM: dbeedd8bb6f684d18ed5e58ed60cae6b4c1557d0
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.4.0

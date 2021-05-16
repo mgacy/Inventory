@@ -6,112 +6,118 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
+
+extension OrderCollection: DateFacade {}
+
+// MARK: - Syncable
+
+extension OrderCollection: Syncable {
+    typealias RemoteType = RemoteOrderCollection
+    typealias RemoteIdentifierType = Date
+
+    static var remoteIdentifierName: String { return "dateTimeInterval" }
+
+    var remoteIdentifier: RemoteIdentifierType { return Date(timeIntervalSinceReferenceDate: dateTimeInterval) }
+
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        guard let date = record.date.toBasicDate() else {
+            /// TODO:find better way of handling error; use SyncError type
+            fatalError("Unable to parse date from: \(record)")
+        }
+        self.dateTimeInterval = date.timeIntervalSinceReferenceDate
+        self.uploaded = true
+        update(with: record, in: context)
+    }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.storeID = Int32(record.storeID)
+        if let inventoryID = record.inventoryId { self.inventoryID = Int32(inventoryID) }
+
+        /// TODO: handle `uploaded`
+
+        /// Relationships
+        if let orders = record.orders {
+            syncChildren(with: orders, in: context)
+        }
+
+        updateStatus()
+    }
+
+}
+
+// MARK: - SyncableParent
+
+extension OrderCollection: SyncableParent {
+    typealias ChildType = Order
+
+    /// TODO: handle remoteID == 0 on new Orders
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: Order]? {
+        let fetchPredicate = NSPredicate(format: "collection == %@", self)
+        guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func updateParent(of entity: ChildType) {
+        entity.collection = self
+        entity.date = self.dateTimeInterval
+    }
+
+}
+
+// MARK: - Location Sync
 
 extension OrderCollection {
 
-    // MARK: - Lifecycle
-
-    convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
-        self.init(context: context)
-
-        // Set properties
-        if let date = json["date"].string {
-            self.date = date
-        }
-        if let inventoryID = json["inventory_id"].int32 {
-            self.inventoryID = inventoryID
-        }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
-        self.uploaded = uploaded
-
-        // Add Orders
-        if let orders = json["orders"].array {
-            for orderJSON in orders {
-                _ = Order(context: context, json: orderJSON, collection: self, uploaded: uploaded)
-            }
-        }
+    /// TODO: return Observable<Void>?
+    func syncOrderLocations(with records: [RemoteLocation], in context: NSManagedObjectContext) -> [OrderLocation] {
+        let syncedLocations = OrderLocation.syncLocations(belongingTo: self, with: records, in: context)
+        return syncedLocations
     }
 
-    // MARK: - Serialization
+}
+
+// MARK: - Serialization
+
+extension OrderCollection {
+
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-
-        /// TODO: handle conversion from NSDate to string
-        myDict["date"] = self.date
+        myDict["date"] = dateTimeInterval.toPythonDateString()
 
         // ...
 
         return myDict
     }
 
-    // MARK: - Update Existing
-
-    func updateExisting(context: NSManagedObjectContext, json: JSON) {
-        guard let orders = json["orders"].array else {
-            log.error("\(#function) FAILED : unable to get orders from JSON"); return
-        }
-
-        // Iterate over Orders
-        for orderJSON in orders {
-            _ = Order(context: context, json: orderJSON, collection: self, uploaded: true)
-        }
-    }
-
-    // MARK: -
-
-    static func fetchByDate(context: NSManagedObjectContext, date: String) -> OrderCollection? {
-        let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
-        request.predicate = NSPredicate(format: "date == %@", date)
-
-        do {
-            let searchResults = try context.fetch(request)
-
-            switch searchResults.count {
-            case 0:
-                return nil
-            case 1:
-                return searchResults[0]
-            default:
-                log.warning("Found multiple matches: \(searchResults)")
-                return searchResults[0]
-            }
-
-        } catch {
-            log.error("Error with request: \(error)")
-        }
-        return nil
-    }
 }
 
-// The extension already offers a default implementation; we will use that
-extension OrderCollection: SyncableCollection {}
+// MARK: - Status
 
 extension OrderCollection {
 
     func updateStatus() {
-        log.debug("\(#function) starting ...")
+        //log.debug("\(#function) starting ...")
         guard uploaded == false else {
-            log.debug("OrderCollection has already been uploaded.")
+            //log.debug("OrderCollection has already been uploaded.")
             return
         }
         guard let orders = orders else {
-            log.debug("OrderCollection does not appear to have any Orders.")
+            //log.debug("OrderCollection does not appear to have any Orders.")
             return
         }
         for order in orders {
             // swiftlint:disable:next for_where
             if (order as? Order)?.uploaded == false {
-                log.debug("Order has not been uploaded")
+                //log.debug("Order has not been uploaded")
                 return
             }
         }
 
-        log.debug("It looks like all orders have been uploaded; we should change status")
+        //log.debug("It looks like all orders have been uploaded; we should change status")
         uploaded = true
     }
 

@@ -7,32 +7,68 @@
 //
 
 import UIKit
-import CoreData
-import SwiftyJSON
 import PKHUD
+import RxCocoa
+import RxSwift
 
-class InvoiceItemViewController: UITableViewController {
+class InvoiceItemViewController: UIViewController {
+
+    private enum Strings {
+        //static let navTitle
+        static let errorAlertTitle = "Error"
+        // Actions
+        static let alertMessage = "Why wasn't this item received?"
+        //static let notReceivedActionTitle = "Not Received ..."
+        //static let moreActionTitle = "More"
+        //static let receivedActionTitle = "Received"
+        //static let damagedActionTitle = "Damaged"
+        //static let outOfStockActionTitle = "Out of Stock"
+        //static let wrongItemActionTitle = "Wrong Item"
+        //static let cancelActionTitle = "Cancel"
+    }
+
+    var bindings: InvoiceItemViewModel.Bindings {
+        return InvoiceItemViewModel.Bindings(
+            rowTaps: tableView.rx.itemSelected.asObservable(),
+            uploadTaps: uploadButtonItem.rx.tap.asObservable())
+    }
 
     // MARK: - Properties
 
-    var parentObject: Invoice!
-    var selectedObject: InvoiceItem?
+    var viewModel: InvoiceItemViewModel!
+    let disposeBag = DisposeBag()
+    let wasPopped: Observable<Void>
+    let wasPoppedSubject = PublishSubject<Void>()
 
-    // FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //var filter: NSPredicate? = nil
-    //var cacheName: String? = nil
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    // MARK: - Interface
+    let uploadButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Upload"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
 
-    // TableView
-    var cellIdentifier = "InvoiceItemCell"
+    lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = .white
+        tv.delegate = self
+        return tv
+    }()
 
     // MARK: - Lifecycle
 
+    init() {
+        self.wasPopped = wasPoppedSubject.asObservable()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        //fatalError("init(coder:) has not been implemented")
+        self.wasPopped = wasPoppedSubject.asObservable()
+        super.init(coder: aDecoder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = parentObject.vendor?.name
+        setupView()
+        setupConstraints()
+        setupBindings()
         setupTableView()
     }
 
@@ -41,166 +77,125 @@ class InvoiceItemViewController: UITableViewController {
         self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    //override func didReceiveMemoryWarning() {}
+
+    deinit {
+        log.debug("\(#function)")
     }
 
-    // MARK: - Navigation
+    // MARK: - View Methods
 
-    fileprivate func showKeypad(withItem item: InvoiceItem) {
-        guard let destinationController = InvoiceKeypadViewController.instance() else {
-            fatalError("\(#function) FAILED: unable to get destination view controller.")
-        }
-        guard
-            let indexPath = self.tableView.indexPathForSelectedRow?.row,
-            let managedObjectContext = managedObjectContext else {
-                fatalError("\(#function) FAILED: unable to get indexPath or moc")
-        }
+    func setupView() {
+        title = viewModel.vendorName
+        self.navigationItem.rightBarButtonItem = uploadButtonItem
+        self.view.addSubview(tableView)
 
-        destinationController.viewModel = InvoiceKeypadViewModel(for: parentObject, atIndex: indexPath,
-                                                                 inContext: managedObjectContext)
-        navigationController?.pushViewController(destinationController, animated: true)
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
+    }
+
+    private func setupConstraints() {
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+
+    func setupBindings() {
+
+        // Uploading
+        viewModel.isUploading
+            .filter { $0 }
+            .drive(onNext: { _ in
+                HUD.show(.progress)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.uploadResults
+            .subscribe(onNext: { [weak self] result in
+                switch result.event {
+                case .next:
+                    HUD.flash(.success, delay: 0.5) { _ in
+                        /// TODO: handle this elsewhere
+                        self?.navigationController!.popViewController(animated: true)
+                    }
+                case .error:
+                    /// TODO: `case.error(let error):; switch error {}`
+                    UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
+                case .completed:
+                    log.warning("\(#function) : not sure how to handle completion")
+                }
+            })
+            .disposed(by: disposeBag)
+
+        // Errors
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceItemViewController>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
-        tableView.register(SubItemTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 80
-
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<InvoiceItem> = InvoiceItem.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        let fetchPredicate = NSPredicate(format: "invoice == %@", parentObject)
-        request.predicate = fetchPredicate
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+        tableView.register(cellType: SubItemTableViewCell.self)
+        //tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.estimatedRowHeight = 80
+        tableView.tableFooterView = UIView()
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    // MARK: - User interaction
+}
 
-    @IBAction func uploadTapped(_ sender: AnyObject) {
-        log.info("Uploading Invoice ...")
+// MARK: - UITableViewDelegate
+extension InvoiceItemViewController: UITableViewDelegate {
 
-        guard let dict = self.parentObject.serialize() else {
-            log.error("\(#function) FAILED : unable to serialize Invoice")
-            /// TODO: completedUpload(false)
-            return
-        }
-        APIManager.sharedInstance.postInvoice(invoice: dict, completion: completedUpload)
-    }
-
-    // MARK: - UITableViewDelegate
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected InvoiceItem: \(String(describing: selectedObject))")
-        guard let selection = selectedObject else {
-            fatalError("Couldn't get selected Invoice")
-        }
-        showKeypad(withItem: selection)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let invoiceItem = dataSource.objectAtIndexPath(indexPath)
-        /*
-        // More Button
-        let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
-            self.isEditing = false
-            log.info("more button tapped")
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+
+        // More
+        let more = UITableViewRowAction(style: .normal, title: "More") { _, indexPath in
+            /// TODO: .promo and .substitute will require further action
+            let statusList: [InvoiceItemStatus] = [.damaged, .wrongItem, .notReceived]
+            self.showNotReceivedAlert(forItemAt: indexPath, with: statusList,
+                                      handler: self.viewModel.updateItemStatus(forItemAt:withStatus:))
         }
         more.backgroundColor = UIColor.lightGray
-        */
-        // Not Received Button
-        let notReceived = UITableViewRowAction(style: .normal, title: "Not Received ...") { _, _ in
-            self.showNotReceivedAlert(forItem: invoiceItem)
-        }
-        notReceived.backgroundColor = ColorPalette.redColor
+        //more.backgroundColor = ColorPalette.yellowColor
 
-        // Received Button
-        let received = UITableViewRowAction(style: .normal, title: "Received") { _, _ in
-            invoiceItem.status = InvoiceItemStatus.received.rawValue
-            self.managedObjectContext?.performSaveOrRollback()
-            self.isEditing = false
+        // Out of Stock
+        let outOfStock = UITableViewRowAction(style: .normal, title: "Out of Stock") { _, indexPath in
+            self.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .outOfStock)
         }
-        received.backgroundColor = ColorPalette.navyColor
+        outOfStock.backgroundColor = ColorPalette.red
 
-        return [received, notReceived]
+        // Received
+        let received = UITableViewRowAction(style: .normal, title: "Received") { [weak self] _, indexPath in
+            /// TODO: do we not need to handle setting `self.isEditing = false`?
+            self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .received) //{ self?.isEditing = false }
+        }
+        received.backgroundColor = ColorPalette.navy
+
+        return [received, outOfStock, more]
     }
 
 }
 
-// MARK: - Completion Handlers
+// MARK: - Alert Controller
 extension InvoiceItemViewController {
 
-    /// TODO: change signature to accept standard (JSON?, Error?)
-
-    func completedUpload(succeeded: Bool, json: JSON) {
-        if succeeded {
-            parentObject.uploaded = true
-
-            /// TODO: set .uploaded of parentObject.collection if all are uploaded
-
-            HUD.flash(.success, delay: 1.0) { _ in
-                self.navigationController!.popViewController(animated: true)
-            }
-
-        } else {
-            log.error("\(#function) FAILED : unable to upload Invoice")
-        }
-    }
-
-}
-
-// MARK: - Alert Controller Extension
-extension InvoiceItemViewController {
-
-    func showNotReceivedAlert(forItem invoiceItem: InvoiceItem) {
-
-        // Generic Action Handler
-
-        func updateItemStatus(forItem invoiceItem: InvoiceItem, withStatus status: InvoiceItemStatus) {
-            self.isEditing = false
-            invoiceItem.status = status.rawValue
-            managedObjectContext?.performSaveOrRollback()
-            log.info("Updated InvoiceItem: \(invoiceItem)")
-        }
+    func showNotReceivedAlert(forItemAt indexPath: IndexPath, with statusList: [InvoiceItemStatus], handler: @escaping (IndexPath, InvoiceItemStatus) -> Void) {
 
         // Alert Controller
-        let alertController = UIAlertController(title: nil, message: "Why wasn't this item received?",
-                                                preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: nil, message: Strings.alertMessage,
+                                                preferredStyle: .adaptiveActionSheet)
 
-        // Actions
-
-        /// TODO: use InvoiceItemStatus.description for alert action title?
-
-        // damaged
-        alertController.addAction(UIAlertAction(title: "Damaged", style: .default, handler: { (_) in
-            updateItemStatus(forItem: invoiceItem, withStatus: .damaged)
-        }))
-
-        // outOfStock
-        alertController.addAction(UIAlertAction(title: "Out of Stock", style: .default, handler: { (_) in
-            updateItemStatus(forItem: invoiceItem, withStatus: .outOfStock)
-        }))
-
-        // wrongItem
-        alertController.addAction(UIAlertAction(title: "Wrong Item", style: .default, handler: { (_) in
-            updateItemStatus(forItem: invoiceItem, withStatus: .wrongItem)
-        }))
+        statusList.forEach { status in
+            alertController.addAction(UIAlertAction(title: status.description, style: .default) { _ in
+                handler(indexPath, status)
+            })
+        }
 
         // cancel
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
@@ -211,35 +206,31 @@ extension InvoiceItemViewController {
         present(alertController, animated: true, completion: nil)
     }
 
-    func showMoreAlert(forItem invoiceItem: InvoiceItem) {
+}
 
-        // Generic Action Handler
+// MARK: - TableViewDataSourceDelegate
+extension InvoiceItemViewController: TableViewDataSourceDelegate {
 
-        // Alert Controller
+    func canEdit(_ item: InvoiceItem) -> Bool {
+        return true
+        //switch item.status {
+        //case InvoiceItemStatus.received.rawValue:
+        //    return false
+        //default:
+        //    return true
+        //}
+    }
 
-        // Actions
-
-        // Present Alert
-
+    func configure(_ cell: SubItemTableViewCell, for invoiceItem: InvoiceItem) {
+        let viewModel = InvoiceItemCellViewModel(forInvoiceItem: invoiceItem)
+        cell.configure(withViewModel: viewModel)
     }
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
-extension InvoiceItemViewController: TableViewDataSourceDelegate {
-
-    func canEdit(_ item: InvoiceItem) -> Bool {
-        switch item.status {
-        case InvoiceItemStatus.received.rawValue:
-            return false
-        default:
-            return true
-        }
+// MARK: - PoppedObservable
+extension InvoiceItemViewController: PoppedObservable {
+    func viewWasPopped() {
+        wasPoppedSubject.onNext(())
     }
-
-    func configure(_ cell: SubItemTableViewCell, for invoiceItem: InvoiceItem) {
-        let viewModel = InvoiceItemViewModel(forInvoiceItem: invoiceItem)
-        cell.configure(withViewModel: viewModel)
-    }
-
 }

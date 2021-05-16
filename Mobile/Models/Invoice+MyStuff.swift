@@ -6,101 +6,140 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
 
 @objc public enum InvoiceStatus: Int16 {
-    case notReceived    = 0
-    case outOfStock     = 1
-    case received       = 2
-    case substitute     = 3
-}
+    case pending        = 0
+    //case received       = 1
+    case rejected       = 2
+    //case paymentIssue   = 3
+    case completed      = 4
 
-extension Invoice {
-
-    @NSManaged var ageType: InvoiceStatus
-
-    // MARK: - Lifecycle
-
-    convenience init(context: NSManagedObjectContext, json: JSON, collection: InvoiceCollection, uploaded: Bool = false) {
-        self.init(context: context)
-
-        // Properties
-
-        if let remoteID = json["remote_id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let invoiceNo = json["invoice_no"].int32 {
-            self.invoiceNo = invoiceNo
-        }
-        if let shipDate = json["ship_date"].string {
-            self.shipDate = shipDate
-        }
-        if let receiveDate = json["receive_date"].string {
-            self.receiveDate = receiveDate
-        }
-        if let credit = json["credit"].double {
-            self.credit = credit
-        }
-        if let shipping = json["shipping"].double {
-            self.shipping = shipping
-        }
-        if let taxes = json["taxes"].double {
-            self.taxes = taxes
-        }
-        /// TODO: this should be a computed property
-        if let totalCost = json["total_cost"].double {
-            self.totalCost = totalCost
-        }
-        if let checkNo = json["check_no"].int32 {
-            self.checkNo = checkNo
-        }
-        self.uploaded = uploaded
-
-        /// TODO: status
-        //if let status = json["status"] {
-        //    self.status = status
-        //}
-
-        // Relationships
-        self.collection = collection
-        /// TODO: error / log if these fail
-        if let items = json["items"].array {
-            for itemJSON in items {
-                _ = InvoiceItem(context: context, json: itemJSON, invoice: self, uploaded: uploaded)
-            }
-        }
-        if let vendorID = json["vendor"]["id"].int32 {
-            self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
+    static func asString(raw: Int16) -> String? {
+        switch raw {
+        case 0: return "pending"
+        //case 1: return "received"
+        case 2: return "rejected"
+        //case 3: return "payment_issue"
+        case 4: return "completed"
+        default: return nil
         }
     }
 
-    // MARK: - Serialization
+    init(recordStatus status: RemoteInvoice.Status) {
+        switch status {
+        case .pending: self = .pending
+        case .rejected: self = .rejected
+        case .completed: self = .completed
+        }
+    }
+
+}
+
+// MARK: - Syncable
+
+extension Invoice: Syncable {
+    typealias RemoteType = RemoteInvoice
+    typealias RemoteIdentifierType = Int32
+
+    var remoteIdentifier: RemoteIdentifierType { return self.remoteID }
+
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        remoteID = record.syncIdentifier
+        update(with: record, in: context)
+    }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        // Required
+        guard let shipDate = record.shipDate.toBasicDate(), let receiveDate = record.receiveDate.toBasicDate() else {
+            /// TODO: a fatalError seems excessive for this type of error
+            fatalError("\(#function) FAILED : unable to parse shipDate or receiveDate from \(record)")
+        }
+        self.shipDate = shipDate.timeIntervalSinceReferenceDate
+        self.receiveDate = receiveDate.timeIntervalSinceReferenceDate
+        self.status = InvoiceStatus(recordStatus: record.status).rawValue
+
+        if record.vendor.syncIdentifier != vendor?.remoteIdentifier {
+            vendor = Vendor.updateOrCreate(with: record.vendor, in: context)
+        }
+
+        // Optional
+        if let invoiceNo = record.invoiceNo {
+            self.invoiceNo = Int32(invoiceNo)
+        }
+        if let credit = record.credit {
+            self.credit = credit
+        }
+        if let shipping = record.shipping {
+            self.shipping = shipping
+        }
+        if let taxes = record.taxes {
+            self.taxes = taxes
+        }
+        /// TODO: this should be a computed property
+        if let totalCost = record.totalCost {
+            self.totalCost = totalCost
+        }
+        if let checkNo = record.checkNo {
+            self.checkNo = Int32(checkNo)
+        }
+
+        // Relationships
+        syncChildren(with: record.items, in: context)
+    }
+
+}
+
+// MARK: - SyncableParent
+
+extension Invoice: SyncableParent {
+    typealias ChildType = InvoiceItem
+
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: InvoiceItem]? {
+        let fetchPredicate = NSPredicate(format: "invoice == %@", self)
+        guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func updateParent(of entity: InvoiceItem) {
+        entity.invoice = self
+    }
+
+}
+
+// MARK: - Serialization
+
+extension Invoice {
 
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
         myDict["id"] = Int(self.remoteID)
         myDict["invoice_no"] = Int(self.invoiceNo)
-        myDict["ship_date"] = self.shipDate
-        myDict["receive_date"] = self.receiveDate
+        myDict["ship_date"] = shipDate.toPythonDateString()
+        myDict["receive_date"] = receiveDate.toPythonDateString()
         myDict["credit"] = Double(self.credit)
         myDict["shipping"] = Double(self.shipping)
         myDict["taxes"] = Double(self.taxes)
-        myDict["total_cost"] = Int(self.totalCost)
+        myDict["total_cost"] = Double(self.totalCost)
         myDict["check_no"] = Int(self.checkNo)
+        myDict["status"] = InvoiceStatus.asString(raw: status) ?? ""
         myDict["store_id"] = Int((self.collection?.storeID)!)
-
-        if let vendor = self.vendor {
-            myDict["vendor_id"] = Int(vendor.remoteID)
+        guard let vendor = self.vendor else {
+            log.error("\(#function) FAILED : unable to serialize without a Vendor")
+            return nil
         }
+        myDict["vendor_id"] = Int(vendor.remoteID)
 
         // Generate array of dictionaries for InventoryItems
         guard let items = self.items else {
             log.error("\(#function) FAILED : unable to serialize without any InvoiceItems")
-            return myDict
+            return nil
         }
 
+        /// TODO: use map / flatmap / reduce
         var itemsArray = [[String: Any]]()
         for case let item as InvoiceItem in items {
             if let itemDict = item.serialize() {
@@ -112,4 +151,55 @@ extension Invoice {
         return myDict
     }
 
+}
+
+// MARK: - Status
+
+extension Invoice {
+
+    /// TODO: rename `updatedStatus()` and return true if we actually change status
+    func updateStatus() {
+        guard let invoiceItems = items else { return }
+
+        // Save current status so we can compare it to updated status
+        let currentStatusIsPending = status == InvoiceStatus.pending.rawValue ? true : false
+        var hasPending: Bool = false
+        var hasCompleted: Bool = false
+
+        for any in invoiceItems {
+            guard let invoiceItem = any as? InvoiceItem else { fatalError("\(#function) FAILED : wrong type") }
+            switch invoiceItem.status {
+            case InvoiceItemStatus.pending.rawValue:
+                hasPending = true
+                if !currentStatusIsPending {
+                    status = InvoiceStatus.pending.rawValue
+                    collection?.updateStatus()
+                    return //true
+                }
+            //case InvoiceItemStatus.received.rawValue:
+            //case InvoiceItemStatus.damaged.rawValue:
+            //case InvoiceItemStatus.outOfStock.rawValue:
+            //case InvoiceItemStatus.promo.rawValue:
+            //case InvoiceItemStatus.substitute.rawValue:
+            //case InvoiceItemStatus.wrongItem.rawValue:
+            default:
+                hasCompleted = true
+            }
+        }
+
+        switch currentStatusIsPending {
+        case true:
+            if hasCompleted && !hasPending {
+                status = InvoiceStatus.completed.rawValue
+                collection?.updateStatus()
+                //return true
+            }
+        case false:
+            if hasPending {
+                status = InvoiceStatus.pending.rawValue
+                collection?.updateStatus()
+                //return true
+            }
+        }
+    }
 }

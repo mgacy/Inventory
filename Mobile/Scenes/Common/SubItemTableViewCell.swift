@@ -8,6 +8,28 @@
 
 import UIKit
 
+// This is used in view models
+
+enum ItemStatus: String {
+    case inactive
+    case pending
+    case normal
+    case warning
+
+    var associatedColor: UIColor {
+        switch self {
+        case .inactive:
+            return .lightGray
+        case .pending:
+            return ColorPalette.yellow
+        case .normal:
+            return .black
+        case .warning:
+            return ColorPalette.red
+        }
+    }
+}
+
 class SubItemTableViewCell: UITableViewCell {
 
     let nameTextLabel = UILabel()
@@ -26,70 +48,70 @@ class SubItemTableViewCell: UITableViewCell {
     }
 
     func initViews() {
-        /// TESTING: backgroundColor
-        //nameTextLabel.backgroundColor = UIColor.red
-        //packTextLabel.backgroundColor = UIColor.yellow
-        //quantityTextLabel.backgroundColor = UIColor.cyan
-        //unitTextLabel.backgroundColor = UIColor.brown
-
         // Name
         contentView.addSubview(nameTextLabel)
+        nameTextLabel.numberOfLines = 0
+        nameTextLabel.translatesAutoresizingMaskIntoConstraints = false
 
         // Pack
         contentView.addSubview(packTextLabel)
         packTextLabel.font = UIFont.systemFont(ofSize: 12)
+        packTextLabel.numberOfLines = 1
+        packTextLabel.translatesAutoresizingMaskIntoConstraints = false
 
         // Quantity
         contentView.addSubview(quantityTextLabel)
+        quantityTextLabel.numberOfLines = 1
         quantityTextLabel.textAlignment = .right
+        quantityTextLabel.translatesAutoresizingMaskIntoConstraints = false
 
         // Unit
         contentView.addSubview(unitTextLabel)
+        unitTextLabel.numberOfLines = 1
+        unitTextLabel.translatesAutoresizingMaskIntoConstraints = false
     }
 
     func setupConstraints() {
         let marginGuide = contentView.layoutMarginsGuide
 
-        // Name
-        nameTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameTextLabel.leadingAnchor.constraint(equalTo: marginGuide.leadingAnchor).isActive = true
-        nameTextLabel.topAnchor.constraint(equalTo: marginGuide.topAnchor).isActive = true
-        //nameTextLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        nameTextLabel.trailingAnchor.constraint(equalTo: quantityTextLabel.leadingAnchor).isActive = true
-        nameTextLabel.numberOfLines = 0
-
-        // Pack
-        packTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        packTextLabel.leadingAnchor.constraint(equalTo: marginGuide.leadingAnchor).isActive = true
-        packTextLabel.topAnchor.constraint(equalTo: nameTextLabel.bottomAnchor).isActive = true
-        packTextLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        packTextLabel.bottomAnchor.constraint(equalTo: marginGuide.bottomAnchor).isActive = true
-        packTextLabel.numberOfLines = 1
-
-        // Unit
-        unitTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        //unitTextLabel.leadingAnchor.constraint(equalTo: quantityTextLabel.trailingAnchor).isActive = true
-        unitTextLabel.topAnchor.constraint(equalTo: marginGuide.topAnchor).isActive = true
-        unitTextLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        unitTextLabel.trailingAnchor.constraint(equalTo: marginGuide.trailingAnchor).isActive = true
-        unitTextLabel.numberOfLines = 1
-
-        // Quantity
-        quantityTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        //quantityTextLabel.leadingAnchor.constraint(equalTo: nameTextLabel.trailingAnchor).isActive = true
-        quantityTextLabel.topAnchor.constraint(equalTo: marginGuide.topAnchor).isActive = true
-        quantityTextLabel.widthAnchor.constraint(equalToConstant: 75).isActive = true
-        quantityTextLabel.trailingAnchor.constraint(equalTo: unitTextLabel.leadingAnchor, constant: -5).isActive = true
-        quantityTextLabel.numberOfLines = 1
+        NSLayoutConstraint.activate([
+            // Name
+            nameTextLabel.leadingAnchor.constraint(equalTo: marginGuide.leadingAnchor),
+            nameTextLabel.topAnchor.constraint(equalTo: marginGuide.topAnchor),
+            //nameTextLabel.widthAnchor.constraint(equalToConstant: 150),
+            nameTextLabel.trailingAnchor.constraint(equalTo: quantityTextLabel.leadingAnchor),
+            // Pack
+            packTextLabel.leadingAnchor.constraint(equalTo: marginGuide.leadingAnchor),
+            packTextLabel.topAnchor.constraint(equalTo: nameTextLabel.bottomAnchor),
+            packTextLabel.widthAnchor.constraint(equalToConstant: 150),
+            packTextLabel.bottomAnchor.constraint(equalTo: marginGuide.bottomAnchor),
+            // Unit
+            //unitTextLabel.leadingAnchor.constraint(equalTo: quantityTextLabel.trailingAnchor),
+            unitTextLabel.topAnchor.constraint(equalTo: marginGuide.topAnchor),
+            unitTextLabel.widthAnchor.constraint(equalToConstant: 30),
+            unitTextLabel.trailingAnchor.constraint(equalTo: marginGuide.trailingAnchor),
+            // Quantity
+            //quantityTextLabel.leadingAnchor.constraint(equalTo: nameTextLabel.trailingAnchor),
+            quantityTextLabel.topAnchor.constraint(equalTo: marginGuide.topAnchor),
+            quantityTextLabel.widthAnchor.constraint(equalToConstant: 75),
+            quantityTextLabel.trailingAnchor.constraint(equalTo: unitTextLabel.leadingAnchor, constant: -5)
+        ])
     }
-
+    /*
+    private func colorSubViewBackgrounds() {
+        nameTextLabel.backgroundColor = UIColor.red
+        packTextLabel.backgroundColor = UIColor.yellow
+        quantityTextLabel.backgroundColor = UIColor.cyan
+        unitTextLabel.backgroundColor = UIColor.brown
+    }
+    */
 }
 
 // MARK: -
 
 extension SubItemTableViewCell {
 
-    func configure(withViewModel viewModel: SubItemCellViewModel) {
+    func configure(withViewModel viewModel: SubItemCellViewModelType) {
         nameTextLabel.text = viewModel.nameText
         nameTextLabel.textColor = viewModel.nameColor
         packTextLabel.text = viewModel.packText
@@ -100,46 +122,4 @@ extension SubItemTableViewCell {
         unitTextLabel.textColor = viewModel.unitColor
     }
 
-}
-
-// MARK: - ViewModel
-
-enum ItemStatus: String {
-    case inactive
-    case pending
-    case normal
-    case warning
-
-    var associatedColor: UIColor {
-        switch self {
-        case .inactive:
-            return .lightGray
-        case .pending:
-            return ColorPalette.yellowColor
-        case .normal:
-            return .black
-        case .warning:
-            return ColorPalette.redColor
-        }
-    }
-}
-
-protocol SubItemCellViewModel {
-    //associatedtype Object: NSManagedObject
-    var nameText: String { get }
-    var nameColor: UIColor { get }
-    var packText: String { get }
-    var packColor: UIColor { get }
-    var quantityText: String { get }
-    var quantityColor: UIColor { get }
-    var unitText: String { get }
-    var unitColor: UIColor { get }
-
-    //init(for: Object)
-}
-
-// MARK: Default Implementations
-
-extension SubItemCellViewModel {
-    var packColor: UIColor { return UIColor.lightGray }
 }

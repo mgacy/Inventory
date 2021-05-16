@@ -7,109 +7,126 @@
 //
 
 import UIKit
-import CoreData
+import RxCocoa
+import RxSwift
 
-class InvoiceVendorViewController: UITableViewController {
+class InvoiceVendorViewController: MGTableViewController {
+
+    private enum Strings {
+        static let navTitle = "Vendors"
+        static let errorAlertTitle = "Error"
+    }
 
     // MARK: - Properties
 
-    var parentObject: InvoiceCollection!
-    var selectedObject: Invoice?
+    var bindings: InvoiceVendorViewModel.Bindings {
+        return InvoiceVendorViewModel.Bindings(rowTaps: tableView.rx.itemSelected.asDriver())
+    }
+    var viewModel: InvoiceVendorViewModel!
 
-    // MARK: FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext?
-    //var filter: NSPredicate? = nil
-    //var cacheName: String? = "Master"
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
-
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
-    // Segues
-    let segueIdentifier = "showInvoiceItems"
+    // MARK: - Interface
 
     // MARK: - Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = "Vendors"
-        setupTableView()
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    //override func didReceiveMemoryWarning() {}
+
+    deinit {
+        log.debug("\(#function)")
     }
 
-    // MARK: - Navigation
+    // MARK: - View Methods
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationController = segue.destination as? InvoiceItemViewController else {
-            fatalError("Wrong view controller type")
+    override func setupView() {
+        title = Strings.navTitle
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
         }
-        guard let selectedObject = selectedObject else {
-            fatalError("Showing detail, but no selected row?")
-        }
-        destinationController.parentObject = selectedObject
-        destinationController.managedObjectContext = managedObjectContext
+        super.setupView()
+    }
+
+    override func setupBindings() {
+        // Activity Indicator
+        viewModel.fetching
+            .drive(activityIndicatorView.rx.isAnimating)
+            .disposed(by: disposeBag)
+
+        viewModel.fetching
+            .map { !$0 }
+            .drive(activityIndicatorView.rx.isHidden)
+            .disposed(by: disposeBag)
+
+        viewModel.fetching
+            .map { !$0 }
+            .drive(messageLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+
+        viewModel.showTable
+            .map { !$0 }
+            .drive(tableView.rx.isHidden)
+            .disposed(by: disposeBag)
+        /*
+        // Errors
+        viewModel.errors
+            //.debug("Error:")
+            .delay(0.1)
+            .map { $0.localizedDescription }
+            .drive(errorAlert)
+            .disposed(by: disposeBag)
+        */
+        // Errors
+        viewModel.errorMessages
+            //.debug("Error:")
+            .delay(0.1)
+            .drive(errorAlert)
+            //.drive(onNext: { [weak self] message in
+            //    self?.showAlert(title: Strings.errorAlertTitle, message: message)
+            //})
+            .disposed(by: disposeBag)
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<InvoiceVendorViewController>!
-    //fileprivate var observer: ManagedObjectObserver?
 
-    fileprivate func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+    override func setupTableView() {
+        tableView.register(cellType: UITableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
         //tableView.estimatedRowHeight = 100
-
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<Invoice> = Invoice.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "vendor.name", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-
-        let fetchPredicate = NSPredicate(format: "collection == %@", parentObject)
-        request.predicate = fetchPredicate
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    // MARK: - UITableViewDelegate
+}
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = dataSource.objectAtIndexPath(indexPath)
-        log.verbose("Selected Invoice: \(String(describing: selectedObject))")
+// MARK: - UITableViewDelegate
+extension InvoiceVendorViewController: UITableViewDelegate {
 
-        performSegue(withIdentifier: segueIdentifier, sender: self)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
 
-// MARK: - TableViewDataSourceDelegate Extension
+// MARK: - TableViewDataSourceDelegate
 extension InvoiceVendorViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for invoice: Invoice) {
-       cell.textLabel?.text = invoice.vendor?.name
-
-        switch invoice.uploaded {
-        case false:
-            //cell.textLabel?.textColor = UIColor.lightGray
-            cell.textLabel?.textColor = ColorPalette.yellowColor
-        case true:
+        cell.textLabel?.text = invoice.vendor?.name
+        switch invoice.status {
+        case InvoiceStatus.pending.rawValue:
+            cell.textLabel?.textColor = ColorPalette.yellow
+        case InvoiceStatus.completed.rawValue:
             cell.textLabel?.textColor = UIColor.black
+        case InvoiceStatus.rejected.rawValue:
+            /// TODO: what color should we use?
+            cell.textLabel?.textColor = ColorPalette.red
+            //cell.textLabel?.textColor = UIColor.black
+        default:
+            log.warning("\(#function) : invalid status for \(invoice)")
+            cell.textLabel?.textColor = UIColor.lightGray
         }
     }
 

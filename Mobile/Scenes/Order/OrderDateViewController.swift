@@ -7,56 +7,98 @@
 //
 
 import UIKit
-import CoreData
-import Alamofire
-import SwiftyJSON
 import PKHUD
+import RxCocoa
+import RxSwift
 
-class OrderDateViewController: UITableViewController, RootSectionViewController {
+class OrderDateViewController: UIViewController {
 
-    // MARK: Properties
+    private enum Strings {
+        static let navTitle = "Orders"
+        static let errorAlertTitle = "Error"
+        static let newOrderTitle = "Create Order"
+        static let newOrderMessage = "Set order quantities from the most recent inventory or simply use pars?"
+    }
 
-    var userManager: CurrentUserManager!
-    var selectedCollection: OrderCollection?
-    //var selectedCollectionIndex: IndexPath?
+    // MARK: - Properties
 
-    // MARK: FetchedResultsController
-    var managedObjectContext: NSManagedObjectContext!
-    //var filter: NSPredicate? = nil
-    //var cacheName: String? = "Master"
-    //var sectionNameKeyPath: String? = nil
-    var fetchBatchSize = 20 // 0 = No Limit
+    var bindings: OrderDateViewModel.Bindings {
+        /*
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
+            .mapToVoid()
+            .asDriverOnErrorJustComplete()
+        let refresh = refreshControl.rx
+            .controlEvent(.valueChanged)
+            .asDriver()
+        */
+        // MARK: Alert
+        let addTaps = addButtonItem.rx.tap
+            .flatMap { [weak self] _ -> Observable<OrderDateViewModel.GenerationMethod> in
+                guard let `self` = self else { return Observable.just(.cancel) }
+                let actions: [OrderDateViewModel.GenerationMethod] = [.count, .par]
+                return self.promptFor(title: Strings.newOrderTitle, message: Strings.newOrderMessage,
+                                      cancelAction: .cancel, actions: actions)
+            }
+            .filter { $0 != .cancel }
+            .map { method -> NewOrderGenerationMethod in
+                switch method {
+                case .count:
+                    return NewOrderGenerationMethod.count
+                case .par:
+                    return NewOrderGenerationMethod.par
+                default:
+                    return NewOrderGenerationMethod.par
+                }
+            }
 
-    // TableViewCell
-    let cellIdentifier = "Cell"
-
-    // Segues
-    let segueIdentifier = "showOrderVendors"
+        return OrderDateViewModel.Bindings(
+            //fetchTrigger: Driver.merge(viewWillAppear, refresh),
+            fetchTrigger: refreshControl.rx.controlEvent(.valueChanged).asDriver(),
+            addTaps: addTaps.asDriver(onErrorDriveWith: .empty()),
+            //editTaps = editButtonItem.rx.tap.asDriver(),
+            rowTaps: tableView.rx.itemSelected.asDriver()
+        )
+    }
+    var viewModel: OrderDateViewModel!
+    let disposeBag = DisposeBag()
 
     /// TODO: provide interface to control these
     let orderTypeID = 1
+
+    // MARK: - Interface
+    let addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+    //let editButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+
+    lazy var activityIndicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var messageLabel: UILabel = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = .white
+        tv.delegate = self
+        return tv
+    }()
+
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        return control
+    }()
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        title = "Orders"
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
-        self.refreshControl?.addTarget(self, action: #selector(OrderDateViewController.refreshTable(_:)),
-                                       for: UIControlEvents.valueChanged)
-        setupTableView()
-
-        guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED : unable to get storeID"); return
-        }
-
-        HUD.show(.progress)
-        APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
-                                                            completion: self.completedGetListOfOrderCollections)
+        setupView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -64,125 +106,92 @@ class OrderDateViewController: UITableViewController, RootSectionViewController 
         self.tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    //override func didReceiveMemoryWarning() {}
+
+    // MARK: - View Methods
+
+    private func setupView() {
+        title = Strings.navTitle
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem
+        self.navigationItem.rightBarButtonItem = addButtonItem
+
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        self.view.addSubview(tableView)
+        self.view.addSubview(activityIndicatorView)
+        self.view.addSubview(messageLabel)
+
+        setupConstraints()
+        setupBindings()
+        setupTableView()
     }
 
-    // MARK: - Navigation
+    private func setupConstraints() {
+        //let guide: UILayoutGuide
+        //if #available(iOS 11, *) {
+        //    guide = view.safeAreaLayoutGuide
+        //} else {
+        //    guide = view.layoutMarginsGuide
+        //}
+        let constraints = [
+            // TableView
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            // ActivityIndicator
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            // MessageLabel
+            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            messageLabel.topAnchor.constraint(equalTo: activityIndicatorView.bottomAnchor, constant: 5.0)
+        ]
+        NSLayoutConstraint.activate(constraints)
+    }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let controller = segue.destination as? OrderVendorViewController else {
-            fatalError("Wrong view controller type")
-        }
-        guard let selection = selectedCollection else {
-            fatalError("Showing detail, but no selected row?")
-        }
-        controller.parentObject = selection
-        controller.managedObjectContext = self.managedObjectContext
+    private func setupBindings() {
+        // Activity Indicator
+        viewModel.isRefreshing
+            .delay(0.01)
+            .drive(refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
+        /*
+        viewModel.hasRefreshed
+            /// TODO: use weak or unowned self?
+            .drive(onNext: { [weak self] _ in
+                self?.tableView.reloadData()
+            })
+            .disposed(by: disposeBag)
+        */
+        // Errors
+        viewModel.errorMessages
+            .drive(onNext: { [weak self] message in
+                self?.showAlert(title: Strings.errorAlertTitle, message: message)
+            })
+            .disposed(by: disposeBag)
     }
 
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<OrderDateViewController>!
-    //fileprivate var observer: ManagedObjectObserver?
 
     fileprivate func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.refreshControl = refreshControl
+        tableView.register(cellType: UITableViewCell.self)
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.tableFooterView = UIView()
         tableView.estimatedRowHeight = 100
 
-        //let request = Mood.sortedFetchRequest(with: moodSource.predicate)
-        let request: NSFetchRequest<OrderCollection> = OrderCollection.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-        request.sortDescriptors = [sortDescriptor]
-
-        request.fetchBatchSize = fetchBatchSize
-        request.returnsObjectsAsFaults = false
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: cellIdentifier,
-                                         fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, fetchedResultsController: viewModel.frc, delegate: self)
     }
 
-    // MARK: - UITableViewDelegate
+}
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCollection = dataSource.objectAtIndexPath(indexPath)
-        guard let selection = selectedCollection else { fatalError("Unable to get selection") }
+// MARK: - TableViewDelegate
+extension OrderDateViewController: UITableViewDelegate {
 
-        switch selection.uploaded {
-        case true:
-            // Get date to use when getting OrderCollection from server
-            guard let storeID = userManager.storeID,
-                  let collectionDate = selection.date else {
-                log.error("\(#function) FAILED : unable to get storeID or collection date"); return
-            }
-
-            //tableView.activityIndicatorView.startAnimating()
-            HUD.show(.progress)
-
-            /// TODO: ideally, we would want to deleteChildOrders *after* fetching data from server
-            log.info("Deleting Orders of selected OrderCollection ...")
-            deleteChildOrders(parent: selection)
-
-            // Reset selection since we reset the managedObjectContext in deleteChildOrders
-            selectedCollection = dataSource.objectAtIndexPath(indexPath)
-
-            log.info("GET OrderCollection from server ...")
-            APIManager.sharedInstance.getOrderCollection(
-                storeID: storeID, orderDate: collectionDate,
-                completion: completedGetExistingOrderCollection)
-
-        case false:
-            log.info("LOAD NEW selectedCollection from disk ...")
-            performSegue(withIdentifier: segueIdentifier, sender: self)
-        }
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-
-    // MARK: - User Actions
-
-    func refreshTable(_ refreshControl: UIRefreshControl) {
-        guard let storeID = userManager.storeID else { return }
-
-        //HUD.show(.progress)
-        _ = SyncManager(context: managedObjectContext, storeID: storeID, completionHandler: completedSync)
-
-        //tableView.reloadData()
-        //refreshControl.endRefreshing()
-    }
-
-    @IBAction func newTapped(_ sender: AnyObject) {
-        /// TODO: check if there is already an Order for the current date and of the current type
-        guard let storeID = userManager.storeID else {
-            log.error("\(#function) FAILED : unable to get storeID"); return
-        }
-
-        /// TODO: should we first check if there are any valid Inventories to use for generating the Orders?
-        let alertController = UIAlertController(
-            title: "Create Order", message: "Set order quantities from the most recent inventory or simply use pars?",
-            preferredStyle: .actionSheet)
-
-        alertController.addAction(UIAlertAction(title: "From Count", style: .default, handler: { (_) in
-            self.createOrderCollection(storeID: storeID, generateFrom: .count)
-        }))
-        alertController.addAction(UIAlertAction(title: "From Par", style: .default, handler: { (_) in
-            self.createOrderCollection(storeID: storeID, generateFrom: .par)
-        }))
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-
-        present(alertController, animated: true, completion: nil)
-
-    }
-
-    func createOrderCollection(storeID: Int, generateFrom method: NewOrderGenerationMethod) {
-        //tableView.activityIndicatorView.startAnimating()
-        HUD.show(.progress)
-        APIManager.sharedInstance.getNewOrderCollection(
-            storeID: storeID, generateFrom: method, returnUsage: false,
-            periodLength: 28, completion: completedGetNewOrderCollection)
     }
 
 }
@@ -200,144 +209,13 @@ extension OrderDateViewController: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: UITableViewCell, for collection: OrderCollection) {
-        cell.textLabel?.text = collection.date
+        cell.textLabel?.text = collection.date.altStringFromDate()
 
         switch collection.uploaded {
         case true:
             cell.textLabel?.textColor = UIColor.black
         case false:
-            cell.textLabel?.textColor = ColorPalette.yellowColor
-        }
-    }
-
-}
-
-// MARK: - Completion Handlers + Sync
-extension OrderDateViewController {
-
-    // MARK: Completion Handlers
-
-    func completedGetListOfOrderCollections(json: JSON?, error: Error?) {
-        refreshControl?.endRefreshing()
-        guard error == nil else {
-            //if error?._code == NSURLErrorTimedOut {}
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.warning("\(#function) FAILED : unable to get JSON")
-            HUD.hide(); return
-        }
-
-        do {
-            try managedObjectContext.syncCollections(OrderCollection.self, withJSON: json)
-        } catch {
-            log.error("Unable to sync OrderCollections")
-            HUD.flash(.error, delay: 1.0)
-        }
-        HUD.hide()
-        managedObjectContext.performSaveOrRollback()
-        tableView.reloadData()
-    }
-
-    func completedGetExistingOrderCollection(json: JSON?, error: Error?) {
-        guard error == nil else {
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.error("\(#function) FAILED : unable to get JSON")
-            HUD.flash(.error, delay: 1.0); return
-        }
-
-        /// TODO: delete child orders after, rather than before fetching from server
-        /*
-        guard let selectedCollectionIndex = selectedCollectionIndex else {
-            log.error("PROBLEM - 1a"); return
-        }
-        var selection: OrderCollection
-        selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
-
-        // Delete existing orders of selected collection
-        log.info("Deleting Orders of selected OrderCollection ...")
-        deleteChildOrders(parent: selection)
-
-        // Reset selection since we reset the managedObjectContext in deleteChildOrders
-        selection = self.fetchedResultsController.object(at: selectedCollectionIndex)
-        */
-
-        guard let selection = selectedCollection else {
-            log.error("\(#function) FAILED : still unable to get selected OrderCollection\n")
-            HUD.flash(.error, delay: 1.0); return
-        }
-
-        // Update selected Inventory with full JSON from server.
-        selection.updateExisting(context: self.managedObjectContext!, json: json)
-        managedObjectContext!.performSaveOrRollback()
-
-        //tableView.activityIndicatorView.stopAnimating()
-        HUD.hide()
-
-        performSegue(withIdentifier: segueIdentifier, sender: self)
-    }
-
-    func completedGetNewOrderCollection(json: JSON?, error: Error?) {
-        guard error == nil else {
-            HUD.flash(.error, delay: 1.0); return
-        }
-        guard let json = json else {
-            log.error("\(#function) FAILED : unable to get JSON")
-            HUD.flash(.error, delay: 1.0); return
-        }
-        //log.info("Creating new OrderCollection ...")
-        selectedCollection = OrderCollection(context: managedObjectContext!, json: json, uploaded: false)
-
-        // Save the context.
-        managedObjectContext!.performSaveOrRollback()
-
-        HUD.hide()
-
-        performSegue(withIdentifier: segueIdentifier, sender: self)
-    }
-
-    func completedSync(_ succeeded: Bool, _ error: Error?) {
-        if succeeded {
-            log.info("Completed login / sync - succeeded: \(succeeded)")
-            guard let storeID = userManager.storeID else {
-                log.error("\(#function) FAILED : unable to get storeID")
-                HUD.flash(.error, delay: 1.0); return
-            }
-
-            // log.info("Fetching existing OrderCollections from server ...")
-            APIManager.sharedInstance.getListOfOrderCollections(storeID: storeID,
-                                                                completion: self.completedGetListOfOrderCollections)
-
-        } else {
-            log.error("Unable to login / sync ...")
-            // if let error = error { // present more detailed error ...
-            HUD.flash(.error, delay: 1.0)
-        }
-    }
-
-    // MARK: Sync
-
-    // Source: https://code.tutsplus.com/tutorials/core-data-and-swift-batch-deletes--cms-25380
-    /// NOTE: I believe I scrapped a plan to make this a method because of the involvement of the moc
-    func deleteChildOrders(parent: OrderCollection) {
-        let fetchPredicate = NSPredicate(format: "collection == %@", parent)
-        do {
-            try managedObjectContext.deleteEntities(Order.self, filter: fetchPredicate)
-
-            /// TODO: perform fetch again?
-            //let request: NSFetchRequest<Inventory> = Inventory.fetchRequest()
-            //let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-            //request.sortDescriptors = [sortDescriptor]
-            //dataSource.reconfigureFetchRequest(request)
-
-            // Reload Table View
-            tableView.reloadData()
-
-        } catch {
-            let updateError = error as NSError
-            log.error("Unable to delete Orders: \(updateError), \(updateError.userInfo)")
+            cell.textLabel?.textColor = ColorPalette.yellow
         }
     }
 

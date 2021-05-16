@@ -6,9 +6,7 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
 
 extension InventoryLocationItem {
 
@@ -68,3 +66,5 @@ extension InventoryLocationItem {
     }
 
 }
+
+extension InventoryLocationItem: Managed {}

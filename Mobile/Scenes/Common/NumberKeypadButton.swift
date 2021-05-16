@@ -25,7 +25,7 @@ class NumberKeypadButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 
-        backgroundColor = ColorPalette.lightGrayColor
+        backgroundColor = ColorPalette.lightGray
         setTitleColor(UIColor.white, for: .normal)
         //setTitleColor(UIColor.green, for: .highlighted)
         titleLabel?.font = UIFont.systemFont(ofSize: 22.0)

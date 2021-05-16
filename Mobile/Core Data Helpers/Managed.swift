@@ -7,17 +7,18 @@
 //
 
 import CoreData
-import SwiftyJSON
 
 // swiftlint:disable force_try
 
 protocol Managed: class, NSFetchRequestResult {
+    static var entity: NSEntityDescription { get }
     static var entityName: String { get }
     static var defaultSortDescriptors: [NSSortDescriptor] { get }
 }
 
 extension Managed {
-    static  var defaultSortDescriptors: [NSSortDescriptor] { return [] }
+
+    static var defaultSortDescriptors: [NSSortDescriptor] { return [] }
 
     static var sortedFetchRequest: NSFetchRequest<Self> {
         let request = NSFetchRequest<Self>(entityName: entityName)
@@ -33,13 +34,9 @@ extension Managed {
 }
 
 extension Managed where Self: NSManagedObject {
-    static var entityName: String { return entity().name!  }
 
-    static func fetch(in context: NSManagedObjectContext, configurationBlock: (NSFetchRequest<Self>) -> Void = { _ in }) -> [Self] {
-        let request = NSFetchRequest<Self>(entityName: Self.entityName)
-        configurationBlock(request)
-        return try! context.fetch(request)
-    }
+    static var entity: NSEntityDescription { return entity() }
+    static var entityName: String { return entity().name! }
 
     static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: (Self) -> Void) -> Self {
         guard let object = findOrFetch(in: context, matching: predicate) else {
@@ -59,6 +56,12 @@ extension Managed where Self: NSManagedObject {
                 }.first
         }
         return object
+    }
+
+    static func fetch(in context: NSManagedObjectContext, configurationBlock: (NSFetchRequest<Self>) -> Void = { _ in }) -> [Self] {
+        let request = NSFetchRequest<Self>(entityName: Self.entityName)
+        configurationBlock(request)
+        return try! context.fetch(request)
     }
 
     static func materializedObject(in context: NSManagedObjectContext, matching predicate: NSPredicate) -> Self? {

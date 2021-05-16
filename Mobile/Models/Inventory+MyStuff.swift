@@ -6,51 +6,41 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
 
-extension Inventory {
+extension Inventory: Syncable {
+    typealias RemoteType = RemoteInventory
+    typealias RemoteIdentifierType = Int32
 
-    // MARK: - Lifecycle
+    var remoteIdentifier: RemoteIdentifierType { return remoteID }
 
-    convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = true) {
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
-
-        // Set properties
-        /// TODO: date and storeID are required and lack default values
-        if let date = json["date"].string {
-            self.date = date
-        }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
-
-        // Optional / have default value
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let typeID = json["inventory_type_id"].int32 {
-            self.typeID = typeID
-        }
-        self.uploaded = uploaded
-
-        // Add InventoryItems
-        if let items = json["items"].array {
-            for itemJSON in items {
-                _ = InventoryItem(context: context, json: itemJSON, inventory: self)
-            }
-        }
-
-        // Add InventoryLocations
-        if let locations = json["locations"].array {
-            for locationJSON in locations {
-                _ = InventoryLocation(context: context, json: locationJSON, inventory: self)
-            }
-        }
+        remoteID = record.syncIdentifier
+        self.uploaded = true
+        update(with: record, in: context)
     }
 
-    // MARK: - Serialization
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        //remoteID
+        if let date = record.date.toBasicDate() {
+            self.dateTimeInterval = date.timeIntervalSinceReferenceDate
+        }
+        storeID = Int32(record.storeID)
+        typeID = Int32(record.inventoryTypeID ?? 0)
+        //uploaded
+
+        //items: [InventoryItem]
+        //locations: [InventoryLocation]
+    }
+
+}
+
+//extension Inventory: DateFacade {}
+
+// MARK: - Serialization
+
+extension Inventory {
 
     func serialize() -> [String: Any]? {
         guard let items = self.items else {
@@ -59,9 +49,7 @@ extension Inventory {
         }
 
         var myDict = [String: Any]()
-
-        /// TODO: handle conversion from NSDate to string
-        myDict["date"] = self.date
+        myDict["date"] = dateTimeInterval.toPythonDateString()
         myDict["store_id"] = storeID
 
         // Apple suggests using a default value of 0 over using optional attributes
@@ -77,77 +65,6 @@ extension Inventory {
         myDict["items"] = itemsArray
 
         return myDict
-    }
-
-    // MARK: - Update Existing
-
-    /// TODO: should this simply be part of .update()?
-    func updateExisting(context: NSManagedObjectContext, json: JSON) {
-
-        // Add Default Location
-        let defaultLocation = InventoryLocation(context: context, name: "Default", remoteID: 1,
-                                                type: InventoryLocationType.category, inventory: self)
-
-        guard let inventoryItems = json["items"].array else {
-            log.error("\(#function) FAILED : unable to get InventoryItems from JSON"); return
-        }
-
-        // Iterate over Items
-        for inventoryItemJSON in inventoryItems {
-
-            // Create InventoryItem
-            let inventoryItem = InventoryItem(context: context, json: inventoryItemJSON,
-                                              inventory: self)
-
-            // Create InventoryLocationItem
-            let locationItem = InventoryLocationItem(context: context)
-            if let quantity = inventoryItemJSON["quantity"].double {
-                locationItem.quantity = quantity as NSNumber?
-            }
-            locationItem.item = inventoryItem
-            /// TODO: am I still setting location when a LocationItem belongs to a LocationCategory?
-            locationItem.location = defaultLocation
-
-            /*
-            // Get Corresponding Unit
-            if let unitID = inventoryItemJSON["unit_id"].int {
-                locationItem.fetchUnit(context: context, id: unitID)
-                //if let inventoryUnit = fetchUnit(id: unitID) {
-                //    locationItem.unit = inventoryUnit
-                //}
-            }
-            */
-
-            // Fetch / Create corresponding InventoryLocationCategory and create relationships
-            defaultLocation.findOrCreateCategory(context: context, json: inventoryItemJSON,
-                                                 for: locationItem)
-
-        }
-        /// TODO: add position to LocationCategories
-        log.verbose("Created InventoryLocation: \(defaultLocation)")
-    }
-
-}
-
-extension Inventory: Syncable {
-
-    public func update(context: NSManagedObjectContext, withJSON json: Any) {
-        guard let json = json as? JSON else {
-            log.error("\(#function) FAILED : SwiftyJSON"); return
-        }
-
-        if let date = json["date"].string {
-            self.date = date
-        }
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
-        if let typeID = json["inventory_type_id"].int32 {
-            self.typeID = typeID
-        }
     }
 
 }

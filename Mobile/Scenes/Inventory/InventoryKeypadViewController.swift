@@ -7,190 +7,262 @@
 //
 
 import UIKit
-import CoreData
+import RxCocoa
+import RxSwift
 
 class InventoryKeypadViewController: UIViewController {
 
     // MARK: Properties
 
-    var category: InventoryLocationCategory?
-    var location: InventoryLocation?
-    var currentIndex = 0
+    var viewModel: InventoryKeypadViewModel!
+    let disposeBag = DisposeBag()
 
-    var items: [InventoryLocationItem] {
-        let request: NSFetchRequest<InventoryLocationItem> = InventoryLocationItem.fetchRequest()
+    // swiftlint:disable:next weak_delegate
+    private let customTransitionDelegate = SheetTransitioningDelegate()
+    private let changeItemDissmissalEvent = PublishSubject<DismissalEvent>()
+    private let panGestureDissmissalEvent = PublishSubject<DismissalEvent>()
 
-        let positionSort = NSSortDescriptor(key: "position", ascending: true)
-        let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
-        request.sortDescriptors = [positionSort, nameSort]
+    // Pan down transitions back to the presenting view controller
+    var interactionController: UIPercentDrivenInteractiveTransition?
 
-        if let parentLocation = self.location {
-            request.predicate = NSPredicate(format: "location == %@", parentLocation)
-        } else if let parentCategory = self.category {
-            request.predicate = NSPredicate(format: "category == %@", parentCategory)
-        } else {
-            log.error("PROBLEM : Unable to add predicate to InventoryLocationItem fetch request")
-            return [InventoryLocationItem]()
-        }
+    let panGestureRecognizer: UIPanGestureRecognizer
 
-        do {
-            let searchResults = try managedObjectContext?.fetch(request)
-            return searchResults!
-
-        } catch {
-            log.error("Error with InventoryLocationItem fetch request: \(error)")
-        }
-        return [InventoryLocationItem]()
+    var dismissalEvents: Observable<DismissalEvent> {
+        return Observable.never()
     }
 
-    var currentItem: InventoryLocationItem {
-        return items[currentIndex]
-    }
+    // MARK: View
 
-    typealias KeypadOutput = (history: String, total: Double?, display: String)
-    let keypad = KeypadWithHistory()
+    lazy var displayView: InventoryKeypadDisplayView = {
+        let view = InventoryKeypadDisplayView()
+        view.backgroundColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
-    // CoreData
-    var managedObjectContext: NSManagedObjectContext?
+    lazy var keypadView: KeypadView = {
+        let view = KeypadView()
+        view.viewController = self
+        view.backgroundColor = ColorPalette.lightGray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
-    // MARK: - Display Outlets
-    @IBOutlet weak var itemValue: UILabel!
-    @IBOutlet weak var itemName: UILabel!
-    @IBOutlet weak var itemHistory: UILabel!
-    @IBOutlet weak var itemPack: UILabel!
-    @IBOutlet weak var itemUnit: UILabel!
+    lazy var stackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [displayView, keypadView])
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.axis = .vertical
+        view.alignment = .fill
+        view.distribution = .fill
+        view.spacing = 0.0
+        return view
+    }()
 
     // MARK: - Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        update(newItem: true)
+    init() {
+        panGestureRecognizer = UIPanGestureRecognizer()
+        super.init(nibName: nil, bundle: nil)
+        panGestureRecognizer.addTarget(self, action: #selector(handleGesture(_:)))
+        modalPresentationStyle = .custom
+        transitioningDelegate = customTransitionDelegate
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        log.warning("\(#function)")
-        // Dispose of any resources that can be recreated.
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+    }
+
+    //override func viewWillAppear(_ animated: Bool) {}
+
+    // MARK: - View Methods
+
+    private func setupView() {
+        // Handle swipe down gesture
+        //let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleGesture(_:)))
+        panGestureRecognizer.delegate = self
+        view.addGestureRecognizer(panGestureRecognizer)
+
+        view.addSubview(stackView)
+        setupConstraints()
+
+        setupBindings()
+        setupKeypad()
+    }
+
+    func setupBindings() {
+        // itemDisplayView
+        viewModel.itemName
+            .asObservable()
+            .bind(to: displayView.itemDisplayView.rx.itemName)
+            .disposed(by: disposeBag)
+
+        viewModel.itemPack
+            .asObservable()
+            .bind(to: displayView.itemDisplayView.rx.itemPack)
+            .disposed(by: disposeBag)
+
+        // inventoryDisplayView
+        viewModel.itemValue
+            .asObservable()
+            .bind(to: displayView.inventoryDisplayView.itemValueLabel.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.itemHistory
+            .asObservable()
+            .bind(to: displayView.inventoryDisplayView.itemHistoryLabel.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.itemUnit
+            .asObservable()
+            .bind(to: displayView.inventoryDisplayView.itemUnitLabel.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.itemValueColor
+            .asObservable()
+            .subscribe(onNext: {[weak self] color in
+                self?.displayView.inventoryDisplayView.itemValueLabel.textColor = color
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func setupConstraints() {
+        //let guide: UILayoutGuide
+        //if #available(iOS 11, *) {
+        //    guide = view.safeAreaLayoutGuide
+        //} else {
+        //    guide = view.layoutMarginsGuide
+        //}
+        let constraints = [
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.topAnchor.constraint(equalTo: view.topAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            keypadView.heightAnchor.constraint(equalTo: displayView.heightAnchor, multiplier: 1.5)
+        ]
+        NSLayoutConstraint.activate(constraints)
+    }
+
+    private func setupKeypad() {
+        keypadView.softButton1.setTitle("+1", for: .normal)
+        keypadView.softButton2.setTitle("+", for: .normal)
     }
 
     // MARK: - Keypad
 
-    @IBAction func numberTapped(_ sender: AnyObject) {
-        guard let digit = sender.currentTitle else { return }
-        //log.verbose("Tapped '\(digit)'")
-        guard let number = Int(digit!) else { return }
-        keypad.pushDigit(value: number)
-
-        // Update model and display with result of keypad
-        update()
+    @objc func numberTapped(sender: UIButton) {
+        guard let title = sender.currentTitle, let number = Int(title) else { return }
+        viewModel.pushDigit(value: number)
     }
 
-    @IBAction func clearTapped(_ sender: AnyObject) {
-        keypad.popItem()
-        update()
+    @objc func clearTapped(sender: UIButton) {
+        viewModel.popItem()
     }
 
-    @IBAction func decimalTapped(_ sender: AnyObject) {
-        keypad.pushDecimal()
-        update()
+    @objc func decimalTapped(_ sender: UIButton) {
+        viewModel.pushDecimal()
     }
 
     // MARK: - Uncertain
 
-    @IBAction func addTapped(_ sender: AnyObject) {
-        keypad.pushOperator()
-        update()
+    @objc func softButton1Tapped(sender: UIButton) {
+        viewModel.pushOperator()
+        viewModel.pushDigit(value: 1)
+        viewModel.pushOperator()
     }
 
-    @IBAction func decrementTapped(_ sender: AnyObject) {
-        //log.verbose("Tapped '-1'")
-    }
-
-    @IBAction func incrementTapped(_ sender: AnyObject) {
-        keypad.pushOperator()
-        keypad.pushDigit(value: 1)
-        keypad.pushOperator()
-        update()
+    @objc func softButton2Tapped(sender: UIButton) {
+        viewModel.pushOperator()
     }
 
     // MARK: - Item Navigation
 
-    @IBAction func nextItemTapped(_ sender: AnyObject) {
-        if currentIndex < items.count - 1 {
-            currentIndex += 1
-            // Update keypad and display with new currentItem
-            update(newItem: true)
-        } else {
-            /// TODO: cleanup?
-            navigationController!.popViewController(animated: true)
-        }
-    }
-
-    @IBAction func previousItemTapped(_ sender: AnyObject) {
-        if currentIndex > 0 {
-            currentIndex -= 1
-            // Update keypad and display with new currentItem
-            update(newItem: true)
-        } else {
-            /// TODO: cleanup?
-            navigationController!.popViewController(animated: true)
-        }
-    }
-
-    // MARK: - View
-
-    func update(newItem: Bool = false) {
-        let output: KeypadOutput
-
-        switch newItem {
+    @objc func nextItemTapped(_ sender: UIButton) {
+        switch viewModel.nextItem() {
         case true:
-            // Update keypad with quantity of new currentItem
-            //keypad.updateNumber(currentItem.quantity as Double?)
-            keypad.updateNumber(currentItem.quantity?.doubleValue)
-            output = keypad.output()
+            return
         case false:
-            // Update model with output of keyapd
-            output = keypad.output()
-
-            if let keypadResult = output.total {
-                currentItem.quantity = keypadResult as NSNumber?
+            changeItemDissmissalEvent.onNext(.wasDismissed)
+            /// TODO: emit event so coordinator can dismiss
+            if let navController = navigationController {
+                navController.popViewController(animated: true)
             } else {
-                currentItem.quantity = nil
+                dismiss(animated: true)
             }
-            managedObjectContext?.performSaveOrRollback()
         }
-
-        updateDisplay(item: currentItem, keypadOutput: output)
     }
 
-    // func updateDisplay(item: InventoryLocationItem, history: String, total: Double?, display: String) {}
-    func updateDisplay(item: InventoryLocationItem, keypadOutput: KeypadOutput) {
-
-        // Item.quantity
-        itemValue.text = keypadOutput.display
-        if keypadOutput.total != nil {
-            itemValue.textColor = UIColor.black
-        } else {
-            itemValue.textColor = UIColor.lightGray
+    @objc func previousItemTapped(_ sender: UIButton) {
+        switch viewModel.previousItem() {
+        case true:
+            return
+        case false:
+            changeItemDissmissalEvent.onNext(.wasDismissed)
+            /// TODO: emit event so coordinator can dismiss
+            if let navController = navigationController {
+                navController.popViewController(animated: true)
+            } else {
+                dismiss(animated: true)
+            }
         }
+    }
 
-        itemHistory.text = keypadOutput.history
+    // MARK: - B
 
-        // Item.name
-        guard let inventoryItem = currentItem.item else {
-            itemName.text = "Error (1)"; return
+    @objc func handleGesture(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: gesture.view)
+        let percent = translation.y / gesture.view!.bounds.size.height
+        //log.debug("%: \(percent)")
+        switch gesture.state {
+        case .began:
+            interactionController = UIPercentDrivenInteractiveTransition()
+            customTransitionDelegate.interactionController = interactionController
+            dismiss(animated: true)
+        case .changed:
+            //log.debug("changed: \(percent)")
+            interactionController?.update(percent)
+        case .ended:
+            let velocity = gesture.velocity(in: gesture.view)
+            //log.debug("velocity: \(velocity)")
+            interactionController?.completionSpeed = 0.999  // https://stackoverflow.com/a/42972283/1271826
+            if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
+                interactionController?.finish()
+                /// Ensure we return event from coordinator when dismissing view with pan gesture
+                panGestureDissmissalEvent.onNext(.wasDismissed)
+            } else {
+                interactionController?.cancel()
+            }
+            interactionController = nil
+        default:
+            if translation != .zero {
+                let angle = atan2(translation.y, translation.x)
+                log.debug("Angle: \(angle)")
+            }
         }
-        guard let name = inventoryItem.name else {
-            itemName.text = "Error (2)"; return
-        }
-        itemName.text = name
-
-        // Item.pack
-        guard let item = inventoryItem.item else { return }
-        itemPack.text = item.packDisplay
-
-        // Item.unit
-        itemUnit.text = "\(item.inventoryUnit?.abbreviation ?? "")"
     }
 
 }
+
+extension InventoryKeypadViewController: UIGestureRecognizerDelegate {
+
+    // Recognize downward gestures only
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let pan = gestureRecognizer as? UIPanGestureRecognizer {
+            let translation = pan.translation(in: pan.view)
+            let angle = atan2(translation.y, translation.x)
+            return abs(angle - .pi / 2.0) < (.pi / 8.0)
+            // ALT
+            //let angle = abs(atan2(translation.x, translation.y) - .pi / 2)
+            //return angle < .pi / 8.0
+        }
+        return false
+    }
+}
+
+extension InventoryKeypadViewController: KeypadViewControllerType {}
+
+extension InventoryKeypadViewController: ModalKeypadDismissing {}

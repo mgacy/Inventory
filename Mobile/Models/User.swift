@@ -8,9 +8,8 @@
 
 import Foundation
 import KeychainAccess
-import SwiftyJSON
 
-class User {
+class User: Codable {
 
     //private let defaults = UserDefaults.standard
     //private let keychain: Keychain

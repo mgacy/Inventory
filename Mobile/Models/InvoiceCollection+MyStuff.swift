@@ -6,86 +6,100 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
+
+extension InvoiceCollection: DateFacade {}
+
+// MARK: - Syncable
+
+extension InvoiceCollection: Syncable {
+    typealias RemoteType = RemoteInvoiceCollection
+    typealias RemoteIdentifierType = Date
+
+    static var remoteIdentifierName: String { return "dateTimeInterval" }
+
+    var remoteIdentifier: RemoteIdentifierType { return Date(timeIntervalSinceReferenceDate: dateTimeInterval) }
+
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        guard let date = record.date.toBasicDate() else {
+            /// TODO: find better way of handling error; use SyncError type
+            fatalError("Unable to parse date from: \(record)")
+        }
+        self.dateTimeInterval = date.timeIntervalSinceReferenceDate
+        update(with: record, in: context)
+    }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        storeID = Int32(record.storeID)
+
+        switch record.status {
+        case .pending:
+            self.uploaded = false
+        case .completed:
+            self.uploaded = true
+        }
+
+        // Relationships
+        if let invoices = record.invoices {
+            syncChildren(with: invoices, in: context)
+        }
+    }
+
+}
+
+// MARK: - SyncableParent
+
+extension InvoiceCollection: SyncableParent {
+    typealias ChildType = Invoice
+
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: Invoice]? {
+        let fetchPredicate = NSPredicate(format: "collection == %@", self)
+        guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func updateParent(of entity: ChildType) {
+        entity.collection = self
+    }
+
+}
+
+// MARK: - Serialization
 
 extension InvoiceCollection {
 
-    // MARK: - Lifecycle
-
-    convenience init(context: NSManagedObjectContext, json: JSON, uploaded: Bool = false) {
-        self.init(context: context)
-
-        // Set properties
-        if let date = json["date"].string {
-            self.date = date
-        } else {
-            self.date = Date().shortDate
-        }
-        if let storeID = json["store_id"].int32 {
-            self.storeID = storeID
-        }
-        self.uploaded = uploaded
-
-        // Add Invoices
-        if let invoices = json["invoices"].array {
-            for invoiceJSON in invoices {
-                _ = Invoice(context: context, json: invoiceJSON, collection: self, uploaded: uploaded)
-            }
-        }
-    }
-
-    // MARK: - Serialization
-
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-
-        /// TODO: handle conversion from NSDate to string
-        myDict["date"] = self.date
-        myDict["store_id"] = self.storeID
-
+        myDict["date"] = dateTimeInterval.toPythonDateString()
+        myDict["store_id"] = storeID
         return myDict
     }
 
-    // MARK: - Update Existing
-
-    func updateExisting(context: NSManagedObjectContext, json: JSON) {
-
-        // Iterate over Invoices
-        for (_, item) in json {
-            _ = Invoice(context: context, json: item, collection: self, uploaded: true)
-        }
-    }
-
-    // MARK: -
-
-    static func fetchByDate(context: NSManagedObjectContext, date: String) -> InvoiceCollection? {
-        //let predicate = NSPredicate(format: "date == %@", date)
-        //return context.fetchSingleEntity(InvoiceCollection.self, matchingPredicate: predicate)
-
-        let request: NSFetchRequest<InvoiceCollection> = InvoiceCollection.fetchRequest()
-        request.predicate = NSPredicate(format: "date == %@", date)
-
-        do {
-            let searchResults = try context.fetch(request)
-
-            switch searchResults.count {
-            case 0:
-                return nil
-            case 1:
-                return searchResults[0]
-            default:
-                log.warning("Found multiple matches: \(searchResults)")
-                return searchResults[0]
-            }
-
-        } catch {
-            log.error("Error with request: \(error)")
-        }
-        return nil
-    }
 }
 
-// The extension already offers a default implementation; we will use that
-extension InvoiceCollection: SyncableCollection {}
+// MARK: - Status
+
+extension InvoiceCollection {
+
+    func updateStatus() {
+        guard uploaded == false else {
+            //log.debug("InvoiceCollection has already been uploaded.")
+            return
+        }
+        guard let invoices = invoices else {
+            //log.debug("InvoiceCollection does not appear to have any Invoices.")
+            return
+        }
+        for any in invoices {
+            guard let invoice = any as? Invoice else { fatalError("\(#function) FAILED : wrong type") }
+            if invoice.status == InvoiceStatus.pending.rawValue {
+                return
+            }
+        }
+        uploaded = true
+    }
+
+}

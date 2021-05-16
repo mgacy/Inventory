@@ -6,9 +6,7 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
 
 @objc public enum OrderStatus: Int16 {
     case incomplete = 0
@@ -17,59 +15,84 @@ import SwiftyJSON
     // case reviewed - for empty but acceptd as such (that's right, no order this week)?
     case placed     = 3
     case uploaded   = 4
+
+    //static func asString(raw: Int16) -> String? {}
+
+    //init?(string: String) {}
+
 }
+
+// MARK: - Syncable
+
+extension Order: Syncable {
+    typealias RemoteType = RemoteOrder
+    typealias RemoteIdentifierType = Int32
+
+    var remoteIdentifier: RemoteIdentifierType { return self.remoteID }
+
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        remoteID = record.syncIdentifier
+        update(with: record, in: context)
+        // NOTE: old .init had `if !uploaded { updateStatus() }`
+    }
+
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        // Required
+        if let date = record.date.toBasicDate() {
+            self.date = date.timeIntervalSinceReferenceDate
+        }
+        // FIXME: get status from record
+        status = OrderStatus.uploaded.rawValue
+        // placed
+
+        // Optional
+        // remoteID = record.syncIdentifier
+        // uploaded
+
+        // Unimplemented
+        // cost = record.cost
+
+        /// Relationships
+        // collection
+        // store
+        if record.vendor.syncIdentifier != vendor?.remoteIdentifier {
+            vendor = Vendor.updateOrCreate(with: record.vendor, in: context)
+        }
+        syncChildren(with: record.items, in: context)
+
+        /// TODO: handle status
+    }
+
+}
+
+// MARK: - SyncableParent
+
+extension Order: SyncableParent {
+    typealias ChildType = OrderItem
+
+    func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: OrderItem]? {
+        let fetchPredicate = NSPredicate(format: "order == %@", self)
+        guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
+            return nil
+        }
+        return objectDict
+    }
+
+    func updateParent(of entity: OrderItem) {
+        entity.order = self
+    }
+
+}
+
+// MARK: - Serialization
 
 extension Order {
 
-    // MARK: - Lifecycle
-
-    convenience init(context: NSManagedObjectContext, json: JSON, collection: OrderCollection, uploaded: Bool = false) {
-        self.init(context: context)
-
-        // Properties
-        // if let orderCost = json["order_cost"].float {}
-        // if let orderDate = json["order_date"].string {}
-        if uploaded {
-            self.status = OrderStatus.uploaded.rawValue
-        } else {
-            self.status = OrderStatus.pending.rawValue
-        }
-
-        // Relationships
-        self.collection = collection
-        if let vendorID = json["vendor"]["id"].int32 {
-            self.vendor = context.fetchWithRemoteID(Vendor.self, withID: vendorID)
-        }
-
-        /*
-        // Rep
-        if json["vendor"]["rep"].array != nil {
-            // rep = json["vendor"]["rep"]["name"].string {}
-            // repEmail = json["vendor"]["rep"]["email"].string {}
-            // repPhone = json["vendor"]["rep"]["phone"].int {}
-        }
-        */
-
-        // OrderItems
-        if let items = json["items"].array {
-            log.info("Creating OrderItems ...")
-            for itemJSON in items {
-                _ = OrderItem(context: context, json: itemJSON, order: self)
-            }
-        }
-
-        if !uploaded {
-            updateStatus()
-        }
-    }
-
-    // MARK: - Serialization
-
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-
-        /// TODO: handle conversion from NSDate to string
-        myDict["order_date"] = self.collection?.date
+        //myDict["order_date"] = self.collection?.dateTimeInterval.toPythonDateString()
+        myDict["order_date"] = date.toPythonDateString()
         myDict["store_id"] = self.collection?.storeID
         myDict["vendor_id"] = self.vendor?.remoteID
 
@@ -90,8 +113,13 @@ extension Order {
         return myDict
     }
 
-    // MARK: - Order Generation
+}
 
+// MARK: - Order Generation
+
+extension Order {
+
+    /// TODO: move into separate object
     func getOrderMessage() -> String? {
         guard let items = self.items else { return nil }
 
@@ -99,7 +127,7 @@ extension Order {
         for case let item as OrderItem in items {
             guard let quantity = item.quantity else { continue }
 
-            if Int(quantity) > 0 {
+            if quantity.doubleValue > 0.0 {
                 guard let name = item.item?.name else { continue }
                 messageItems.append("\n\(name) \(quantity) \(item.orderUnit?.abbreviation ?? "")")
             }
@@ -108,12 +136,15 @@ extension Order {
         if messageItems.count == 0 { return nil }
 
         messageItems.sort()
-        let message = "Order for \(self.collection?.date ?? ""):\n\(messageItems.joined(separator: ""))"
+        /// TODO: handle conversion from NSDate to String
+        let message = "Order for \(collection?.date.altStringFromDate() ?? ""):\n\(messageItems.joined(separator: ""))"
         log.debug("Order Message: \(message)")
         return message
     }
 
 }
+
+// MARK: - Status
 
 extension Order {
 
@@ -130,8 +161,9 @@ extension Order {
         }
 
         var hasOrder = false
-        for item in items {
-            if let quantity = (item as? OrderItem)?.quantity {
+        for any in items {
+            guard let orderItem = any as? OrderItem else { fatalError("\(#function) FAILED : wrong type") }
+            if let quantity = orderItem.quantity {
                 if quantity.intValue > 0 {
                     hasOrder = true
                 }

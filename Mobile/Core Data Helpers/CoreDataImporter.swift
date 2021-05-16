@@ -10,10 +10,8 @@
 //  Copyright © 2015 Tim Roadley. All rights reserved.
 //
 
-import Foundation
-import UIKit
 import CoreData
-import SwiftyJSON
+import UIKit
 
 class CoreDataImporter {
 
@@ -41,14 +39,13 @@ class CoreDataImporter {
             log.error("Invalid filename.")
             return false
         }
-        let jsonArray = JSON(data: asset.data)
-        guard jsonArray != JSON.null else {
-            log.error("Could not get json from file, make sure that file contains valid json.")
-            return false
-        }
 
-        for (_, unitJSON):(String, JSON) in jsonArray {
-            _ = Unit(context: context, json: unitJSON)
+        let decoder = JSONDecoder()
+        do {
+            let units = try decoder.decode([RemoteUnit].self, from: asset.data)
+            Unit.sync(with: units, in: context)
+        } catch {
+            log.error("\(#function) FAILED : error trying to decode Unit data")
         }
 
         if context.saveOrRollback() == true {

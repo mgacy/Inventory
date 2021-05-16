@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="16G1408" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Base" representedClassName="Base" syncable="YES" codeGenerationType="class">
+        <attribute name="dateTimeInterval" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="storeID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <fetchIndex name="byStoreIDIndex">
+            <fetchIndexElement property="storeID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="Inventory" representedClassName="Inventory" syncable="YES" codeGenerationType="class">
+        <attribute name="dateTimeInterval" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="storeID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="typeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryItem" inverseName="inventory" inverseEntity="InventoryItem" syncable="YES"/>
+        <relationship name="locations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocation" inverseName="inventory" inverseEntity="InventoryLocation" syncable="YES"/>
+        <relationship name="store" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="inventories" inverseEntity="Store" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="InventoryItem" representedClassName="InventoryItem" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="itemID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="inventory" maxCount="1" deletionRule="Nullify" destinationEntity="Inventory" inverseName="items" inverseEntity="Inventory" syncable="YES"/>
+        <relationship name="item" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="inventoryItems" inverseEntity="Item" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationItem" inverseName="item" inverseEntity="InventoryLocationItem" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="InventoryLocation" representedClassName="InventoryLocation" syncable="YES" codeGenerationType="class">
+        <attribute name="locationType" attributeType="String" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InventoryLocationCategory" inverseName="location" inverseEntity="InventoryLocationCategory" syncable="YES"/>
+        <relationship name="inventory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Inventory" inverseName="locations" inverseEntity="Inventory" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="InventoryLocationItem" inverseName="location" inverseEntity="InventoryLocationItem" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="InventoryLocationCategory" representedClassName="InventoryLocationCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="position" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="InventoryLocationItem" inverseName="category" inverseEntity="InventoryLocationItem" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocation" inverseName="categories" inverseEntity="InventoryLocation" syncable="YES"/>
+    </entity>
+    <entity name="InventoryLocationItem" representedClassName="InventoryLocationItem" syncable="YES" codeGenerationType="class">
+        <attribute name="history" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="itemID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="position" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocationCategory" inverseName="items" inverseEntity="InventoryLocationCategory" syncable="YES"/>
+        <relationship name="item" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryItem" inverseName="items" inverseEntity="InventoryItem" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InventoryLocation" inverseName="items" inverseEntity="InventoryLocation" syncable="YES"/>
+        <relationship name="unit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="locationItems" inverseEntity="Unit" syncable="YES"/>
+    </entity>
+    <entity name="Invoice" representedClassName="Invoice" syncable="YES" codeGenerationType="class">
+        <attribute name="checkNo" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="credit" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="invoiceNo" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="receiveDate" optional="YES" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="shipDate" optional="YES" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="shipping" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="status" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="taxes" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="totalCost" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="collection" maxCount="1" deletionRule="Nullify" destinationEntity="InvoiceCollection" inverseName="invoices" inverseEntity="InvoiceCollection" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InvoiceItem" inverseName="invoice" inverseEntity="InvoiceItem" syncable="YES"/>
+        <relationship name="vendor" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="invoices" inverseEntity="Vendor" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="InvoiceCollection" representedClassName="InvoiceCollection" syncable="YES" codeGenerationType="class">
+        <attribute name="dateTimeInterval" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="storeID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="invoices" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Invoice" inverseName="collection" inverseEntity="Invoice" syncable="YES"/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="dateTimeInterval" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="InvoiceItem" representedClassName="InvoiceItem" syncable="YES" codeGenerationType="class">
+        <attribute name="cost" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="discount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="quantity" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="status" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="invoice" maxCount="1" deletionRule="Nullify" destinationEntity="Invoice" inverseName="items" inverseEntity="Invoice" syncable="YES"/>
+        <relationship name="item" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="invoiceItems" inverseEntity="Item" syncable="YES"/>
+        <relationship name="unit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="invoiceItems" inverseEntity="Unit" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="packSize" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="subSize" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ItemCategory" inverseName="items" inverseEntity="ItemCategory" syncable="YES"/>
+        <relationship name="inventoryItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryItem" inverseName="item" inverseEntity="InventoryItem" syncable="YES"/>
+        <relationship name="inventoryUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemInventoryUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="invoiceItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="InvoiceItem" inverseName="item" inverseEntity="InvoiceItem" syncable="YES"/>
+        <relationship name="orderItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="item" inverseEntity="OrderItem" syncable="YES"/>
+        <relationship name="parUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemParUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="purchaseSubUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemPurchaseSubUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="purchaseUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemPurchaseUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="store" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="items" inverseEntity="Store" syncable="YES"/>
+        <relationship name="subUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="itemSubUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="vendor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="items" inverseEntity="Vendor" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="ItemCategory" representedClassName="ItemCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="category" inverseEntity="Item" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="Order" representedClassName="Order" syncable="YES" codeGenerationType="class">
+        <attribute name="date" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="placed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="status" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="collection" maxCount="1" deletionRule="Nullify" destinationEntity="OrderCollection" inverseName="orders" inverseEntity="OrderCollection" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="OrderItem" inverseName="order" inverseEntity="OrderItem" syncable="YES"/>
+        <relationship name="store" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="orders" inverseEntity="Store" syncable="YES"/>
+        <relationship name="vendor" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="orders" inverseEntity="Vendor" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="OrderCollection" representedClassName="OrderCollection" syncable="YES" codeGenerationType="class">
+        <attribute name="dateTimeInterval" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="inventoryID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="storeID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="uploaded" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="locations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="OrderLocation" inverseName="collection" inverseEntity="OrderLocation" syncable="YES"/>
+        <relationship name="orders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Order" inverseName="collection" inverseEntity="Order" syncable="YES"/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="dateTimeInterval" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="OrderItem" representedClassName="OrderItem" syncable="YES" codeGenerationType="class">
+        <attribute name="itemID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="minOrder" optional="YES" attributeType="Double" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="onHand" optional="YES" attributeType="Double" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="par" optional="YES" attributeType="Double" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="item" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="orderItems" inverseEntity="Item" syncable="YES"/>
+        <relationship name="locationItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="OrderLocationItem" inverseName="item" inverseEntity="OrderLocationItem" syncable="YES"/>
+        <relationship name="minOrderUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="orderItemMinOrderUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="order" maxCount="1" deletionRule="Nullify" destinationEntity="Order" inverseName="items" inverseEntity="Order" syncable="YES"/>
+        <relationship name="orderUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="orderItemOrderUnits" inverseEntity="Unit" syncable="YES"/>
+        <relationship name="parUnit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Unit" inverseName="orderItemParUnits" inverseEntity="Unit" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="OrderLocation" representedClassName="OrderLocation" syncable="YES" codeGenerationType="class">
+        <attribute name="locationID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="locationType" attributeType="Integer 16" minValueString="0" maxValueString="1" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="OrderLocationCategory" inverseName="location" inverseEntity="OrderLocationCategory" syncable="YES"/>
+        <relationship name="collection" maxCount="1" deletionRule="Nullify" destinationEntity="OrderCollection" inverseName="locations" inverseEntity="OrderCollection" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="OrderLocationItem" inverseName="location" inverseEntity="OrderLocationItem" syncable="YES"/>
+    </entity>
+    <entity name="OrderLocationCategory" representedClassName="OrderLocationCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="position" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="OrderLocationItem" inverseName="category" inverseEntity="OrderLocationItem" syncable="YES"/>
+        <relationship name="location" maxCount="1" deletionRule="Nullify" destinationEntity="OrderLocation" inverseName="categories" inverseEntity="OrderLocation" syncable="YES"/>
+    </entity>
+    <entity name="OrderLocationItem" representedClassName="OrderLocationItem" syncable="YES" codeGenerationType="class">
+        <attribute name="itemID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="position" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OrderLocationCategory" inverseName="items" inverseEntity="OrderLocationCategory" syncable="YES"/>
+        <relationship name="item" maxCount="1" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="locationItems" inverseEntity="OrderItem" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OrderLocation" inverseName="items" inverseEntity="OrderLocation" syncable="YES"/>
+    </entity>
+    <entity name="Store" representedClassName="Store" syncable="YES" codeGenerationType="class">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="inventories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Inventory" inverseName="store" inverseEntity="Inventory" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="store" inverseEntity="Item" syncable="YES"/>
+        <relationship name="orders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Order" inverseName="store" inverseEntity="Order" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="Unit" representedClassName="Unit" syncable="YES" codeGenerationType="class">
+        <attribute name="abbreviation" attributeType="String" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="invoiceItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InvoiceItem" inverseName="unit" inverseEntity="InvoiceItem" syncable="YES"/>
+        <relationship name="itemInventoryUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="inventoryUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemParUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="parUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemPurchaseSubUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="purchaseSubUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemPurchaseUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="purchaseUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemSubUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="subUnit" inverseEntity="Item" syncable="YES"/>
+        <relationship name="locationItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InventoryLocationItem" inverseName="unit" inverseEntity="InventoryLocationItem" syncable="YES"/>
+        <relationship name="orderItemMinOrderUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="minOrderUnit" inverseEntity="OrderItem" syncable="YES"/>
+        <relationship name="orderItemOrderUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="orderUnit" inverseEntity="OrderItem" syncable="YES"/>
+        <relationship name="orderItemParUnits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OrderItem" inverseName="parUnit" inverseEntity="OrderItem" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="Vendor" representedClassName="Vendor" syncable="YES" codeGenerationType="class">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="invoices" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Invoice" inverseName="vendor" inverseEntity="Invoice" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="vendor" inverseEntity="Item" syncable="YES"/>
+        <relationship name="orders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Order" inverseName="vendor" inverseEntity="Order" syncable="YES"/>
+        <relationship name="rep" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="VendorRep" inverseName="vendor" inverseEntity="VendorRep" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="VendorRep" representedClassName="VendorRep" syncable="YES" codeGenerationType="class">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phone" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="vendor" maxCount="1" deletionRule="Nullify" destinationEntity="Vendor" inverseName="rep" inverseEntity="Vendor" syncable="YES"/>
+        <fetchIndex name="byRemoteIDIndex">
+            <fetchIndexElement property="remoteID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <elements>
+        <element name="Base" positionX="-947" positionY="-324" width="128" height="90"/>
+        <element name="Inventory" positionX="-549" positionY="-342" width="128" height="165"/>
+        <element name="InventoryItem" positionX="-65" positionY="-333" width="128" height="150"/>
+        <element name="InventoryLocation" positionX="-344" positionY="-117" width="128" height="135"/>
+        <element name="InventoryLocationCategory" positionX="-135" positionY="-135" width="128" height="120"/>
+        <element name="InventoryLocationItem" positionX="124" positionY="-81" width="128" height="165"/>
+        <element name="Invoice" positionX="-371" positionY="45" width="128" height="255"/>
+        <element name="InvoiceCollection" positionX="-677" positionY="162" width="128" height="105"/>
+        <element name="InvoiceItem" positionX="-164" positionY="213" width="128" height="165"/>
+        <element name="Item" positionX="-1512" positionY="-135" width="128" height="270"/>
+        <element name="ItemCategory" positionX="-1287" positionY="-306" width="128" height="90"/>
+        <element name="Order" positionX="-549" positionY="477" width="128" height="180"/>
+        <element name="OrderCollection" positionX="-1091" positionY="510" width="128" height="135"/>
+        <element name="OrderItem" positionX="-92" positionY="447" width="128" height="225"/>
+        <element name="OrderLocation" positionX="-1575" positionY="-189" width="128" height="150"/>
+        <element name="OrderLocationCategory" positionX="-1566" positionY="-180" width="128" height="120"/>
+        <element name="OrderLocationItem" positionX="-1557" positionY="-171" width="128" height="120"/>
+        <element name="Store" positionX="-1784" positionY="159" width="128" height="120"/>
+        <element name="Unit" positionX="-1278" positionY="201" width="128" height="240"/>
+        <element name="Vendor" positionX="-1278" positionY="51" width="128" height="135"/>
+        <element name="VendorRep" positionX="-1575" positionY="-189" width="128" height="135"/>
+    </elements>
+</model>

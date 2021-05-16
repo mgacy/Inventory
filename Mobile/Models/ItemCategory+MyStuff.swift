@@ -6,29 +6,24 @@
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import SwiftyJSON
 
 extension ItemCategory: Syncable {
+    typealias RemoteType = RemoteItemCategory
+    typealias RemoteIdentifierType = Int32
 
-    convenience init(context: NSManagedObjectContext, json: JSON) {
+    var remoteIdentifier: RemoteIdentifierType { return remoteID }
+
+    convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
-        self.update(context: context, withJSON: json)
+        remoteID = record.syncIdentifier
+        //self.setValue(record.syncIdentifier, forKey: self.remoteIdentifierName)
+        update(with: record, in: context)
     }
 
-    public func update(context: NSManagedObjectContext, withJSON json: Any) {
-        guard let json = json as? JSON else {
-            log.error("\(#function) FAILED : SwiftyJSON"); return
-        }
-
-        // Properties
-        if let remoteID = json["id"].int32 {
-            self.remoteID = remoteID
-        }
-        if let name = json["name"].string {
-            self.name = name
-        }
+    func update(with record: RemoteType, in context: NSManagedObjectContext) {
+        //remoteID = record.syncIdentifier
+        name = record.name
     }
 
 }
