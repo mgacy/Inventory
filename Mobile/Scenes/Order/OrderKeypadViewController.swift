@@ -202,7 +202,7 @@ class OrderKeypadViewController: UIViewController {
         updateKeypad()
     }
 
-    /// TODO: rename `updateUnitButtons`?
+    // TODO: rename `updateUnitButtons`?
     func updateKeypad(animated: Bool = true) {
         keypadView.softButton1.setTitle(viewModel.packUnitLabel, for: .normal)
         keypadView.softButton1.isEnabled = viewModel.singleUnitIsEnabled

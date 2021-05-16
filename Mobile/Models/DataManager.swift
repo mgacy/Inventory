@@ -26,11 +26,11 @@ class DataManager {
 
     // MARK: - Properties
 
-    /// TODO: specify client as conforming to NetworkServiceType protocol
+    // TODO: specify client as conforming to NetworkServiceType protocol
     private let client: APIManager
     let viewContext: NSManagedObjectContext
     //let syncContext: NSManagedObjectContext
-    /// TODO: use `UserManagerType`; should userManager be private?
+    // TODO: use `UserManagerType`; should userManager be private?
     let userManager: CurrentUserManager
 
     var managedObjectContext: NSManagedObjectContext {
@@ -51,8 +51,8 @@ class DataManager {
 
     @discardableResult
     func saveOrRollback() -> Observable<Bool> {
-        /// TODO: use `saveOrRollback()` or `performSaveOrRollback()`
-        /// TODO: should we simply perform the do / catch here and materialize the error?
+        // TODO: use `saveOrRollback()` or `performSaveOrRollback()`
+        // TODO: should we simply perform the do / catch here and materialize the error?
         return Observable.just(viewContext.saveOrRollback())
     }
 
@@ -67,7 +67,7 @@ class DataManager {
 
 extension DataManager {
 
-    /// TODO: rename
+    // FIXME: rename
     func refreshStuff() -> Observable<Bool> {
         return refreshVendors()
             // Items
@@ -223,7 +223,7 @@ extension DataManager {
 
     //func deleteInventory(_ inventory: Inventory) -> Observable<> {}
 
-    /// TODO: rename `completeInventory(:)`?
+    // TODO: rename `completeInventory(:)`?
     func updateInventory(_ inventory: Inventory) -> Observable<Event<Inventory>> {
         guard let inventoryDict = inventory.serialize() else {
             log.error("\(#function) FAILED : unable to serialize Inventory \(inventory)")
@@ -331,7 +331,7 @@ extension DataManager {
                     throw error
                 }
             }
-            /// TODO: save context?
+            // TODO: save context?
             .materialize()
     }
 
@@ -352,7 +352,7 @@ extension DataManager {
                         throw DataManagerError.missingMOC
                     }
                     collection.update(with: record, in: context)
-                    /// TODO: handle this elsewhere?
+                    // TODO: handle this elsewhere?
                     collection.uploaded = true
                     return collection
                 case .failure(let error):
@@ -360,7 +360,7 @@ extension DataManager {
                     throw error
                 }
             }
-            /// TODO: save context?
+            // TODO: save context?
             .materialize()
     }
 
@@ -384,14 +384,14 @@ extension DataManager {
                     throw error
                 }
             }
-            /// TODO: save context?
+            // TODO: save context?
             .materialize()
     }
 
     // Method is named in anticipation of `createOrderCollection()` actually creating records on the server
     func updateOrder(_ order: Order) -> Observable<Event<Order>> {
         //return Observable.just(order).materialize()
-        /// TODO: use RemoteRecords instead?
+        // TODO: use RemoteRecords instead?
         guard let orderDict = order.serialize() else {
             log.error("\(#function) FAILED : unable to serialize Order \(order)")
             return Observable.error(DataManagerError.serializationError).materialize()
@@ -405,7 +405,7 @@ extension DataManager {
                     order.status = OrderStatus.uploaded.rawValue
                     order.collection?.updateStatus()
 
-                    /// TODO: is there a better way to handle this?
+                    // TODO: is there a better way to handle this?
                     self?.saveOrRollback()
 
                     return order
@@ -414,7 +414,7 @@ extension DataManager {
                     throw error
                 }
             }
-            /// TODO: save context?
+            // TODO: save context?
             .materialize()
     }
 
@@ -483,12 +483,12 @@ extension DataManager {
             log.error("\(#function) FAILED : unable to serialize Invoice \(invoice)")
             return Observable.error(DataManagerError.serializationError).materialize()
         }
-        /// TODO: mark invoice as having in-progress update
+        // TODO: mark invoice as having in-progress update
         return client.putInvoice(remoteID: remoteID, invoice: dict)
             .map { response in
                 switch response.result {
                 case .success:
-                    /// TODO: mark invoice as no longer having in-progress update
+                    // TODO: mark invoice as no longer having in-progress update
                     invoice.collection?.updateStatus()
                     return invoice
                 case .failure(let error):
@@ -545,10 +545,10 @@ extension DataManager {
 */
 // MARK: - Authentication
 
-/// TODO: make this conform to a protocol?
+// TODO: make this conform to a protocol?
 extension DataManager {
 
-    /// TODO: mark as @discardable and return Observable<Event<User>>?
+    // TODO: mark as @discardable and return Observable<Event<User>>?
     public func login(email: String, password: String) -> Observable<Event<Bool>> {
         return Observable.create { observer in
             self.userManager.login(email: email, password: password) { error in
@@ -569,8 +569,8 @@ extension DataManager {
     }
 
     public func logout() -> Observable<Bool> {
-        /// TODO: check for pending Inventory / Invoice / Order; throw error and use `.materialize()`
-        /// TODO: return if already logged out
+        // TODO: check for pending Inventory / Invoice / Order; throw error and use `.materialize()`
+        // TODO: return if already logged out
         return self.userManager.logout()
             //.filter { $0 }
             .flatMap { result -> Observable<Bool> in
@@ -598,7 +598,7 @@ extension DataManager {
     }
 
     private func deleteData(in context: NSManagedObjectContext) -> Observable<Bool> {
-        /// TODO: use cascade rules to reduce list of entities we need to manually delete
+        // TODO: use cascade rules to reduce list of entities we need to manually delete
 
         // Inventory
         do {

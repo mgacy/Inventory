@@ -23,7 +23,7 @@ extension InvoiceCollection: Syncable {
     convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
         guard let date = record.date.toBasicDate() else {
-            /// TODO: find better way of handling error; use SyncError type
+            // TODO: find better way of handling error; use SyncError type
             fatalError("Unable to parse date from: \(record)")
         }
         self.dateTimeInterval = date.timeIntervalSinceReferenceDate

@@ -69,7 +69,7 @@ class OrderLocationViewController: MGTableViewController {
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
-        /// TODO: there is an ActivityIndicator property we can set so it automatically hides when stopped
+        // TODO: there is an ActivityIndicator property we can set so it automatically hides when stopped
         viewModel.isRefreshing
             .map { !$0 }
             .drive(activityIndicatorView.rx.isHidden)

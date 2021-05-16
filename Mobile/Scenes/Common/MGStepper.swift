@@ -228,7 +228,7 @@ class MGStepper: UIControl {
         switch itemState.stepperState {
         case .initial:
             unitView.updateUnit(itemState.currentUnit.converted(), animated: false)
-            /// TODO: disable increment / decrement button if .maximumValue / minimumValue
+            // TODO: disable increment / decrement button if .maximumValue / minimumValue
             return
         case .minimum:
             animateLimitHitForButton(button: decrementButton)
@@ -328,7 +328,7 @@ extension MGStepper {
 
 // MARK: - A
 
-/// TODO: rename `InternalStepperState`
+// TODO: rename `InternalStepperState`
 enum StepperState {
     indirect case initial(StepperState)
     case stable
@@ -387,7 +387,7 @@ enum StepperCommand {
     case switchToSingleUnit
 }
 
-/// TODO: rename `StepperState`
+// TODO: rename `StepperState`
 struct ItemState {
     var stepperState: StepperState
 
@@ -484,7 +484,7 @@ extension ItemState {
                     return state.mutateOne { $0.value += stepSize }
                 }
             default:
-                /// TODO: should we distinguish .packUnit from .invalidUnit?
+                // TODO: should we distinguish .packUnit from .invalidUnit?
                 guard state.value < maximumValue else {
                     return state.mutateOne { $0.stepperState = .maximum }
                 }
@@ -512,21 +512,21 @@ extension ItemState {
 
         // Command: Switch Unit
         case (.shouldIncrement, .switchToPackUnit):
-            /// TODO: verify .currentUnit == .singleUnit?
+            // TODO: verify .currentUnit == .singleUnit?
             return state.mutate {
                 $0.value = 1
                 $0.item.switchToPackUnit()
             }
 
         case (.shouldDecrement(let stepSize), .switchToSingleUnit):
-            /// TODO: verify .currentUnit == .packUnit?
-             /// TODO: include check that packSize > 0?
+            // TODO: verify .currentUnit == .packUnit?
+             // TODO: include check that packSize > 0?
             return state.mutate {
                 $0.value = $0.packSize - stepSize
                 $0.item.switchToSingleUnit()
             }
 
-        /// TODO: add support for (.stable, .switchToPackUnit) / (.stable, .switchToSingleUnit)?
+        // TODO: add support for (.stable, .switchToPackUnit) / (.stable, .switchToSingleUnit)?
 
         // E
         case (.minimum, .decrement):

@@ -3,7 +3,6 @@
 //  Mobile
 //
 //  Created by Mathew Gacy on 2/8/18.
-//  Copyright © 2018 Mathew Gacy. All rights reserved.
 //
 //  From:
 //  https://github.com/sergdort/CleanArchitectureRxSwift

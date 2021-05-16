@@ -6,12 +6,11 @@
 //  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
-//import UIKit
 import OnePasswordExtension
 
 extension OnePasswordExtension {
 
-    /// TODO: add enum for different images
+    // TODO: add enum for different images
     // "onepassword-button.png"
     // "onepassword-button-light.png"
 

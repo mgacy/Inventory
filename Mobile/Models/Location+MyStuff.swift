@@ -12,7 +12,7 @@ import Foundation
     case category   = 0
     case item       = 1
 
-    /// TODO: see `Invoice+MyStuff.swift`
+    // TODO: see `Invoice+MyStuff.swift`
     //static func asString(raw: Int16) -> String? {}
 
     //init?(string: String) {}

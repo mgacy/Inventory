@@ -60,7 +60,7 @@ extension NSManagedObjectContext {
             let fetchedResult = try self.fetch(request)
             return fetchedResult
         } catch let error {
-            /// TODO: provide better error info?
+            // TODO: provide better error info?
             log.error(error.localizedDescription)
             throw error
         }
@@ -73,7 +73,7 @@ extension NSManagedObjectContext {
 
     func deleteEntities<T: NSManagedObject>(_ entityClass: T.Type, filter: NSPredicate? = nil) throws {
 
-        /// TODO: actually throw on exception?
+        // TODO: actually throw on exception?
 
         // Ensure any changes are first pushed to the persistent store
         if self.hasChanges {
@@ -115,7 +115,7 @@ extension NSManagedObjectContext {
 extension NSManagedObjectContext {
 
     public func saveOrRollback() -> Bool {
-        /// TODO: proceed only if self.hasChanges?
+        // TODO: proceed only if self.hasChanges?
         do {
             try save()
             return true

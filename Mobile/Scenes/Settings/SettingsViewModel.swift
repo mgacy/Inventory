@@ -31,8 +31,8 @@ final class SettingsViewModel: AttachableViewModelType {
         didLogout = accountCellTaps
             .filter { _ in dependency.userManager.authenticationState == .signedIn }
             .flatMap { _ in
-                /// TODO: check for pending Inventory / Invoice / Order
-                /// TODO: if so, present warning; this should be handled by using `.materialize()` in dataManager
+                // TODO: check for pending Inventory / Invoice / Order
+                // TODO: if so, present warning; this should be handled by using `.materialize()` in dataManager
                 return dependency.dataManager.logout()
                     .asDriver(onErrorJustReturn: false)
             }

@@ -29,7 +29,7 @@ class OrderItemViewController: UIViewController {
     let placedOrder = PublishSubject<Void>()
 
     // Create a MessageComposer
-    /// TODO: should I instantiate this here or only in `.setupView()`?
+    // TODO: should I instantiate this here or only in `.setupView()`?
     // var mailComposer: MailComposer? = nil
     let messageComposer = MessageComposer()
 
@@ -118,7 +118,7 @@ class OrderItemViewController: UIViewController {
             }
         #endif
 
-        /// TODO: handle orders that have been placed but not uploaded; display different `upload` button
+        // TODO: handle orders that have been placed but not uploaded; display different `upload` button
         headerView.messageButton.isEnabled = viewModel.canMessageOrder
     }
 
@@ -185,7 +185,7 @@ class OrderItemViewController: UIViewController {
     // MARK: - TableViewDataSource
     fileprivate var dataSource: TableViewDataSource<OrderItemViewController>!
 
-    /// TODO: pass `(with viewModel: OrderItemViewModel)`?
+    // TODO: pass `(with viewModel: OrderItemViewModel)`?
     fileprivate func setupTableView() {
         tableView.register(cellType: SubItemTableViewCell.self)
         //tableView.rowHeight = UITableViewAutomaticDimension
@@ -206,7 +206,7 @@ class OrderItemViewController: UIViewController {
         }
 
         #if !(arch(i386) || arch(x86_64)) && os(iOS)
-            /// TODO: wait until this point to instantiate `MessageComposer`?
+            // TODO: wait until this point to instantiate `MessageComposer`?
             let messageComposeVC = messageComposer.configuredMessageComposeViewController(
                 phoneNumber: viewModel.phone, message: message,
                 completionHandler: completedPlaceOrder)
@@ -292,7 +292,7 @@ extension OrderItemViewController: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: SubItemTableViewCell, for orderItem: OrderItem) {
-        /// TODO: simply add extension on SubItemTableViewCell passing OrderItem as arg?
+        // TODO: simply add extension on SubItemTableViewCell passing OrderItem as arg?
         //cell.configure(forOrderItem: orderItem)
         let viewModel = OrderItemPhoneCellViewModel(forOrderItem: orderItem)!
         cell.configure(withViewModel: viewModel)

@@ -102,7 +102,7 @@ struct RemoteInvoiceItem: Codable {
     }
 
     let remoteID: Int
-    /// TODO: should quantity be an Int or Double?
+    // TODO: should quantity be an Int or Double?
     let quantity: Double
     let status: Status
     // Optional

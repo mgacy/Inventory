@@ -3,7 +3,6 @@
 //  Mobile
 //
 //  Created by Mathew Gacy on 6/12/18.
-//  Copyright © 2018 Mathew Gacy. All rights reserved.
 //
 //  Based on code from:
 //  https://cocoacasts.com/dequeueing-reusable-views-with-generics-and-protocols

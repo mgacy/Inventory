@@ -28,7 +28,7 @@ extension InventoryLocationItem {
         if let item = fetchInventoryItem(context: context, inventory: parent, itemID: itemID) {
             self.item = item
         } else {
-            /// TODO: init should fail since self.item is required
+            // TODO: init should fail since self.item is required
             log.error("\(#function) FAILED : unable to fetch InventoryItem \(itemID) for InventoryLocation \(location)")
         }
     }
@@ -50,7 +50,7 @@ extension InventoryLocationItem {
         if let item = fetchInventoryItem(context: context, inventory: parent, itemID: itemID) {
             self.item = item
         } else {
-            /// TODO: init should fail since self.item is required
+            // TODO: init should fail since self.item is required
             // swiftlint:disable:next line_length
             log.error("\(#function) FAILED : unable to fetch InventoryItem \(itemID) for InventoryLocationCategory \(category)")
         }

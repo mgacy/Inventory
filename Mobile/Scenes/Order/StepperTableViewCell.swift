@@ -180,7 +180,7 @@ class StepperTableViewCell: UITableViewCell {
 
     // MARK: - Lifecycle
 
-    /// TODO: init with initial state (or view model)?
+    // TODO: init with initial state (or view model)?
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         contextualActionSubject = PublishSubject<StepperCommand>()
         super.init(style: style, reuseIdentifier: reuseIdentifier)

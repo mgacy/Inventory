@@ -222,7 +222,7 @@ final class InvoiceKeypadViewController: UIViewController {
         case .quantity:
             print("quantity")
             keypadView.softButton1.setTitle(viewModel.unitButtonTitle, for: .normal)
-            /// TODO: only enable if we are able to choose an alternate unit for CurrentItem?
+            // TODO: only enable if we are able to choose an alternate unit for CurrentItem?
             keypadView.softButton1.isEnabled = true
             /*
             // Should inactiveUnit simply return currentItem.unit instead of nil?

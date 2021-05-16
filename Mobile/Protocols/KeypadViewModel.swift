@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-/// TODO: rename ItemListViewModelType?
+// TODO: rename ItemListViewModelType?
 protocol KeypadViewModel: class {
     //associatedtype ParentType
     associatedtype ChildType: NSManagedObject
@@ -39,7 +39,7 @@ extension KeypadViewModel {
             didChangeItem(currentItem)
             return true
         } else {
-            /// TODO: cleanup?
+            // TODO: cleanup?
             return false
         }
     }
@@ -50,7 +50,7 @@ extension KeypadViewModel {
             didChangeItem(currentItem)
             return true
         } else {
-            /// TODO: cleanup?
+            // TODO: cleanup?
             return false
         }
     }
@@ -59,7 +59,7 @@ extension KeypadViewModel {
 
 // MARK: - NEW
 
-/// TODO: rename `ListProxy`?
+// TODO: rename `ListProxy`?
 // In practice, use of this relies on `didSet` on `currentIndex` which calls `didChangeItem(currentItem)`
 protocol ListViewModelType {
     associatedtype ItemType
@@ -84,7 +84,7 @@ extension ListViewModelType {
             currentIndex += 1
             return true
         } else {
-            /// TODO: cleanup?
+            // TODO: cleanup?
             return false
         }
     }
@@ -94,7 +94,7 @@ extension ListViewModelType {
             currentIndex -= 1
             return true
         } else {
-            /// TODO: cleanup?
+            // TODO: cleanup?
             return false
         }
     }

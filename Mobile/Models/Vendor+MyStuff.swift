@@ -24,7 +24,7 @@ extension Vendor: Syncable {
         remoteID = Int32(record.remoteID)
         name = record.name
 
-        /// TODO: create separate VendorRep object
+        // TODO: create separate VendorRep object
         if let repRecord = record.rep {
             let rep = VendorRep.updateOrCreate(with: repRecord, in: context)
             rep.vendor = self

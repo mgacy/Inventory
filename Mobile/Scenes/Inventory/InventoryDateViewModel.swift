@@ -64,13 +64,13 @@ struct InventoryDateViewModel: AttachableViewModelType {
         //self.errors = errorTracker.asDriver()
 
         // Add
-        /// TODO: go ahead and push new view controller and have that be responsible for POST?
+        // TODO: go ahead and push new view controller and have that be responsible for POST?
         let showNewResults = bindings.addTaps
             .asObservable()
             .flatMap { _ -> Observable<Event<Inventory>> in
                 return dependency.dataManager.createInventory()
             }
-            /// TODO: .map { InventorySelection.new($0) }
+            // TODO: .map { InventorySelection.new($0) }
             .share()
 
         // FetchRequest
@@ -83,7 +83,7 @@ struct InventoryDateViewModel: AttachableViewModelType {
 
         // Selection
         let showSelection = bindings.rowTaps
-            /// TODO: .map { InventorySelection.existing($0) }
+            // TODO: .map { InventorySelection.existing($0) }
             .map { frc.object(at: $0) }
             .share()
 

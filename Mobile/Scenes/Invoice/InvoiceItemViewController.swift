@@ -117,11 +117,11 @@ class InvoiceItemViewController: UIViewController {
                 switch result.event {
                 case .next:
                     HUD.flash(.success, delay: 0.5) { _ in
-                        /// TODO: handle this elsewhere
+                        // TODO: handle this elsewhere
                         self?.navigationController!.popViewController(animated: true)
                     }
                 case .error:
-                    /// TODO: `case.error(let error):; switch error {}`
+                    // TODO: `case.error(let error):; switch error {}`
                     UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
                 case .completed:
                     log.warning("\(#function) : not sure how to handle completion")
@@ -156,7 +156,7 @@ extension InvoiceItemViewController: UITableViewDelegate {
 
         // More
         let more = UITableViewRowAction(style: .normal, title: "More") { _, indexPath in
-            /// TODO: .promo and .substitute will require further action
+            // TODO: .promo and .substitute will require further action
             let statusList: [InvoiceItemStatus] = [.damaged, .wrongItem, .notReceived]
             self.showNotReceivedAlert(forItemAt: indexPath, with: statusList,
                                       handler: self.viewModel.updateItemStatus(forItemAt:withStatus:))
@@ -172,7 +172,7 @@ extension InvoiceItemViewController: UITableViewDelegate {
 
         // Received
         let received = UITableViewRowAction(style: .normal, title: "Received") { [weak self] _, indexPath in
-            /// TODO: do we not need to handle setting `self.isEditing = false`?
+            // TODO: do we not need to handle setting `self.isEditing = false`?
             self?.viewModel.updateItemStatus(forItemAt: indexPath, withStatus: .received) //{ self?.isEditing = false }
         }
         received.backgroundColor = ColorPalette.navy

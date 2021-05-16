@@ -3,7 +3,6 @@
 //  Mobile
 //
 //  Created by Mathew Gacy on 3/8/18.
-//  Copyright © 2018 Mathew Gacy. All rights reserved.
 //
 
 import UIKit

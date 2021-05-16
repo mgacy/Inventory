@@ -137,8 +137,8 @@ extension OrderLocation {
         }
     }
 
-    /// TODO: rename `configure` as `configureRelationship`?
-    /// TODO: should this throw?
+    // TODO: rename `configure` as `configureRelationship`?
+    // TODO: should this throw?
     static func syncLocations(belongingTo parent: OrderCollection,
                               with records: [RemoteType],
                               in context: NSManagedObjectContext)
@@ -209,7 +209,7 @@ extension OrderLocation {
         do {
             try context.deleteEntities(self, filter: fetchPredicate)
         } catch {
-            /// TODO: deleteEntities(_:filter) already logs the error
+            // TODO: deleteEntities(_:filter) already logs the error
             let updateError = error as NSError
             log.error("\(updateError), \(updateError.userInfo)")
             //throw updateError?

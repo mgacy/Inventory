@@ -3,7 +3,6 @@
 //  Mobile
 //
 //  Created by Mathew Gacy on 12/1/16.
-//  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 //  Includes code from CDImporter.swift
 //  Created by Tim Roadley on 5/10/2015.
@@ -15,7 +14,7 @@ import UIKit
 
 class CoreDataImporter {
 
-    /// TODO: should this really handle setting defaults?
+    // TODO: should this really handle setting defaults?
     /*
     private let defaults: UserDefaults
 
@@ -28,7 +27,7 @@ class CoreDataImporter {
     // MARK: - 
 
     func isDefaultDataAlreadyPreloaded() -> Bool {
-        /// TODO: use getter?
+        // TODO: use getter?
         return defaults.bool(forKey: "isPreloaded")
     }
     */

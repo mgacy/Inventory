@@ -40,16 +40,16 @@ class AppCoordinator: BaseCoordinator<Void> {
                 log.info("Preloading data ...")
                 let importer = CoreDataImporter()
                 guard importer.preloadData(in: container.viewContext) == true else {
-                    /// TODO: tell user why we are crashing?
+                    // TODO: tell user why we are crashing?
                     fatalError("Unable to import Unit data")
                 }
                 defaults.set(true, forKey: "isPreloaded")
             }
 
-            /// TODO: Should we use a failable initializier with CurrentUserManager?
+            // TODO: Should we use a failable initializier with CurrentUserManager?
             //  Alteratively, we could try to login and perform the following in a completion handler with success / failure.
 
-            /// TODO: initialize a SessionManager here and pass to different components
+            // TODO: initialize a SessionManager here and pass to different components
             let userManager = CurrentUserManager()
             let dataManager = DataManager(container: container, userManager: userManager)
             //self.dataManager = dataManager
@@ -94,7 +94,7 @@ class AppCoordinator: BaseCoordinator<Void> {
 
     /*
     // MARK: - Core Data stack
-    /// TODO: move into separate object
+    // TODO: move into separate object
 
     private let configuredContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Mobile")
@@ -108,7 +108,7 @@ class AppCoordinator: BaseCoordinator<Void> {
     private func createPersistentContainer(migrating: Bool = false, progress: Progress? = nil, completion: @escaping (NSPersistentContainer) -> Void) {
         configuredContainer.loadPersistentStores { _, error in
             if error == nil {
-                /// TODO: set mergePolicy
+                // TODO: set mergePolicy
                 completion(self.configuredContainer)
                 //DispatchQueue.main.async { completion(self.configuredContainer) }
             } else {
@@ -130,7 +130,7 @@ class AppCoordinator: BaseCoordinator<Void> {
     }
 
     private func destroyStore(for container: NSPersistentContainer) {
-        /// TODO: should we simply move the store?
+        // TODO: should we simply move the store?
         // see: https://code.tutsplus.com/tutorials/core-data-and-swift-migrations--cms-25084
         let psc = container.persistentStoreCoordinator
         let dbURL = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("Mobile.sqlite")

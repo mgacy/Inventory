@@ -188,7 +188,7 @@ class UnitView: UIView {
             width = 2.0 * baseUnit
         }
 
-        /// TODO: should `cornerRadius` = `lineWidth`?
+        // TODO: should `cornerRadius` = `lineWidth`?
         return UIBezierPath(roundedRect: CGRect(x: x, y: y, width: width, height: width), cornerRadius: 1)
     }
 

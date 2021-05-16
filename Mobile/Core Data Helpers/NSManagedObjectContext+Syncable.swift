@@ -60,5 +60,5 @@ extension NSManagedObjectContext {
         }
     }
 
-    /// TODO: add method to delete objects belonging to Set<RemoteIdentifierType>?
+    // TODO: add method to delete objects belonging to Set<RemoteIdentifierType>?
 }

@@ -42,7 +42,7 @@ class InventoryReviewViewController: MGTableViewController {
     override func setupView() {
         super.setupView()
         title = Strings.navTitle
-        /// TODO: add `messageLabel` output to viewModel?
+        // TODO: add `messageLabel` output to viewModel?
         messageLabel.text = Strings.messageLabelText
 
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
@@ -75,7 +75,7 @@ class InventoryReviewViewController: MGTableViewController {
             .disposed(by: disposeBag)
         /*
         viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
+            // TODO: use weak or unowned self?
             .drive(onNext: { [weak self] event in
                 self?.tableView.reloadData()
             })

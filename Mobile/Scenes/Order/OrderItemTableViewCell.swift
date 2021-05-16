@@ -43,17 +43,17 @@ extension OrderItemTableViewCell {
 
         } else {
             nameTextLabel.textColor = UIColor.lightGray
-            /// TODO: should I even bother displaying quantity?
+            // TODO: should I even bother displaying quantity?
             quantityTextLabel.text = "\(quantity)"
             quantityTextLabel.textColor = UIColor.lightGray
             unitTextLabel.text = orderItem.orderUnit?.abbreviation ?? ""
             unitTextLabel.textColor = UIColor.lightGray
         }
-        /// TODO: add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
+        // TODO: add warning color if quantity < suggested (excluding when par = 1 and suggested < 0.x)
 
         /*
         // FROM InventoryItemTableViewCell
-        /// TODO: clean this ugly mess up
+        // TODO: clean this ugly mess up
         if let quantity = locationItem.quantity {
             label.textColor = UIColor.black
 

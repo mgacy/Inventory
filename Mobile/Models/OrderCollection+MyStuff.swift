@@ -23,7 +23,7 @@ extension OrderCollection: Syncable {
     convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
         guard let date = record.date.toBasicDate() else {
-            /// TODO:find better way of handling error; use SyncError type
+            // TODO:find better way of handling error; use SyncError type
             fatalError("Unable to parse date from: \(record)")
         }
         self.dateTimeInterval = date.timeIntervalSinceReferenceDate
@@ -35,7 +35,7 @@ extension OrderCollection: Syncable {
         self.storeID = Int32(record.storeID)
         if let inventoryID = record.inventoryId { self.inventoryID = Int32(inventoryID) }
 
-        /// TODO: handle `uploaded`
+        // TODO: handle `uploaded`
 
         /// Relationships
         if let orders = record.orders {
@@ -52,7 +52,7 @@ extension OrderCollection: Syncable {
 extension OrderCollection: SyncableParent {
     typealias ChildType = Order
 
-    /// TODO: handle remoteID == 0 on new Orders
+    // TODO: handle remoteID == 0 on new Orders
     func fetchChildDict(in context: NSManagedObjectContext) -> [Int32: Order]? {
         let fetchPredicate = NSPredicate(format: "collection == %@", self)
         guard let objectDict = try? ChildType.fetchEntityDict(in: context, matching: fetchPredicate) else {
@@ -72,7 +72,7 @@ extension OrderCollection: SyncableParent {
 
 extension OrderCollection {
 
-    /// TODO: return Observable<Void>?
+    // TODO: return Observable<Void>?
     func syncOrderLocations(with records: [RemoteLocation], in context: NSManagedObjectContext) -> [OrderLocation] {
         let syncedLocations = OrderLocation.syncLocations(belongingTo: self, with: records, in: context)
         return syncedLocations

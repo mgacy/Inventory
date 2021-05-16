@@ -53,7 +53,7 @@ extension Invoice: Syncable {
     func update(with record: RemoteType, in context: NSManagedObjectContext) {
         // Required
         guard let shipDate = record.shipDate.toBasicDate(), let receiveDate = record.receiveDate.toBasicDate() else {
-            /// TODO: a fatalError seems excessive for this type of error
+            // TODO: a fatalError seems excessive for this type of error
             fatalError("\(#function) FAILED : unable to parse shipDate or receiveDate from \(record)")
         }
         self.shipDate = shipDate.timeIntervalSinceReferenceDate
@@ -77,7 +77,7 @@ extension Invoice: Syncable {
         if let taxes = record.taxes {
             self.taxes = taxes
         }
-        /// TODO: this should be a computed property
+        // FIXME: this should be a computed property
         if let totalCost = record.totalCost {
             self.totalCost = totalCost
         }
@@ -139,7 +139,7 @@ extension Invoice {
             return nil
         }
 
-        /// TODO: use map / flatmap / reduce
+        // TODO: use map / flatmap / reduce
         var itemsArray = [[String: Any]]()
         for case let item as InvoiceItem in items {
             if let itemDict = item.serialize() {
@@ -157,7 +157,7 @@ extension Invoice {
 
 extension Invoice {
 
-    /// TODO: rename `updatedStatus()` and return true if we actually change status
+    // TODO: rename `updatedStatus()` and return true if we actually change status
     func updateStatus() {
         guard let invoiceItems = items else { return }
 

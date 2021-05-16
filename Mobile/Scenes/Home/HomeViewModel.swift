@@ -23,8 +23,8 @@ final class HomeViewModel: AttachableViewModelType {
     }
 
     enum PendingTransition {
-        /// TODO: name cases `showInventory`, etc?
-        /// TODO: add fetchPredicate or frc as associated value?
+        // TODO: name cases `showInventory`, etc?
+        // TODO: add fetchPredicate or frc as associated value?
         case inventory
         case order
         case invoice
@@ -90,7 +90,7 @@ final class HomeViewModel: AttachableViewModelType {
             .asDriver(onErrorJustReturn: "Unrecognized Error")
 
         // MARK: TableView
-        /// TODO: check local or remote for pending?
+        // TODO: check local or remote for pending?
 
         guard let currentStoreID = dependency.dataManager.userManager.storeID else {
             fatalError("\(#function) FAILED : no storeID")

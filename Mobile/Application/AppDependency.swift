@@ -26,7 +26,7 @@ struct AppDependency: HasDataManager, HasUserManager {
 
     init(container: NSPersistentContainer) {
 
-        /// TODO: initialize a SessionManager here and pass to different components
+        // TODO: initialize a SessionManager here and pass to different components
         self.userManager = CurrentUserManager()
         self.dataManager = DataManager(container: container, userManager: userManager)
     }

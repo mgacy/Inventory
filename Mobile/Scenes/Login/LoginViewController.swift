@@ -63,7 +63,7 @@ class LoginViewController: UIViewController {
         // FIXME: should I disable this check?
         if self.presentingViewController != nil {
             // We are being presented from settings (or somewhere else within rather than during startup)
-            /// TODO: should we hide the 'Sign Up' button?
+            // TODO: should we hide the 'Sign Up' button?
             self.navigationItem.leftBarButtonItem = cancelButtonItem
         }
 
@@ -144,10 +144,10 @@ extension LoginViewController: UITextFieldDelegate {
         switch textField {
         case loginTextField:
             log.debug("A")
-            /// TODO: perform validation
+            // TODO: perform validation
         case passwordTextField:
             log.debug("B")
-            /// TODO: perform validation
+            // TODO: perform validation
         default:
             log.debug("C")
             //textField.resignFirstResponder()

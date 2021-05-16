@@ -9,14 +9,14 @@
 import CoreData
 
 protocol Syncable: Managed {
-    /// TODO: rename `RemoteType` as `RemoteRecordType`?
+    // TODO: rename `RemoteType` as `RemoteRecordType`?
     associatedtype RemoteType: RemoteRecord
     associatedtype RemoteIdentifierType: Hashable
 
     static var remoteIdentifierName: String { get }
     var remoteIdentifier: RemoteIdentifierType { get }
 
-    /// TODO: should these all throw?
+    // TODO: should these all throw?
     //static func updateOrCreate(with: RemoteType, in: NSManageObjectContext) -> Self
     static func sync(with: [RemoteType], in: NSManagedObjectContext, matching: NSPredicate?)
     func update(with: RemoteType, in: NSManagedObjectContext)
@@ -79,8 +79,8 @@ extension Syncable where Self: NSManagedObject {
             return findOrFetch(in: context, matching: predicate)
     }
 
-    /// TODO: add `throws`?
-    /// TODO: configuration block `configure: (Self) -> Void = { _ in }`; this could cover most of SyncableParent
+    // TODO: add `throws`?
+    // TODO: configuration block `configure: (Self) -> Void = { _ in }`; this could cover most of SyncableParent
     static func sync<R>(with records: [RemoteType], in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil)
         where R == Self.RemoteIdentifierType, R == RemoteType.SyncIdentifierType {
             guard let objectDict: [R: Self] = try? fetchEntityDict(in: context, matching: predicate) else {
@@ -100,7 +100,7 @@ extension Syncable where Self: NSManagedObject {
                     //log.debug("existingObject: \(existingObject)")
                 } else {
                     let newObject = Self(with: record, in: context)
-                    /// TODO: add newObject to localIDs?
+                    // TODO: add newObject to localIDs?
                     log.verbose("newObject: \(newObject)")
                 }
                 /*
@@ -113,7 +113,7 @@ extension Syncable where Self: NSManagedObject {
 
             // Delete objects that were deleted from server. We filter remoteID 0
             // since that is the default value for new objects
-            /// TODO: switch based on remoteIdentifierName instead?
+            // TODO: switch based on remoteIdentifierName instead?
             let deletedObjects: Set<R>
             switch R.self {
             case is Int32.Type:
@@ -142,7 +142,7 @@ extension Syncable where Self: NSManagedObject {
         do {
             try context.deleteEntities(self, filter: fetchPredicate)
         } catch {
-            /// TODO: deleteEntities(_:filter) already logs the error
+            // TODO: deleteEntities(_:filter) already logs the error
             let updateError = error as NSError
             log.error("\(updateError), \(updateError.userInfo)")
             //throw updateError?

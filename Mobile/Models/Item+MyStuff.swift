@@ -44,7 +44,7 @@ extension Item: Syncable {
         if let remoteCategory = record.category {
             if remoteCategory.syncIdentifier != category?.remoteIdentifier {
                 category = ItemCategory.updateOrCreate(with: remoteCategory, in: context)
-                /// TODO: create new ItemCategory if .fetchWithRemoteIdentifier fails?
+                // TODO: create new ItemCategory if .fetchWithRemoteIdentifier fails?
                 //category = context.fetchWithRemoteIdentifier(ItemCategory.self,
                 //                                             identifier: remoteCategory.syncIdentifier)
             }
@@ -58,7 +58,7 @@ extension Item: Syncable {
         if let remoteVendor = record.vendor {
             if remoteVendor.syncIdentifier != vendor?.remoteIdentifier {
                 vendor = Vendor.updateOrCreate(with: remoteVendor, in: context)
-                /// TODO: create new Vendor if .fetchWithRemoteIdentifier fails?
+                // TODO: create new Vendor if .fetchWithRemoteIdentifier fails?
                 //vendor = context.fetchWithRemoteIdentifier(Vendor.self, identifier: remoteVendor.syncIdentifier)
             }
         } else {
@@ -69,7 +69,7 @@ extension Item: Syncable {
     }
 
     func updateUnits(with record: RemoteItem, unitDict: [Int32: Unit]) {
-        /// TODO: make unitDict optional and fetch if not passed?
+        // TODO: make unitDict optional and fetch if not passed?
 
         // inventoryUnit
         if let inventoryUnit = record.inventoryUnit {
@@ -98,7 +98,7 @@ extension Item: Syncable {
         }
     }
 
-    /// TODO: should this be marked as `throws`?
+    // TODO: should this be marked as `throws`?
     static func sync(with records: [RemoteType], in context: NSManagedObjectContext) {
         // Create dict from fetch request on Items
         let prefetch = ["inventoryUnit", "purchaseSubUnit", "purchaseUnit",
@@ -139,12 +139,12 @@ extension Item: Syncable {
         let deletedItems = localIDs.subtracting(remoteIDs)
         if !deletedItems.isEmpty {
             log.debug("We need to delete: \(deletedItems)")
-            /// TODO: Do we really need to create a new fetch request or can we just get from itemDict?
+            // TODO: Do we really need to create a new fetch request or can we just get from itemDict?
             let fetchPredicate = NSPredicate(format: "remoteID IN %@", deletedItems)
             do {
                 try context.deleteEntities(Item.self, filter: fetchPredicate)
             } catch {
-                /// TODO: deleteEntities(_:filter) already prints the error
+                // TODO: deleteEntities(_:filter) already prints the error
                 let updateError = error as NSError
                 log.error("\(updateError), \(updateError.userInfo)")
             }
@@ -156,7 +156,7 @@ extension Item: Syncable {
 
 extension Item {
 
-    /// TODO: move this to a view model
+    // TODO: move this to a view model
     var packDisplay: String {
         return "\(self.packSize) x \(self.subSize) \(self.subUnit?.abbreviation ?? " ")"
     }

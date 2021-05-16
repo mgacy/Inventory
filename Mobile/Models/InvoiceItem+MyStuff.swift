@@ -160,7 +160,7 @@ extension InvoiceItem {
 
     func serialize() -> [String: Any]? {
         var myDict = [String: Any]()
-        /// TODO: remove the init of the different types?
+        // TODO: remove the init of the different types?
         myDict["id"] = Int(self.remoteID)
         myDict["item_id"] = self.item?.remoteID
         myDict["quantity"] = Double(self.quantity)

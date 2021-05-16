@@ -7,7 +7,6 @@
 //  http://stackoverflow.com/questions/28332946/nsdateformatter-stringfromdatensdate-returns-empty-string
 //
 //  Created by Mathew Gacy on 11/16/16.
-//  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
 import Foundation

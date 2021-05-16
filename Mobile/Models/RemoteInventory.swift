@@ -188,7 +188,7 @@ extension RemoteInventoryLocation: RemoteRecord {
 
 // MARK: - InventoryLocationCategory
 
-/// TODO: should we simply include `categoryID` to generate `items`?
+// TODO: should we simply include `categoryID` to generate `items`?
 struct RemoteLocationCategory: Codable {
     let remoteID: Int
     let name: String

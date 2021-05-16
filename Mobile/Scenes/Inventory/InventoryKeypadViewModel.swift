@@ -29,7 +29,7 @@ class InventoryKeypadViewModel: KeypadViewModel {
         let nameSort = NSSortDescriptor(key: "item.name", ascending: true)
         request.sortDescriptors = [positionSort, nameSort]
 
-        /// TODO: think about [Moving Safety into Types](http://www.figure.ink/blog/2017/10/15/moving-safety-into-types)
+        // TODO: think about [Moving Safety into Types](http://www.figure.ink/blog/2017/10/15/moving-safety-into-types)
         guard let fetchPredicate = parentObject.fetchPredicate else {
             fatalError("\(#function) FAILED : LocationItemListParent not set")
         }
@@ -53,7 +53,7 @@ class InventoryKeypadViewModel: KeypadViewModel {
     let itemValueColor = Variable<UIColor>(.black)
     let itemHistory = Variable<String>("")
     let itemUnit = Variable<String>("")
-    /// TODO: add Observable to pop controller
+    // TODO: add Observable to pop controller
 
     // MARK: - Lifecycle
 

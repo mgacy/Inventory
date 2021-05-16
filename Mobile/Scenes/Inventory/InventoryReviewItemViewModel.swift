@@ -56,7 +56,7 @@ struct InventoryReviewItemViewModel: SubItemCellViewModelType {
     init(forInventoryItem inventoryItem: InventoryItem) {
         self.inventoryItem = inventoryItem
         guard let item = inventoryItem.item else {
-            /// TODO: is a fatalError too extreme a response?
+            // TODO: is a fatalError too extreme a response?
             fatalError("Unable to get Item to configure cell")
         }
         self.item = item

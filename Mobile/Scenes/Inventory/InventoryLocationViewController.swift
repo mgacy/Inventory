@@ -67,7 +67,7 @@ class InventoryLocationViewController: MGTableViewController, AttachableType {
     override func setupView() {
         //super.setupView()
         title = Strings.navTitle
-        /// TODO: add `messageLabel` output to viewModel?
+        // TODO: add `messageLabel` output to viewModel?
         //messageLabel.text = "You do not have any Items yet."
 
         self.navigationItem.rightBarButtonItem = uploadButtonItem
@@ -97,7 +97,7 @@ class InventoryLocationViewController: MGTableViewController, AttachableType {
                         self?._dismissView.onNext(())
                     }
                 case .error:
-                    /// TODO: `case.error(let error):; switch error {}`
+                    // TODO: `case.error(let error):; switch error {}`
                     UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
                 case .completed:
                     log.warning("\(#function) : not sure how to handle completion")
@@ -123,11 +123,11 @@ class InventoryLocationViewController: MGTableViewController, AttachableType {
                 switch result.event {
                 case .next:
                     HUD.flash(.success, delay: 0.5) { _ in
-                        /// TODO: simply call `viewWasPopped()`?
+                        // TODO: simply call `viewWasPopped()`?
                         self?._dismissView.onNext(())
                     }
                 case .error:
-                    /// TODO: `case.error(let error):; switch error {}`
+                    // TODO: `case.error(let error):; switch error {}`
                     UIViewController.showErrorInHUD(title: Strings.errorAlertTitle, subtitle: "Message")
                 case .completed:
                     log.warning("\(#function) : not sure how to handle completion")

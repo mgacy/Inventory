@@ -45,7 +45,7 @@ class OrderContainerViewModel {
                 return OrderContainerViewModel.checkStatusIsSafe(forCollection: parentObject)
             }
 
-        /// TODO: rename `confirmUnsafeComplete`?
+        // TODO: rename `confirmUnsafeComplete`?
         // If there are pending orders we want to warn the user about marking this collection as completed
         self.showAlert = safeToComplete
             .filter { !$0 }
@@ -57,7 +57,7 @@ class OrderContainerViewModel {
             .merge()
             .map { _ in
                 //log.debug("Going back ...")
-                /// TODO: refresh OrderDateViewController
+                // TODO: refresh OrderDateViewController
                 parentObject.uploaded = true
                 return
             }
@@ -82,7 +82,7 @@ class OrderContainerViewModel {
                 //case OrderStatus.placed.rawValue:
                 //case OrderStatus.uploaded.rawValue:
                 default:
-                    /// TODO: use another color for values that aren't captured above
+                    // TODO: use another color for values that aren't captured above
                     continue
                 }
             }

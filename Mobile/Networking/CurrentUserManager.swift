@@ -85,7 +85,7 @@ class CurrentUserManager {
 
     public func login(email: String, password: String, completion: @escaping CompletionHandlerType) {
 
-        /// TODO: handle pre-existing user?
+        // TODO: handle pre-existing user?
 
         // We login with AuthenticationHandler since it is responsible for maintaining the token.
         // Something long-lasting like an access token in an OAuth2 scheme should be the
@@ -126,10 +126,10 @@ class CurrentUserManager {
         }
     }
 
-    /// TODO: public func confirm(withToken token: String) {}
+    // TODO: public func confirm(withToken token: String) {}
 
     public func logout() -> Observable<Bool> {
-        /// TODO: removeUser first, regardless of response.result?
+        // TODO: removeUser first, regardless of response.result?
         return APIManager.sharedInstance.logout()
             .do(onNext: { result in
                 switch result {

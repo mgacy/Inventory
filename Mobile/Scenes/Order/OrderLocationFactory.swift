@@ -10,7 +10,7 @@ import CoreData
 
 /*
 // MARK: - OrderLocation
-/// TODO: does `remoteID` mis-represent the relationship?
+// TODO: does `remoteID` mis-represent the relationship?
 
 struct OrderLocation {
     //let remoteID: Int32
@@ -106,14 +106,14 @@ class OrderLocationFactory {
     // MARK: - Private
 
     private func fetchOrderItemDict(for collection: OrderCollection, in context: NSManagedObjectContext) -> [Int32: OrderItem]? {
-        /// TODO: simply fetch Orders and prefetch "item" (and "item.item")?
+        // TODO: simply fetch Orders and prefetch "item" (and "item.item")?
         guard let orders = collection.orders else { return nil }
 
         let request: NSFetchRequest<OrderItem> = OrderItem.fetchRequest()
         request.predicate = NSPredicate(format: "order IN %@", orders)
         request.relationshipKeyPathsForPrefetching = ["item"]
 
-        /// TODO: complete (some of) the following
+        // TODO: complete (some of) the following
         //request.sortDescriptors = []
         //request.includesSubentities = true
         //request.propertiesToFetch = ["item"]

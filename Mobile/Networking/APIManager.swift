@@ -117,13 +117,13 @@ extension APIManager {
     }
 
     func getInventory(remoteID: Int) -> Observable<DataResponse<RemoteExistingInventory>> {
-        /// TODO: just accept `Inventory` so DataManager doesn't need to know anything about endpoint params?
+        // TODO: just accept `Inventory` so DataManager doesn't need to know anything about endpoint params?
         return request(Router.getInventory(remoteID: remoteID))
     }
 
     /// NOTE: I am designing this in accordance with how things should work, not how they currently do
     func postInventory(storeID: Int) -> Observable<DataResponse<RemoteNewInventory>> {
-        /// TODO: update to actually use POST
+        // TODO: update to actually use POST
         //return request(Router.postInventory)
         let isActive = true
         let typeID = 1
@@ -180,7 +180,7 @@ extension APIManager {
     }
 
     /// NOTE: I am designing this in accordance with how things should work, not how they currently do
-    /// TODO: should remoteID be a separate argument?
+    // TODO: should remoteID be a separate argument?
     func putOrder(_ order: [String: Any]) -> Observable<DataResponse<RemoteOrder>> {
         return request(Router.postOrder(order))
     }

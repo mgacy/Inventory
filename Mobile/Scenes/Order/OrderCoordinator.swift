@@ -82,7 +82,7 @@ class OrderCoordinator: BaseCoordinator<Void> {
         let (containerController, locationsViewModel, vendorsViewModel) = configureContainer(with: collection)
         navigationController.pushViewController(containerController, animated: true)
 
-        /// TODO: replace `.subscribe(onNext: { ... }) in the following with:
+        // TODO: replace `.subscribe(onNext: { ... }) in the following with:
         /// .subscribe()
         /// .do(onNext: { ... })
 

@@ -17,7 +17,7 @@ struct InvoiceItemViewModel: AttachableViewModelType {
     let vendorName: String
     let isUploading: Driver<Bool>
     let uploadResults: Observable<Event<Invoice>>
-    /// TODO: add uploadIsEnabled: Driver<Bool>
+    // TODO: add uploadIsEnabled: Driver<Bool>
     let itemSelected: Observable<IndexPath>
 
     private let dataManager: DataManager
@@ -36,7 +36,7 @@ struct InvoiceItemViewModel: AttachableViewModelType {
         self.dataManager = dependency.dataManager
         self.parentObject = dependency.parentObject
 
-        /// TODO: use computed property instead?
+        // TODO: use computed property instead?
         self.vendorName = dependency.parentObject.vendor?.name ?? "Error"
 
         // Upload
@@ -67,11 +67,11 @@ struct InvoiceItemViewModel: AttachableViewModelType {
     // MARK: Model
 
     func updateItemStatus(forItemAt indexPath: IndexPath, withStatus status: InvoiceItemStatus) {
-        /// TODO: add `completion: () -> Void` arg to so view controller can do `self?.isEditing = false` as completion?
+        // TODO: add `completion: () -> Void` arg to so view controller can do `self?.isEditing = false` as completion?
         let invoiceItem = frc.object(at: indexPath)
         invoiceItem.status = status.rawValue
         parentObject.updateStatus() // ???
-        /// TODO: dataManager.updateInvoiceItem?
+        // TODO: dataManager.updateInvoiceItem?
         dataManager.saveOrRollback()
         log.info("Updated InvoiceItem: \(invoiceItem)")
     }

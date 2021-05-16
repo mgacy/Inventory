@@ -61,7 +61,7 @@ extension Order: Syncable {
         }
         syncChildren(with: record.items, in: context)
 
-        /// TODO: handle status
+        // TODO: handle status
     }
 
 }
@@ -119,7 +119,7 @@ extension Order {
 
 extension Order {
 
-    /// TODO: move into separate object
+    // TODO: move into separate object
     func getOrderMessage() -> String? {
         guard let items = self.items else { return nil }
 
@@ -136,7 +136,7 @@ extension Order {
         if messageItems.count == 0 { return nil }
 
         messageItems.sort()
-        /// TODO: handle conversion from NSDate to String
+        // TODO: handle conversion from NSDate to String
         let message = "Order for \(collection?.date.altStringFromDate() ?? ""):\n\(messageItems.joined(separator: ""))"
         log.debug("Order Message: \(message)")
         return message

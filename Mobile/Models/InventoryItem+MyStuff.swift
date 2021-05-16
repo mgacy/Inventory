@@ -61,7 +61,7 @@ extension InventoryItem {
             } else {
                 let newObject = InventoryItem(with: record, in: context)
                 configure(newObject, record)
-                /// TODO: add newObject to localIDs?
+                // TODO: add newObject to localIDs?
                 //log.debug("newObject: \(newObject)")
             }
 
@@ -75,12 +75,12 @@ extension InventoryItem {
     static func deleteItems(withIDs deletionIDs: Set<Int32>, in context: NSManagedObjectContext) {
         guard !deletionIDs.isEmpty else { return }
         //log.debug("We need to delete: \(deletionIDs)")
-        /// TODO: remove hard-coded predicate string
+        // TODO: remove hard-coded predicate string
         let fetchPredicate = NSPredicate(format: "\(self.remoteIdentifierName) IN %@", deletionIDs)
         do {
             try context.deleteEntities(self, filter: fetchPredicate)
         } catch let error {
-            /// TODO: deleteEntities(_:filter) already prints the error
+            // TODO: deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
             log.error("\(updateError), \(updateError.userInfo)")
         }

@@ -59,7 +59,7 @@ class MailComposer: NSObject, MFMailComposeViewControllerDelegate {
         case .cancelled:
             completionHandler(.cancelled)
         case .saved:
-            /// TODO: is this the best way to handle this?
+            // TODO: is this the best way to handle this?
             completionHandler(.cancelled)
         case .sent:
             completionHandler(.sent)

@@ -34,7 +34,7 @@ struct OrderItemPhoneCellViewModel: SubItemCellViewModelType {
 
     var quantityColor: UIColor { return self.status.associatedColor }
     var quantityText: String {
-        /// TODO: simply use `switch status {}`?
+        // TODO: simply use `switch status {}`?
         guard self.status != .inactive else {
             return ""
         }
@@ -76,7 +76,7 @@ extension OrderItemPhoneCellViewModel {
 
     func decrementOrder() -> Bool {
         guard let currentQuantity = orderItem.quantity else {
-            /// TODO: should we simply set .quantity to 0?
+            // TODO: should we simply set .quantity to 0?
             //orderItem.quantity = 0.0
             return false
         }
@@ -91,7 +91,7 @@ extension OrderItemPhoneCellViewModel {
 
     func incrementOrder() -> Bool {
         guard let currentQuantity: NSNumber = orderItem.quantity else {
-            /// TODO: should we simply increment by 1 if .quantity is nil?
+            // TODO: should we simply increment by 1 if .quantity is nil?
             //orderItem.quantity = 1.0
             return false
         }
@@ -103,7 +103,7 @@ extension OrderItemPhoneCellViewModel {
         guard let parUnit = orderItem.parUnit else {
             return false
         }
-        /// TODO: should we return false if orderItem.par == 0?
+        // TODO: should we return false if orderItem.par == 0?
         let newQuantity = orderItem.par.rounded(.awayFromZero)
 
         orderItem.quantity = newQuantity as NSNumber

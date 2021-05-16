@@ -33,14 +33,14 @@ final class OrderViewModel: AttachableViewModelType {
         guard order.vendor?.rep?.phone != nil else {
             return false
         }
-        /// TODO: what about handling upload of .placed Order if upload previously failed?
+        // TODO: what about handling upload of .placed Order if upload previously failed?
         guard order.status == OrderStatus.pending.rawValue else {
             return false
         }
         return true
     }
 
-    /// TODO: make optional?
+    // TODO: make optional?
     var orderSubject: String { return "Order for \(order.collection?.date.stringFromDate() ?? "")" }
 
     var orderMessage: String? {
@@ -89,7 +89,7 @@ final class OrderViewModel: AttachableViewModelType {
                 return dependency.dataManager.updateOrder(dependency.parentObject)
                     .trackActivity(isUploading)
             }
-            /// TODO: save context?
+            // TODO: save context?
             .share()
 
         // FetchRequest

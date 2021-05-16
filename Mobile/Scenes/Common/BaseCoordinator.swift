@@ -3,7 +3,6 @@
 //  Mobile
 //
 //  Created by Mathew Gacy on 11/21/17.
-//  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 //  From:
 //  https://github.com/uptechteam/Coordinator-MVVM-Rx-Example

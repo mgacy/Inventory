@@ -17,9 +17,9 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         case quantity
         case status
 
-        /// TODO: include relevant methods?
+        // TODO: include relevant methods?
 
-        /// TODO: return new state?
+        // TODO: return new state?
         mutating func next() {
             switch self {
             case .cost:
@@ -91,7 +91,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
 
     // MARK: - Lifecycle
 
-    /// TODO: pass DataManager
+    // TODO: pass DataManager
     required init(dataManager: DataManager, for invoice: Invoice, atIndex index: Int) {
         self.dataManager = dataManager
         self.parentObject = invoice
@@ -139,10 +139,10 @@ class InvoiceKeypadViewModel: KeypadViewModel {
             return false
         }
         currentItem.unit = newUnit
-        /// TODO: save context?
+        // TODO: save context?
 
         guard let currentUnit = currentItemUnits.currentUnit else {
-            /// TODO: what should the label be in this situation?
+            // TODO: what should the label be in this situation?
             unitButtonTitle = "?"
             return true
         }
@@ -150,7 +150,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         switch currentUnit {
         case .singleUnit:
             unitButtonTitle = currentItemUnits.packUnit?.abbreviation ?? ""
-            /// TODO: disable softButton if .packUnit is nil?
+            // TODO: disable softButton if .packUnit is nil?
         case .packUnit:
             unitButtonTitle = currentItemUnits.singleUnit?.abbreviation ?? ""
         case .invalidUnit:
@@ -167,7 +167,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
         // Handle purchaseUnit, purchaseSubUnit
         currentItemUnits = ItemUnits(item: currentItem.item, currentUnit: currentItem.unit)
 
-        /// TODO: this would be a good place to use an associated value w/ the enum
+        // TODO: this would be a good place to use an associated value w/ the enum
         if let currentUnit = currentUnit {
             switch currentUnit {
             case .singleUnit:
@@ -178,7 +178,7 @@ class InvoiceKeypadViewModel: KeypadViewModel {
                 unitButtonTitle = "ERR"
             }
         } else {
-            /// TODO: is there a better way to handle this?
+            // TODO: is there a better way to handle this?
             unitButtonTitle = "ERR"
         }
 

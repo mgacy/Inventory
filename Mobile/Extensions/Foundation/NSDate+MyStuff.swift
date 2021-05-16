@@ -3,7 +3,6 @@
 //  Mobile
 //
 //  Created by Mathew Gacy on 7/6/17.
-//  Copyright © 2017 Mathew Gacy. All rights reserved.
 //
 
 import Foundation
@@ -59,7 +58,7 @@ extension NSDate {
 
 extension String {
 
-    /// TODO: add method to convert string to TimeInterval?
+    // TODO: add method to convert string to TimeInterval?
     //func toTimeInterval() -> TimeInterval? {}
 
     func toBasicDate() -> Date? {

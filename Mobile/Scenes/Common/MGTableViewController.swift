@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-/// TODO: should this inhereit from MGViewController; should I define a basic protocol for my VCs?
+// TODO: should this inhereit from MGViewController; should I define a basic protocol for my VCs?
 class MGTableViewController: UIViewController {
 
     // MARK: - Properties
@@ -21,7 +21,7 @@ class MGTableViewController: UIViewController {
 
     // MARK: UI
 
-    /// TODO: omit refreshControl?
+    // TODO: omit refreshControl?
     let refreshControl = UIRefreshControl()
     /*
     lazy var refreshControl: UIRefreshControl = {
@@ -83,7 +83,7 @@ class MGTableViewController: UIViewController {
         view.addSubview(tableView)
         view.addSubview(activityIndicatorView)
         view.addSubview(messageLabel)
-        /// TODO: set messageLabel.text?
+        // TODO: set messageLabel.text?
 
         // Uncomment the following line to preserve selection between presentations.
         // self.clearsSelectionOnViewWillAppear = false

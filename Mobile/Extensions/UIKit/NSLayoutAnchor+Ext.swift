@@ -6,7 +6,6 @@
 //  https://stackoverflow.com/a/39111696/4472195
 //
 //  Created by Mathew Gacy on 5/17/18.
-//  Copyright © 2018 Mathew Gacy. All rights reserved.
 //
 
 import UIKit

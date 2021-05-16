@@ -30,8 +30,8 @@ class InventoriesFactory {
 
     // MARK: - Create / Update Inventory
 
-    /// TODO: shouldn't these methods be named `makeX` according to Raywenderlich styleguide?
-    /// TODO: shouldn't this be marked as `throws`?
+    // TODO: shouldn't these methods be named `makeX` according to Raywenderlich styleguide?
+    // TODO: shouldn't this be marked as `throws`?
     func createNewInventory(from record: RemoteNewInventory, in context: NSManagedObjectContext) -> Inventory? {
         guard let itemDict = try? Item.fetchEntityDict(in: context) else { return nil }
         //guard let categoryDict = try? ItemCategory.fetchEntityDict(in: context) else { return nil }
@@ -51,7 +51,7 @@ class InventoriesFactory {
         //log.debug("\(#function) inventoryItemDict: \(inventoryItemDict)")
 
         // Create InventoryLocations
-        /// TODO: can this be cleaned up?
+        // TODO: can this be cleaned up?
         try? record.locations.forEach { locationRecord in
             do {
                 let location = try createLocation(with: locationRecord, in: context) { locationItem, itemID in

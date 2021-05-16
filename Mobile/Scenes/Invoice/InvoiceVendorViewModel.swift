@@ -10,7 +10,6 @@ import CoreData
 import RxCocoa
 import RxSwift
 
-/// TODO: make class?
 struct InvoiceVendorViewModel: AttachableViewModelType {
 
     // MARK: - Properties

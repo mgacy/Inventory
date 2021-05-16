@@ -293,7 +293,7 @@ class InvoiceDisplaySubview: UIView {
                 log.warning("Unable to get superview or constraints"); return
         }
 
-        /// TODO: move this into `didSet` on `currentMode`?
+        // TODO: move this into `didSet` on `currentMode`?
         switch newMode {
         case .cost:
             costTapGestureRecognizer.isEnabled = false
@@ -399,7 +399,7 @@ class InvoiceDisplayHighlightView: UIView {
 
         let x: CGFloat = frame.width - indicatorWidth - indicatorHorizontalInset
         let y: CGFloat = indicatorVerticalInset
-        /// TODO: should height be determined by xHeight of InvoiceDisplaySubview labels?
+        // TODO: should height be determined by xHeight of InvoiceDisplaySubview labels?
         let height = frame.height - (2.0 * indicatorVerticalInset)
         let path = UIBezierPath(roundedRect: CGRect(x: x, y: y, width: indicatorWidth, height: height), cornerRadius: 1)
         indicatorLayer.path = path.cgPath

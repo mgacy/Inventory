@@ -62,7 +62,7 @@ extension InventoryLocation {
 
     private var statusForCategory: InventoryStatus {
         guard let categories = self.categories else {
-            /// TODO: is this the correct way to handle this?
+            // TODO: is this the correct way to handle this?
             return InventoryStatus.notStarted
         }
 
@@ -114,7 +114,7 @@ extension InventoryLocation {
 
     private var statusForLocation: InventoryStatus {
         guard let items = self.items else {
-            /// TODO: is this the correct way to handle this?
+            // TODO: is this the correct way to handle this?
             return InventoryStatus.notStarted
         }
 

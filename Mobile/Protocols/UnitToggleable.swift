@@ -59,13 +59,13 @@ protocol ItemProtocol {
 // MARK: - Implementation
 
 protocol UnitToggleable: class {
-    /// TODO: rename `wrappedItem`?
+    // TODO: rename `wrappedItem`?
     var associatedItem: ItemProtocol { get }
     var quantity: NSNumber? { get set }
     var unit: Unit? { get set }
     var currentUnit: NewCurrentUnit { get set }
 
-    /// TODO: should these methods be part of a separate `UnitToggling` protocol?
+    // TODO: should these methods be part of a separate `UnitToggling` protocol?
     func switchToSingleUnit()
     func switchToPackUnit()
 }
@@ -125,7 +125,7 @@ extension UnitToggleable {
                 }
             case .invalidUnit:
                 log.warning("Unable to update unit to: INVALID")
-                /// TODO: set to nil?
+                // TODO: set to nil?
             }
         }
     }

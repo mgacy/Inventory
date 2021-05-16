@@ -4,7 +4,6 @@
 //
 //  https://swifting.io/blog/2016/09/25/25-core-data-in-ios10-nspersistentcontainer/
 //
-//
 
 import CoreData
 /*

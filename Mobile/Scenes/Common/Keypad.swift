@@ -30,7 +30,7 @@ protocol KeypadDelegate: class {
 
 class Keypad: KeypadType {
 
-    /// TODO: rename `currentDisplay` to better differentiate purpose from currentValue?
+    // TODO: rename `currentDisplay` to better differentiate purpose from currentValue?
     public var displayValue: String {
         // swiftlint:disable:next identifier_name
         guard let _currentNumber = currentNumber else {
@@ -100,10 +100,9 @@ class Keypad: KeypadType {
             isEditingNumber = true
             currentNumber = "0."
         }
-        /*
-         Since we currently use `delegate?.updateModel(:)` to update both the model AND view model, call that method
-         even if we are not actually changing the value of the model.
-         */
+
+        // Since we currently use `delegate?.updateModel(:)` to update both the model AND view model, call that method
+        // even if we are not actually changing the value of the model.
         delegate?.updateModel(currentValue)
     }
 
@@ -159,7 +158,7 @@ class KeypadWithHistory: KeypadWithHistoryType {
 
     // NOTE: when displayHistory = `a + b + c`, stack == ["a", "b"] and currentNumber == "c"
 
-    /// TODO: rename `currentDisplay` to better differentiate purpose from currentValue?
+    // TODO: rename `currentDisplay` to better differentiate purpose from currentValue?
     public var displayValue: String {
         guard let total = evaluateHistory(stack: self.stack, currentNumber: self.currentNumber) else {
             return "0"
@@ -198,7 +197,7 @@ class KeypadWithHistory: KeypadWithHistoryType {
         self.maximumFractionDigits = maximumFractionDigits
 
         self.isEditingNumber = false
-        /// TODO: should we init with `nil`?
+        // TODO: should we init with `nil`?
         self.currentNumber = ""
         self.stack = []
     }
@@ -245,10 +244,8 @@ class KeypadWithHistory: KeypadWithHistoryType {
             currentNumber = nil
             isEditingNumber = false
 
-            /*
-             Since we currently use `delegate?.updateModel(:)` to update both the model AND view model, call that method
-             even if we are not actually changing the value of the model.
-             */
+             // Since we currently use `delegate?.updateModel(:)` to update both the model AND view model, call that
+             // method even if we are not actually changing the value of the model.
             delegate?.updateModel(currentValue)
         }
     }
@@ -265,10 +262,8 @@ class KeypadWithHistory: KeypadWithHistoryType {
             isEditingNumber = true
             currentNumber = "0."
         }
-        /*
-         Since we currently use `delegate?.updateModel(:)` to update both the model AND view model, call that method
-         even if we are not actually changing the value of the model.
-         */
+        // Since we currently use `delegate?.updateModel(:)` to update both the model AND view model, call that method
+        // even if we are not actually changing the value of the model.
         delegate?.updateModel(currentValue)
     }
 
@@ -302,7 +297,7 @@ class KeypadWithHistory: KeypadWithHistoryType {
 
     /// Essentially, reset currentNumber with newNumber
     public func updateNumber(_ newNumber: NSNumber?) {
-        /// TODO: look at how KeypadWithHistory calls `.pushOperator()` if newNumber != nil after calling `super.updateNumber(newNumber)`
+        // TODO: look at how KeypadWithHistory calls `.pushOperator()` if newNumber != nil after calling `super.updateNumber(newNumber)`
         stack = []
         isEditingNumber = false
         // swiftlint:disable:next identifier_name

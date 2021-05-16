@@ -66,7 +66,7 @@ class OrderVendorViewController: UIViewController {
 
     private func setupView() {
         title = Strings.navTitle
-        /// TODO: should we show this button as disabled or simply omit it?
+        // TODO: should we show this button as disabled or simply omit it?
         navigationItem.rightBarButtonItem = completeButtonItem
         completeButtonItem.isEnabled = false
         self.view.addSubview(tableView)
@@ -134,7 +134,7 @@ extension OrderVendorViewController: TableViewDataSourceDelegate {
     func configure(_ cell: UITableViewCell, for order: Order) {
         cell.textLabel?.text = order.vendor?.name
 
-        /// TODO: handle situation where user placed an order but uploading to the server failed;
+        // TODO: handle situation where user placed an order but uploading to the server failed;
         // we still need to make sure that it ends up getting uploaded
 
         switch order.status {
@@ -145,12 +145,12 @@ extension OrderVendorViewController: TableViewDataSourceDelegate {
         case OrderStatus.pending.rawValue:
             cell.textLabel?.textColor = ColorPalette.yellow
         case OrderStatus.placed.rawValue:
-            /// TODO: use another color?
+            // TODO: use another color?
             cell.textLabel?.textColor = UIColor.black
         case OrderStatus.uploaded.rawValue:
             cell.textLabel?.textColor = UIColor.black
         default:
-            /// TODO: use another color for values that aren't captured above
+            // TODO: use another color for values that aren't captured above
             cell.textLabel?.textColor = UIColor.blue
         }
     }

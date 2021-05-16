@@ -39,7 +39,7 @@ final class SplitViewDelegate: NSObject {
 extension SplitViewDelegate: UITabBarControllerDelegate {
 
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        /// Prevent selection of the same tab twice (which would reset its navigation controller)
+        // Prevent selection of the same tab twice (which would reset its navigation controller)
         return tabBarController.selectedViewController === viewController ? false : true
     }
 
@@ -49,8 +49,8 @@ extension SplitViewDelegate: UITabBarControllerDelegate {
             let selectedNavController = viewController as? PrimaryContainerType else {
                 fatalError("\(#function) FAILED : wrong view controller type")
         }
-        /// If split view controller is collapsed, detail view will already be on `selectedNavController.viewControllers`;
-        /// otherwise, we need to change the secondary view controller to the selected tab's detail view.
+        // If split view controller is collapsed, detail view will already be on `selectedNavController.viewControllers`;
+        // otherwise, we need to change the secondary view controller to the selected tab's detail view.
         if !splitViewController.isCollapsed {
             updateSecondaryWithDetail(from: selectedNavController)
         }
@@ -86,7 +86,7 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
 
         navigationControllers.forEach { $0.separateDetail() }
 
-        /// There is no point in hiding the primary view controller with a placeholder detail view
+        // There is no point in hiding the primary view controller with a placeholder detail view
         if
             case .placeholder = selectedNavController.detailView,
             splitViewController.preferredDisplayMode == .primaryHidden
@@ -115,7 +115,7 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
             selectedNavController.detailView = .collapsed(vc)
         } else {
             switch selectedNavController.detailView {
-            /// Animate only the initial presentation of the detail vc
+            // Animate only the initial presentation of the detail vc
             case .placeholder:
                 detailNavigationController.setViewControllers([vc], animated: true)
             default:
@@ -123,7 +123,7 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
             }
             selectedNavController.detailView = .separated(vc)
         }
-        return true /// Prevent UIKit from performing default behavior
+        return true // Prevent UIKit from performing default behavior
     }
 
 }

@@ -120,7 +120,7 @@ extension StepperCellViewModel {
         guard let parUnit = orderItem.parUnit else {
             return false
         }
-        /// TODO: should we return false if orderItem.par == 0?
+        // TODO: should we return false if orderItem.par == 0?
         let newQuantity = orderItem.par.rounded(.awayFromZero)
 
         orderItem.quantity = newQuantity as NSNumber

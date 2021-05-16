@@ -206,7 +206,7 @@ class OrderKeypadViewModel: OrderKeypadViewModelType {
             return false
         }
         currentItem.orderUnit = newUnit
-        /// TODO: save context?
+        // TODO: save context?
         return true
     }
 
@@ -240,7 +240,7 @@ extension OrderKeypadViewModel: ListViewModelType {
             currentIndex += 1
             return true
         } else {
-            /// TODO: cleanup?
+            // TODO: cleanup?
             return false
         }
     }
@@ -250,7 +250,7 @@ extension OrderKeypadViewModel: ListViewModelType {
             currentIndex -= 1
             return true
         } else {
-            /// TODO: cleanup?
+            // TODO: cleanup?
             return false
         }
     }

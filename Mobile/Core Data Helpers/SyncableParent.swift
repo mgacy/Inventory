@@ -8,20 +8,20 @@
 
 import CoreData
 
-/// TODO: rename to reference relationships
+// TODO: rename to reference relationships
 protocol SyncableParent: class, NSFetchRequestResult {
     associatedtype ChildType: Syncable
 
     func syncChildren(with: [ChildType.RemoteType], in: NSManagedObjectContext)
     func fetchChildDict(in: NSManagedObjectContext) -> [ChildType.RemoteIdentifierType: ChildType]?
     func updateParent(of: ChildType)
-    /// TODO: rename to something referencing RemoteDeletion?
+    // TODO: rename to something referencing RemoteDeletion?
     func deleteChildren(withIdentifiers: Set<ChildType.RemoteType.SyncIdentifierType>, in: NSManagedObjectContext)
 }
 
 extension SyncableParent where ChildType: NSManagedObject {
 
-    /// TODO: pass closure `configure: (ChildType) -> Void` to allow configuring relationships
+    // TODO: pass closure `configure: (ChildType) -> Void` to allow configuring relationships
     func syncChildren<R, I>(with records: [R], in context: NSManagedObjectContext) where R == ChildType.RemoteType,
         I == ChildType.RemoteIdentifierType, I == ChildType.RemoteType.SyncIdentifierType {
             guard let objectDict: [I: ChildType] = fetchChildDict(in: context) else {
@@ -71,7 +71,7 @@ extension SyncableParent where ChildType: NSManagedObject {
         do {
             try context.deleteEntities(ChildType.self, filter: fetchPredicate)
         } catch let error {
-            /// TODO: deleteEntities(_:filter) already prints the error
+            // TODO: deleteEntities(_:filter) already prints the error
             let updateError = error as NSError
             log.error("\(updateError), \(updateError.userInfo)")
         }

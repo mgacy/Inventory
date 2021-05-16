@@ -187,7 +187,7 @@ class InventoryKeypadViewController: UIViewController {
             return
         case false:
             changeItemDissmissalEvent.onNext(.wasDismissed)
-            /// TODO: emit event so coordinator can dismiss
+            // TODO: emit event so coordinator can dismiss
             if let navController = navigationController {
                 navController.popViewController(animated: true)
             } else {
@@ -202,7 +202,7 @@ class InventoryKeypadViewController: UIViewController {
             return
         case false:
             changeItemDissmissalEvent.onNext(.wasDismissed)
-            /// TODO: emit event so coordinator can dismiss
+            // TODO: emit event so coordinator can dismiss
             if let navController = navigationController {
                 navController.popViewController(animated: true)
             } else {

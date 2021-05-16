@@ -14,7 +14,7 @@ import RxSwift
 class HomeViewController: UIViewController, AttachableType {
 
     private enum Strings {
-        /// TODO: navTitle should be store name
+        // TODO: navTitle should be store name
         static let navTitle = "Home"
         static let errorAlertTitle = "Error"
         static let newOrderTitle = "Create Order"

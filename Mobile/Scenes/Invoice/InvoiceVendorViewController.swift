@@ -121,7 +121,7 @@ extension InvoiceVendorViewController: TableViewDataSourceDelegate {
         case InvoiceStatus.completed.rawValue:
             cell.textLabel?.textColor = UIColor.black
         case InvoiceStatus.rejected.rawValue:
-            /// TODO: what color should we use?
+            // TODO: what color should we use?
             cell.textLabel?.textColor = ColorPalette.red
             //cell.textLabel?.textColor = UIColor.black
         default:

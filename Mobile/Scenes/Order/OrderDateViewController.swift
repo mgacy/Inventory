@@ -62,7 +62,7 @@ class OrderDateViewController: UIViewController {
     var viewModel: OrderDateViewModel!
     let disposeBag = DisposeBag()
 
-    /// TODO: provide interface to control these
+    // TODO: provide interface to control these
     let orderTypeID = 1
 
     // MARK: - Interface
@@ -158,7 +158,7 @@ class OrderDateViewController: UIViewController {
             .disposed(by: disposeBag)
         /*
         viewModel.hasRefreshed
-            /// TODO: use weak or unowned self?
+            // TODO: use weak or unowned self?
             .drive(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })

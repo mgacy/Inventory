@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-/// TODO: define protocol specifying any dimensions required for constraints:
+// TODO: define protocol specifying any dimensions required for constraints:
 // - width of detailview controller
 // - height of navbar?
 protocol ModalKeypadPresenting: class {
@@ -52,7 +52,7 @@ final class ModalKeypadViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-    /// TODO: pass primary view controller (or its constraints) to configure widths?
+    // TODO: pass primary view controller (or its constraints) to configure widths?
     init(keypadViewController: UIViewController & ModalKeypadDismissing) {
         self.keypadViewController = keypadViewController
         self.dismissalEvents = Observable.of(
