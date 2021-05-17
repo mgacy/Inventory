@@ -71,7 +71,7 @@ extension SplitViewDelegate: UISplitViewControllerDelegate {
         }
 
         navigationControllers.forEach { $0.collapseDetail() }
-        return true /// Prevent UIKit from performing default collapse behavior
+        return true // Prevent UIKit from performing default collapse behavior
     }
 
     // MARK: Expanding the Interface

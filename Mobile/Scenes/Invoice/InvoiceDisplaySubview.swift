@@ -156,12 +156,6 @@ class InvoiceDisplaySubview: UIView {
         fatalError("NSCoding not supported")
     }
 
-    // MARK: - B
-
-    //override func layoutIfNeeded() {}
-
-    //override func layoutSubviews() {}
-
     // MARK: - My View Methods
 
     private func setupView() {

@@ -246,22 +246,22 @@ final class InvoiceKeypadViewController: UIViewController {
     @objc func handleGesture(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: gesture.view)
         let percent = translation.y / gesture.view!.bounds.size.height
-        //log.debug("%: \(percent)")
+        //log.verbose("%: \(percent)")
         switch gesture.state {
         case .began:
             interactionController = UIPercentDrivenInteractiveTransition()
             customTransitionDelegate.interactionController = interactionController
             dismiss(animated: true)
         case .changed:
-            //log.debug("changed: \(percent)")
+            //log.verbose("changed: \(percent)")
             interactionController?.update(percent)
         case .ended:
             let velocity = gesture.velocity(in: gesture.view)
-            //log.debug("velocity: \(velocity)")
+            //log.verbose("velocity: \(velocity)")
             interactionController?.completionSpeed = 0.999  // https://stackoverflow.com/a/42972283/1271826
             if (percent > 0.5 && velocity.y >= 0) || velocity.y > 0 {
                 interactionController?.finish()
-                /// Ensure we return event from coordinator when dismissing view with pan gesture
+                // Ensure we return event from coordinator when dismissing view with pan gesture
                 panGestureDissmissalEvent.onNext(.wasDismissed)
             } else {
                 interactionController?.cancel()

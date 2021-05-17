@@ -70,10 +70,6 @@ class MGTableViewController: UIViewController {
         setupView()
     }
 
-    //override func viewWillAppear(_ animated: Bool) {}
-
-    //override func didReceiveMemoryWarning() {}
-
     //deinit { log.debug("\(#function)") }
 
     // MARK: - View Methods

@@ -55,10 +55,8 @@ extension Syncable where Self: NSManagedObject {
 
         let request = NSFetchRequest<Self>(entityName: Self.entityName)
 
-        /*
-         Set returnsObjectsAsFaults to false to gain a performance benefit if you know
-         you will need to access the property values from the returned objects.
-         */
+        // Set returnsObjectsAsFaults to false to gain a performance benefit if you know
+        // you will need to access the property values from the returned objects.
         request.returnsObjectsAsFaults = asFaults
         request.predicate = predicate
         request.relationshipKeyPathsForPrefetching = relationships
@@ -97,7 +95,7 @@ extension Syncable where Self: NSManagedObject {
                 // Find + update / create Items
                 if let existingObject = objectDict[objectID] {
                     existingObject.update(with: record, in: context)
-                    //log.debug("existingObject: \(existingObject)")
+                    log.verbose("existingObject: \(existingObject)")
                 } else {
                     let newObject = Self(with: record, in: context)
                     // TODO: add newObject to localIDs?
@@ -109,7 +107,7 @@ extension Syncable where Self: NSManagedObject {
                  */
             }
 
-            //log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
+            log.verbose("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
 
             // Delete objects that were deleted from server. We filter remoteID 0
             // since that is the default value for new objects
@@ -128,7 +126,7 @@ extension Syncable where Self: NSManagedObject {
     }
 
     private static func delete(withIdentifiers identifiers: Set<RemoteIdentifierType>, in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil) {
-        //log.debug("We need to delete: \(identifiers)")
+        log.verbose("We need to delete: \(identifiers)")
         guard !identifiers.isEmpty else { return }
 
         let fetchPredicate: NSPredicate
@@ -145,7 +143,7 @@ extension Syncable where Self: NSManagedObject {
             // TODO: deleteEntities(_:filter) already logs the error
             let updateError = error as NSError
             log.error("\(updateError), \(updateError.userInfo)")
-            //throw updateError?
+            // throw updateError?
         }
     }
 

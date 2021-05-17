@@ -68,7 +68,7 @@ class OrderLocationFactory {
         //self.orderItemDict = fetchOrderItemDict(for: collection, in: context) ?? [:]
         // swiftlint:disable:next identifier_name
         if let _orderItemDict = fetchOrderItemDict(for: collection, in: context) {
-            //log.debug("orderItemDict: \(_orderItemDict)\n")
+            log.verbose("orderItemDict: \(_orderItemDict)\n")
             self.orderItemDict = _orderItemDict
         }
     }

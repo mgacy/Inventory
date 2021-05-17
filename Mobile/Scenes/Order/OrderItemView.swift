@@ -100,7 +100,6 @@ final class OrderItemHeaderView: UIView {
     // MARK: - Configuration
 
     private func configure() {
-        //backgroundColor = .yellow
         addSubview(stackView)
         addSubview(bottomDividerView)
         setupConstraints()

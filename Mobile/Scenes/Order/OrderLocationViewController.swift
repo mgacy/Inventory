@@ -46,8 +46,6 @@ class OrderLocationViewController: MGTableViewController {
         self.tableView.reloadData()
     }
 
-    //override func didReceiveMemoryWarning() {}
-
     deinit { log.debug("\(#function)") }
 
     // MARK: - View Methods

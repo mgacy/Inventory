@@ -211,7 +211,7 @@ class UserStorageManager: UserStorageManagerType {
         if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             return url
         } else {
-            // should incorporate better error handling
+            // FIXME: incorporate better error handling
             fatalError("Could not retrieve documents directory")
         }
     }
@@ -230,19 +230,19 @@ protocol CredentialsManagerType {
 
 class CredentialsManager: CredentialsManagerType {
     var accessToken: String? {
-        set {
-            if let valueToSave = newValue {
-                keychain["authToken"] = valueToSave
-            } else { // they set it to nil, so delete it
-                keychain["authToken"] = nil
-            }
-        }
         get {
             // try to load from keychain
             if let token = try? keychain.get("authToken") {
                 return token
             } else {
                 return nil
+            }
+        }
+        set {
+            if let valueToSave = newValue {
+                keychain["authToken"] = valueToSave
+            } else { // they set it to nil, so delete it
+                keychain["authToken"] = nil
             }
         }
     }

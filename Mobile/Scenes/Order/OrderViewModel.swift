@@ -84,7 +84,7 @@ final class OrderViewModel: AttachableViewModelType {
 
         self.uploadResults = bindings.placedOrder
             .flatMap { _ -> Observable<Event<Order>> in
-                //log.info("POSTing Order ...")
+                log.verbose("POSTing Order ...")
                 dependency.parentObject.status = OrderStatus.placed.rawValue
                 return dependency.dataManager.updateOrder(dependency.parentObject)
                     .trackActivity(isUploading)

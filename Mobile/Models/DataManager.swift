@@ -72,11 +72,11 @@ extension DataManager {
         return refreshVendors()
             // Items
             .flatMap { result -> Observable<Bool> in
-                //log.debug("\(#function) - \(result)")
+                //log.verbose("\(#function) - \(result)")
                 return self.refreshItems()
             }
             .flatMap { result -> Observable<Bool> in
-                //log.debug("\(#function) - \(result)")
+                //log.verbose("\(#function) - \(result)")
                 return Observable.just(self.viewContext.saveOrRollback())
             }
             //.materialize()

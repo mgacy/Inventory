@@ -53,7 +53,7 @@ extension Order: Syncable {
         // Unimplemented
         // cost = record.cost
 
-        /// Relationships
+        // Relationships
         // collection
         // store
         if record.vendor.syncIdentifier != vendor?.remoteIdentifier {

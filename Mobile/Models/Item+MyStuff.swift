@@ -32,7 +32,7 @@ extension Item: Syncable {
         //packSize = (record.packSize != nil ?? Int16(record.packSize!) : nil)
         subSize = Int16(record.subSize ?? 0)
 
-        /// NOTE: not implemented:
+        // NOTE: not implemented:
         // active
         // shelfLife
         // sku

@@ -10,6 +10,8 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+// swiftlint:disable file_length
+
 /// https://github.com/ReactiveX/RxSwift/issues/991
 extension Reactive where Base: MGStepper {
 

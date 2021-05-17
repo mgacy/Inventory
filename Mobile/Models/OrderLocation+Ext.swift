@@ -69,7 +69,7 @@ extension OrderLocation {
         name = record.name
         locationType = record.locationType.converted().rawValue
 
-        /// Relationships
+        // Relationships
         // collection
         // categories?
         // items?
@@ -78,13 +78,13 @@ extension OrderLocation {
         case .category:
             let localCount = categories?.count ?? 0
             let remoteCount = record.categories.count
-            //log.debug("Counts - local: \(localCount) - remote: \(remoteCount)")
+            //log.verbose("Counts - local: \(localCount) - remote: \(remoteCount)")
 
             for (position, locationCategory) in record.categories.enumerated() {
                 if position < localCount {
                     if let existingObject = categories?.object(at: position) as? OrderLocationCategory {
                         existingObject.update(with: locationCategory, in: context, configureChildren: configureChildren)
-                        //log.debug("Updated Category: \(existingObject)")
+                        //log.verbose("Updated Category: \(existingObject)")
                     } else {
                         log.error("\(#function) FAILED : \(locationCategory)")
                     }
@@ -93,11 +93,11 @@ extension OrderLocation {
                                                           configure: configureChildren)
                     newObject.position = Int16(position)
                     newObject.location = self
-                    //log.debug("Created Category: \(newObject)")
+                    //log.verbose("Created Category: \(newObject)")
                 }
             }
 
-            /// Delete any local objects not in remote records
+            // Delete any local objects not in remote records
             if localCount > remoteCount {
                 for position in (remoteCount ..< localCount).reversed() {
                     if let object = categories?.object(at: position) as? OrderLocationCategory {
@@ -121,7 +121,7 @@ extension OrderLocation {
                 }
             }
 
-            /// Handle deleted objects
+            // Handle deleted objects
             //let objectsToDelete = Set(locItemDict.keys).subtracting(record.items.map { $0.position })
             if locItemDict.keys.count > record.items.count {
                 for position in (record.items.count ..< locItemDict.keys.count).reversed() {
@@ -164,38 +164,38 @@ extension OrderLocation {
                             context.delete(locationItem); return
                         }
                         locationItem.item = orderItem
-                        //log.debug("Item: \(locationItem)")
+                        log.verbose("Item: \(locationItem)")
                     }
                     returnValue.append(existingObject)
-                    //log.debug("Updated Location: \(existingObject)")
+                    log.verbose("Updated Location: \(existingObject)")
                 } else {
                     let newObject = OrderLocation(with: record, in: context) { locationItem, locationItemRecord in
                         guard let orderItem = orderItemDict[locationItemRecord.syncIdentifier] else {
                             context.delete(locationItem); return
                         }
                         locationItem.item = orderItem
-                        //log.debug("Item: \(locationItem)")
+                        log.verbose("Item: \(locationItem)")
                     }
                     newObject.collection = parent
                     returnValue.append(newObject)
-                    //log.verbose("Created Location: \(newObject)")
+                    log.verbose("Created Location: \(newObject)")
                 }
             }
 
-            //log.debug("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
+            log.verbose("\(self) - remote: \(remoteIDs) - local: \(localIDs)")
 
             // Delete objects that were deleted from server. We filter remoteID 0 (the default value for new objects)
             let deletedObjects: Set<RemoteIdentifierType> = localIDs.subtracting(remoteIDs).filter { $0 != 0 }
             delete(withIdentifiers: deletedObjects, in: context, matching: predicate)
 
             //let saveResult = context.saveOrRollback()
-            //log.debug("Saved: \(saveResult)")
+            //log.verbose("Saved: \(saveResult)")
 
             return returnValue
     }
 
     static func delete(withIdentifiers identifiers: Set<RemoteIdentifierType>, in context: NSManagedObjectContext, matching predicate: NSPredicate? = nil) {
-        //log.debug("We need to delete: \(identifiers)")
+        log.verbose("We need to delete: \(identifiers)")
         guard !identifiers.isEmpty else { return }
 
         let fetchPredicate: NSPredicate

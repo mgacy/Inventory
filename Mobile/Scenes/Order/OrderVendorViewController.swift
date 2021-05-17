@@ -58,8 +58,6 @@ class OrderVendorViewController: UIViewController {
         //self.tableView.reloadData()
     }
 
-    //override func didReceiveMemoryWarning() {}
-
     deinit { log.debug("\(#function)") }
 
     // MARK: - View Methods

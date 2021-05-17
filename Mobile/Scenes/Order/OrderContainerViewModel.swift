@@ -56,7 +56,7 @@ class OrderContainerViewModel {
         self.popView = Observable.of(_confirmComplete.asObservable(), safeToComplete.filter { $0 }.map { _ in })
             .merge()
             .map { _ in
-                //log.debug("Going back ...")
+                log.verbose("Going back ...")
                 // TODO: refresh OrderDateViewController
                 parentObject.uploaded = true
                 return

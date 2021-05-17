@@ -40,12 +40,12 @@ struct OrderDateViewModel: AttachableViewModelType {
         let refreshResults = bindings.fetchTrigger
             .asObservable()
             .flatMapLatest { _ -> Observable<Event<Bool>> in
-                //log.debug("\(#function) : Refreshing (1) ...")
+                log.verbose("\(#function) : Refreshing (1) ...")
                 return dependency.dataManager.refreshStuff()
                     .materialize()
             }
             .flatMapLatest { _ -> Observable<Event<Bool>> in
-                //log.debug("\(#function) : Refreshing (2) ...")
+                log.verbose("\(#function) : Refreshing (2) ...")
                 return dependency.dataManager.refreshOrderCollections()
                     .trackActivity(activityIndicator)
             }
@@ -75,7 +75,7 @@ struct OrderDateViewModel: AttachableViewModelType {
             .flatMap { selection -> Observable<Event<OrderCollection>> in
                 switch selection.uploaded {
                 case true:
-                    /// FIXME: simply push view; refresh on next scene
+                    // FIXME: simply push view; refresh on next scene
                     // TODO: show PKHUD progress
                     return dependency.dataManager.refreshOrderCollection(selection)
                 case false:

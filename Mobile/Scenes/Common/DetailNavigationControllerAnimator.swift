@@ -8,6 +8,7 @@
 
 import UIKit
 
+// swiftlint:disable:next type_name
 class DetailNavigationControllerAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     let operation: UINavigationControllerOperation
 

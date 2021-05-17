@@ -36,7 +36,7 @@ extension OrderItem: Syncable {
             self.quantity = quantity as NSNumber
         }
 
-        /// Relationships
+        // Relationships
         // order
         // item
         if Int32(record.item.remoteID) != self.item?.remoteID {

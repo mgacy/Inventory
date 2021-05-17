@@ -16,7 +16,7 @@ extension OrderLocationCategory: Managed {
 
     convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
-        /// FIXME: InventoryLocationCategory does have .id, but response from /inventory_locations returns id of ItemCategory
+        // FIXME: InventoryLocationCategory does have .id, but response from /inventory_locations returns id of ItemCategory
         // remoteID = record.syncIdentifier
         update(with: record, in: context)
     }
@@ -26,7 +26,7 @@ extension OrderLocationCategory: Managed {
         name = record.name
         categoryID = record.syncIdentifier
 
-        /// Relationships
+        // Relationships
         // location
         // items?
     }
@@ -50,20 +50,20 @@ extension OrderLocationCategory {
         // categoryID
         // position
 
-        /// Relationships
+        // Relationships
         // location
         guard let itemRecords = record.items else {
             return
         }
         let localCount = items?.count ?? 0
         let remoteCount = itemRecords.count
-        //log.debug("Counts - local: \(localCount) - remote: \(remoteCount)")
+        log.verbose("Counts - local: \(localCount) - remote: \(remoteCount)")
 
         for (position, locationItem) in itemRecords.enumerated() {
             if position < localCount {
                 if let existingObject = items?.object(at: position) as? OrderLocationItem {
                     existingObject.update(with: locationItem, in: context, configure: configureChildren)
-                    //log.debug("Updated Item: \(existingObject)")
+                    log.verbose("Updated Item: \(existingObject)")
                 } else {
                     log.error("\(#function) FAILED : \(locationItem)")
                 }
@@ -71,7 +71,7 @@ extension OrderLocationCategory {
                 let newObject = OrderLocationItem(with: locationItem, in: context, configure: configureChildren)
                 newObject.position = Int16(position)
                 newObject.category = self
-                //log.debug("Created Item: \(newObject)")
+                log.verbose("Created Item: \(newObject)")
             }
         }
 

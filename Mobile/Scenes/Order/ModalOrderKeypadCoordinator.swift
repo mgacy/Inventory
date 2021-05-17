@@ -52,7 +52,7 @@ final class OrderKeypadCoordinator: BaseCoordinator<Void> {
         case .phone:
             presentedViewController = viewController
         case .pad:
-            /// TODO: use rootViewController dimensions to configure modalViewController constraints
+            // TODO: use rootViewController dimensions to configure modalViewController constraints
             presentedViewController = ModalKeypadViewController(keypadViewController: viewController)
         default:
             fatalError("Unable to setup bindings for unrecognized device: \(UIDevice.current.userInterfaceIdiom)")

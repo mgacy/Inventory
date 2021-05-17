@@ -24,7 +24,7 @@ extension OrderLocationItem: Managed {
         itemID = record.syncIdentifier
         // position
 
-        /// Relationships
+        // Relationships
         // category?
         // location?
         // item
@@ -47,7 +47,7 @@ extension OrderLocationItem {
         itemID = record.syncIdentifier
         // position
 
-        /// Relationships
+        // Relationships
         // category?
         // location?
         // item
@@ -62,10 +62,8 @@ extension OrderLocationItem {
         -> [T: OrderLocationItem]? {
             let request: NSFetchRequest<OrderLocationItem> = OrderLocationItem.fetchRequest()
 
-            /*
-             Set returnsObjectsAsFaults to false to gain a performance benefit if you know
-             you will need to access the property values from the returned objects.
-             */
+            // Set returnsObjectsAsFaults to false to gain a performance benefit if you know
+            // you will need to access the property values from the returned objects.
             request.returnsObjectsAsFaults = asFaults
             request.predicate = predicate
             request.relationshipKeyPathsForPrefetching = relationships

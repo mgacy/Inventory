@@ -80,7 +80,6 @@ class OrderItemViewController: UIViewController {
         self.tableView.reloadData()
         // Update in case we have returned from the keypad where we updated the quantity of an OrderItem
         viewModel.updateOrderStatus()
-        //setupView()
     }
 
     deinit { log.debug("\(#function)") }

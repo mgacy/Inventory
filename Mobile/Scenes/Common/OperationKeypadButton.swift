@@ -21,7 +21,7 @@ class OperationKeypadButton: UIButton {
         setTitleColor(ColorPalette.yellow, for: .highlighted)
         setTitleColor(ColorPalette.text, for: .disabled)
         //setTitleColor(ColorPalette.darkGrayColor, for: .disabled)
-        /// NOTE: not sure about the following states for UIButton
+        // NOTE: not sure about the following states for UIButton
         setTitleColor(.red, for: .selected)
         setTitleColor(.blue, for: .focused)
         titleLabel?.font = UIFont.systemFont(ofSize: 22.0)

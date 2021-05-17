@@ -23,7 +23,7 @@ extension OrderCollection: Syncable {
     convenience init(with record: RemoteType, in context: NSManagedObjectContext) {
         self.init(context: context)
         guard let date = record.date.toBasicDate() else {
-            // TODO:find better way of handling error; use SyncError type
+            // FIXME: find better way of handling error; use SyncError type
             fatalError("Unable to parse date from: \(record)")
         }
         self.dateTimeInterval = date.timeIntervalSinceReferenceDate
@@ -37,7 +37,7 @@ extension OrderCollection: Syncable {
 
         // TODO: handle `uploaded`
 
-        /// Relationships
+        // Relationships
         if let orders = record.orders {
             syncChildren(with: orders, in: context)
         }
@@ -100,24 +100,24 @@ extension OrderCollection {
 extension OrderCollection {
 
     func updateStatus() {
-        //log.debug("\(#function) starting ...")
+        log.verbose("\(#function) starting ...")
         guard uploaded == false else {
-            //log.debug("OrderCollection has already been uploaded.")
+            log.verbose("OrderCollection has already been uploaded.")
             return
         }
         guard let orders = orders else {
-            //log.debug("OrderCollection does not appear to have any Orders.")
+            log.verbose("OrderCollection does not appear to have any Orders.")
             return
         }
         for order in orders {
             // swiftlint:disable:next for_where
             if (order as? Order)?.uploaded == false {
-                //log.debug("Order has not been uploaded")
+                log.verbose("Order has not been uploaded")
                 return
             }
         }
 
-        //log.debug("It looks like all orders have been uploaded; we should change status")
+        log.verbose("It looks like all orders have been uploaded; we should change status")
         uploaded = true
     }
 

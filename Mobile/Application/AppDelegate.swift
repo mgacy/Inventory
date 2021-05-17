@@ -171,7 +171,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //let file = FileDestination()
 
         // use custom format and set console output to short time, log level & message
-        //console.format = "$DHH:mm:ss$d $L $M"
+        // console.format = "$DHH:mm:ss$d $L $M"
         // or use this for JSON output: console.format = "$J"
 
         // Filters

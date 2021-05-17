@@ -27,7 +27,7 @@ extension SyncableParent where ChildType: NSManagedObject {
             guard let objectDict: [I: ChildType] = fetchChildDict(in: context) else {
                 log.error("\(#function) FAILED : unable to create dictionary for \(ChildType.self)"); return
             }
-            //log.debug("\(ChildType.self) - objectDict: \(objectDict)")
+            log.verbose("\(ChildType.self) - objectDict: \(objectDict)")
 
             let localIDs: Set<I> = Set(objectDict.keys)
             var remoteIDs = Set<I>()
@@ -46,18 +46,18 @@ extension SyncableParent where ChildType: NSManagedObject {
                 // B
                 if let existingObject = objectDict[objectID] {
                     existingObject.update(with: record, in: context)
-                    //log.debug("existingObject: \(existingObject)")
+                    log.verbose("existingObject: \(existingObject)")
                 } else {
                     let newObject = ChildType(with: record, in: context)
                     //let newObject = ChildType(context: context)
                     //let newObject: ChildType = context.insertObject()
                     //newObject.update(with: record, in: context)
                     updateParent(of: newObject)
-                    //log.debug("newObject: \(newObject)")
+                    log.verbose("newObject: \(newObject)")
                 }
 
             }
-            //log.debug("\(ChildType.self) - remote: \(remoteIDs) - local: \(localIDs)")
+            log.verbose("\(ChildType.self) - remote: \(remoteIDs) - local: \(localIDs)")
 
             // Delete objects that were deleted from server.
             let deletedIDs = localIDs.subtracting(remoteIDs)
@@ -66,7 +66,7 @@ extension SyncableParent where ChildType: NSManagedObject {
 
     func deleteChildren(withIdentifiers identifiers: Set<ChildType.RemoteIdentifierType>, in context: NSManagedObjectContext) {
         guard !identifiers.isEmpty else { return }
-        //log.debug("We need to delete: \(identifiers)")
+        log.verbose("We need to delete: \(identifiers)")
         let fetchPredicate = NSPredicate(format: "\(ChildType.remoteIdentifierName) IN %@", identifiers)
         do {
             try context.deleteEntities(ChildType.self, filter: fetchPredicate)

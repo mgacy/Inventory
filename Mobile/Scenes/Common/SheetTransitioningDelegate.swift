@@ -7,8 +7,6 @@
 //
 
 import UIKit
-//import RxSwift
-//import RxCocoa
 
 // MARK: - Transitioning Delegate
 
@@ -89,7 +87,7 @@ class KeypadSheetAnimationController: NSObject, UIViewControllerAnimatedTransiti
         let dy = containerView.frame.size.height
         let finalFrame = transitionContext.finalFrame(for: toVC)
 
-        //log.debug("\(#function): \(fromVC) -> \(toVC) in \(containerView)")
+        //log.verbose("\(#function): \(fromVC) -> \(toVC) in \(containerView)")
 
         /*
         guard let svc = fromVC as? UISplitViewController else {

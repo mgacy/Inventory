@@ -36,7 +36,7 @@ extension NSManagedObjectContext {
 
         } catch let error {
             log.error("Error with request: \(error)")
-            //throw error?
+            // throw error?
         }
         return nil
     }
@@ -82,7 +82,7 @@ extension NSManagedObjectContext {
             } catch {
                 let saveError = error as NSError
                 log.error("\(saveError), \(saveError.userInfo)")
-                //throw saveError?
+                // throw saveError?
             }
         }
 
@@ -104,7 +104,7 @@ extension NSManagedObjectContext {
         } catch {
             let updateError = error as NSError
             log.error("\(updateError), \(updateError.userInfo)")
-            //throw updateError?
+            // throw updateError?
         }
     }
 
