@@ -154,8 +154,6 @@
 		C9AA8DC41F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */; };
 		C9B66FAC20D45B0800B8DB72 /* BackendError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B66FAB20D45B0800B8DB72 /* BackendError.swift */; };
 		C9B66FAE20D4619C00B8DB72 /* ErrorAlertDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B66FAD20D4619C00B8DB72 /* ErrorAlertDisplayable.swift */; };
-		C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */; };
-		C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */; };
 		C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB057F1F8315B000A07529 /* RemoteItem.swift */; };
 		C9BB05871F83169800A07529 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05861F83169800A07529 /* DataManager.swift */; };
 		C9BB05891F83171000A07529 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05881F83171000A07529 /* ActivityIndicator.swift */; };
@@ -379,8 +377,6 @@
 		C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnePasswordExtension+MyStuff.swift"; sourceTree = "<group>"; };
 		C9B66FAB20D45B0800B8DB72 /* BackendError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendError.swift; sourceTree = "<group>"; };
 		C9B66FAD20D4619C00B8DB72 /* ErrorAlertDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertDisplayable.swift; sourceTree = "<group>"; };
-		C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Magic.swift"; sourceTree = "<group>"; };
-		C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Magic.swift"; sourceTree = "<group>"; };
 		C9BB057F1F8315B000A07529 /* RemoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteItem.swift; sourceTree = "<group>"; };
 		C9BB05861F83169800A07529 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		C9BB05881F83171000A07529 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
@@ -912,7 +908,6 @@
 				C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */,
 				C92FB7EB205236A9002AE490 /* UIControl+Rx.swift */,
 				C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */,
-				C9BA912D1DEB969200DA2C6C /* UIView+Magic.swift */,
 				C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */,
 				C9D38DB1202D5F6800B8B381 /* UIViewController+Extensions.swift */,
 			);
@@ -925,7 +920,6 @@
 				C988CE701DF5050D00A8028B /* Array+MyStuff.swift */,
 				C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */,
 				C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */,
-				C9BA912B1DEB961E00DA2C6C /* NSObject+Magic.swift */,
 				C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */,
 				C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */,
 			);
@@ -1471,7 +1465,6 @@
 				C925909820AEA2F900F15634 /* InvoiceKeypadDisplayView.swift in Sources */,
 				C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */,
 				C998A81A204DD27B00600F5A /* DetailNavigationControllerAnimator.swift in Sources */,
-				C9BA912C1DEB961E00DA2C6C /* NSObject+Magic.swift in Sources */,
 				C902FF431DBE769C0063CD02 /* InventoryItem+MyStuff.swift in Sources */,
 				C9F645591EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift in Sources */,
 				C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */,
@@ -1560,7 +1553,6 @@
 				C96751C42086EDB100212278 /* ModalKeypadViewController.swift in Sources */,
 				C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */,
 				C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */,
-				C9BA912E1DEB969200DA2C6C /* UIView+Magic.swift in Sources */,
 				C9F5160D1DB7F133004C10E6 /* InventoryLocCatViewController.swift in Sources */,
 				C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */,
 				C9045C1F1FC4D21E00F55FB3 /* ItemCoordinator.swift in Sources */,
