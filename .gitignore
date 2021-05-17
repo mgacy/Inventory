@@ -1,2 +1,4 @@
 /Pods
 /Mobile.xcworkspace
+/Mobile/Application/AppSecrets.generated.swift
+/buildscripts/env-vars.sh

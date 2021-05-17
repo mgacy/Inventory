@@ -139,6 +139,7 @@
 		C998A818204DD22E00600F5A /* SplitViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C998A817204DD22E00600F5A /* SplitViewDelegate.swift */; };
 		C998A81A204DD27B00600F5A /* DetailNavigationControllerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C998A819204DD27B00600F5A /* DetailNavigationControllerAnimator.swift */; };
 		C998A81C204DD2BE00600F5A /* DetailNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C998A81B204DD2BE00600F5A /* DetailNavigationController.swift */; };
+		C99E950726522A70004D14E8 /* AppSecrets.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99E950626522A70004D14E8 /* AppSecrets.generated.swift */; };
 		C9A0B2EC1E63D2A300404320 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0B2EB1E63D2A300404320 /* SignUpViewController.swift */; };
 		C9A114F01FAC336500308974 /* InvoiceItemViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9A114EF1FAC336500308974 /* InvoiceItemViewController.storyboard */; };
 		C9A14ABC1DC6742700ACDE69 /* OrderVendorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABB1DC6742700ACDE69 /* OrderVendorViewController.swift */; };
@@ -362,6 +363,7 @@
 		C998A817204DD22E00600F5A /* SplitViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewDelegate.swift; sourceTree = "<group>"; };
 		C998A819204DD27B00600F5A /* DetailNavigationControllerAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNavigationControllerAnimator.swift; sourceTree = "<group>"; };
 		C998A81B204DD2BE00600F5A /* DetailNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNavigationController.swift; sourceTree = "<group>"; };
+		C99E950626522A70004D14E8 /* AppSecrets.generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSecrets.generated.swift; sourceTree = "<group>"; };
 		C9A0B2EB1E63D2A300404320 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		C9A114EF1FAC336500308974 /* InvoiceItemViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InvoiceItemViewController.storyboard; sourceTree = "<group>"; };
 		C9A14ABB1DC6742700ACDE69 /* OrderVendorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderVendorViewController.swift; sourceTree = "<group>"; };
@@ -592,6 +594,7 @@
 				C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */,
 				C9045C101FC49EB400F55FB3 /* AppCoordinator.swift */,
 				C9A2A97620491096005548D1 /* AppDependency.swift */,
+				C99E950626522A70004D14E8 /* AppSecrets.generated.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -1123,13 +1126,14 @@
 			buildConfigurationList = C9F515FD1DB7EF98004C10E6 /* Build configuration list for PBXNativeTarget "Mobile" */;
 			buildPhases = (
 				3959FB9E5A8CB018B9D3DF30 /* [CP] Check Pods Manifest.lock */,
+				C9D92C252652316C004F9B7D /* Run Script - Sourcery */,
 				C9F515D91DB7EF98004C10E6 /* Sources */,
 				C9F515DA1DB7EF98004C10E6 /* Frameworks */,
 				C9F515DB1DB7EF98004C10E6 /* Resources */,
 				52092E81B2BA2C8F6EDD3BBF /* [CP] Embed Pods Frameworks */,
 				ADA2809B8EAE7BBE3EA5C642 /* [CP] Copy Pods Resources */,
-				C95A8DC21E7896BA001F425B /* ShellScript */,
-				C9EFD1341EBCEE0B008F7F02 /* ShellScript */,
+				C95A8DC21E7896BA001F425B /* Run Script - incrementXcodeBuild */,
+				C9EFD1341EBCEE0B008F7F02 /* Run Script - Lint */,
 			);
 			buildRules = (
 			);
@@ -1199,6 +1203,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -1379,26 +1384,46 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Mobile/Pods-Mobile-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C95A8DC21E7896BA001F425B /* ShellScript */ = {
+		C95A8DC21E7896BA001F425B /* Run Script - incrementXcodeBuild */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+			);
+			name = "Run Script - incrementXcodeBuild";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildscripts/incrementXcodeBuild.sh\n";
+		};
+		C9D92C252652316C004F9B7D /* Run Script - Sourcery */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script - Sourcery";
+			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ $USER == 'matt' ]]; then\n    /Users/matt/scripts/incrementXcodeBuild\nfi\n";
+			shellScript = "buildscripts/secrets.sh\n";
 		};
-		C9EFD1341EBCEE0B008F7F02 /* ShellScript */ = {
+		C9EFD1341EBCEE0B008F7F02 /* Run Script - Lint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Script - Lint";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1501,6 +1526,7 @@
 				C9A2A97720491096005548D1 /* AppDependency.swift in Sources */,
 				C9045C171FC4A1BA00F55FB3 /* InventoryCoordinator.swift in Sources */,
 				C9045C151FC49F0000F55FB3 /* TabBarCoordinator.swift in Sources */,
+				C99E950726522A70004D14E8 /* AppSecrets.generated.swift in Sources */,
 				C95E446A1FB296A700820067 /* ItemViewModel.swift in Sources */,
 				C9174D471F833265008639CC /* LoginViewModel.swift in Sources */,
 				C91194741F9D426200B65CF9 /* InvoiceItemViewModel.swift in Sources */,

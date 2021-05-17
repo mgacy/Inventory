@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 log.info("Preloading data ...")
                 let importer = CoreDataImporter()
                 guard importer.preloadData(in: container.viewContext) == true else {
-                    /// TODO: tell user why we are crashing?
+                    // TODO: tell user why we are crashing?
                     fatalError("Unable to import Unit data")
                 }
                 defaults.set(true, forKey: "isPreloaded")
@@ -111,7 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func createPersistentContainer(migrating: Bool = false, progress: Progress? = nil, completion: @escaping (NSPersistentContainer) -> Void) {
         configuredContainer.loadPersistentStores { _, error in
             if error == nil {
-                /// TODO: set mergePolicy
+                // TODO: set mergePolicy
                 completion(self.configuredContainer)
                 //DispatchQueue.main.async { completion(self.configuredContainer) }
             } else {
@@ -133,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func destroyStore(for container: NSPersistentContainer) {
-        /// TODO: should we simply move the store?
+        // TODO: should we simply move the store?
         // see: https://code.tutsplus.com/tutorials/core-data-and-swift-migrations--cms-25084
         let psc = container.persistentStoreCoordinator
         let dbURL = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("Mobile.sqlite")
@@ -177,15 +177,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Filters
 
         #if !(arch(i386) || arch(x86_64)) && os(iOS)
-            let platform = SBPlatformDestination(appID: "***REMOVED***",
-                                                 appSecret: "***REMOVED***",
-                                                 encryptionKey: "***REMOVED***")
-            if let userName = defaults.string(forKey: "email") {
-                platform.analyticsUserName = userName
-            }
-            /// TODO: try to get minLevel from defaults (so user can set verbose logging)
-            platform.minLevel = .warning
-            log.addDestination(platform)
+        let platform = SBPlatformDestination(appID: AppSecrets.loggerAppID,
+                                             appSecret: AppSecrets.loggerAppSecret,
+                                             encryptionKey: AppSecrets.loggerEncryptionKey)
+        if let userName = defaults.string(forKey: "email") {
+            platform.analyticsUserName = userName
+        }
+        // TODO: try to get minLevel from defaults (so user can set verbose logging)
+        platform.minLevel = .warning
+        log.addDestination(platform)
         #endif
 
         log.addDestination(console)

@@ -45,21 +45,12 @@ class User: Codable {
         }
         get {
             guard let email = email else { return nil }
-
-            // try to load from keychain
-            guard let pass1 = try? keychain.get(email) else {
-                log.error("FAILED: unable to access keychain"); return nil
-            }
-            if let pass2 = pass1 {
-                log.verbose("Got password from keychain")
-                return pass2
-            } else {
-                // TODO: remove hard-coded password
-                log.verbose("Using hard-coded password")
-                let defaultPass = "***REMOVED***"
-
-                keychain[email] = defaultPass
-                return defaultPass
+            do {
+                let pass = try keychain.get(email)
+                return pass
+            } catch {
+                log.error("FAILED: unable to access keychain: \(error)")
+                return nil
             }
         }
     }
