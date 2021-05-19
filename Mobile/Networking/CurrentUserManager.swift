@@ -45,7 +45,7 @@ class CurrentUserManager {
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        self.keychain = Keychain(service: "***REMOVED***")
+        self.keychain = Keychain(service: AppSecrets.keychainService)
         self.credentialsManager = CredentialsManager(keychain: self.keychain)
         self.storageManager = UserStorageManager()
 

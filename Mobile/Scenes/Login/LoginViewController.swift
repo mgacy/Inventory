@@ -182,7 +182,7 @@ extension LoginViewController {
 
     @objc func findLoginFrom1Password(sender: AnyObject) {
         OnePasswordExtension.shared().findLogin(
-            forURLString: "***REMOVED***", for: self, sender: sender,
+            forURLString: "https://\(AppSecrets.baseURL)", for: self, sender: sender,
             completion: { (loginDictionary, error) -> Void in
                 if loginDictionary == nil {
                     if error!._code == Int(AppExtensionErrorCodeCancelledByUser) {

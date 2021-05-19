@@ -44,7 +44,7 @@ public enum Router: URLRequestConvertible {
     case postOrder([String: Any])                                                           // Deprecated
 
     //static let baseURLString = "http://localhost:5000"
-    static let baseURLString = "***REMOVED***"
+    static let baseURLString = "https:\(AppSecrets.baseURL)"
     static let apiPath = "/api/v1.0"
 
     var method: HTTPMethod {
