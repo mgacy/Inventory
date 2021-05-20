@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C9F515DC1DB7EF98004C10E6"
-               BuildableName = "Mobile.app"
-               BlueprintName = "Mobile"
-               ReferencedContainer = "container:Mobile.xcodeproj">
+               BuildableName = "Inventory.app"
+               BlueprintName = "Inventory"
+               ReferencedContainer = "container:Inventory.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -26,37 +26,33 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "C9F515DC1DB7EF98004C10E6"
+            BuildableName = "Inventory.app"
+            BlueprintName = "Inventory"
+            ReferencedContainer = "container:Inventory.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C9F515F31DB7EF98004C10E6"
-               BuildableName = "MobileTests.xctest"
-               BlueprintName = "MobileTests"
-               ReferencedContainer = "container:Mobile.xcodeproj">
+               BuildableName = "InventoryTests.xctest"
+               BlueprintName = "InventoryTests"
+               ReferencedContainer = "container:Inventory.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C9F515DC1DB7EF98004C10E6"
-            BuildableName = "Mobile.app"
-            BlueprintName = "Mobile"
-            ReferencedContainer = "container:Mobile.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -68,13 +64,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C9F515DC1DB7EF98004C10E6"
-            BuildableName = "Mobile.app"
-            BlueprintName = "Mobile"
-            ReferencedContainer = "container:Mobile.xcodeproj">
+            BuildableName = "Inventory.app"
+            BlueprintName = "Inventory"
+            ReferencedContainer = "container:Inventory.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -87,9 +81,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C9F515DC1DB7EF98004C10E6"
-            BuildableName = "Mobile.app"
-            BlueprintName = "Mobile"
-            ReferencedContainer = "container:Mobile.xcodeproj">
+            BuildableName = "Inventory.app"
+            BlueprintName = "Inventory"
+            ReferencedContainer = "container:Inventory.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
