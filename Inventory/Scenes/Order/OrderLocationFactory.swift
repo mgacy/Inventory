@@ -95,12 +95,12 @@ class OrderLocationFactory {
         guard let categoryItems = category.items else {
             return nil
         }
-        return categoryItems.flatMap { self.orderItemDict[$0.syncIdentifier] }
+        return categoryItems.compactMap { self.orderItemDict[$0.syncIdentifier] }
     }
 
     func getOrderItems(forItemType location: RemoteLocation) -> [OrderItem]? {
         //guard location.locationType == .item else { log.warning("\(#function) : tried passing .category type") }
-        return location.items.flatMap { self.orderItemDict[$0.syncIdentifier] }
+        return location.items.compactMap { self.orderItemDict[$0.syncIdentifier] }
     }
 
     // MARK: - Private

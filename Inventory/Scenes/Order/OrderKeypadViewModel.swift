@@ -190,7 +190,7 @@ class OrderKeypadViewModel: OrderKeypadViewModelType {
 
         do {
             let searchResults = try context.fetch(request)
-            return searchResults.flatMap { $0.item }
+            return searchResults.compactMap { $0.item }
         } catch {
             log.error("Error with request: \(error)")
         }

@@ -20,7 +20,7 @@ class TabBarController: UITabBarController {
     override func separateSecondaryViewController(for splitViewController: UISplitViewController) -> UIViewController? {
         //log.debug("separateSecondaryViewController")
         return viewControllers?
-            .flatMap { vc in
+            .compactMap { vc in
                 guard let navController = vc as? PrimaryContainerType else { return nil }
                 navController.separateDetail()
                 return vc
