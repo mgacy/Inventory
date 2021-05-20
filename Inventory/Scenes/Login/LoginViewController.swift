@@ -183,27 +183,27 @@ extension LoginViewController {
     @objc func findLoginFrom1Password(sender: AnyObject) {
         OnePasswordExtension.shared().findLogin(
             forURLString: "https://\(AppSecrets.baseURL)", for: self, sender: sender,
-            completion: { (loginDictionary, error) -> Void in
-                if loginDictionary == nil {
-                    if error!._code == Int(AppExtensionErrorCodeCancelledByUser) {
+            completion: { (loginDictionary, error) in
+                guard let loginDictionary = loginDictionary else {
+                    if let error = error as NSError?, error.code != AppExtensionErrorCode.cancelledByUser.rawValue {
                         log.error("Error invoking 1Password App Extension for find login: \(String(describing: error))")
                     }
                     return
                 }
-                self.loginTextField.text = loginDictionary?[AppExtensionUsernameKey] as? String
-                self.passwordTextField.text = loginDictionary?[AppExtensionPasswordKey] as? String
+                self.loginTextField.text = loginDictionary[AppExtensionUsernameKey] as? String
+                self.passwordTextField.text = loginDictionary[AppExtensionPasswordKey] as? String
                 /*
-                if let generatedOneTimePassword = loginDictionary?[AppExtensionTOTPKey] as? String {
+                if let generatedOneTimePassword = loginDictionary[AppExtensionTOTPKey] as? String {
                     self.passwordTextField.text = generatedOneTimePassword
 
                     // Important: It is recommended that you submit the OTP/TOTP to your validation server as soon as you receive it, otherwise it may expire.
-                    let dispatchTime = DispatchTime.now() + 0.5
-                    DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+                    let delayTime: DispatchTime = .now() + DispatchTimeInterval.milliseconds(500)
+                    DispatchQueue.main.asyncAfter(deadline: delayTime) {
                         self.performSegue(withIdentifier: "showThankYouViewController", sender: self)
-                    })
+                    }
                 }
                 */
-        })
+            })
     }
 
 }
