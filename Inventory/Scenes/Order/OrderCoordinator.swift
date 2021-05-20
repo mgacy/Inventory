@@ -314,6 +314,7 @@ class ModalOrderCoordinator: OrderCoordinator {
         self.collection = collection
 
         self.viewDelegate = ModalSplitViewDelegate(detailNavigationController: DetailNavigationController())
+        // swiftlint:disable:next inclusive_language
         let masterNavigationController = NavigationController(withPopDetailCompletion: viewDelegate.replaceDetail)
         viewDelegate.updateSecondaryWithDetail(from: masterNavigationController)
 

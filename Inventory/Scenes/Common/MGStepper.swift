@@ -161,7 +161,7 @@ class MGStepper: UIControl {
 
     public init() {
         self.commandProp = .stabilize
-        super.init(frame: CGRect (x: 0, y: 0, width: 120, height: 30))
+        super.init(frame: CGRect(x: 0, y: 0, width: 120, height: 30))
         setup()
     }
 

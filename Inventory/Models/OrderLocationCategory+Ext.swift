@@ -75,7 +75,7 @@ extension OrderLocationCategory {
             }
         }
 
-        /// Delete any local objects not in remote records
+        // Delete any local objects not in remote records
         if localCount > remoteCount {
             for position in (remoteCount ..< localCount).reversed() {
                 if let object = items?.object(at: position) as? OrderLocationItem {

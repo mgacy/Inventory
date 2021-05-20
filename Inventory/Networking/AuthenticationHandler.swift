@@ -37,19 +37,19 @@ class AuthenticationHandler: RequestAdapter, RequestRetrier {
     private var password: String
 
     private var accessToken: String? {
-        set {
-            if let valueToSave = newValue {
-                keychain["authToken"] = valueToSave
-            } else { // they set it to nil, so delete it
-                keychain["authToken"] = nil
-            }
-        }
         get {
             // try to load from keychain
             if let token = try? keychain.get("authToken") {
                 return token
             } else {
                 return nil
+            }
+        }
+        set {
+            if let valueToSave = newValue {
+                keychain["authToken"] = valueToSave
+            } else { // they set it to nil, so delete it
+                keychain["authToken"] = nil
             }
         }
     }

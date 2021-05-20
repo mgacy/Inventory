@@ -28,7 +28,7 @@ extension OrderLocation: Syncable {
         name = record.name
         locationType = record.locationType.converted().rawValue
 
-        /// Relationships
+        // Relationships
         // collection
         // categories?
         // items?
