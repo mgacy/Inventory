@@ -333,6 +333,7 @@
 		C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		C96A899D1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderContainerViewController.storyboard; sourceTree = "<group>"; };
 		C96A899F1FAA5DB400CDDC59 /* OrderContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderContainerViewController.swift; sourceTree = "<group>"; };
+		C96B3A192654B850000550E2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+Stuff.swift"; sourceTree = "<group>"; };
 		C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperTableViewCell.swift; sourceTree = "<group>"; };
 		C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperCellViewModel.swift; sourceTree = "<group>"; };
@@ -1038,6 +1039,7 @@
 		C9F515D41DB7EF98004C10E6 = {
 			isa = PBXGroup;
 			children = (
+				C96B3A192654B850000550E2 /* README.md */,
 				C9F515DF1DB7EF98004C10E6 /* Mobile */,
 				C9F515F71DB7EF98004C10E6 /* MobileTests */,
 				C9F515DE1DB7EF98004C10E6 /* Products */,
