@@ -1,32 +1,35 @@
 PODS:
-  - 1PasswordExtension (1.8.5)
-  - Alamofire (4.6.0)
-  - CodableAlamofire (1.1.0):
+  - 1PasswordExtension (1.8.6)
+  - Alamofire (4.9.1)
+  - CodableAlamofire (1.1.2):
     - Alamofire (~> 4.0)
-  - Differentiator (3.0.2)
-  - KeychainAccess (3.1.0)
-  - PKHUD (5.0.0)
-  - RxCocoa (4.1.2):
-    - RxSwift (~> 4.0)
+  - Differentiator (3.1.0)
+  - KeychainAccess (4.2.2)
+  - PKHUD (5.3.0)
+  - RxCocoa (4.5.0):
+    - RxSwift (>= 4.4.2, ~> 4.4)
   - RxCoreData (0.4.0):
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
-  - RxDataSources (3.0.2):
+  - RxDataSources (3.1.0):
     - Differentiator (~> 3.0)
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
-  - RxSwift (4.1.2)
-  - RxSwiftExt (3.1.0):
-    - RxSwiftExt/Core (= 3.1.0)
-  - RxSwiftExt/Core (3.1.0):
+  - RxSwift (4.5.0)
+  - RxSwiftExt (3.4.0):
+    - RxSwiftExt/Core (= 3.4.0)
+    - RxSwiftExt/RxCocoa (= 3.4.0)
+  - RxSwiftExt/Core (3.4.0):
     - RxSwift (~> 4.0)
-  - SwiftyBeaver (1.5.1)
-  - SwiftyJSON (3.1.4)
+  - RxSwiftExt/RxCocoa (3.4.0):
+    - RxCocoa (~> 4.0)
+    - RxSwiftExt/Core
+  - SwiftyBeaver (1.9.3)
 
 DEPENDENCIES:
   - 1PasswordExtension (~> 1.8.5)
-  - Alamofire (~> 4.4)
-  - CodableAlamofire
+  - Alamofire (~> 4.9)
+  - CodableAlamofire (~> 1.1)
   - KeychainAccess
   - PKHUD (~> 5.0)
   - RxCocoa (~> 4.0)
@@ -35,23 +38,36 @@ DEPENDENCIES:
   - RxSwift (~> 4.0)
   - RxSwiftExt (~> 3.0)
   - SwiftyBeaver
-  - SwiftyJSON
+
+SPEC REPOS:
+  trunk:
+    - 1PasswordExtension
+    - Alamofire
+    - CodableAlamofire
+    - Differentiator
+    - KeychainAccess
+    - PKHUD
+    - RxCocoa
+    - RxCoreData
+    - RxDataSources
+    - RxSwift
+    - RxSwiftExt
+    - SwiftyBeaver
 
 SPEC CHECKSUMS:
-  1PasswordExtension: 0e95bdea64ec8ff2f4f693be5467a09fac42a83d
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
-  CodableAlamofire: e2d2edcec7cf413f7862c30c8fa98eded27a83f9
-  Differentiator: a87be69eba49ec4ab460c7671143ee3a9eececfd
-  KeychainAccess: 94c5540b32eabf7bc32bfb976a268e8ea05fd6da
-  PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
-  RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
+  1PasswordExtension: f97cc80ae58053c331b2b6dc8843ba7103b33794
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  CodableAlamofire: b7adfb2e5e980392014b4b3f3b8b62c01b9de4aa
+  Differentiator: be49ca3408f0ecfc761e4c7763d20c62be01b9ad
+  KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
+  PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
+  RxCocoa: cbf70265dc65a981d4ac982e513c10cf23df24a0
   RxCoreData: 3717ff29afb7261f8cff4b893ffb0650367d0fe6
-  RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
-  RxSwift: e49536837d9901277638493ea537394d4b55f570
-  RxSwiftExt: a9b9c8e94be009146707f9fcb16eaf3cc1f3910c
-  SwiftyBeaver: 4f74563624b2c1e821c522c54142b5dd5ebb0f30
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  RxDataSources: a843bad90c29817f5923ec8163f4af2de084ceb3
+  RxSwift: f172070dfd1a93d70a9ab97a5a01166206e1c575
+  RxSwiftExt: 01f8ecbeeb355698e9c75365ebe908b00dacf45d
+  SwiftyBeaver: 2e8acd6fc90c6d0a27055867a290794926d57c02
 
-PODFILE CHECKSUM: dbeedd8bb6f684d18ed5e58ed60cae6b4c1557d0
+PODFILE CHECKSUM: 2af0513c1facb7c1ddaf1082c7361b49fe5f642b
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.10.1

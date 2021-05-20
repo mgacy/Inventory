@@ -1,15 +1,15 @@
 //
-//  MobileTests.swift
-//  MobileTests
+//  InventoryTests.swift
+//  InventoryTests
 //
 //  Created by Mathew Gacy on 10/19/16.
 //  Copyright © 2016 Mathew Gacy. All rights reserved.
 //
 
 import XCTest
-@testable import Mobile
+@testable import Inventory
 
-class MobileTests: XCTestCase {
+class InventoryTests: XCTestCase {
 
     override func setUp() {
         super.setUp()

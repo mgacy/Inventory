@@ -1,4 +1,4 @@
-#  Mobile
+#  Inventory
 
 Inventory management for the restaurant industry.
 
