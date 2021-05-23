@@ -1,0 +1,1852 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		192D481BFBDB34209B13F3B0 /* Pods_Inventory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 396FB1B2DC0124F1C57275B6 /* Pods_Inventory.framework */; };
+		28C8992B563BCFFF53AAE2FF /* Pods_InventoryTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F9F76DEA3E13FE69939ACFE /* Pods_InventoryTests.framework */; };
+		C901A50B1FA2BC3900BC7BD2 /* OrderLocItemViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C901A50A1FA2BC3900BC7BD2 /* OrderLocItemViewController.storyboard */; };
+		C901A50D1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A50C1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift */; };
+		C901A50F1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C901A50E1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift */; };
+		C902F04520CDBD2E0044BB3A /* PoppedObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902F04420CDBD2E0044BB3A /* PoppedObservable.swift */; };
+		C902F04720CF41E80044BB3A /* MGViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902F04620CF41E80044BB3A /* MGViewController.swift */; };
+		C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF2D1DB816EB0063CD02 /* Keypad.swift */; };
+		C902FF3E1DBD8B3F0063CD02 /* NumberKeypadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */; };
+		C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */; };
+		C902FF411DBE70290063CD02 /* Inventory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF401DBE70290063CD02 /* Inventory+MyStuff.swift */; };
+		C902FF431DBE769C0063CD02 /* InventoryItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF421DBE769C0063CD02 /* InventoryItem+MyStuff.swift */; };
+		C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */; };
+		C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */; };
+		C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */; };
+		C90459131F93E31400E517C7 /* InventoryReviewItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90459121F93E31400E517C7 /* InventoryReviewItemViewModel.swift */; };
+		C9045C111FC49EB400F55FB3 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C101FC49EB400F55FB3 /* AppCoordinator.swift */; };
+		C9045C131FC49EDA00F55FB3 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C121FC49EDA00F55FB3 /* BaseCoordinator.swift */; };
+		C9045C151FC49F0000F55FB3 /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C141FC49F0000F55FB3 /* TabBarCoordinator.swift */; };
+		C9045C171FC4A1BA00F55FB3 /* InventoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C161FC4A1BA00F55FB3 /* InventoryCoordinator.swift */; };
+		C9045C191FC4AD1000F55FB3 /* OrderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C181FC4AD1000F55FB3 /* OrderCoordinator.swift */; };
+		C9045C1B1FC4D1F200F55FB3 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C1A1FC4D1F200F55FB3 /* HomeCoordinator.swift */; };
+		C9045C1D1FC4D20500F55FB3 /* InvoiceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C1C1FC4D20500F55FB3 /* InvoiceCoordinator.swift */; };
+		C9045C1F1FC4D21E00F55FB3 /* ItemCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C1E1FC4D21E00F55FB3 /* ItemCoordinator.swift */; };
+		C9045C211FC5122800F55FB3 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9045C201FC5122800F55FB3 /* LoginCoordinator.swift */; };
+		C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90477201EEE30D60082D894 /* KeypadViewModel.swift */; };
+		C90482301F96A543001A3E01 /* OrderVendorViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C904822F1F96A543001A3E01 /* OrderVendorViewController.storyboard */; };
+		C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */; };
+		C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9090FFD1EB92D8B0035A1DA /* Managed.swift */; };
+		C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */; };
+		C90DBB5820B3D364006F7097 /* InvoiceDisplaySubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90DBB5720B3D364006F7097 /* InvoiceDisplaySubview.swift */; };
+		C91194741F9D426200B65CF9 /* InvoiceItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91194731F9D426200B65CF9 /* InvoiceItemViewModel.swift */; };
+		C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F741DF0D61E00166A08 /* CoreDataStack.swift */; };
+		C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */; };
+		C91417EC1FA8F62200168064 /* OrderLocCatViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91417EB1FA8F62200168064 /* OrderLocCatViewController.storyboard */; };
+		C91417EE1FA8F63500168064 /* OrderLocCatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91417ED1FA8F63500168064 /* OrderLocCatViewController.swift */; };
+		C91417F01FA8F64B00168064 /* OrderLocCatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91417EF1FA8F64B00168064 /* OrderLocCatViewModel.swift */; };
+		C9174D431F83232C008639CC /* SyncableParent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9174D421F83232C008639CC /* SyncableParent.swift */; };
+		C9174D451F832393008639CC /* NSManagedObjectContext+Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9174D441F832393008639CC /* NSManagedObjectContext+Syncable.swift */; };
+		C9174D471F833265008639CC /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9174D461F833265008639CC /* LoginViewModel.swift */; };
+		C91856951F8D881D001B08A0 /* InventoriesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91856941F8D881D001B08A0 /* InventoriesFactory.swift */; };
+		C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B4EDB1E5C2863002DA2A5 /* User.swift */; };
+		C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */; };
+		C91C92821EFCD98F00566CEB /* OrderItemViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */; };
+		C91C92841EFCDBE400566CEB /* OrderItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91C92831EFCDBE400566CEB /* OrderItemTableViewCell.swift */; };
+		C91C92861EFCDD9000566CEB /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91C92851EFCDD9000566CEB /* RoundButton.swift */; };
+		C91C928A1EFCE65800566CEB /* OrderKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91C92891EFCE65800566CEB /* OrderKeypadViewController.storyboard */; };
+		C91E72982050CE4600D42B79 /* MGStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91E72972050CE4600D42B79 /* MGStepper.swift */; };
+		C91F52FE20C77EFD00B1B7AA /* InventoryKeypadDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F52FD20C77EFD00B1B7AA /* InventoryKeypadDisplayView.swift */; };
+		C9208A2E1FAB8BFA00D7C830 /* ItemUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9208A2D1FAB8BFA00D7C830 /* ItemUnits.swift */; };
+		C925909820AEA2F900F15634 /* InvoiceKeypadDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C925909720AEA2F900F15634 /* InvoiceKeypadDisplayView.swift */; };
+		C925909A20AEA3FA00F15634 /* KeypadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C925909920AEA3FA00F15634 /* KeypadView.swift */; };
+		C925909C20AEA7FF00F15634 /* DisplayItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C925909B20AEA7FF00F15634 /* DisplayItemView.swift */; };
+		C925909E20AEAAF500F15634 /* NSLayoutAnchor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C925909D20AEAAF500F15634 /* NSLayoutAnchor+Ext.swift */; };
+		C92C2F8D1F9FE3E500B69CF5 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92C2F8C1F9FE3E500B69CF5 /* SettingsViewModel.swift */; };
+		C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift */; };
+		C92D75BF1DC7A7E500AA1A02 /* InvoiceItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75BE1DC7A7E500AA1A02 /* InvoiceItemViewController.swift */; };
+		C92D75C11DC7A81400AA1A02 /* InvoiceKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */; };
+		C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */; };
+		C92EC6321F84C80300B47C23 /* RemoteOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EC6311F84C80300B47C23 /* RemoteOrder.swift */; };
+		C92FB7EC205236A9002AE490 /* UIControl+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92FB7EB205236A9002AE490 /* UIControl+Rx.swift */; };
+		C92FB7EE20523794002AE490 /* Mutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92FB7ED20523794002AE490 /* Mutable.swift */; };
+		C93203EA1FC678D200ACFC1D /* SignupCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */; };
+		C93203EC1FC6AA3000ACFC1D /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */; };
+		C93565361FCDF77D00CAFB16 /* RoundRectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */; };
+		C935E9A41E60D713003BF386 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E9A31E60D713003BF386 /* LoginViewController.swift */; };
+		C9375060202D72050076B65E /* ErrorTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C937505F202D72050076B65E /* ErrorTracker.swift */; };
+		C9375062202D72B50076B65E /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9375061202D72B50076B65E /* Coordinator.swift */; };
+		C9375064202D738D0076B65E /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9375063202D738D0076B65E /* Observable+Extensions.swift */; };
+		C9375066202D75390076B65E /* PrimaryContainerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9375065202D75390076B65E /* PrimaryContainerType.swift */; };
+		C93BD19420B6699F002E23DC /* OrderLocation+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93BD19320B6699F002E23DC /* OrderLocation+Ext.swift */; };
+		C93BD19820B669ED002E23DC /* OrderLocationItem+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93BD19720B669ED002E23DC /* OrderLocationItem+Ext.swift */; };
+		C93BD19A20B66A1D002E23DC /* OrderLocationCategory+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93BD19920B66A1D002E23DC /* OrderLocationCategory+Ext.swift */; };
+		C93BD19C20BB3F48002E23DC /* ModalSplitViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93BD19B20BB3F48002E23DC /* ModalSplitViewDelegate.swift */; };
+		C93BD19E20BC87AC002E23DC /* OrderKeypadDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93BD19D20BC87AC002E23DC /* OrderKeypadDisplayView.swift */; };
+		C93BD1A020BC8824002E23DC /* OrderDisplaySubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93BD19F20BC8824002E23DC /* OrderDisplaySubview.swift */; };
+		C9428EE71E032FCC002771EA /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE61E032FCC002771EA /* Syncable.swift */; };
+		C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */; };
+		C945DAC31FEA2EAD009D0EB0 /* LoginViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */; };
+		C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */; };
+		C949C20E1F160719008A5EC4 /* InvoiceItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */; };
+		C94AC872209005B400CBBCB2 /* UnitToggleable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94AC871209005B400CBBCB2 /* UnitToggleable.swift */; };
+		C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9564F311F840276007D84F6 /* RemoteInventory.swift */; };
+		C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */; };
+		C95DE42C1F9587580079B43B /* InventoryLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C95DE42B1F9587580079B43B /* InventoryLocationViewController.storyboard */; };
+		C95E44631FB2581400820067 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95E44621FB2581400820067 /* HomeViewController.swift */; };
+		C95E44651FB2582400820067 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95E44641FB2582400820067 /* HomeViewModel.swift */; };
+		C95E44681FB2968C00820067 /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95E44671FB2968C00820067 /* ItemViewController.swift */; };
+		C95E446A1FB296A700820067 /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95E44691FB296A700820067 /* ItemViewModel.swift */; };
+		C95E446C1FB2AB3A00820067 /* SettingsViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C95E446B1FB2AB3A00820067 /* SettingsViewController.storyboard */; };
+		C95E446E1FB2C26200820067 /* ItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */; };
+		C95F52F01F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */; };
+		C964D2131FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C964D2121FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard */; };
+		C96751C42086EDB100212278 /* ModalKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96751C32086EDB100212278 /* ModalKeypadViewController.swift */; };
+		C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */; };
+		C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */; };
+		C96870E61DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */; };
+		C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */; };
+		C968B85E1EF7275E005CE2FC /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */; };
+		C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */; };
+		C96A899E1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C96A899D1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard */; };
+		C96A89A01FAA5DB400CDDC59 /* OrderContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96A899F1FAA5DB400CDDC59 /* OrderContainerViewController.swift */; };
+		C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */; };
+		C96BB8AB206C8147009D9F7B /* StepperTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */; };
+		C96BB8AD206C81D2009D9F7B /* StepperCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */; };
+		C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */; };
+		C979BEE620D9A4A400D8DFC0 /* Location+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C979BEE520D9A4A400D8DFC0 /* Location+MyStuff.swift */; };
+		C97A71301F8EC4A100F2F1CD /* OrderVendorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A712F1F8EC4A100F2F1CD /* OrderVendorViewModel.swift */; };
+		C97A71321F8EC83700F2F1CD /* InvoiceVendorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71311F8EC83700F2F1CD /* InvoiceVendorViewModel.swift */; };
+		C97A71341F8EC94A00F2F1CD /* InventoryLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71331F8EC94A00F2F1CD /* InventoryLocationViewModel.swift */; };
+		C97A71361F8EC96100F2F1CD /* InventoryLocCatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71351F8EC96100F2F1CD /* InventoryLocCatViewModel.swift */; };
+		C97A71381F8ECACE00F2F1CD /* InventoryReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71371F8ECACE00F2F1CD /* InventoryReviewViewController.swift */; };
+		C97A713A1F8ECADD00F2F1CD /* InventoryReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A71391F8ECADD00F2F1CD /* InventoryReviewViewModel.swift */; };
+		C97A713D1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */; };
+		C97B7C471FAB908000117D29 /* OrderContainerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97B7C461FAB908000117D29 /* OrderContainerViewModel.swift */; };
+		C98165021F915E7F006EC785 /* SubItemCellViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */; };
+		C983643E1FA6744200DFAC6C /* OrderItemPhoneCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C983643D1FA6744200DFAC6C /* OrderItemPhoneCellViewModel.swift */; };
+		C98364401FA675F400DFAC6C /* OrderLocationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C983643F1FA675F400DFAC6C /* OrderLocationFactory.swift */; };
+		C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988CE701DF5050D00A8028B /* Array+MyStuff.swift */; };
+		C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */; };
+		C98A4FB31DCB0233002BB076 /* Unit+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */; };
+		C98A4FB51DCB0329002BB076 /* Vendor+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */; };
+		C98A64F61FCB47A4008F02F9 /* AttachableViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A64F51FCB47A4008F02F9 /* AttachableViewModelType.swift */; };
+		C98A90881F97E97400644548 /* InventoryKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98A90871F97E97400644548 /* InventoryKeypadViewModel.swift */; };
+		C98B25FC2071860C00F1D157 /* ChevronButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98B25FB2071860C00F1D157 /* ChevronButton.swift */; };
+		C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */; };
+		C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */; };
+		C98FDED420C1E414005ED2AE /* OrderItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98FDED320C1E414005ED2AE /* OrderItemView.swift */; };
+		C99568CA1FBB809C00AE6949 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99568C91FBB809C00AE6949 /* ViewModelType.swift */; };
+		C998A818204DD22E00600F5A /* SplitViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C998A817204DD22E00600F5A /* SplitViewDelegate.swift */; };
+		C998A81A204DD27B00600F5A /* DetailNavigationControllerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C998A819204DD27B00600F5A /* DetailNavigationControllerAnimator.swift */; };
+		C998A81C204DD2BE00600F5A /* DetailNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C998A81B204DD2BE00600F5A /* DetailNavigationController.swift */; };
+		C99E950726522A70004D14E8 /* AppSecrets.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99E950626522A70004D14E8 /* AppSecrets.generated.swift */; };
+		C9A0B2EC1E63D2A300404320 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0B2EB1E63D2A300404320 /* SignUpViewController.swift */; };
+		C9A114F01FAC336500308974 /* InvoiceItemViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9A114EF1FAC336500308974 /* InvoiceItemViewController.storyboard */; };
+		C9A14ABC1DC6742700ACDE69 /* OrderVendorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABB1DC6742700ACDE69 /* OrderVendorViewController.swift */; };
+		C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */; };
+		C9A14AC01DC6748000ACDE69 /* OrderKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14ABF1DC6748000ACDE69 /* OrderKeypadViewController.swift */; };
+		C9A14AC21DC67A0F00ACDE69 /* InvoiceDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AC11DC67A0F00ACDE69 /* InvoiceDateViewController.swift */; };
+		C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */; };
+		C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */; };
+		C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */; };
+		C9A2A97720491096005548D1 /* AppDependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A2A97620491096005548D1 /* AppDependency.swift */; };
+		C9AA8DC01F9F0D2D00147F07 /* InventoryLocItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */; };
+		C9AA8DC21F9F191000147F07 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DC11F9F191000147F07 /* SignUpViewModel.swift */; };
+		C9AA8DC41F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */; };
+		C9B66FAC20D45B0800B8DB72 /* BackendError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B66FAB20D45B0800B8DB72 /* BackendError.swift */; };
+		C9B66FAE20D4619C00B8DB72 /* ErrorAlertDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B66FAD20D4619C00B8DB72 /* ErrorAlertDisplayable.swift */; };
+		C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB057F1F8315B000A07529 /* RemoteItem.swift */; };
+		C9BB05871F83169800A07529 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05861F83169800A07529 /* DataManager.swift */; };
+		C9BB05891F83171000A07529 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05881F83171000A07529 /* ActivityIndicator.swift */; };
+		C9BB058B1F831AF900A07529 /* InventoryDateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB058A1F831AF900A07529 /* InventoryDateViewModel.swift */; };
+		C9BB058D1F831B0F00A07529 /* InvoiceDateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB058C1F831B0F00A07529 /* InvoiceDateViewModel.swift */; };
+		C9BB058F1F831B2200A07529 /* OrderDateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB058E1F831B2200A07529 /* OrderDateViewModel.swift */; };
+		C9BB05911F831D6600A07529 /* InventoryDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB05901F831D6600A07529 /* InventoryDateViewController.swift */; };
+		C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */; };
+		C9C2DA081F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA071F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift */; };
+		C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */; };
+		C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */; };
+		C9CC04DF1F84C13C00180120 /* RemoteInvoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CC04DE1F84C13C00180120 /* RemoteInvoice.swift */; };
+		C9CE65E020BE461400A194F5 /* InventoryKeypadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CE65DF20BE461400A194F5 /* InventoryKeypadCoordinator.swift */; };
+		C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D16F2A1DD277390073F95E /* MessageComposer.swift */; };
+		C9D38DB2202D5F6800B8B381 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D38DB1202D5F6800B8B381 /* UIViewController+Extensions.swift */; };
+		C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */; };
+		C9D59C5C1FE0FA280050A4AB /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */; };
+		C9D59C5E1FE0FA870050A4AB /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */; };
+		C9D59C601FE0FAE60050A4AB /* PlaceholderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D59C5F1FE0FAE60050A4AB /* PlaceholderViewController.swift */; };
+		C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */; };
+		C9DE2CF12087CBCA0090109A /* OrderKeypadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF02087CBCA0090109A /* OrderKeypadCoordinator.swift */; };
+		C9DE2CF3208969D00090109A /* SheetTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */; };
+		C9DE2CF52089A3450090109A /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF42089A3440090109A /* Operators.swift */; };
+		C9DE2CF72089C8B50090109A /* UnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DE2CF62089C8B50090109A /* UnitView.swift */; };
+		C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DEC1051F805CF6004602EB /* DateFacade.swift */; };
+		C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */; };
+		C9DF81D61FEA158500C86A75 /* InvoiceDateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81D51FEA158500C86A75 /* InvoiceDateViewController.storyboard */; };
+		C9DF81D81FEA167E00C86A75 /* OrderDateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81D71FEA167E00C86A75 /* OrderDateViewController.storyboard */; };
+		C9DF81DA1FEA16FA00C86A75 /* InventoryDateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81D91FEA16FA00C86A75 /* InventoryDateViewController.storyboard */; };
+		C9DF81DC1FEA177800C86A75 /* ItemViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81DB1FEA177800C86A75 /* ItemViewController.storyboard */; };
+		C9DF81DE1FEA1B6300C86A75 /* InventoryLocCatViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81DD1FEA1B6300C86A75 /* InventoryLocCatViewController.storyboard */; };
+		C9DF81E01FEA1BDE00C86A75 /* InventoryLocItemViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81DF1FEA1BDE00C86A75 /* InventoryLocItemViewController.storyboard */; };
+		C9DF81E31FEA1FB000C86A75 /* SignUpViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9DF81E21FEA1FB000C86A75 /* SignUpViewController.storyboard */; };
+		C9E0F85D20B530B900B64A55 /* InvoiceKeypadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E0F85C20B530B800B64A55 /* InvoiceKeypadCoordinator.swift */; };
+		C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */; };
+		C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB7D891EE7910000515429 /* MailComposer.swift */; };
+		C9EC6E5D1FCCF7E000A3860E /* AttachableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EC6E5C1FCCF7E000A3860E /* AttachableType.swift */; };
+		C9F3564B1FA04536007ED98C /* OrderLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */; };
+		C9F3564D1FA0554C007ED98C /* OrderLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */; };
+		C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */; };
+		C9F374AD20F7E6390020BD2E /* OrderLocItemPadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */; };
+		C9F374B120F7E9010020BD2E /* OrderLocItemProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F374B020F7E9010020BD2E /* OrderLocItemProtocols.swift */; };
+		C9F374B320F867E10020BD2E /* OrderItemPhoneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F374B220F867E00020BD2E /* OrderItemPhoneCell.swift */; };
+		C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */; };
+		C9F515E61DB7EF98004C10E6 /* HomeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */; };
+		C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */; };
+		C9F515EB1DB7EF98004C10E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */; };
+		C9F515EE1DB7EF98004C10E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9F515EC1DB7EF98004C10E6 /* LaunchScreen.storyboard */; };
+		C9F515F91DB7EF98004C10E6 /* InventoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F515F81DB7EF98004C10E6 /* InventoryTests.swift */; };
+		C9F5160C1DB7F133004C10E6 /* InventoryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516071DB7F133004C10E6 /* InventoryLocationViewController.swift */; };
+		C9F5160D1DB7F133004C10E6 /* InventoryLocCatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516081DB7F133004C10E6 /* InventoryLocCatViewController.swift */; };
+		C9F5160E1DB7F133004C10E6 /* InventoryLocItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516091DB7F133004C10E6 /* InventoryLocItemViewController.swift */; };
+		C9F5160F1DB7F133004C10E6 /* InventoryKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */; };
+		C9F516151DB7F158004C10E6 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516111DB7F158004C10E6 /* Router.swift */; };
+		C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516121DB7F158004C10E6 /* APIManager.swift */; };
+		C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F516141DB7F158004C10E6 /* AuthenticationHandler.swift */; };
+		C9F5459C20D0B0C500458548 /* MGTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5459B20D0B0C500458548 /* MGTableViewController.swift */; };
+		C9F5459E20D0B17900458548 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5459D20D0B17900458548 /* Reusable.swift */; };
+		C9F645591EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C9F515F51DB7EF98004C10E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9F515D51DB7EF98004C10E6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C9F515DC1DB7EF98004C10E6;
+			remoteInfo = Mobile;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1759CF217E0F7753CCC30E90 /* Pods-MobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileTests/Pods-MobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		340E0AF81234DF7A6BFFB4AE /* Pods-Inventory.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inventory.release.xcconfig"; path = "Pods/Target Support Files/Pods-Inventory/Pods-Inventory.release.xcconfig"; sourceTree = "<group>"; };
+		396FB1B2DC0124F1C57275B6 /* Pods_Inventory.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Inventory.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F9F76DEA3E13FE69939ACFE /* Pods_InventoryTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InventoryTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		623B37D710436A1D20E64318 /* Pods-InventoryTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InventoryTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-InventoryTests/Pods-InventoryTests.release.xcconfig"; sourceTree = "<group>"; };
+		6B720FCBE35A278707E0AB7A /* Pods-Mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mobile/Pods-Mobile.debug.xcconfig"; sourceTree = "<group>"; };
+		C59292621F81F385905E6F0E /* Pods-Inventory.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inventory.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Inventory/Pods-Inventory.debug.xcconfig"; sourceTree = "<group>"; };
+		C901A50A1FA2BC3900BC7BD2 /* OrderLocItemViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderLocItemViewController.storyboard; sourceTree = "<group>"; };
+		C901A50C1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemViewController.swift; sourceTree = "<group>"; };
+		C901A50E1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemViewModel.swift; sourceTree = "<group>"; };
+		C902F04420CDBD2E0044BB3A /* PoppedObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoppedObservable.swift; sourceTree = "<group>"; };
+		C902F04620CF41E80044BB3A /* MGViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGViewController.swift; sourceTree = "<group>"; };
+		C902FF2D1DB816EB0063CD02 /* Keypad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keypad.swift; sourceTree = "<group>"; };
+		C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberKeypadButton.swift; sourceTree = "<group>"; };
+		C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationKeypadButton.swift; sourceTree = "<group>"; };
+		C902FF401DBE70290063CD02 /* Inventory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Inventory+MyStuff.swift"; path = "Models/Inventory+MyStuff.swift"; sourceTree = "<group>"; };
+		C902FF421DBE769C0063CD02 /* InventoryItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InventoryItem+MyStuff.swift"; path = "Models/InventoryItem+MyStuff.swift"; sourceTree = "<group>"; };
+		C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InventoryLocationItem+MyStuff.swift"; path = "Models/InventoryLocationItem+MyStuff.swift"; sourceTree = "<group>"; };
+		C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InventoryLocation+MyStuff.swift"; path = "Models/InventoryLocation+MyStuff.swift"; sourceTree = "<group>"; };
+		C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InventoryLocationCategory+MyStuff.swift"; path = "Models/InventoryLocationCategory+MyStuff.swift"; sourceTree = "<group>"; };
+		C90459121F93E31400E517C7 /* InventoryReviewItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryReviewItemViewModel.swift; sourceTree = "<group>"; };
+		C9045C101FC49EB400F55FB3 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		C9045C121FC49EDA00F55FB3 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
+		C9045C141FC49F0000F55FB3 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
+		C9045C161FC4A1BA00F55FB3 /* InventoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryCoordinator.swift; sourceTree = "<group>"; };
+		C9045C181FC4AD1000F55FB3 /* OrderCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCoordinator.swift; sourceTree = "<group>"; };
+		C9045C1A1FC4D1F200F55FB3 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		C9045C1C1FC4D20500F55FB3 /* InvoiceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceCoordinator.swift; sourceTree = "<group>"; };
+		C9045C1E1FC4D21E00F55FB3 /* ItemCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCoordinator.swift; sourceTree = "<group>"; };
+		C9045C201FC5122800F55FB3 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		C90477201EEE30D60082D894 /* KeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeypadViewModel.swift; sourceTree = "<group>"; };
+		C904822F1F96A543001A3E01 /* OrderVendorViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderVendorViewController.storyboard; sourceTree = "<group>"; };
+		C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VendorRep+MyStuff.swift"; sourceTree = "<group>"; };
+		C9090FFD1EB92D8B0035A1DA /* Managed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Managed.swift; sourceTree = "<group>"; };
+		C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+setBackgroundColor.swift"; sourceTree = "<group>"; };
+		C90DBB5720B3D364006F7097 /* InvoiceDisplaySubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceDisplaySubview.swift; sourceTree = "<group>"; };
+		C91194731F9D426200B65CF9 /* InvoiceItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceItemViewModel.swift; sourceTree = "<group>"; };
+		C9124F741DF0D61E00166A08 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataImporter.swift; sourceTree = "<group>"; };
+		C91417EB1FA8F62200168064 /* OrderLocCatViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderLocCatViewController.storyboard; sourceTree = "<group>"; };
+		C91417ED1FA8F63500168064 /* OrderLocCatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocCatViewController.swift; sourceTree = "<group>"; };
+		C91417EF1FA8F64B00168064 /* OrderLocCatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocCatViewModel.swift; sourceTree = "<group>"; };
+		C9174D421F83232C008639CC /* SyncableParent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncableParent.swift; sourceTree = "<group>"; };
+		C9174D441F832393008639CC /* NSManagedObjectContext+Syncable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Syncable.swift"; sourceTree = "<group>"; };
+		C9174D461F833265008639CC /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		C91856941F8D881D001B08A0 /* InventoriesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InventoriesFactory.swift; path = Models/InventoriesFactory.swift; sourceTree = "<group>"; };
+		C91B4EDB1E5C2863002DA2A5 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUserManager.swift; sourceTree = "<group>"; };
+		C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OrderItemViewController.storyboard; sourceTree = "<group>"; };
+		C91C92831EFCDBE400566CEB /* OrderItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemTableViewCell.swift; sourceTree = "<group>"; };
+		C91C92851EFCDD9000566CEB /* RoundButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
+		C91C92891EFCE65800566CEB /* OrderKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OrderKeypadViewController.storyboard; sourceTree = "<group>"; };
+		C91E72972050CE4600D42B79 /* MGStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGStepper.swift; sourceTree = "<group>"; };
+		C91F52FD20C77EFD00B1B7AA /* InventoryKeypadDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryKeypadDisplayView.swift; sourceTree = "<group>"; };
+		C9208A2D1FAB8BFA00D7C830 /* ItemUnits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemUnits.swift; sourceTree = "<group>"; };
+		C925909720AEA2F900F15634 /* InvoiceKeypadDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadDisplayView.swift; sourceTree = "<group>"; };
+		C925909920AEA3FA00F15634 /* KeypadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypadView.swift; sourceTree = "<group>"; };
+		C925909B20AEA7FF00F15634 /* DisplayItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayItemView.swift; sourceTree = "<group>"; };
+		C925909D20AEAAF500F15634 /* NSLayoutAnchor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutAnchor+Ext.swift"; sourceTree = "<group>"; };
+		C92C2F8C1F9FE3E500B69CF5 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceVendorViewController.swift; sourceTree = "<group>"; };
+		C92D75BE1DC7A7E500AA1A02 /* InvoiceItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemViewController.swift; sourceTree = "<group>"; };
+		C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadViewController.swift; sourceTree = "<group>"; };
+		C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		C92EC6311F84C80300B47C23 /* RemoteOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteOrder.swift; path = Models/RemoteOrder.swift; sourceTree = "<group>"; };
+		C92FB7EB205236A9002AE490 /* UIControl+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Rx.swift"; sourceTree = "<group>"; };
+		C92FB7ED20523794002AE490 /* Mutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mutable.swift; sourceTree = "<group>"; };
+		C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupCoordinator.swift; sourceTree = "<group>"; };
+		C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
+		C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundRectButton.swift; sourceTree = "<group>"; };
+		C935E9A31E60D713003BF386 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		C937505F202D72050076B65E /* ErrorTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTracker.swift; sourceTree = "<group>"; };
+		C9375061202D72B50076B65E /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		C9375063202D738D0076B65E /* Observable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
+		C9375065202D75390076B65E /* PrimaryContainerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryContainerType.swift; sourceTree = "<group>"; };
+		C93BD19220B663D3002E23DC /* Mobile 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 5.xcdatamodel"; sourceTree = "<group>"; };
+		C93BD19320B6699F002E23DC /* OrderLocation+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OrderLocation+Ext.swift"; path = "Models/OrderLocation+Ext.swift"; sourceTree = "<group>"; };
+		C93BD19720B669ED002E23DC /* OrderLocationItem+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OrderLocationItem+Ext.swift"; path = "Models/OrderLocationItem+Ext.swift"; sourceTree = "<group>"; };
+		C93BD19920B66A1D002E23DC /* OrderLocationCategory+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OrderLocationCategory+Ext.swift"; path = "Models/OrderLocationCategory+Ext.swift"; sourceTree = "<group>"; };
+		C93BD19B20BB3F48002E23DC /* ModalSplitViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalSplitViewDelegate.swift; sourceTree = "<group>"; };
+		C93BD19D20BC87AC002E23DC /* OrderKeypadDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderKeypadDisplayView.swift; sourceTree = "<group>"; };
+		C93BD19F20BC8824002E23DC /* OrderDisplaySubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDisplaySubview.swift; sourceTree = "<group>"; };
+		C9428EE61E032FCC002771EA /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Syncable.swift; sourceTree = "<group>"; };
+		C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemCategory+MyStuff.swift"; sourceTree = "<group>"; };
+		C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginViewController.storyboard; sourceTree = "<group>"; };
+		C945DAC41FEA37E5009D0EB0 /* Mobile 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 4.xcdatamodel"; sourceTree = "<group>"; };
+		C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = InvoiceKeypadViewController.storyboard; sourceTree = "<group>"; };
+		C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceItemCellViewModel.swift; sourceTree = "<group>"; };
+		C94AC871209005B400CBBCB2 /* UnitToggleable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitToggleable.swift; sourceTree = "<group>"; };
+		C9564F311F840276007D84F6 /* RemoteInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInventory.swift; path = Models/RemoteInventory.swift; sourceTree = "<group>"; };
+		C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+MyStuff.swift"; sourceTree = "<group>"; };
+		C95DE42B1F9587580079B43B /* InventoryLocationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryLocationViewController.storyboard; sourceTree = "<group>"; };
+		C95E44621FB2581400820067 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		C95E44641FB2582400820067 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		C95E44671FB2968C00820067 /* ItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
+		C95E44691FB296A700820067 /* ItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewModel.swift; sourceTree = "<group>"; };
+		C95E446B1FB2AB3A00820067 /* SettingsViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingsViewController.storyboard; sourceTree = "<group>"; };
+		C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCellViewModel.swift; sourceTree = "<group>"; };
+		C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertControllerStyle+Adaptive.swift"; sourceTree = "<group>"; };
+		C964D2121FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InvoiceVendorViewController.storyboard; sourceTree = "<group>"; };
+		C96751C32086EDB100212278 /* ModalKeypadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalKeypadViewController.swift; sourceTree = "<group>"; };
+		C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InvoiceCollection+MyStuff.swift"; path = "Models/InvoiceCollection+MyStuff.swift"; sourceTree = "<group>"; };
+		C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Invoice+MyStuff.swift"; path = "Models/Invoice+MyStuff.swift"; sourceTree = "<group>"; };
+		C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "InvoiceItem+MyStuff.swift"; path = "Models/InvoiceItem+MyStuff.swift"; sourceTree = "<group>"; };
+		C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+MyStuff.swift"; sourceTree = "<group>"; };
+		C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
+		C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 2.xcdatamodel"; sourceTree = "<group>"; };
+		C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
+		C96A899D1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderContainerViewController.storyboard; sourceTree = "<group>"; };
+		C96A899F1FAA5DB400CDDC59 /* OrderContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderContainerViewController.swift; sourceTree = "<group>"; };
+		C96B3A192654B850000550E2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+Stuff.swift"; sourceTree = "<group>"; };
+		C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperTableViewCell.swift; sourceTree = "<group>"; };
+		C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperCellViewModel.swift; sourceTree = "<group>"; };
+		C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
+		C979BEE520D9A4A400D8DFC0 /* Location+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+MyStuff.swift"; sourceTree = "<group>"; };
+		C97A712F1F8EC4A100F2F1CD /* OrderVendorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderVendorViewModel.swift; sourceTree = "<group>"; };
+		C97A71311F8EC83700F2F1CD /* InvoiceVendorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceVendorViewModel.swift; sourceTree = "<group>"; };
+		C97A71331F8EC94A00F2F1CD /* InventoryLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryLocationViewModel.swift; sourceTree = "<group>"; };
+		C97A71351F8EC96100F2F1CD /* InventoryLocCatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryLocCatViewModel.swift; sourceTree = "<group>"; };
+		C97A71371F8ECACE00F2F1CD /* InventoryReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryReviewViewController.swift; sourceTree = "<group>"; };
+		C97A71391F8ECADD00F2F1CD /* InventoryReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryReviewViewModel.swift; sourceTree = "<group>"; };
+		C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryReviewViewController.storyboard; sourceTree = "<group>"; };
+		C97B7C461FAB908000117D29 /* OrderContainerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderContainerViewModel.swift; sourceTree = "<group>"; };
+		C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubItemCellViewModelType.swift; sourceTree = "<group>"; };
+		C983643D1FA6744200DFAC6C /* OrderItemPhoneCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemPhoneCellViewModel.swift; sourceTree = "<group>"; };
+		C983643F1FA675F400DFAC6C /* OrderLocationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationFactory.swift; sourceTree = "<group>"; };
+		C988CE701DF5050D00A8028B /* Array+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+MyStuff.swift"; sourceTree = "<group>"; };
+		C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+MyStuff.swift"; sourceTree = "<group>"; };
+		C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Unit+MyStuff.swift"; sourceTree = "<group>"; };
+		C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Vendor+MyStuff.swift"; sourceTree = "<group>"; };
+		C98A64F51FCB47A4008F02F9 /* AttachableViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachableViewModelType.swift; sourceTree = "<group>"; };
+		C98A90871F97E97400644548 /* InventoryKeypadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryKeypadViewModel.swift; sourceTree = "<group>"; };
+		C98B25FB2071860C00F1D157 /* ChevronButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChevronButton.swift; sourceTree = "<group>"; };
+		C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadViewModel.swift; sourceTree = "<group>"; };
+		C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+MyStuff.swift"; sourceTree = "<group>"; };
+		C98FDED320C1E414005ED2AE /* OrderItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemView.swift; sourceTree = "<group>"; };
+		C99568C91FBB809C00AE6949 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
+		C998A817204DD22E00600F5A /* SplitViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewDelegate.swift; sourceTree = "<group>"; };
+		C998A819204DD27B00600F5A /* DetailNavigationControllerAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNavigationControllerAnimator.swift; sourceTree = "<group>"; };
+		C998A81B204DD2BE00600F5A /* DetailNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNavigationController.swift; sourceTree = "<group>"; };
+		C99E950626522A70004D14E8 /* AppSecrets.generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSecrets.generated.swift; sourceTree = "<group>"; };
+		C9A0B2EB1E63D2A300404320 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		C9A114EF1FAC336500308974 /* InvoiceItemViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InvoiceItemViewController.storyboard; sourceTree = "<group>"; };
+		C9A14ABB1DC6742700ACDE69 /* OrderVendorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderVendorViewController.swift; sourceTree = "<group>"; };
+		C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemViewController.swift; sourceTree = "<group>"; };
+		C9A14ABF1DC6748000ACDE69 /* OrderKeypadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderKeypadViewController.swift; sourceTree = "<group>"; };
+		C9A14AC11DC67A0F00ACDE69 /* InvoiceDateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceDateViewController.swift; sourceTree = "<group>"; };
+		C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OrderCollection+MyStuff.swift"; path = "Models/OrderCollection+MyStuff.swift"; sourceTree = "<group>"; };
+		C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Order+MyStuff.swift"; path = "Models/Order+MyStuff.swift"; sourceTree = "<group>"; };
+		C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OrderItem+MyStuff.swift"; path = "Models/OrderItem+MyStuff.swift"; sourceTree = "<group>"; };
+		C9A2A97620491096005548D1 /* AppDependency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependency.swift; sourceTree = "<group>"; };
+		C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryLocItemViewModel.swift; sourceTree = "<group>"; };
+		C9AA8DC11F9F191000147F07 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnePasswordExtension+MyStuff.swift"; sourceTree = "<group>"; };
+		C9B66FAB20D45B0800B8DB72 /* BackendError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendError.swift; sourceTree = "<group>"; };
+		C9B66FAD20D4619C00B8DB72 /* ErrorAlertDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertDisplayable.swift; sourceTree = "<group>"; };
+		C9BB057F1F8315B000A07529 /* RemoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteItem.swift; sourceTree = "<group>"; };
+		C9BB05861F83169800A07529 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		C9BB05881F83171000A07529 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		C9BB058A1F831AF900A07529 /* InventoryDateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryDateViewModel.swift; sourceTree = "<group>"; };
+		C9BB058C1F831B0F00A07529 /* InvoiceDateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceDateViewModel.swift; sourceTree = "<group>"; };
+		C9BB058E1F831B2200A07529 /* OrderDateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDateViewModel.swift; sourceTree = "<group>"; };
+		C9BB05901F831D6600A07529 /* InventoryDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryDateViewController.swift; sourceTree = "<group>"; };
+		C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubItemTableViewCell.swift; sourceTree = "<group>"; };
+		C9C2DA071F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocItemCellViewModel.swift; sourceTree = "<group>"; };
+		C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+MyStuff.swift"; sourceTree = "<group>"; };
+		C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = InventoryKeypadViewController.storyboard; sourceTree = "<group>"; };
+		C9CC04DE1F84C13C00180120 /* RemoteInvoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RemoteInvoice.swift; path = Models/RemoteInvoice.swift; sourceTree = "<group>"; };
+		C9CE65DF20BE461400A194F5 /* InventoryKeypadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryKeypadCoordinator.swift; sourceTree = "<group>"; };
+		C9D16F2A1DD277390073F95E /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
+		C9D38DB1202D5F6800B8B381 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
+		C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		C9D59C5F1FE0FAE60050A4AB /* PlaceholderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderViewController.swift; sourceTree = "<group>"; };
+		C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+MyStuff.swift"; sourceTree = "<group>"; };
+		C9DE2CF02087CBCA0090109A /* OrderKeypadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderKeypadCoordinator.swift; sourceTree = "<group>"; };
+		C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetTransitioningDelegate.swift; sourceTree = "<group>"; };
+		C9DE2CF42089A3440090109A /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
+		C9DE2CF62089C8B50090109A /* UnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitView.swift; sourceTree = "<group>"; };
+		C9DEC1051F805CF6004602EB /* DateFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFacade.swift; sourceTree = "<group>"; };
+		C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Managed.swift"; sourceTree = "<group>"; };
+		C9DF81D51FEA158500C86A75 /* InvoiceDateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InvoiceDateViewController.storyboard; sourceTree = "<group>"; };
+		C9DF81D71FEA167E00C86A75 /* OrderDateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderDateViewController.storyboard; sourceTree = "<group>"; };
+		C9DF81D91FEA16FA00C86A75 /* InventoryDateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryDateViewController.storyboard; sourceTree = "<group>"; };
+		C9DF81DB1FEA177800C86A75 /* ItemViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ItemViewController.storyboard; sourceTree = "<group>"; };
+		C9DF81DD1FEA1B6300C86A75 /* InventoryLocCatViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryLocCatViewController.storyboard; sourceTree = "<group>"; };
+		C9DF81DF1FEA1BDE00C86A75 /* InventoryLocItemViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InventoryLocItemViewController.storyboard; sourceTree = "<group>"; };
+		C9DF81E21FEA1FB000C86A75 /* SignUpViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SignUpViewController.storyboard; sourceTree = "<group>"; };
+		C9E0F85C20B530B800B64A55 /* InvoiceKeypadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadCoordinator.swift; sourceTree = "<group>"; };
+		C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderDateViewController.swift; sourceTree = "<group>"; };
+		C9EB7D891EE7910000515429 /* MailComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
+		C9EC6E5C1FCCF7E000A3860E /* AttachableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachableType.swift; sourceTree = "<group>"; };
+		C9ECDB271F214DB9002AA99E /* Mobile 3a.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mobile 3a.xcdatamodel"; sourceTree = "<group>"; };
+		C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationViewController.swift; sourceTree = "<group>"; };
+		C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocationViewModel.swift; sourceTree = "<group>"; };
+		C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OrderLocationViewController.storyboard; sourceTree = "<group>"; };
+		C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemPadViewController.swift; sourceTree = "<group>"; };
+		C9F374B020F7E9010020BD2E /* OrderLocItemProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLocItemProtocols.swift; sourceTree = "<group>"; };
+		C9F374B220F867E00020BD2E /* OrderItemPhoneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemPhoneCell.swift; sourceTree = "<group>"; };
+		C9F515DD1DB7EF98004C10E6 /* Inventory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Inventory.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C9F515E51DB7EF98004C10E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/HomeViewController.storyboard; sourceTree = "<group>"; };
+		C9F515E81DB7EF98004C10E6 /* Mobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mobile.xcdatamodel; sourceTree = "<group>"; };
+		C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C9F515ED1DB7EF98004C10E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C9F515EF1DB7EF98004C10E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C9F515F41DB7EF98004C10E6 /* InventoryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InventoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9F515F81DB7EF98004C10E6 /* InventoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryTests.swift; sourceTree = "<group>"; };
+		C9F515FA1DB7EF98004C10E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C9F516031DB7F05A004C10E6 /* Inventory.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Inventory.entitlements; sourceTree = "<group>"; };
+		C9F516071DB7F133004C10E6 /* InventoryLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocationViewController.swift; sourceTree = "<group>"; };
+		C9F516081DB7F133004C10E6 /* InventoryLocCatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocCatViewController.swift; sourceTree = "<group>"; };
+		C9F516091DB7F133004C10E6 /* InventoryLocItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryLocItemViewController.swift; sourceTree = "<group>"; };
+		C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryKeypadViewController.swift; sourceTree = "<group>"; };
+		C9F516111DB7F158004C10E6 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		C9F516121DB7F158004C10E6 /* APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		C9F516141DB7F158004C10E6 /* AuthenticationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationHandler.swift; sourceTree = "<group>"; };
+		C9F5459B20D0B0C500458548 /* MGTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGTableViewController.swift; sourceTree = "<group>"; };
+		C9F5459D20D0B17900458548 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
+		C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoiceKeypadViewModel.swift; sourceTree = "<group>"; };
+		CFC8025568883F725FCA0469 /* Pods-InventoryTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InventoryTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-InventoryTests/Pods-InventoryTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D430FB7BCEC8764AA38D8E28 /* Pods-MobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileTests/Pods-MobileTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E7E121BAFBB6D4F072EDD6C3 /* Pods-Mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mobile/Pods-Mobile.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C9F515DA1DB7EF98004C10E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				192D481BFBDB34209B13F3B0 /* Pods_Inventory.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C9F515F11DB7EF98004C10E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28C8992B563BCFFF53AAE2FF /* Pods_InventoryTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2CB51C8B861C60945D4B77A9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				396FB1B2DC0124F1C57275B6 /* Pods_Inventory.framework */,
+				3F9F76DEA3E13FE69939ACFE /* Pods_InventoryTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C901A5091FA2BBEC00BC7BD2 /* LocationItemList */ = {
+			isa = PBXGroup;
+			children = (
+				C901A50A1FA2BC3900BC7BD2 /* OrderLocItemViewController.storyboard */,
+				C9F374B020F7E9010020BD2E /* OrderLocItemProtocols.swift */,
+				C901A50E1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift */,
+				C9194CC820F94A530068B74C /* Pad */,
+				C9194CC720F94A440068B74C /* Phone */,
+			);
+			name = LocationItemList;
+			sourceTree = "<group>";
+		};
+		C902FF2F1DB81BD00063CD02 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C95E446B1FB2AB3A00820067 /* SettingsViewController.storyboard */,
+				C93203EB1FC6AA3000ACFC1D /* SettingsCoordinator.swift */,
+				C92D75C41DC7A94100AA1A02 /* SettingsViewController.swift */,
+				C92C2F8C1F9FE3E500B69CF5 /* SettingsViewModel.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		C902FF311DB81BF70063CD02 /* Invoice */ = {
+			isa = PBXGroup;
+			children = (
+				C9045C1C1FC4D20500F55FB3 /* InvoiceCoordinator.swift */,
+				C9E0F85C20B530B800B64A55 /* InvoiceKeypadCoordinator.swift */,
+				C97A71281F8EC03D00F2F1CD /* Date List */,
+				C97A71291F8EC04F00F2F1CD /* Vendor List */,
+				C949C20C1F1606E6008A5EC4 /* Item List */,
+				C949C2091F15E210008A5EC4 /* Keypad */,
+			);
+			path = Invoice;
+			sourceTree = "<group>";
+		};
+		C902FF4A1DBE77290063CD02 /* Inventory Models */ = {
+			isa = PBXGroup;
+			children = (
+				C902FF401DBE70290063CD02 /* Inventory+MyStuff.swift */,
+				C902FF421DBE769C0063CD02 /* InventoryItem+MyStuff.swift */,
+				C902FF441DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift */,
+				C902FF461DBE76F60063CD02 /* InventoryLocation+MyStuff.swift */,
+				C902FF481DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift */,
+				C9564F311F840276007D84F6 /* RemoteInventory.swift */,
+				C91856941F8D881D001B08A0 /* InventoriesFactory.swift */,
+			);
+			name = "Inventory Models";
+			path = ..;
+			sourceTree = "<group>";
+		};
+		C904771F1EEE30770082D894 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				C9EC6E5C1FCCF7E000A3860E /* AttachableType.swift */,
+				C98A64F51FCB47A4008F02F9 /* AttachableViewModelType.swift */,
+				C9375061202D72B50076B65E /* Coordinator.swift */,
+				C9DEC1051F805CF6004602EB /* DateFacade.swift */,
+				C9B66FAD20D4619C00B8DB72 /* ErrorAlertDisplayable.swift */,
+				C90477201EEE30D60082D894 /* KeypadViewModel.swift */,
+				C92FB7ED20523794002AE490 /* Mutable.swift */,
+				C902F04420CDBD2E0044BB3A /* PoppedObservable.swift */,
+				C9375065202D75390076B65E /* PrimaryContainerType.swift */,
+				C9F5459D20D0B17900458548 /* Reusable.swift */,
+				C94AC871209005B400CBBCB2 /* UnitToggleable.swift */,
+				C99568C91FBB809C00AE6949 /* ViewModelType.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		C91417EA1FA8F5D500168064 /* LocationCategory List */ = {
+			isa = PBXGroup;
+			children = (
+				C91417EB1FA8F62200168064 /* OrderLocCatViewController.storyboard */,
+				C91417ED1FA8F63500168064 /* OrderLocCatViewController.swift */,
+				C91417EF1FA8F64B00168064 /* OrderLocCatViewModel.swift */,
+			);
+			name = "LocationCategory List";
+			sourceTree = "<group>";
+		};
+		C9194CC720F94A440068B74C /* Phone */ = {
+			isa = PBXGroup;
+			children = (
+				C901A50C1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift */,
+				C9F374B220F867E00020BD2E /* OrderItemPhoneCell.swift */,
+				C983643D1FA6744200DFAC6C /* OrderItemPhoneCellViewModel.swift */,
+			);
+			name = Phone;
+			sourceTree = "<group>";
+		};
+		C9194CC820F94A530068B74C /* Pad */ = {
+			isa = PBXGroup;
+			children = (
+				C9F374AC20F7E6390020BD2E /* OrderLocItemPadViewController.swift */,
+				C96BB8AA206C8147009D9F7B /* StepperTableViewCell.swift */,
+				C96BB8AC206C81D2009D9F7B /* StepperCellViewModel.swift */,
+			);
+			name = Pad;
+			sourceTree = "<group>";
+		};
+		C9208A2C1FAB89B200D7C830 /* Container */ = {
+			isa = PBXGroup;
+			children = (
+				C96A899D1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard */,
+				C96A899F1FAA5DB400CDDC59 /* OrderContainerViewController.swift */,
+				C97B7C461FAB908000117D29 /* OrderContainerViewModel.swift */,
+			);
+			name = Container;
+			sourceTree = "<group>";
+		};
+		C937505C202D6C9B0076B65E /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				C9F515E01DB7EF98004C10E6 /* AppDelegate.swift */,
+				C9045C101FC49EB400F55FB3 /* AppCoordinator.swift */,
+				C9A2A97620491096005548D1 /* AppDependency.swift */,
+				C99E950626522A70004D14E8 /* AppSecrets.generated.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		C937505D202D6E000076B65E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C9F515EA1DB7EF98004C10E6 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C937505E202D6F380076B65E /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				C9F516111DB7F158004C10E6 /* Router.swift */,
+				C9F516121DB7F158004C10E6 /* APIManager.swift */,
+				C9B66FAB20D45B0800B8DB72 /* BackendError.swift */,
+				C9F516141DB7F158004C10E6 /* AuthenticationHandler.swift */,
+				C91B4EDD1E5CC1FC002DA2A5 /* CurrentUserManager.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		C94084741EFCCB7F00638E25 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				C9C2DA041F0F3AF7007263FB /* Common */,
+				C95E44611FB257DC00820067 /* Home */,
+				C9F516051DB7F11D004C10E6 /* Inventory */,
+				C902FF311DB81BF70063CD02 /* Invoice */,
+				C94084751EFCCB7F00638E25 /* Order */,
+				C95E44661FB2966400820067 /* Item */,
+				C9B825E71EB9A0ED009B92F0 /* Login */,
+				C945DAC11FEA2B3F009D0EB0 /* Signup */,
+				C902FF2F1DB81BD00063CD02 /* Settings */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		C94084751EFCCB7F00638E25 /* Order */ = {
+			isa = PBXGroup;
+			children = (
+				C9045C181FC4AD1000F55FB3 /* OrderCoordinator.swift */,
+				C9DE2CF02087CBCA0090109A /* OrderKeypadCoordinator.swift */,
+				C97A712A1F8EC06B00F2F1CD /* Date List */,
+				C9208A2C1FAB89B200D7C830 /* Container */,
+				C97A712B1F8EC07900F2F1CD /* Vendor List */,
+				C9C221151EFCCE4A009C7D01 /* Item List */,
+				C9C221161EFCCE61009C7D01 /* Keypad */,
+				C9F356491FA04496007ED98C /* Location List */,
+				C91417EA1FA8F5D500168064 /* LocationCategory List */,
+				C901A5091FA2BBEC00BC7BD2 /* LocationItemList */,
+			);
+			path = Order;
+			sourceTree = "<group>";
+		};
+		C940847A1EFCCC8B00638E25 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C9BB05861F83169800A07529 /* DataManager.swift */,
+				C902FF4A1DBE77290063CD02 /* Inventory Models */,
+				C96870E01DDA1ED000EC06AB /* Invoice Models */,
+				C9E198D31DC566780065FB98 /* Order Models */,
+				C98A4FB01DC927CD002BB076 /* Item+MyStuff.swift */,
+				C9208A2D1FAB8BFA00D7C830 /* ItemUnits.swift */,
+				C9428EE81E03314B002771EA /* ItemCategory+MyStuff.swift */,
+				C979BEE520D9A4A400D8DFC0 /* Location+MyStuff.swift */,
+				C98A4FB21DCB0233002BB076 /* Unit+MyStuff.swift */,
+				C91B4EDB1E5C2863002DA2A5 /* User.swift */,
+				C98A4FB41DCB0329002BB076 /* Vendor+MyStuff.swift */,
+				C9090FFB1EB929EF0035A1DA /* VendorRep+MyStuff.swift */,
+				C9BB057F1F8315B000A07529 /* RemoteItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C945DAC11FEA2B3F009D0EB0 /* Signup */ = {
+			isa = PBXGroup;
+			children = (
+				C93203E91FC678D200ACFC1D /* SignupCoordinator.swift */,
+				C9DF81E21FEA1FB000C86A75 /* SignUpViewController.storyboard */,
+				C9A0B2EB1E63D2A300404320 /* SignUpViewController.swift */,
+				C9AA8DC11F9F191000147F07 /* SignUpViewModel.swift */,
+			);
+			path = Signup;
+			sourceTree = "<group>";
+		};
+		C949C2091F15E210008A5EC4 /* Keypad */ = {
+			isa = PBXGroup;
+			children = (
+				C949C20A1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard */,
+				C92D75C01DC7A81400AA1A02 /* InvoiceKeypadViewController.swift */,
+				C9F645581EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift */,
+				C925909720AEA2F900F15634 /* InvoiceKeypadDisplayView.swift */,
+				C90DBB5720B3D364006F7097 /* InvoiceDisplaySubview.swift */,
+			);
+			name = Keypad;
+			sourceTree = "<group>";
+		};
+		C949C20C1F1606E6008A5EC4 /* Item List */ = {
+			isa = PBXGroup;
+			children = (
+				C9A114EF1FAC336500308974 /* InvoiceItemViewController.storyboard */,
+				C92D75BE1DC7A7E500AA1A02 /* InvoiceItemViewController.swift */,
+				C91194731F9D426200B65CF9 /* InvoiceItemViewModel.swift */,
+				C949C20D1F160719008A5EC4 /* InvoiceItemCellViewModel.swift */,
+			);
+			name = "Item List";
+			sourceTree = "<group>";
+		};
+		C9534D351F9003C000DA4A78 /* RxSwift */ = {
+			isa = PBXGroup;
+			children = (
+				C9375063202D738D0076B65E /* Observable+Extensions.swift */,
+			);
+			path = RxSwift;
+			sourceTree = "<group>";
+		};
+		C95E44611FB257DC00820067 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				C9045C1A1FC4D1F200F55FB3 /* HomeCoordinator.swift */,
+				C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */,
+				C95E44621FB2581400820067 /* HomeViewController.swift */,
+				C95E44641FB2582400820067 /* HomeViewModel.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		C95E44661FB2966400820067 /* Item */ = {
+			isa = PBXGroup;
+			children = (
+				C9045C1E1FC4D21E00F55FB3 /* ItemCoordinator.swift */,
+				C9DF81E11FEA1E3200C86A75 /* Item List */,
+			);
+			path = Item;
+			sourceTree = "<group>";
+		};
+		C96870E01DDA1ED000EC06AB /* Invoice Models */ = {
+			isa = PBXGroup;
+			children = (
+				C96870E11DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift */,
+				C96870E31DDA1F1500EC06AB /* Invoice+MyStuff.swift */,
+				C96870E51DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift */,
+				C9CC04DE1F84C13C00180120 /* RemoteInvoice.swift */,
+			);
+			name = "Invoice Models";
+			path = ..;
+			sourceTree = "<group>";
+		};
+		C97A71281F8EC03D00F2F1CD /* Date List */ = {
+			isa = PBXGroup;
+			children = (
+				C9DF81D51FEA158500C86A75 /* InvoiceDateViewController.storyboard */,
+				C9A14AC11DC67A0F00ACDE69 /* InvoiceDateViewController.swift */,
+				C9BB058C1F831B0F00A07529 /* InvoiceDateViewModel.swift */,
+			);
+			name = "Date List";
+			sourceTree = "<group>";
+		};
+		C97A71291F8EC04F00F2F1CD /* Vendor List */ = {
+			isa = PBXGroup;
+			children = (
+				C964D2121FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard */,
+				C92D75BC1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift */,
+				C97A71311F8EC83700F2F1CD /* InvoiceVendorViewModel.swift */,
+			);
+			name = "Vendor List";
+			sourceTree = "<group>";
+		};
+		C97A712A1F8EC06B00F2F1CD /* Date List */ = {
+			isa = PBXGroup;
+			children = (
+				C9DF81D71FEA167E00C86A75 /* OrderDateViewController.storyboard */,
+				C9E198D41DC5669E0065FB98 /* OrderDateViewController.swift */,
+				C9BB058E1F831B2200A07529 /* OrderDateViewModel.swift */,
+			);
+			name = "Date List";
+			sourceTree = "<group>";
+		};
+		C97A712B1F8EC07900F2F1CD /* Vendor List */ = {
+			isa = PBXGroup;
+			children = (
+				C904822F1F96A543001A3E01 /* OrderVendorViewController.storyboard */,
+				C9A14ABB1DC6742700ACDE69 /* OrderVendorViewController.swift */,
+				C97A712F1F8EC4A100F2F1CD /* OrderVendorViewModel.swift */,
+			);
+			name = "Vendor List";
+			sourceTree = "<group>";
+		};
+		C97A712C1F8EC09600F2F1CD /* Date List */ = {
+			isa = PBXGroup;
+			children = (
+				C9DF81D91FEA16FA00C86A75 /* InventoryDateViewController.storyboard */,
+				C9BB05901F831D6600A07529 /* InventoryDateViewController.swift */,
+				C9BB058A1F831AF900A07529 /* InventoryDateViewModel.swift */,
+			);
+			name = "Date List";
+			sourceTree = "<group>";
+		};
+		C97A712D1F8EC0AF00F2F1CD /* Location List */ = {
+			isa = PBXGroup;
+			children = (
+				C95DE42B1F9587580079B43B /* InventoryLocationViewController.storyboard */,
+				C9F516071DB7F133004C10E6 /* InventoryLocationViewController.swift */,
+				C97A71331F8EC94A00F2F1CD /* InventoryLocationViewModel.swift */,
+			);
+			name = "Location List";
+			sourceTree = "<group>";
+		};
+		C97A712E1F8EC0BA00F2F1CD /* Category List */ = {
+			isa = PBXGroup;
+			children = (
+				C9DF81DD1FEA1B6300C86A75 /* InventoryLocCatViewController.storyboard */,
+				C9F516081DB7F133004C10E6 /* InventoryLocCatViewController.swift */,
+				C97A71351F8EC96100F2F1CD /* InventoryLocCatViewModel.swift */,
+			);
+			name = "Category List";
+			sourceTree = "<group>";
+		};
+		C97A713B1F8ECAEC00F2F1CD /* Review List */ = {
+			isa = PBXGroup;
+			children = (
+				C97A713C1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard */,
+				C97A71371F8ECACE00F2F1CD /* InventoryReviewViewController.swift */,
+				C97A71391F8ECADD00F2F1CD /* InventoryReviewViewModel.swift */,
+				C90459121F93E31400E517C7 /* InventoryReviewItemViewModel.swift */,
+			);
+			name = "Review List";
+			sourceTree = "<group>";
+		};
+		C9A99AF32050970F0000ABC3 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				C902FF3C1DBD8B3F0063CD02 /* NumberKeypadButton.swift */,
+				C98B25FB2071860C00F1D157 /* ChevronButton.swift */,
+				C902FF3D1DBD8B3F0063CD02 /* OperationKeypadButton.swift */,
+				C91C92851EFCDD9000566CEB /* RoundButton.swift */,
+				C93565351FCDF77D00CAFB16 /* RoundRectButton.swift */,
+			);
+			name = Buttons;
+			sourceTree = "<group>";
+		};
+		C9A99AF42050974D0000ABC3 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				C9C2DA051F0F3BC3007263FB /* SubItemTableViewCell.swift */,
+				C98165011F915E7F006EC785 /* SubItemCellViewModelType.swift */,
+				C91E72972050CE4600D42B79 /* MGStepper.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		C9A99AF5205097650000ABC3 /* Coordination */ = {
+			isa = PBXGroup;
+			children = (
+				C9045C121FC49EDA00F55FB3 /* BaseCoordinator.swift */,
+				C9045C141FC49F0000F55FB3 /* TabBarCoordinator.swift */,
+				C998A817204DD22E00600F5A /* SplitViewDelegate.swift */,
+				C93BD19B20BB3F48002E23DC /* ModalSplitViewDelegate.swift */,
+				C9D59C5D1FE0FA870050A4AB /* NavigationController.swift */,
+				C998A81B204DD2BE00600F5A /* DetailNavigationController.swift */,
+				C998A819204DD27B00600F5A /* DetailNavigationControllerAnimator.swift */,
+				C9D59C5F1FE0FAE60050A4AB /* PlaceholderViewController.swift */,
+				C9D59C5B1FE0FA280050A4AB /* TabBarController.swift */,
+			);
+			name = Coordination;
+			sourceTree = "<group>";
+		};
+		C9B825E61EB9A0A4009B92F0 /* Core Data Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				C9124F741DF0D61E00166A08 /* CoreDataStack.swift */,
+				C9124F761DF0D7DD00166A08 /* CoreDataImporter.swift */,
+				C9D3E3A61EAD233C0008F444 /* TableViewDataSource.swift */,
+				C9090FFD1EB92D8B0035A1DA /* Managed.swift */,
+				C9428EE61E032FCC002771EA /* Syncable.swift */,
+				C9174D421F83232C008639CC /* SyncableParent.swift */,
+				C9DF4E0C1F7479DD009C690A /* NSManagedObjectContext+Managed.swift */,
+				C96870E71DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift */,
+				C9174D441F832393008639CC /* NSManagedObjectContext+Syncable.swift */,
+			);
+			path = "Core Data Helpers";
+			sourceTree = "<group>";
+		};
+		C9B825E71EB9A0ED009B92F0 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				C9045C201FC5122800F55FB3 /* LoginCoordinator.swift */,
+				C945DAC21FEA2EAD009D0EB0 /* LoginViewController.storyboard */,
+				C935E9A31E60D713003BF386 /* LoginViewController.swift */,
+				C9174D461F833265008639CC /* LoginViewModel.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		C9BA91271DEB957400DA2C6C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C9BA91291DEB959500DA2C6C /* Foundation */,
+				C9534D351F9003C000DA4A78 /* RxSwift */,
+				C9BA91281DEB958200DA2C6C /* UIKit */,
+				C9AA8DC31F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C9BA91281DEB958200DA2C6C /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				C925909D20AEAAF500F15634 /* NSLayoutAnchor+Ext.swift */,
+				C95F52EF1F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift */,
+				C90CF93D1EFDADC000097DCB /* UIButton+setBackgroundColor.swift */,
+				C92FB7EB205236A9002AE490 /* UIControl+Rx.swift */,
+				C96B74EE1F194F5900C881E0 /* UITextField+Stuff.swift */,
+				C968B8601EF9D171005CE2FC /* UIViewController+Alert.swift */,
+				C9D38DB1202D5F6800B8B381 /* UIViewController+Extensions.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		C9BA91291DEB959500DA2C6C /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				C988CE701DF5050D00A8028B /* Array+MyStuff.swift */,
+				C98EE04C1DDD800900EE2AC7 /* Date+MyStuff.swift */,
+				C9C2DA0A1F0F5ADA007263FB /* NSDate+MyStuff.swift */,
+				C9DB04F71F8E9C6300C58F55 /* String+MyStuff.swift */,
+				C95B31031F809B98002ED2B9 /* TimeInterval+MyStuff.swift */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
+		C9C221151EFCCE4A009C7D01 /* Item List */ = {
+			isa = PBXGroup;
+			children = (
+				C91C92811EFCD98F00566CEB /* OrderItemViewController.storyboard */,
+				C9A14ABD1DC6746300ACDE69 /* OrderItemViewController.swift */,
+				C968B85D1EF7275E005CE2FC /* OrderViewModel.swift */,
+				C98FDED320C1E414005ED2AE /* OrderItemView.swift */,
+				C9EB7D891EE7910000515429 /* MailComposer.swift */,
+				C9D16F2A1DD277390073F95E /* MessageComposer.swift */,
+				C91C92831EFCDBE400566CEB /* OrderItemTableViewCell.swift */,
+			);
+			name = "Item List";
+			sourceTree = "<group>";
+		};
+		C9C221161EFCCE61009C7D01 /* Keypad */ = {
+			isa = PBXGroup;
+			children = (
+				C91C92891EFCE65800566CEB /* OrderKeypadViewController.storyboard */,
+				C9A14ABF1DC6748000ACDE69 /* OrderKeypadViewController.swift */,
+				C98D915F1EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift */,
+				C93BD19D20BC87AC002E23DC /* OrderKeypadDisplayView.swift */,
+				C93BD19F20BC8824002E23DC /* OrderDisplaySubview.swift */,
+			);
+			name = Keypad;
+			sourceTree = "<group>";
+		};
+		C9C2DA041F0F3AF7007263FB /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				C9A99AF32050970F0000ABC3 /* Buttons */,
+				C9A99AF42050974D0000ABC3 /* Cells */,
+				C9A99AF5205097650000ABC3 /* Coordination */,
+				C9BB05881F83171000A07529 /* ActivityIndicator.swift */,
+				C937505F202D72050076B65E /* ErrorTracker.swift */,
+				C971B4491DC02F9C007DD7A8 /* ColorPalette.swift */,
+				C902FF2D1DB816EB0063CD02 /* Keypad.swift */,
+				C925909B20AEA7FF00F15634 /* DisplayItemView.swift */,
+				C925909920AEA3FA00F15634 /* KeypadView.swift */,
+				C9DE2CF2208969D00090109A /* SheetTransitioningDelegate.swift */,
+				C96751C32086EDB100212278 /* ModalKeypadViewController.swift */,
+				C9F5459B20D0B0C500458548 /* MGTableViewController.swift */,
+				C902F04620CF41E80044BB3A /* MGViewController.swift */,
+				C9DE2CF62089C8B50090109A /* UnitView.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		C9C2DA091F0F3F56007263FB /* LocationItem List */ = {
+			isa = PBXGroup;
+			children = (
+				C9DF81DF1FEA1BDE00C86A75 /* InventoryLocItemViewController.storyboard */,
+				C9F516091DB7F133004C10E6 /* InventoryLocItemViewController.swift */,
+				C9AA8DBF1F9F0D2D00147F07 /* InventoryLocItemViewModel.swift */,
+				C9C2DA071F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift */,
+			);
+			name = "LocationItem List";
+			sourceTree = "<group>";
+		};
+		C9CB6FC71F01D28F0094ED07 /* Keypad */ = {
+			isa = PBXGroup;
+			children = (
+				C9CB6FC51F01D2300094ED07 /* InventoryKeypadViewController.storyboard */,
+				C9F5160A1DB7F133004C10E6 /* InventoryKeypadViewController.swift */,
+				C98A90871F97E97400644548 /* InventoryKeypadViewModel.swift */,
+				C91F52FD20C77EFD00B1B7AA /* InventoryKeypadDisplayView.swift */,
+			);
+			name = Keypad;
+			sourceTree = "<group>";
+		};
+		C9DF81E11FEA1E3200C86A75 /* Item List */ = {
+			isa = PBXGroup;
+			children = (
+				C9DF81DB1FEA177800C86A75 /* ItemViewController.storyboard */,
+				C95E44671FB2968C00820067 /* ItemViewController.swift */,
+				C95E44691FB296A700820067 /* ItemViewModel.swift */,
+				C95E446D1FB2C26200820067 /* ItemCellViewModel.swift */,
+			);
+			name = "Item List";
+			sourceTree = "<group>";
+		};
+		C9E198D31DC566780065FB98 /* Order Models */ = {
+			isa = PBXGroup;
+			children = (
+				C9A14AF11DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift */,
+				C9A14AF31DC6B21800ACDE69 /* Order+MyStuff.swift */,
+				C9A14AF51DC6B22300ACDE69 /* OrderItem+MyStuff.swift */,
+				C93BD19320B6699F002E23DC /* OrderLocation+Ext.swift */,
+				C93BD19920B66A1D002E23DC /* OrderLocationCategory+Ext.swift */,
+				C93BD19720B669ED002E23DC /* OrderLocationItem+Ext.swift */,
+				C92EC6311F84C80300B47C23 /* RemoteOrder.swift */,
+			);
+			name = "Order Models";
+			path = ..;
+			sourceTree = "<group>";
+		};
+		C9F356491FA04496007ED98C /* Location List */ = {
+			isa = PBXGroup;
+			children = (
+				C9F3564E1FA05603007ED98C /* OrderLocationViewController.storyboard */,
+				C9F3564A1FA04535007ED98C /* OrderLocationViewController.swift */,
+				C9F3564C1FA0554C007ED98C /* OrderLocationViewModel.swift */,
+				C983643F1FA675F400DFAC6C /* OrderLocationFactory.swift */,
+			);
+			name = "Location List";
+			sourceTree = "<group>";
+		};
+		C9F515D41DB7EF98004C10E6 = {
+			isa = PBXGroup;
+			children = (
+				C96B3A192654B850000550E2 /* README.md */,
+				C9F515DF1DB7EF98004C10E6 /* Inventory */,
+				C9F515F71DB7EF98004C10E6 /* InventoryTests */,
+				C9F515DE1DB7EF98004C10E6 /* Products */,
+				E2A047F8CE6B9B7295CA21F4 /* Pods */,
+				2CB51C8B861C60945D4B77A9 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C9F515DE1DB7EF98004C10E6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C9F515DD1DB7EF98004C10E6 /* Inventory.app */,
+				C9F515F41DB7EF98004C10E6 /* InventoryTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C9F515DF1DB7EF98004C10E6 /* Inventory */ = {
+			isa = PBXGroup;
+			children = (
+				C937505C202D6C9B0076B65E /* Application */,
+				C9B825E61EB9A0A4009B92F0 /* Core Data Helpers */,
+				C9BA91271DEB957400DA2C6C /* Extensions */,
+				C9DE2CF42089A3440090109A /* Operators.swift */,
+				C940847A1EFCCC8B00638E25 /* Models */,
+				C904771F1EEE30770082D894 /* Protocols */,
+				C937505E202D6F380076B65E /* Networking */,
+				C94084741EFCCB7F00638E25 /* Scenes */,
+				C937505D202D6E000076B65E /* Resources */,
+				C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */,
+				C9F516041DB7F062004C10E6 /* Support */,
+			);
+			path = Inventory;
+			sourceTree = "<group>";
+		};
+		C9F515F71DB7EF98004C10E6 /* InventoryTests */ = {
+			isa = PBXGroup;
+			children = (
+				C9F515F81DB7EF98004C10E6 /* InventoryTests.swift */,
+				C9F515FA1DB7EF98004C10E6 /* Info.plist */,
+			);
+			path = InventoryTests;
+			sourceTree = "<group>";
+		};
+		C9F516041DB7F062004C10E6 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				C9F515EC1DB7EF98004C10E6 /* LaunchScreen.storyboard */,
+				C9F516031DB7F05A004C10E6 /* Inventory.entitlements */,
+				C9F515EF1DB7EF98004C10E6 /* Info.plist */,
+			);
+			name = Support;
+			sourceTree = "<group>";
+		};
+		C9F516051DB7F11D004C10E6 /* Inventory */ = {
+			isa = PBXGroup;
+			children = (
+				C9045C161FC4A1BA00F55FB3 /* InventoryCoordinator.swift */,
+				C9CE65DF20BE461400A194F5 /* InventoryKeypadCoordinator.swift */,
+				C97A712C1F8EC09600F2F1CD /* Date List */,
+				C97A712D1F8EC0AF00F2F1CD /* Location List */,
+				C97A712E1F8EC0BA00F2F1CD /* Category List */,
+				C9C2DA091F0F3F56007263FB /* LocationItem List */,
+				C9CB6FC71F01D28F0094ED07 /* Keypad */,
+				C97A713B1F8ECAEC00F2F1CD /* Review List */,
+			);
+			path = Inventory;
+			sourceTree = "<group>";
+		};
+		E2A047F8CE6B9B7295CA21F4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6B720FCBE35A278707E0AB7A /* Pods-Mobile.debug.xcconfig */,
+				E7E121BAFBB6D4F072EDD6C3 /* Pods-Mobile.release.xcconfig */,
+				D430FB7BCEC8764AA38D8E28 /* Pods-MobileTests.debug.xcconfig */,
+				1759CF217E0F7753CCC30E90 /* Pods-MobileTests.release.xcconfig */,
+				C59292621F81F385905E6F0E /* Pods-Inventory.debug.xcconfig */,
+				340E0AF81234DF7A6BFFB4AE /* Pods-Inventory.release.xcconfig */,
+				CFC8025568883F725FCA0469 /* Pods-InventoryTests.debug.xcconfig */,
+				623B37D710436A1D20E64318 /* Pods-InventoryTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C9F515DC1DB7EF98004C10E6 /* Inventory */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C9F515FD1DB7EF98004C10E6 /* Build configuration list for PBXNativeTarget "Inventory" */;
+			buildPhases = (
+				3959FB9E5A8CB018B9D3DF30 /* [CP] Check Pods Manifest.lock */,
+				C9D92C252652316C004F9B7D /* Run Script - Sourcery */,
+				C9F515D91DB7EF98004C10E6 /* Sources */,
+				C9F515DA1DB7EF98004C10E6 /* Frameworks */,
+				C9F515DB1DB7EF98004C10E6 /* Resources */,
+				52092E81B2BA2C8F6EDD3BBF /* [CP] Embed Pods Frameworks */,
+				C95A8DC21E7896BA001F425B /* Run Script - incrementXcodeBuild */,
+				C9EFD1341EBCEE0B008F7F02 /* Run Script - Lint */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Inventory;
+			productName = Mobile;
+			productReference = C9F515DD1DB7EF98004C10E6 /* Inventory.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C9F515F31DB7EF98004C10E6 /* InventoryTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C9F516001DB7EF98004C10E6 /* Build configuration list for PBXNativeTarget "InventoryTests" */;
+			buildPhases = (
+				8507A96BC768BE04726A314C /* [CP] Check Pods Manifest.lock */,
+				C9F515F01DB7EF98004C10E6 /* Sources */,
+				C9F515F11DB7EF98004C10E6 /* Frameworks */,
+				C9F515F21DB7EF98004C10E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C9F515F61DB7EF98004C10E6 /* PBXTargetDependency */,
+			);
+			name = InventoryTests;
+			productName = MobileTests;
+			productReference = C9F515F41DB7EF98004C10E6 /* InventoryTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C9F515D51DB7EF98004C10E6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0800;
+				LastUpgradeCheck = 1240;
+				ORGANIZATIONNAME = "Mathew Gacy";
+				TargetAttributes = {
+					C9F515DC1DB7EF98004C10E6 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 2PMX4WLK83;
+						LastSwiftMigration = 0900;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
+						};
+					};
+					C9F515F31DB7EF98004C10E6 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = NYT8K4678F;
+						LastSwiftMigration = 0900;
+						ProvisioningStyle = Automatic;
+						TestTargetID = C9F515DC1DB7EF98004C10E6;
+					};
+				};
+			};
+			buildConfigurationList = C9F515D81DB7EF98004C10E6 /* Build configuration list for PBXProject "Inventory" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C9F515D41DB7EF98004C10E6;
+			productRefGroup = C9F515DE1DB7EF98004C10E6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C9F515DC1DB7EF98004C10E6 /* Inventory */,
+				C9F515F31DB7EF98004C10E6 /* InventoryTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C9F515DB1DB7EF98004C10E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C96A899E1FAA5D3700CDDC59 /* OrderContainerViewController.storyboard in Resources */,
+				C901A50B1FA2BC3900BC7BD2 /* OrderLocItemViewController.storyboard in Resources */,
+				C9DF81DE1FEA1B6300C86A75 /* InventoryLocCatViewController.storyboard in Resources */,
+				C9F515EE1DB7EF98004C10E6 /* LaunchScreen.storyboard in Resources */,
+				C9F3564F1FA05603007ED98C /* OrderLocationViewController.storyboard in Resources */,
+				C95E446C1FB2AB3A00820067 /* SettingsViewController.storyboard in Resources */,
+				C9F515EB1DB7EF98004C10E6 /* Assets.xcassets in Resources */,
+				C9CB6FC61F01D2300094ED07 /* InventoryKeypadViewController.storyboard in Resources */,
+				C95DE42C1F9587580079B43B /* InventoryLocationViewController.storyboard in Resources */,
+				C964D2131FAC38A500FA3F69 /* InvoiceVendorViewController.storyboard in Resources */,
+				C91417EC1FA8F62200168064 /* OrderLocCatViewController.storyboard in Resources */,
+				C9DF81E31FEA1FB000C86A75 /* SignUpViewController.storyboard in Resources */,
+				C90482301F96A543001A3E01 /* OrderVendorViewController.storyboard in Resources */,
+				C9DF81D81FEA167E00C86A75 /* OrderDateViewController.storyboard in Resources */,
+				C91C928A1EFCE65800566CEB /* OrderKeypadViewController.storyboard in Resources */,
+				C9DF81DC1FEA177800C86A75 /* ItemViewController.storyboard in Resources */,
+				C949C20B1F15E354008A5EC4 /* InvoiceKeypadViewController.storyboard in Resources */,
+				C9F515E61DB7EF98004C10E6 /* HomeViewController.storyboard in Resources */,
+				C97A713D1F8ECEA900F2F1CD /* InventoryReviewViewController.storyboard in Resources */,
+				C9DF81DA1FEA16FA00C86A75 /* InventoryDateViewController.storyboard in Resources */,
+				C9A114F01FAC336500308974 /* InvoiceItemViewController.storyboard in Resources */,
+				C91C92821EFCD98F00566CEB /* OrderItemViewController.storyboard in Resources */,
+				C945DAC31FEA2EAD009D0EB0 /* LoginViewController.storyboard in Resources */,
+				C9DF81D61FEA158500C86A75 /* InvoiceDateViewController.storyboard in Resources */,
+				C9DF81E01FEA1BDE00C86A75 /* InventoryLocItemViewController.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C9F515F21DB7EF98004C10E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3959FB9E5A8CB018B9D3DF30 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Inventory-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		52092E81B2BA2C8F6EDD3BBF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Inventory/Pods-Inventory-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/1PasswordExtension/OnePasswordExtension.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CodableAlamofire/CodableAlamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
+				"${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework",
+				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCoreData/RxCoreData.framework",
+				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwiftExt/RxSwiftExt.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OnePasswordExtension.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CodableAlamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differentiator.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainAccess.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCoreData.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwiftExt.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyBeaver.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Inventory/Pods-Inventory-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8507A96BC768BE04726A314C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-InventoryTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C95A8DC21E7896BA001F425B /* Run Script - incrementXcodeBuild */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script - incrementXcodeBuild";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#buildscripts/incrementXcodeBuild.sh\n";
+		};
+		C9D92C252652316C004F9B7D /* Run Script - Sourcery */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script - Sourcery";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildscripts/secrets.sh\n";
+		};
+		C9EFD1341EBCEE0B008F7F02 /* Run Script - Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script - Lint";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildscripts/lint.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C9F515D91DB7EF98004C10E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C91B4EDC1E5C2863002DA2A5 /* User.swift in Sources */,
+				C92FB7EC205236A9002AE490 /* UIControl+Rx.swift in Sources */,
+				C9AA8DC01F9F0D2D00147F07 /* InventoryLocItemViewModel.swift in Sources */,
+				C91856951F8D881D001B08A0 /* InventoriesFactory.swift in Sources */,
+				C901A50D1FA2BC7D00BC7BD2 /* OrderLocItemViewController.swift in Sources */,
+				C925909A20AEA3FA00F15634 /* KeypadView.swift in Sources */,
+				C9428EE91E03314B002771EA /* ItemCategory+MyStuff.swift in Sources */,
+				C9DE2CF52089A3450090109A /* Operators.swift in Sources */,
+				C92EC6321F84C80300B47C23 /* RemoteOrder.swift in Sources */,
+				C95F52F01F88046C00C90BCD /* UIAlertControllerStyle+Adaptive.swift in Sources */,
+				C92D75BF1DC7A7E500AA1A02 /* InvoiceItemViewController.swift in Sources */,
+				C94AC872209005B400CBBCB2 /* UnitToggleable.swift in Sources */,
+				C9F5459E20D0B17900458548 /* Reusable.swift in Sources */,
+				C90459131F93E31400E517C7 /* InventoryReviewItemViewModel.swift in Sources */,
+				C9DE2CF12087CBCA0090109A /* OrderKeypadCoordinator.swift in Sources */,
+				C98165021F915E7F006EC785 /* SubItemCellViewModelType.swift in Sources */,
+				C9F374B120F7E9010020BD2E /* OrderLocItemProtocols.swift in Sources */,
+				C93BD19420B6699F002E23DC /* OrderLocation+Ext.swift in Sources */,
+				C9F515E91DB7EF98004C10E6 /* Mobile.xcdatamodeld in Sources */,
+				C9A14AC01DC6748000ACDE69 /* OrderKeypadViewController.swift in Sources */,
+				C902FF411DBE70290063CD02 /* Inventory+MyStuff.swift in Sources */,
+				C9045C131FC49EDA00F55FB3 /* BaseCoordinator.swift in Sources */,
+				C925909E20AEAAF500F15634 /* NSLayoutAnchor+Ext.swift in Sources */,
+				C949C20E1F160719008A5EC4 /* InvoiceItemCellViewModel.swift in Sources */,
+				C9375062202D72B50076B65E /* Coordinator.swift in Sources */,
+				C902F04520CDBD2E0044BB3A /* PoppedObservable.swift in Sources */,
+				C96BB8AD206C81D2009D9F7B /* StepperCellViewModel.swift in Sources */,
+				C9F516161DB7F158004C10E6 /* APIManager.swift in Sources */,
+				C902FF471DBE76F60063CD02 /* InventoryLocation+MyStuff.swift in Sources */,
+				C9375064202D738D0076B65E /* Observable+Extensions.swift in Sources */,
+				C9DF4E0D1F7479DD009C690A /* NSManagedObjectContext+Managed.swift in Sources */,
+				C96870E81DDA982A00EC06AB /* NSManagedObjectContext+MyStuff.swift in Sources */,
+				C9A14ABE1DC6746300ACDE69 /* OrderItemViewController.swift in Sources */,
+				C91417EE1FA8F63500168064 /* OrderLocCatViewController.swift in Sources */,
+				C9BB05911F831D6600A07529 /* InventoryDateViewController.swift in Sources */,
+				C98A90881F97E97400644548 /* InventoryKeypadViewModel.swift in Sources */,
+				C93203EA1FC678D200ACFC1D /* SignupCoordinator.swift in Sources */,
+				C92D75BD1DC7A7C200AA1A02 /* InvoiceVendorViewController.swift in Sources */,
+				C99568CA1FBB809C00AE6949 /* ViewModelType.swift in Sources */,
+				C9BB05801F8315B000A07529 /* RemoteItem.swift in Sources */,
+				C95B31041F809B98002ED2B9 /* TimeInterval+MyStuff.swift in Sources */,
+				C901A50F1FA2BC9200BC7BD2 /* OrderLocItemViewModel.swift in Sources */,
+				C9D59C5E1FE0FA870050A4AB /* NavigationController.swift in Sources */,
+				C9DE2CF72089C8B50090109A /* UnitView.swift in Sources */,
+				C90DBB5820B3D364006F7097 /* InvoiceDisplaySubview.swift in Sources */,
+				C9045C1D1FC4D20500F55FB3 /* InvoiceCoordinator.swift in Sources */,
+				C9090FFE1EB92D8B0035A1DA /* Managed.swift in Sources */,
+				C9A14AF41DC6B21800ACDE69 /* Order+MyStuff.swift in Sources */,
+				C98A4FB51DCB0329002BB076 /* Vendor+MyStuff.swift in Sources */,
+				C96BB8AB206C8147009D9F7B /* StepperTableViewCell.swift in Sources */,
+				C925909820AEA2F900F15634 /* InvoiceKeypadDisplayView.swift in Sources */,
+				C9564F321F840276007D84F6 /* RemoteInventory.swift in Sources */,
+				C998A81A204DD27B00600F5A /* DetailNavigationControllerAnimator.swift in Sources */,
+				C902FF431DBE769C0063CD02 /* InventoryItem+MyStuff.swift in Sources */,
+				C9F645591EDF6B53000E1AF4 /* InvoiceKeypadViewModel.swift in Sources */,
+				C98D91601EDE1CC300B3D4E8 /* OrderKeypadViewModel.swift in Sources */,
+				C9BB058B1F831AF900A07529 /* InventoryDateViewModel.swift in Sources */,
+				C9A14AF61DC6B22300ACDE69 /* OrderItem+MyStuff.swift in Sources */,
+				C983643E1FA6744200DFAC6C /* OrderItemPhoneCellViewModel.swift in Sources */,
+				C9CE65E020BE461400A194F5 /* InventoryKeypadCoordinator.swift in Sources */,
+				C9BB058D1F831B0F00A07529 /* InvoiceDateViewModel.swift in Sources */,
+				C97A713A1F8ECADD00F2F1CD /* InventoryReviewViewModel.swift in Sources */,
+				C9D38DB2202D5F6800B8B381 /* UIViewController+Extensions.swift in Sources */,
+				C9F5459C20D0B0C500458548 /* MGTableViewController.swift in Sources */,
+				C91B4EDE1E5CC1FC002DA2A5 /* CurrentUserManager.swift in Sources */,
+				C9045C111FC49EB400F55FB3 /* AppCoordinator.swift in Sources */,
+				C9090FFC1EB929EF0035A1DA /* VendorRep+MyStuff.swift in Sources */,
+				C9174D431F83232C008639CC /* SyncableParent.swift in Sources */,
+				C9F3564D1FA0554C007ED98C /* OrderLocationViewModel.swift in Sources */,
+				C93BD19E20BC87AC002E23DC /* OrderKeypadDisplayView.swift in Sources */,
+				C97A71321F8EC83700F2F1CD /* InvoiceVendorViewModel.swift in Sources */,
+				C968B8611EF9D171005CE2FC /* UIViewController+Alert.swift in Sources */,
+				C9F374B320F867E10020BD2E /* OrderItemPhoneCell.swift in Sources */,
+				C9C2DA0B1F0F5ADA007263FB /* NSDate+MyStuff.swift in Sources */,
+				C93565361FCDF77D00CAFB16 /* RoundRectButton.swift in Sources */,
+				C9BB058F1F831B2200A07529 /* OrderDateViewModel.swift in Sources */,
+				C9C2DA081F0F3EC2007263FB /* InventoryLocItemCellViewModel.swift in Sources */,
+				C9D59C5C1FE0FA280050A4AB /* TabBarController.swift in Sources */,
+				C95E446E1FB2C26200820067 /* ItemCellViewModel.swift in Sources */,
+				C92C2F8D1F9FE3E500B69CF5 /* SettingsViewModel.swift in Sources */,
+				C902F04720CF41E80044BB3A /* MGViewController.swift in Sources */,
+				C93BD1A020BC8824002E23DC /* OrderDisplaySubview.swift in Sources */,
+				C9045C191FC4AD1000F55FB3 /* OrderCoordinator.swift in Sources */,
+				C9F5160C1DB7F133004C10E6 /* InventoryLocationViewController.swift in Sources */,
+				C9DB04F81F8E9C6300C58F55 /* String+MyStuff.swift in Sources */,
+				C9F5160E1DB7F133004C10E6 /* InventoryLocItemViewController.swift in Sources */,
+				C9A2A97720491096005548D1 /* AppDependency.swift in Sources */,
+				C9045C171FC4A1BA00F55FB3 /* InventoryCoordinator.swift in Sources */,
+				C9045C151FC49F0000F55FB3 /* TabBarCoordinator.swift in Sources */,
+				C99E950726522A70004D14E8 /* AppSecrets.generated.swift in Sources */,
+				C95E446A1FB296A700820067 /* ItemViewModel.swift in Sources */,
+				C9174D471F833265008639CC /* LoginViewModel.swift in Sources */,
+				C91194741F9D426200B65CF9 /* InvoiceItemViewModel.swift in Sources */,
+				C9174D451F832393008639CC /* NSManagedObjectContext+Syncable.swift in Sources */,
+				C90477211EEE30D60082D894 /* KeypadViewModel.swift in Sources */,
+				C9AA8DC21F9F191000147F07 /* SignUpViewModel.swift in Sources */,
+				C925909C20AEA7FF00F15634 /* DisplayItemView.swift in Sources */,
+				C9EC6E5D1FCCF7E000A3860E /* AttachableType.swift in Sources */,
+				C98EE04D1DDD800900EE2AC7 /* Date+MyStuff.swift in Sources */,
+				C97A71361F8EC96100F2F1CD /* InventoryLocCatViewModel.swift in Sources */,
+				C9DEC1061F805CF7004602EB /* DateFacade.swift in Sources */,
+				C97A71301F8EC4A100F2F1CD /* OrderVendorViewModel.swift in Sources */,
+				C935E9A41E60D713003BF386 /* LoginViewController.swift in Sources */,
+				C97B7C471FAB908000117D29 /* OrderContainerViewModel.swift in Sources */,
+				C95E44681FB2968C00820067 /* ItemViewController.swift in Sources */,
+				C96A89A01FAA5DB400CDDC59 /* OrderContainerViewController.swift in Sources */,
+				C98364401FA675F400DFAC6C /* OrderLocationFactory.swift in Sources */,
+				C902FF451DBE76D60063CD02 /* InventoryLocationItem+MyStuff.swift in Sources */,
+				C93BD19C20BB3F48002E23DC /* ModalSplitViewDelegate.swift in Sources */,
+				C9F374AD20F7E6390020BD2E /* OrderLocItemPadViewController.swift in Sources */,
+				C91F52FE20C77EFD00B1B7AA /* InventoryKeypadDisplayView.swift in Sources */,
+				C9D3E3A71EAD233C0008F444 /* TableViewDataSource.swift in Sources */,
+				C971B44A1DC02F9C007DD7A8 /* ColorPalette.swift in Sources */,
+				C95E44631FB2581400820067 /* HomeViewController.swift in Sources */,
+				C9D59C601FE0FAE60050A4AB /* PlaceholderViewController.swift in Sources */,
+				C9A14AC21DC67A0F00ACDE69 /* InvoiceDateViewController.swift in Sources */,
+				C9428EE71E032FCC002771EA /* Syncable.swift in Sources */,
+				C9375066202D75390076B65E /* PrimaryContainerType.swift in Sources */,
+				C9BB05871F83169800A07529 /* DataManager.swift in Sources */,
+				C91C92841EFCDBE400566CEB /* OrderItemTableViewCell.swift in Sources */,
+				C9F516151DB7F158004C10E6 /* Router.swift in Sources */,
+				C92D75C11DC7A81400AA1A02 /* InvoiceKeypadViewController.swift in Sources */,
+				C97A71381F8ECACE00F2F1CD /* InventoryReviewViewController.swift in Sources */,
+				C96B74EF1F194F5900C881E0 /* UITextField+Stuff.swift in Sources */,
+				C9208A2E1FAB8BFA00D7C830 /* ItemUnits.swift in Sources */,
+				C90CF93E1EFDADC000097DCB /* UIButton+setBackgroundColor.swift in Sources */,
+				C92D75C51DC7A94100AA1A02 /* SettingsViewController.swift in Sources */,
+				C9F516181DB7F158004C10E6 /* AuthenticationHandler.swift in Sources */,
+				C95E44651FB2582400820067 /* HomeViewModel.swift in Sources */,
+				C9AA8DC41F9FDE6A00147F07 /* OnePasswordExtension+MyStuff.swift in Sources */,
+				C9BB05891F83171000A07529 /* ActivityIndicator.swift in Sources */,
+				C979BEE620D9A4A400D8DFC0 /* Location+MyStuff.swift in Sources */,
+				C96870E41DDA1F1500EC06AB /* Invoice+MyStuff.swift in Sources */,
+				C9A14ABC1DC6742700ACDE69 /* OrderVendorViewController.swift in Sources */,
+				C9C2DA061F0F3BC3007263FB /* SubItemTableViewCell.swift in Sources */,
+				C968B85E1EF7275E005CE2FC /* OrderViewModel.swift in Sources */,
+				C92FB7EE20523794002AE490 /* Mutable.swift in Sources */,
+				C91E72982050CE4600D42B79 /* MGStepper.swift in Sources */,
+				C9F515E11DB7EF98004C10E6 /* AppDelegate.swift in Sources */,
+				C96751C42086EDB100212278 /* ModalKeypadViewController.swift in Sources */,
+				C902FF2E1DB816EB0063CD02 /* Keypad.swift in Sources */,
+				C9E198D51DC5669E0065FB98 /* OrderDateViewController.swift in Sources */,
+				C9F5160D1DB7F133004C10E6 /* InventoryLocCatViewController.swift in Sources */,
+				C902FF3F1DBD8B3F0063CD02 /* OperationKeypadButton.swift in Sources */,
+				C9045C1F1FC4D21E00F55FB3 /* ItemCoordinator.swift in Sources */,
+				C9124F771DF0D7DD00166A08 /* CoreDataImporter.swift in Sources */,
+				C902FF491DBE77130063CD02 /* InventoryLocationCategory+MyStuff.swift in Sources */,
+				C98A64F61FCB47A4008F02F9 /* AttachableViewModelType.swift in Sources */,
+				C9F3564B1FA04536007ED98C /* OrderLocationViewController.swift in Sources */,
+				C9B66FAE20D4619C00B8DB72 /* ErrorAlertDisplayable.swift in Sources */,
+				C9CC04DF1F84C13C00180120 /* RemoteInvoice.swift in Sources */,
+				C98B25FC2071860C00F1D157 /* ChevronButton.swift in Sources */,
+				C93203EC1FC6AA3000ACFC1D /* SettingsCoordinator.swift in Sources */,
+				C998A81C204DD2BE00600F5A /* DetailNavigationController.swift in Sources */,
+				C9124F751DF0D61E00166A08 /* CoreDataStack.swift in Sources */,
+				C98FDED420C1E414005ED2AE /* OrderItemView.swift in Sources */,
+				C998A818204DD22E00600F5A /* SplitViewDelegate.swift in Sources */,
+				C9EB7D8A1EE7910000515429 /* MailComposer.swift in Sources */,
+				C9D16F2B1DD277390073F95E /* MessageComposer.swift in Sources */,
+				C93BD19A20B66A1D002E23DC /* OrderLocationCategory+Ext.swift in Sources */,
+				C96870E61DDA1F1C00EC06AB /* InvoiceItem+MyStuff.swift in Sources */,
+				C9B66FAC20D45B0800B8DB72 /* BackendError.swift in Sources */,
+				C902FF3E1DBD8B3F0063CD02 /* NumberKeypadButton.swift in Sources */,
+				C91417F01FA8F64B00168064 /* OrderLocCatViewModel.swift in Sources */,
+				C9A0B2EC1E63D2A300404320 /* SignUpViewController.swift in Sources */,
+				C9375060202D72050076B65E /* ErrorTracker.swift in Sources */,
+				C988CE711DF5050D00A8028B /* Array+MyStuff.swift in Sources */,
+				C91C92861EFCDD9000566CEB /* RoundButton.swift in Sources */,
+				C9F5160F1DB7F133004C10E6 /* InventoryKeypadViewController.swift in Sources */,
+				C9E0F85D20B530B900B64A55 /* InvoiceKeypadCoordinator.swift in Sources */,
+				C9045C211FC5122800F55FB3 /* LoginCoordinator.swift in Sources */,
+				C96870E21DDA1F0900EC06AB /* InvoiceCollection+MyStuff.swift in Sources */,
+				C97A71341F8EC94A00F2F1CD /* InventoryLocationViewModel.swift in Sources */,
+				C9A14AF21DC6AAA000ACDE69 /* OrderCollection+MyStuff.swift in Sources */,
+				C9045C1B1FC4D1F200F55FB3 /* HomeCoordinator.swift in Sources */,
+				C98A4FB31DCB0233002BB076 /* Unit+MyStuff.swift in Sources */,
+				C9DE2CF3208969D00090109A /* SheetTransitioningDelegate.swift in Sources */,
+				C93BD19820B669ED002E23DC /* OrderLocationItem+Ext.swift in Sources */,
+				C98A4FB11DC927CD002BB076 /* Item+MyStuff.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C9F515F01DB7EF98004C10E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9F515F91DB7EF98004C10E6 /* InventoryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C9F515F61DB7EF98004C10E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C9F515DC1DB7EF98004C10E6 /* Inventory */;
+			targetProxy = C9F515F51DB7EF98004C10E6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C9F515E41DB7EF98004C10E6 /* HomeViewController.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C9F515E51DB7EF98004C10E6 /* Base */,
+			);
+			name = HomeViewController.storyboard;
+			sourceTree = "<group>";
+		};
+		C9F515EC1DB7EF98004C10E6 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C9F515ED1DB7EF98004C10E6 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C9F515FB1DB7EF98004C10E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C9F515FC1DB7EF98004C10E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C9F515FE1DB7EF98004C10E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C59292621F81F385905E6F0E /* Pods-Inventory.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Inventory/Inventory.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 2PMX4WLK83;
+				INFOPLIST_FILE = "$(SRCROOT)/Inventory/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mgacy.Inventory;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		C9F515FF1DB7EF98004C10E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 340E0AF81234DF7A6BFFB4AE /* Pods-Inventory.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Inventory/Inventory.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 2PMX4WLK83;
+				INFOPLIST_FILE = "$(SRCROOT)/Inventory/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mgacy.Inventory;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		C9F516011DB7EF98004C10E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CFC8025568883F725FCA0469 /* Pods-InventoryTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = NYT8K4678F;
+				INFOPLIST_FILE = InventoryTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mgacy.InventoryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Inventory.app/Inventory";
+			};
+			name = Debug;
+		};
+		C9F516021DB7EF98004C10E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 623B37D710436A1D20E64318 /* Pods-InventoryTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = NYT8K4678F;
+				INFOPLIST_FILE = InventoryTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mgacy.InventoryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Inventory.app/Inventory";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C9F515D81DB7EF98004C10E6 /* Build configuration list for PBXProject "Inventory" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C9F515FB1DB7EF98004C10E6 /* Debug */,
+				C9F515FC1DB7EF98004C10E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C9F515FD1DB7EF98004C10E6 /* Build configuration list for PBXNativeTarget "Inventory" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C9F515FE1DB7EF98004C10E6 /* Debug */,
+				C9F515FF1DB7EF98004C10E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C9F516001DB7EF98004C10E6 /* Build configuration list for PBXNativeTarget "InventoryTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C9F516011DB7EF98004C10E6 /* Debug */,
+				C9F516021DB7EF98004C10E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C9F515E71DB7EF98004C10E6 /* Mobile.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C93BD19220B663D3002E23DC /* Mobile 5.xcdatamodel */,
+				C945DAC41FEA37E5009D0EB0 /* Mobile 4.xcdatamodel */,
+				C9ECDB271F214DB9002AA99E /* Mobile 3a.xcdatamodel */,
+				C968B85F1EF8DD63005CE2FC /* Mobile 2.xcdatamodel */,
+				C9F515E81DB7EF98004C10E6 /* Mobile.xcdatamodel */,
+			);
+			currentVersion = C93BD19220B663D3002E23DC /* Mobile 5.xcdatamodel */;
+			path = Mobile.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = C9F515D51DB7EF98004C10E6 /* Project object */;
+}

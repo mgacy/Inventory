@@ -1,11 +1,11 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '10.0'
+platform :ios, '12.0'
 
 # Basic
 def basic_pods
-  pod 'Alamofire',          '~> 4.4'
-  pod 'CodableAlamofire'
-  pod 'SwiftyJSON'
+  pod 'Alamofire',          '~> 4.9'
+  pod 'CodableAlamofire',   '~> 1.1'
+  # pod 'SwiftyJSON'
   pod 'KeychainAccess'
   pod 'PKHUD',              '~> 5.0'
   pod 'SwiftyBeaver'
@@ -32,15 +32,15 @@ def test_pods
   pod 'RxTest',             '~> 4.0'
 end
 
-target 'Mobile' do
+target 'Inventory' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for Mobile
+  # Pods for Inventory
   basic_pods
   rx_pods
 
-  target 'MobileTests' do
+  target 'InventoryTests' do
     inherit! :search_paths
     # Pods for testing
     # test_pods
