@@ -10,7 +10,7 @@ Inventory management for the restaurant industry.
 ## Acknowledgements
 
 - [CleanArchitectureRxSwift](https://github.com/sergdort/CleanArchitectureRxSwift)
-- Sample code from [RxSwift](https://github.com/ReactiveX/RxSwift)
+- RxExample in [RxSwift repo](https://github.com/ReactiveX/RxSwift)
 - Sample code from [Core Data by objc.io](https://github.com/objcio/core-data)
 - [Reactive MVVM](http://www.thomasvisser.me/2017/02/09/mvvm-rx/)
 - [Taming Great Complexity: MVVM, Coordinators and RxSwift](https://blog.uptech.team/taming-great-complexity-mvvm-coordinators-and-rxswift-8daf8a76e7fd)

@@ -29,11 +29,6 @@ xcuserdata/
 # CocoaPods
 Pods
 
-
-# /Pods
-# /Inventory.xcworkspace
-# Inventory.xcodeproj/xcuserdata/matt.xcuserdatad
-
 # Secrets
 /buildscripts/env-vars.sh
 Inventory/Application/AppSecrets.generated.swift
